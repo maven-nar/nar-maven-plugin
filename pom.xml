@@ -1,15 +1,35 @@
 <project>
-  <parent>
-    <artifactId>freehep-maven-plugins</artifactId>
-    <groupId>org.freehep</groupId>
-    <version>1.9-SNAPSHOT</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.freehep</groupId>
-  <artifactId>freehep-cpptasks</artifactId>
-  <name>FreeHEP CPPTasks (modified)</name>
-  <version>20051015-patched-0.6.1-SNAPSHOT</version>
+  <groupId>net.sf.antcontrib</groupId>
+  <artifactId>cpptasks</artifactId>
+  <name>CPPTasks (modified)</name>
+  <version>20051015-patched-1.0</version>
   <description>Library to call native compilers and linkers.</description>
+
+  <url>http://java.freehep.org/</url>
+  <ciManagement>
+    <system>continuum</system>
+    <url>http://svn.freehep.org:2000/continuum</url>
+    <notifiers>
+      <notifier>
+        <configuration>
+          <address>Mark.Donszelmann@slac.stanford.edu</address>
+        </configuration>
+      </notifier>
+    </notifiers>
+  </ciManagement>
+  <scm>
+    <connection>scm:svn:svn://svn.freehep.org/svn/misc/trunk/cpptasks</connection>
+    <developerConnection>scm:svn:svn://svn.freehep.org/svn/freehep/trunk/cpptasks</developerConnection>
+  </scm>
+  <distributionManagement>
+    <repository>
+      <id>freehep-maven</id>
+      <name>FreeHEP Maven Repository</name>
+      <url>sftp://svn.freehep.org/nfs/slac/g/jas/maven2</url>
+    </repository>
+  </distributionManagement>
+
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
