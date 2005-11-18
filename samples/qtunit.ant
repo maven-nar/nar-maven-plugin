@@ -1,0 +1,238 @@
+<?xml version="1.0"?>
+<!--
+
+Copyright 2004 The Ant-Contrib project
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!--
+
+Build file for qtunit 0.9.8 (http://www.uwyn.com/projects/qtunit/index.html)
+A Trolltech Qt based unit testing framework.
+-->
+<project name="qtunit" default="test-all">
+
+<property name="base.dir" value="."/>
+<property name="debug" value="true"/>
+<property name="compiler" value="gcc"/>
+<property name="src.dir" location="${base.dir}/src"/>
+<property name="samples.dir" location="${base.dir}/samples"/>
+<property name="build.dir" location="build"/>
+<property name="include.dir" location="${base.dir}/include"/>
+<property name="config.dir" location="${base.dir}/config"/>
+<property name="qt.dir" location="/usr/lib/qt3"/>
+<property name="major" value="0"/>
+<property name="minor" value="9"/>
+<property name="build" value="8"/>
+<!-- specify api="unix" or api="win32" override platform default -->
+<property name="api" value="default"/>
+
+<taskdef resource="cpptasks.tasks"/>
+<typedef resource="cpptasks.types"/>
+
+<target name="usage">
+	<echo message="Builds qtunit 0.9.8 (http://www.uwyn.com/projects/qtunit/index.html)."/>
+	<echo message="Usage:"/>
+	<echo message="ant -f qtunit.ant -Dbase.dir=c:/qtunit-0.9.8"/>
+	<echo message="    -Dcompiler=[gcc | msvc | icc | bcc ...]"/>
+</target>
+
+<target name="init">
+	<mkdir dir="${build.dir}"/>
+	<property name="obj.dir" value="${build.dir}/obj"/>
+	<mkdir dir="${obj.dir}"/>
+	<condition property="is-gcc">
+		<or>
+			<equals arg1="${compiler}" arg2="gcc"/>
+			<equals arg1="${compiler}" arg2="g++"/>
+		</or>
+	</condition>
+	<condition property="is-msvc">
+		<or>
+			<equals arg1="${compiler}" arg2="msvc"/>
+		</or>
+	</condition>
+	<condition property="is-windows"><os family="windows"/></condition>
+	<condition property="is-win32">
+		<or>
+			<equals arg1="${api}" arg2="win32"/>
+			<and>
+				<equals arg1="${api}" arg2="default"/>
+				<isset property="is-windows"/>
+			</and>
+		</or>
+	</condition>
+	<property environment="env"/>
+	<!--  in case not set in environment, use an insignificant value -->
+	<property name="env.LD_LIBRARY_PATH" value="."/>
+</target>
+
+<target name="clean">
+	<delete dir="${build.dir}"/>
+</target>
+
+
+<target name="build-libqtunit" depends="init">
+    <mkdir dir="${obj.dir}"/>
+
+       <!--  preprocesses .ui and .h files, places generated files on obj.dir  -->
+	<cc objdir="${obj.dir}">
+            <!--  runs uic twice and moc once to create *.h, *.cpp and moc_*.cpp files   -->
+            <compiler name="uic" inherit="false">
+    		<fileset dir="${src.dir}" includes="guirunner/*.ui"/>
+            </compiler>
+            <!--  runs moc only on files with Q_OBJECT   -->
+            <compiler name="moc" inherit="false">
+    		<fileset dir="${src.dir}" includes="guirunner/*.h, framework/*.h"/>
+            </compiler>
+	</cc>
+
+	<cc subsystem="console"
+	    objdir="${obj.dir}"
+	    debug="${debug}"
+	    outtype="shared"
+	    name="${compiler}"
+	    exceptions="true"
+	    rtti="true"
+	    optimize="speed"
+	    outfile="${build.dir}/qtunit">
+		<fileset dir="${src.dir}/framework" includes="*.cpp"/>
+		<fileset dir="${src.dir}/guirunner" includes="*.cpp"/>
+		<fileset dir="${src.dir}/textrunner" includes="*.cpp"/>
+		<fileset dir="${obj.dir}" includes="*.cpp"/>
+		<syslibset libs="pthread"/>
+		<syslibset dir="${qt.dir}/lib" libs="qt-mt"/>
+		<defineset define="WIN32" if="is-win32"/>
+		<defineset define="_REENTRANT,QT_THREAD_SUPPORT, QT_SHARED, QT_TABLET_SUPPORT"/>
+		<defineset define="QT_NO_DEBUG" unless="is-debug"/>
+		<includepath path="${obj.dir}"/>
+		<includepath path="${qt.dir}/include"/>
+		<includepath path="${src.dir};${src.dir}/framework;${src.dir}/guirunner"/>
+	</cc>
+</target>
+
+
+<target name="build-texttestrunner" depends="build-libqtunit">
+	<mkdir dir="${obj.dir}"/>
+	<cc subsystem="console"
+	    objdir="${obj.dir}"
+	    debug="${debug}"
+	    outtype="executable"
+	    name="${compiler}"
+	    exceptions="true"
+	    rtti="true"
+	    optimize="speed"
+	    outfile="${build.dir}/texttestrunner">
+	    <fileset dir="${samples.dir}/texttestrunner" includes="*.cpp"/>
+	    <defineset define="WIN32" if="is-win32"/>
+	    <defineset define="_REENTRANT,QT_THREAD_SUPPORT, QT_SHARED, QT_TABLET_SUPPORT"/>
+	    <defineset define="QT_NO_DEBUG" unless="is-debug"/>
+            <includepath path="${obj.dir}"/>
+	    <includepath path="${src.dir};${src.dir}/framework;${src.dir}/textrunner"/>
+            <includepath path="${qt.dir}/include"/>
+	    <libset dir="${build.dir}" libs="qtunit"/>
+	</cc>
+</target>
+
+<target name="build-guitestrunner" depends="build-libqtunit">
+	<mkdir dir="${obj.dir}"/>
+	<cc subsystem="console"
+	    objdir="${obj.dir}"
+	    debug="${debug}"
+	    outtype="executable"
+	    name="${compiler}"
+	    exceptions="true"
+	    rtti="true"
+	    optimize="speed"
+	    outfile="${build.dir}/guitestrunner">
+	    <fileset dir="${samples.dir}/guitestrunner" includes="*.cpp"/>
+	    <defineset define="WIN32" if="is-win32"/>
+	    <defineset define="_REENTRANT,QT_THREAD_SUPPORT, QT_SHARED, QT_TABLET_SUPPORT"/>
+	    <defineset define="QT_NO_DEBUG" unless="is-debug"/>
+            <includepath path="${obj.dir}"/>
+	    <includepath path="${src.dir};${src.dir}/framework;${src.dir}/guirunner"/>
+            <includepath path="${qt.dir}/include"/>
+	    <libset dir="${build.dir}" libs="qtunit"/>
+	</cc>
+</target>
+
+
+<target name="build-testmodule" depends="init">
+	<mkdir dir="${obj.dir}"/>
+	<cc subsystem="console"
+	    objdir="${obj.dir}"
+	    debug="${debug}"
+	    outtype="shared"
+	    name="${compiler}"
+	    exceptions="true"
+	    rtti="true"
+	    optimize="speed"
+	    outputfileproperty="testmodule.so"
+	    outfile="${build.dir}/testmodule">
+	    <fileset dir="${samples.dir}/testmodule" includes="*.cpp"/>
+	    <defineset define="WIN32" if="is-win32"/>
+	    <defineset define="_REENTRANT,QT_THREAD_SUPPORT, QT_SHARED, QT_TABLET_SUPPORT"/>
+	    <defineset define="QT_NO_DEBUG" unless="is-debug"/>
+	    <includepath path="${src.dir};${src.dir}/framework"/>
+            <includepath path="${qt.dir}/include"/>
+	    <libset dir="${build.dir}" libs="qtunit"/>
+	</cc>
+</target>
+
+<target name="test-texttestrunner" depends="build-texttestrunner, build-testmodule">
+    <echo file="${build.dir}/testproject.qpj" message='&lt;PROJECT NAME="testproject"&gt;&lt;MODULE&gt;&lt;FILEPATH&gt;${testmodule.so}&lt;/FILEPATH&gt;&lt;SOURCEPATH&gt;${samples.dir}/testmodule/&lt;/SOURCEPATH&gt;&lt;/MODULE&gt;&lt;/PROJECT&gt;'/>
+	<exec dir="${build.dir}"
+	      executable="${build.dir}/texttestrunner"
+	      failonerror="false">
+	      <env key="LD_LIBRARY_PATH" value="${build.dir}:${env.LD_LIBRARY_PATH}"/>
+	      <arg value="${build.dir}/testproject.qpj"/>
+	</exec>
+</target>
+
+
+<target name="build-standalonerunner" depends="build-libqtunit">
+	<mkdir dir="${obj.dir}"/>
+	<cc subsystem="console"
+	    objdir="${obj.dir}"
+	    debug="${debug}"
+	    outtype="executable"
+	    name="${compiler}"
+	    exceptions="true"
+	    rtti="true"
+	    optimize="speed"
+	    outfile="${build.dir}/standalonerunner">
+	    <fileset dir="${samples.dir}/standalonerunner" includes="*.cpp"/>
+	    <defineset define="WIN32" if="is-win32"/>
+	    <defineset define="_REENTRANT,QT_THREAD_SUPPORT, QT_SHARED, QT_TABLET_SUPPORT"/>
+	    <defineset define="QT_NO_DEBUG" unless="is-debug"/>
+	    <includepath path="${src.dir};${src.dir}/framework;${src.dir}/textrunner"/>
+            <includepath path="${qt.dir}/include"/>
+	    <libset dir="${build.dir}" libs="qtunit"/>
+	</cc>
+</target>
+
+
+<target name="test-standalonerunner" depends="build-standalonerunner">
+	<exec dir="${build.dir}"
+	      executable="${build.dir}/standalonerunner"
+	      failonerror="false">
+	      <env key="LD_LIBRARY_PATH" value="${build.dir}:${env.LD_LIBRARY_PATH}"/>
+	</exec>
+</target>
+
+<target name="all" depends="build-standalonerunner, build-texttestrunner, build-guitestrunner"/>
+
+<target name="test-all" depends="test-standalonerunner, test-texttestrunner, build-guitestrunner"/>
+
+</project>

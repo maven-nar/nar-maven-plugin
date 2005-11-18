@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+<!--
+
+Copyright 2004 The Ant-Contrib project
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!--  
+
+    build file for generic FORTRAN 77 Basic Linear Algebra Subprograms library
+    (http://www.netlib.org/blas/blas.tgz) and double precision tests
+    
+    targets test-dblat2 and test-dblat3 require Ant 1.6
+    
+    
+    
+-->    
+<project name="blas" default="test-all">
+
+<property name="base.dir" value="."/>
+<property name="debug" value="true"/>
+<property name="compiler" value="g77"/>
+<property name="src.dir" location="${base.dir}/src"/>
+<property name="tests.dir" location="${base.dir}/tests"/>
+<property name="build.dir" location="build"/>
+<property name="libtype" value="static"/>
+
+<taskdef resource="cpptasks.tasks"/>
+<typedef resource="cpptasks.types"/>
+
+<target name="usage">
+	<echo message="Builds BLAS (http://www.netlib.org/blas)."/>
+	<echo message="Usage:"/>
+	<echo message="ant -f blas.ant -Dsrc.dir=c:/blas -Dtests.dir=c:/blas-tests"/>
+	<echo message="    -Dcompiler=[g77 | df ...]"/>
+	<echo message="    -Dlibtype=[static | shared ...]"/>
+</target>
+
+<target name="get-blas">
+    <get src="http://www.netlib.org/blas/blas.tgz" usetimestamp="true"
+         dest="${base.dir}/blas.tgz"/>
+    <untar src="${base.dir}/blas.tgz" dest="${src.dir}" compression="gzip" overwrite="true"/>
+    <mkdir dir="${tests.dir}"/>
+    <get src="http://www.netlib.org/blas/dblat1" usetimestamp="true"
+         dest="${tests.dir}/dblat1.f"/>
+    <get src="http://www.netlib.org/blas/dblat2" usetimestamp="true"
+         dest="${tests.dir}/dblat2.f"/>
+    <get src="http://www.netlib.org/blas/dblat2d" usetimestamp="true"
+         dest="${tests.dir}/dblat2d"/>
+    <get src="http://www.netlib.org/blas/dblat3" usetimestamp="true"
+         dest="${tests.dir}/dblat3.f"/>
+    <get src="http://www.netlib.org/blas/dblat3d" usetimestamp="true"
+         dest="${tests.dir}/dblat3d"/>
+</target>
+
+<target name="init">
+	<mkdir dir="${build.dir}"/>
+	<property name="obj.dir" value="${build.dir}/obj"/>
+	<mkdir dir="${obj.dir}"/>
+	<property environment="env"/>
+	<!--  in case not set in environment, use an insignificant value -->
+	<property name="env.LD_LIBRARY_PATH" value="."/>
+	<condition property="is-shared"><equals arg1="${libtype}" arg2="shared"/></condition>
+	<condition property="is-gcc">
+		<or>
+			<equals arg1="${compiler}" arg2="gcc"/>
+			<equals arg1="${compiler}" arg2="g77"/>
+		</or>
+	</condition>
+</target>
+
+<target name="clean">
+	<delete dir="${build.dir}"/>
+</target>
+
+
+<target name="build-lib" depends="init">
+	<cc subsystem="console" 
+		outfile="${build.dir}/blas"
+		objdir="${obj.dir}" 
+		outtype="${libtype}" 
+		debug="${debug}"
+		warnings="diagnostic"
+	    optimize="speed"
+		name="${compiler}">
+		<fileset dir="${src.dir}" includes="*.f"/>
+	</cc>
+</target>
+
+<target name="build-dblat1" depends="build-lib">
+	<cc outfile="${build.dir}/dblat1" 
+	    outtype="executable" 
+	    subsystem="console" 
+	    objdir="${obj.dir}" 
+	    debug="${debug}"
+	    warnings="diagnostic"
+	    name="${compiler}"
+	    outputfileproperty="dblat1.exe">
+		<fileset dir="${tests.dir}" includes="dblat1.f"/>
+		<!-- the following line is undesirable and will hopefully be made unnecessary shortly  -->
+		<libset libs="g2c, frtbegin" if="is-gcc"/>
+		<libset dir="${build.dir}" type="${libtype}" libs="blas"/>
+	</cc>
+</target>
+
+
+<target name="test-dblat1" depends="build-dblat1">
+	<exec dir="${build.dir}" 
+	      executable="${dblat1.exe}"
+	      failonerror="true"/> 
+</target>
+
+<target name="build-dblat2" depends="build-lib">
+	<cc outfile="${build.dir}/dblat2" 
+	    outtype="executable" 
+	    subsystem="console" 
+	    objdir="${obj.dir}" 
+	    debug="${debug}"
+	    warnings="diagnostic"
+	    name="${compiler}"
+	    outputfileproperty="dblat2.exe">
+		<fileset dir="${tests.dir}" includes="dblat2.f"/>
+		<!-- the following line is undesirable and will hopefully be made unnecessary shortly  -->
+		<syslibset libs="g2c, frtbegin" if="is-gcc"/>
+		<libset dir="${build.dir}" type="${libtype}" libs="blas"/>
+	</cc>
+</target>
+
+
+<target name="test-dblat2" depends="build-dblat2">
+    <delete file="${build.dir}/DBLAT2.SUMM"/>
+    <!-- requires Ant 1.6 due to the input attribute  -->
+	<exec dir="${build.dir}" 
+	      executable="${dblat2.exe}"
+	      failonerror="true"
+	      input="${tests.dir}/dblat2d"/>
+	<concat><fileset dir="${build.dir}" includes="DBLAT2.SUMM"/></concat>   
+</target>
+
+
+<target name="build-dblat3" depends="build-lib">
+	<cc outfile="${build.dir}/dblat3" 
+	    outtype="executable" 
+	    subsystem="console" 
+	    objdir="${obj.dir}" 
+	    debug="${debug}"
+	    warnings="diagnostic"
+	    name="${compiler}"
+	    outputfileproperty="dblat3.exe">
+		<fileset dir="${tests.dir}" includes="dblat3.f"/>
+		<!-- the following line is undesirable and will hopefully be made unnecessary shortly  -->
+		<syslibset libs="g2c, frtbegin" if="is-gcc"/>
+		<libset dir="${build.dir}" type="${libtype}" libs="blas"/>
+	</cc>
+</target>
+
+
+<target name="test-dblat3" depends="build-dblat3">
+    <delete file="${build.dir}/DBLAT3.SUMM"/>
+    <!-- requires Ant 1.6 due to the input attribute  -->
+	<exec dir="${build.dir}" 
+	      executable="${dblat3.exe}"
+	      failonerror="true"
+	      input="${tests.dir}/dblat3d"/> 
+	<concat><fileset dir="${build.dir}" includes="DBLAT3.SUMM"/></concat>   
+</target>
+
+
+			    
+<target name="all" depends="build-dblat1, build-dblat2, build-dblat3"/>
+
+<target name="test-all" depends="test-dblat1, test-dblat2, test-dblat3"/>
+			    
+</project>

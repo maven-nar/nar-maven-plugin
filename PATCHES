@@ -1,0 +1,25 @@
+*** Changes marked with FREEHEP.
+freehep-cpptasks-20051015-patched-1.0-SNAPSHOT
+- [DevStudioCompatibleCCompiler] changed /GX into /EHsc (for VC8, and backward compatible with VC7 and VC6).
+- [CommandLineLinker] use absolute paths for filenames if they are shorter than relative paths to overcome windows file length limit.
+- [gcc.AbstractLdLinker] no -Bstatic for Darwin.
+- [CCTask] added log statement to identify linker and compiler.
+- [intel.IntelLinux32CLinker, intel.IntelLinux64CLinker, intel.IntelLinux32Compiler, intel.IntelLinux64Compiler] 
+  added with names icpc and ecpc.
+- [LinkerEnum, CompilerEnum] added above linkers and compilers.
+- [intel.IntelLinux32CCompiler, intel.IntelLinux64CCompiler] links to IntelLinux32CLinker and IntelLinux64CLinker.
+- [intel.IntelLinux32Linker, intel.IntelLinux64Linker] changed linker name from icc to icpc and ecc to ecpc for version 8.1 of icc.
+- [sun.ForteCCompiler] Added (suncc)
+- [sun.ForteF77Compiler] Added (sunf77)
+- [CompilerEnum] Added the above (suncc, sunf77).
+- [compaq.CompaqVisualFortranCompiler] removed addition of quotes.
+- [gcc.GccCompatibleCCompiler, gcc.GccCCompiler] moved and modified -fno-rtti code 
+- [gcc.GccCompatibleCCompiler] added missing code for -fno-exceptions
+- [gcc.GppLinker, compiler.LinkType] Set "callAddLibrarySets" flag, submitted as bug 1109917 in cpptasks of ant-contrib.
+- [compiler.CommandLineLinker] Check "callAddLibrarySets" flag.
+
+For CVS updates from the original CVS repository:
+- commit latest to svn
+- run cvs up
+- commit again to svn
+

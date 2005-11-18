@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<!--
+
+Copyright 2004 The Ant-Contrib project
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!--  
+
+Builds Mozilla xpcom/sample
+
+-->
+<project name="xpcom" default="test-all">
+
+<property name="base.dir" value="."/>
+<property name="debug" value="true"/>
+<property name="compiler" value="gcc"/>
+<property name="build.dir" location="build"/>
+<property name="obj.dir" location="${build.dir}/obj"/>
+<!-- specify api="unix" or api="win32" override platform default -->
+<property name="api" value="default"/>
+<property name="mozinclude.dir" location="${base.dir}/dist/include"/>
+<property name="mozlib.dir" location="${base.dir}/dist/lib"/>
+
+<taskdef resource="cpptasks.tasks"/>
+<typedef resource="cpptasks.types"/>
+
+<target name="usage">
+	<echo message="Builds Mozilla xpcom/sample."/>
+	<echo message="Usage:"/>
+	<echo message="ant -f xpcom.ant -Dbase.dir=/home/someuser/mozilla"/>
+	<echo message="    -Dcompiler=[gcc | msvc | icc | bcc ...]"/>
+</target>
+
+<target name="init">
+	<mkdir dir="${build.dir}"/>
+	<property name="obj.dir" value="${build.dir}/obj"/>
+	<mkdir dir="${obj.dir}"/>
+	<condition property="is-gcc">
+		<or>
+			<equals arg1="${compiler}" arg2="gcc"/>
+			<equals arg1="${compiler}" arg2="g++"/>
+		</or>
+	</condition>
+	<condition property="is-msvc">
+		<or>
+			<equals arg1="${compiler}" arg2="msvc"/>
+		</or>
+	</condition>
+	<condition property="is-windows"><os family="windows"/></condition>
+	<condition property="is-win32">
+		<or>
+			<equals arg1="${api}" arg2="win32"/>
+			<and>
+				<equals arg1="${api}" arg2="default"/>
+				<isset property="is-windows"/>
+			</and>
+		</or>
+	</condition>
+	<property environment="env"/>
+	<!--  in case not set in environment, use an insignificant value -->
+	<property name="env.LD_LIBRARY_PATH" value="."/>
+</target>
+
+<target name="clean">
+	<delete dir="${build.dir}"/>
+</target>
+
+
+<target name="build-xpcomsample" depends="init">
+    <mkdir dir="${obj.dir}"/>
+
+       <!--  compile .idl files, places generated files on obj.dir  -->
+	<cc objdir="${obj.dir}">
+            <!--  runs xpidl twice to create .h and .xpt files   -->
+            <compiler name="xpidl" inherit="false">
+            	<includepath path="${base.dir}/dist/idl"/>
+    			<fileset dir="${base.dir}/xpcom/sample" includes="*.idl"/>
+            </compiler>
+    </cc>
+    <cc objdir="${obj.dir}" 
+        outtype="shared" 
+        outfile="${build.dir}/xpcomsample"
+        rtti="false"
+        exceptions="false">
+    	<fileset dir="${base.dir}/xpcom/sample" includes="*.cpp"/>
+    	<defineset define="XPCOM_GLUE,HAVE_DEPENDENT_LIBS,MOZILLA_CLIENT"/>
+    	<defineset>
+    		<define name="OSTYPE" value="Linux2.4"/>
+    		<define name="OSARCH" value="Linux"/>
+    	</defineset>
+    	<defineset if="is-debug" define="DEBUG, _DEBUG, TRACING"/>
+    	<includepath path="${obj.dir}"/>
+    	<includepath path="${base.dir}/xpcom/sample"/>
+    	<includepath path="${mozinclude.dir};${mozinclude.dir}/string:${mozinclude.dir}/xpcom;${mozinclude.dir}/nspr"/>
+    	<compilerarg value="-fshort-wchar"/>
+    	<compilerarg value="-pthread"/>
+    	<libset dir="${mozlib.dir}" libs="xpcomglue, plds4, plc4, nspr4"/>
+    	<syslibset libs="pthread, dl, m"/>    	
+    </cc>
+</target>
+
+
+
+<target name="all" depends="build-xpcomsample"/>
+
+<target name="test-all" depends="build-xpcomsample"/>
+
+</project>
