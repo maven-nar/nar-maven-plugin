@@ -66,7 +66,11 @@ import org.apache.tools.ant.types.EnumeratedAttribute;
  * </tr>
  * <tr>
  * <td>g77</td>
- * <td>GNU FORTRAN compiler</td>
+ * <td>GNU FORTRAN 77 compiler</td>
+ * </tr>
+ * <tr>
+ * <td>gfortran</td>
+ * <td>GNU FORTRAN 95 compiler</td>
  * </tr>
  * <tr>
  * <td>msvc</td>
@@ -186,7 +190,9 @@ public class CompilerEnum extends EnumeratedAttribute {
             new ProcessorEnumValue("gcc", GccCCompiler.getInstance()),
             new ProcessorEnumValue("g++", GccCCompiler.getGppInstance()),
             new ProcessorEnumValue("c++", GccCCompiler.getCppInstance()),
+// FREEHEP
             new ProcessorEnumValue("g77", GccCCompiler.getG77Instance()),
+            new ProcessorEnumValue("gfortran", GccCCompiler.getGFortranInstance()),
             new ProcessorEnumValue("msvc", DevStudioCCompiler.getInstance()),
             new ProcessorEnumValue("bcc", BorlandCCompiler.getInstance()),
             new ProcessorEnumValue("msrc", DevStudioResourceCompiler

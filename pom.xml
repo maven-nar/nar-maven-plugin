@@ -3,7 +3,7 @@
   <groupId>net.sf.antcontrib</groupId>
   <artifactId>cpptasks</artifactId>
   <name>CPPTasks (modified)</name>
-  <version>20051015-patched-1.0</version>
+  <version>20051015-patched-1.1-SNAPSHOT</version>
   <description>Library to call native compilers and linkers.</description>
 
   <url>http://java.freehep.org/</url>
@@ -26,11 +26,12 @@
     <repository>
       <id>freehep-maven</id>
       <name>FreeHEP Maven Repository</name>
-      <url>sftp://svn.freehep.org/nfs/slac/g/jas/maven2</url>
+      <url>scp://svn.freehep.org/nfs/slac/g/jas/maven2</url>
     </repository>
   </distributionManagement>
 
   <build>
+    <defaultGoal>install</defaultGoal>
     <sourceDirectory>src</sourceDirectory>
     <resources>
       <resource>
@@ -77,9 +78,9 @@
       </dependencies>
     </profile>
     <profile>
-      <id>jdk1.5+</id>
+      <id>jdk1.5</id>
       <activation>
-        <jdk>1.5+</jdk>
+        <jdk>1.5</jdk>
       </activation>
       <dependencies>
         <dependency>
@@ -95,6 +96,12 @@
       <groupId>ant</groupId>
       <artifactId>ant</artifactId>
       <version>1.6.5</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.2</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

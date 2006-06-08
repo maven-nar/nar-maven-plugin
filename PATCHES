@@ -1,5 +1,8 @@
 *** Changes marked with FREEHEP.
-cpptasks-20051015-patched-1.0-SNAPSHOT
+cpptasks-20051015-patched-1.1-SNAPSHOT
+- [gcc.GccCCompiler] added gfortran compiler
+- [CompilerEnum] added gfortran compiler
+cpptasks-20051015-patched-1.0
 - [DevStudioCompatibleCCompiler] changed /GX into /EHsc (for VC8, and backward compatible with VC7 and VC6).
 - [CommandLineLinker] use absolute paths for filenames if they are shorter than relative paths to overcome windows file length limit.
 - [gcc.AbstractLdLinker] no -Bstatic for Darwin.

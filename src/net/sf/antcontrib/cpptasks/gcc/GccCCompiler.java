@@ -59,6 +59,11 @@ public final class GccCCompiler extends GccCompatibleCCompiler {
             sourceExtensions, headerExtensions, false,
             new GccCCompiler("g77", sourceExtensions, headerExtensions, true,
                     null, false, null), false, null);
+// FREEHEP
+    private static final GccCCompiler gfortranInstance = new GccCCompiler("gfortran",
+            sourceExtensions, headerExtensions, false,
+            new GccCCompiler("gfortran", sourceExtensions, headerExtensions, true,
+                    null, false, null), false, null);
     private static final GccCCompiler gppInstance = new GccCCompiler("g++",
             sourceExtensions, headerExtensions, false,
             new GccCCompiler("g++", sourceExtensions, headerExtensions, true,
@@ -78,6 +83,13 @@ public final class GccCCompiler extends GccCompatibleCCompiler {
      */
     public static GccCCompiler getG77Instance() {
         return g77Instance;
+    }
+// FREEHEP
+    /**
+     * Gets g95 adapter
+     */
+    public static GccCCompiler getGFortranInstance() {
+        return gfortranInstance;
     }
     /**
      * Gets gpp adapter
