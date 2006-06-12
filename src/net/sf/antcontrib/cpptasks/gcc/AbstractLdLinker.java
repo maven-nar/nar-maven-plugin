@@ -57,10 +57,14 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
         if (isDarwin()) {
             if (linkType.isPluginModule()) {
                 args.addElement("-bundle");
+// FREEHEP
+            } else if (linkType.isJNIModule()) {
+                args.addElement("-dynamic");
+                args.addElement("-bundle");
             } else {
                 if (linkType.isSharedLibrary()) {
-                    args.addElement("-prebind");
-                    args.addElement("-dynamiclib");
+                  args.addElement("-prebind");
+                  args.addElement("-dynamiclib");
                 }
             }
         } else {

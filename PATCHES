@@ -1,8 +1,10 @@
 *** Changes marked with FREEHEP.
 cpptasks-20051015-patched-1.1-SNAPSHOT
+- [gcc.AbstractLdLinker] added jni
 - [OutputTypeEnum] added jni
 - [compiler.LinkType] add jni as type
 - [gcc.GccLinker] add jni as type and special linker for MacOS X to output jnilib files.
+- [gcc.GppLinker] add jni as type and special linker for MacOS X to output jnilib files.
 - [gcc.GccCCompiler] added gfortran compiler
 - [CompilerEnum] added gfortran compiler
 cpptasks-20051015-patched-1.0

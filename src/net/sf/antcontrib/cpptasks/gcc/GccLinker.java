@@ -43,6 +43,9 @@ public class GccLinker extends AbstractLdLinker {
             discardFiles, "", "", false, null);
     private static final GccLinker machBundleLinker = new GccLinker("gcc",
             objFiles, discardFiles, "lib", ".bundle", false, null);
+// FREEHEP
+    private static final GccLinker machJNILinker = new GccLinker("gcc",
+            objFiles, discardFiles, "lib", ".jnilib", false, null);
     private static final GccLinker machDllLinker = new GccLinker("gcc",
             objFiles, discardFiles, "lib", ".dylib", false, null);
     public static GccLinker getInstance() {
@@ -193,7 +196,11 @@ public class GccLinker extends AbstractLdLinker {
         }
 // FREEHEP
         if (type.isJNIModule()) {
-            return dllLinker;
+            if (isDarwin()) {
+                return machJNILinker;
+            } else {
+                return dllLinker;
+            }
         }
         if (type.isPluginModule()) {
             if (isDarwin()) {
