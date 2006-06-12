@@ -44,6 +44,12 @@ public class LinkType {
         String value = outputType.getValue();
         return value.equals("executable");
     }
+// FREEHEP    
+    public boolean isJNIModule() {
+        String value = outputType.getValue();
+        return value.equals("jni");
+    }
+    
     /**
      * Gets whether the link should produce a plugin module.
      * 
@@ -60,7 +66,8 @@ public class LinkType {
      */
     public boolean isSharedLibrary() {
         String value = outputType.getValue();
-        return value.equals("shared") || value.equals("plugin");
+// FREEHEP
+        return value.equals("shared") || value.equals("plugin") || value.equals("jni");
     }
     /**
      * Gets whether the link should produce a static library.

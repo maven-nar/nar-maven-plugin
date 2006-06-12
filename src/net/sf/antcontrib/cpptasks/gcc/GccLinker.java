@@ -191,6 +191,10 @@ public class GccLinker extends AbstractLdLinker {
         if (type.isStaticLibrary()) {
             return GccLibrarian.getInstance();
         }
+// FREEHEP
+        if (type.isJNIModule()) {
+            return dllLinker;
+        }
         if (type.isPluginModule()) {
             if (isDarwin()) {
                 return machBundleLinker;
