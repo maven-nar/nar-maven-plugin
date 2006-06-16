@@ -27,6 +27,9 @@ public class LinkType {
     private OutputTypeEnum outputType = new OutputTypeEnum();
     private boolean staticRuntime = false;
     private SubsystemEnum subsystem = new SubsystemEnum();
+// FREEHEP
+    private boolean linkCPP = true;
+    
     /**
      * Constructor
      * 
@@ -156,6 +159,14 @@ public class LinkType {
     	return subsystem.getValue();
     }
 
+    public void setLinkCPP(boolean linkCPP) {
+        this.linkCPP = linkCPP;
+    }
+    
+    public boolean linkCPP() {
+        return linkCPP;
+    }
+    
     // FREEHEP: flag
     public boolean callAddLibrarySets = false;
 }

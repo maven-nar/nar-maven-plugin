@@ -1,5 +1,8 @@
 *** Changes marked with FREEHEP.
 cpptasks-20051015-patched-1.1-SNAPSHOT
+- [CCTask] added method to link with CPP
+- [compiler.LinkType] added method to link with CPP
+- [gcc.GppLinker] link with or without CPP
 - [gcc.AbstractLdLinker] added jni
 - [OutputTypeEnum] added jni
 - [compiler.LinkType] add jni as type

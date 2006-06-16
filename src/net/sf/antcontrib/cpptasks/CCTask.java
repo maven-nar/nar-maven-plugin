@@ -1072,6 +1072,12 @@ public class CCTask extends Task {
     public void setLink(OutputTypeEnum outputType) {
         linkType.setOutputType(outputType);
     }
+    
+// FREEHEP added method to link with cpp    
+    public void setLinkCPP(boolean linkCPP) {
+        linkType.setLinkCPP(linkCPP);
+    }
+    
     /**
      * Enables or disables generation of multithreaded code
      * 

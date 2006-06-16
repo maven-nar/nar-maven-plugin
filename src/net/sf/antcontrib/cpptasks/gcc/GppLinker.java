@@ -72,16 +72,20 @@ public class GppLinker extends AbstractLdLinker {
                 args.addElement("-mwindows");
             }
         }
-        if (linkType.isStaticRuntime()) {
-            String[] cmdin = new String[]{"g++", "-print-file-name=libstdc++.a"};
-            String[] cmdout = CaptureStreamHandler.run(cmdin);
-            if (cmdout.length > 0) {
-                runtimeLibrary = cmdout[0];
+// FREEHEP, avoid stdc++ if requested
+        runtimeLibrary = null;
+        if (linkType.linkCPP()) {
+            if (linkType.isStaticRuntime()) {
+                String[] cmdin = new String[]{"g++", "-print-file-name=libstdc++.a"};
+                String[] cmdout = CaptureStreamHandler.run(cmdin);
+                if (cmdout.length > 0) {
+                    runtimeLibrary = cmdout[0];
+                } else {
+                    runtimeLibrary = null;
+                }
             } else {
-                runtimeLibrary = null;
+                runtimeLibrary = "-lstdc++";
             }
-        } else {
-            runtimeLibrary = "-lstdc++";
         }
         // FREEHEP: set flag
         linkType.callAddLibrarySets = true;
