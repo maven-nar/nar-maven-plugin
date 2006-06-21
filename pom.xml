@@ -31,6 +31,12 @@
   </distributionManagement>
 
   <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh-external</artifactId>
+      </extension>
+    </extensions>
     <defaultGoal>install</defaultGoal>
     <sourceDirectory>src</sourceDirectory>
     <resources>
