@@ -26,7 +26,7 @@
     <repository>
       <id>freehep-maven</id>
       <name>FreeHEP Maven Repository</name>
-      <url>scp://svn.freehep.org/nfs/slac/g/jas/maven2</url>
+      <url>scpexe://svn.freehep.org/nfs/slac/g/jas/maven2</url>
     </repository>
   </distributionManagement>
 
