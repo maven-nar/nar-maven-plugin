@@ -3,9 +3,8 @@
   <groupId>net.sf.antcontrib</groupId>
   <artifactId>cpptasks</artifactId>
   <name>CPPTasks (modified)</name>
-  <version>20051015-patched-1.1-SNAPSHOT</version>
+  <version>20051015-patched-1.1</version>
   <description>Library to call native compilers and linkers.</description>
-
   <url>http://java.freehep.org/</url>
   <ciManagement>
     <system>continuum</system>
@@ -29,7 +28,6 @@
       <url>scpexe://svn.freehep.org/nfs/slac/g/jas/maven2</url>
     </repository>
   </distributionManagement>
-
   <build>
     <extensions>
       <extension>
