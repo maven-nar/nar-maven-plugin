@@ -1,5 +1,5 @@
 *** Changes marked with FREEHEP.
-cpptasks-20051015-patched-1.1-SNAPSHOT
+cpptasks-20051015-patched-1.1
 - [CCTask] added method to link with CPP
 - [compiler.LinkType] added method to link with CPP
 - [gcc.GppLinker] link with or without CPP
