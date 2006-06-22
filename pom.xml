@@ -20,11 +20,11 @@
   </ciManagement>
   <scm>
     <connection>scm:svn:svn://svn.freehep.org/svn/misc/trunk/cpptasks</connection>
-    <developerConnection>scm:svn:svn://svn.freehep.org/svn/freehep/trunk/cpptasks</developerConnection>
+    <developerConnection>scm:svn:svn://svn.freehep.org/svn/misc/trunk/cpptasks</developerConnection>
   </scm>
   <distributionManagement>
     <repository>
-      <id>freehep-maven</id>
+      <id>freehep-maven-deploy</id>
       <name>FreeHEP Maven Repository</name>
       <url>scpexe://svn.freehep.org/nfs/slac/g/jas/maven2</url>
     </repository>
@@ -56,6 +56,13 @@
       </resource>
     </resources>
     <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.4</source>
+          <target>1.4</target>
+        </configuration>
+      </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
