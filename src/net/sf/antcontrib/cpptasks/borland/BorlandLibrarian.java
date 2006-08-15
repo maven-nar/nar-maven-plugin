@@ -60,12 +60,18 @@ public class BorlandLibrarian extends CommandLineLinker {
     protected void addEntry(String entry, Vector args) {
     }
     
-    protected String getCommandFileSwitch(String cmdFile) {
-        //
-        //  tlib requires quotes around paths containing -
-        //     ilink32 doesn't like them
-        StringBuffer buf = new StringBuffer("@");
-        BorlandProcessor.quoteFile(buf, cmdFile);
+    protected String getCommandFileSwitch(String cmdFile) {
+
+        //
+
+        //  tlib requires quotes around paths containing -
+
+        //     ilink32 doesn't like them
+
+        StringBuffer buf = new StringBuffer("@");
+
+        BorlandProcessor.quoteFile(buf, cmdFile);
+
         return buf.toString();
     }
     public File[] getLibraryPath() {
@@ -182,8 +188,10 @@ public class BorlandLibrarian extends CommandLineLinker {
     protected String[] prepareResponseFile(File outputFile, String[] args)
             throws IOException {
     	String[] cmdargs = BorlandProcessor.prepareResponseFile(outputFile, args, " & \n");
-        cmdargs[cmdargs.length - 1] = getCommandFileSwitch(cmdargs[cmdargs.length -1]);
-        return cmdargs;
+        cmdargs[cmdargs.length - 1] = getCommandFileSwitch(cmdargs[cmdargs.length -1]);
+
+        return cmdargs;
+
     }
     
     /**
@@ -203,17 +211,29 @@ public class BorlandLibrarian extends CommandLineLinker {
     	//  build a new library
     	super.link(task, outputFile, sourceFiles, config);
     }
-    
-    /**
-     *   Encloses problematic file names within quotes.
-     *   @param buf string buffer
-     *   @param filename source file name
-     *   @returns filename potentially enclosed in quotes.
-     */
-    protected String quoteFilename(StringBuffer buf,String filename) {
-      buf.setLength(0);
-      BorlandProcessor.quoteFile(buf, filename);
-      return buf.toString();
-    }
+    
+
+    /**
+
+     *   Encloses problematic file names within quotes.
+
+     *   @param buf string buffer
+
+     *   @param filename source file name
+
+     *   @returns filename potentially enclosed in quotes.
+
+     */
+
+    protected String quoteFilename(StringBuffer buf,String filename) {
+
+      buf.setLength(0);
+
+      BorlandProcessor.quoteFile(buf, filename);
+
+      return buf.toString();
+
+    }
+
 
 }
