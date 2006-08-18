@@ -1,4 +1,7 @@
 *** Changes marked with FREEHEP.
+cpptasks-20051015-patched-1.2-SNAPSHOT
+- added -shared-libgcc/-static-libgcc for linking gcc and c++. 
+
 cpptasks-20051015-patched-1.1
 - [CCTask] added method to link with CPP
 - [compiler.LinkType] added method to link with CPP

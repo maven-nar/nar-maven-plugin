@@ -41,7 +41,9 @@ public class GppLinker extends AbstractLdLinker {
             ".lib", ".dll", ".so", ".sl"};
     private static String[] linkerOptions = new String[]{"-bundle", "-dylib",
             "-dynamic", "-dynamiclib", "-nostartfiles", "-nostdlib",
-            "-prebind", "-s", "-static", "-shared", "-symbolic", "-Xlinker"};
+            "-prebind", "-s", "-static", "-shared", "-symbolic", "-Xlinker",
+// FREEHEP
+            "-static-libgcc", "-shared-libgcc"};
     private static final GppLinker instance = new GppLinker("gcc", objFiles,
             discardFiles, "", "", false, null);
     private static final GppLinker machDllLinker = new GppLinker("gcc",
@@ -56,6 +58,7 @@ public class GppLinker extends AbstractLdLinker {
     }
     private File[] libDirs;
     private String runtimeLibrary;
+    private String gccLibrary;
     protected GppLinker(String command, String[] extensions,
             String[] ignoredExtensions, String outputPrefix,
             String outputSuffix, boolean isLibtool, GppLinker libtoolLinker) {
@@ -74,6 +77,7 @@ public class GppLinker extends AbstractLdLinker {
         }
 // FREEHEP, avoid stdc++ if requested
         runtimeLibrary = null;
+        gccLibrary = null;
         if (linkType.linkCPP()) {
             if (linkType.isStaticRuntime()) {
                 String[] cmdin = new String[]{"g++", "-print-file-name=libstdc++.a"};
@@ -83,8 +87,10 @@ public class GppLinker extends AbstractLdLinker {
                 } else {
                     runtimeLibrary = null;
                 }
+                gccLibrary = "-static-libgcc";
             } else {
                 runtimeLibrary = "-lstdc++";
+                gccLibrary = "-shared-libgcc";
             }
         }
         // FREEHEP: set flag
@@ -96,6 +102,9 @@ public class GppLinker extends AbstractLdLinker {
                 endargs);
         if (runtimeLibrary != null) {
             endargs.addElement(runtimeLibrary);
+        }
+        if (gccLibrary != null) {
+        	endargs.addElement(gccLibrary);
         }
         return rs;
     }
