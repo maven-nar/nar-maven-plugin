@@ -125,8 +125,9 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
                             previousLibraryType = set.getType();
                         }
                     } else {
-                            if (set.getType() == null ||
-                                            !"framework".equals(set.getType().getValue()) ||
+                    	// FREEHEP FIXME, recheck this, works on MacOSX
+                            if (set.getType() == null &&
+                                            !"framework".equals(set.getType().getValue()) &&
                                                         !isDarwin()) {
                                     endargs.addElement("-Bdynamic");
                                     previousLibraryType = set.getType();
