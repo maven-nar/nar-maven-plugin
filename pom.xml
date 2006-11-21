@@ -3,7 +3,7 @@
 	<groupId>net.sf.antcontrib</groupId>
 	<artifactId>cpptasks</artifactId>
 	<name>CPPTasks (modified)</name>
-	<version>20051015-patched-1.2</version>
+	<version>20051015-patched-1.3-SNAPSHOT</version>
 	<description>
 		Library to call native compilers and linkers.
 	</description>
@@ -22,8 +22,8 @@
 		</notifiers>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:svn://svn.freehep.org/svn/misc/tags/cpptasks-20051015-patched-1.2</connection>
-		<developerConnection>scm:svn:svn://svn.freehep.org/svn/misc/tags/cpptasks-20051015-patched-1.2</developerConnection>
+		<connection>scm:svn:svn://svn.freehep.org/svn/misc/trunk/cpptasks</connection>
+		<developerConnection>scm:svn:svn://svn.freehep.org/svn/misc/trunk/cpptasks</developerConnection>
 	</scm>
 	<distributionManagement>
 		<repository>
