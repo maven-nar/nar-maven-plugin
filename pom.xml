@@ -65,6 +65,12 @@
 		</resources>
 		<plugins>
 			<plugin>
+			<artifactId>maven-release-plugin</artifactId>
+			<configuration>
+            			<tagBase>svn://svn.freehep.org/svn/misc/tags</tagBase>
+          		</configuration>
+        		</plugin>
+			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<source>1.4</source>
