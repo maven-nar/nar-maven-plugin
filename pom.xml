@@ -41,6 +41,8 @@
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-ssh-external</artifactId>
+				<!-- needed for release to work -->
+				<version>1.0-alpha-5</version>
 			</extension>
 		</extensions>
 		<defaultGoal>install</defaultGoal>
