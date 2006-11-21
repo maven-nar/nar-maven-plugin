@@ -15,6 +15,7 @@
  *  limitations under the License.
  */
 package net.sf.antcontrib.cpptasks.compiler;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +25,7 @@ import java.util.Vector;
 
 import org.apache.tools.ant.taskdefs.Execute;
 import org.apache.tools.ant.taskdefs.ExecuteStreamHandler;
+
 /**
  * Implements ExecuteStreamHandler to capture the output of a Execute to an
  * array of strings
@@ -31,92 +33,134 @@ import org.apache.tools.ant.taskdefs.ExecuteStreamHandler;
  * @author Curt Arnold
  */
 public class CaptureStreamHandler implements ExecuteStreamHandler {
-    /**
-     * Runs an executable and captures the output in a String array
-     * 
-     * @param cmdline
-     *            command line arguments
-     * @return output of process
-     */
-    public static String[] run(String[] cmdline) {
-        CaptureStreamHandler handler = new CaptureStreamHandler();
-        Execute exec = new Execute(handler);
-        exec.setCommandline(cmdline);
-        try {
-            int status = exec.execute();
-        } catch (IOException ex) {
-        }
-        return handler.getOutput();
-    }
-    private InputStream errorStream;
-    private InputStream fromProcess;
-    public CaptureStreamHandler() {
-    }
-    public String[] getOutput() {
-        String[] output;
-        if (fromProcess != null) {
-            Vector lines = new Vector(10);
-            try {
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(errorStream));
-                for (int i = 0; i < 2; i++) {
-                    for (int j = 0; j < 100; j++) {
-                        String line = reader.readLine();
-                        if (line == null) {
-                            reader = new BufferedReader(new InputStreamReader(
-                                    fromProcess));
-                            break;
-                        }
-                        lines.addElement(line);
-                    }
-                }
-            } catch (IOException ex) {
-            }
-            output = new String[lines.size()];
-            lines.copyInto(output);
-            return output;
-        }
-        output = new String[0];
-        return output;
-    }
-    /**
-     * Install a handler for the error stream of the subprocess.
-     * 
-     * @param is
-     *            input stream to read from the error stream from the
-     *            subprocess
-     */
-    public void setProcessErrorStream(InputStream is) throws IOException {
-        errorStream = is;
-    }
-    /**
-     * Install a handler for the input stream of the subprocess.
-     * 
-     * @param os
-     *            output stream to write to the standard input stream of the
-     *            subprocess
-     */
-    public void setProcessInputStream(OutputStream os) throws IOException {
-        os.close();
-    }
-    /**
-     * Install a handler for the output stream of the subprocess.
-     * 
-     * @param is
-     *            input stream to read from the error stream from the
-     *            subprocess
-     */
-    public void setProcessOutputStream(InputStream is) throws IOException {
-        fromProcess = is;
-    }
-    /**
-     * Start handling of the streams.
-     */
-    public void start() throws IOException {
-    }
-    /**
-     * Stop handling of the streams - will not be restarted.
-     */
-    public void stop() {
-    }
+
+	String[] output;
+
+	/**
+	 * Runs an executable and captures the output in a String array
+	 * 
+	 * @param cmdline
+	 *            command line arguments
+	 * @return output of process
+	 */
+	public static String[] run(String[] cmdline) {
+		CaptureStreamHandler handler = new CaptureStreamHandler();
+		Execute exec = new Execute(handler);
+		exec.setCommandline(cmdline);
+		try {
+			int status = exec.execute();
+		} catch (IOException ex) {
+		}
+		return handler.getOutput();
+	}
+
+	private InputStream processErrorStream;
+
+	private InputStream processOutputStream;
+
+	public CaptureStreamHandler() {
+	}
+
+	public String[] getOutput() {
+		return output;
+	}
+
+	static class Copier extends Thread {
+		InputStream is;
+
+		Vector lines;
+
+		Copier(InputStream is) {
+			this.is = is;
+			lines = new Vector(10);
+		}
+
+		public void run() {
+    		try {
+    			BufferedReader reader = new BufferedReader( new InputStreamReader(is) );
+    			while ( true ) {
+    				String line = reader.readLine();
+    				if ( line == null )
+    					break;
+    				lines.addElement( line );
+    			}
+			} catch (IOException e) {
+				// Ignore
+			}
+    	}
+
+		public Vector getLines() {
+			return lines;
+		}
+	}
+
+	/**
+	 * Reads concurrently both the process standard output and standard error.
+	 * The standard error - if not empty - is copied to the output string array field. Otherwise
+	 * the stanard output is copied to the output field. The output field is set to an empty array 
+	 * in case of any error. 
+	 */
+	public void gatherOutput() {
+		try {
+			Copier errorCopier = new Copier(processErrorStream);
+			Copier outputCopier = new Copier(processOutputStream);
+			errorCopier.start();
+			outputCopier.start();
+			errorCopier.join();
+			outputCopier.join();
+			if (errorCopier.getLines().size() > 0) {
+				output = new String[errorCopier.getLines().size()];
+				errorCopier.getLines().copyInto(output);
+			} else {
+				output = new String[outputCopier.getLines().size()];
+				outputCopier.getLines().copyInto(output);
+			}
+		} catch (Exception e) {
+			output = new String[0];
+		}
+	}
+
+	/**
+	 * Install a handler for the error stream of the subprocess.
+	 * 
+	 * @param is
+	 *            input stream to read from the error stream from the subprocess
+	 */
+	public void setProcessErrorStream(InputStream is) throws IOException {
+		processErrorStream = is;
+	}
+
+	/**
+	 * Install a handler for the input stream of the subprocess.
+	 * 
+	 * @param os
+	 *            output stream to write to the standard input stream of the
+	 *            subprocess
+	 */
+	public void setProcessInputStream(OutputStream os) throws IOException {
+		os.close();
+	}
+
+	/**
+	 * Install a handler for the output stream of the subprocess.
+	 * 
+	 * @param is
+	 *            input stream to read from the error stream from the subprocess
+	 */
+	public void setProcessOutputStream(InputStream is) throws IOException {
+		processOutputStream = is;
+	}
+
+	/**
+	 * Start handling of the streams.
+	 */
+	public void start() throws IOException {
+		gatherOutput();
+	}
+
+	/**
+	 * Stop handling of the streams - will not be restarted.
+	 */
+	public void stop() {
+	}
 }
