@@ -1,5 +1,5 @@
 *** Changes marked with FREEHEP.
-cpptasks-20051015-patched-1.2-SNAPSHOT
+cpptasks-20051015-patched-1.2
 - added -shared-libgcc/-static-libgcc for linking gcc and c++. 
 - added -dynamic as a valid option to GccLinker
 - rewrote the launching of subprocesses (NARPLUGIN-71).
