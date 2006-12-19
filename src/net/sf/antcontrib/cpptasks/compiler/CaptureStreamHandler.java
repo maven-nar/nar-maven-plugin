@@ -51,7 +51,7 @@ public class CaptureStreamHandler implements ExecuteStreamHandler {
 			int status = exec.execute();
 		} catch (IOException ex) {
 		}
-		return handler.getOutput();
+		return handler.getOutput() != null ? handler.getOutput() : new String[0];
 	}
 
 	private InputStream processErrorStream;

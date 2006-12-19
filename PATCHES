@@ -1,4 +1,7 @@
 *** Changes marked with FREEHEP.
+cpptasks-20051015-patched-1.3
+- protected return of net.sf.antcontrib.cpptasks.compiler.CaptureStreamHandler.run().
+
 cpptasks-20051015-patched-1.2
 - added -shared-libgcc/-static-libgcc for linking gcc and c++. 
 - added -dynamic as a valid option to GccLinker
