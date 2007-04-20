@@ -1,4 +1,7 @@
 *** Changes marked with FREEHEP.
+cpptasks-20051015-patched-1.4-SNAPSHOT
+- unquoted -framework on MacOX X.
+
 cpptasks-20051015-patched-1.3
 - protected return of net.sf.antcontrib.cpptasks.compiler.CaptureStreamHandler.run().
 
