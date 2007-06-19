@@ -90,8 +90,15 @@ public class GppLinker extends AbstractLdLinker {
                 gccLibrary = "-static-libgcc";
             } else {
                 runtimeLibrary = "-lstdc++";
-                gccLibrary = "-shared-libgcc";
+// FIXME, needed to add exceptions here for MacOS X.
+                gccLibrary = "-fexceptions";
             }
+        } else {
+            if (linkType.isStaticRuntime()) {
+               gccLibrary = "-static-libgcc";
+            } else {
+               gccLibrary = "-shared-libgcc";
+            } 
         }
         // FREEHEP: set flag
         linkType.callAddLibrarySets = true;

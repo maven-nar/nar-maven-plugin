@@ -1,4 +1,7 @@
 *** Changes marked with FREEHEP.
+1.5-SNAPSHOT
+- g++ linking now includes option -fexceptions
+
 cpptasks-20051015-patched-1.4
 - unquoted -framework on MacOX X.
 
