@@ -63,7 +63,8 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
                 args.addElement("-bundle");
             } else {
                 if (linkType.isSharedLibrary()) {
-                  args.addElement("-prebind");
+// No longer needed for 10.4 and up.
+//                  args.addElement("-prebind");
                   args.addElement("-dynamiclib");
                 }
             }
