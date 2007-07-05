@@ -1,5 +1,5 @@
 *** Changes marked with FREEHEP.
-1.5-SNAPSHOT
+cpptasks-20051015-patched-1.5
 - [gcc.AbstractLdLinker] no more need for -prebind as of 10.4
 - g++ linking now includes option -fexceptions
 
