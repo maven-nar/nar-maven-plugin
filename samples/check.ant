@@ -18,8 +18,8 @@ Copyright 2004 The Ant-Contrib project
 
 <!--  
 
-    build file for check 0.8.4 (http://check.sourceforge.net)
-    a C unit test framework.
+    build file for check 0.9.3 (http://check.sourceforge.net)
+    a C unit test framework for POSIX-like OS.
     
 -->    
 <project name="check" default="test-all">
@@ -32,8 +32,8 @@ Copyright 2004 The Ant-Contrib project
 <property name="money.dir" location="${base.dir}/doc/money"/>
 <property name="build.dir" location="build"/>
 <property name="major" value="0"/>
-<property name="minor" value="8"/>
-<property name="build" value="4"/>
+<property name="minor" value="9"/>
+<property name="build" value="3"/>
 <!-- specify api="unix" or api="win32" override platform default -->
 <property name="api" value="default"/>
 
@@ -43,92 +43,49 @@ Copyright 2004 The Ant-Contrib project
 <target name="usage">
 	<echo message="Builds check (http://check.sourceforge.net)."/>
 	<echo message="Usage:"/>
-	<echo message="ant -f cppunit.ant -Dbase.dir=c:/check-0.8.4"/>
-	<echo message="    -Dcompiler=[gcc | msvc | icc | bcc ...]"/>
+	<echo message="ant -f cppunit.ant -Dbase.dir=c:/check-0.9.3"/>
+	<echo message="    -Dcompiler=[gcc | icc  ...]"/>
 </target>
 
-<!--  
-    sample versioninfo, targetplatform and distributer to check
-         if definitions are processed, not functional at this time
--->         
-<versioninfo id="check-version" 
-             fileversion="0.8.4" 
-             compatibilityversion="0.8"/>
-             
-<targetplatform id="winbox" arch="pentium4" osfamily="windows"/>
+  <target name="init">
+    <mkdir dir="${build.dir}"/>
+    <property name="obj.dir" value="${build.dir}/obj"/>
+    <mkdir dir="${obj.dir}"/>
+    <condition property="is-gcc">
+      <or>
+        <equals arg1="${compiler}" arg2="gcc"/>
+        <equals arg1="${compiler}" arg2="g++"/>
+      </or>
+    </condition>
+    <condition property="is-msvc">
+      <or>
+        <equals arg1="${compiler}" arg2="msvc"/>
+      </or>
+    </condition>
+    <property environment="env"/>
+    <!--  in case not set in environment, use an insignificant value -->
+    <property name="env.LD_LIBRARY_PATH" value="."/>
+    <available property="configure-available" 
+               file="${base.dir}/configure"/>
+    <available property="config-available" 
+               file="${base.dir}/config.h"/>
+  </target>
 
-<distributer id="mydistcc" hosts="192.168.18.101 192.168.18.102" protocol="distcc" user="carnold">
-    <map local="c:\" remote="smb://xanadu/c-drive/" remoteseparator="/"/>
-</distributer>
-
-<target name="check-config" depends="init">
-	<available property="configure-available" 
-	           file="${base.dir}/configure"/>
-	<available property="config-available" 
-	           file="${base.dir}/config.h"/>
-	<condition property="do-autogen">
-			<not>
-				<or>
-					<isset property="configure-available"/>
-					<isset property="is-windows"/>
-				</or>
-			</not>
-	</condition>
-	<condition property="do-configure">
-			<not>
-				<or>
-					<isset property="config-available"/>
-					<isset property="is-windows"/>
-				</or>
-			</not>
-	</condition>
-</target>
-
-<target name="run-autogen" 
-        depends="check-config" 
-	    if="do-autogen">
+<target name="autogen" 
+        depends="init" 
+	      unless="configure-available">
 	<exec dir="${base.dir}" executable="bash">
 		<arg value="autogen.sh"/>
 	</exec>
 </target>
 
 
-<target name="run-configure" 
-        depends="run-autogen" 
-        if="do-configure">
+<target name="configure" 
+        depends="autogen" 
+        unless="config-available">
 	<exec dir="${base.dir}" executable="bash">
 		<arg value="configure"/>
 	</exec>
-</target>
-
-<target name="init">
-	<mkdir dir="${build.dir}"/>
-	<property name="obj.dir" value="${build.dir}/obj"/>
-	<mkdir dir="${obj.dir}"/>
-	<condition property="is-gcc">
-		<or>
-			<equals arg1="${compiler}" arg2="gcc"/>
-			<equals arg1="${compiler}" arg2="g++"/>
-		</or>
-	</condition>
-	<condition property="is-msvc">
-		<or>
-			<equals arg1="${compiler}" arg2="msvc"/>
-		</or>
-	</condition>
-	<condition property="is-windows"><os family="windows"/></condition>
-	<condition property="is-win32">
-		<or>
-			<equals arg1="${api}" arg2="win32"/>
-			<and>
-				<equals arg1="${api}" arg2="default"/>
-				<isset property="is-windows"/>
-			</and>
-		</or>
-	</condition>
-	<property environment="env"/>
-	<!--  in case not set in environment, use an insignificant value -->
-	<property name="env.LD_LIBRARY_PATH" value="."/>
 </target>
 
 <target name="clean">
@@ -136,7 +93,7 @@ Copyright 2004 The Ant-Contrib project
 </target>
 
 
-<target name="static-lib" depends="run-configure">
+<target name="static-lib" depends="configure">
 	<mkdir dir="${obj.dir}"/>
 	<cc subsystem="console" 
 		outfile="${build.dir}/check"
@@ -168,7 +125,7 @@ Copyright 2004 The Ant-Contrib project
 		<libset dir="${build.dir}" libs="check"/>
 		<defineset define="WIN32" if="is-win32"/>
 		<versioninfo refid="check-version"/>
-	</cc>
+  </cc>
 </target>
 
 
@@ -207,7 +164,7 @@ Copyright 2004 The Ant-Contrib project
 		<libset dir="${build.dir}" libs="check"/>
 		<defineset define="WIN32" if="is-win32"/>
 		<versioninfo refid="check-version"/>
-	</cc>
+  </cc>
 </target>
 
 
@@ -231,7 +188,7 @@ Copyright 2004 The Ant-Contrib project
 		<libset dir="${build.dir}" libs="check"/>
 		<defineset define="WIN32" if="is-win32"/>
 		<versioninfo refid="check-version"/>
-	</cc>
+  </cc>
 </target>
 
 

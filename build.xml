@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-Copyright 2001-2005 The Ant-Contrib project
+Copyright 2001-2006 The Ant-Contrib project
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -33,7 +33,8 @@ Copyright 2001-2005 The Ant-Contrib project
         (zipped source doesn't contain xdocs proposal)  -->
   <property name="ant-src.dir" location="/ant-src/ant"/>
   <property name="xdocs.dir" location="${ant-src.dir}/proposal/xdocs"/>
-
+  <property name="javac.source" value="1.3"/>
+  <property name="javac.target" value="1.1"/>
 
   <!--
        ===================================================================
@@ -128,8 +129,8 @@ Copyright 2001-2005 The Ant-Contrib project
     <javac srcdir="${java.dir}"
            destdir="${build.classes}"
            debug="${debug}"
-           target="1.1"
-           source="1.3"
+           target="${javac.target}"
+           source="${javac.source}"
            deprecation="${deprecation}"
            optimize="${optimize}" >
     </javac>
@@ -163,8 +164,8 @@ Copyright 2001-2005 The Ant-Contrib project
            destdir="${tests.build.classes}"
            debug="true"
            deprecation="false"
-           target="1.1"
-           source="1.3"
+           target="${javac.target}"
+           source="${javac.source}"
            optimize="false"
            classpath="${build.lib}/${name}.jar;${java.class.path}"/>
     <jar jarfile="${tests.build.lib}/${name}_test.jar">
@@ -173,7 +174,7 @@ Copyright 2001-2005 The Ant-Contrib project
     </jar>
   </target>
 
-  <target name="run-tests"  depends="build-tests">
+  <target name="run-tests"  depends="build-tests" description="Run tests">
         <junit printsummary="false"
                 fork="true"
                 dir="${tests.java.dir}">
@@ -396,7 +397,7 @@ Copyright 2001-2005 The Ant-Contrib project
   </target>
 
   <target name="xdocs-cctask-warning" depends="xdocs-init" unless="cctask-available">
-        <fail>cpptask.jar must be in the classpath, SET CLASSPATH=${build.dir}\lib\cpptasks.jar before running ant.</fail>
+        <fail>cpptasks.jar must be in the classpath, SET CLASSPATH=${build.dir}\lib\cpptasks.jar before running ant.</fail>
   </target>
 
   <target name="xdocs-build-warning" depends="xdocs-init" unless="xdocs.build-available">
@@ -464,7 +465,6 @@ Copyright 2001-2005 The Ant-Contrib project
         <move file="${doc.dir}/precompileexceptdef.html" tofile="${doc.dir}/except.html"/>
         <move file="${doc.dir}/distributermap.html" tofile="${doc.dir}/map.html"/>
         <move file="${doc.dir}/projectdef.html" tofile="${doc.dir}/project.html"/>
-        <move file="${doc.dir}/debugdef.html" tofile="${doc.dir}/debug.html"/>
 
         <replace dir="${build.dir}/xdocs/docs/manual/other"
             includes="${all.html}"
