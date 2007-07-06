@@ -45,6 +45,6 @@ public final class DevStudioCCompiler extends DevStudioCompatibleCCompiler {
         return DevStudioLinker.getInstance().getLinker(type);
     }
     public int getMaximumCommandLength() {
-        return 1024;
+        return 32767;
     }
 }

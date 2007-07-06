@@ -27,9 +27,10 @@ public class LinkType {
     private OutputTypeEnum outputType = new OutputTypeEnum();
     private boolean staticRuntime = false;
     private SubsystemEnum subsystem = new SubsystemEnum();
+    
 // FREEHEP
     private boolean linkCPP = true;
-    
+
     /**
      * Constructor
      * 
@@ -47,12 +48,11 @@ public class LinkType {
         String value = outputType.getValue();
         return value.equals("executable");
     }
-// FREEHEP    
+    
     public boolean isJNIModule() {
         String value = outputType.getValue();
-        return value.equals("jni");
+        return value.equals("jni");    	
     }
-    
     /**
      * Gets whether the link should produce a plugin module.
      * 
@@ -158,15 +158,16 @@ public class LinkType {
     public String getSubsystem() {
     	return subsystem.getValue();
     }
-
+    
+// BEGINFREEHEP
     public void setLinkCPP(boolean linkCPP) {
-        this.linkCPP = linkCPP;
+    	this.linkCPP = linkCPP;
     }
     
     public boolean linkCPP() {
-        return linkCPP;
+    	return linkCPP;
     }
+   
+// ENDFREEHEP
     
-    // FREEHEP: flag
-    public boolean callAddLibrarySets = false;
 }

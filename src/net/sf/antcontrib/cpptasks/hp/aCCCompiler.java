@@ -59,7 +59,11 @@ public final class aCCCompiler extends GccCompatibleCCompiler {
         /*
          * if (multithreaded) { args.addElement("-mt"); }
          */
-        if (linkType.isSharedLibrary()) {
+
+        //
+        //    per patch 1193690
+        //
+        if (linkType.isSharedLibrary() && (! args.contains("+Z"))) {
             args.addElement("+z");
         }
     }

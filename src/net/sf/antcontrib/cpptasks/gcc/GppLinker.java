@@ -48,16 +48,17 @@ public class GppLinker extends AbstractLdLinker {
             discardFiles, "", "", false, null);
     private static final GppLinker machDllLinker = new GppLinker("gcc",
             objFiles, discardFiles, "lib", ".dylib", false, null);
-//  FREEHEP
-    private static final GppLinker machJNILinker = new GppLinker("gcc",
-            objFiles, discardFiles, "lib", ".jnilib", false, null);
     private static final GppLinker machPluginLinker = new GppLinker("gcc",
             objFiles, discardFiles, "lib", ".bundle", false, null);
+// FREEHEP
+    private static final GppLinker machJNILinker = new GppLinker("gcc",
+            objFiles, discardFiles, "lib", ".jnilib", false, null);
     public static GppLinker getInstance() {
         return instance;
     }
     private File[] libDirs;
     private String runtimeLibrary;
+// FREEEHEP
     private String gccLibrary;
     protected GppLinker(String command, String[] extensions,
             String[] ignoredExtensions, String outputPrefix,
@@ -75,34 +76,34 @@ public class GppLinker extends AbstractLdLinker {
                 args.addElement("-mwindows");
             }
         }
-// FREEHEP, avoid stdc++ if requested
+// BEGINFREEHEP link or not with libstdc++
         runtimeLibrary = null;
         gccLibrary = null;
         if (linkType.linkCPP()) {
-            if (linkType.isStaticRuntime()) {
-                String[] cmdin = new String[]{"g++", "-print-file-name=libstdc++.a"};
-                String[] cmdout = CaptureStreamHandler.run(cmdin);
-                if (cmdout.length > 0) {
-                    runtimeLibrary = cmdout[0];
-                } else {
-                    runtimeLibrary = null;
-                }
-                gccLibrary = "-static-libgcc";
-            } else {
-                runtimeLibrary = "-lstdc++";
-// FIXME, needed to add exceptions here for MacOS X.
-                gccLibrary = "-fexceptions";
-            }
+        	if (linkType.isStaticRuntime()) {
+        		String[] cmdin = new String[]{"g++", "-print-file-name=libstdc++.a"};
+        		String[] cmdout = CaptureStreamHandler.run(cmdin);
+        		if (cmdout.length > 0) {
+        			runtimeLibrary = cmdout[0];
+        		} else {
+        			runtimeLibrary = null;
+        		}
+        		gccLibrary = "-static-libgcc";
+        	} else {
+        		runtimeLibrary = "-lstdc++";
+        		// NOTE: added -fexceptions here for MacOS X
+        		gccLibrary = "-fexceptions";
+        	}
         } else {
-            if (linkType.isStaticRuntime()) {
-               gccLibrary = "-static-libgcc";
-            } else {
-               gccLibrary = "-shared-libgcc";
-            } 
+        	if (linkType.isStaticRuntime()) {
+        		gccLibrary = "-static-libgcc";
+        	} else {
+        		gccLibrary = "-shared-libgcc";
+        	}
         }
-        // FREEHEP: set flag
-        linkType.callAddLibrarySets = true;
+// ENDFREEHEP
     }
+
     public String[] addLibrarySets(CCTask task, LibrarySet[] libsets,
             Vector preargs, Vector midargs, Vector endargs) {
         String[] rs = super.addLibrarySets(task, libsets, preargs, midargs,
@@ -110,9 +111,11 @@ public class GppLinker extends AbstractLdLinker {
         if (runtimeLibrary != null) {
             endargs.addElement(runtimeLibrary);
         }
+// BEGINFREEHEP
         if (gccLibrary != null) {
         	endargs.addElement(gccLibrary);
         }
+// ENDFREEHEP
         return rs;
     }
     /**
@@ -209,14 +212,15 @@ public class GppLinker extends AbstractLdLinker {
         if (type.isStaticLibrary()) {
             return GccLibrarian.getInstance();
         }
-//      FREEHEP
+// BEGINFREEHEP
         if (type.isJNIModule()) {
-            if (isDarwin()) {
-                return machJNILinker;
-            } else {
-                return dllLinker;
-            }
+        	if (GccProcessor.getMachine().indexOf("darwin") >= 0) {
+        		return machJNILinker;
+        	} else {
+        		return dllLinker;
+        	}
         }
+// ENDFREEHEP
         if (type.isPluginModule()) {
             if (GccProcessor.getMachine().indexOf("darwin") >= 0) {
                 return machPluginLinker;

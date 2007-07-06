@@ -27,25 +27,23 @@ import net.sf.antcontrib.cpptasks.gcc.GccCCompiler;
 import net.sf.antcontrib.cpptasks.hp.aCCCompiler;
 import net.sf.antcontrib.cpptasks.ibm.VisualAgeCCompiler;
 import net.sf.antcontrib.cpptasks.intel.IntelLinux32CCompiler;
-import net.sf.antcontrib.cpptasks.intel.IntelLinux64CCompiler;
-// FREEHEP
 import net.sf.antcontrib.cpptasks.intel.IntelLinux32Compiler;
+import net.sf.antcontrib.cpptasks.intel.IntelLinux64CCompiler;
 import net.sf.antcontrib.cpptasks.intel.IntelLinux64Compiler;
 import net.sf.antcontrib.cpptasks.intel.IntelWin32CCompiler;
 import net.sf.antcontrib.cpptasks.intel.IntelWin64CCompiler;
 import net.sf.antcontrib.cpptasks.mozilla.XpidlCompiler;
+import net.sf.antcontrib.cpptasks.openwatcom.OpenWatcomCCompiler;
+import net.sf.antcontrib.cpptasks.openwatcom.OpenWatcomFortranCompiler;
 import net.sf.antcontrib.cpptasks.os390.OS390CCompiler;
 import net.sf.antcontrib.cpptasks.os400.IccCompiler;
 import net.sf.antcontrib.cpptasks.sun.C89CCompiler;
 import net.sf.antcontrib.cpptasks.sun.ForteCCCompiler;
-// FREEHEP
 import net.sf.antcontrib.cpptasks.sun.ForteCCompiler;
 import net.sf.antcontrib.cpptasks.sun.ForteF77Compiler;
 import net.sf.antcontrib.cpptasks.ti.ClxxCCompiler;
 import net.sf.antcontrib.cpptasks.trolltech.MetaObjectCompiler;
 import net.sf.antcontrib.cpptasks.trolltech.UserInterfaceCompiler;
-import net.sf.antcontrib.cpptasks.openwatcom.OpenWatcomCCompiler;
-import net.sf.antcontrib.cpptasks.openwatcom.OpenWatcomFortranCompiler;
 
 import org.apache.tools.ant.types.EnumeratedAttribute;
 /**
@@ -66,11 +64,7 @@ import org.apache.tools.ant.types.EnumeratedAttribute;
  * </tr>
  * <tr>
  * <td>g77</td>
- * <td>GNU FORTRAN 77 compiler</td>
- * </tr>
- * <tr>
- * <td>gfortran</td>
- * <td>GNU FORTRAN 95 compiler</td>
+ * <td>GNU FORTRAN compiler</td>
  * </tr>
  * <tr>
  * <td>msvc</td>
@@ -190,8 +184,8 @@ public class CompilerEnum extends EnumeratedAttribute {
             new ProcessorEnumValue("gcc", GccCCompiler.getInstance()),
             new ProcessorEnumValue("g++", GccCCompiler.getGppInstance()),
             new ProcessorEnumValue("c++", GccCCompiler.getCppInstance()),
-// FREEHEP
             new ProcessorEnumValue("g77", GccCCompiler.getG77Instance()),
+// FREEHEP
             new ProcessorEnumValue("gfortran", GccCCompiler.getGFortranInstance()),
             new ProcessorEnumValue("msvc", DevStudioCCompiler.getInstance()),
             new ProcessorEnumValue("bcc", BorlandCCompiler.getInstance()),
@@ -203,15 +197,17 @@ public class CompilerEnum extends EnumeratedAttribute {
             new ProcessorEnumValue("midl", DevStudioMIDLCompiler.getInstance()),
             new ProcessorEnumValue("icl", IntelWin32CCompiler.getInstance()),
             new ProcessorEnumValue("ecl", IntelWin64CCompiler.getInstance()),
+// BEGINFREEHEP
             new ProcessorEnumValue("icc", IntelLinux32CCompiler.getInstance()),
             new ProcessorEnumValue("ecc", IntelLinux64CCompiler.getInstance()),
-// FREEHEP
             new ProcessorEnumValue("icpc", IntelLinux32Compiler.getInstance()),
             new ProcessorEnumValue("ecpc", IntelLinux64Compiler.getInstance()),
+// ENDFREEHEP
             new ProcessorEnumValue("CC", ForteCCCompiler.getInstance()),
-// FREEHEP
+// BEGINFREEHEP
             new ProcessorEnumValue("suncc", ForteCCompiler.getInstance()),
             new ProcessorEnumValue("sunf77", ForteF77Compiler.getInstance()),
+// ENDFREEHEP
             new ProcessorEnumValue("aCC", aCCCompiler.getInstance()),
             new ProcessorEnumValue("os390", OS390CCompiler.getInstance()),
             new ProcessorEnumValue("os400", IccCompiler.getInstance()),

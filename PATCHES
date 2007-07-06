@@ -1,51 +1,59 @@
-*** Changes marked with FREEHEP.
-cpptasks-20051015-patched-1.5
-- [gcc.AbstractLdLinker] no more need for -prebind as of 10.4
-- g++ linking now includes option -fexceptions
+*** ALL Changes marked with FREEHEP or BEGINFREEHEP-ENDFREEHEP.
 
-cpptasks-20051015-patched-1.4
-- unquoted -framework on MacOX X.
+* cpptasks-1.0-beta-4-patched-1-SNAPSHOT
 
-cpptasks-20051015-patched-1.3
-- protected return of net.sf.antcontrib.cpptasks.compiler.CaptureStreamHandler.run().
+** Misc.
+- [src/net/sf/antcontrib/cpptasks/gcc/AbstractLdLinker.java] no more need for -prebind as of 10.4
+- [src/net/sf/antcontrib/cpptasks/gcc/GppLinker.java] added -shared-libgcc/-static-libgcc for linking gcc and c++. 
+- [src/net/sf/antcontrib/cpptasks/gcc/GccLinker.java] added -dynamic as a valid option to GccLinker
+- [src/net/sf/antcontrib/cpptasks/gcc/AbstractLdLinker.java] no -Bstatic for Darwin and no -Bdynamic for framework
+- [src/net/sf/antcontrib/cpptasks/compaq/CompaqVisualFortranCompiler.java] removed addition of quotes.
+- [src/net/sf/antcontrib/cpptasks/gcc/GccCompatibleCCompiler.java] added missing code for -fno-exceptions
+- [src/net/sf/antcontrib/cpptasks/CCTask.java] added log statement to identify linker and compiler
+- [src/net/sf/antcontrib/cpptasks/gcc/GppLinker.java] g++ linking now includes option -fexceptions
+- [src/net/sf/antcontrib/cpptasks/CommandLineLinker] use absolute paths for filenames if they are shorter than relative paths to overcome windows file length limit.
 
-cpptasks-20051015-patched-1.2
-- added -shared-libgcc/-static-libgcc for linking gcc and c++. 
-- added -dynamic as a valid option to GccLinker
-- rewrote the launching of subprocesses (NARPLUGIN-71).
+** -fno-rtti changes
+- [src/net/sf/antcontrib/cpptasks/gcc/GccCompatibleCCompiler.java] removed -fno-rtti flag
+- [src/net/sf/antcontrib/cpptasks/gcc/GccCCompiler.java] only add -fno-rtti for g++ and c++ 
 
-cpptasks-20051015-patched-1.1
-- [CCTask] added method to link with CPP
-- [compiler.LinkType] added method to link with CPP
-- [gcc.GppLinker] link with or without CPP
-- [gcc.AbstractLdLinker] added jni
-- [OutputTypeEnum] added jni
-- [compiler.LinkType] add jni as type
-- [gcc.GccLinker] add jni as type and special linker for MacOS X to output jnilib files.
-- [gcc.GppLinker] add jni as type and special linker for MacOS X to output jnilib files.
-- [gcc.GccCCompiler] added gfortran compiler
-- [CompilerEnum] added gfortran compiler
-cpptasks-20051015-patched-1.0
-- [DevStudioCompatibleCCompiler] changed /GX into /EHsc (for VC8, and backward compatible with VC7 and VC6).
-- [CommandLineLinker] use absolute paths for filenames if they are shorter than relative paths to overcome windows file length limit.
-- [gcc.AbstractLdLinker] no -Bstatic for Darwin.
-- [CCTask] added log statement to identify linker and compiler.
-- [intel.IntelLinux32CLinker, intel.IntelLinux64CLinker, intel.IntelLinux32Compiler, intel.IntelLinux64Compiler] 
-  added with names icpc and ecpc.
-- [LinkerEnum, CompilerEnum] added above linkers and compilers.
-- [intel.IntelLinux32CCompiler, intel.IntelLinux64CCompiler] links to IntelLinux32CLinker and IntelLinux64CLinker.
-- [intel.IntelLinux32Linker, intel.IntelLinux64Linker] changed linker name from icc to icpc and ecc to ecpc for version 8.1 of icc.
-- [sun.ForteCCompiler] Added (suncc)
-- [sun.ForteF77Compiler] Added (sunf77)
-- [CompilerEnum] Added the above (suncc, sunf77).
-- [compaq.CompaqVisualFortranCompiler] removed addition of quotes.
-- [gcc.GccCompatibleCCompiler, gcc.GccCCompiler] moved and modified -fno-rtti code 
-- [gcc.GccCompatibleCCompiler] added missing code for -fno-exceptions
-- [gcc.GppLinker, compiler.LinkType] Set "callAddLibrarySets" flag, submitted as bug 1109917 in cpptasks of ant-contrib.
-- [compiler.CommandLineLinker] Check "callAddLibrarySets" flag.
+** Launch process change
+- [src/net/sf/antcontrib/cpptasks/compiler/CaptureStreamHandler.java] rewrote the launching of subprocesses (NARPLUGIN-71).
+- [src/net/sf/antcontrib/cpptasks/compiler/CaptureStreamHandler.java] added protection against null return of run() method.
 
-For CVS updates from the original CVS repository:
-- commit latest to svn
-- run cvs up
-- commit again to svn
+** libstdc++ linking
+- [src/net/sf/antcontrib/cpptasks/CCTask.java] added method to link with CPP
+- [src/net/sf/antcontrib/cpptasks/compiler/LinkType.java] added method to link with CPP
+- [src/net/sf/antcontrib/cpptasks/compiler/gcc/GppLinker.java] link with or without CPP
+
+** jni libraries (MacOS X)
+- [src/net/sf/antcontrib/cpptasks/OutputTypeEnum.java] added jni
+- [src/net/sf/antcontrib/cpptasks/compiler/LinkType] add jni as type
+- [src/net/sf/antcontrib/cpptasks/gcc/AbstractLdLinker] added jni
+- [src/net/sf/antcontrib/cpptasks/gcc/GccLinker.java] add jni as type and special linker for MacOS X to output jnilib files.
+- [src/net/sf/antcontrib/cpptasks/gcc/GppLinker.java] add jni as type and special linker for MacOS X to output jnilib files.
+
+** gfortran compiler
+- [src/net/sf/antcontrib/cpptasks/gcc/GccCCompiler.java] added gfortran compiler
+- [src/net/sf/antcontrib/cpptasks/CompilerEnum.java] added gfortran compiler
+
+** intel compilers name change
+- [src/net/sf/antcontrib/cpptasks/intel/IntelLinux32CLinker.java] added (icpc)
+- [src/net/sf/antcontrib/cpptasks/intel/IntelLinux32Compiler.java] added (icpc)
+- [src/net/sf/antcontrib/cpptasks/intel/IntelLinux64CLinker.java] added (ecpc)
+- [src/net/sf/antcontrib/cpptasks/intel/IntelLinux64Compiler.java] added (ecpc)
+- [src/net/sf/antcontrib/cpptasks/LinkerEnum.java] added and changed linkers 
+- [src/net/sf/antcontrib/cpptasks/CompilerEnum.java] added and changed compilers.
+- [src/net/sf/antcontrib/cpptasks/intel/IntelLinux32CCompiler.java] links to IntelLinux32CLinker.
+- [src/net/sf/antcontrib/cpptasks/intel/IntelLinux64CCompiler.java] links to  IntelLinux64CLinker.
+- [src/net/sf/antcontrib/cpptasks/intel/IntelLinux32Linker.java] changed linker name from icc to icpc for version 8.1 of Intel Compilers.
+- [src/net/sf/antcontrib/cpptasks/intel/IntelLinux64Linker.java] changed linker name from ecc to ecpc for version 8.1 of Intel Compilers.
+
+** sun c and fortran compiles
+- [src/net/sf/antcontrib/cpptasks/sun/ForteCCompiler.java] added (suncc)
+- [src/net/sf/antcontrib/cpptasks/sun/ForteF77Compiler.java] added (sunf77)
+- [src/net/sf/antcontrib/cpptasks/CompilerEnum] Added the above (suncc, sunf77).
+
+** bug 1109917
+- [src/net/sf/antcontrib/cpptasks/compiler/CommandLineLinker] always call addLibrarySets
 

@@ -1,6 +1,6 @@
 /*
  *
- * Copyright 2004 The Ant-Contrib project
+ * Copyright 2004-2006 The Ant-Contrib project
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,11 +16,11 @@
  */
 package net.sf.antcontrib.cpptasks.ide;
 
-import org.apache.tools.ant.types.EnumeratedAttribute;
 import net.sf.antcontrib.cpptasks.apple.XcodeProjectWriter;
 import net.sf.antcontrib.cpptasks.borland.CBuilderXProjectWriter;
 import net.sf.antcontrib.cpptasks.devstudio.DevStudioProjectWriter;
 import net.sf.antcontrib.cpptasks.devstudio.VisualStudioNETProjectWriter;
+import org.apache.tools.ant.types.EnumeratedAttribute;
 
 /**
  * Enumeration of supported project file generators.
@@ -47,6 +47,10 @@ import net.sf.antcontrib.cpptasks.devstudio.VisualStudioNETProjectWriter;
  * <td>Microsoft Visual C++.NET 2003</td>
  * </tr>
  * <tr>
+ * <td>msvc8</td>
+ * <td>Microsoft Visual C++ 2005</td>
+ * </tr>
+ * <tr>
  * <td>xcode</td>
  * <td>Apple Xcode</td>
  * </tr>
@@ -62,7 +66,7 @@ public final class ProjectWriterEnum
    */
   private static String[] values = new String[] {
       "cbuilderx", "msvc5",
-      "msvc6", "msvc7", "msvc71", "xcode"};
+      "msvc6", "msvc7", "msvc71", "msvc8", "xcode"};
 
   /**
    * Project writers associated with enumeration values.
@@ -70,8 +74,9 @@ public final class ProjectWriterEnum
   private static ProjectWriter[] writers = new ProjectWriter[] {
       new CBuilderXProjectWriter(), new DevStudioProjectWriter("5.00"),
       new DevStudioProjectWriter("6.00"),
-      new VisualStudioNETProjectWriter("7.00"),
-      new VisualStudioNETProjectWriter("7.10"),
+      new VisualStudioNETProjectWriter("7.00", "TRUE", "FALSE"),
+      new VisualStudioNETProjectWriter("7.10", "TRUE", "FALSE"),
+      new VisualStudioNETProjectWriter("8.00", "true", "false"),
       new XcodeProjectWriter()};
 
   /**
@@ -92,3 +97,4 @@ public final class ProjectWriterEnum
     return (String[]) values.clone();
   }
 }
+

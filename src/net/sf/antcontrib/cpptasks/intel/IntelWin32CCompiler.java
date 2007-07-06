@@ -19,7 +19,6 @@ import net.sf.antcontrib.cpptasks.compiler.LinkType;
 import net.sf.antcontrib.cpptasks.compiler.Linker;
 import net.sf.antcontrib.cpptasks.compiler.Processor;
 import net.sf.antcontrib.cpptasks.devstudio.DevStudioCompatibleCCompiler;
-
 import org.apache.tools.ant.types.Environment;
 /**
  * Adapter for the Intel (r) C++ compiler for 32-bit applications
@@ -36,7 +35,7 @@ public final class IntelWin32CCompiler extends DevStudioCompatibleCCompiler {
         return instance;
     }
     private IntelWin32CCompiler(boolean newEnvironment, Environment env) {
-        super("icl", null, newEnvironment, env);
+        super("icl", "-help", newEnvironment, env);
     }
     public Processor changeEnvironment(boolean newEnvironment, Environment env) {
         if (newEnvironment || env != null) {
@@ -48,6 +47,6 @@ public final class IntelWin32CCompiler extends DevStudioCompatibleCCompiler {
         return IntelWin32Linker.getInstance().getLinker(type);
     }
     public int getMaximumCommandLength() {
-        return 1024;
+        return 32767;
     }
 }

@@ -33,7 +33,9 @@ public class GccLinker extends AbstractLdLinker {
     private static final String[] libtoolObjFiles = new String[]{".fo", ".a",
             ".lib", ".dll", ".so", ".sl"};
     private static String[] linkerOptions = new String[]{"-bundle",
-            "-dynamic", "-dynamiclib", "-nostartfiles", "-nostdlib", "-prebind", "-s",
+// FREEHEP
+    	    "-dynamic", 
+            "-dynamiclib", "-nostartfiles", "-nostdlib", "-prebind", "-s",
             "-static", "-shared", "-symbolic", "-Xlinker",
             "--export-all-symbols", "-static-libgcc",};
     private static final GccLinker dllLinker = new GccLinker("gcc", objFiles,
@@ -43,11 +45,10 @@ public class GccLinker extends AbstractLdLinker {
             discardFiles, "", "", false, null);
     private static final GccLinker machBundleLinker = new GccLinker("gcc",
             objFiles, discardFiles, "lib", ".bundle", false, null);
-// FREEHEP
-    private static final GccLinker machJNILinker = new GccLinker("gcc",
-            objFiles, discardFiles, "lib", ".jnilib", false, null);
     private static final GccLinker machDllLinker = new GccLinker("gcc",
             objFiles, discardFiles, "lib", ".dylib", false, null);
+    private static final GccLinker machJNILinker = new GccLinker("gcc",
+            objFiles, discardFiles, "lib", ".jnilib", false, null);
     public static GccLinker getInstance() {
         return instance;
     }
@@ -194,14 +195,15 @@ public class GccLinker extends AbstractLdLinker {
         if (type.isStaticLibrary()) {
             return GccLibrarian.getInstance();
         }
-// FREEHEP
+// BEGINFREEHEP
         if (type.isJNIModule()) {
-            if (isDarwin()) {
-                return machJNILinker;
-            } else {
-                return dllLinker;
-            }
+        	if (isDarwin()) {
+        		return machJNILinker;
+        	} else {
+        		return dllLinker;
+        	}
         }
+// ENDFREEHEP
         if (type.isPluginModule()) {
             if (isDarwin()) {
                 return machBundleLinker;

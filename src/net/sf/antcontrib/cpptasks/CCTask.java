@@ -17,9 +17,11 @@
 package net.sf.antcontrib.cpptasks;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.*;
+import java.util.List;
+import java.util.Vector;
 
 import net.sf.antcontrib.cpptasks.compiler.CompilerConfiguration;
 import net.sf.antcontrib.cpptasks.compiler.LinkType;
@@ -53,7 +55,7 @@ import org.apache.tools.ant.types.Environment;
  * 
  * 
  * <p>
- * Copyright (c) 2001-2005, The Ant-Contrib project.
+ * Copyright (c) 2001-2006, The Ant-Contrib project.
  * </p>
  * 
  * <p>
@@ -73,9 +75,12 @@ import org.apache.tools.ant.types.Environment;
  * 
  * To use:
  * <ol>
- * <li>Place cpptasks.jar into the lib directory of Ant 1.5 or later.</li>
- * <li>Add &lt;taskdef resource="cpptasks.tasks"/&gt; and &lt;typedef
- * resource="cpptasks.types"/&gt; to build.xml.</li>
+ * <li>Place cpptasks.jar into Ant's classpath by placing in Ant's lib directory,
+ * adding to CLASSPATH environment variable or using the -lib command line option.</li>
+ * <li>Add type and task definitions in build file:
+ * <ul><li>Ant 1.6 or later: add xmlns:cpptasks="antlib:org.sf.net.antcontrib.cpptasks" to &lt;project&gt; element.</li>
+ * <li>Ant 1.5 or later: Add &lt;taskdef resource="cpptasks.tasks"/&gt; and &lt;typedef
+ * resource="cpptasks.types"/&gt; to body of &lt;project&gt; element.</li></ul></li>
  * <li>Add &lt;cc/&gt;, &lt;compiler/&gt; and &lt;linker/&gt elements to
  * project.</li>
  * <li>Set path and environment variables to be able to run compiler from
@@ -763,11 +768,10 @@ public class CCTask extends Task {
             //
             File output = linkTarget.getOutput();
             if (linkTarget.getRebuild()) {
-                // FREEHEP
-//                log("Starting link");
                 LinkerConfiguration linkConfig = (LinkerConfiguration) linkTarget
                         .getConfiguration();
-                log("Starting link ("+linkConfig.getIdentifier()+")");
+// FREEHEP
+                log("Starting link {"+linkConfig.getIdentifier()+"}");
                 if (failOnError) {
                 	linkConfig.link(this, linkTarget);
                 } else {
@@ -1073,11 +1077,11 @@ public class CCTask extends Task {
         linkType.setOutputType(outputType);
     }
     
-// FREEHEP added method to link with cpp    
+// BEGINFREEHEP
     public void setLinkCPP(boolean linkCPP) {
-        linkType.setLinkCPP(linkCPP);
+    	linkType.setLinkCPP(linkCPP);
     }
-    
+// ENDFREEHEP
     /**
      * Enables or disables generation of multithreaded code
      * 

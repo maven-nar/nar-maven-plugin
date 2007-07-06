@@ -84,13 +84,14 @@ public final class GccCCompiler extends GccCompatibleCCompiler {
     public static GccCCompiler getG77Instance() {
         return g77Instance;
     }
-// FREEHEP
     /**
-     * Gets g95 adapter
+     * Gets g77 adapter
      */
+// FREEHEPBEGIN
     public static GccCCompiler getGFortranInstance() {
         return gfortranInstance;
     }
+// FREEHEPEND
     /**
      * Gets gpp adapter
      */
@@ -130,10 +131,12 @@ public final class GccCCompiler extends GccCompatibleCCompiler {
         if (isPICMeaningful && linkType.isSharedLibrary()) {
             args.addElement("-fPIC");
         }
-        // FREEHEP -fno-rtti only valid for g++ and c++
-        if (!getCommand().equals("g77") && !getCommand().equals("gcc") && (rtti != null) && !rtti.booleanValue()) {
-            args.addElement("-fno-rtti");
+// BEGINFREEHEP
+        // Add -fno_rtti only for g++ and c++
+        if (!getCommand().equals("g77") && !getCommand().equals("gcc") && (rtti != null) && (!rtti.booleanValue())) {
+        	args.addElement("-fno_rtti");
         }
+// ENDFREEHEP
     }
     public Processor changeEnvironment(boolean newEnvironment, Environment env) {
         if (newEnvironment || env != null) {

@@ -58,7 +58,8 @@ public abstract class DevStudioCompatibleCCompiler
         args.addElement("/c");
         args.addElement("/nologo");
         if (exceptions) {
-            // FREEHEP changed /GX into /EHsc (for VC8, and backward compatible with VC7 and VC6)
+            //   changed to eliminate warning on VC 2005, should support VC 6 and later
+            //   use /GX to support VC5 - 2005 (with warning)
             args.addElement("/EHsc");
         }
         int mindex = 0;

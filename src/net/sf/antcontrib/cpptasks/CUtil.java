@@ -171,7 +171,7 @@ public class CUtil {
      * Returns a relative path for the targetFile relative to the base
      * directory.
      *
-     * @param canonicalBase
+     * @param base
      *            base directory as returned by File.getCanonicalPath()
      * @param targetFile
      *            target file
@@ -180,26 +180,25 @@ public class CUtil {
      *
      * @author Curt Arnold
      */
-    public static String getRelativePath(String base, File targetFile) {
+    public static String getRelativePath(final String base, final File targetFile) {
         try {
             //
             //   remove trailing file separator
             //
             String canonicalBase = base;
-            if (base.charAt(base.length() - 1) == File.separatorChar) {
-                canonicalBase = base.substring(0, base.length() - 1);
+            if (base.charAt(base.length() - 1) != File.separatorChar) {
+                canonicalBase = base + File.separatorChar;
             }
             //
-            //   get canonical name of target and remove trailing separator
+            //   get canonical name of target
             //
             String canonicalTarget;
             if (System.getProperty("os.name").equals("OS/400"))
                 canonicalTarget = targetFile.getPath();
             else
                 canonicalTarget = targetFile.getCanonicalPath();
-            if (canonicalTarget.charAt(canonicalTarget.length() - 1) == File.separatorChar) {
-                canonicalTarget = canonicalTarget.substring(0, canonicalTarget
-                        .length() - 1);
+            if (canonicalBase.startsWith(canonicalTarget + File.separatorChar)) {
+                canonicalTarget = canonicalTarget + File.separator;
             }
             if (canonicalTarget.equals(canonicalBase)) {
                 return ".";
@@ -234,22 +233,20 @@ public class CUtil {
                 }
             }
             char separator = File.separatorChar;
-            int lastSeparator = -1;
+            int lastCommonSeparator = -1;
             int minLength = canonicalBase.length();
             if (canonicalTarget.length() < minLength) {
                 minLength = canonicalTarget.length();
             }
-            int firstDifference = minLength + 1;
             //
             //  walk to the shorter of the two paths
             //      finding the last separator they have in common
             for (int i = 0; i < minLength; i++) {
                 if (canonicalTarget.charAt(i) == canonicalBase.charAt(i)) {
                     if (canonicalTarget.charAt(i) == separator) {
-                        lastSeparator = i;
+                        lastCommonSeparator = i;
                     }
                 } else {
-                    firstDifference = lastSeparator + 1;
                     break;
                 }
             }
@@ -258,24 +255,19 @@ public class CUtil {
             //   walk from the first difference to the end of the base
             //      adding "../" for each separator encountered
             //
-            if (canonicalBase.length() > firstDifference) {
-                relativePath.append("..");
-                for (int i = firstDifference; i < canonicalBase.length(); i++) {
-                    if (canonicalBase.charAt(i) == separator) {
+            for (int i = lastCommonSeparator + 1; i < canonicalBase.length(); i++) {
+                if (canonicalBase.charAt(i) == separator) {
+                    if (relativePath.length() > 0) {
                         relativePath.append(separator);
-                        relativePath.append("..");
                     }
+                    relativePath.append("..");
                 }
             }
-            if (canonicalTarget.length() > firstDifference) {
-                //
-                //    append the rest of the target
-                //
-                //
+            if (canonicalTarget.length() > lastCommonSeparator + 1) {
                 if (relativePath.length() > 0) {
                     relativePath.append(separator);
                 }
-                relativePath.append(canonicalTarget.substring(firstDifference));
+                relativePath.append(canonicalTarget.substring(lastCommonSeparator + 1));
             }
             return relativePath.toString();
         } catch (IOException ex) {
@@ -443,19 +435,27 @@ public class CUtil {
      *
      */
     public static String xmlAttribEncode(String attrValue) {
-        int quotePos = attrValue.indexOf('\"');
-        if (quotePos < 0) {
-            return attrValue;
+    	StringBuffer buf = new StringBuffer (attrValue);
+    	int quotePos;
+    	
+        for (quotePos = -1; (quotePos = buf.indexOf("\"", quotePos + 1)) >= 0;) {
+        	buf.deleteCharAt(quotePos);
+        	buf.insert (quotePos, "&quot;");
+        	quotePos += 5;
         }
-        int startPos = 0;
-        StringBuffer buf = new StringBuffer(attrValue.length() + 20);
-        while (quotePos >= 0) {
-            buf.append(attrValue.substring(startPos, quotePos));
-            buf.append("&quot;");
-            startPos = quotePos + 1;
-            quotePos = attrValue.indexOf('\"', startPos);
+        
+        for (quotePos = -1; (quotePos = buf.indexOf("<", quotePos + 1)) >= 0;) {
+        	buf.deleteCharAt(quotePos);
+        	buf.insert (quotePos, "&lt;");
+        	quotePos += 3;
         }
-        buf.append(attrValue.substring(startPos));
+        
+        for (quotePos = -1; (quotePos = buf.indexOf(">", quotePos + 1)) >= 0;) {
+        	buf.deleteCharAt(quotePos);
+        	buf.insert (quotePos, "&gt;");
+        	quotePos += 3;
+        }
+        
         return buf.toString();
     }
 

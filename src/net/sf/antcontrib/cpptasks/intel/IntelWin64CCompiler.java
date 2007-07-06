@@ -33,7 +33,7 @@ public final class IntelWin64CCompiler extends DevStudioCompatibleCCompiler {
         return instance;
     }
     private IntelWin64CCompiler(boolean newEnvironment, Environment env) {
-        super("ecl", null, newEnvironment, env);
+        super("ecl", "-help", newEnvironment, env);
     }
     public Processor changeEnvironment(boolean newEnvironment, Environment env) {
         if (newEnvironment || env != null) {
@@ -48,6 +48,6 @@ public final class IntelWin64CCompiler extends DevStudioCompatibleCCompiler {
         return IntelWin32Linker.getInstance().getLinker(type);
     }
     public int getMaximumCommandLength() {
-        return 1024;
+        return 32767;
     }
 }

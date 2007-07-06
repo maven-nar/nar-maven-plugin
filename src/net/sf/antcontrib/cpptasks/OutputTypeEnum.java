@@ -43,7 +43,8 @@ public class OutputTypeEnum extends EnumeratedAttribute {
                 "plugin", // plugin module
                 "shared", // dynamically linkable module
                 "static", // convenience library
-                "jni"     // FREEHEP Java Native Interface library
+// FREEHEP
+                "jni"	  // jni module
         };
     }
 }

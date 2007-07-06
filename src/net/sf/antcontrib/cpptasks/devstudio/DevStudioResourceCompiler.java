@@ -99,7 +99,7 @@ public final class DevStudioResourceCompiler extends CommandLineCompiler {
         return DevStudioLinker.getInstance().getLinker(type);
     }
     public int getMaximumCommandLength() {
-        return 1024;
+        return 32767;
     }
     protected int getMaximumInputFilesPerCommand() {
         return 1;

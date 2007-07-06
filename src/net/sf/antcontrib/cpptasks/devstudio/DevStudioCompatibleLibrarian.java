@@ -61,7 +61,7 @@ public abstract class DevStudioCompatibleLibrarian extends CommandLineLinker {
         return new String[0];
     }
     public int getMaximumCommandLength() {
-        return 1024;
+        return 32767;
     }
     public String[] getOutputFileSwitch(String outFile) {
         StringBuffer buf = new StringBuffer("/OUT:");

@@ -55,17 +55,18 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
             args.addElement("-g");
         }
         if (isDarwin()) {
-            if (linkType.isPluginModule()) {
+        	if (linkType.isPluginModule()) {
                 args.addElement("-bundle");
-// FREEHEP
+// BEGINFREEHEP
             } else if (linkType.isJNIModule()) {
                 args.addElement("-dynamic");
                 args.addElement("-bundle");
+// ENDFREEHEP               
             } else {
                 if (linkType.isSharedLibrary()) {
-// No longer needed for 10.4 and up.
-//                  args.addElement("-prebind");
-                  args.addElement("-dynamiclib");
+// FREEHEP no longer needed for 10.4+
+//                    args.addElement("-prebind");
+                    args.addElement("-dynamiclib");
                 }
             }
         } else {
@@ -120,14 +121,15 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
             //
             if (set.getType() != previousLibraryType) {
                     if (set.getType() != null && "static".equals(set.getType().getValue())) {
-            	        // FREEHEP
-                	    if (!isDarwin()) {
+// BEGINFREEHEP not on MacOS X
+                    	if (!isDarwin()) {
                             endargs.addElement("-Bstatic");
                             previousLibraryType = set.getType();
-                        }
+                    	}
+//ENDFREEHEP                          
                     } else {
-                    	// FREEHEP FIXME, recheck this, works on MacOSX
-                            if (set.getType() == null &&
+// FREEHEP not on MacOS X, recheck this!
+                            if (set.getType() == null ||
                                             !"framework".equals(set.getType().getValue()) &&
                                                         !isDarwin()) {
                                     endargs.addElement("-Bdynamic");
@@ -140,8 +142,8 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
                             "framework".equals(set.getType().getValue()) &&
                                         isDarwin()) {
                     buf.setLength(0);
-//                    buf.append("-framework ");
-                    endargs.addElement("-framework");
+// FREEHEP                
+                    endargs.addElement("-framework ");
             }
             int initialLength = buf.length();
             for (int j = 0; j < libs.length; j++) {

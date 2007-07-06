@@ -30,7 +30,7 @@ public class IntelWin32Librarian extends DevStudioCompatibleLibrarian {
         return instance;
     }
     protected IntelWin32Librarian() {
-        super("xilib", "/bogus");
+        super("xilib", "-qv");
     }
     public Linker getLinker(LinkType type) {
         return IntelWin32Linker.getInstance().getLinker(type);

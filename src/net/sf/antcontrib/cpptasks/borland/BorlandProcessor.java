@@ -23,7 +23,6 @@ import java.io.Reader;
 import java.util.Vector;
 import java.io.FileWriter;
 
-
 import net.sf.antcontrib.cpptasks.CUtil;
 import net.sf.antcontrib.cpptasks.types.LibraryTypeEnum;
 /**
@@ -158,11 +157,8 @@ public final class BorlandProcessor {
     }
     public static void quoteFile(StringBuffer buf, String outPath) {
         if (outPath.charAt(0) != '\"'
-
             && (outPath.indexOf(' ') >= 0
-
             || outPath.indexOf('-') >= 0
-
             || outPath.indexOf('/') >= 0)) {
             buf.append('\"');
             buf.append(outPath);
@@ -212,9 +208,7 @@ public final class BorlandProcessor {
         writer.close();
         String[] execArgs = new String[2];
         execArgs[0] = args[0];
-
         //
-
         //  left for the caller to decorate
         execArgs[1] = commandFile.toString();
         return execArgs;

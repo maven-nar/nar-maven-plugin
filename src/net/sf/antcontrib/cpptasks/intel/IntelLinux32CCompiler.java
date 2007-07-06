@@ -50,7 +50,7 @@ public final class IntelLinux32CCompiler extends GccCompatibleCCompiler {
         return this;
     }
     public Linker getLinker(LinkType type) {
-        // FREEHEP
+// FREEHEP
         return IntelLinux32CLinker.getInstance().getLinker(type);
     }
     public int getMaximumCommandLength() {

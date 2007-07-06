@@ -156,9 +156,11 @@ public class LinkerDef extends ProcessorDef {
         Vector libsets = new Vector();
         for (int i = index; i < defaultProviders.length; i++) {
             defaultProviders[i].addActiveUserLibrarySets(p, libsets);
-            defaultProviders[i].addActiveSystemLibrarySets(p, libsets);
         }
         addActiveUserLibrarySets(p, libsets);
+        for (int i = index; i < defaultProviders.length; i++) {
+            defaultProviders[i].addActiveSystemLibrarySets(p, libsets);
+        }
         addActiveSystemLibrarySets(p, libsets);
         LibrarySet[] sets = new LibrarySet[libsets.size()];
         libsets.copyInto(sets);

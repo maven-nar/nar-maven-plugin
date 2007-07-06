@@ -145,10 +145,10 @@ public abstract class CommandLineLinker extends AbstractLinker
 
       String[] libnames = null;
       LibrarySet[] libsets = specificDef.getActiveLibrarySets(defaultProviders,1);
-      // FREEHEP: check if runtime was added without any present libs
-      if (linkType.callAddLibrarySets || (libsets.length > 0)) {
+// FREEHEP call at all times
+//      if (libsets.length > 0) {
         libnames = addLibrarySets(task, libsets, preargs, midargs, endargs);
-      }
+//      }
 
       StringBuffer buf = new StringBuffer(getIdentifier());
       for (int i = 0; i < 3; i++) {
@@ -256,7 +256,7 @@ public abstract class CommandLineLinker extends AbstractLinker
 
         //
         //   if command length exceeds maximum
-        //       (1024 for Windows) then create a temporary
+        //       then create a temporary
         //       file containing everything but the command name
         if(commandLength >= this.getMaximumCommandLength()) {
           try {
@@ -336,7 +336,7 @@ public abstract class CommandLineLinker extends AbstractLinker
       String outputDir, String sourceFile) {
       String relativePath = CUtil.getRelativePath(outputDir,
         new File(sourceFile));
-      // FREEHEP - take the shortest of the two (Windows file length limitation)
+// FREEHEP, return the shortest
       return quoteFilename(buf, sourceFile.length() > relativePath.length() ? relativePath : sourceFile);
     }
 

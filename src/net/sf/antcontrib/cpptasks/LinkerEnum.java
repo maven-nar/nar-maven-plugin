@@ -26,20 +26,20 @@ import net.sf.antcontrib.cpptasks.gcc.GppLinker;
 import net.sf.antcontrib.cpptasks.gcc.LdLinker;
 import net.sf.antcontrib.cpptasks.hp.aCCLinker;
 import net.sf.antcontrib.cpptasks.ibm.VisualAgeLinker;
-// FREEHEP
-import net.sf.antcontrib.cpptasks.intel.IntelLinux32CLinker;
-import net.sf.antcontrib.cpptasks.intel.IntelLinux64CLinker;
 import net.sf.antcontrib.cpptasks.intel.IntelLinux32Linker;
+import net.sf.antcontrib.cpptasks.intel.IntelLinux32CLinker;
 import net.sf.antcontrib.cpptasks.intel.IntelLinux64Linker;
+import net.sf.antcontrib.cpptasks.intel.IntelLinux64CLinker;
 import net.sf.antcontrib.cpptasks.intel.IntelWin32Linker;
+import net.sf.antcontrib.cpptasks.openwatcom.OpenWatcomCLinker;
+import net.sf.antcontrib.cpptasks.openwatcom.OpenWatcomFortranLinker;
 import net.sf.antcontrib.cpptasks.os390.OS390Linker;
 import net.sf.antcontrib.cpptasks.os400.IccLinker;
 import net.sf.antcontrib.cpptasks.sun.C89Linker;
 import net.sf.antcontrib.cpptasks.sun.ForteCCLinker;
 import net.sf.antcontrib.cpptasks.ti.ClxxLinker;
+
 import org.apache.tools.ant.types.EnumeratedAttribute;
-import net.sf.antcontrib.cpptasks.openwatcom.OpenWatcomCLinker;
-import net.sf.antcontrib.cpptasks.openwatcom.OpenWatcomFortranLinker;
 
 /**
  * Enumeration of supported linkers
@@ -59,11 +59,12 @@ public class LinkerEnum extends EnumeratedAttribute {
                     .getInstance()),
             new ProcessorEnumValue("icl", IntelWin32Linker.getInstance()),
             new ProcessorEnumValue("ecl", IntelWin32Linker.getInstance()),
-            new ProcessorEnumValue("icc", IntelLinux32Linker.getInstance()),
-            new ProcessorEnumValue("ecc", IntelLinux64Linker.getInstance()),
-// FREEHEP
+// BEGINFREEHEP
+            new ProcessorEnumValue("icc", IntelLinux32CLinker.getInstance()),
+            new ProcessorEnumValue("ecc", IntelLinux64CLinker.getInstance()),
             new ProcessorEnumValue("icpc", IntelLinux32Linker.getInstance()),
             new ProcessorEnumValue("ecpc", IntelLinux64Linker.getInstance()),
+// ENDFREEHEP
             new ProcessorEnumValue("CC", ForteCCLinker.getInstance()),
             new ProcessorEnumValue("aCC", aCCLinker.getInstance()),
             new ProcessorEnumValue("os390", OS390Linker.getInstance()),

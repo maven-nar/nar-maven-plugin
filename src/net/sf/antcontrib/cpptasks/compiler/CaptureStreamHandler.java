@@ -14,6 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+// BEGINFREEHEP, fully replaced with a runner with threads
 package net.sf.antcontrib.cpptasks.compiler;
 
 import java.io.BufferedReader;
@@ -97,7 +98,7 @@ public class CaptureStreamHandler implements ExecuteStreamHandler {
 	/**
 	 * Reads concurrently both the process standard output and standard error.
 	 * The standard error - if not empty - is copied to the output string array field. Otherwise
-	 * the stanard output is copied to the output field. The output field is set to an empty array 
+	 * the standard output is copied to the output field. The output field is set to an empty array 
 	 * in case of any error. 
 	 */
 	public void gatherOutput() {
@@ -163,4 +164,5 @@ public class CaptureStreamHandler implements ExecuteStreamHandler {
 	 */
 	public void stop() {
 	}
+// ENDFREEHEP
 }

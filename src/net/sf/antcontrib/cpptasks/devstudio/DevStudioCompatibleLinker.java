@@ -63,12 +63,14 @@ public abstract class DevStudioCompatibleLinker extends CommandLineLinker {
         if (linkType.isSharedLibrary()) {
             args.addElement("/DLL");
         }
-        /*
-         * if(linkType.isSubsystemGUI()) {
-         * args.addElement("/SUBSYSTEM:WINDOWS"); } else {
-         * if(linkType.isSubsystemConsole()) {
-         * args.addElement("/SUBSYSTEM:CONSOLE"); } }
-         */
+        //
+        //  The following lines were commented out
+        //   from v 1.5 to v 1.12 with no explanation
+        //
+         if(linkType.isSubsystemGUI()) {
+           args.addElement("/SUBSYSTEM:WINDOWS"); } else {
+         if(linkType.isSubsystemConsole()) {
+           args.addElement("/SUBSYSTEM:CONSOLE"); } }
     }
     protected void addIncremental(boolean incremental, Vector args) {
         if (incremental) {
@@ -115,7 +117,7 @@ public abstract class DevStudioCompatibleLinker extends CommandLineLinker {
         return patterns;
     }
     public int getMaximumCommandLength() {
-        return 1024;
+        return 32767;
     }
     public String[] getOutputFileSwitch(String outputFile) {
         return new String[]{"/OUT:" + outputFile};

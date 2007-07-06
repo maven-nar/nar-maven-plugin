@@ -27,12 +27,12 @@ import net.sf.antcontrib.cpptasks.compiler.Linker;
 import org.apache.tools.ant.types.Environment;
 /**
  * Adapter for the ARM C Compilers
- * 
+ *
  * See Doc No: ARM DUI 0151A, Issued: Nov 2001 at
  * http://www.arm.com/arm/User_Guides?OpenDocument
- * 
+ *
  * @author Curt Arnold
- *  
+ *
  */
 public class ADSCCompiler extends CommandLineCCompiler {
     /**
@@ -80,7 +80,7 @@ public class ADSCCompiler extends CommandLineCCompiler {
      * Singleton for ARM 16-bit C compiler
      */
     public static ADSCCompiler getThumbCC() {
-        return tcpp;
+        return tcc;
     }
     /**
      * Singleton for ARM 16-bit C++ compiler

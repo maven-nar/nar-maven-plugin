@@ -1,6 +1,6 @@
 /*
  * 
- * Copyright 2001-2004 The Ant-Contrib project
+ * Copyright 2001-2006 The Ant-Contrib project
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import net.sf.antcontrib.cpptasks.compiler.Linker;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
-import org.apache.tools.ant.ProjectComponent;
+import org.apache.tools.ant.types.DataType;
 import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.PatternSet;
 /**
@@ -42,7 +42,7 @@ import org.apache.tools.ant.types.PatternSet;
  * @author Adam Murdoch
  * @author Curt Arnold
  */
-public class LibrarySet extends ProjectComponent {
+public class LibrarySet extends DataType {
     private String dataset;
     private boolean explicitCaseSensitive;
     private String ifCond;
@@ -63,15 +63,31 @@ public class LibrarySet extends ProjectComponent {
      * @return Returns a String
      */
     public String getDataset() {
+        if (isReference()) {
+            LibrarySet master = ((LibrarySet) getCheckedRef(LibrarySet.class, "LibrarySet"));
+            return master.getDataset();
+        }
         return dataset;
     }
-    public File getDir(Project project) {
+    public File getDir(final Project project) {
+        if (isReference()) {
+            LibrarySet master = ((LibrarySet) getCheckedRef(LibrarySet.class, "LibrarySet"));
+            return master.getDir(project);
+        }
         return set.getDir(project);
     }
     protected FileSet getFileSet() {
+        if (isReference()) {
+            LibrarySet master = ((LibrarySet) getCheckedRef(LibrarySet.class, "LibrarySet"));
+            return master.getFileSet();
+        }
         return set;
     }
     public String[] getLibs() {
+        if (isReference()) {
+            LibrarySet master = ((LibrarySet) getCheckedRef(LibrarySet.class, "LibrarySet"));
+            return master.getLibs();
+        }
         String[] retval = (String[]) libnames.clone();
         return retval;
     }
@@ -82,13 +98,17 @@ public class LibrarySet extends ProjectComponent {
      * @return library type, may be null.
      */
     public LibraryTypeEnum getType() {
+        if (isReference()) {
+            LibrarySet master = ((LibrarySet) getCheckedRef(LibrarySet.class, "LibrarySet"));
+            return master.getType();
+        }
     	return libraryType;
     }
     /**
      * Returns true if the define's if and unless conditions (if any) are
      * satisfied.
      */
-    public boolean isActive(org.apache.tools.ant.Project p) {
+    public boolean isActive(final org.apache.tools.ant.Project p) {
         if (p == null) {
             throw new NullPointerException("p");
         }
@@ -121,6 +141,10 @@ public class LibrarySet extends ProjectComponent {
                 return false;
             }
         }
+        if (isReference()) {
+            LibrarySet master = ((LibrarySet) getCheckedRef(LibrarySet.class, "LibrarySet"));
+            return master.isActive(project);
+        }
         if (libnames.length == 0) {
             p.log("libnames not specified or empty.", Project.MSG_WARN);
             return false;
@@ -135,7 +159,10 @@ public class LibrarySet extends ProjectComponent {
      *            "true"|"on"|"yes" if file system is case sensitive,
      *            "false"|"off"|"no" when not.
      */
-    public void setCaseSensitive(boolean isCaseSensitive) {
+    public void setCaseSensitive(final boolean isCaseSensitive) {
+        if (isReference()) {
+            throw tooManyAttributes();
+        }
         explicitCaseSensitive = true;
         set.setCaseSensitive(isCaseSensitive);
     }
@@ -145,7 +172,10 @@ public class LibrarySet extends ProjectComponent {
      * @param dataset
      *            The dataset to set
      */
-    public void setDataset(String dataset) {
+    public void setDataset(final String dataset) {
+        if (isReference()) {
+            throw tooManyAttributes();
+        }
         this.dataset = dataset;
     }
     /**
@@ -155,7 +185,10 @@ public class LibrarySet extends ProjectComponent {
      *            library directory
      *  
      */
-    public void setDir(File dir) throws BuildException {
+    public void setDir(final File dir) throws BuildException {
+        if (isReference()) {
+            throw tooManyAttributes();
+        }
         set.setDir(dir);
     }
     /**
@@ -178,33 +211,18 @@ public class LibrarySet extends ProjectComponent {
      * "lib", or extensions, such as ".so" or ".a".
      *  
      */
-    public void setLibs(CUtil.StringArrayBuilder libs) throws BuildException {
-        libnames = libs.getValue();
-        // If this is not active.. then it's ok if the lib names are invalid.
-        // so we can do a: <libset if="x.lib" dir="." libs="${x.lib}"/>
-        if (!isActive(getProject()))
-            return;
-        for (int i = 0; i < libnames.length; i++) {
-            int lastDot = libnames[i].lastIndexOf('.');
-            if (lastDot >= 0) {
-                String extension = libnames[i].substring(lastDot);
-                if (extension.equalsIgnoreCase(".lib")
-                        || extension.equalsIgnoreCase(".so")
-                        || extension.equalsIgnoreCase(".a")) {
-                    getProject().log(
-                            "Suspicious library name ending with \""
-                                    + extension + "\": " + libnames[i]);
-                }
-            }
-            if (libnames[i].length() >= 3
-                    && libnames[i].substring(0, 3).equalsIgnoreCase("lib")) {
-                getProject().log(
-                        "Suspicious library name starting with \"lib\": "
-                                + libnames[i]);
-            }
+    public void setLibs(final CUtil.StringArrayBuilder libs) throws BuildException {
+        if (isReference()) {
+            throw tooManyAttributes();
         }
+        libnames = libs.getValue();
+        //
+        //   earlier implementations would warn of suspicious library names
+        //    (like libpthread for pthread or kernel.lib for kernel).
+        //    visitLibraries now provides better feedback and ld type linkers
+        //    should provide adequate feedback so the check here is not necessary.
     }
-    public void setProject(Project project) {
+    public void setProject(final Project project) {
         set.setProject(project);
         super.setProject(project);
     }
@@ -228,63 +246,102 @@ public class LibrarySet extends ProjectComponent {
      * Sets the preferred library type. Supported values "shared", "static", and
      * "framework".  "framework" is equivalent to "shared" on non-Darwin platforms. 
      */
-    public void setType(LibraryTypeEnum type) {
+    public void setType(final LibraryTypeEnum type) {
+        if (isReference()) {
+            throw tooManyAttributes();
+        }
     	this.libraryType = type;
     }
     
-    public void visitLibraries(Project project, Linker linker, File[] libpath,
-            FileVisitor visitor) throws BuildException {
-        FileSet localSet = (FileSet) set.clone();
-        //
-        //   unless explicitly set
-        //      will default to the linker case sensitivity
-        //
-        if (!explicitCaseSensitive) {
-            boolean linkerCaseSensitive = linker.isCaseSensitive();
-            localSet.setCaseSensitive(linkerCaseSensitive);
+    public void visitLibraries(final Project project,
+                               final Linker linker,
+                               final File[] libpath,
+                               final FileVisitor visitor) throws BuildException {
+        if (isReference()) {
+            LibrarySet master = ((LibrarySet) getCheckedRef(LibrarySet.class, "LibrarySet"));
+            master.visitLibraries(project, linker, libpath, visitor);
         }
         //
         //  if there was a libs attribute then
         //     add the corresponding patterns to the FileSet
         //
-        if (libnames != null && libnames.length > 0) {
-            String[] patterns = linker.getLibraryPatterns(libnames, libraryType);
-            //
-            //  if no patterns, then linker does not support libraries
-            //
-            if (patterns.length > 0) {
-		        for (int i = 0; i < patterns.length; i++) {
-		             PatternSet.NameEntry entry = localSet.createInclude();
-		             entry.setName(patterns[i]);
-		        }
-		        //
-		        //  if there was no specified directory then
-		        //     run through the libpath backwards
-		        //
-		        if (localSet.getDir(project) == null) {
-		            //
-		            //  scan libpath in reverse order
-		            //     to give earlier entries priority
-		            //
-		            for (int j = libpath.length - 1; j >= 0; j--) {
-		                FileSet clone = (FileSet) localSet.clone();
-		                clone.setDir(libpath[j]);
-		                DirectoryScanner scanner = clone.getDirectoryScanner(project);
-		                File basedir = scanner.getBasedir();
-		                String[] files = scanner.getIncludedFiles();
-		                for (int k = 0; k < files.length; k++) {
-		                    visitor.visit(basedir, files[k]);
-		                }
-		            }
-		        } else {
-		            DirectoryScanner scanner = localSet.getDirectoryScanner(project);
-		            File basedir = scanner.getBasedir();
-		            String[] files = scanner.getIncludedFiles();
-		            for (int k = 0; k < files.length; k++) {
-		                visitor.visit(basedir, files[k]);
-		            }
-		        }
-        	}
+        if (libnames != null) {
+            for (int i = 0; i < libnames.length; i++) {
+                String[] patterns = linker.getLibraryPatterns(new String[] { libnames[i] }, libraryType);
+                if (patterns.length > 0) {
+                    FileSet localSet = (FileSet) set.clone();
+                    //
+                    //   unless explicitly set
+                    //      will default to the linker case sensitivity
+                    //
+                    if (!explicitCaseSensitive) {
+                        boolean linkerCaseSensitive = linker.isCaseSensitive();
+                        localSet.setCaseSensitive(linkerCaseSensitive);
+                    }
+                    //
+                    //   add all the patterns for this libname
+                    //
+                    for (int j = 0; j < patterns.length; j++) {
+                        PatternSet.NameEntry entry = localSet.createInclude();
+                        entry.setName(patterns[j]);
+                    }
+                   int matches = 0;
+		           //
+		           //  if there was no specified directory then
+		           //     run through the libpath backwards
+		           //
+		           if (localSet.getDir(project) == null) {
+		               //
+		               //  scan libpath in reverse order
+		               //     to give earlier entries priority
+		               //
+		               for (int j = libpath.length - 1; j >= 0; j--) {
+		                   FileSet clone = (FileSet) localSet.clone();
+		                   clone.setDir(libpath[j]);
+		                   DirectoryScanner scanner = clone.getDirectoryScanner(project);
+		                   File basedir = scanner.getBasedir();
+		                   String[] files = scanner.getIncludedFiles();
+                           matches += files.length;
+                           for (int k = 0; k < files.length; k++) {
+		                       visitor.visit(basedir, files[k]);
+		                   }
+		               }
+		           } else {
+		               DirectoryScanner scanner = localSet.getDirectoryScanner(project);
+		               File basedir = scanner.getBasedir();
+		               String[] files = scanner.getIncludedFiles();
+                       matches += files.length;
+		               for (int k = 0; k < files.length; k++) {
+		                   visitor.visit(basedir, files[k]);
+		               }
+		           }
+                   //
+                   //  TODO: following section works well for Windows
+                   //      style linkers but unnecessary fails
+                   //     Unix style linkers.  Will need to revisit.
+                   //
+                   if (matches == 0 && false) {
+                      StringBuffer msg = new StringBuffer("No file matching ");
+                       if (patterns.length == 1) {
+                           msg.append("pattern (");
+                           msg.append(patterns[0]);
+                           msg.append(")");
+                       } else {
+                           msg.append("patterns (\"");
+                           msg.append(patterns[0]);
+                           for (int k = 1; k < patterns.length; k++) {
+                               msg.append(", ");
+                               msg.append(patterns[k]);
+                           }
+                           msg.append(")");
+                       }
+                       msg.append(" for library name \"");
+                       msg.append(libnames[i]);
+                       msg.append("\" was found.");
+                      throw new BuildException(msg.toString());
+                   }
+                }
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 /*
  *
- * Copyright 2004-2005 The Ant-Contrib project
+ * Copyright 2004-2006 The Ant-Contrib project
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,18 +16,17 @@
  */
 package net.sf.antcontrib.cpptasks.ide;
 
+import net.sf.antcontrib.cpptasks.CCTask;
+import net.sf.antcontrib.cpptasks.CUtil;
+import net.sf.antcontrib.cpptasks.TargetInfo;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.types.DataType;
+
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.Hashtable;
 import java.util.List;
-
-import net.sf.antcontrib.cpptasks.CCTask;
-import net.sf.antcontrib.cpptasks.CUtil;
-import net.sf.antcontrib.cpptasks.TargetInfo;
-
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.types.DataType;
 
 /**
  *  Requests the creation of an IDE project file.  Experimental.
@@ -115,6 +114,10 @@ public final class ProjectDef
    * <tr>
    * <td>msvc71</td>
    * <td>Microsoft Visual C++.NET 2003</td>
+   * </tr>
+   * <tr>
+   * <td>msvc8</td>
+   * <td>Microsoft Visual C++ 2005</td>
    * </tr>
    * <tr>
    * <td>xcode</td>

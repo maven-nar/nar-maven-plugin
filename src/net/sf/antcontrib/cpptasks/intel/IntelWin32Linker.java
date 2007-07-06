@@ -32,7 +32,7 @@ public final class IntelWin32Linker extends DevStudioCompatibleLinker {
         return instance;
     }
     private IntelWin32Linker(String outputSuffix) {
-        super("xilink", "/bogus", outputSuffix);
+        super("xilink", "-qv", outputSuffix);
     }
     public Linker getLinker(LinkType type) {
         if (type.isStaticLibrary()) {

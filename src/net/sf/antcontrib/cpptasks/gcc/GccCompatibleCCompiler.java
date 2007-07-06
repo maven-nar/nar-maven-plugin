@@ -98,15 +98,16 @@ public abstract class GccCompatibleCCompiler extends CommandLineCCompiler {
                 args.addElement("-mwindows");
             }
         }
-// FREEHEP, moved to GccCCompiler
+// BEGINFREEHEP
+        if (!exceptions) {
+        	args.addElement("-fno-exceptions");
+        }
+// ENDFREEHEP
+// BEGINFREEHEP moved to GccCCompiler
 //        if (rtti != null && !rtti.booleanValue()) {
 //          args.addElement("-fno-rtti");
 //        }
-// FREEHEP
-        if (!exceptions) {
-          args.addElement("-fno-exceptions");
-        }
-
+// ENDFREEHEP
     }
     /**
      * Adds an include path to the command.
