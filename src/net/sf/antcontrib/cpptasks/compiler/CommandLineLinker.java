@@ -324,7 +324,7 @@ public abstract class CommandLineLinker extends AbstractLinker
         }
         for (int i = 0; i < endargs.length; i++) {
           allArgs[index++] = decorateLinkerOption(buf, endargs[i]);
-        }
+        }        
         return allArgs;
     }
 

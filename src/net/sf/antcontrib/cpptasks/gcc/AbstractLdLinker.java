@@ -142,8 +142,8 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
                             "framework".equals(set.getType().getValue()) &&
                                         isDarwin()) {
                     buf.setLength(0);
-// FREEHEP                
-                    endargs.addElement("-framework ");
+// FREEHEP, added as endarg w/o trailing space to avoid quoting!
+                    endargs.addElement("-framework");
             }
             int initialLength = buf.length();
             for (int j = 0; j < libs.length; j++) {
