@@ -55,6 +55,10 @@
 - [src/net/sf/antcontrib/cpptasks/sun/ForteF77Compiler.java] added (sunf77)
 - [src/net/sf/antcontrib/cpptasks/CompilerEnum] Added the above (suncc, sunf77).
 
-** bug 1109917
+** bug [ 1109917 ] g++ linker does not add runtime w/o other libs referenced
 - [src/net/sf/antcontrib/cpptasks/compiler/CommandLineLinker] always call addLibrarySets
+
+** bug [ 795683 ] cpptasks speedup
+- [src/net/sf/antcontrib/cpptasks/DependencyTable.java] cpptasks speedup
+- [src/net/sf/antcontrib/cpptasks/DependencyInfo.java] cpptasks speedup
 

@@ -178,29 +178,35 @@ public final class DependencyTable {
             return !noNeedToRebuild;
         }
         public boolean preview(DependencyInfo parent, DependencyInfo[] children) {
-            int withCompositeTimes = 0;
-            long parentCompositeLastModified = parent.getSourceLastModified();
-            for (int i = 0; i < children.length; i++) {
+// BEGINFREEHEP
+//            int withCompositeTimes = 0;
+//            long parentCompositeLastModified = parent.getSourceLastModified();
+// ENDFREEHEP
+        	for (int i = 0; i < children.length; i++) {
                 if (children[i] != null) {
                     //
                     //  expedient way to determine if a child forces us to
                     // rebuild
                     //
                     visit(children[i]);
-                    long childCompositeLastModified = children[i]
-                            .getCompositeLastModified();
-                    if (childCompositeLastModified != Long.MIN_VALUE) {
-                        withCompositeTimes++;
-                        if (childCompositeLastModified > parentCompositeLastModified) {
-                            parentCompositeLastModified = childCompositeLastModified;
-                        }
-                    }
+// BEGINFREEHEP
+//                    long childCompositeLastModified = children[i]
+//                            .getCompositeLastModified();
+//                    if (childCompositeLastModified != Long.MIN_VALUE) {
+//                        withCompositeTimes++;
+//                        if (childCompositeLastModified > parentCompositeLastModified) {
+//                            parentCompositeLastModified = childCompositeLastModified;
+//                        }
+//                    }
+// ENDFREEHEP
                 }
             }
-            if (withCompositeTimes == children.length) {
-                parent.setCompositeLastModified(parentCompositeLastModified);
-            }
-            //
+// BEGINFREEHEP
+//        	if (withCompositeTimes == children.length) {
+//                parent.setCompositeLastModified(parentCompositeLastModified);
+//            }
+// ENDFREEHEP
+        	//
             //  may have been changed by an earlier call to visit()
             //
             return noNeedToRebuild;
@@ -212,8 +218,9 @@ public final class DependencyTable {
         }
         public boolean visit(DependencyInfo dependInfo) {
             if (noNeedToRebuild) {
-                    if (CUtil.isSignificantlyAfter(dependInfo.getSourceLastModified(), outputLastModified)
-                                    || CUtil.isSignificantlyAfter(dependInfo.getCompositeLastModified(), outputLastModified)) {
+                    if (CUtil.isSignificantlyAfter(dependInfo.getSourceLastModified(), outputLastModified)) {
+//FREEHEP
+//                    		|| CUtil.isSignificantlyAfter(dependInfo.getCompositeLastModified(), outputLastModified)) {
                     noNeedToRebuild = false;
                 }
             }
@@ -222,8 +229,9 @@ public final class DependencyTable {
             //      it has not yet been determined whether
             //      we need to rebuild and the composite modified time
             //         has not been determined for this file
-            return noNeedToRebuild
-                    && dependInfo.getCompositeLastModified() == Long.MIN_VALUE;
+            return noNeedToRebuild;
+// FREEHEP
+//            && dependInfo.getCompositeLastModified() == Long.MIN_VALUE;
         }
     }
     private/* final */File baseDir;
@@ -468,35 +476,43 @@ public final class DependencyTable {
     public void walkDependencies(CCTask task, DependencyInfo dependInfo,
             CompilerConfiguration compiler, DependencyInfo[] stack,
             DependencyVisitor visitor) throws BuildException {
+// BEGINFREEHEP
+      if (dependInfo.hasTag(visitor)) {
+         return;
+      }
+      dependInfo.setTag(visitor);    	
+// ENDFREEHEP
         //
         //   visit this node
         //       if visit returns true then
         //          visit the referenced include and sysInclude dependencies
         //
         if (visitor.visit(dependInfo)) {
-            //
-            //   find first null entry on stack
-            //
-            int stackPosition = -1;
-            for (int i = 0; i < stack.length; i++) {
-                if (stack[i] == null) {
-                    stackPosition = i;
-                    stack[i] = dependInfo;
-                    break;
-                } else {
-                    //
-                    //   if we have appeared early in the calling history
-                    //      then we didn't exceed the criteria
-                    if (stack[i] == dependInfo) {
-                        return;
-                    }
-                }
-            }
-            if (stackPosition == -1) {
-                visitor.stackExhausted();
-                return;
-            }
-            //
+// BEGINFREEHEP
+//        	//
+//            //   find first null entry on stack
+//            //
+//            int stackPosition = -1;
+//            for (int i = 0; i < stack.length; i++) {
+//                if (stack[i] == null) {
+//                    stackPosition = i;
+//                    stack[i] = dependInfo;
+//                    break;
+//                } else {
+//                    //
+//                    //   if we have appeared early in the calling history
+//                    //      then we didn't exceed the criteria
+//                    if (stack[i] == dependInfo) {
+//                        return;
+//                    }
+//                }
+//            }
+//            if (stackPosition == -1) {
+//                visitor.stackExhausted();
+//                return;
+//            }
+// ENDFREEHEP
+        	//
             //   locate dependency infos
             //
             String[] includes = dependInfo.getIncludes();
@@ -546,7 +562,8 @@ public final class DependencyTable {
                     }
                 }
             }
-            stack[stackPosition] = null;
+// FREEHEP
+//            stack[stackPosition] = null;
         }
     }
     private void writeDependencyInfo(BufferedWriter writer, StringBuffer buf,

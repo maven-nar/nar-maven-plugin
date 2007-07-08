@@ -26,12 +26,15 @@ public final class DependencyInfo {
      * Not persisted since almost any change could invalidate it. Initialized
      * to long.MIN_VALUE on construction.
      */
-    private long compositeLastModified;
+// FREEHEP
+//	private long compositeLastModified;
     private/* final */String includePathIdentifier;
     private/* final */String[] includes;
     private/* final */String source;
     private/* final */long sourceLastModified;
     private/* final */String[] sysIncludes;
+// FREEHEP
+    private Object tag = null;
     public DependencyInfo(String includePathIdentifier, String source,
             long sourceLastModified, Vector includes, Vector sysIncludes) {
         if (source == null) {
@@ -44,13 +47,17 @@ public final class DependencyInfo {
         this.sourceLastModified = sourceLastModified;
         this.includePathIdentifier = includePathIdentifier;
         this.includes = new String[includes.size()];
-        if (includes.size() == 0) {
-            compositeLastModified = sourceLastModified;
-        } else {
-            includes.copyInto(this.includes);
-            compositeLastModified = Long.MIN_VALUE;
-        }
+// BEGINFREEHEP
+//        if (includes.size() == 0) {
+//            compositeLastModified = sourceLastModified;
+//        } else {
+//            includes.copyInto(this.includes);
+//            compositeLastModified = Long.MIN_VALUE;
+//        }
+// ENDFREEHEP
         this.sysIncludes = new String[sysIncludes.size()];
+// FREEHEP
+        includes.copyInto(this.includes);
         sysIncludes.copyInto(this.sysIncludes);
     }
     /**
@@ -60,9 +67,14 @@ public final class DependencyInfo {
      * @returns the composite lastModified time, returns Long.MIN_VALUE if not
      * set
      */
-    public long getCompositeLastModified() {
-        return compositeLastModified;
+// BEGINFREEHEP
+//    public long getCompositeLastModified() {
+//        return compositeLastModified;
+//    }
+    public void setTag(Object t) {
+       tag = t;
     }
+// ENDFREEHEP
     public String getIncludePathIdentifier() {
         return includePathIdentifier;
     }
@@ -80,7 +92,19 @@ public final class DependencyInfo {
         String[] sysIncludesClone = (String[]) sysIncludes.clone();
         return sysIncludesClone;
     }
-    public void setCompositeLastModified(long lastMod) {
-        compositeLastModified = lastMod;
+// BEGINFREEHEP
+    /**
+     * Returns true, if dependency info is tagged with object t.
+     * 
+     * @param t object to compare with
+     * 
+     * @return boolean, true, if tagged with t, otherwise false
+     */
+    public boolean hasTag(Object t) {
+       return tag == t;
     }
+//    public void setCompositeLastModified(long lastMod) {
+//        compositeLastModified = lastMod;
+//    }
+// ENDFREEHEP
 }
