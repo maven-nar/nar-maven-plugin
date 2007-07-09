@@ -13,6 +13,7 @@
 - [src/net/sf/antcontrib/cpptasks/CCTask.java] added log statement to identify linker and compiler
 - [src/net/sf/antcontrib/cpptasks/gcc/GppLinker.java] g++ linking now includes option -fexceptions
 - [src/net/sf/antcontrib/cpptasks/CommandLineLinker] use absolute paths for filenames if they are shorter than relative paths to overcome windows file length limit.
+- [src/net/sf/antcontrib/cpptasks/CCTask.java] added thread to keep progress
 
 ** -fno-rtti changes
 - [src/net/sf/antcontrib/cpptasks/gcc/GccCompatibleCCompiler.java] removed -fno-rtti flag

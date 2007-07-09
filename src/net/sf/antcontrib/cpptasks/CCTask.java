@@ -16,6 +16,7 @@
  */
 package net.sf.antcontrib.cpptasks;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -678,6 +679,11 @@ public class CCTask extends Task {
                     }
                 }
             }
+
+// BEGINFREEHEP
+            Progress progress = new Progress(getObjdir(), rebuildCount);
+            progress.start();
+            
             for (int i = 0; i < targetVectors.length; i++) {
                 //
                 //    get the targets for this configuration
@@ -711,6 +717,10 @@ public class CCTask extends Task {
                         break;
                 }
             }
+
+// FREEHEP
+            progress.exit();
+            
             //
             //   save the details of the object file compilation
             //     settings to disk for dependency analysis
@@ -770,8 +780,10 @@ public class CCTask extends Task {
             if (linkTarget.getRebuild()) {
                 LinkerConfiguration linkConfig = (LinkerConfiguration) linkTarget
                         .getConfiguration();
-// FREEHEP
+// BEGINFREEHEP
+                log("Linking...");
                 log("Starting link {"+linkConfig.getIdentifier()+"}");
+// ENDFREEHEP
                 if (failOnError) {
                 	linkConfig.link(this, linkTarget);
                 } else {
@@ -798,6 +810,48 @@ public class CCTask extends Task {
             }
         }
     }
+// BEGINFREEHEP
+	class Progress extends Thread {
+		
+		private boolean stop = false;
+		private File objDir;
+		private int rebuildCount;
+		
+		public Progress(File objDir, int rebuildCount) {
+			this.objDir = objDir;
+			this.rebuildCount = rebuildCount;
+		}
+		
+		public void run() {
+			if (rebuildCount < 10) return;
+			try {
+				FileFilter updatedFiles = new FileFilter() {
+					private long startTime = System.currentTimeMillis();
+					
+					public boolean accept(File file) {
+						return file.lastModified() > startTime && !file.getName().endsWith(".xml");
+					}
+				};
+				while (!stop) {
+					System.err.print("\r"+objDir.listFiles(updatedFiles).length+" / "+rebuildCount+" files compiled...");
+					System.err.flush();
+					Thread.sleep(5000);
+				}
+			} catch (InterruptedException e) {
+			}
+			System.err.print("\r                                                                    ");
+			System.err.print("\r");
+	        log(Integer.toString(rebuildCount) + " files were compiled.");
+			System.err.flush();
+		}
+		
+		public void exit() {
+			stop = true;
+		}
+		
+	}    
+// ENDFREEHEP
+    
     /**
      * Gets the dataset.
      * 
