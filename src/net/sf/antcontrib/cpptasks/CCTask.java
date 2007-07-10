@@ -718,8 +718,13 @@ public class CCTask extends Task {
                 }
             }
 
-// FREEHEP
+// BEGINFREEHEP
             progress.exit();
+            try {
+            	progress.join();
+            } catch (InterruptedException e) {
+            }
+// ENDFREEHEP
             
             //
             //   save the details of the object file compilation
