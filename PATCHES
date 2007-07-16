@@ -3,6 +3,7 @@
 * cpptasks-1.0-beta-4-patched-1-SNAPSHOT
 
 ** Misc.
+- [src/net/sf/antcontrib/cpptasks/SubsyetemEnum.java] changed default subsystem from "gui" into "console"
 - [src/net/sf/antcontrib/cpptasks/gcc/AbstractLdLinker.java] no more need for -prebind as of 10.4
 - [src/net/sf/antcontrib/cpptasks/gcc/AbstractLdLinker.java] removed trailing space after "-framework" to avoid quoting
 - [src/net/sf/antcontrib/cpptasks/gcc/GppLinker.java] added -shared-libgcc/-static-libgcc for linking gcc and c++. 
