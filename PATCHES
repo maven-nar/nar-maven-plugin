@@ -1,6 +1,6 @@
 *** ALL Changes marked with FREEHEP or BEGINFREEHEP-ENDFREEHEP.
 
-* cpptasks-1.0-beta-4-patched-1-SNAPSHOT
+* cpptasks-1.0-beta-4-parallel-1-SNAPSHOT
 
 ** Misc.
 - [src/net/sf/antcontrib/cpptasks/SubsyetemEnum.java] changed default subsystem from "gui" into "console"
@@ -15,6 +15,10 @@
 - [src/net/sf/antcontrib/cpptasks/gcc/GppLinker.java] g++ linking now includes option -fexceptions
 - [src/net/sf/antcontrib/cpptasks/CommandLineLinker] use absolute paths for filenames if they are shorter than relative paths to overcome windows file length limit.
 - [src/net/sf/antcontrib/cpptasks/CCTask.java] added thread to keep progress
+
+** Parallel running change
+- [src/net/sf/antcontrib/cpptasks/CCTask.java] fork of a process per core/cpu available.
+- [src/net/sf/antcontrib/cpptasks/TargetHistoryTable.java] protect againts multi-threaded updates.
 
 ** -fno-rtti changes
 - [src/net/sf/antcontrib/cpptasks/gcc/GccCompatibleCCompiler.java] removed -fno-rtti flag

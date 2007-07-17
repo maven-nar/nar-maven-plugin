@@ -323,7 +323,8 @@ public final class TargetHistoryTable {
             markForRebuild((TargetInfo) targetInfoEnum.nextElement());
         }
     }
-    public void markForRebuild(TargetInfo targetInfo) {
+ // FREEHEP added synchronized    
+    public synchronized void markForRebuild(TargetInfo targetInfo) {
         //
         //     if it must already be rebuilt, no need to check further
         //
@@ -382,7 +383,8 @@ public final class TargetHistoryTable {
             }
         }
     }
-    private void update(String configId, String outputName, String[] sources) {
+// FREEHEP added synchronized
+    private synchronized void update(String configId, String outputName, String[] sources) {
         File outputFile = new File(outputDir, outputName);
         //
         //   if output file doesn't exist or predates the start of the
@@ -407,7 +409,8 @@ public final class TargetHistoryTable {
             history.put(outputName, newHistory);
         }
     }
-    public void update(TargetInfo linkTarget) {
+ // FREEHEP added synchronized
+    public synchronized void update(TargetInfo linkTarget) {
         File outputFile = linkTarget.getOutput();
         String outputName = outputFile.getName();
         //
