@@ -175,6 +175,8 @@ public class CCTask extends Task {
 		return targetsByConfig;
 	}
 
+// FREEHEP
+	private int maxCores = 0;
 	/** The compiler definitions. */
 	private Vector _compilers = new Vector();
 	/** The output file type. */
@@ -739,8 +741,10 @@ public class CCTask extends Task {
 				//
 				
 				// BEGINFREEHEP
-//				int noOfCores = Runtime.getRuntime().availableProcessors();
-int noOfCores = 1;
+				int noOfCores = Runtime.getRuntime().availableProcessors();
+				if (maxCores > 0) {
+				    noOfCores = Math.min(maxCores, noOfCores);
+				}
 				int noOfFiles = targetsForConfig.size();
 				if (noOfFiles < noOfCores) noOfCores = targetsForConfig.size();
 				
@@ -1558,6 +1562,16 @@ int noOfCores = 1;
 	public void setWarnings(WarningLevelEnum level) {
 		compilerDef.setWarnings(level);
 	}
+	
+// BEGINFREEHEP
+	public void setMaxCores(int maxCores) {
+	    this.maxCores = maxCores;
+	}
+	
+	public int getMaxCores() {
+	    return maxCores;
+	}
+// ENDFREEHEP
 
 	/**
 	 * Indicates whether the build will continue even if there are compilation
