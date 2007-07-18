@@ -72,6 +72,7 @@ public abstract class DevStudioCompatibleCCompiler
         }
         if (debug) {
             mindex += 1;
+// FREEHEP changed /Zi into /Z7
             args.addElement("/Zi");
             args.addElement("/Od");
             args.addElement("/GZ");
@@ -105,6 +106,7 @@ public abstract class DevStudioCompatibleCCompiler
             String lastInclude) {
         String[] additionalArgs = new String[]{
                 "/Fp" + CUtil.getBasename(prototype) + ".pch", "/Yc"};
+        // FREEHEP FIXME we may need /Yd here, but only in debug mode, how do we find out?
         return new CommandLineCompilerConfiguration(baseConfig, additionalArgs,
                 null, true);
     }
