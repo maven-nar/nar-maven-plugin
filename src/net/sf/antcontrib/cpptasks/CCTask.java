@@ -767,7 +767,7 @@ public class CCTask extends Task {
 					cores[j] = new Core(this, config, _objDir, sourceFiles[j],
 						relentless, monitor);
 					cores[j].start();
-					System.err.println("\nStarted Core "+j);
+					System.err.println("\nStarted Core "+j+" with "+sourceFiles[j].size()+" source files...");
 				}
 				
 				try {
