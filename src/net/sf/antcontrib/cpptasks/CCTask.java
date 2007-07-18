@@ -739,7 +739,8 @@ public class CCTask extends Task {
 				//
 				
 				// BEGINFREEHEP
-				int noOfCores = Runtime.getRuntime().availableProcessors();
+//				int noOfCores = Runtime.getRuntime().availableProcessors();
+int noOfCores = 1;
 				int noOfFiles = targetsForConfig.size();
 				if (noOfFiles < noOfCores) noOfCores = targetsForConfig.size();
 				
