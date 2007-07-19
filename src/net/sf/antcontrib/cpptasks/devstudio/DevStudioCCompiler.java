@@ -45,6 +45,7 @@ public final class DevStudioCCompiler extends DevStudioCompatibleCCompiler {
         return DevStudioLinker.getInstance().getLinker(type);
     }
     public int getMaximumCommandLength() {
-        return 32767;
+// FREEHEP stay on safe side
+        return 32000; // 32767;
     }
 }

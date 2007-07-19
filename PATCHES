@@ -20,6 +20,12 @@
 - [src/net/sf/antcontrib/cpptasks/CCTask.java] fork of a process per core/cpu available.
 - [src/net/sf/antcontrib/cpptasks/TargetHistoryTable.java] protect against multi-threaded updates.
 - [src/net/sf/antcontrib/cpptasks/devstudio/DevStudioCompatibleCCompiler.java] replaced /Zi flag with /Z7 to disable writing debug database file (.pdb).
+- [src/net/sf/antcontrib/cpptasks/devstudio/DevStudioCCompiler.java] limit command line length to 32000.
+- [src/net/sf/antcontrib/cpptasks/devstudio/DevStudioCompatibleLinker.java] limit command line length to 32000.
+- [src/net/sf/antcontrib/cpptasks/devstudio/DevStudioCompatibleLibrarian.java] limit command line length to 32000.
+- [src/net/sf/antcontrib/cpptasks/devstudio/DevStudioMIDLCompiler.java] limit command line length to 32000.
+- [src/net/sf/antcontrib/cpptasks/devstudio/DevStudioResourceCompiler.java] limit command line length to 32000.
+- [src/net/sf/antcontrib/cpptasks/devstudio/VisualStudioNETProjectWriter.java] limit command line length to 32000.
 
 ** -fno-rtti changes
 - [src/net/sf/antcontrib/cpptasks/gcc/GccCompatibleCCompiler.java] removed -fno-rtti flag

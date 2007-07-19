@@ -175,7 +175,7 @@ public class CCTask extends Task {
 		return targetsByConfig;
 	}
 
-// FREEHEP
+	// FREEHEP
 	private int maxCores = 0;
 	/** The compiler definitions. */
 	private Vector _compilers = new Vector();
@@ -739,18 +739,20 @@ public class CCTask extends Task {
 				//
 				// prepare the list of source files
 				//
-				
+
 				// BEGINFREEHEP
 				int noOfCores = Runtime.getRuntime().availableProcessors();
 				if (maxCores > 0) {
-				    noOfCores = Math.min(maxCores, noOfCores);
+					noOfCores = Math.min(maxCores, noOfCores);
 				}
 				int noOfFiles = targetsForConfig.size();
-				if (noOfFiles < noOfCores) noOfCores = targetsForConfig.size();
+				if (noOfFiles < noOfCores)
+					noOfCores = targetsForConfig.size();
 				
 				Set[] sourceFiles = new HashSet[noOfCores];
-				for (int j=0; j<sourceFiles.length; j++) {
-					sourceFiles[j] = new HashSet(targetsForConfig.size() / sourceFiles.length); 
+				for (int j = 0; j < sourceFiles.length; j++) {
+					sourceFiles[j] = new HashSet(targetsForConfig.size()
+							/ sourceFiles.length);
 				}
 				Enumeration targetsEnum = targetsForConfig.elements();
 				index = 0;
@@ -761,37 +763,66 @@ public class CCTask extends Task {
 							.toString());
 					index %= sourceFiles.length;
 				}
-				
+
+				// setup cores/cpus
 				Core[] cores = new Core[noOfCores];
-				for (int j=0; j<cores.length; j++) {
+				for (int j = 0; j < cores.length; j++) {
 					cores[j] = new Core(this, config, _objDir, sourceFiles[j],
-						relentless, monitor);
+							relentless, monitor);
+					log("\nStarting Core " + j + " with "
+							+ sourceFiles[j].size() + " source files...");
+				}
+
+				// starting cores
+				for (int j = 0; j < cores.length; j++) {
 					cores[j].start();
-					System.err.println("\nStarted Core "+j+" with "+sourceFiles[j].size()+" source files...");
 				}
 				
+				// checking cores
+				boolean alive = false;
 				try {
-					for (int j=0; j<cores.length; j++) {
-						System.err.println("\nJoining Core "+j);
-						cores[j].join();
-					}
-				} catch (InterruptedException ex) {
+					do {
+						alive = false;
+						for (int j = 0; j < cores.length; j++) {
+							if (cores[j] != null) {
+								if (cores[j].isAlive()) {
+									alive = true;
+								} else {
+									Exception exception = cores[j].getException();
+									if (exception != null) {
+										if ((compileException == null) && (exception instanceof BuildException)) {
+											compileException = (BuildException)exception;
+										} else {
+											log(cores[j].getName()+" "+exception+"                                  ", Project.MSG_ERR);
+										}
+										if (!relentless) {
+											cores[j] = null;
+											alive = false;
+											break;
+										}
+									}
+									cores[j] = null;
+								}
+							}
+						}
+						if (alive) {
+							Thread.sleep(5000);
+						}
+					} while (alive);
+				} catch (InterruptedException e) {
 					break;
 				}
-				
-				Exception exception = null;
-				for (int j=0; j<cores.length; j++) {
-					System.err.println("\nChecking Core "+j);
-					exception = cores[j].getException();
-					if (exception != null) break;
-				}
-				if (exception != null) {
-					if (exception instanceof BuildException) {
-						compileException = (BuildException)exception;
+
+				// killing leftovers
+				for (int j = 0; j < cores.length; j++) {
+					if (cores[j] != null) {
+						cores[j].interrupt();
+						log(cores[j].getName()+" interrupted                                          ");
 					}
-					if (!relentless)
-						break;
 				}
+				
+				if (!relentless)
+					break;
 				// ENDFREEHEP
 			}
 
@@ -904,9 +935,8 @@ public class CCTask extends Task {
 		private Exception compileException;
 		private CCTask task;
 
-		Core(CCTask task, CompilerConfiguration config, File objDir,
-				Set set, boolean relentless,
-				CCTaskProgressMonitor monitor) {
+		Core(CCTask task, CompilerConfiguration config, File objDir, Set set,
+				boolean relentless, CCTaskProgressMonitor monitor) {
 			this.task = task;
 			this.config = config;
 			this.objDir = objDir;
@@ -923,7 +953,7 @@ public class CCTask extends Task {
 			super.run();
 			try {
 				String[] sources = new String[sourceFiles.size()];
-				sources = (String[])sourceFiles.toArray(sources);
+				sources = (String[]) sourceFiles.toArray(sources);
 				config.compile(task, objDir, sources, relentless, monitor);
 			} catch (Exception ex) {
 				if (compileException == null) {
@@ -963,6 +993,7 @@ public class CCTask extends Task {
 					System.err.print("\r"
 							+ objDir.listFiles(updatedFiles).length + " / "
 							+ rebuildCount + " files compiled...");
+					System.err.print("\r");
 					System.err.flush();
 					Thread.sleep(5000);
 				}
@@ -1562,16 +1593,17 @@ public class CCTask extends Task {
 	public void setWarnings(WarningLevelEnum level) {
 		compilerDef.setWarnings(level);
 	}
-	
-// BEGINFREEHEP
+
+	// BEGINFREEHEP
 	public void setMaxCores(int maxCores) {
-	    this.maxCores = maxCores;
+		this.maxCores = maxCores;
 	}
-	
+
 	public int getMaxCores() {
-	    return maxCores;
+		return maxCores;
 	}
-// ENDFREEHEP
+
+	// ENDFREEHEP
 
 	/**
 	 * Indicates whether the build will continue even if there are compilation

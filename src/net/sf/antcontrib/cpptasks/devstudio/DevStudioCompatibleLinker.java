@@ -117,7 +117,8 @@ public abstract class DevStudioCompatibleLinker extends CommandLineLinker {
         return patterns;
     }
     public int getMaximumCommandLength() {
-        return 32767;
+// FREEHEP stay on the safe side
+        return 32000; // 32767;
     }
     public String[] getOutputFileSwitch(String outputFile) {
         return new String[]{"/OUT:" + outputFile};
