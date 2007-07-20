@@ -806,7 +806,8 @@ public class CCTask extends Task {
 							}
 						}
 						if (alive) {
-							Thread.sleep(5000);
+							// wait for a maximum of 5 seconds or #files*2 seconds.
+							Thread.sleep(Math.min(5000, sourceFiles[0].size()*2000));
 						}
 					} while (alive);
 				} catch (InterruptedException e) {
@@ -997,7 +998,9 @@ public class CCTask extends Task {
 							+ rebuildCount + " files compiled...");
 					System.err.print("\r");
 					System.err.flush();
-					Thread.sleep(5000);
+					if (!stop) {
+						Thread.sleep(5000);
+					}
 				}
 			} catch (InterruptedException e) {
 			}
