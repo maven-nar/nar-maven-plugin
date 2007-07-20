@@ -767,7 +767,7 @@ public class CCTask extends Task {
 				// setup cores/cpus
 				Core[] cores = new Core[noOfCores];
 				for (int j = 0; j < cores.length; j++) {
-					cores[j] = new Core(this, config, _objDir, sourceFiles[j],
+					cores[j] = new Core(this, j, config, _objDir, sourceFiles[j],
 							relentless, monitor);
 					log("\nStarting Core " + j + " with "
 							+ sourceFiles[j].size() + " source files...");
@@ -927,16 +927,18 @@ public class CCTask extends Task {
 
 	// BEGINFREEHEP
 	class Core extends Thread {
+		private CCTask task;
 		private CompilerConfiguration config;
 		private File objDir;
 		private Set sourceFiles;
 		private boolean relentless;
 		private CCTaskProgressMonitor monitor;
 		private Exception compileException;
-		private CCTask task;
 
-		Core(CCTask task, CompilerConfiguration config, File objDir, Set set,
-				boolean relentless, CCTaskProgressMonitor monitor) {
+		Core(CCTask task, int coreNo, CompilerConfiguration config, File objDir,
+				Set set, boolean relentless,
+				CCTaskProgressMonitor monitor) {
+			super("Core "+coreNo);
 			this.task = task;
 			this.config = config;
 			this.objDir = objDir;
