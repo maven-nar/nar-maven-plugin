@@ -822,8 +822,9 @@ public class CCTask extends Task {
 					}
 				}
 				
-				if (!relentless)
+				if ((!relentless) && (compileException != null)) {
 					break;
+                                }
 				// ENDFREEHEP
 			}
 
