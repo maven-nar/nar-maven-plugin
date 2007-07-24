@@ -742,16 +742,20 @@ public class CCTask extends Task {
 
 				// BEGINFREEHEP
 				int noOfCores = Runtime.getRuntime().availableProcessors();
+				log("Found "+noOfCores+" processors available");
 				if (maxCores > 0) {
 					noOfCores = Math.min(maxCores, noOfCores);
+					log("Limited processors to "+noOfCores);
 				}
 				int noOfFiles = targetsForConfig.size();
-				if (noOfFiles < noOfCores)
-					noOfCores = targetsForConfig.size();
+				if (noOfFiles < noOfCores) {
+					noOfCores = noOfFiles;
+					log("Limited used processors to "+noOfCores);					
+				}
 				
 				Set[] sourceFiles = new HashSet[noOfCores];
 				for (int j = 0; j < sourceFiles.length; j++) {
-					sourceFiles[j] = new HashSet(targetsForConfig.size()
+					sourceFiles[j] = new HashSet(noOfFiles
 							/ sourceFiles.length);
 				}
 				Enumeration targetsEnum = targetsForConfig.elements();

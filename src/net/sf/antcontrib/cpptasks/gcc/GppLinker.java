@@ -77,16 +77,21 @@ public class GppLinker extends AbstractLdLinker {
             }
         }
 // BEGINFREEHEP link or not with libstdc++
+// for MacOS X see: http://developer.apple.com/documentation/DeveloperTools/Conceptual/CppRuntimeEnv/Articles/LibCPPDeployment.html
         runtimeLibrary = null;
         gccLibrary = null;
         if (linkType.linkCPP()) {
         	if (linkType.isStaticRuntime()) {
-        		String[] cmdin = new String[]{"g++", "-print-file-name=libstdc++.a"};
-        		String[] cmdout = CaptureStreamHandler.run(cmdin);
-        		if (cmdout.length > 0) {
-        			runtimeLibrary = cmdout[0];
+        		if (isDarwin()) {
+        			runtimeLibrary = "-lstdc++-static";
         		} else {
-        			runtimeLibrary = null;
+        			String[] cmdin = new String[]{"g++", "-print-file-name=libstdc++.a"};
+        			String[] cmdout = CaptureStreamHandler.run(cmdin);
+        			if (cmdout.length > 0) {
+        				runtimeLibrary = cmdout[0];
+        			} else {
+        				runtimeLibrary = null;
+        			}
         		}
         		gccLibrary = "-static-libgcc";
         	} else {
