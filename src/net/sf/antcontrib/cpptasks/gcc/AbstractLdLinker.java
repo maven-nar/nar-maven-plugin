@@ -160,6 +160,14 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
                 endargs.addElement(buf.toString());
             }
         }
+        
+// BEGINFREEHEP if last was -Bstatic reset it to -Bdynamic so that libc and libm can be found as shareables
+System.err.println(previousLibraryType+" "+isDarwin());
+        if ("static".equals(previousLibraryType) && !isDarwin()) {
+            endargs.addElement("-Bdynamic");
+        }
+// ENDFREEHEP
+        
         String rc[] = new String[libnames.size()];
         for (int i = 0; i < libnames.size(); i++) {
             rc[i] = (String) libnames.elementAt(i);
