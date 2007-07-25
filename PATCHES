@@ -3,7 +3,7 @@
 * cpptasks-1.0-beta-4-parallel-1-SNAPSHOT
 
 ** Misc.
-- [src/net/sf/antcontrib/cpptasks/SubsyetemEnum.java] changed default subsystem from "gui" into "console"
+- [src/net/sf/antcontrib/cpptasks/SubsystemEnum.java] changed default subsystem from "gui" into "console"
 - [src/net/sf/antcontrib/cpptasks/gcc/AbstractLdLinker.java] no more need for -prebind as of 10.4
 - [src/net/sf/antcontrib/cpptasks/gcc/AbstractLdLinker.java] removed trailing space after "-framework" to avoid quoting
 - [src/net/sf/antcontrib/cpptasks/gcc/GppLinker.java] added -shared-libgcc/-static-libgcc for linking gcc and c++. 
@@ -66,6 +66,7 @@
 ** sun c and fortran compiles
 - [src/net/sf/antcontrib/cpptasks/sun/ForteCCompiler.java] added (suncc)
 - [src/net/sf/antcontrib/cpptasks/sun/ForteF77Compiler.java] added (sunf77)
+- [src/net/sf/antcontrib/cpptasks/sun/ForteCCLinker.java] changed -static into -staticlib=%all
 - [src/net/sf/antcontrib/cpptasks/CompilerEnum] Added the above (suncc, sunf77).
 
 ** bug [ 1109917 ] g++ linker does not add runtime w/o other libs referenced

@@ -51,7 +51,8 @@ public final class ForteCCLinker extends AbstractLdLinker {
             args.addElement("-g");
         }
         if (linkType.isStaticRuntime()) {
-            args.addElement("-static");
+// FREEHEP changed -static
+            args.addElement("-staticlib=%all");
         }
         if (linkType.isSharedLibrary()) {
             args.addElement("-G");
