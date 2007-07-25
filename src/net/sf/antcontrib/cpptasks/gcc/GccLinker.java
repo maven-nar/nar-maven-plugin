@@ -38,7 +38,8 @@ public class GccLinker extends AbstractLdLinker {
             "-dynamiclib", "-nostartfiles", "-nostdlib", "-prebind", "-s",
             "-static", "-shared", "-symbolic", "-Xlinker",
             "--export-all-symbols", "-static-libgcc",};
-    private static final GccLinker dllLinker = new GccLinker("gcc", objFiles,
+// FREEHEP refactored dllLinker to soLinker
+    private static final GccLinker soLinker = new GccLinker("gcc", objFiles,
             discardFiles, "lib", ".so", false, new GccLinker("gcc", objFiles,
                     discardFiles, "lib", ".so", true, null));
     private static final GccLinker instance = new GccLinker("gcc", objFiles,
@@ -49,6 +50,9 @@ public class GccLinker extends AbstractLdLinker {
             objFiles, discardFiles, "lib", ".dylib", false, null);
     private static final GccLinker machJNILinker = new GccLinker("gcc",
             objFiles, discardFiles, "lib", ".jnilib", false, null);
+// FREEHEP added dllLinker for windows
+    private static final GccLinker dllLinker = new GccLinker("gcc",
+            objFiles, discardFiles, "", ".dll", false, null);    
     public static GccLinker getInstance() {
         return instance;
     }
@@ -197,27 +201,15 @@ public class GccLinker extends AbstractLdLinker {
         }
 // BEGINFREEHEP
         if (type.isJNIModule()) {
-        	if (isDarwin()) {
-        		return machJNILinker;
-        	} else {
-        		return dllLinker;
-        	}
+            return isDarwin() ? machJNILinker : isWindows() ? dllLinker : soLinker;
         }
-// ENDFREEHEP
         if (type.isPluginModule()) {
-            if (isDarwin()) {
-                return machBundleLinker;
-            } else {
-                return dllLinker;
-            }
+            return isDarwin() ? machBundleLinker : isWindows() ? dllLinker : soLinker;
         }
         if (type.isSharedLibrary()) {
-            if (isDarwin()) {
-                return machDllLinker;
-            } else {
-                return dllLinker;
-            }
+            return isDarwin() ? machDllLinker : isWindows() ? dllLinker : soLinker;
         }
+// ENDFREEHEP
         return instance;
     }
 }

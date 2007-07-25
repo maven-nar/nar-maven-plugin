@@ -27,6 +27,13 @@
 - [src/net/sf/antcontrib/cpptasks/devstudio/DevStudioResourceCompiler.java] limit command line length to 32000.
 - [src/net/sf/antcontrib/cpptasks/devstudio/VisualStudioNETProjectWriter.java] limit command line length to 32000.
 
+** dll for g++ on windows changes
+- [src/net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.java] Added isWindows()
+- [src/net/sf/antcontrib/cpptasks/gcc/GccLinker.java] refactored dllLinker to soLinker
+- [src/net/sf/antcontrib/cpptasks/gcc/GppLinker.java] refactored dllLinker to soLinker
+- [src/net/sf/antcontrib/cpptasks/gcc/GccLinker.java] added dllLinker for windows
+- [src/net/sf/antcontrib/cpptasks/gcc/GppLinker.java] added dllLinker for windows
+
 ** -fno-rtti changes
 - [src/net/sf/antcontrib/cpptasks/gcc/GccCompatibleCCompiler.java] removed -fno-rtti flag
 - [src/net/sf/antcontrib/cpptasks/gcc/GccCCompiler.java] only add -fno-rtti for g++ and c++ 

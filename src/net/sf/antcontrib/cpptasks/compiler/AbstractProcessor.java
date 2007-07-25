@@ -123,6 +123,13 @@ public abstract class AbstractProcessor implements Processor, Cloneable {
         String osName = getOSName();
         return "Mac OS X".equals(osName);
     }
+// BEGINFREEHEP
+    protected boolean isWindows() {
+        String osName = getOSName();
+        return (osName != null) && osName.startsWith("Windows");
+    }
+// ENDFREEHEP
+    
     public final String toString() {
         return getIdentifier();
     }
