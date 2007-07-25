@@ -162,8 +162,7 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
         }
         
 // BEGINFREEHEP if last was -Bstatic reset it to -Bdynamic so that libc and libm can be found as shareables
-System.err.println(previousLibraryType+" "+isDarwin());
-        if ("static".equals(previousLibraryType) && !isDarwin()) {
+        if ((previousLibraryType != null) && previousLibraryType.getValue().equals("static") && !isDarwin()) {
             endargs.addElement("-Bdynamic");
         }
 // ENDFREEHEP
