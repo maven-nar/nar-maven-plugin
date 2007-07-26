@@ -3,7 +3,7 @@
 	<groupId>net.sf.antcontrib</groupId>
 	<artifactId>cpptasks</artifactId>
 	<name>CPPTasks (modified)</name>
-	<version>1.0-beta-4-parallel-2-SNAPSHOT</version>
+	<version>1.0-beta-4-parallel-1-SNAPSHOT</version>
 	<description>
 		Library to call native compilers and linkers.
 	</description>
