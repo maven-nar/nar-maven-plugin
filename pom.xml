@@ -64,6 +64,7 @@
 			<artifactId>maven-release-plugin</artifactId>
 			<configuration>
             			<tagBase>svn://svn.freehep.org/svn/misc/tags</tagBase>
+				<arguments>-P jdk1.4</arguments>
           		</configuration>
         		</plugin>
 			<plugin>
