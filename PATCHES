@@ -1,6 +1,6 @@
 *** ALL Changes marked with FREEHEP or BEGINFREEHEP-ENDFREEHEP.
 
-* cpptasks-1.0-beta-4-parallel-1-SNAPSHOT
+* cpptasks-1.0-beta-4-parallel-1
 
 ** Misc.
 - [src/net/sf/antcontrib/cpptasks/SubsystemEnum.java] changed default subsystem from "gui" into "console"
