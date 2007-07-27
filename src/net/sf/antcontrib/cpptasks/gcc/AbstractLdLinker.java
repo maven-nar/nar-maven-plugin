@@ -252,7 +252,8 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
         return patterns;
     }
     public int getMaximumCommandLength() {
-        return Integer.MAX_VALUE;
+// FREEHEP
+        return isWindows() ? 20000 : Integer.MAX_VALUE;
     }
     public String[] getOutputFileNames(String baseName, VersionInfo versionInfo) {
             String[] baseNames = super.getOutputFileNames(baseName, versionInfo);

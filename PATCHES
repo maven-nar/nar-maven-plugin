@@ -26,6 +26,9 @@
 - [src/net/sf/antcontrib/cpptasks/devstudio/DevStudioMIDLCompiler.java] limit command line length to 32000.
 - [src/net/sf/antcontrib/cpptasks/devstudio/DevStudioResourceCompiler.java] limit command line length to 32000.
 - [src/net/sf/antcontrib/cpptasks/devstudio/VisualStudioNETProjectWriter.java] limit command line length to 32000.
+- [src/net/sf/antcontrib/cpptasks/gcc/AbstractLdLinker.java] limit command line for Windows to 20000.
+- [src/net/sf/antcontrib/cpptasks/gcc/GccCCompiler.java] limit command line for Windows to 20000.
+
 
 ** dll for g++ on windows changes
 - [src/net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.java] Added isWindows()

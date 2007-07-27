@@ -256,6 +256,7 @@ public final class GccCCompiler extends GccCompatibleCCompiler {
         return GccLinker.getInstance().getLinker(linkType);
     }
     public int getMaximumCommandLength() {
-        return Integer.MAX_VALUE;
+// FREEHEP
+        return isWindows() ?  20000 : Integer.MAX_VALUE;
     }
 }
