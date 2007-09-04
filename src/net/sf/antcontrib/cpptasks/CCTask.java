@@ -1321,6 +1321,10 @@ public class CCTask extends Task {
 		linkType.setLinkCPP(linkCPP);
 	}
 
+	public void setLinkFortran(boolean linkFortran) {
+		linkType.setLinkFortran(linkFortran);
+	}
+
 	// ENDFREEHEP
 	/**
 	 * Enables or disables generation of multithreaded code

@@ -28,9 +28,11 @@ public class LinkType {
     private boolean staticRuntime = false;
     private SubsystemEnum subsystem = new SubsystemEnum();
     
-// FREEHEP
+// BEGINFREEHEP
     private boolean linkCPP = true;
-
+	private boolean linkFortran = false;
+// ENDFREEHEP
+	
     /**
      * Constructor
      * 
@@ -167,7 +169,14 @@ public class LinkType {
     public boolean linkCPP() {
     	return linkCPP;
     }
-   
+
+    public void setLinkFortran(boolean linkFortran) {
+    	this.linkFortran = linkFortran;
+    }
+    
+    public boolean linkFortran() {
+		return linkFortran;
+	}
 // ENDFREEHEP
     
 }
