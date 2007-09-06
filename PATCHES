@@ -1,6 +1,6 @@
 *** ALL Changes marked with FREEHEP or BEGINFREEHEP-ENDFREEHEP.
 
-* cpptasks-1.0-beta-4-parallel-2-SNAPSHOT
+* cpptasks-1.0-beta-4-parallel-2
 
 - [src/net/sf/antcontrib/cpptasks/gcc/GppLinker.java] g++ handles gfortran static linking.
 - [src/net/sf/antcontrib/cpptasks/compiler/LinkType.java] g++ handles gfortran static linking.
