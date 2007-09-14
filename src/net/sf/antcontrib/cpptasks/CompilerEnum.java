@@ -30,6 +30,7 @@ import net.sf.antcontrib.cpptasks.intel.IntelLinux32CCompiler;
 import net.sf.antcontrib.cpptasks.intel.IntelLinux32Compiler;
 import net.sf.antcontrib.cpptasks.intel.IntelLinux64CCompiler;
 import net.sf.antcontrib.cpptasks.intel.IntelLinux64Compiler;
+import net.sf.antcontrib.cpptasks.intel.IntelLinuxFortranCompiler;
 import net.sf.antcontrib.cpptasks.intel.IntelWin32CCompiler;
 import net.sf.antcontrib.cpptasks.intel.IntelWin64CCompiler;
 import net.sf.antcontrib.cpptasks.mozilla.XpidlCompiler;
@@ -101,6 +102,10 @@ import org.apache.tools.ant.types.EnumeratedAttribute;
  * <tr>
  * <td>icc</td>
  * <td>Intel C++ compiler for Linux (IA-32)</td>
+ * </tr>
+ * <tr>
+ * <td>ifort</td>
+ * <td>Intel Fortran compiler for Linux (IA-32)</td>
  * </tr>
  * <tr>
  * <td>ecc</td>
@@ -202,6 +207,7 @@ public class CompilerEnum extends EnumeratedAttribute {
             new ProcessorEnumValue("ecc", IntelLinux64CCompiler.getInstance()),
             new ProcessorEnumValue("icpc", IntelLinux32Compiler.getInstance()),
             new ProcessorEnumValue("ecpc", IntelLinux64Compiler.getInstance()),
+            new ProcessorEnumValue("ifort", IntelLinuxFortranCompiler.getInstance()),
 // ENDFREEHEP
             new ProcessorEnumValue("CC", ForteCCCompiler.getInstance()),
 // BEGINFREEHEP
