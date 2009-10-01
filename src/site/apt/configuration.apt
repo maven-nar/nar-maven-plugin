@@ -1,0 +1,453 @@
+	---
+FreeHEP NAR Plugin
+	---
+	---
+Mark Donszelmann
+	---
+
+NAR Configuration
+
+	The following shows the possible tags in the NAR configuration section:
+
++--
+<configuration>
+  <arch/>
+  <os/>
+  <javaHome/>
+  <aol/>
+  <resourceDirectory/>
+  <resourceBinDir/>
+  <resourceIncludeDir/>
+  <resourceLibDir/>
+  <maxCores/>
+  <targetDirectory/>
+  <output/>
+  <failOnError/>
+  <runtime/>
+  <libtool/>
+
+  <libraries>
+    <library>
+      <type/>
+      <linkCPP/>
+      <linkFortran/>
+      <run/>
+      <args>
+        <arg/>
+      </args>
+    </library>
+  </libraries>
+
+  <tests>
+    <test>
+      <name/>
+      <link/>
+      <run/>
+      <args>
+        <arg/>
+      </args>
+    </test>
+  </tests>
+
+  <linker>
+    <name/>
+    <incremental/>
+    <map/>
+    <options>
+      <option/>
+    </options>
+    <clearDefaultOptions/>
+    <libs>
+      <lib>
+        <name/>
+        <type/>
+        <directory/>
+      </lib>
+    </libs>
+    <sysLibs>
+      <sysLib>
+        <name/>
+        <type/>
+      </sysLib>
+    </sysLibs>
+  </linker>    
+
+  <cpp>
+    <name/>
+    <sourceDirectory/>
+    <includes>
+      <include>
+    </includes>
+    <excludes>
+      <exclude>
+    </excludes>
+    <debug/>
+    <exceptions/>
+    <rtti/>
+    <optimize/>
+    <multiThreaded/>
+    <defines>
+      <define/>
+    </defines>
+    <clearDefaultDefines/>
+    <undefines>
+      <undefine/>
+    </undefines>
+    <clearDefaultUndefines/>
+    <includePaths>
+      <includePath/>
+    </includePaths>
+    <systemIncludePaths>
+      <systemIncludePath/>
+    </systemIncludePaths>
+    <options>
+      <option/>
+    </options>
+    <clearDefaultOptions/>
+  </cpp>
+
+  <c>
+    ... same as for <cpp>
+  </c>
+
+  <fortran>
+    ... same as for <cpp>
+  </fortran>
+  
+  <java>
+    <include/>
+    <includePaths>
+      <includePath/>
+    </includePaths>
+    <link/>
+    <runtimeDirectory/>
+    <runtime/>
+  </java>
+
+  <javah>
+    <name/>
+    <bootClassPaths>
+      <bootClassPath/>
+    </bootClassPaths>
+    <classPaths>
+      <classPath/>
+    </classPaths>
+    <jniDirectory/>
+    <classDirectory/>
+    <includes>
+      <include>
+    </includes>
+    <excludes>
+      <exclude>
+    </excludes>
+  </javah>
+  
+  <link/>
+</configuration>
++--
+
+
+* {arch}
+
+	The Architecture for which we produce the native library. Examples are
+i386, x86, ppc, ppc64, etc... Default is the system property os.arch.
+
+* {os}
+
+	The Operating System  for which we produce the native library. Examples
+are Windows, Linux, MacOSX, SunOS, ... Default is derived from os.name, without spaces and
+in the case of Windows generalized.
+
+* {javaHome}
+
+	The location of the Java installation. Default is derived from the system
+property java.home, corrected for MacOSX.
+
+* {aol}
+
+	The Architecture-OS-Linker qualifier. Default is composed from the arch,
+os and linker.name value.
+
+* {resourceDirectory}
+
+	Directory with NAR related resources. Used by the nar-resources goal, which
+copies resources over to the target area. Defaults to ${basedir}/src/nar/resources.
+
+* {resourceBinDir}
+
+	Directory with binaries, relative to ${resourceDirectory}. Defaults to bin.
+
+* {resourceIncludeDir}
+
+	Directory with includes, relative to ${resourceDirectory}. Defaults to include.
+
+* {resourceLibDir}
+
+	Directory with libraries, relative to ${resourceDirectory}. Defaults to lib.
+
+* {maxCores}
+
+	Specifies the maximum number or Cores/CPUs to use for compilation. 
+If set to 0 it will use all the Cores/CPUs available.
+
+* {targetDirectory}
+
+	Directory for all NAR related output.
+Defaults to "${project.build.directory}/nar" for "compile" goal
+Defaults to "${project.build.directory}/test-nar" for "compile-test" goal
+
+* {output}
+
+	Name of the output. Default is ${project.artifactId}-${project.version}.
+	
+* {failOnError}
+
+	Fail on compilation/linking error. Default is true.
+
+* {runtime}
+
+	Sets the type of runtime library, possible values "dynamic", "static".
+Default is dynamic.
+
+* {libtool}
+
+	Set use of libtool. If set to true, the "libtool " will be prepended to 
+the command line for compatible compilers/linkers. Default is false.
+
+* {libraries}
+
+	Section to specify what type or libraries to create. For each library you may specify:
+	
+	[type] The type of the library: shared, static, jni, plugin, executable. Default is shared.
+
+	[linkCPP] Specifies if the stdc++ library should be linked with. Default is true.
+
+	[linkFortran] Specifies if the fortran library should be linked with. Default is false.
+
+	[narSystemPackage] If specified a NarSystem class will be generated in this package and 
+	added to the main jar artifact. The NarSystem class contains the following methods:
+	
+	* loadLibrary() - which will load the <artifact>-<version> JNI library. 
+
+	[narSystemName] Specifies the NarSystem class. Defaults to NarSystem.
+
+	[narSystemDirectory] Specifies the NarSystem source directory. Defaults to target/nar/nar-generated.
+	
+	[]
+	
+	[run] If true will run this executable (only if type is executable).
+	
+	[args] List of arguments to be provided to executable.
+	
+	[]
+
+* {tests}
+
+	Section to specify which test executables should be created. For each test you may specify:
+	
+	[name] Name of the executable.
+	
+	[link] Type of linking to be used: shared or static. Default is shared.
+
+	[run] If true will run this test
+	
+	[args] List of arguments to be provided to test.
+	
+	[]
+
+* {linker}
+
+	Section to specify parameters for the linker.
+
+** {linker name}
+
+	The Linker. Some choices are: "msvc", "g++", "CC", "icpc", ...
+    Default is Architecture OS specific.
+
+** {linker incremental}
+
+	Enables incremental linking. Default is false.
+
+** {linker map}
+
+	Enables the production of a map file. Default is false.
+
+** {linker options}
+
+	Additional options for the linker.
+    Defaults to AOL specific values.
+
+** {linker clearDefaultOptions}
+
+	Clear options specified in AOL properties.
+
+** {linker libs}
+
+	Adds libraries to the linker. For each lib you have to specify:
+    
+	[name] Name of the library, or a dependency groupId:artifactId if this library contains sublibraries
+    
+	[type] Type of linking for this library. Default is shared.
+    
+	[directory] Location for this library.
+	
+	[]
+  
+** {linker sysLibs}
+
+	Adds system libraries to the linker. For each syslib you have to specify:
+	
+	[name] Name of the system library
+	
+	[type] Type of linking for this system library. Default is shared.
+  
+  	[]
+  	 
+
+* {cpp}
+
+	Section to specify parameters for the c++ compiler.
+
+** {cpp name}
+
+	The name of the compiler. Some choices are: "msvc", "g++", "gcc", "CC", "cc", "icc", "icpc", ...
+    Default is AOL specific.
+    
+** {cpp sourceDirectory}
+    
+    Source directory for native files
+    
+** {cpp includes}
+
+	Include patterns for sources, relative to sourceDirectory in "ant" style.
+
+** {cpp excludes}
+      
+	Exclude patterns for sources, relative to sourceDirectory in "ant" style. 
+    
+** {cpp debug}
+    
+    Compile with debug information. Default is false.
+    
+** {cpp exceptions}
+
+	Enables generation of exception handling code. Default is true.
+    
+** {cpp rtti}
+
+	Enables run-time type information. Default is true.
+    
+** {cpp optimize}
+
+	Sets optimization.
+  	Possible choices are: "none", "size", "minimal", "speed", "full", "aggressive", "extreme", "unsafe".
+  	Default is none.
+   
+** {cpp  multiThreaded}
+   
+    Enables or disables generation of multithreaded code.
+    Default value: false, except on Windows.
+   
+** {cpp defines}
+
+	Additional list of defines.
+
+** {cpp clearDefaultDefines}
+    
+    Clear the defines specified in AOL properties.
+    
+** {cpp undefines}
+
+	Additional list of undefines.
+     
+** {cpp clearDefaultUndefines}
+    
+	Clear undefines specified in AOL properties.
+
+** {cpp includePaths}
+
+	Include Paths, relative to ${baseDir}.
+    Defaults to "${sourceDirectory}/include"
+    
+** {cpp systemIncludePaths}
+
+	System Include Paths, which are added at the end of all include paths
+    
+** {cpp options}
+
+	Additional options for the C++ compiler. Some of these options can be set by specific tags (debug, rtti, ...).
+    Defaults to AOL specific values.
+      
+** {cpp clearDefaultOptions}
+
+	Clear options specified in AOL properties.
+	
+* {c}
+
+	Same definitions as for \<cpp\>
+
+
+* {fortran}
+
+	Same definitions as for \<cpp\>
+
+
+* {java}
+
+	Section to specify parameters for java
+
+** {java include}
+
+	Add Java includes to includepath. Default is false.
+
+** {java includePaths}
+
+	List of Java Include Paths, relative to javaHome.
+    Defaults to: "javaHome/include" and "javaHome/include/os-specific".
+
+** {java link}
+
+	Add Java Runtime to linker. Default is false.
+
+** {java runtimeDirectory}
+
+	Relative path from javaHome to the java runtime to link with.
+    Defaults to AOL specific value.
+
+** {java runtime}
+
+	Name of the runtime. Default is jvm.
+
+* {javah}
+
+	Section to specify parameters for javah
+
+** {javah name}
+
+	Javah command to run.
+
+** {javah bootClassPaths}
+
+	List of boot class paths. By default none.
+
+** {javah classPaths}
+
+	List of classpaths. By default the classDirectory directory is included and all dependent classes.
+
+** {javah jniDirectory}
+
+	The target directory into which to generate the output.
+
+** {javah classDirectory}
+
+	The class directory to scan for class files with native interfaces.
+
+** {javah includes}
+
+	The set of files/patterns to include, relative to classDirectory/sourceDirectory. Defaults to "**/*.class"
+
+** {javah excludes}
+
+	A list of exclusion filters, relative to classDirectory/sourceDirectory. Defaults to none.
+	
+

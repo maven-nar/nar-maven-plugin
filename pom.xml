@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <artifactId>maven-plugin-pom</artifactId>
+    <groupId>org.freehep</groupId>
+    <version>5</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.freehep</groupId>
+  <artifactId>freehep-nar-plugin</artifactId>
+  <packaging>maven-plugin</packaging>
+  <name>FreeHEP Maven Native Archive Plugin</name>
+  <version>2.0-alpha-11-SNAPSHOT</version>
+  <description>Native Archive Plug-in to compile and link c++, c and fortran (for Maven 2),
+  see Introduction</description>
+  <repositories>
+    <repository>
+      <id>freehep-maven</id>
+      <name>Maven FreeHEP</name>
+      <url>http://java.freehep.org/maven2</url>
+    </repository>
+  </repositories>
+  <dependencies>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-compiler-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-archiver</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.surefire</groupId>
+      <artifactId>surefire-booter</artifactId>
+      <version>2.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.antcontrib</groupId>
+      <artifactId>cpptasks</artifactId>
+      <version>1.0-beta-4-parallel-3-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>bcel</groupId>
+      <artifactId>bcel</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ant</groupId>
+      <artifactId>ant</artifactId>
+      <version>1.6.5</version>
+    </dependency>
+  </dependencies>
+</project>
+

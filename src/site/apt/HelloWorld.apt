@@ -1,0 +1,61 @@
+	---
+FreeHEP NAR Plugin
+	---
+	---
+Mark Donszelmann
+	---
+	
+HelloWorld Examples
+
+	These example contain a simple C method "sayHello". This method can be called from a C program, a Java program, put into
+a static library, put into a shared library, use a third party library, ...
+There are also some unit test which are run and call the same method. 
+
+	The following examples are available:
+
+  	[helloworldexe] A C routine.
+  
+  	[helloworldstaticexe] A C routine statically linked with the C-runtime library.
+
+	[]
+
+	[helloworldjni] A C routine called from Java and a Java unit test.
+	
+	[helloworldjnilibjava] A java project which depends on helloworldjni. 
+
+	[helloworldstaticjni] A C routine called from Java statically linked with the C-runtime library and a Java unit test.
+	
+	[hellothirdpartyjni] A third party JNI library called from Java.
+	The third party library is "helloworldjni" and is added as resource to the project in the 
+	form of a JNI library and a corresponding jar file. A Java unit test is provided.
+	
+	[]
+
+	[helloworldsharedlib] A C routine which gets archived into a shared library. A C test executable 
+	is created and run.
+	
+	[helloworldsharedlibexe] A C executable which depends on "helloworldsharedlib" and links dynamically 
+	with it. The executable is created and run.
+	
+	[helloworldsharedlibjni] A C routine called from Java, which depends on 
+	"helloworldsharedlib" and links dynamically with it. A Java unit test is provided.
+	
+	[]
+
+	[helloworldstaticlib] A C routine which gets archived into a static library. A C test executable 
+	is created and run.
+	
+	[helloworldstaticlibexe] A C executable which depends on "helloworldstaticlib" and links statically 
+	with it. The executabe is created and run. 
+
+	[helloworldstaticlibjni] A C routine called from Java, which depends on 
+	"helloworldstaticlib" and links statically with it. A Java unit test is provided.
+	
+	[]
+
+	These examples are now all run as tests when you try to run maven on the freehep-nar-plugin from its top-level directory.
+
+	For the sources of these tests, see: 
+{{{http://java.freehep.org/svn/repobrowser.svn?path=%2ffreehep%2ftrunk%2fmaven-plugins%2ffreehep-nar-plugin%2ftests&revision=HEAD&name=freehep&bypassEmpty=true}
+the SVN repository}}.
+

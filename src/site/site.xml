@@ -1,0 +1,59 @@
+<project name="freehep">
+    <bannerLeft>
+        <name>FreeHEP NAR Plugin</name>
+<!--        <src>http://maven.apache.org/images/apache-maven-project.png</src> -->
+<!-- FIXME, should this be substituted by some properties -->
+        <href>http://java.freehep.org/freehep-nar-plugin</href>
+    </bannerLeft>
+    
+    <bannerRight>
+        <name>FreeHEP</name>
+        <src>http://java.freehep.org/images/sm-freehep.gif</src>
+        <href>http://java.freehep.org</href>
+    </bannerRight>
+  
+  <body>
+    <links>
+        <item name="NAR Plugin for Maven1" href="http://java.freehep.org/maven1.x/freehep-nar-plugin"/>
+        <item name="FreeHEP 1.x" href="http://java.freehep.org/freehep1.x"/>
+        <item name="FreeHEP 2.x" href="http://java.freehep.org/"/>
+        <item name="Maven 2" href="http://maven.apache.org/maven2/"/>
+    </links>
+
+    <menu name="Overview">
+      <item name="Introduction" href="intro.html"/>
+      <item name="Philosophy" href="philosophy.html"/>
+      <item name="Presentation (pdf)" href="NARPlugin.pdf"/>
+      <item name="Presentation (ppt)" href="NARPlugin.ppt"/>
+    </menu>
+    
+    <menu name="User Info">
+      <item name="Goals" href="plugin-info.html"/>
+      <item name="Usage" href="usage.html"/>
+      <item name="Lifecycle" href="lifecycle.html"/>
+      <item name="Configuration" href="configuration.html"/>
+      <item name="FAQ" href="faq.html"/>
+      <item name="AOL Properties" href="aol.html"/>
+    </menu>
+   
+    <menu name="Developer Info">
+      <item name="NAR Dependencies" href="narDependencies.html"/>
+      <item name="Bug Reports" href="http://bugs.freehep.org/browse/NARPLUGIN"/>
+      <item name="Forum" href="http://forum.freehep.org/index.php?t=threadt&amp;frm_id=14&amp;rid=4"/>
+      <item name="APIDocs" href="apidocs/index.html"/>
+      <item name="NAR Library" href="narLibrary.html"/>
+      <item name="CPPTasks" href="cpptasks.html"/>
+      <item name="SVN Browse" href="http://java.freehep.org/svn/repobrowser.svn?path=%2ffreehep%2ftrunk%2fmaven-plugins%2ffreehep-nar-plugin/&amp;revision=HEAD"/>
+      <item name="SVN Repository" href="source-repository.html"/>      
+    </menu>
+    <menu name="Examples">
+      <item name="HelloWorld" href="HelloWorld.html"/>
+    </menu>
+    <menu name="Other Information">
+      <item name="Maven and other languages" href="http://docs.codehaus.org/display/MAVEN/Support+for+other+languages"/>
+    </menu>
+
+    ${reports}
+    
+  </body>
+</project>

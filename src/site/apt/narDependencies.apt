@@ -1,0 +1,54 @@
+	---
+FreeHEP NAR Plugin
+	---
+	---
+Mark Donszelmann
+	---
+	
+NAR Dependencies
+
+	Dependencies on other NARs are handled by the standard maven dependency mechanism.
+The type for NAR files is <<<nar>>>, however to ease the inclusion of Java code and
+lookup of properties any nar file is always published as an attached artifact
+to  a jar artifact. A nar dependency therefore becomes a jar dependency and is
+declared in the following way:
+
++--
+<project>
+  ...
+  <dependencies>
+    <dependency>
+      <groupId>dependent-group</groupId>
+      <artifactId>dependent-artifact</artifactId>
+      <version>dependent-version</version>
+    </dependency>
+  </dependencies>
+</project>
++--
+        
+	as is any other jar dependency. Maven will automatically download this jar file
+for any goal that requires it.
+
+	The NAR plugin knows this is a nar dependency
+by looking inside the jar file for a properties file with the following name:
+
++--
+META-INF/nar/groupId/artifactId/nar.properties
++--
+
+	This file is normally generated in the nar-package goal for pickup by
+the standard package goal to be included in the jar file.
+<<TBD there is no way to include a hand-written file>>.
+
+	The file may contain the following properties:
+	
+*---------------------------+--------------------+---------------------------------------+
+| <<Property>>              | <<Default-Value>>  | <<Description>>                       |
+*---------------------------+--------------------+---------------------------------------+
+| nar.noarch                |                    | Comma separated list of architecture independent nars to download. Each entry consists of groupId:artifactId:type:classifier, for example: ch.cern:cernlib:nar:noarch |
+*---------------------------+--------------------+---------------------------------------+
+| nar.static                |                    | Comma separated list of static nar files to download. Each entry consists of groupId:artifactId:type:classifier. $\{aol\} can be used to be replaced by the current aol value, for example: ch.cern:cernlib:nar:$\{aol\}-static |
+*---------------------------+--------------------+---------------------------------------+
+
+
+	<<TBD more values are possible >>

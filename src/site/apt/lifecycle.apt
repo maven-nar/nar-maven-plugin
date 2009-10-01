@@ -1,0 +1,48 @@
+	---
+FreeHEP NAR Plugin
+	---
+	---
+Mark Donszelmann
+	---
+	
+NAR Lifecycle
+
+	The NAR lifecycle copies the default Maven lifecycle and adds native goals to its phases.
+The table below shows the different phases of the NAR Lifecycle and the goals (including
+standard maven goals) attached to them. The order is left to right, top to bottom.
+
+*------------------------+-------------------------------------------+
+| <Phase>                | <Goals (NAR Goals in bold)>               |
+*------------------------+-------------------------------------------+ 
+| generate-sources       | <<nar-download>>, <<nar-system-generate>> |
+*------------------------+-------------------------------------------+ 
+| process-sources        | <<nar-unpack>>                            |
+*------------------------+-------------------------------------------+ 
+| process-resources      | resources, <<nar-resources>>              |
+*------------------------+-------------------------------------------+ 
+| compile                | compile, <<nar-javah>>                    |
+*------------------------+-------------------------------------------+ 
+| process-classes        | <<nar-compile>>                           |
+*------------------------+-------------------------------------------+ 
+| process-test-resources | testResources                             |
+*------------------------+-------------------------------------------+ 
+| test-compile           | testCompile, <<nar-testCompile>>          |
+*------------------------+-------------------------------------------+ 
+| test                   | test, <<nar-test>>                        |
+*------------------------+-------------------------------------------+ 
+| package                | <<nar-package>>, jar                      |
+*------------------------+-------------------------------------------+ 
+| integration-test       | <<nar-integration-test>>                  |
+*------------------------+-------------------------------------------+ 
+| install                | install                                   |
+*------------------------+-------------------------------------------+ 
+| deploy                 | deploy                                    |
+*------------------------+-------------------------------------------+ 
+
+
+	The NAR plugin attaches the nar files it produces to the main artifact (jar) so the standard
+install and deploy plugins of maven do their job.
+
+	The nar-assembly goal is not part of the lifestyle and should be called independently.
+	
+	

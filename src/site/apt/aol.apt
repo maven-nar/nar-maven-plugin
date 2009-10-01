@@ -1,0 +1,384 @@
+	---
+FreeHEP NAR Plugin
+	---
+	---
+Mark Donszelmann
+	---
+	
+AOL Properties
+
+	Below a copy of the AOL Properties file which is used by the NAR plugin for AOL dependent default settings:
+	
++--
+#
+# Windows ("Windows *" => Windows)
+#
+x86.Windows.linker=msvc
+
+x86.Windows.msvc.cpp.compiler=msvc
+x86.Windows.msvc.cpp.defines=Windows WIN32
+x86.Windows.msvc.cpp.options=
+x86.Windows.msvc.cpp.includes=**/*.cc **/*.cpp **/*.cxx
+x86.Windows.msvc.cpp.excludes=
+
+x86.Windows.msvc.c.compiler=msvc
+x86.Windows.msvc.c.defines=Windows WIN32
+x86.Windows.msvc.c.options=
+x86.Windows.msvc.c.includes=**/*.c
+x86.Windows.msvc.c.excludes=
+
+x86.Windows.msvc.fortran.compiler=df
+x86.Windows.msvc.fortran.defines=Windows WIN32
+x86.Windows.msvc.fortran.options=
+x86.Windows.msvc.fortran.includes=**/*.f **/*.for
+x86.Windows.msvc.fortran.excludes=
+
+x86.Windows.msvc.java.include=include;include/win32
+x86.Windows.msvc.java.runtimeDirectory=lib
+
+x86.Windows.msvc.lib.prefix=
+x86.Windows.msvc.shared.extension=dll
+x86.Windows.msvc.static.extension=lib
+x86.Windows.msvc.plugin.extension=dll
+x86.Windows.msvc.jni.extension=dll
+x86.Windows.msvc.executable.extension=exe
+
+#x86.Windows.msvc.arch.includes=lib/**/*.lib lib/**/*.dll
+
+#
+# Windows g++
+#
+x86.Windows.g++.cpp.compiler=g++
+x86.Windows.g++.cpp.defines=Windows
+x86.Windows.g++.cpp.options=-Wall
+x86.Windows.g++.cpp.includes=**/*.cc **/*.cpp **/*.cxx
+x86.Windows.g++.cpp.excludes=
+
+x86.Windows.g++.c.compiler=gcc
+x86.Windows.g++.c.defines=Windows
+x86.Windows.g++.c.options=-Wall
+x86.Windows.g++.c.includes=**/*.c
+x86.Windows.g++.c.excludes=
+
+x86.Windows.g++.fortran.compiler=g77
+x86.Windows.g++.fortran.defines=Windows
+x86.Windows.g++.fortran.options=-Wall
+x86.Windows.g++.fortran.includes=**/*.f **/*.for
+x86.Windows.g++.fortran.excludes=
+
+x86.Windows.g++.java.include=include;include/Windows
+x86.Windows.g++.java.runtimeDirectory=lib
+
+x86.Windows.g++.lib.prefix=lib
+x86.Windows.g++.static.extension=a
+x86.Windows.g++.shared.extension=so
+x86.Windows.g++.plugin.extension=so
+x86.Windows.g++.jni.extension=so
+x86.Windows.g++.executable.extension=
+
+#
+# Linux
+#
+i386.Linux.linker=g++
+
+i386.Linux.g++.cpp.compiler=g++
+i386.Linux.g++.cpp.defines=Linux GNU_GCC f2cFortran
+i386.Linux.g++.cpp.options=-Wall -Wno-long-long -Wpointer-arith -Wconversion
+i386.Linux.g++.cpp.includes=**/*.cc **/*.cpp **/*.cxx
+i386.Linux.g++.cpp.excludes=
+
+i386.Linux.g++.c.compiler=gcc
+i386.Linux.g++.c.defines=Linux GNU_GCC f2cFortran
+i386.Linux.g++.c.options=-Wall -Wno-long-long -Wpointer-arith -Wconversion
+i386.Linux.g++.c.includes=**/*.c
+i386.Linux.g++.c.excludes=
+
+i386.Linux.g++.fortran.compiler=g77
+i386.Linux.g++.fortran.defines=Linux GNU_GCC f2cFortran
+i386.Linux.g++.fortran.options=-Wall 
+i386.Linux.g++.fortran.includes=**/*.f **/*.for
+i386.Linux.g++.fortran.excludes=
+
+i386.Linux.g++.java.include=include;include/linux
+i386.Linux.g++.java.runtimeDirectory=jre/lib/i386/client
+
+i386.Linux.g++.lib.prefix=lib
+i386.Linux.g++.static.extension=a
+i386.Linux.g++.shared.extension=so
+i386.Linux.g++.plugin.extension=so
+i386.Linux.g++.jni.extension=so
+i386.Linux.g++.executable.extension=
+
+#i386.Linux.g++.arch.includes=lib/**/*.a lib/**/*.so
+
+#
+# Linux icc (C linker)
+#
+i386.Linux.icc.cpp.compiler=NONE
+i386.Linux.icc.cpp.defines=Linux
+i386.Linux.icc.cpp.options=-ansi -mp -no-gcc -w1
+i386.Linux.icc.cpp.includes=**/*.cc **/*.cpp **/*.cxx
+i386.Linux.icc.cpp.excludes=
+
+i386.Linux.icc.c.compiler=icc
+i386.Linux.icc.c.defines=Linux
+i386.Linux.icc.c.options=-ansi -mp -no-gcc -w1
+i386.Linux.icc.c.includes=**/*.c
+i386.Linux.icc.c.excludes=
+
+i386.Linux.icc.fortran.compiler=ifort
+i386.Linux.icc.fortran.defines=Linux
+i386.Linux.icc.fortran.options=
+i386.Linux.icc.fortran.includes=**/*.f **/*.for
+i386.Linux.icc.fortran.excludes=
+
+i386.Linux.icc.java.include=include;include/linux
+i386.Linux.icc.java.runtimeDirectory=jre/lib/i386/client
+
+i386.Linux.icc.lib.prefix=lib
+i386.Linux.icc.static.extension=a
+i386.Linux.icc.shared.extension=so
+i386.Linux.icc.plugin.extension=so
+i386.Linux.icc.jni.extension=so
+i386.Linux.icc.executable.extension=
+
+
+#
+# Linux icpc (C++ linker)
+#
+i386.Linux.icpc.cpp.compiler=icpc
+i386.Linux.icpc.cpp.defines=Linux
+i386.Linux.icpc.cpp.options=-ansi -mp -no-gcc -w1
+i386.Linux.icpc.cpp.includes=**/*.cc **/*.cpp **/*.cxx
+i386.Linux.icpc.cpp.excludes=
+
+i386.Linux.icpc.c.compiler=icc
+i386.Linux.icpc.c.defines=Linux
+i386.Linux.icpc.c.options=-ansi -mp -no-gcc -w1
+i386.Linux.icpc.c.includes=**/*.c
+i386.Linux.icpc.c.excludes=
+
+i386.Linux.icpc.fortran.compiler=ifort
+i386.Linux.icpc.fortran.defines=Linux
+i386.Linux.icpc.fortran.options=
+i386.Linux.icpc.fortran.includes=**/*.f **/*.for
+i386.Linux.icpc.fortran.excludes=
+
+i386.Linux.icpc.java.include=include;include/linux
+i386.Linux.icpc.java.runtimeDirectory=jre/lib/i386/client
+
+i386.Linux.icpc.lib.prefix=lib
+i386.Linux.icpc.static.extension=a
+i386.Linux.icpc.shared.extension=so
+i386.Linux.icpc.plugin.extension=so
+i386.Linux.icpc.jni.extension=so
+i386.Linux.icpc.executable.extension=
+
+#
+# Linux ecc (C linker)
+#
+i386.Linux.ecc.cpp.compiler=NONE
+i386.Linux.ecc.cpp.defines=Linux
+i386.Linux.ecc.cpp.options=-ansi -mp -no-gcc -w1
+i386.Linux.ecc.cpp.includes=**/*.cc **/*.cpp **/*.cxx
+i386.Linux.ecc.cpp.excludes=
+
+i386.Linux.ecc.c.compiler=ecc
+i386.Linux.ecc.c.defines=Linux
+i386.Linux.ecc.c.options=-ansi -mp -no-gcc -w1
+i386.Linux.ecc.c.includes=**/*.c
+i386.Linux.ecc.c.excludes=
+
+# Should this be efc ?
+i386.Linux.ecc.fortran.compiler=ifort
+i386.Linux.ecc.fortran.defines=Linux
+i386.Linux.ecc.fortran.options=
+i386.Linux.ecc.fortran.includes=**/*.f **/*.for
+i386.Linux.ecc.fortran.excludes=
+
+i386.Linux.ecc.java.include=include;include/linux
+i386.Linux.ecc.java.runtimeDirectory=jre/lib/i386/client
+
+i386.Linux.ecc.lib.prefix=lib
+i386.Linux.ecc.static.extension=a
+i386.Linux.ecc.shared.extension=so
+i386.Linux.ecc.plugin.extension=so
+i386.Linux.ecc.jni.extension=so
+i386.Linux.ecc.executable.extension=
+
+#
+# Linux ecpc (C++ linker)
+#
+i386.Linux.ecpc.cpp.compiler=ecpc
+i386.Linux.icpc.cpp.defines=Linux
+i386.Linux.ecpc.cpp.options=-ansi -mp -no-gcc -w1
+i386.Linux.ecpc.cpp.includes=**/*.cc **/*.cpp **/*.cxx
+i386.Linux.ecpc.cpp.excludes=
+
+i386.Linux.ecpc.c.compiler=ecc
+i386.Linux.ecpc.c.defines=Linux
+i386.Linux.ecpc.c.options=-ansi -mp -no-gcc -w1
+i386.Linux.ecpc.c.includes=**/*.c
+i386.Linux.ecpc.c.excludes=
+
+# Should this be efc ?
+i386.Linux.ecpc.fortran.compiler=ifort
+i386.Linux.ecpc.fortran.defines=Linux
+i386.Linux.ecpc.fortran.options=
+i386.Linux.ecpc.fortran.includes=**/*.f **/*.for
+i386.Linux.ecpc.fortran.excludes=
+
+i386.Linux.ecpc.java.include=include;include/linux
+i386.Linux.ecpc.java.runtimeDirectory=jre/lib/i386/client
+
+i386.Linux.ecpc.lib.prefix=lib
+i386.Linux.ecpc.static.extension=a
+i386.Linux.ecpc.shared.extension=so
+i386.Linux.ecpc.plugin.extension=so
+i386.Linux.ecpc.jni.extension=so
+i386.Linux.ecpc.executable.extension=
+
+#
+# Linux
+#
+amd64.Linux.linker=g++
+
+amd64.Linux.g++.cpp.compiler=g++
+amd64.Linux.g++.cpp.defines=Linux GNU_GCC f2cFortran 
+amd64.Linux.g++.cpp.options=-Wall -Wno-long-long -Wpointer-arith -Wconversion
+amd64.Linux.g++.cpp.includes=**/*.cc **/*.cpp **/*.cxx
+amd64.Linux.g++.cpp.excludes=
+
+amd64.Linux.g++.c.compiler=gcc
+amd64.Linux.g++.c.defines=Linux GNU_GCC f2cFortran 
+amd64.Linux.g++.c.options=-Wall -Wno-long-long -Wpointer-arith -Wconversion
+amd64.Linux.g++.c.includes=**/*.c
+amd64.Linux.g++.c.excludes=
+
+amd64.Linux.g++.fortran.compiler=g77
+amd64.Linux.g++.fortran.defines=Linux GNU_GCC f2cFortran 
+amd64.Linux.g++.fortran.options=-Wall 
+amd64.Linux.g++.fortran.includes=**/*.f **/*.for
+amd64.Linux.g++.fortran.excludes=
+
+amd64.Linux.g++.java.include=include;include/linux
+amd64.Linux.g++.java.runtimeDirectory=jre/lib/amd64/server
+
+amd64.Linux.g++.lib.prefix=lib
+amd64.Linux.g++.static.extension=a
+amd64.Linux.g++.shared.extension=so
+amd64.Linux.g++.plugin.extension=so
+amd64.Linux.g++.jni.extension=so
+amd64.Linux.g++.executable.extension=
+
+#amd64.Linux.g++.arch.includes=lib/**/*.a lib/**/*.so
+
+#
+# MacOSX ("Mac OS X" => MacOSX)
+#
+ppc.MacOSX.linker=g++
+
+ppc.MacOSX.g++.cpp.compiler=g++
+ppc.MacOSX.g++.cpp.defines=Darwin GNU_GCC f2cFortran 
+ppc.MacOSX.g++.cpp.options=-Wall -Wno-long-long -Wpointer-arith -Wconversion
+ppc.MacOSX.g++.cpp.includes=**/*.cc **/*.cpp **/*.cxx
+ppc.MacOSX.g++.cpp.excludes=
+
+ppc.MacOSX.g++.c.compiler=gcc
+ppc.MacOSX.g++.c.defines=Darwin GNU_GCC f2cFortran 
+ppc.MacOSX.g++.c.options=-Wall -Wno-long-long -Wpointer-arith -Wconversion
+ppc.MacOSX.g++.c.includes=**/*.c
+ppc.MacOSX.g++.c.excludes=
+
+ppc.MacOSX.g++.fortran.compiler=g77
+ppc.MacOSX.g++.fortran.defines=Darwin GNU_GCC 
+ppc.MacOSX.g++.fortran.options=-Wall -fno-automatic -fno-second-underscore
+ppc.MacOSX.g++.fortran.includes=**/*.f **/*.for
+ppc.MacOSX.g++.fortran.excludes=
+
+ppc.MacOSX.g++.java.include=include
+ppc.MacOSX.g++.java.runtimeDirectory=IGNORED
+
+ppc.MacOSX.g++.lib.prefix=lib
+ppc.MacOSX.g++.static.extension=a
+ppc.MacOSX.g++.shared.extension=dylib
+ppc.MacOSX.g++.plugin.extension=bundle
+ppc.MacOSX.g++.jni.extension=jnilib
+ppc.MacOSX.g++.executable.extension=
+
+#ppc.MacOSX.g++.arch.includes=lib/**/*.a lib/**/*.so lib/**/*.dylib lib/**/*.jnilib
+
+#
+# MacOSX ("Mac OS X" => MacOSX) Intel
+#
+i386.MacOSX.linker=g++
+
+i386.MacOSX.g++.cpp.compiler=g++
+i386.MacOSX.g++.cpp.defines=Darwin GNU_GCC 
+i386.MacOSX.g++.cpp.options=-Wall -Wno-long-long -Wpointer-arith -Wconversion
+i386.MacOSX.g++.cpp.includes=**/*.cc **/*.cpp **/*.cxx
+i386.MacOSX.g++.cpp.excludes=
+
+i386.MacOSX.g++.c.compiler=gcc
+i386.MacOSX.g++.c.defines=Darwin GNU_GCC 
+i386.MacOSX.g++.c.options=-Wall -Wno-long-long -Wpointer-arith -Wconversion
+i386.MacOSX.g++.c.includes=**/*.c
+i386.MacOSX.g++.c.excludes=
+
+i386.MacOSX.g++.fortran.compiler=gfortran
+i386.MacOSX.g++.fortran.defines=Darwin GNU_GCC 
+i386.MacOSX.g++.fortran.options=-Wall -fno-automatic -fno-second-underscore
+i386.MacOSX.g++.fortran.includes=**/*.f **/*.for
+i386.MacOSX.g++.fortran.excludes=
+
+i386.MacOSX.g++.java.include=include
+i386.MacOSX.g++.java.runtimeDirectory=IGNORED
+
+i386.MacOSX.g++.lib.prefix=lib
+i386.MacOSX.g++.static.extension=a
+i386.MacOSX.g++.shared.extension=dylib
+i386.MacOSX.g++.plugin.extension=bundle
+i386.MacOSX.g++.jni.extension=jnilib
+i386.MacOSX.g++.executable.extension=
+
+#i386.MacOSX.g++.arch.includes=lib/**/*.a lib/**/*.so lib/**/*.dylib lib/**/*.jnilib
+
+#
+# Solaris
+#
+sparc.SunOS.linker=CC
+
+sparc.SunOS.CC.cpp.compiler=CC
+sparc.SunOS.CC.cpp.defines=SOLARIS2
+sparc.SunOS.CC.cpp.options=
+sparc.SunOS.CC.cpp.includes=**/*.cc **/*.cpp **/*.cxx
+sparc.SunOS.CC.cpp.excludes=
+
+sparc.SunOS.CC.c.compiler=suncc
+sparc.SunOS.CC.c.defines=SOLARIS2
+sparc.SunOS.CC.c.options=
+sparc.SunOS.CC.c.includes=**/*.c
+sparc.SunOS.CC.c.excludes=
+
+sparc.SunOS.CC.fortran.compiler=sunf77
+sparc.SunOS.CC.fortran.defines=SOLARIS2
+sparc.SunOS.CC.fortran.options=
+sparc.SunOS.CC.fortran.includes=**/*.f **/*.for
+sparc.SunOS.CC.fortran.excludes=
+
+sparc.SunOS.CC.java.include=include;include/solaris
+sparc.SunOS.CC.java.runtimeDirectory=jre/lib/sparc/server
+
+sparc.SunOS.CC.linker.systemLibs=pthread:shared
+
+sparc.SunOS.CC.lib.prefix=lib
+sparc.SunOS.CC.static.extension=a
+sparc.SunOS.CC.shared.extension=so
+sparc.SunOS.CC.plugin.extension=so
+sparc.SunOS.CC.jni.extension=so
+sparc.SunOS.CC.executable.extension=
+
+#sparc.SunOS.CC.arch.includes=lib/**/*.a lib/**/*.so
++--
+
+	

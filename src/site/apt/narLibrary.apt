@@ -1,0 +1,109 @@
+	---
+FreeHEP NAR Plugin
+	---
+	---
+Mark Donszelmann
+	---
+	
+NAR Library
+
+	Other plugins may need to use some of the functionality of the NAR Plugin,
+such as downloading and unpacking. The NAR Plugin therefore groups most of
+its functionality into the NAR Manager and allows other plugins and the NAR
+Plugin itself to call on the NAR Manager.
+
+	The {{{http://java.freehep.org/freehep-swig-plugin}SWIG Plugin}} which needs
+the swig native executable uses the NAR Manager to download, unpack and call 
+the executable.
+
+	To use the NAR Manager, see the {{{apidocs/index.html}API Docs}}, add the
+following to your POM file:
+
++--
+<project>
+  ...
+  <dependencies>
+    ...
+    <dependency>
+      <groupId>org.freehep</groupId>
+      <artifactId>freehep-nar-plugin</artifactId>
+      <version>2.0-alpha-2-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+</project>
++--
+
+	and use the code with the following snippet:
+
++--
+import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
+import org.freehep.maven.nar.Linker;
+import org.freehep.maven.nar.NarManager;
+import org.freehep.maven.nar.NarUtil;
+
+/**
+ * Description...
+ * 
+ * @goal your-goal
+ * @phase your-phase
+ * @requiresDependencyResolution compile
+ */
+public class YourMojo extends AbstractMojo {
+
+    /**
+     * Level of logging messages, 0 is minimum.
+     * 
+     * @parameter expression="${logLevel}" default-value="0"
+     */
+    private int logLevel;
+
+    /**
+     * @parameter expression="${localRepository}"
+     * @required
+     * @readonly
+     */
+    private ArtifactRepository localRepository;
+
+    /**
+     * @parameter expression="${project}"
+     * @required
+     * @readonly
+     */
+    private MavenProject project;
+
+    /**
+     * The Architecture for picking up swig, Some choices are: "x86", "i386",
+     * "amd64", "ppc", "sparc", ... Defaults to ${os.arch}
+     * 
+     * @parameter expression="${os.arch}"
+     * @required
+     */
+    private String architecture;
+
+    /**
+     * The Operating System for picking up swig. Some choices are: "Windows",
+     * "Linux", "MacOSX", "SunOS", ... Defaults to a derived value from
+     * ${os.name}
+     * 
+     * @parameter expression=""
+     */
+    private String os;
+
+    private NarManager narManager;
+
+    public void execute() throws MojoExecutionException, MojoFailureException {
+
+        os = NarUtil.getOS(os);
+		// FIXME, should have some function in NarUtil
+        Linker linker = new Linker("g++");
+        narManager = new NarManager(getLog(), logLevel, localRepository, project,
+            architecture, os, linker);
+
+        ... DO WHATEVER YOU NEED WITH THE NarManager
+    }
+}
++--

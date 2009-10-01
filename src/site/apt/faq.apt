@@ -1,0 +1,50 @@
+	---
+FreeHEP NAR Plugin
+	---
+	---
+Mark Donszelmann
+	---
+	
+Frequently Asked Questions
+
+	[Why does the nar-package goal run before the (general) jar goal]
+The nar-package goal generates the nar.properties file which needs to 
+be included in the general jar artifact.
+
+	[Why does the nar plugin produce both a jar artifact and an 
+	attached -noarch.nar artifact. Could these two not be combined?]
+The jar artifact contains only java classes and gets added to the classpath.
+It needs no further processing. The -noarch.nar artifact contains include
+files and needs to be unpacked to be useful for the native compilers. 
+It does not need to be added to the classpath. Combining the two artifacts
+would complicate matters.
+
+	[I use the nar-plugin to create a JNI type library. How do I load this library
+	from my code?]
+The JNI library is strictly connected to the corresponding java code in the
+main artifact (jar file). Since the main artifact has a version number, we decided
+that the JNI library should have the same version number. If you add the subtag
+<packageName> to the <library> tag, the nar-plugin will generate a NarSystem
+class for you which will load the library. Assuming you specified com.mycompany.mypackage
+as packageName, then you need to add the following code to the class with the native
+methods:
+
++--
+import com.mycompany.mypackage.NarSystem
+
+public class ... {
+
+	...
+
+	static {
+		NarSystem.loadLibrary();
+	}
+	
+	...
+	
+}
++--
+
+
+
+	

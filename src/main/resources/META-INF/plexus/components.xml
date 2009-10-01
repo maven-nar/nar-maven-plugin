@@ -1,0 +1,59 @@
+<component-set>
+    <components>
+        <component>
+            <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
+            <role-hint>nar</role-hint>
+            <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
+            <configuration>
+                <phases>
+                    <generate-sources>org.freehep:freehep-nar-plugin:nar-download,
+                                      org.freehep:freehep-nar-plugin:nar-system-generate</generate-sources>
+                    <process-sources>org.freehep:freehep-nar-plugin:nar-unpack</process-sources>
+                    <process-resources>org.apache.maven.plugins:maven-resources-plugin:resources,
+                                       org.freehep:freehep-nar-plugin:nar-resources</process-resources>
+                    <compile>org.apache.maven.plugins:maven-compiler-plugin:compile,
+                             org.freehep:freehep-nar-plugin:nar-javah</compile>
+                    <process-classes>org.freehep:freehep-nar-plugin:nar-compile</process-classes>
+                    <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:testResources</process-test-resources>
+                    <test-compile>org.apache.maven.plugins:maven-compiler-plugin:testCompile,
+                                  org.freehep:freehep-nar-plugin:nar-testCompile</test-compile>
+                    <test>org.apache.maven.plugins:maven-surefire-plugin:test,
+                          org.freehep:freehep-nar-plugin:nar-test</test>
+                    <package>org.freehep:freehep-nar-plugin:nar-package,
+                             org.apache.maven.plugins:maven-jar-plugin:jar</package>
+                    <integration-test>org.freehep:freehep-nar-plugin:nar-integration-test</integration-test>
+                    <install>org.apache.maven.plugins:maven-install-plugin:install</install>
+                    <deploy>org.apache.maven.plugins:maven-deploy-plugin:deploy</deploy>
+                </phases>
+            </configuration>
+        </component>
+
+        <component>
+            <role>org.apache.maven.artifact.handler.ArtifactHandler</role>
+            <role-hint>nar-artifact</role-hint>
+            <implementation>org.apache.maven.artifact.handler.DefaultArtifactHandler</implementation>
+            <configuration>
+                <type>nar-artifact</type>
+                <extension>jar</extension>
+                <packaging>nar</packaging>
+                <language>java</language>
+                <addedToClasspath>true</addedToClasspath>
+                <classifier/>
+            </configuration>
+        </component>
+        
+        <component>
+            <role>org.codehaus.plexus.archiver.Archiver</role>
+            <role-hint>nar-library</role-hint>
+            <implementation>org.freehep.maven.nar.NarArchiver</implementation>
+            <instantiation-strategy>per-lookup</instantiation-strategy>
+        </component>
+        
+        <component>
+            <role>org.codehaus.plexus.archiver.UnArchiver</role>
+            <role-hint>nar-library</role-hint>
+            <implementation>org.freehep.maven.nar.NarUnArchiver</implementation>
+            <instantiation-strategy>per-lookup</instantiation-strategy>
+        </component>
+    </components>
+</component-set>

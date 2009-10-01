@@ -1,0 +1,737 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+
+    <properties>
+        <title>FreeHEP NAR Plugin Properties</title>
+        <author email="Mark.Donszelmann@slac.stanford.edu">Mark Donszelmann</author>
+    </properties>
+    
+    <body>
+        <section name="NAR Properties">
+            <p>
+                Below are the properties by group for the NAR plugin. The properties with
+                the <code>[<i>arch.[os.[linker.]</i>]</code> prefix can either be set in general,
+                architecture specific, architecture-os specific or architecture-os-linker specific.
+                The latter overruling the former ones. The defaults for these combiations
+                are listed in two separate tables below.
+            </p>
+
+            <subsection name="Command Line Flags">
+                <table>
+                    <tr>
+                        <th>Flag</th>
+                        <th>Description</th>
+                    </tr>
+
+                    <tr>
+                        <td>maven -Dverbose</td>
+                        <td>Output NAR debug stetements</td>
+                    </tr>
+
+                    <tr>
+                        <td>maven -X</td>
+                        <td>Output maven debug statements</td>
+                    </tr>
+                </table>
+            </subsection>
+           
+            <subsection name="General">
+                <table>
+                    <tr>
+                        <th>Property</th>
+                        <th>Description</th>
+                        <th>Default Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>freehep.nar.arch</td>
+                        <td>Architecture [<i>arch</i>] (ex: x86, i386, sparc, ...)</td>
+                        <td>
+                            <code>${os.arch}</code>
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <td>freehep.nar.os</td>
+                        <td>Operating System [<i>os</i>] (ex: Linux, win32, MacOSX, SunOs, ...)</td>
+                        <td>
+                            <code>${os.name}</code> (Note: no spaces)
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>]]freehep.nar.linker</td>
+                        <td><a href="http://ant-contrib.sourceforge.net/linker.html">Linker</a> [<i>linker</i>] 
+                            (ex: msvc, g++, CC, ...), but you may use any name here and override it in
+                            the property <i>arch.os.linker.</i>freehep.nar.linker to the real linker name.</td>
+                        <td>Architecture-OS specific, see <a href="#Architecture-OS">below</a>.</td>
+                    </tr>
+                </table>
+            </subsection>
+
+            <subsection name="Architecture/OS Independent Settings" >
+                <table>    
+                    <tr>
+                        <th>Property</th>
+                        <th>Description</th>
+                        <th>Default Value</th>
+                    </tr>
+    
+                    <tr>
+                        <td>freehep.nar.src</td>
+                        <td>Source file directory</td>
+                        <td><code>src/main/cpp</code></td>
+                    </tr>
+        
+                    <tr>
+                        <td>freehep.nar.cpp.src.includes</td>
+                        <td>C++ file pattern to include</td>
+                        <td><code>**/*.h **/*.hh **/*.cc **/*.cpp **/*.cxx</code></td>
+                    </tr>
+        
+                    <tr>
+                        <td>freehep.nar.cpp.src.excludes</td>
+                        <td>C++ file pattern to exclude</td>
+                        <td></td>
+                    </tr>
+        
+                    <tr>
+                        <td>freehep.nar.c.src.includes</td>
+                        <td>C file pattern to include</td>
+                        <td><code>**/*.h **/*.c</code></td>
+                    </tr>
+        
+                    <tr>
+                        <td>freehep.nar.c.src.excludes</td>
+                        <td>C file pattern to exclude</td>
+                        <td></td>
+                    </tr>
+        
+                    <tr>
+                        <td>freehep.nar.fortran.src.includes</td>
+                        <td>Fortran file pattern to include</td>
+                        <td><code>**/*.f **/*.for</code></td>
+                    </tr>
+        
+                    <tr>
+                        <td>freehep.nar.fortran.src.excludes</td>
+                        <td>Fortran file pattern to exclude</td>
+                        <td></td>
+                    </tr>
+        
+                    <tr>
+                        <td>freehep.nar.test.src</td>
+                        <td>Test source file directory</td>
+                        <td><code>src/test/cpp</code></td>
+                    </tr>
+                
+                    <tr>
+                        <td>freehep.nar.compile.includepath</td>
+                        <td><a href="http://ant-contrib.sourceforge.net/includepath.html">
+                            Include path for compilation</a></td>
+                        <td><code>src/main/include</code></td>
+                    </tr>
+        
+                    <tr>
+                        <td>freehep.nar.compile.sysincludepath</td>
+                        <td><a href="http://ant-contrib.sourceforge.net/sysincludepath.html">
+                            System include path for compilation</a></td>
+                        <td></td>
+                    </tr>
+        
+                    <tr>
+                        <td>freehep.nar.compile.withjava</td>
+                        <td>Adds the Java Virtual Machine include files for compilation</td>
+                        <td>false (automatic if the nar:jni goal is run and headers are generated)</td>
+                    </tr>
+                                
+                    <tr>
+                        <td>freehep.nar.test.compile.includepath</td>
+                        <td><a href="http://ant-contrib.sourceforge.net/includepath.html">
+                            Include path for compilation of tests</a></td>
+                        <td><code>src/test/include</code></td>
+                    </tr>
+        
+                    <tr>
+                        <td>freehep.nar.link.withjava</td>
+                        <td>Enables the linking with the Java Virtual Machine</td>
+                        <td><code>${freehep.nar.compile.withjava}</code></td>
+                    </tr>
+
+                    <tr>
+                        <td>freehep.nar.jni.classpath</td>
+                        <td>Classpath to add for nar:jni goal</td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td>freehep.nar.tests</td>
+                        <td>List of test (executables) to be generated</td>
+                        <td></td>
+                    </tr>
+        
+                    <tr>
+                        <td>freehep.nar.includefilesonly</td>
+                        <td>Generates only common NAR file. Machine-OS specific NAR file will not be made.</td>
+                        <td>false</td>
+                    </tr>
+                
+                    <tr>
+                        <td>freehep.nar.aol</td>
+                        <td>Architecture-OS-Linker [<i>aol</i>] name, used for naming the machine specific NAR 
+                            and used for the destination directory</td>
+                        <td>
+                            <code><i>arch-os-linker</i></code>
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <td>freehep.nar.dest</td>
+                        <td>Output directory</td>
+                        <td>
+                            <code>${maven.build.dir}/nar</code>
+                        </td>
+                    </tr>
+    
+                    <tr>
+                        <td>freehep.nar.test.dest</td>
+                        <td>Test output directory</td>
+                        <td>
+                            <code>${maven.build.dir}/test-nar</code>
+                        </td>
+                    </tr>                
+                </table>
+            </subsection>
+                       
+                       
+            <subsection name="Compilers and Linkers" >
+                <table>    
+                    <tr>
+                        <th>Property</th>
+                        <th>Description</th>
+                        <th>Default Value</th>
+                    </tr>
+                
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.cpp.compiler</td>
+                        <td><a href="http://ant-contrib.sourceforge.net/compiler.html">C++ Compiler</a></td>
+                        <td>Architecture-OS-Linker specific, see <a href="#Architecture-OS">below</a></td>
+                    </tr>
+                                
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.c.compiler</td>
+                        <td><a href="http://ant-contrib.sourceforge.net/compiler.html">C Compiler</a></td>
+                        <td>Architecture-OS-Linker specific, see <a href="#Architecture-OS">below</a></td>
+                    </tr>
+                                
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.fortran.compiler</td>
+                        <td><a href="http://ant-contrib.sourceforge.net/compiler.html">Fortran Compiler</a></td>
+                        <td>Architecture-OS-Linker specific, see <a href="#Architecture-OS">below</a></td>
+                    </tr>
+                            
+
+                    <tr>
+                        <td><i>arch.os.linker.</i>freehep.nar.linker</td>
+                        <td><a href="http://ant-contrib.sourceforge.net/linker.html">Real linker name</a></td>
+                        <td>Architecture-OS-Linker specific, see <a href="#Architecture-OS">below</a></td>
+                    </tr>                            
+                </table>
+            </subsection>
+                       
+                       
+                       
+            <subsection name="Unified Compiler and Linker Options" >
+                <table>    
+                    <tr>
+                        <th>Property</th>
+                        <th>Description</th>
+                        <th>Default Value</th>
+                    </tr>
+    
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.rtti</td>
+                        <td>Enable Runtime Type Identification</td>
+                        <td>true</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.exceptions</td>
+                        <td>Enable Exception Handling</td>
+                        <td>true</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.runtime</td>
+                        <td><a href="http://ant-contrib.sourceforge.net/cc.html">Use static or dynamic runtime library</a></td>
+                        <td>dynamic</td>
+                    </tr>
+                
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.optmize</td>
+                        <td><a href="http://ant-contrib.sourceforge.net/cc.html">Set optimization level</a></td>
+                        <td>none</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.multithreaded</td>
+                        <td>Enable multithreading</td>
+                        <td>false</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.incremental</td>
+                        <td>Enable incremental linking</td>
+                        <td>false</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.failonerror</td>
+                        <td>Abort if an error is detected</td>
+                        <td>true</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.libtool</td>
+                        <td>Use libtool to compile and link</td>
+                        <td>false</td>
+                    </tr>
+                
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.debug</td>
+                        <td>Generate debugging code</td>
+                        <td>false</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.outtype</td>
+                        <td><a href="http://ant-contrib.sourceforge.net/cc.html">Type of library to be generated</a> (use "jni" for native shareable code with java)</td>
+                        <td>static</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.test.outtype</td>
+                        <td><a href="http://ant-contrib.sourceforge.net/cc.html">Type of test output to be generated</a></td>
+                        <td>executable</td>
+                    </tr>
+                            
+                </table>
+            </subsection>
+                       
+                       
+            <subsection name="Additional Compiler and Linker Options" >
+                <table>    
+                    <tr>
+                        <th>Property</th>
+                        <th>Description</th>
+                        <th>Default Value</th>
+                    </tr>
+                
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.compiler.arg.start|mid|end</td>
+                        <td>
+                            <a href="http://ant-contrib.sourceforge.net/compilerarg.html">
+                            Space delimited list of optional compiler arguments</a>.
+                            <code>start|mid|end</code> specifies the position in the compiler
+                            argument list.
+                        </td>
+                        <td></td>
+                    </tr>	
+        
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.cpp.compiler.arg.start|mid|end</td>
+                        <td>
+                            <a href="http://ant-contrib.sourceforge.net/compilerarg.html">
+                            Space delimited list of optional cpp compiler arguments</a>. 
+                            <code>start|mid|end</code> specifies the position in the compiler
+                            argument list.
+                        </td>
+                        <td></td>
+                    </tr>	
+    
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.c.compiler.arg.start|mid|end</td>
+                        <td>
+                            <a href="http://ant-contrib.sourceforge.net/compilerarg.html">
+                            Space delimited list of optional c compiler arguments</a>. 
+                            <code>start|mid|end</code> specifies the position in the compiler
+                            argument list.
+                        </td>
+                        <td></td>
+                    </tr>	
+    
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.fortran.compiler.arg.start|mid|end</td>
+                        <td>
+                            <a href="http://ant-contrib.sourceforge.net/compilerarg.html">
+                            Space delimited list of optional fortran compiler arguments</a>. 
+                            <code>start|mid|end</code> specifies the position in the compiler
+                            argument list.
+                        </td>
+                        <td></td>
+                    </tr>	
+        
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.linker.arg.start|mid|end</td>
+                        <td>
+                            <a href="http://ant-contrib.sourceforge.net/linkerarg.html">
+                            Space delimited list of optional linker arguments</a>. 
+                            <code>start|mid|end</code> specifies the position in the linker
+                            argument list.
+                        </td>
+                        <td></td>
+                    </tr>	
+                                    
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.linker.test.arg.start|mid|end</td>
+                        <td>
+                            <a href="http://ant-contrib.sourceforge.net/linkerarg.html">
+                            Space delimited list of optional linker arguments for creating the test output</a>. 
+                            <code>start|mid|end</code> specifies the position in the linker
+                            argument list.
+                        </td>
+                        <td></td>
+                    </tr>	
+                    
+                </table>
+            </subsection>
+                       
+            <subsection name="Java Settings" >
+                <table>    
+                    <tr>
+                        <th>Property</th>
+                        <th>Description</th>
+                        <th>Default Value</th>
+                    </tr>
+                
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.java.home</td>
+                        <td>Java Home (jdk)</td>
+                        <td>
+                            <code>${java.home}/..</code>
+                        </td>
+                    </tr>
+                                
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.java.include</td>
+                        <td>Directory to look for include files for jni</td>
+                        <td><code>${freehep.nar.java.home}/include</code></td>
+                    </tr>
+                                
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.java.include.os</td>
+                        <td>OS specific directory to look for include files for jni</td>
+                        <td>Architecture-OS-Linker specific, see <a href="#Architecture-OS">below</a></td>
+                    </tr>
+                                
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.java.vm</td>
+                        <td>Location to the jvm</td>
+                        <td>Architecture-OS-Linker specific, see <a href="#Architecture-OS">below</a></td>
+                    </tr>                                
+                </table>
+            </subsection>
+
+
+
+            <subsection name="File Prefixes, Suffixes and Extensions" >
+                <table>    
+                    <tr>
+                        <th>Property</th>
+                        <th>Description</th>
+                        <th>Default Value</th>
+                    </tr>
+                                        
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.lib.prefix</td>
+                        <td>Prefix for library name</td>
+                        <td>Architecture-OS-Linker specific, see <a href="#Architecture-OS">below</a></td>
+                    </tr>
+        
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.static.extension</td>
+                        <td>Extension for static library</td>
+                        <td>Architecture-OS-Linker specific, see <a href="#Architecture-OS">below</a></td>
+                    </tr>
+        
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.shared.extension</td>
+                        <td>Extension for shared library</td>
+                        <td>Architecture-OS-Linker specific, see <a href="#Architecture-OS">below</a></td>
+                    </tr>
+        
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.plugin.extension</td>
+                        <td>Extension for plugin library</td>
+                        <td>Architecture-OS-Linker specific, see <a href="#Architecture-OS">below</a></td>
+                    </tr>
+        
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.executable.extension</td>
+                        <td>Extension for executable output</td>
+                        <td>Architecture-OS-Linker specific, see <a href="#Architecture-OS">below</a></td>
+                    </tr>
+    
+                </table>
+            </subsection>
+                                              
+            <subsection name="Extra Libraries (please use nar dependencies rather than these)" >
+                <table>    
+                    <tr>
+                        <th>Property</th>
+                        <th>Description</th>
+                        <th>Default Value</th>
+                    </tr>
+    
+                    <tr>
+                        <td>freehep.nar.libs.type</td>
+                        <td>Type for libraries</td>
+                        <td>static</td>
+                    </tr>
+        
+                    <tr>
+                        <td>freehep.nar.libs</td>
+                        <td>List of library modules to link against [<i>X</i>]</td>
+                        <td></td>
+                    </tr>
+        
+                    <tr>
+                        <td>freehep.nar.lib.<i>X</i>.libs</td>
+                        <td>List of library names to link against</td>
+                        <td><i>X</i></td>
+                    </tr>
+        
+                    <tr>
+                        <td>freehep.nar.lib.<i>X</i>.dir</td>
+                        <td>Directory where to look for <i>X</i></td>
+                        <td><code>${freehep.nar.dest}/lib</code></td>
+                    </tr>
+        
+                    <tr>
+                        <td>freehep.nar.lib.<i>X</i>.type</td>
+                        <td>Type of library <i>X</i></td>
+                        <td><code>${freehep.nar.libs.type}</code></td>
+                    </tr>
+                </table>
+            </subsection>            
+
+            <subsection name="NAR packaging" >
+                <table>
+                    <tr>
+                        <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]freehep.nar.arch.includes</td>
+                        <td>Include these files and libraries in the arch specific nar file</td>
+                        <td>Architecture-OS-Linker specific, see <a href="#Architecture-OS">below</a></td>
+                    </tr>
+                </table>
+            </subsection>
+        </section>
+    
+
+
+
+
+        <section name="Default values for Architecture and Operating System specific properties">
+            <p>
+                Below are the defaults for the architecture and os specific properties. Each of the property names
+                is prefixed with the <code>arch.os</code> name as given in the different columns.
+            </p>
+            <table>
+                <tr>
+                    <th>Property</th>
+                    <th>x86.win32</th>
+                    <th>i386.Linux</th>
+                    <th>amd64.Linux</th>
+                    <th>ppc.MacOSX</th>
+                    <th>sparc.SunOS</th>
+                </tr>
+                
+                <tr>
+                    <td>freehep.nar.linker</td>
+                    <td>msvc</td>
+                    <td>g++</td>
+                    <td>g++</td>
+                    <td>g++</td>
+                    <td>CC</td>                
+                </tr>
+    
+                <tr>
+                    <td>freehep.nar.java.home</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><code>${java.home}</code></td>
+                    <td></td>                
+                </tr>
+    
+                <tr>
+                    <td>freehep.nar.java.include.os prefixed with <code>freehep.nar.java.home</code></td>
+                    <td>include/win32</td>
+                    <td>include/linux</td>
+                    <td>include/linux</td>
+                    <td></td>
+                    <td>include/solaris</td>                
+                </tr>
+    
+                <tr>
+                    <td>freehep.nar.java.vm prefixed with <code>freehep.nar.java.home</code></td>
+                    <td><code>lib</code></td>
+                    <td><code>jre/lib/i386/client</code></td>
+                    <td><code>jre/lib/amd64/server</code></td>
+                    <td>IGNORED, uses "-framework JavaVM"</td>
+                    <td><code>jre/lib/sparc/server</code></td>
+                </tr>
+
+                <tr>
+                    <td>freehep.nar.multithreaded</td>
+                    <td>true</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>                
+                </tr>
+    
+                <tr>
+                    <td>freehep.nar.cpp.compiler</td>
+                    <td>msvc</td>
+                    <td>g++</td>
+                    <td>g++</td>
+                    <td>g++</td>
+                    <td>CC</td>                
+                </tr>
+    
+                <tr>
+                    <td>freehep.nar.c.compiler</td>
+                    <td>msvc</td>
+                    <td>gcc</td>
+                    <td>gcc</td>
+                    <td>gcc</td>
+                    <td>suncc</td>                
+                </tr>
+    
+                <tr>
+                    <td>freehep.nar.fortran.compiler</td>
+                    <td>df</td>
+                    <td>g77</td>
+                    <td>g77</td>
+                    <td>g77</td>
+                    <td>sunf77</td>                
+                </tr>
+    
+                <tr>
+                    <td>freehep.nar.compiler.arg.start</td>
+                    <td>-DWIN32</td>
+                    <td>-DLinux</td>
+                    <td>-DLinux</td>
+                    <td>-DDarwin</td>
+                    <td>-lpthread -DSOLARIS2</td>                
+                </tr>
+    
+                <tr>
+                    <td>freehep.nar.linker.arg.start</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>-lpthread</td>                
+                </tr>
+                    
+                <tr>
+                    <td>freehep.nar.arch.includes</td>
+                    <td>lib/**/*.lib lib/**/*.dll</td>
+                    <td>lib/**/*.a lib/**/*.so</td>
+                    <td>lib/**/*.a lib/**/*.so</td>
+                    <td>lib/**/*.a lib/**/*.so lib/**/*.dylib lib/**/*.jnilib</td>
+                    <td>lib/**/*.a lib/**/*.so</td>                
+                </tr>
+    
+                <tr>
+                    <td>freehep.nar.lib.prefix</td>
+                    <td></td>
+                    <td>lib</td>
+                    <td>lib</td>
+                    <td>lib</td>
+                    <td>lib</td>                
+                </tr>
+    
+                <tr>
+                    <td>freehep.nar.static.extension</td>
+                    <td>.lib</td>
+                    <td>.a</td>
+                    <td>.a</td>
+                    <td>.a</td>
+                    <td>.a</td>                
+                </tr>
+    
+                <tr>
+                    <td>freehep.nar.shared.extension</td>
+                    <td>.dll</td>
+                    <td>.so</td>
+                    <td>.so</td>
+                    <td>.dylib</td>
+                    <td>.so</td>                
+                </tr>
+    
+                <tr>
+                    <td>freehep.nar.plugin.extension</td>
+                    <td>.dll</td>
+                    <td>.so</td>
+                    <td>.so</td>
+                    <td>.bundle</td>
+                    <td>.so</td>                
+                </tr>
+    
+                <tr>
+                    <td>freehep.nar.executable.extension</td>
+                    <td>.exe</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>                
+                </tr>
+    
+            </table>
+        </section>
+
+
+        <section name="Default values for Architecture, Operating System and Linker specific properties">
+            <p>
+                Below are the defaults for the architecture, os and linker specific properties. Each of the property names
+                is prefixed with the <code>arch.os.linker</code> name as given in the different columns.
+            </p>
+            <table>
+                <tr>
+                    <th>Property</th>
+                    <th>x86.win32.g++</th>
+                    <th>i386.Linux.icc</th>
+                    <th>i386.Linux.ecc</th>
+                </tr>
+                
+                <tr>
+                    <td>freehep.nar.cpp.compiler</td>
+                    <td>g++</td>
+                    <td>icpc</td>
+                    <td>ecpc</td>
+                </tr>
+    
+                <tr>
+                    <td>freehep.nar.c.compiler</td>
+                    <td>gcc</td>
+                    <td>icc</td>
+                    <td>ecc</td>
+                </tr>
+    
+                <tr>
+                    <td>freehep.nar.fortran.compiler</td>
+                    <td>g77</td>
+                    <td>ifort</td>
+                    <td>ifort (should this be efc?)</td>
+                </tr>
+    
+            </table>
+        </section>
+
+
+
+    </body>
+</document>
