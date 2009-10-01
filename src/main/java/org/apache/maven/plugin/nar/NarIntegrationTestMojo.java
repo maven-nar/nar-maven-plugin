@@ -1,5 +1,6 @@
-// Copied from Maven maven-surefire-plugin 2.3, 2006-2007
-package org.freehep.maven.nar;
+package org.apache.maven.plugin.nar;
+
+//Copied from Maven maven-surefire-plugin 2.3, 2006-2007
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

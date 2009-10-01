@@ -1,46 +1,78 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <parent>
-    <artifactId>maven-plugin-pom</artifactId>
-    <groupId>org.freehep</groupId>
-    <version>5</version>
-  </parent>
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.freehep</groupId>
-  <artifactId>freehep-nar-plugin</artifactId>
+  
+  <parent>
+    <artifactId>maven-plugins</artifactId>
+    <groupId>org.apache.maven.plugins</groupId>
+    <version>14</version>
+  </parent>
+  
+  <artifactId>maven-nar-plugin</artifactId>
+  <version>2.1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
-  <name>FreeHEP Maven Native Archive Plugin</name>
-  <version>2.0-alpha-11-SNAPSHOT</version>
-  <description>Native Archive Plug-in to compile and link c++, c and fortran (for Maven 2),
-  see Introduction</description>
-  <repositories>
-    <repository>
-      <id>freehep-maven</id>
-      <name>Maven FreeHEP</name>
-      <url>http://java.freehep.org/maven2</url>
-    </repository>
-  </repositories>
+
+  <name>Maven NAR Plugin</name>
+  <description>
+    This plugin compiles native code and publishes native artifacts in the for of nar files.
+  </description>
+  <url>http://java.freehep.org/freehep-nar-plugin/intro.html</url>
+  
+  <prerequisites>
+    <maven>2.0.6</maven>
+  </prerequisites>
+  
+  <scm>
+    <connection>scm:git:git://github.com/duns/maven-nar-plugin.git</connection>
+    <developerConnection>scm:git:git://github.com/duns/maven-nar-plugin.git</developerConnection>
+    <url>http://github.com/duns/maven-nar-plugin</url>
+  </scm>
+  <issueManagement>
+    <system>jira</system>
+    <url>http://bugs.freehep.org/browse/NARPLUGIN</url>
+  </issueManagement>
+
+  <properties>
+    <mavenVersion>2.0.6</mavenVersion>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>    
+  </properties>
+
   <dependencies>
     <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-compiler-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-utils</artifactId>
-      <version>1.2</version>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <version>${mavenVersion}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-project</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-archiver</artifactId>
+      <version>${mavenVersion}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
+      <version>${mavenVersion}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.surefire</groupId>
@@ -49,23 +81,47 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-compiler-api</artifactId>
+      <version>1.5.3</version>
+    </dependency>
+    
+<!--  FIXME No Longer Needed ?
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>1.1</version>
+      <version>1.2</version>
     </dependency>
     <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-archiver</artifactId>
+      <version>1.0-alpha-11</version>
+    </dependency>
+
+ -->
+    <dependency>
       <groupId>net.sf.antcontrib</groupId>
-      <artifactId>cpptasks</artifactId>
+      <artifactId>cpptasks-parallel</artifactId>
       <version>1.0-beta-4-parallel-3-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>bcel</groupId>
       <artifactId>bcel</artifactId>
+      <version>5.1</version>
     </dependency>
     <dependency>
       <groupId>ant</groupId>
       <artifactId>ant</artifactId>
       <version>1.6.5</version>
     </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.2</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
+  
+  <build>
+    <defaultGoal>install</defaultGoal>
+  </build>
 </project>
-
