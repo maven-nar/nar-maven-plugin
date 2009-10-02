@@ -1,0 +1,31 @@
+Version 2.1
+
+- Moved source code repository to github.com (including copy and history of freehep-nar-plugin,
+and cpptasks-parallel.
+- Renamed package from org.freehep.maven.nar to org.apache.maven.plugin.nar
+- Renamed groupId from org.freehep to org.apache.maven.plugins
+- Renamed all properties from freehep to maven
+- Removed all $Id$ versions
+- Fixed warnings of incorrect use of Maven Archiver injection.
+- Removed dependencies on plexus (where possible) from pom.xml.
+- Added x86_64 for MacOS X into aol.properties
+- Moved tests all under src/it, to be run with -Prun-its
+
+Bugs
+
+- When the calculated AOL is not found in aol.properties the error message is misleading:
+
+[INFO] [nar:nar-download {execution: default-nar-download}]
+[INFO] ------------------------------------------------------------------------
+[ERROR] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] NAR: Please specify a <Name> as part of <Linker>
+
+- When the aol.properties does NOT include a fortran (or other compiler) the nar-compile
+goal throws an exception with the following message:
+
+[INFO] [nar:nar-compile {execution: default-nar-compile}]
+[INFO] ------------------------------------------------------------------------
+[ERROR] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] NAR: Please specify <Includes> as part of <Cpp>, <C> or <Fortran> for x86_64.MacOSX.g++.fortran.

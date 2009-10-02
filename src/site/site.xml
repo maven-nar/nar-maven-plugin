@@ -1,29 +1,38 @@
-<project name="freehep">
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<project name="maven-nar-plugin">
     <bannerLeft>
-        <name>FreeHEP NAR Plugin</name>
-<!--        <src>http://maven.apache.org/images/apache-maven-project.png</src> -->
-<!-- FIXME, should this be substituted by some properties -->
+        <name>Maven NAR Plugin</name>
+        <src>http://maven.apache.org/images/apache-maven-project.png</src>
         <href>http://java.freehep.org/freehep-nar-plugin</href>
     </bannerLeft>
-    
-    <bannerRight>
-        <name>FreeHEP</name>
-        <src>http://java.freehep.org/images/sm-freehep.gif</src>
-        <href>http://java.freehep.org</href>
-    </bannerRight>
-  
+      
   <body>
     <links>
         <item name="NAR Plugin for Maven1" href="http://java.freehep.org/maven1.x/freehep-nar-plugin"/>
-        <item name="FreeHEP 1.x" href="http://java.freehep.org/freehep1.x"/>
-        <item name="FreeHEP 2.x" href="http://java.freehep.org/"/>
         <item name="Maven 2" href="http://maven.apache.org/maven2/"/>
     </links>
 
     <menu name="Overview">
       <item name="Introduction" href="intro.html"/>
       <item name="Philosophy" href="philosophy.html"/>
-      <item name="Presentation (pdf)" href="NARPlugin.pdf"/>
       <item name="Presentation (ppt)" href="NARPlugin.ppt"/>
     </menu>
     
@@ -43,8 +52,9 @@
       <item name="APIDocs" href="apidocs/index.html"/>
       <item name="NAR Library" href="narLibrary.html"/>
       <item name="CPPTasks" href="cpptasks.html"/>
-      <item name="SVN Browse" href="http://java.freehep.org/svn/repobrowser.svn?path=%2ffreehep%2ftrunk%2fmaven-plugins%2ffreehep-nar-plugin/&amp;revision=HEAD"/>
-      <item name="SVN Repository" href="source-repository.html"/>      
+      <item name="Git Browse nar-plugin" href="http://github.com/duns/maven-nar-plugin"/>
+      <item name="Git Browse cpptasks" href="http://github.com/duns/cpptasks-parallel"/>
+      <item name="Git Repository" href="source-repository.html"/>      
     </menu>
     <menu name="Examples">
       <item name="HelloWorld" href="HelloWorld.html"/>

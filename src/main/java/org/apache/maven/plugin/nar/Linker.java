@@ -45,7 +45,6 @@ import org.codehaus.plexus.util.FileUtils;
  * Linker tag
  * 
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/Linker.java 22df3eb318cc 2007/09/06 18:55:15 duns $
  */
 public class Linker {
 

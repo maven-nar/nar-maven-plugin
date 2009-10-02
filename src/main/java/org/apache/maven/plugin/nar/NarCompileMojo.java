@@ -50,7 +50,6 @@ import org.codehaus.plexus.util.StringUtils;
  * @phase compile
  * @requiresDependencyResolution compile
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/NarCompileMojo.java 0ee9148b7c6a 2007/09/20 18:42:29 duns $
  */
 public class NarCompileMojo extends AbstractCompileMojo {
 

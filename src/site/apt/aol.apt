@@ -1,5 +1,5 @@
 	---
-FreeHEP NAR Plugin
+Maven NAR Plugin
 	---
 	---
 Mark Donszelmann
@@ -10,6 +10,13 @@ AOL Properties
 	Below a copy of the AOL Properties file which is used by the NAR plugin for AOL dependent default settings:
 	
 +--
+#
+# AOL (Architecture-OperatingSystem-Linker) Default Values
+#
+# @author Mark Donszelmann
+# @version $Id$
+#
+
 #
 # Windows ("Windows *" => Windows)
 #
@@ -37,6 +44,7 @@ x86.Windows.msvc.java.include=include;include/win32
 x86.Windows.msvc.java.runtimeDirectory=lib
 
 x86.Windows.msvc.lib.prefix=
+x86.Windows.msvc.shared.prefix=
 x86.Windows.msvc.shared.extension=dll
 x86.Windows.msvc.static.extension=lib
 x86.Windows.msvc.plugin.extension=dll
@@ -66,15 +74,22 @@ x86.Windows.g++.fortran.options=-Wall
 x86.Windows.g++.fortran.includes=**/*.f **/*.for
 x86.Windows.g++.fortran.excludes=
 
-x86.Windows.g++.java.include=include;include/Windows
+x86.Windows.g++.java.include=include;include/win32
 x86.Windows.g++.java.runtimeDirectory=lib
 
 x86.Windows.g++.lib.prefix=lib
+x86.Windows.g++.shared.prefix=
 x86.Windows.g++.static.extension=a
-x86.Windows.g++.shared.extension=so
-x86.Windows.g++.plugin.extension=so
-x86.Windows.g++.jni.extension=so
+x86.Windows.g++.shared.extension=dll
+x86.Windows.g++.plugin.extension=dll
+x86.Windows.g++.jni.extension=dll
 x86.Windows.g++.executable.extension=
+
+# FIXME to be removed when NARPLUGIN-137
+x86.Windows.gcc.static.extension=a
+x86.Windows.gcc.shared.extension=dll
+x86.Windows.gcc.plugin.extension=dll
+x86.Windows.gcc.jni.extension=dll
 
 #
 # Linux
@@ -103,11 +118,18 @@ i386.Linux.g++.java.include=include;include/linux
 i386.Linux.g++.java.runtimeDirectory=jre/lib/i386/client
 
 i386.Linux.g++.lib.prefix=lib
+i386.Linux.g++.shared.prefix=lib
 i386.Linux.g++.static.extension=a
 i386.Linux.g++.shared.extension=so
 i386.Linux.g++.plugin.extension=so
 i386.Linux.g++.jni.extension=so
 i386.Linux.g++.executable.extension=
+
+# FIXME to be removed when NARPLUGIN-137
+i386.Linux.gcc.static.extension=a
+i386.Linux.gcc.shared.extension=so
+i386.Linux.gcc.plugin.extension=so
+i386.Linux.gcc.jni.extension=so
 
 #i386.Linux.g++.arch.includes=lib/**/*.a lib/**/*.so
 
@@ -136,6 +158,7 @@ i386.Linux.icc.java.include=include;include/linux
 i386.Linux.icc.java.runtimeDirectory=jre/lib/i386/client
 
 i386.Linux.icc.lib.prefix=lib
+i386.Linux.icc.shared.prefix=lib
 i386.Linux.icc.static.extension=a
 i386.Linux.icc.shared.extension=so
 i386.Linux.icc.plugin.extension=so
@@ -168,6 +191,7 @@ i386.Linux.icpc.java.include=include;include/linux
 i386.Linux.icpc.java.runtimeDirectory=jre/lib/i386/client
 
 i386.Linux.icpc.lib.prefix=lib
+i386.Linux.icpc.shared.prefix=lib
 i386.Linux.icpc.static.extension=a
 i386.Linux.icpc.shared.extension=so
 i386.Linux.icpc.plugin.extension=so
@@ -200,6 +224,7 @@ i386.Linux.ecc.java.include=include;include/linux
 i386.Linux.ecc.java.runtimeDirectory=jre/lib/i386/client
 
 i386.Linux.ecc.lib.prefix=lib
+i386.Linux.ecc.shared.prefix=lib
 i386.Linux.ecc.static.extension=a
 i386.Linux.ecc.shared.extension=so
 i386.Linux.ecc.plugin.extension=so
@@ -232,6 +257,7 @@ i386.Linux.ecpc.java.include=include;include/linux
 i386.Linux.ecpc.java.runtimeDirectory=jre/lib/i386/client
 
 i386.Linux.ecpc.lib.prefix=lib
+i386.Linux.ecpc.shared.prefix=lib
 i386.Linux.ecpc.static.extension=a
 i386.Linux.ecpc.shared.extension=so
 i386.Linux.ecpc.plugin.extension=so
@@ -265,16 +291,23 @@ amd64.Linux.g++.java.include=include;include/linux
 amd64.Linux.g++.java.runtimeDirectory=jre/lib/amd64/server
 
 amd64.Linux.g++.lib.prefix=lib
+amd64.Linux.g++.shared.prefix=lib
 amd64.Linux.g++.static.extension=a
 amd64.Linux.g++.shared.extension=so
 amd64.Linux.g++.plugin.extension=so
 amd64.Linux.g++.jni.extension=so
 amd64.Linux.g++.executable.extension=
 
+# FIXME to be removed when NARPLUGIN-137
+amd64.Linux.gcc.static.extension=a
+amd64.Linux.gcc.shared.extension=so
+amd64.Linux.gcc.plugin.extension=so
+amd64.Linux.gcc.jni.extension=so
+
 #amd64.Linux.g++.arch.includes=lib/**/*.a lib/**/*.so
 
 #
-# MacOSX ("Mac OS X" => MacOSX)
+# MacOSX ("Mac OS X" => MacOSX) PowerPC
 #
 ppc.MacOSX.linker=g++
 
@@ -300,16 +333,23 @@ ppc.MacOSX.g++.java.include=include
 ppc.MacOSX.g++.java.runtimeDirectory=IGNORED
 
 ppc.MacOSX.g++.lib.prefix=lib
+ppc.MacOSX.g++.shared.prefix=lib
 ppc.MacOSX.g++.static.extension=a
 ppc.MacOSX.g++.shared.extension=dylib
 ppc.MacOSX.g++.plugin.extension=bundle
 ppc.MacOSX.g++.jni.extension=jnilib
 ppc.MacOSX.g++.executable.extension=
 
+# FIXME to be removed when NARPLUGIN-137
+ppc.MacOSX.gcc.static.extension=a
+ppc.MacOSX.gcc.shared.extension=dylib
+ppc.MacOSX.gcc.plugin.extension=bundle
+ppc.MacOSX.gcc.jni.extension=jnilib
+
 #ppc.MacOSX.g++.arch.includes=lib/**/*.a lib/**/*.so lib/**/*.dylib lib/**/*.jnilib
 
 #
-# MacOSX ("Mac OS X" => MacOSX) Intel
+# MacOSX ("Mac OS X" => MacOSX) Intel (32 bits)
 #
 i386.MacOSX.linker=g++
 
@@ -335,13 +375,62 @@ i386.MacOSX.g++.java.include=include
 i386.MacOSX.g++.java.runtimeDirectory=IGNORED
 
 i386.MacOSX.g++.lib.prefix=lib
+i386.MacOSX.g++.shared.prefix=lib
 i386.MacOSX.g++.static.extension=a
 i386.MacOSX.g++.shared.extension=dylib
 i386.MacOSX.g++.plugin.extension=bundle
 i386.MacOSX.g++.jni.extension=jnilib
 i386.MacOSX.g++.executable.extension=
 
+# FIXME to be removed when NARPLUGIN-137
+i386.MacOSX.gcc.static.extension=a
+i386.MacOSX.gcc.shared.extension=dylib
+i386.MacOSX.gcc.plugin.extension=bundle
+i386.MacOSX.gcc.jni.extension=jnilib
+
 #i386.MacOSX.g++.arch.includes=lib/**/*.a lib/**/*.so lib/**/*.dylib lib/**/*.jnilib
+
+#
+# MacOSX ("Mac OS X" => MacOSX) Intel (64 bits)
+#
+x86_64.MacOSX.linker=g++
+
+x86_64.MacOSX.g++.cpp.compiler=g++
+x86_64.MacOSX.g++.cpp.defines=Darwin GNU_GCC 
+x86_64.MacOSX.g++.cpp.options=-Wall -Wno-long-long -Wpointer-arith -Wconversion
+x86_64.MacOSX.g++.cpp.includes=**/*.cc **/*.cpp **/*.cxx
+x86_64.MacOSX.g++.cpp.excludes=
+
+x86_64.MacOSX.g++.c.compiler=gcc
+x86_64.MacOSX.g++.c.defines=Darwin GNU_GCC 
+x86_64.MacOSX.g++.c.options=-Wall -Wno-long-long -Wpointer-arith -Wconversion
+x86_64.MacOSX.g++.c.includes=**/*.c
+x86_64.MacOSX.g++.c.excludes=
+
+x86_64.MacOSX.g++.fortran.compiler=gfortran
+x86_64.MacOSX.g++.fortran.defines=Darwin GNU_GCC 
+x86_64.MacOSX.g++.fortran.options=-Wall -fno-automatic -fno-second-underscore
+x86_64.MacOSX.g++.fortran.includes=**/*.f **/*.for
+x86_64.MacOSX.g++.fortran.excludes=
+
+x86_64.MacOSX.g++.java.include=include
+x86_64.MacOSX.g++.java.runtimeDirectory=IGNORED
+
+x86_64.MacOSX.g++.lib.prefix=lib
+x86_64.MacOSX.g++.shared.prefix=lib
+x86_64.MacOSX.g++.static.extension=a
+x86_64.MacOSX.g++.shared.extension=dylib
+x86_64.MacOSX.g++.plugin.extension=bundle
+x86_64.MacOSX.g++.jni.extension=jnilib
+x86_64.MacOSX.g++.executable.extension=
+
+# FIXME to be removed when NARPLUGIN-137
+x86_64.MacOSX.gcc.static.extension=a
+x86_64.MacOSX.gcc.shared.extension=dylib
+x86_64.MacOSX.gcc.plugin.extension=bundle
+x86_64.MacOSX.gcc.jni.extension=jnilib
+
+#x86_64.MacOSX.g++.arch.includes=lib/**/*.a lib/**/*.so lib/**/*.dylib lib/**/*.jnilib
 
 #
 # Solaris
@@ -372,11 +461,18 @@ sparc.SunOS.CC.java.runtimeDirectory=jre/lib/sparc/server
 sparc.SunOS.CC.linker.systemLibs=pthread:shared
 
 sparc.SunOS.CC.lib.prefix=lib
+sparc.SunOS.CC.shared.prefix=lib
 sparc.SunOS.CC.static.extension=a
 sparc.SunOS.CC.shared.extension=so
 sparc.SunOS.CC.plugin.extension=so
 sparc.SunOS.CC.jni.extension=so
 sparc.SunOS.CC.executable.extension=
+
+# FIXME to be removed when NARPLUGIN-137
+sparc.SunOS.cc.static.extension=a
+sparc.SunOS.cc.shared.extension=so
+sparc.SunOS.cc.plugin.extension=so
+sparc.SunOS.cc.jni.extension=so
 
 #sparc.SunOS.CC.arch.includes=lib/**/*.a lib/**/*.so
 +--

@@ -28,7 +28,6 @@ import org.apache.maven.plugin.MojoFailureException;
  * Sets up a test to create
  *
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/Test.java c867ab546be1 2007/07/05 21:26:30 duns $
  */
 public class Test implements Executable {
 

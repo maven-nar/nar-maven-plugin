@@ -27,7 +27,6 @@ import java.util.List;
  * Sets up a library to create
  * 
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/Library.java 19804ec9b6b9 2007/09/04 23:36:51 duns $
  */
 public class Library implements Executable {
 

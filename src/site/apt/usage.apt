@@ -1,5 +1,5 @@
 	---
-FreeHEP NAR Plugin
+Maven NAR Plugin
 	---
 	---
 Mark Donszelmann
@@ -20,8 +20,7 @@ and link native code.
   <build>
     <plugins>
       <plugin>
-        <groupId>org.freehep</groupId>
-        <artifactId>freehep-nar-plugin</artifactId>
+        <artifactId>maven-nar-plugin</artifactId>
         <version>nar-version-number</version>
         <extensions>true</extensions>
       </plugin>
@@ -40,8 +39,7 @@ and link native code.
   <build>
     <plugins>
       <plugin>
-        <groupId>org.freehep</groupId>
-        <artifactId>freehep-nar-plugin</artifactId>
+        <artifactId>maven-nar-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>
           <libraries>
@@ -72,8 +70,7 @@ to disable exceptions and not link with C++.
   <build>
     <plugins>
       <plugin>
-        <groupId>org.freehep</groupId>
-        <artifactId>freehep-nar-plugin</artifactId>
+        <artifactId>maven-nar-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>
           <cpp>
@@ -127,8 +124,7 @@ The example also shows how to configure the
       </plugin>
       ...
       <plugin>
-        <groupId>org.freehep</groupId>
-        <artifactId>freehep-nar-plugin</artifactId>
+        <artifactId>maven-nar-plugin</artifactId>
         <configuration>
           <java>
             <include>true</include>
@@ -182,8 +178,7 @@ assemblies would be "pom".
       </plugin>
 	  ...    
       <plugin>
-        <groupId>org.freehep</groupId>
-        <artifactId>freehep-nar-plugin</artifactId>
+        <artifactId>maven-nar-plugin</artifactId>
         <configuration>
           <classifiers>
             <classifier>x86-Windows-msvc</classifier>

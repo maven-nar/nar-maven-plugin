@@ -36,7 +36,6 @@ import org.apache.maven.plugin.MojoFailureException;
  * @phase generate-sources
  * @requiresProject
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/NarSystemGenerate.java d43b38443d0b 2007/09/13 18:31:01 duns $
  */
 public class NarSystemGenerate extends AbstractCompileMojo {
 

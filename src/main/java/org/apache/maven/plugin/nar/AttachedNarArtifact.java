@@ -29,7 +29,6 @@ import org.apache.maven.artifact.versioning.VersionRange;
  * NarArtifact with its own type, classifier and artifactHandler.
  *
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/AttachedNarArtifact.java 54f05023f537 2007/07/24 05:44:30 duns $
  */
 public class AttachedNarArtifact extends DefaultArtifact {
 

@@ -1,5 +1,5 @@
 	---
-FreeHEP NAR Plugin
+Maven NAR Plugin
 	---
 	---
 Mark Donszelmann
@@ -25,9 +25,8 @@ following to your POM file:
   <dependencies>
     ...
     <dependency>
-      <groupId>org.freehep</groupId>
-      <artifactId>freehep-nar-plugin</artifactId>
-      <version>2.0-alpha-2-SNAPSHOT</version>
+       <artifactId>maven-nar-plugin</artifactId>
+      <version>2.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>
@@ -41,9 +40,9 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
-import org.freehep.maven.nar.Linker;
-import org.freehep.maven.nar.NarManager;
-import org.freehep.maven.nar.NarUtil;
+import org.apache.maven.plugin.nar.Linker;
+import org.apache.maven.plugin.nar.NarManager;
+import org.apache.maven.plugin.nar.NarUtil;
 
 /**
  * Description...

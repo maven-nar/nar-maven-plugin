@@ -43,8 +43,7 @@ import org.codehaus.plexus.util.StringUtils;
 /**
  * Abstract Compiler class
  * 
- * @author <a href="Mark.Donszelmann@slac.stanford.edu">Mark Donszelmann</a>
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/Compiler.java 0ee9148b7c6a 2007/09/20 18:42:29 duns $
+ * @author Mark Donszelmann
  */
 public abstract class Compiler {
 

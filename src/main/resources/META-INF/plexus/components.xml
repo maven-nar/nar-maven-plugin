@@ -1,3 +1,22 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
 <component-set>
     <components>
         <component>
@@ -6,22 +25,22 @@
             <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
             <configuration>
                 <phases>
-                    <generate-sources>org.freehep:freehep-nar-plugin:nar-download,
-                                      org.freehep:freehep-nar-plugin:nar-system-generate</generate-sources>
-                    <process-sources>org.freehep:freehep-nar-plugin:nar-unpack</process-sources>
+                    <generate-sources>org.apache.maven.plugins:maven-nar-plugin:nar-download,
+                                      org.apache.maven.plugins:maven-nar-plugin:nar-system-generate</generate-sources>
+                    <process-sources>org.apache.maven.plugins:maven-nar-plugin:nar-unpack</process-sources>
                     <process-resources>org.apache.maven.plugins:maven-resources-plugin:resources,
-                                       org.freehep:freehep-nar-plugin:nar-resources</process-resources>
+                                       org.apache.maven.plugins:maven-nar-plugin:nar-resources</process-resources>
                     <compile>org.apache.maven.plugins:maven-compiler-plugin:compile,
-                             org.freehep:freehep-nar-plugin:nar-javah</compile>
-                    <process-classes>org.freehep:freehep-nar-plugin:nar-compile</process-classes>
+                             org.apache.maven.plugins:maven-nar-plugin:nar-javah</compile>
+                    <process-classes>org.apache.maven.plugins:maven-nar-plugin:nar-compile</process-classes>
                     <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:testResources</process-test-resources>
                     <test-compile>org.apache.maven.plugins:maven-compiler-plugin:testCompile,
-                                  org.freehep:freehep-nar-plugin:nar-testCompile</test-compile>
+                                  org.apache.maven.plugins:maven-nar-plugin:nar-testCompile</test-compile>
                     <test>org.apache.maven.plugins:maven-surefire-plugin:test,
-                          org.freehep:freehep-nar-plugin:nar-test</test>
-                    <package>org.freehep:freehep-nar-plugin:nar-package,
+                          org.apache.maven.plugins:maven-nar-plugin:nar-test</test>
+                    <package>org.apache.maven.plugins:maven-nar-plugin:nar-package,
                              org.apache.maven.plugins:maven-jar-plugin:jar</package>
-                    <integration-test>org.freehep:freehep-nar-plugin:nar-integration-test</integration-test>
+                    <integration-test>org.apache.maven.plugins:maven-nar-plugin:nar-integration-test</integration-test>
                     <install>org.apache.maven.plugins:maven-install-plugin:install</install>
                     <deploy>org.apache.maven.plugins:maven-deploy-plugin:deploy</deploy>
                 </phases>
@@ -45,14 +64,13 @@
         <component>
             <role>org.codehaus.plexus.archiver.Archiver</role>
             <role-hint>nar-library</role-hint>
-            <implementation>org.freehep.maven.nar.NarArchiver</implementation>
             <instantiation-strategy>per-lookup</instantiation-strategy>
         </component>
         
         <component>
             <role>org.codehaus.plexus.archiver.UnArchiver</role>
             <role-hint>nar-library</role-hint>
-            <implementation>org.freehep.maven.nar.NarUnArchiver</implementation>
+            <implementation>org.apache.maven.plugin.nar.NarUnArchiver</implementation>
             <instantiation-strategy>per-lookup</instantiation-strategy>
         </component>
     </components>

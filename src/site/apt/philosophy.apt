@@ -1,5 +1,5 @@
 	---
-FreeHEP NAR Plugin
+Maven NAR Plugin
 	---
 	---
 Mark Donszelmann
@@ -129,8 +129,7 @@ platform the NAR Plugin is running on. An example is below:
 +--
 ...
 <plugin>
-  <groupId>org.freehep</groupId>
-  <artifactId>freehep-nar-plugin</artifactId>
+  <artifactId>maven-nar-plugin</artifactId>
   <configuration>
     <cpp>
       <exceptions>false</exceptions>
@@ -176,8 +175,7 @@ shared library, which depends on a native math library (nmath).
   <build>
     <plugins>
       <plugin>
-        <groupId>org.freehep</groupId>
-        <artifactId>freehep-nar-plugin</artifactId>
+        <artifactId>maven-nar-plugin</artifactId>
         <version>nar-version-number</version>
         <extensions>true</extensions>
       </plugin>

@@ -24,7 +24,6 @@ import java.util.List;
 /**
  *
  * @author Mark Donszelmann (Mark.Donszelmann@gmail.com)
- * @version $Id$
  */
 public interface Executable {
 

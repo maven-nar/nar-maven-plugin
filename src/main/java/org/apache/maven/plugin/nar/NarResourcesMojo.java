@@ -41,7 +41,6 @@ import org.codehaus.plexus.util.SelectorUtils;
  * @phase process-resources
  * @requiresProject
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/NarResourcesMojo.java 2126b860c9c5 2007/07/31 23:19:30 duns $
  */
 public class NarResourcesMojo extends AbstractCompileMojo {
 

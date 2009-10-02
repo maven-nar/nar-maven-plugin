@@ -23,7 +23,6 @@ package org.apache.maven.plugin.nar;
  * C compiler tag
  *
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/C.java 631dc18040bb 2007/07/17 14:21:11 duns $
  */
 public class C extends Compiler { 
     

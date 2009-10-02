@@ -44,7 +44,6 @@ import org.apache.tools.ant.Project;
  * @phase test-compile
  * @requiresDependencyResolution test
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/NarTestCompileMojo.java 0ee9148b7c6a 2007/09/20 18:42:29 duns $
  */
 public class NarTestCompileMojo extends AbstractCompileMojo {
 

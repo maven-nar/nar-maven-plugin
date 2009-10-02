@@ -40,7 +40,6 @@ import org.codehaus.plexus.util.StringUtils;
  * @phase test
  * @requiresProject
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/NarTestMojo.java 51709c87671c 2007/08/08 22:49:17 duns $
  */
 public class NarTestMojo extends AbstractCompileMojo {
 

@@ -22,7 +22,6 @@ package org.apache.maven.plugin.nar;
 /**
  * 
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/OS.java bf894e19f5aa 2007/07/07 15:33:36 duns $
  */
 public interface OS {
 

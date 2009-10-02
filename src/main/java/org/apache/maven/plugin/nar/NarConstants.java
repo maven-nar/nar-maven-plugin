@@ -21,7 +21,6 @@ package org.apache.maven.plugin.nar;
 
 /**
  * @author Mark Donszelmann
- * @version $Id$
  */
 public interface NarConstants {
     public final static String NAR_EXTENSION = "nar";

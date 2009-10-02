@@ -47,9 +47,7 @@ import org.codehaus.plexus.util.FileUtils;
 
 /**
  * @author Mark Donszelmann (Mark.Donszelmann@gmail.com)
- * @version $Id$
  */
-
 public class NarManager {
 
 	private Log log;

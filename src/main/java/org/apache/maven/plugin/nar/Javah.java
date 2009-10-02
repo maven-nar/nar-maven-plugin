@@ -45,7 +45,6 @@ import org.codehaus.plexus.util.StringUtils;
  * Sets up the javah configuration
  *
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/Javah.java eeac31f37379 2007/07/24 04:02:00 duns $
  */
 public class Javah {
 

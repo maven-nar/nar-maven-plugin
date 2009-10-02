@@ -24,7 +24,6 @@ import org.codehaus.plexus.archiver.zip.AbstractZipArchiver;
 /**
  * 
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/NarArchiver.java eda4d0bbde3d 2007/07/03 16:52:10 duns $
  */
 public class NarArchiver extends AbstractZipArchiver {
 }

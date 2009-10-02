@@ -24,7 +24,6 @@ import org.apache.maven.plugin.MojoFailureException;
 
 /**
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/AbstractDependencyMojo.java c867ab546be1 2007/07/05 21:26:30 duns $
  */
 public abstract class AbstractDependencyMojo extends AbstractNarMojo {
 

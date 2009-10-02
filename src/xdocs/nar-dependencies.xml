@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
 <document>
     <properties>
-        <title> NAR Dependencies</title>
-        <author email="Mark.Donszelmann@slac.stanford.edu">Mark Donszelmann</author>
+        <title>NAR Dependencies</title>
+        <author email="Mark.Donszelmann@gmail.com">Mark Donszelmann</author>
     </properties>
     <body>
         <section name="Dependencies on other NARs">
@@ -47,7 +66,7 @@
                 </tr>
     
                 <tr>
-                    <td>freehep.nar.nars</td>
+                    <td>maven.nar.nars</td>
                     <td>Space separated list of other nar files to download.
                     </td>
                     <td>
@@ -76,7 +95,7 @@
                 <tr>
                     <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]<i>DependentArtifact</i>-nar.local</td>
                     <td>Specifies that the DependentArtifact is installed locally (in a different place than the local
-                    repository. The property <code>freehep.nar.nars</code> will be ignored.
+                    repository. The property <code>maven.nar.nars</code> will be ignored.
                     One would typically use this for standard libs such as zlib and others.</td>
                     <td>false</td>
                 </tr>
@@ -108,7 +127,7 @@
                 <tr>
                     <td>[<i>arch.</i>[<i>os.</i>[<i>linker.</i>]<i>DependentArtifact</i>-nar.type</td>
                     <td>Specify the type of linking</td>
-                    <td><code>${freehep.nar.libs.type}</code></td>
+                    <td><code>${maven.nar.libs.type}</code></td>
                 </tr>
                                
                 <tr>
@@ -122,7 +141,7 @@
                     <td>Converts one AOL into another. For example: YourLib-nar.i386-Linux-g++=i386-Linux-gcc will 
                     make sure you can link from g++ as well as from gcc to YourLib. YourLib needs to be dsitributed
                     as a gcc linked lib in this case.</td>
-                    <td>${freehep.nar.aol.name}</td>
+                    <td>${maven.nar.aol.name}</td>
                 </tr>
                 
             </table>        
@@ -131,7 +150,7 @@
             If the property <i>DependentArtifact</i>-nar.local is set to true, then no further files will be 
             downloaded or installed and the properties <i>DependentArtifact</i>-nar.dir and 
             <i>DependentArtifact</i>-nar.include will be used for compilation and linking with this <i>DependentArtifact</i>. 
-            In the other case the files specified by freehep.nar.nars will be downloaded, installed in 
+            In the other case the files specified by maven.nar.nars will be downloaded, installed in 
             the local repository, unpacked and used for compilation and linking. 
             Setting <i>DependentArtifact</i>-nar.local allows the user to avoid downloading a library 
             which is already installed as a non-NAR file somewhere else on his machine.
@@ -140,7 +159,7 @@
             <p>
             When generating a set of NAR files, the <i>Artifact</i>-nar-<i>Version</i>.nar file will be generated
             for you. This file may contain any of the properties listed above. The NAR plugin generates the 
-            properties freehep.nar.nars and <i>Artifact</i>-nar.linkLibs. Any other properties can be specified
+            properties maven.nar.nars and <i>Artifact</i>-nar.linkLibs. Any other properties can be specified
             in the nar.properties file in the artifact's top directory (alongside project.properties) and will
             be concatenated to the generated nar file.
             </p>

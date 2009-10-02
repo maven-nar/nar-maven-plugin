@@ -1,0 +1,33 @@
+i386-MacOSX-g++: g++ 4.0.1 MacOS 10.4 2.3 GHz MacIntel
+ppc-MacOSX-g++: g++ 4.0.1 MacOS 10.4 2 GHz PowerPC G5
+i386-Linux-g++3: g++ 3.3 / 3.4 Linux 2 GHz
+i386-Linux-g++: g++ 4.1 Linux 2 GHz
+x86-Windows-msvc: vc 8 WindowsXP 2.3 GHz
+
+8-core to local disk.
+
+Compile Times Maven NAR
+
+Geant4 Full Size
+
+  Cores/CPUs		1	2	4	8
+Platform	
+i386-MacOSX-g++		1800	1034
+ppc-MacOSX-g++		3467	1992
+i386-Linux-g++3				826   	340 (local disk)
+i386-Linux-g++				632   	270 (local disk)
+x86-Windows-msvc	1701	1035
+x86-Windows-g++		5232	2894
+
+
+Geant4 75 Files
+
+  Cores/CPUs		1	2	4	8
+Platform	
+i386-MacOSX-g++		120	93
+ppc-MacOSX-g++
+i386-Linux-g++3
+i386-Linux-g++
+x86-Windows-msvc	161	120
+
+

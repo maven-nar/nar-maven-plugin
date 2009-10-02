@@ -25,7 +25,6 @@ import org.apache.maven.artifact.DefaultArtifact;
 /**
  * 
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/NarArtifact.java eda4d0bbde3d 2007/07/03 16:52:10 duns $
  */
 public class NarArtifact extends DefaultArtifact {
 

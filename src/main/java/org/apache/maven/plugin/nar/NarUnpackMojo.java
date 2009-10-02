@@ -35,7 +35,6 @@ import org.codehaus.plexus.archiver.manager.ArchiverManager;
  * @requiresProject
  * @requiresDependencyResolution
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/NarUnpackMojo.java eda4d0bbde3d 2007/07/03 16:52:10 duns $
  */
 public class NarUnpackMojo extends AbstractDependencyMojo {
 

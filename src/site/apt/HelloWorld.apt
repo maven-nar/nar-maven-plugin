@@ -1,5 +1,5 @@
 	---
-FreeHEP NAR Plugin
+Maven NAR Plugin
 	---
 	---
 Mark Donszelmann
@@ -13,7 +13,7 @@ There are also some unit test which are run and call the same method.
 
 	The following examples are available:
 
-  	[helloworldexe] A C routine.
+  	[executable] A C routine.
   
   	[helloworldstaticexe] A C routine statically linked with the C-runtime library.
 
@@ -53,9 +53,6 @@ There are also some unit test which are run and call the same method.
 	
 	[]
 
-	These examples are now all run as tests when you try to run maven on the freehep-nar-plugin from its top-level directory.
+	These examples are now all run as integration tests when you try to run maven on the maven-nar-plugin from its top-level directory with the profile "run-its".
 
-	For the sources of these tests, see: 
-{{{http://java.freehep.org/svn/repobrowser.svn?path=%2ffreehep%2ftrunk%2fmaven-plugins%2ffreehep-nar-plugin%2ftests&revision=HEAD&name=freehep&bypassEmpty=true}
-the SVN repository}}.
 

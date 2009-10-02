@@ -25,7 +25,6 @@ import org.apache.maven.artifact.handler.ArtifactHandler;
 /**
  * 
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/NarArtifactHandler.java 76e8ff7ad2b0 2007/07/24 04:15:54 duns $
  */
 public class NarArtifactHandler implements ArtifactHandler {
 	public String getPackaging() {

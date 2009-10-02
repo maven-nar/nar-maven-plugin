@@ -38,7 +38,6 @@ import org.codehaus.plexus.util.FileUtils;
  * @requiresProject
  * @requiresDependencyResolution
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/NarAssemblyMojo.java c867ab546be1 2007/07/05 21:26:30 duns $
  */
 public class NarAssemblyMojo extends AbstractDependencyMojo {
 

@@ -30,7 +30,6 @@ import org.apache.maven.plugin.MojoFailureException;
  * @goal nar-javah
  * @phase compile
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/NarJavahMojo.java eeac31f37379 2007/07/24 04:02:00 duns $
  */
 public class NarJavahMojo extends AbstractCompileMojo {
     

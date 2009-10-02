@@ -37,7 +37,6 @@ import org.apache.tools.ant.Project;
  * Keeps info on a library
  *
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/Lib.java eda4d0bbde3d 2007/07/03 16:52:10 duns $
  */
 public class Lib {
 

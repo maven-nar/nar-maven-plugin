@@ -28,7 +28,6 @@ import org.apache.tools.ant.Project;
  * Logger to connect the Ant logging to the Maven logging.
  *
  * @author Mark Donszelmann
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/NarLogger.java 9589202406dd 2007/07/23 17:42:54 duns $
  */
 public class NarLogger implements BuildListener {
     

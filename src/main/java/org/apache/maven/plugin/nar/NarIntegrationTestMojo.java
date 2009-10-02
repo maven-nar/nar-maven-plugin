@@ -73,16 +73,15 @@ import org.codehaus.plexus.util.StringUtils;
  * directories but disable the running of the tests by the
  * maven-surefire-plugin.
  * 
- * @author Jason van Zyl (modified by Mark Donszelmann, noted by FREEHEP)
- * @version $Id: plugin/src/main/java/org/freehep/maven/nar/NarIntegrationTestMojo.java eeac31f37379 2007/07/24 04:02:00 duns $,
- *          2.3 maven repository maven-surefire-plugin
+ * @author Jason van Zyl (modified by Mark Donszelmann, noted by DUNS)
+ * @version 2.3 maven repository maven-surefire-plugin and changes by DUNS
  * @requiresDependencyResolution test
  * @goal nar-integration-test
  * @phase integration-test
  */
-// FREEHEP, changed class name, inheritence, goal and phase
+// DUNS, changed class name, inheritence, goal and phase
 public class NarIntegrationTestMojo extends AbstractCompileMojo {
-	// FREEHEP added test for JNI module
+	// DUNS added test for JNI module
 	private boolean testJNIModule() {
 		for (Iterator i = getLibraries().iterator(); i.hasNext();) {
 			Library lib = (Library) i.next();
@@ -92,7 +91,7 @@ public class NarIntegrationTestMojo extends AbstractCompileMojo {
 		return false;
 	}
 
-	// FREEHEP added to get names
+	// DUNS added to get names
 	/**
 	 * @parameter expression="${project}"
 	 * @readonly
@@ -100,7 +99,7 @@ public class NarIntegrationTestMojo extends AbstractCompileMojo {
 	 */
 	private MavenProject project;
 
-	// FREEHEP added because of naming conflict
+	// DUNS added because of naming conflict
 	/**
 	 * Skip running of NAR plugins (any) altogether.
 	 * 
@@ -148,7 +147,7 @@ public class NarIntegrationTestMojo extends AbstractCompileMojo {
 	 * @parameter expression="${project.build.outputDirectory}"
 	 * @required
 	 */
-	// FREEHEP
+	// DUNS
 	// private File classesDirectory;
 	/**
 	 * The directory containing generated test classes of the project being
@@ -225,7 +224,7 @@ public class NarIntegrationTestMojo extends AbstractCompileMojo {
 	 * @required
 	 * @readonly
 	 */
-	// FREEHEP removed, already in superclass
+	// DUNS removed, already in superclass
 	// private ArtifactRepository localRepository;
 	/**
 	 * List of System properties to pass to the JUnit tests.
@@ -473,7 +472,7 @@ public class NarIntegrationTestMojo extends AbstractCompileMojo {
 	}
 
 	private boolean verifyParameters() throws MojoFailureException {
-		// FREEHEP, shouldSkip() does not work...
+		// DUNS, shouldSkip() does not work...
 		if (skipNAR) {
 			getLog()
 					.info(
@@ -649,7 +648,7 @@ public class NarIntegrationTestMojo extends AbstractCompileMojo {
 										testSourceDirectory.getAbsolutePath() });
 			} else {
 				String junitDirectoryTestSuite;
-				// FREEHEP NP check
+				// DUNS NP check
 				if (junitArtifact != null
 						&& junitArtifact.getBaseVersion().startsWith("4")) {
 					junitDirectoryTestSuite = "org.apache.maven.surefire.junit4.JUnit4DirectoryTestSuite";
@@ -690,7 +689,7 @@ public class NarIntegrationTestMojo extends AbstractCompileMojo {
 
 		ForkConfiguration fork = new ForkConfiguration();
 
-		// FREEHEP
+		// DUNS
 		if (project.getPackaging().equals("nar")
 				|| (getNarManager().getNarDependencies("test").size() > 0))
 			forkMode = "pertest";
@@ -722,7 +721,7 @@ public class NarIntegrationTestMojo extends AbstractCompileMojo {
 				fork.setWorkingDirectory(basedir);
 			}
 
-			// BEGINFREEHEP
+			// BEGINDUNS
 			if (argLine == null)
 				argLine = "";
 
@@ -800,7 +799,7 @@ public class NarIntegrationTestMojo extends AbstractCompileMojo {
 			if (getOS().equals(OS.WINDOWS)) {
 				environmentVariables.put("SystemRoot", NarUtil.getEnv("SystemRoot", "SystemRoot", "C:\\Windows"));
 			}
-			// ENDFREEHEP
+			// ENDDUNS
 
 			fork.setArgLine(argLine);
 
@@ -872,7 +871,7 @@ public class NarIntegrationTestMojo extends AbstractCompileMojo {
 		Artifact originatingArtifact = artifactFactory.createBuildArtifact(
 				"dummy", "dummy", "1.0", "jar");
 
-		// FREEHEP, use access method rather than "localRepository" field.
+		// DUNS, use access method rather than "localRepository" field.
 		return artifactResolver.resolveTransitively(Collections
 				.singleton(providerArtifact), originatingArtifact,
 				getLocalRepository(), remoteRepositories, metadataSource,
@@ -906,7 +905,7 @@ public class NarIntegrationTestMojo extends AbstractCompileMojo {
 
 		systemProperties.setProperty("basedir", basedir.getAbsolutePath());
 
-		// FREEHEP, use access method rather than "localRepository" field.
+		// DUNS, use access method rather than "localRepository" field.
 		systemProperties.setProperty("localRepository", getLocalRepository()
 				.getBasedir());
 

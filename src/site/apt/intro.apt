@@ -1,5 +1,5 @@
 	---
-FreeHEP NAR Plugin
+Maven NAR Plugin
 	---
 	---
 Mark Donszelmann
@@ -170,7 +170,7 @@ os and linker (x86.Windows.msvc for example).
 	All include files from <<<COMPILER.includePaths>>> are copied to be included
 in the noarch nar file.
 
-	<< TBD If you set freehep.nar.includefilesonly to true the compilation step will be 
+	<< TBD If you set maven.nar.includefilesonly to true the compilation step will be 
 skipped. This flag can be used if you want to distribute a library that only contains pure
 abstract classes in include files.>>
                 
@@ -192,7 +192,7 @@ sources, as specified in the patterns in <<<AOL.c.includes>>>,
 <<<AOL.nar.src.includes>>> and <<<AOL.fortran.includes>>>, where AOL is a dotted qualifier of the architecture,
 os and linker (x86.Windows.msvc for example).
                 
-	<<TBD If you set freehep.nar.includefilesonly to true the compile-tests goal will be 
+	<<TBD If you set maven.nar.includefilesonly to true the compile-tests goal will be 
 skipped.>>
 
 
@@ -214,7 +214,7 @@ The following jar and nar files are created:
     
     * \<Artifact\>-\<version\>-\<aol\>-\<type\>.nar, a compressed jar file containing machine
     specific parts of the distribution, such as the libraries. This file is specific to a particular
-    Architecture-OS-Linker (AOL) combination <<TBD and is not generated if freehep.nar.includefilesonly
+    Architecture-OS-Linker (AOL) combination <<TBD and is not generated if maven.nar.includefilesonly
     is set>>. Type specifies if this nar is either of type shared, static or jni.
     
     []
