@@ -29,13 +29,13 @@ under the License.
     <relativePath>../it-parent/pom.xml</relativePath>
   </parent>
 
-  <artifactId>it0003-jni</artifactId>
+  <artifactId>it0005-jni-static</artifactId>
   <packaging>nar</packaging>
   
-  <name>Maven NAR JNI Test</name>
+  <name>Maven NAR Static JNI Test</name>
   <version>1.0-SNAPSHOT</version>
   <description>
-    Simple JNI Library
+    Simple Static JNI Library
   </description>
   <url>http://maven.apache.org/</url>
 <!--
@@ -51,9 +51,7 @@ under the License.
         <artifactId>maven-nar-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>
-          <cpp>
-            <debug>true</debug>
-          </cpp>
+          <runtime>static</runtime>
           <libraries>
             <library>
               <type>jni</type>
