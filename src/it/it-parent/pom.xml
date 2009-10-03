@@ -43,6 +43,7 @@ under the License.
       </snapshots>
     </repository>
   </repositories>
+  
   <pluginRepositories>
     <pluginRepository>
       <id>local.central</id>
@@ -55,4 +56,13 @@ under the License.
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
+  
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>

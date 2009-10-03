@@ -28,21 +28,22 @@ under the License.
     <version>1.0-SNAPSHOT</version>
     <relativePath>../it-parent/pom.xml</relativePath>
   </parent>
-
-  <artifactId>jni</artifactId>
+  
+  <artifactId>it0002-executable-static</artifactId>
   <packaging>nar</packaging>
   
-  <name>Maven NAR JNI Test</name>
+  <name>Maven NAR Static Executable Test</name>
   <version>1.0-SNAPSHOT</version>
   <description>
-    Simple JNI Library
+    Simple executable statically linked with the c runtime
   </description>
-  <url>http://maven.apache.org/</url>
+
 <!--
   <properties>
     <maven.test.skip>true</maven.test.skip>
   </properties>
--->  
+-->
+
   <build>
     <defaultGoal>integration-test</defaultGoal>
     <plugins>
@@ -50,14 +51,11 @@ under the License.
         <artifactId>maven-nar-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>
-          <cpp>
-            <debug>true</debug>
-          </cpp>
+          <runtime>static</runtime>
           <libraries>
             <library>
-              <type>jni</type>
-              <narSystemPackage>com.mycompany.mypackage</narSystemPackage>
-              <linkCPP>false</linkCPP>
+              <type>executable</type>
+              <run>true</run>
             </library>
           </libraries>
         </configuration>
@@ -70,12 +68,4 @@ under the License.
       </plugin>
     </plugins>
   </build>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.2</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
 </project>

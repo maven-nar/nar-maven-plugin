@@ -15,13 +15,13 @@ There are also some unit test which are run and call the same method.
 
   	[executable] A C routine.
   
-  	[helloworldstaticexe] A C routine statically linked with the C-runtime library.
+  	[executable-static] A C routine statically linked with the C-runtime library.
 
 	[]
 
 	[jni] A C routine called from Java and a Java unit test.
 	
-	[helloworldjnilibjava] A java project which depends on "jni". 
+	[java-dep-jni] A java project which depends on "jni". 
 
 	[helloworldstaticjni] A C routine called from Java statically linked with the C-runtime library and a Java unit test.
 	

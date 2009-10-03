@@ -29,7 +29,7 @@ under the License.
     <relativePath>../it-parent/pom.xml</relativePath>
   </parent>
   
-  <artifactId>executable</artifactId>
+  <artifactId>it0001-executable</artifactId>
   <packaging>nar</packaging>
   
   <name>Maven NAR Executable Test</name>
