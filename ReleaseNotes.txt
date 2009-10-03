@@ -13,6 +13,8 @@ and cpptasks-parallel.
 
 Bugs
 
+- Goal for Tests should be Install.
+
 - Excecutable needs a test to run and verify the output of Executable.
 
 - Resource directory seems in GIT while it should not, it should be generated in target

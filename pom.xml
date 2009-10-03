@@ -141,7 +141,7 @@
               <localRepositoryPath>${project.build.directory}/it-repo</localRepositoryPath>
               <goals>
                 <goal>clean</goal>
-                <goal>integration-test</goal>
+                <goal>install</goal>
               </goals>
             </configuration>
             <executions>
