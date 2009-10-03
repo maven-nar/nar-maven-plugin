@@ -131,11 +131,18 @@
             <artifactId>maven-invoker-plugin</artifactId>
             <version>1.4</version>
             <configuration>
-              <debug>true</debug>
+              <debug>false</debug>
+              <!-- FAILS to run, see ReleaseNotes
+              <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+               -->
               <pomExcludes>
                 <pomExclude>it-parent/**</pomExclude>
               </pomExcludes>
               <localRepositoryPath>${project.build.directory}/it-repo</localRepositoryPath>
+              <goals>
+                <goal>clean</goal>
+                <goal>integration-test</goal>
+              </goals>
             </configuration>
             <executions>
               <execution>

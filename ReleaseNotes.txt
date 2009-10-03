@@ -13,6 +13,18 @@ and cpptasks-parallel.
 
 Bugs
 
+- Excecutable needs a test to run and verify the output of Executable.
+
+- When it test fails it seems not reported in main pom, refer to executable 
+
+- nar-integration (our plugin copy) tests are not run when maven.tests.skip=true is set... 
+while they are run when in the configuration (plugin has different name) skip is set. 
+
+- When run from run-its, executable fails to create. The build file shows:
+
+Error looking up lifecycle mapping to retrieve optional mojos. Lifecycle ID: default. Error: Component descriptor cannot be found in the component repository: org.apache.maven.lifecycle.mapping.LifecycleMappingnar.
+org.codehaus.plexus.component.repository.exception.ComponentLookupException: Component descriptor cannot be found in the component repository: org.apache.maven.lifecycle.mapping.LifecycleMappingnar. 
+
 - When the calculated AOL is not found in aol.properties the error message is misleading:
 
 [INFO] [nar:nar-download {execution: default-nar-download}]
