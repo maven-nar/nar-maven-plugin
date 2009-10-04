@@ -2,3 +2,6 @@
 .project
 .settings
 target
+pom.xml.releaseBackup
+release.properties
+

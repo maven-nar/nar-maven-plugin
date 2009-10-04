@@ -21,6 +21,20 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+<!-- to avoid MDEPLOY-50 -->
+<distributionManagement>
+  <repository>
+    <id>repo</id>
+    <name>Repository Name</name>
+    <url>scp://host/path/to/repo</url>
+  </repository>
+  <snapshotRepository>
+    <id>repo</id>
+    <name>Repository Name</name>
+    <url>scp://host/path/to/repo</url>
+  </snapshotRepository>
+</distributionManagement>
+
   <build>
     <defaultGoal>install</defaultGoal>
     <sourceDirectory>src</sourceDirectory>

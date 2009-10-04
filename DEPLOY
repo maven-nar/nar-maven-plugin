@@ -1,0 +1,4 @@
+To deploy use something like this:
+
+mvn -Darguments=-DaltDeploymentRepository=releases::default::http://localhost:8081/nexus/content/repositories/releases/ release:perform
+
