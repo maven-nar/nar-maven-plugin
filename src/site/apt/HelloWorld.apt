@@ -39,25 +39,25 @@ There are also some unit test which are run and call the same method.
 	[it0007-lib-shared] A C routine which gets archived into a shared library. A C test executable 
 	is created.
 	
-	[it0008-executable-dep-lib-shared] A C executable which depends on "helloworldsharedlib" and links dynamically 
+	[it0008-executable-dep-lib-shared] A C executable which depends on "lib-shared" and links dynamically 
 	with it. The executable is created and run.
 	
 	[helloworldsharedlibjni] A C routine called from Java, which depends on 
-	"helloworldsharedlib" and links dynamically with it.
+	"lib-shared" and links dynamically with it.
 	
 	[]
 
 	[it0010-lib-static] A C routine which gets archived into a static library. A C test executable 
 	is created.
 	
-	[helloworldstaticlibexe] A C executable which depends on "helloworldstaticlib" and links statically 
+	[it0011-executable-dep-lib-static] A C executable which depends on "lib-static" and links statically 
 	with it. The executabe is created and run. 
 
 	[helloworldstaticlibjni] A C routine called from Java, which depends on 
-	"helloworldstaticlib" and links statically with it. A Java unit test is provided.
+	"lib-static" and links statically with it. A Java unit test is provided.
 	
 	[]
 
-	These examples are now all run as integration tests when you try to run maven on the maven-nar-plugin from its top-level directory with the profile "run-its".
+	These examples are now all run as integration tests by running maven on the maven-nar-plugin from its top-level directory with the profile "run-its".
 
 

@@ -24,19 +24,18 @@ under the License.
 
   <parent>
     <groupId>org.apache.maven.its.nar</groupId>
-    <artifactId>it0008-pom</artifactId>
+    <artifactId>it0011-pom</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>it0008-executable-dep-lib-shared</artifactId>
+  <artifactId>it0011-executable-dep-lib-static</artifactId>
   <packaging>nar</packaging>
-  
   <name>Maven NAR Executable</name>
   <version>1.0-SNAPSHOT</version>
   <description>
     Executable
   </description>
-   
+  
   <build>
     <defaultGoal>integration-test</defaultGoal>
     <plugins>
@@ -63,7 +62,7 @@ under the License.
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.its.nar</groupId>
-      <artifactId>it0008-lib-shared</artifactId>
+      <artifactId>it0011-lib-static</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
   </dependencies>

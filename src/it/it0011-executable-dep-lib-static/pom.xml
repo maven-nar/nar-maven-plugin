@@ -24,47 +24,26 @@ under the License.
 
   <parent>
     <groupId>org.apache.maven.its.nar</groupId>
-    <artifactId>it0008-pom</artifactId>
+    <artifactId>it-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <relativePath>../it-parent/pom.xml</relativePath>
   </parent>
 
-  <artifactId>it0008-executable-dep-lib-shared</artifactId>
-  <packaging>nar</packaging>
+  <artifactId>it0011-pom</artifactId>
+  <packaging>pom</packaging>
   
-  <name>Maven NAR Executable</name>
+  <name>Maven NAR Executable and Static Library</name>
   <version>1.0-SNAPSHOT</version>
   <description>
-    Executable
+    Executable depending on a static library.
   </description>
-   
+  
   <build>
-    <defaultGoal>integration-test</defaultGoal>
-    <plugins>
-      <plugin>
-        <artifactId>maven-nar-plugin</artifactId>
-        <extensions>true</extensions>
-        <configuration>
-          <libraries>
-            <library>
-              <type>executable</type>
-              <run>true</run>
-            </library>
-          </libraries>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.maven.its.nar</groupId>
-      <artifactId>it0008-lib-shared</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
-  </dependencies>
+    <defaultGoal>install</defaultGoal>
+  </build>  
+
+  <modules>
+    <module>executable-dep-lib-static</module>
+    <module>lib-static</module>
+  </modules>
 </project>
