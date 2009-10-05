@@ -24,21 +24,27 @@ under the License.
 
   <parent>
     <groupId>org.apache.maven.its.nar</groupId>
-    <artifactId>it0011-pom</artifactId>
+    <artifactId>it0012-pom</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>it0011-executable-dep-lib-static</artifactId>
+  <artifactId>it0012-lib-static</artifactId>
   <packaging>nar</packaging>
   
-  <name>Maven NAR Executable</name>
+  <name>Maven NAR Static Library</name>
   <version>1.0-SNAPSHOT</version>
   <description>
-    Executable
+    Simple static library and test file
   </description>
-  
+  <url>http://maven.apache.org/</url>
+<!--
+  <properties>
+    <maven.test.skip>true</maven.test.skip>
+  </properties>
+-->  
+
   <build>
-    <defaultGoal>integration-test</defaultGoal>
+    <defaultGoal>install</defaultGoal>
     <plugins>
       <plugin>
         <artifactId>maven-nar-plugin</artifactId>
@@ -46,10 +52,15 @@ under the License.
         <configuration>
           <libraries>
             <library>
-              <type>executable</type>
-              <run>true</run>
+              <type>static</type>
             </library>
           </libraries>
+          <tests>
+            <test>
+              <name>HelloWorldTest</name>
+              <link>static</link>
+            </test>
+          </tests>
         </configuration>
       </plugin>
       <plugin>
@@ -60,12 +71,4 @@ under the License.
       </plugin>
     </plugins>
   </build>
-  
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.maven.its.nar</groupId>
-      <artifactId>it0011-lib-static</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
-  </dependencies>
 </project>

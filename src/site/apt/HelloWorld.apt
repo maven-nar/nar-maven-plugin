@@ -8,7 +8,7 @@ Mark Donszelmann
 HelloWorld Examples
 
 	These example contain a simple C method "sayHello". This method can be called from a C program, a Java program, put into
-a static library, put into a shared library, use a third party library, ...
+a static library, put into a shared library, use as a third party library, ...
 There are also some unit test which are run and call the same method. 
 
 	The following examples are available:
@@ -53,8 +53,8 @@ There are also some unit test which are run and call the same method.
 	[it0011-executable-dep-lib-static] A C executable which depends on "lib-static" and links statically 
 	with it. The executabe is created and run. 
 
-	[helloworldstaticlibjni] A C routine called from Java, which depends on 
-	"lib-static" and links statically with it. A Java unit test is provided.
+	[it0012-jni-dep-lib-static] A C routine called from Java, which depends on 
+	"lib-static" and links statically with it.
 	
 	[]
 

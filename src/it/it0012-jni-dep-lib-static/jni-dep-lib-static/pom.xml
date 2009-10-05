@@ -24,19 +24,19 @@ under the License.
 
   <parent>
     <groupId>org.apache.maven.its.nar</groupId>
-    <artifactId>it0011-pom</artifactId>
+    <artifactId>it0012-pom</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>it0011-executable-dep-lib-static</artifactId>
+  <artifactId>it0012-jni-dep-lib-static</artifactId>
   <packaging>nar</packaging>
-  
-  <name>Maven NAR Executable</name>
+
+  <name>Maven NAR JNI</name>
   <version>1.0-SNAPSHOT</version>
   <description>
-    Executable
+    JNI
   </description>
-  
+
   <build>
     <defaultGoal>integration-test</defaultGoal>
     <plugins>
@@ -46,8 +46,9 @@ under the License.
         <configuration>
           <libraries>
             <library>
-              <type>executable</type>
-              <run>true</run>
+              <type>jni</type>
+              <narSystemPackage>com.mycompany.mypackage</narSystemPackage>
+              <linkCPP>false</linkCPP>
             </library>
           </libraries>
         </configuration>
@@ -64,7 +65,7 @@ under the License.
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.its.nar</groupId>
-      <artifactId>it0011-lib-static</artifactId>
+      <artifactId>it0012-lib-static</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
