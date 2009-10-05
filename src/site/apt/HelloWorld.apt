@@ -36,14 +36,14 @@ There are also some unit test which are run and call the same method.
 	
 	[]
 
-	[helloworldsharedlib] A C routine which gets archived into a shared library. A C test executable 
+	[lib-shared] A C routine which gets archived into a shared library. A C test executable 
 	is created and run.
 	
 	[helloworldsharedlibexe] A C executable which depends on "helloworldsharedlib" and links dynamically 
 	with it. The executable is created and run.
 	
 	[helloworldsharedlibjni] A C routine called from Java, which depends on 
-	"helloworldsharedlib" and links dynamically with it. A Java unit test is provided.
+	"helloworldsharedlib" and links dynamically with it.
 	
 	[]
 
