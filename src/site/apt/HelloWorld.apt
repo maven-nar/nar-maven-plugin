@@ -37,7 +37,7 @@ There are also some unit test which are run and call the same method.
 	[]
 
 	[lib-shared] A C routine which gets archived into a shared library. A C test executable 
-	is created and run.
+	is created.
 	
 	[helloworldsharedlibexe] A C executable which depends on "helloworldsharedlib" and links dynamically 
 	with it. The executable is created and run.
@@ -47,8 +47,8 @@ There are also some unit test which are run and call the same method.
 	
 	[]
 
-	[helloworldstaticlib] A C routine which gets archived into a static library. A C test executable 
-	is created and run.
+	[lib-static] A C routine which gets archived into a static library. A C test executable 
+	is created.
 	
 	[helloworldstaticlibexe] A C executable which depends on "helloworldstaticlib" and links statically 
 	with it. The executabe is created and run. 
