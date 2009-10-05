@@ -13,19 +13,19 @@ There are also some unit test which are run and call the same method.
 
 	The following examples are available:
 
-  	[executable] A C routine.
+  	[it0001-executable] A C routine.
   
-  	[executable-static] A C routine statically linked with the C-runtime library.
+  	[it0002-executable-static] A C routine statically linked with the C-runtime library.
 
 	[]
 
-	[jni] A C routine called from Java.
+	[it0003-jni] A C routine called from Java.
 	
-	[java-dep-jni] A java project which depends on "jni". 
+	[it0004-java-dep-jni] A java project which depends on "jni". 
 
-	[jni-static] A C routine called from Java statically linked with the C-runtime library.
+	[it0005-jni-static] A C routine called from Java statically linked with the C-runtime library.
 	
-	[jni-3rdparty] A third party JNI library called from Java.
+	[it0006-jni-3rdparty] A third party JNI library called from Java.
 	The third party library is the "jni" from the example above and is added as resource to the project in the 
 	form of a JNI library and a corresponding jar file. The "jni" lib is currently provided for the following
 	platforms:
@@ -36,10 +36,10 @@ There are also some unit test which are run and call the same method.
 	
 	[]
 
-	[lib-shared] A C routine which gets archived into a shared library. A C test executable 
+	[it0007-lib-shared] A C routine which gets archived into a shared library. A C test executable 
 	is created.
 	
-	[helloworldsharedlibexe] A C executable which depends on "helloworldsharedlib" and links dynamically 
+	[it0008-executable-dep-lib-shared] A C executable which depends on "helloworldsharedlib" and links dynamically 
 	with it. The executable is created and run.
 	
 	[helloworldsharedlibjni] A C routine called from Java, which depends on 
@@ -47,7 +47,7 @@ There are also some unit test which are run and call the same method.
 	
 	[]
 
-	[lib-static] A C routine which gets archived into a static library. A C test executable 
+	[it0010-lib-static] A C routine which gets archived into a static library. A C test executable 
 	is created.
 	
 	[helloworldstaticlibexe] A C executable which depends on "helloworldstaticlib" and links statically 

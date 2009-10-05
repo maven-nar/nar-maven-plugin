@@ -15,7 +15,8 @@ Bugs
 
 - Goal for Tests should be Install.
 
-- Excecutable needs a test to run and verify the output of Executable for it0001, it0002, it0007
+- Excecutable needs a test to run and verify the output of Executable for it0001, it0002, it0007, it0008
+  it0010
 
 - Resource directory seems in GIT while it should not, it should be generated in target
 
