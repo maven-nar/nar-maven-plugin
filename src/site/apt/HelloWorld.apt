@@ -19,15 +19,20 @@ There are also some unit test which are run and call the same method.
 
 	[]
 
-	[jni] A C routine called from Java and a Java unit test.
+	[jni] A C routine called from Java.
 	
 	[java-dep-jni] A java project which depends on "jni". 
 
-	[helloworldstaticjni] A C routine called from Java statically linked with the C-runtime library and a Java unit test.
+	[jni-static] A C routine called from Java statically linked with the C-runtime library.
 	
-	[hellothirdpartyjni] A third party JNI library called from Java.
-	The third party library is "jni" and is added as resource to the project in the 
-	form of a JNI library and a corresponding jar file. A Java unit test is provided.
+	[jni-3rdparty] A third party JNI library called from Java.
+	The third party library is the "jni" from the example above and is added as resource to the project in the 
+	form of a JNI library and a corresponding jar file. The "jni" lib is currently provided for the following
+	platforms:
+	
+	* x86_64-MacOSX-g++
+	
+	[]
 	
 	[]
 
