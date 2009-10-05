@@ -42,7 +42,7 @@ There are also some unit test which are run and call the same method.
 	[it0008-executable-dep-lib-shared] A C executable which depends on "lib-shared" and links dynamically 
 	with it. The executable is created and run.
 	
-	[helloworldsharedlibjni] A C routine called from Java, which depends on 
+	[it0009-jni-dep-lib-shared] A C routine called from Java, which depends on 
 	"lib-shared" and links dynamically with it.
 	
 	[]
