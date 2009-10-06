@@ -29,21 +29,35 @@ under the License.
     <relativePath>../it-parent/pom.xml</relativePath>
   </parent>
 
-  <artifactId>it0004-pom</artifactId>
-  <packaging>pom</packaging>
+  <artifactId>it0004-java-dep-jni</artifactId>
+  <packaging>nar</packaging>
   
-  <name>Maven NAR Java Class using JNI library</name>
-  <version>1.0-SNAPSHOT</version>
+  <name>Maven NAR Java Class Depends on JNI</name>
   <description>
-    Java class which depends on JNI implemented library.
+    Java class which depends on a separate JNI library
   </description>
   
   <build>
-    <defaultGoal>install</defaultGoal>
-  </build>  
-
-  <modules>
-    <module>java-dep-jni</module>
-    <module>jni</module>
-  </modules>
+    <defaultGoal>integration-test</defaultGoal>
+    <plugins>
+      <plugin>
+        <artifactId>maven-nar-plugin</artifactId>
+        <extensions>true</extensions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven.its.nar</groupId>
+      <artifactId>it0003-jni</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
 </project>

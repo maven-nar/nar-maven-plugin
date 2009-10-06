@@ -1,3 +1,5 @@
+package it0004.test;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,7 +21,7 @@
 
 import junit.framework.*;
 
-import com.mycompany.mypackage.HelloWorldJNI;
+import it0003.HelloWorldJNI;
 
 public class HelloWorldJavaDepJNITest
     extends TestCase
@@ -47,6 +49,6 @@ public class HelloWorldJavaDepJNITest
     {
         HelloWorldJNI app = new HelloWorldJNI();
 
-        this.assertEquals( "Hello NAR World!", app.sayHello() );
+        Assert.assertEquals( "Hello NAR World!", app.sayHello() );
     }
 }
