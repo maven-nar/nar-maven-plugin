@@ -1,3 +1,5 @@
+package it0003.test;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,19 +19,36 @@
  * under the License.
  */
 
-#include <stdio.h>
-#include "it0003_HelloWorldJNI.h"
-
-JNIEXPORT jstring JNICALL Java_it0003_HelloWorldJNI_sayHello( JNIEnv *env, jobject obj ) {
-	jstring value;           /* the return value */
-
-	char buf[40];            /* working buffer (really only need 20 ) */
+import it0003.HelloWorldJNI;
+import junit.framework.*;
 
 
-	sprintf ( buf, "%s", "Hello NAR World!" );
+public class HelloWorldJNITest
+    extends TestCase
+{
 
-	value = (*env)->NewStringUTF( env, buf );
+    public HelloWorldJNITest( String name )
+    {
+        super( name );
+    }
 
-	return value;
+    protected void setUp()
+        throws Exception
+    {
+        super.setUp();
+    }
+
+    protected void tearDown()
+        throws Exception
+    {
+        super.tearDown();
+    }
+
+    public void testNativeHelloWorldJNI()
+        throws Exception
+    {
+        HelloWorldJNI app = new HelloWorldJNI();
+
+        Assert.assertEquals( "Hello NAR World!", app.sayHello() );
+    }
 }
-

@@ -57,7 +57,7 @@ under the License.
           <libraries>
             <library>
               <type>jni</type>
-              <narSystemPackage>com.mycompany.mypackage</narSystemPackage>
+              <narSystemPackage>it0003</narSystemPackage>
               <linkCPP>false</linkCPP>
             </library>
           </libraries>
