@@ -1,4 +1,4 @@
-package com.mycompany.mypackage;
+package it0005;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

@@ -45,7 +45,7 @@ under the License.
 -->  
 
   <build>
-    <defaultGoal>integration-test</defaultGoal>
+    <defaultGoal>install</defaultGoal>
     <plugins>
       <plugin>
         <artifactId>maven-nar-plugin</artifactId>
@@ -55,7 +55,7 @@ under the License.
           <libraries>
             <library>
               <type>jni</type>
-              <narSystemPackage>com.mycompany.mypackage</narSystemPackage>
+              <narSystemPackage>it0005</narSystemPackage>
               <linkCPP>false</linkCPP>
             </library>
           </libraries>

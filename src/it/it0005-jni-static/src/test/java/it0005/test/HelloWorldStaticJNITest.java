@@ -1,3 +1,5 @@
+package it0005.test;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,9 +19,8 @@
  * under the License.
  */
 
-import junit.framework.*;
-
-import com.mycompany.mypackage.HelloWorldStaticJNI;
+import it0005.HelloWorldStaticJNI;
+import junit.framework.TestCase;
 
 public class HelloWorldStaticJNITest
     extends TestCase
