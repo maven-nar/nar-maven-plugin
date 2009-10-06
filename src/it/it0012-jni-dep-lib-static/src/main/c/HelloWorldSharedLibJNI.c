@@ -1,5 +1,3 @@
-package it0006.test;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,36 +17,20 @@ package it0006.test;
  * under the License.
  */
 
-import it0003.HelloWorldJNI;
-import junit.framework.Assert;
-import junit.framework.TestCase;
+#include <stdio.h>
+#include "HelloWorldLib.h"
 
-public class HelloThirdPartyJNITest
-    extends TestCase
-{
+#include "it0012_HelloWorldSharedLibJNI.h"
 
-    public HelloThirdPartyJNITest( String name )
-    {
-        super( name );
-    }
+JNIEXPORT jstring JNICALL Java_it0012_HelloWorldSharedLibJNI_sayHello( JNIEnv *env, jobject obj ) {
+	jstring value;           /* the return value */
 
-    protected void setUp()
-        throws Exception
-    {
-        super.setUp();
-    }
+	char buf[80];            /* working buffer (really only need 20 ) */
 
-    protected void tearDown()
-        throws Exception
-    {
-        super.tearDown();
-    }
+	sprintf ( buf, "%s", HelloWorldLib_sayHello());
 
-    public void testNativeHelloThirdPartyJNI()
-        throws Exception
-    {
-        HelloWorldJNI app = new HelloWorldJNI();
+	value = (*env)->NewStringUTF( env, buf );
 
-        Assert.assertEquals( "Hello NAR World!", app.sayHello() );
-    }
+	return value;
 }
+

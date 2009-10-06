@@ -29,21 +29,45 @@ under the License.
     <relativePath>../it-parent/pom.xml</relativePath>
   </parent>
 
-  <artifactId>it0012-pom</artifactId>
-  <packaging>pom</packaging>
-  
-  <name>Maven NAR JNI and Static Library</name>
+  <artifactId>it0012-jni-dep-lib-static</artifactId>
+  <packaging>nar</packaging>
+
+  <name>Maven NAR JNI</name>
   <version>1.0-SNAPSHOT</version>
   <description>
-    JNI depending on a static library.
+    JNI
   </description>
-  
-  <build>
-    <defaultGoal>install</defaultGoal>
-  </build>  
 
-  <modules>
-    <module>jni-dep-lib-static</module>
-    <module>lib-static</module>
-  </modules>
+  <build>
+    <defaultGoal>integration-test</defaultGoal>
+    <plugins>
+      <plugin>
+        <artifactId>maven-nar-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <libraries>
+            <library>
+              <type>jni</type>
+              <narSystemPackage>it0012</narSystemPackage>
+              <linkCPP>false</linkCPP>
+            </library>
+          </libraries>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven.its.nar</groupId>
+      <artifactId>it0010-lib-static</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
 </project>

@@ -1,3 +1,5 @@
+package it0012;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,36 +19,18 @@
  * under the License.
  */
 
-import junit.framework.*;
-
-import com.mycompany.mypackage.HelloWorldSharedLibJNI;
-
-public class HelloWorldSharedLibJNITest
-    extends TestCase
+public class HelloWorldSharedLibJNI
 {
-
-    public HelloWorldSharedLibJNITest( String name )
+    static
     {
-        super( name );
+        NarSystem.loadLibrary();
     }
 
-    protected void setUp()
-        throws Exception
-    {
-        super.setUp();
-    }
+    public native String sayHello();
 
-    protected void tearDown()
-        throws Exception
-    {
-        super.tearDown();
-    }
-
-    public void testNativeHelloWorldSharedLibJNI()
-        throws Exception
+    public static void main( String[] args )
     {
         HelloWorldSharedLibJNI app = new HelloWorldSharedLibJNI();
-
-        this.assertEquals( "Hello NAR LIB World!", app.sayHello() );
+        System.out.println( app.sayHello() );
     }
 }

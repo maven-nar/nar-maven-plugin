@@ -1,5 +1,4 @@
-package com.mycompany.mypackage;
-
+package it0012.test;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,18 +18,37 @@ package com.mycompany.mypackage;
  * under the License.
  */
 
-public class HelloWorldSharedLibJNI
+import it0012.HelloWorldSharedLibJNI;
+import junit.framework.Assert;
+import junit.framework.TestCase;
+
+
+public class HelloWorldSharedLibJNITest
+    extends TestCase
 {
-    static
+
+    public HelloWorldSharedLibJNITest( String name )
     {
-        NarSystem.loadLibrary();
+        super( name );
     }
 
-    public native String sayHello();
+    protected void setUp()
+        throws Exception
+    {
+        super.setUp();
+    }
 
-    public static void main( String[] args )
+    protected void tearDown()
+        throws Exception
+    {
+        super.tearDown();
+    }
+
+    public void testNativeHelloWorldSharedLibJNI()
+        throws Exception
     {
         HelloWorldSharedLibJNI app = new HelloWorldSharedLibJNI();
-        System.out.println( app.sayHello() );
+
+        Assert.assertEquals( "Hello NAR LIB World!", app.sayHello() );
     }
 }
