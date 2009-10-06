@@ -22,12 +22,12 @@ package org.apache.maven.plugin.nar;
 import java.util.List;
 
 /**
- *
  * @author Mark Donszelmann (Mark.Donszelmann@gmail.com)
  */
-public interface Executable {
+public interface Executable
+{
 
     public boolean shouldRun();
-    
-    public List/*<String>*/ getArgs();
+
+    public List/* <String> */getArgs();
 }

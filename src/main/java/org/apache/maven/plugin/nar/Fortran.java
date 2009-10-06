@@ -21,15 +21,19 @@ package org.apache.maven.plugin.nar;
 
 /**
  * Fortran compiler tag
- *
+ * 
  * @author Mark Donszelmann
  */
-public class Fortran extends Compiler {
-  
-	public Fortran() {
-	}
-	
-    public String getName() {
+public class Fortran
+    extends Compiler
+{
+
+    public Fortran()
+    {
+    }
+
+    public String getName()
+    {
         return "fortran";
-    }         
+    }
 }

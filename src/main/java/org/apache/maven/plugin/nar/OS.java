@@ -20,13 +20,16 @@ package org.apache.maven.plugin.nar;
  */
 
 /**
- * 
  * @author Mark Donszelmann
  */
-public interface OS {
+public interface OS
+{
 
-	public final String MACOSX = "MacOSX";
-	public final String WINDOWS = "Windows";
-	public final String LINUX = "Linux";
-	public final String SUNOS = "SunOS";
+    public final String MACOSX = "MacOSX";
+
+    public final String WINDOWS = "Windows";
+
+    public final String LINUX = "Linux";
+
+    public final String SUNOS = "SunOS";
 }

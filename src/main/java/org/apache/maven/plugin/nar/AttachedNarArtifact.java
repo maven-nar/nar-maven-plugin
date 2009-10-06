@@ -18,7 +18,7 @@ package org.apache.maven.plugin.nar;
  * specific language governing permissions and limitations
  * under the License.
  */
- 
+
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.handler.ArtifactHandler;
@@ -27,56 +27,71 @@ import org.apache.maven.artifact.versioning.VersionRange;
 
 /**
  * NarArtifact with its own type, classifier and artifactHandler.
- *
+ * 
  * @author Mark Donszelmann
  */
-public class AttachedNarArtifact extends DefaultArtifact {
+public class AttachedNarArtifact
+    extends DefaultArtifact
+{
 
-    public AttachedNarArtifact(String groupId, String artifactId, String version, String scope, 
-                       String type, String classifier, boolean optional) throws InvalidVersionSpecificationException {
-        super(groupId, artifactId, VersionRange.createFromVersionSpec(version), scope, 
-              type, classifier, null, optional);
-        setArtifactHandler(new Handler(classifier));
+    public AttachedNarArtifact( String groupId, String artifactId, String version, String scope, String type,
+                                String classifier, boolean optional )
+        throws InvalidVersionSpecificationException
+    {
+        super( groupId, artifactId, VersionRange.createFromVersionSpec( version ), scope, type, classifier, null,
+               optional );
+        setArtifactHandler( new Handler( classifier ) );
     }
 
-    public AttachedNarArtifact(Artifact parent, String type, String classifier) {
-        super(parent.getGroupId(), parent.getArtifactId(), parent.getVersionRange(), parent.getScope(), 
-              type, classifier, null, parent.isOptional());
-        setArtifactHandler(new Handler(classifier));
+    public AttachedNarArtifact( Artifact parent, String type, String classifier )
+    {
+        super( parent.getGroupId(), parent.getArtifactId(), parent.getVersionRange(), parent.getScope(), type,
+               classifier, null, parent.isOptional() );
+        setArtifactHandler( new Handler( classifier ) );
     }
-     
-    private class Handler implements ArtifactHandler {
+
+    private class Handler
+        implements ArtifactHandler
+    {
         private String classifier;
-        
-        Handler(String classifier) {
+
+        Handler( String classifier )
+        {
             this.classifier = classifier;
         }
-        
-        public String getExtension() {
+
+        public String getExtension()
+        {
             return "nar";
         }
 
-        public String getDirectory() {
+        public String getDirectory()
+        {
             return "nars";
         }
 
-        public String getClassifier() {
+        public String getClassifier()
+        {
             return classifier;
         }
 
-        public String getPackaging() {
+        public String getPackaging()
+        {
             return "nar";
         }
 
-        public boolean isIncludesDependencies() {
+        public boolean isIncludesDependencies()
+        {
             return false;
         }
 
-        public String getLanguage() {
+        public String getLanguage()
+        {
             return "native";
         }
 
-        public boolean isAddedToClasspath() {
+        public boolean isAddedToClasspath()
+        {
             return false;
         }
     }

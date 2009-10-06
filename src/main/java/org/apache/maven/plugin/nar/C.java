@@ -21,15 +21,19 @@ package org.apache.maven.plugin.nar;
 
 /**
  * C compiler tag
- *
+ * 
  * @author Mark Donszelmann
  */
-public class C extends Compiler { 
-    
-	public C() {
-	}
-	
-    public String getName() {
+public class C
+    extends Compiler
+{
+
+    public C()
+    {
+    }
+
+    public String getName()
+    {
         return "c";
-    }   
+    }
 }

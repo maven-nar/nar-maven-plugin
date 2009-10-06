@@ -23,21 +23,24 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 
 /**
- * 
  * @author Mark Donszelmann
  */
-public class NarArtifact extends DefaultArtifact {
+public class NarArtifact
+    extends DefaultArtifact
+{
 
     private NarInfo narInfo;
 
-    public NarArtifact(Artifact dependency, NarInfo narInfo) {
-        super(dependency.getGroupId(), dependency.getArtifactId(), dependency.getVersionRange(), 
-              dependency.getScope(), dependency.getType(), dependency.getClassifier(), 
-              dependency.getArtifactHandler(), dependency.isOptional());
+    public NarArtifact( Artifact dependency, NarInfo narInfo )
+    {
+        super( dependency.getGroupId(), dependency.getArtifactId(), dependency.getVersionRange(),
+               dependency.getScope(), dependency.getType(), dependency.getClassifier(),
+               dependency.getArtifactHandler(), dependency.isOptional() );
         this.narInfo = narInfo;
     }
-    
-    public NarInfo getNarInfo() {
+
+    public NarInfo getNarInfo()
+    {
         return narInfo;
     }
 }

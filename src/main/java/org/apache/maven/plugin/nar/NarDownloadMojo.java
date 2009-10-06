@@ -28,62 +28,68 @@ import org.apache.maven.plugin.MojoFailureException;
 
 /**
  * Downloads any dependent NAR files. This includes the noarch and aol type NAR files.
- *
+ * 
  * @goal nar-download
  * @phase generate-sources
  * @requiresProject
  * @requiresDependencyResolution
  * @author Mark Donszelmann
  */
-public class NarDownloadMojo extends AbstractDependencyMojo {
+public class NarDownloadMojo
+    extends AbstractDependencyMojo
+{
 
-	/**
-	 * Artifact resolver, needed to download source jars for inclusion in
-	 * classpath.
-	 * 
-	 * @component role="org.apache.maven.artifact.resolver.ArtifactResolver"
-	 * @required
-	 * @readonly
-	 */
-	private ArtifactResolver artifactResolver;
+    /**
+     * Artifact resolver, needed to download source jars for inclusion in classpath.
+     * 
+     * @component role="org.apache.maven.artifact.resolver.ArtifactResolver"
+     * @required
+     * @readonly
+     */
+    private ArtifactResolver artifactResolver;
 
-	/**
-	 * Remote repositories which will be searched for source attachments.
-	 * 
-	 * @parameter expression="${project.remoteArtifactRepositories}"
-	 * @required
-	 * @readonly
-	 */
-	private List remoteArtifactRepositories;
+    /**
+     * Remote repositories which will be searched for source attachments.
+     * 
+     * @parameter expression="${project.remoteArtifactRepositories}"
+     * @required
+     * @readonly
+     */
+    private List remoteArtifactRepositories;
 
-	/**
-	 * List of classifiers which you want download. Example ppc-MacOSX-g++,
-	 * x86-Windows-msvc, i386-Linux-g++.
-	 * 
-	 * @parameter expression=""
-	 */
-	private List classifiers;
+    /**
+     * List of classifiers which you want download. Example ppc-MacOSX-g++, x86-Windows-msvc, i386-Linux-g++.
+     * 
+     * @parameter expression=""
+     */
+    private List classifiers;
 
-	public void execute() throws MojoExecutionException, MojoFailureException {
-		getLog().info("Using AOL: "+getAOL());
-		
-		if (shouldSkip()) {
-    		getLog().info("***********************************************************************");
-    		getLog().info("NAR Plugin SKIPPED, no NAR Libraries will be produced.");
-    		getLog().info("***********************************************************************");
-    		
-    		return;
-		}
-		
-		List narArtifacts = getNarManager().getNarDependencies("compile");
-		if (classifiers == null) {
-			getNarManager().downloadAttachedNars(narArtifacts, remoteArtifactRepositories,
-					artifactResolver, null);
-		} else {
-			for (Iterator j = classifiers.iterator(); j.hasNext();) {
-				getNarManager().downloadAttachedNars(narArtifacts, remoteArtifactRepositories,
-						artifactResolver, (String) j.next());
-			}
-		}
-	}
+    public void execute()
+        throws MojoExecutionException, MojoFailureException
+    {
+        getLog().info( "Using AOL: " + getAOL() );
+
+        if ( shouldSkip() )
+        {
+            getLog().info( "***********************************************************************" );
+            getLog().info( "NAR Plugin SKIPPED, no NAR Libraries will be produced." );
+            getLog().info( "***********************************************************************" );
+
+            return;
+        }
+
+        List narArtifacts = getNarManager().getNarDependencies( "compile" );
+        if ( classifiers == null )
+        {
+            getNarManager().downloadAttachedNars( narArtifacts, remoteArtifactRepositories, artifactResolver, null );
+        }
+        else
+        {
+            for ( Iterator j = classifiers.iterator(); j.hasNext(); )
+            {
+                getNarManager().downloadAttachedNars( narArtifacts, remoteArtifactRepositories, artifactResolver,
+                                                      (String) j.next() );
+            }
+        }
+    }
 }

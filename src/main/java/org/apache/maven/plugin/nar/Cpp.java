@@ -21,14 +21,18 @@ package org.apache.maven.plugin.nar;
 
 /**
  * Cpp compiler tag
- *
+ * 
  * @author Mark Donszelmann
  */
-public class Cpp extends Compiler {
-	public Cpp() {
-	}
-	
-    public String getName() {
+public class Cpp
+    extends Compiler
+{
+    public Cpp()
+    {
+    }
+
+    public String getName()
+    {
         return "cpp";
-    }   
+    }
 }

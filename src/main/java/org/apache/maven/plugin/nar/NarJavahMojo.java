@@ -23,19 +23,23 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**
- * Compiles class files into c/c++ headers using "javah". 
- * Any class file that contains methods that were declared
+ * Compiles class files into c/c++ headers using "javah". Any class file that contains methods that were declared
  * "native" will be run through javah.
- *
+ * 
  * @goal nar-javah
  * @phase compile
  * @author Mark Donszelmann
  */
-public class NarJavahMojo extends AbstractCompileMojo {
-    
-    public void execute() throws MojoExecutionException, MojoFailureException {
-    	if (shouldSkip()) return;
-    	
+public class NarJavahMojo
+    extends AbstractCompileMojo
+{
+
+    public void execute()
+        throws MojoExecutionException, MojoFailureException
+    {
+        if ( shouldSkip() )
+            return;
+
         getJavah().execute();
-    }    
+    }
 }

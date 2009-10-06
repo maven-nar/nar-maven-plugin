@@ -25,54 +25,52 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
-
 /**
  * @author Mark Donszelmann
  */
-public abstract class AbstractNarMojo extends AbstractMojo implements NarConstants {
-    
+public abstract class AbstractNarMojo
+    extends AbstractMojo
+    implements NarConstants
+{
+
     /**
      * Skip running of NAR plugins (any) altogether.
      * 
      * @parameter expression="${nar.skip}" default-value="false"
      */
     private boolean skip;
-    
+
     /**
-     * The Architecture for the nar,
-     * Some choices are: "x86", "i386", "amd64", "ppc", "sparc", ...
-     * Defaults to a derived value from ${os.arch}
-     *
+     * The Architecture for the nar, Some choices are: "x86", "i386", "amd64", "ppc", "sparc", ... Defaults to a derived
+     * value from ${os.arch}
+     * 
      * @parameter expression="${os.arch}"
      * @required
      */
     private String architecture;
 
     /**
-     * The Operating System for the nar.
-     * Some choices are: "Windows", "Linux", "MacOSX", "SunOS", ...
-     * Defaults to a derived value from ${os.name}
-     * FIXME table missing
-     *
+     * The Operating System for the nar. Some choices are: "Windows", "Linux", "MacOSX", "SunOS", ... Defaults to a
+     * derived value from ${os.name} FIXME table missing
+     * 
      * @parameter expression=""
      */
     private String os;
 
     /**
-     * Architecture-OS-Linker name.
-     * Defaults to: arch-os-linker.
-     *
+     * Architecture-OS-Linker name. Defaults to: arch-os-linker.
+     * 
      * @parameter expression=""
      */
     private String aol;
 
     /**
      * Linker
-     *
+     * 
      * @parameter expression=""
      */
     private Linker linker;
-     
+
     /**
      * @parameter expression="${project.build.directory}"
      * @readonly
@@ -86,61 +84,70 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
     private String finalName;
 
     /**
-     * Target directory for Nar file construction
-     * Defaults to "${project.build.directory}/nar" for "nar-compile" goal
+     * Target directory for Nar file construction Defaults to "${project.build.directory}/nar" for "nar-compile" goal
      * Defaults to "${project.build.directory}/test-nar" for "nar-testCompile" goal
-     *
+     * 
      * @parameter expression=""
      */
     private File targetDirectory;
-     
+
     /**
      * @parameter expression="${project}"
      * @readonly
      * @required
      */
     private MavenProject mavenProject;
- 
-    
-    protected boolean shouldSkip() {
-    	return skip;
+
+    protected boolean shouldSkip()
+    {
+        return skip;
     }
-    
-    protected String getArchitecture() {
-    	architecture = NarUtil.getArchitecture(architecture);
+
+    protected String getArchitecture()
+    {
+        architecture = NarUtil.getArchitecture( architecture );
         return architecture;
     }
-    
-    protected String getOS() {
-    	os = NarUtil.getOS(os);    	
+
+    protected String getOS()
+    {
+        os = NarUtil.getOS( os );
         return os;
     }
-    
-    protected AOL getAOL() throws MojoFailureException {
-    	return NarUtil.getAOL(architecture, os, linker, aol);    	
+
+    protected AOL getAOL()
+        throws MojoFailureException
+    {
+        return NarUtil.getAOL( architecture, os, linker, aol );
     }
-    
-    protected Linker getLinker() {
-    	linker = NarUtil.getLinker(linker);
+
+    protected Linker getLinker()
+    {
+        linker = NarUtil.getLinker( linker );
         return linker;
     }
-    
-    protected File getOutputDirectory() {
+
+    protected File getOutputDirectory()
+    {
         return outputDirectory;
     }
-   
-    protected String getFinalName() {
+
+    protected String getFinalName()
+    {
         return finalName;
     }
-    
-    protected File getTargetDirectory() {
-        if (targetDirectory == null) {
-            targetDirectory = new File(mavenProject.getBuild().getDirectory(), "nar");
+
+    protected File getTargetDirectory()
+    {
+        if ( targetDirectory == null )
+        {
+            targetDirectory = new File( mavenProject.getBuild().getDirectory(), "nar" );
         }
         return targetDirectory;
     }
-              
-    protected MavenProject getMavenProject() {
+
+    protected MavenProject getMavenProject()
+    {
         return mavenProject;
     }
 }

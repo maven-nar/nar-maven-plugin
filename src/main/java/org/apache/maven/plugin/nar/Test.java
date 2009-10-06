@@ -26,60 +26,62 @@ import org.apache.maven.plugin.MojoFailureException;
 
 /**
  * Sets up a test to create
- *
+ * 
  * @author Mark Donszelmann
  */
-public class Test implements Executable {
+public class Test
+    implements Executable
+{
 
     /**
      * Name of the test to create
-     *
+     * 
      * @required
      * @parameter expression=""
      */
     protected String name = null;
 
     /**
-     * Type of linking used for this test
-     * Possible choices are: "shared" or "static".
-     * Defaults to "shared".
+     * Type of linking used for this test Possible choices are: "shared" or "static". Defaults to "shared".
      * 
      * @parameter expression=""
      */
     protected String link = Library.SHARED;
 
     /**
-     * When true run this test.
-     * Defaults to true;
+     * When true run this test. Defaults to true;
      * 
      * @parameter expresssion=""
      */
-	protected boolean run=true;
-	
-	/**
-	 * Arguments to be used for running this test.
-	 * Defaults to empty list. This option is 
-	 * only used if run=true.
-	 * 
-	 * @parameter expression=""
-	 */
-    protected List/*<String>*/ args = new ArrayList();
-    
-    public String getName() throws MojoFailureException {
-        if (name == null) throw new MojoFailureException("NAR: Please specify <Name> as part of <Test>");
+    protected boolean run = true;
+
+    /**
+     * Arguments to be used for running this test. Defaults to empty list. This option is only used if run=true.
+     * 
+     * @parameter expression=""
+     */
+    protected List/* <String> */args = new ArrayList();
+
+    public String getName()
+        throws MojoFailureException
+    {
+        if ( name == null )
+            throw new MojoFailureException( "NAR: Please specify <Name> as part of <Test>" );
         return name;
     }
-    
-    public String getLink() {
+
+    public String getLink()
+    {
         return link;
     }
-    
-    public boolean shouldRun() {
-    	return run;
+
+    public boolean shouldRun()
+    {
+        return run;
     }
-    
-    public List/*<String>*/ getArgs() {
-    	return args;
+
+    public List/* <String> */getArgs()
+    {
+        return args;
     }
 }
-

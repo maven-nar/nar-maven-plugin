@@ -25,7 +25,9 @@ import org.apache.maven.plugin.MojoFailureException;
 /**
  * @author Mark Donszelmann
  */
-public abstract class AbstractDependencyMojo extends AbstractNarMojo {
+public abstract class AbstractDependencyMojo
+    extends AbstractNarMojo
+{
 
     /**
      * @parameter expression="${localRepository}"
@@ -34,11 +36,15 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
      */
     private ArtifactRepository localRepository;
 
-    protected ArtifactRepository getLocalRepository() {
+    protected ArtifactRepository getLocalRepository()
+    {
         return localRepository;
     }
-	
-	protected NarManager getNarManager() throws MojoFailureException {
-		return new NarManager(getLog(), getLocalRepository(), getMavenProject(), getArchitecture(), getOS(), getLinker());
-	}
+
+    protected NarManager getNarManager()
+        throws MojoFailureException
+    {
+        return new NarManager( getLog(), getLocalRepository(), getMavenProject(), getArchitecture(), getOS(),
+                               getLinker() );
+    }
 }

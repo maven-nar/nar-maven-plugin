@@ -19,39 +19,46 @@ package org.apache.maven.plugin.nar;
  * under the License.
  */
 
-
 import org.apache.maven.artifact.handler.ArtifactHandler;
 
 /**
- * 
  * @author Mark Donszelmann
  */
-public class NarArtifactHandler implements ArtifactHandler {
-	public String getPackaging() {
-		return "nar";
-	}
+public class NarArtifactHandler
+    implements ArtifactHandler
+{
+    public String getPackaging()
+    {
+        return "nar";
+    }
 
-	public String getClassifier() {
-		return null;
-	}
+    public String getClassifier()
+    {
+        return null;
+    }
 
-	public String getDirectory() {
-		return getExtension() + "s";
-	}
+    public String getDirectory()
+    {
+        return getExtension() + "s";
+    }
 
-	public String getExtension() {
-		return "jar";
-	}
+    public String getExtension()
+    {
+        return "jar";
+    }
 
-	public String getLanguage() {
-		return "java";
-	}
+    public String getLanguage()
+    {
+        return "java";
+    }
 
-	public boolean isAddedToClasspath() {
-		return true;
-	}
+    public boolean isAddedToClasspath()
+    {
+        return true;
+    }
 
-	public boolean isIncludesDependencies() {
-		return false;
-	}
+    public boolean isIncludesDependencies()
+    {
+        return false;
+    }
 }
