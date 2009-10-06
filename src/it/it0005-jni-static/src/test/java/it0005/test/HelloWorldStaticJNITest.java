@@ -20,6 +20,7 @@ package it0005.test;
  */
 
 import it0005.HelloWorldStaticJNI;
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class HelloWorldStaticJNITest
@@ -48,6 +49,6 @@ public class HelloWorldStaticJNITest
     {
         HelloWorldStaticJNI app = new HelloWorldStaticJNI();
 
-        this.assertEquals( "Hello Static NAR World!", app.sayHello() );
+        Assert.assertEquals( "Hello Static NAR World!", app.sayHello() );
     }
 }

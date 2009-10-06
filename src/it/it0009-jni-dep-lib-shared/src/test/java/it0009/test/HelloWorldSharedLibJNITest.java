@@ -1,3 +1,5 @@
+package it0009.test;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,15 +19,16 @@
  * under the License.
  */
 
-import junit.framework.*;
+import it0009.HelloWorldSharedLibJNI;
+import junit.framework.Assert;
+import junit.framework.TestCase;
 
-import com.mycompany.mypackage.HelloWorldJNI;
 
-public class HelloThirdPartyJNITest
+public class HelloWorldSharedLibJNITest
     extends TestCase
 {
 
-    public HelloThirdPartyJNITest( String name )
+    public HelloWorldSharedLibJNITest( String name )
     {
         super( name );
     }
@@ -42,11 +45,11 @@ public class HelloThirdPartyJNITest
         super.tearDown();
     }
 
-    public void testNativeHelloThirdPartyJNI()
+    public void testNativeHelloWorldSharedLibJNI()
         throws Exception
     {
-        HelloWorldJNI app = new HelloWorldJNI();
+        HelloWorldSharedLibJNI app = new HelloWorldSharedLibJNI();
 
-        this.assertEquals( "Hello NAR World!", app.sayHello() );
+        Assert.assertEquals( "Hello NAR LIB World!", app.sayHello() );
     }
 }

@@ -29,21 +29,45 @@ under the License.
     <relativePath>../it-parent/pom.xml</relativePath>
   </parent>
 
-  <artifactId>it0009-pom</artifactId>
-  <packaging>pom</packaging>
+  <artifactId>it0009-jni-dep-lib-shared</artifactId>
+  <packaging>nar</packaging>
   
   <name>Maven NAR JNI and Shared Library</name>
   <version>1.0-SNAPSHOT</version>
   <description>
     JNI depending on a shared library.
   </description>
-  
-  <build>
-    <defaultGoal>install</defaultGoal>
-  </build>  
 
-  <modules>
-    <module>jni-dep-lib-shared</module>
-    <module>lib-shared</module>
-  </modules>
+  <build>
+    <defaultGoal>integration-test</defaultGoal>
+    <plugins>
+      <plugin>
+        <artifactId>maven-nar-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <libraries>
+            <library>
+              <type>jni</type>
+              <narSystemPackage>it0009</narSystemPackage>
+              <linkCPP>false</linkCPP>
+            </library>
+          </libraries>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven.its.nar</groupId>
+      <artifactId>it0007-lib-shared</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
 </project>
