@@ -1,6 +1,7 @@
 .classpath
 .project
 .settings
+bin
 target
 pom.xml.releaseBackup
 release.properties

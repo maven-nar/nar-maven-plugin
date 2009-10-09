@@ -309,9 +309,11 @@ public class LibrarySet extends DataType {
 		           } else {
 		               DirectoryScanner scanner = localSet.getDirectoryScanner(project);
 		               File basedir = scanner.getBasedir();
+		               System.err.println("CPP BaseDir: "+basedir);
 		               String[] files = scanner.getIncludedFiles();
                        matches += files.length;
 		               for (int k = 0; k < files.length; k++) {
+		                   System.err.println("CPP File: "+files[k]);
 		                   visitor.visit(basedir, files[k]);
 		               }
 		           }
