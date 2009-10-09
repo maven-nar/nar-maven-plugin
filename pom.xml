@@ -140,6 +140,9 @@
                 <setupInclude>it0007-lib-shared/pom.xml</setupInclude>
                 <setupInclude>it0010-lib-static/pom.xml</setupInclude>
               </setupIncludes>
+              <pomIncludes>
+              	<pomInclude>*/pom.xml</pomInclude>
+              </pomIncludes>
               <pomExcludes>
                 <pomExclude>it-parent/**</pomExclude>
               </pomExcludes>
