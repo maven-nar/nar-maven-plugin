@@ -10,6 +10,7 @@ and cpptasks-parallel.
 - Removed dependencies on plexus (where possible) from pom.xml.
 - Added x86_64 for MacOS X into aol.properties
 - Moved tests all under src/it, to be run with -Prun-its
+- Added -fPIC option to amd64 compilers
 
 Bugs
 
