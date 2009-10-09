@@ -135,6 +135,11 @@
               <!-- FAILS to run, see ReleaseNotes
               <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
                -->
+              <setupIncludes>
+                <setupInclude>it0003-jni/pom.xml</setupInclude>
+                <setupInclude>it0007-lib-shared/pom.xml</setupInclude>
+                <setupInclude>it0010-lib-static/pom.xml</setupInclude>
+              </setupIncludes>
               <pomExcludes>
                 <pomExclude>it-parent/**</pomExclude>
               </pomExcludes>
