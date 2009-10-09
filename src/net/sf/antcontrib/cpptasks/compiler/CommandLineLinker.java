@@ -337,7 +337,9 @@ public abstract class CommandLineLinker extends AbstractLinker
       String relativePath = CUtil.getRelativePath(outputDir,
         new File(sourceFile));
 // FREEHEP, return the shortest
-      return quoteFilename(buf, sourceFile.length() > relativePath.length() ? relativePath : sourceFile);
+//      return quoteFilename(buf, sourceFile.length() > relativePath.length() ? relativePath : sourceFile);
+// FREEHEP trying with always absolute paths...
+      return quoteFilename(buf, sourceFile);
     }
 
     /**

@@ -1,5 +1,9 @@
 *** ALL Changes marked with FREEHEP or BEGINFREEHEP-ENDFREEHEP.
 
+* cpptasks-1.0-beta-4-parallel-5-SNAPSHOT
+
+- [src/net/sf/antcontrib/cpptasks/compiler/CommandLineLinker] use absolute paths for all paths to overcome windows file length limit.
+
 * cpptasks-1.0-beta-4-parallel-4
 
 - Added fake <distributionManagement> section to pom to avoid MDEPLOY-50. One can now deploy
@@ -30,7 +34,7 @@
 - [src/net/sf/antcontrib/cpptasks/gcc/GccCompatibleCCompiler.java] added missing code for -fno-exceptions
 - [src/net/sf/antcontrib/cpptasks/CCTask.java] added log statement to identify linker and compiler
 - [src/net/sf/antcontrib/cpptasks/gcc/GppLinker.java] g++ linking now includes option -fexceptions
-- [src/net/sf/antcontrib/cpptasks/CommandLineLinker] use absolute paths for filenames if they are shorter than relative paths to overcome windows file length limit.
+- [src/net/sf/antcontrib/cpptasks/compiler/CommandLineLinker] use absolute paths for filenames if they are shorter than relative paths to overcome windows file length limit.
 - [src/net/sf/antcontrib/cpptasks/CCTask.java] added thread to keep progress
 
 ** Parallel running change
