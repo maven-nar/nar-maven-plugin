@@ -31,7 +31,7 @@ under the License.
     </links>
 
     <menu name="Overview">
-      <item name="Introduction" href="intro.html"/>
+      <item name="Introduction" href="index.html"/>
       <item name="Philosophy" href="philosophy.html"/>
       <item name="Presentation (ppt)" href="NARPlugin.ppt"/>
     </menu>
