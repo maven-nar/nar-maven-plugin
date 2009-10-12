@@ -47,7 +47,7 @@
   </scm>
   <issueManagement>
     <system>jira</system>
-    <url>http://bugs.freehep.org/browse/NARPLUGIN</url>
+    <url>http://issues.sonatype.org/browse/NAR</url>
   </issueManagement>
 
   <properties>
