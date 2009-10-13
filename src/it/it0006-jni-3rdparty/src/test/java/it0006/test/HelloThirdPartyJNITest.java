@@ -20,30 +20,12 @@ package it0006.test;
  */
 
 import it0003.HelloWorldJNI;
-import junit.framework.Assert;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class HelloThirdPartyJNITest
-    extends TestCase
 {
-
-    public HelloThirdPartyJNITest( String name )
-    {
-        super( name );
-    }
-
-    protected void setUp()
-        throws Exception
-    {
-        super.setUp();
-    }
-
-    protected void tearDown()
-        throws Exception
-    {
-        super.tearDown();
-    }
-
+    @Test
     public void testNativeHelloThirdPartyJNI()
         throws Exception
     {

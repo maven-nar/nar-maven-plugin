@@ -20,31 +20,12 @@ package it0009.test;
  */
 
 import it0009.HelloWorldSharedLibJNI;
-import junit.framework.Assert;
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Test;
 
 public class HelloWorldSharedLibJNITest
-    extends TestCase
 {
-
-    public HelloWorldSharedLibJNITest( String name )
-    {
-        super( name );
-    }
-
-    protected void setUp()
-        throws Exception
-    {
-        super.setUp();
-    }
-
-    protected void tearDown()
-        throws Exception
-    {
-        super.tearDown();
-    }
-
+    @Test
     public void testNativeHelloWorldSharedLibJNI()
         throws Exception
     {

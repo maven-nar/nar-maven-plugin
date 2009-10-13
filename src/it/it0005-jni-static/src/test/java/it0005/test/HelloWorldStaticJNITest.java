@@ -20,30 +20,12 @@ package it0005.test;
  */
 
 import it0005.HelloWorldStaticJNI;
-import junit.framework.Assert;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class HelloWorldStaticJNITest
-    extends TestCase
 {
-
-    public HelloWorldStaticJNITest( String name )
-    {
-        super( name );
-    }
-
-    protected void setUp()
-        throws Exception
-    {
-        super.setUp();
-    }
-
-    protected void tearDown()
-        throws Exception
-    {
-        super.tearDown();
-    }
-
+    @Test
     public void testNativeHelloWorldJNI()
         throws Exception
     {

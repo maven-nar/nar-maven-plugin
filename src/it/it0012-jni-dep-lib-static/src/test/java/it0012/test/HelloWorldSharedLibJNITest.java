@@ -1,4 +1,5 @@
 package it0012.test;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,31 +20,12 @@ package it0012.test;
  */
 
 import it0012.HelloWorldSharedLibJNI;
-import junit.framework.Assert;
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Test;
 
 public class HelloWorldSharedLibJNITest
-    extends TestCase
 {
-
-    public HelloWorldSharedLibJNITest( String name )
-    {
-        super( name );
-    }
-
-    protected void setUp()
-        throws Exception
-    {
-        super.setUp();
-    }
-
-    protected void tearDown()
-        throws Exception
-    {
-        super.tearDown();
-    }
-
+    @Test
     public void testNativeHelloWorldSharedLibJNI()
         throws Exception
     {

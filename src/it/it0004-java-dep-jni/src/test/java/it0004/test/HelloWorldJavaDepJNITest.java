@@ -19,31 +19,13 @@ package it0004.test;
  * under the License.
  */
 
-import junit.framework.*;
-
 import it0003.HelloWorldJNI;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class HelloWorldJavaDepJNITest
-    extends TestCase
 {
-
-    public HelloWorldJavaDepJNITest( String name )
-    {
-        super( name );
-    }
-
-    protected void setUp()
-        throws Exception
-    {
-        super.setUp();
-    }
-
-    protected void tearDown()
-        throws Exception
-    {
-        super.tearDown();
-    }
-
+    @Test
     public void testNativeHelloWorldJavaDepJNI()
         throws Exception
     {

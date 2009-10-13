@@ -20,35 +20,16 @@ package it0003.test;
  */
 
 import it0003.HelloWorldJNI;
-import junit.framework.*;
-
+import org.junit.Assert;
+import org.junit.Test;
 
 public class HelloWorldJNITest
-    extends TestCase
 {
-
-    public HelloWorldJNITest( String name )
-    {
-        super( name );
-    }
-
-    protected void setUp()
-        throws Exception
-    {
-        super.setUp();
-    }
-
-    protected void tearDown()
-        throws Exception
-    {
-        super.tearDown();
-    }
-
+    @Test
     public void testNativeHelloWorldJNI()
         throws Exception
     {
         HelloWorldJNI app = new HelloWorldJNI();
-
         Assert.assertEquals( "Hello NAR World!", app.sayHello() );
     }
 }
