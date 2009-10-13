@@ -2,21 +2,22 @@ This plugin eventually replaces the freehep-nar-plugin.
 
 For now, see:
 
-Documentation (old):
+Documentation:
 
-- http://java.freehep.org/freehep-nar-plugin/intro.html
+- http://duns.github.com/maven-nar-plugin
 
-Issues (new):
+Issues:
 
 - https://issues.sonatype.org/browse/NAR
 
-SCM (new):
+SCM:
 
 - http://github.com/duns/maven-nar-plugin
 - http://github.com/duns/cpptasks-parallel
 
-SCM (old):
+Old:
 
+- http://java.freehep.org/freehep-nar-plugin/intro.html
 - http://github.com/duns/freehep-nar-plugin
 
 

@@ -34,7 +34,15 @@
   <description>
     This plugin compiles native code and publishes native artifacts in the for of nar files.
   </description>
-  <url>http://java.freehep.org/freehep-nar-plugin/intro.html</url>
+  <url>http://duns.github.com/maven-nar-plugin/</url>
+
+  <!-- temporarily until we have a fixed site -->
+  <distributionManagement>
+    <site>
+      <id>local</id>
+      <url>file:///Users/duns/sonatype/git/maven-nar-plugin-site</url>
+    </site>
+  </distributionManagement>
 
   <prerequisites>
     <maven>2.0.6</maven>
@@ -116,6 +124,15 @@
   <build>
     <defaultGoal>install</defaultGoal>
   </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>  
 
   <profiles>
     <profile>

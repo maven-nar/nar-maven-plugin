@@ -21,7 +21,7 @@ under the License.
     <bannerLeft>
         <name>Maven NAR Plugin</name>
         <src>http://maven.apache.org/images/apache-maven-project.png</src>
-        <href>http://java.freehep.org/freehep-nar-plugin</href>
+        <href>http://duns.github.com/maven-nar-plugin/</href>
     </bannerLeft>
       
   <body>
@@ -47,7 +47,7 @@ under the License.
    
     <menu name="Developer Info">
       <item name="NAR Dependencies" href="narDependencies.html"/>
-      <item name="Bug Reports" href="http://bugs.freehep.org/browse/NARPLUGIN"/>
+      <item name="Bug Reports" href="https://issues.sonatype.org/browse/NAR"/>
       <item name="Forum" href="http://forum.freehep.org/index.php?t=threadt&amp;frm_id=14&amp;rid=4"/>
       <item name="APIDocs" href="apidocs/index.html"/>
       <item name="NAR Library" href="narLibrary.html"/>
