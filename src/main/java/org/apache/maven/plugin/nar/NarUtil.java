@@ -68,11 +68,12 @@ public class NarUtil
         if ( os == null )
         {
             os = System.getProperty( "os.name" );
-            if ( os.startsWith( "Windows" ) )
+            String name = os.toLowerCase();
+            if ( name.startsWith( "windows" ) )
                 os = OS.WINDOWS;
-            if ( os.startsWith( "windows" ) )
-                os = OS.WINDOWS;
-            if ( os.equals( "Mac OS X" ) )
+            if ( name.startsWith( "linux" ) )
+                os = OS.LINUX;
+            if ( name.equals( "mac os x" ) )
                 os = OS.MACOSX;
         }
         return os;
@@ -128,7 +129,7 @@ public class NarUtil
         if ( javaHome == null )
         {
             javaHome = new File( System.getProperty( "java.home" ) );
-            if ( !getOS( os ).equals( "MacOSX" ) )
+            if ( !getOS( os ).equals( OS.MACOSX ) )
             {
                 javaHome = new File( javaHome, ".." );
             }

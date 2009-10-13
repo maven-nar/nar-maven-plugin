@@ -381,7 +381,7 @@ public class NarManager
                 try
                 {
                     unpackNar( manager, file, narLocation );
-                    if ( !NarUtil.getOS( os ).equals( "Windows" ) )
+                    if ( !NarUtil.getOS( os ).equals( OS.WINDOWS ) )
                     {
                         NarUtil.makeExecutable( new File( narLocation, "bin/" + defaultAOL ), log );
                         // FIXME clumsy
