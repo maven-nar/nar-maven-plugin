@@ -26,7 +26,9 @@ standard maven goals) attached to them. The order is left to right, top to botto
 *------------------------+-------------------------------------------+ 
 | process-test-resources | testResources                             |
 *------------------------+-------------------------------------------+ 
-| test-compile           | testCompile, <<nar-testCompile>>          |
+| test-compile           | testCompile                               |
+*------------------------+-------------------------------------------+ 
+| process-test-classes   | <<nar-testCompile>>                       |
 *------------------------+-------------------------------------------+ 
 | test                   | test, <<nar-test>>                        |
 *------------------------+-------------------------------------------+ 

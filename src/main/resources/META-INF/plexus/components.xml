@@ -40,9 +40,8 @@ under the License.
                     <process-test-sources></process-test-sources>
                     <generate-test-resources></generate-test-resources>
                     <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:testResources</process-test-resources>
-                    <test-compile>org.apache.maven.plugins:maven-compiler-plugin:testCompile,
-                                  org.apache.maven.plugins:maven-nar-plugin:nar-testCompile</test-compile>
-                    <process-test-classes></process-test-classes>
+                    <test-compile>org.apache.maven.plugins:maven-compiler-plugin:testCompile</test-compile>
+                    <process-test-classes>org.apache.maven.plugins:maven-nar-plugin:nar-testCompile</process-test-classes>
                     <test>org.apache.maven.plugins:maven-surefire-plugin:test,
                           org.apache.maven.plugins:maven-nar-plugin:nar-test</test>
                     <package>org.apache.maven.plugins:maven-nar-plugin:nar-package,
