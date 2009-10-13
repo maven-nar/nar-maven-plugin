@@ -60,11 +60,20 @@ import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Run integration tests using Surefire. This goal was copied from Maven's surefire plugin to accomodate a few things
- * for the NAR plugin: 1. To test a jar file with its native module we can only run after the package phase, so we use
- * the integration-test phase. 2. We need to set java.library.path to an AOL (architecture-os-linker) specific value,
- * but AOL is only known in the NAR plugin and thus cannot be set from the pom. 3. To have the java.library.path
- * definition picked up by java we need the "pertest" forkmode. To use this goal you need to put the test sources in the
- * regular test directories but disable the running of the tests by the maven-surefire-plugin.
+ * for the NAR plugin:
+ * <P>
+ * 1. To test a jar file with its native module we can only run after the package phase, so we use the integration-test
+ * phase.
+ * </P>
+ * <P>
+ * 2. We need to set java.library.path to an AOL (architecture-os-linker) specific value, but AOL is only known in the
+ * NAR plugin and thus cannot be set from the pom.
+ * </P>
+ * <P>
+ * 3. To have the java.library.path definition picked up by java we need the "pertest" forkmode. To use this goal you
+ * need to put the test sources in the regular test directories but disable the running of the tests by the
+ * maven-surefire-plugin by setting maven.test.skip.exec to false in your pom.
+ * </P>
  * 
  * @author Jason van Zyl (modified by Mark Donszelmann, noted by DUNS)
  * @version 2.3 maven repository maven-surefire-plugin and changes by DUNS
@@ -104,26 +113,29 @@ public class NarIntegrationTestMojo
      */
     private boolean skipNAR;
 
+    // DUNS changed to nar. because of naming conflict
     /**
      * Set this to 'true' to bypass unit tests entirely. Its use is NOT RECOMMENDED, but quite convenient on occasion.
      * 
-     * @parameter expression="${maven.test.skip}"
+     * @parameter expression="${nar.test.skip}"
      */
     private boolean skip;
 
+    // DUNS changed to nar. because of naming conflict
     /**
      * Set this to 'true' to bypass unit tests execution, but still compile them. Its use is NOT RECOMMENDED, but quite
      * convenient on occasion.
      * 
-     * @parameter expression="${maven.test.skip.exec}"
+     * @parameter expression="${nar.test.skip.exec}"
      */
     private boolean skipExec;
 
+    // DUNS changed to nar. because of naming conflict
     /**
      * Set this to true to ignore a failure during testing. Its use is NOT RECOMMENDED, but quite convenient on
      * occasion.
      * 
-     * @parameter expression="${maven.test.failure.ignore}"
+     * @parameter expression="${nar.test.failure.ignore}"
      */
     private boolean testFailureIgnore;
 
@@ -261,11 +273,12 @@ public class NarIntegrationTestMojo
      */
     private boolean useFile;
 
+    // DUNS changed to nar. because of naming conflict
     /**
      * When forking, set this to true to redirect the unit test standard output to a file (found in
      * reportsDirectory/testName-output.txt).
      * 
-     * @parameter expression="${maven.test.redirectTestOutputToFile}" default-value="false"
+     * @parameter expression="${nar.test.redirectTestOutputToFile}" default-value="false"
      */
     private boolean redirectTestOutputToFile;
 

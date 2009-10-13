@@ -38,11 +38,10 @@ under the License.
     Java class that uses a 3rd party JNI and its library
   </description>  
   <url>http://maven.apache.org/</url>
-<!--
+
   <properties>
-    <maven.test.skip>true</maven.test.skip>
+    <maven.test.skip.exec>true</maven.test.skip.exec>
   </properties>
--->  
 
   <build>
     <defaultGoal>integration-test</defaultGoal>
@@ -56,12 +55,6 @@ under the License.
               <type>jni</type>
             </library>
           </libraries>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
         </configuration>
       </plugin>
     </plugins>

@@ -39,11 +39,9 @@ under the License.
   </description>
   <url>http://maven.apache.org/</url>
 
-<!--
   <properties>
-    <maven.test.skip>true</maven.test.skip>
+    <maven.test.skip.exec>true</maven.test.skip.exec>
   </properties>
--->
 
   <build>
     <defaultGoal>integration-test</defaultGoal>
@@ -58,12 +56,6 @@ under the License.
               <run>true</run>
             </library>
           </libraries>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
         </configuration>
       </plugin>
     </plugins>

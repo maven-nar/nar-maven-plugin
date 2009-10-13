@@ -38,6 +38,10 @@ under the License.
     Executable depending on a static library.
   </description>
 
+  <properties>
+    <maven.test.skip.exec>true</maven.test.skip.exec>
+  </properties>
+
   <build>
     <defaultGoal>integration-test</defaultGoal>
     <plugins>
@@ -51,12 +55,6 @@ under the License.
               <run>true</run>
             </library>
           </libraries>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
         </configuration>
       </plugin>
     </plugins>

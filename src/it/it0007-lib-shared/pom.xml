@@ -38,11 +38,10 @@ under the License.
     Simple shared library and test file
   </description>
   <url>http://maven.apache.org/</url>
-<!--
+
   <properties>
-    <maven.test.skip>true</maven.test.skip>
+    <maven.test.skip.exec>true</maven.test.skip.exec>
   </properties>
--->  
   
   <build>
     <defaultGoal>install</defaultGoal>
@@ -62,12 +61,6 @@ under the License.
               <link>shared</link>
             </test>
           </tests>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
         </configuration>
       </plugin>
     </plugins>

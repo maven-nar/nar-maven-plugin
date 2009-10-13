@@ -38,6 +38,10 @@ under the License.
     JNI depending on a shared library.
   </description>
 
+  <properties>
+    <maven.test.skip.exec>true</maven.test.skip.exec>
+  </properties>
+
   <build>
     <defaultGoal>integration-test</defaultGoal>
     <plugins>
@@ -52,12 +56,6 @@ under the License.
               <linkCPP>false</linkCPP>
             </library>
           </libraries>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
         </configuration>
       </plugin>
     </plugins>

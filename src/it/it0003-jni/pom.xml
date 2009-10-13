@@ -38,11 +38,10 @@ under the License.
     Simple JNI Library
   </description>
   <url>http://maven.apache.org/</url>
-<!--
+  
   <properties>
-    <maven.test.skip>true</maven.test.skip>
-  </properties>
--->  
+    <maven.test.skip.exec>true</maven.test.skip.exec>
+  </properties>  
 
   <build>
     <defaultGoal>install</defaultGoal>
@@ -61,12 +60,6 @@ under the License.
               <linkCPP>false</linkCPP>
             </library>
           </libraries>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
         </configuration>
       </plugin>
     </plugins>
