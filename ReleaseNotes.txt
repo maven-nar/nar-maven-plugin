@@ -1,25 +1,11 @@
 Version 2.1
 
-- Moved source code repository to github.com (including copy and history of freehep-nar-plugin,
-and cpptasks-parallel.
-- Renamed package from org.freehep.maven.nar to org.apache.maven.plugin.nar
-- Renamed groupId from org.freehep to org.apache.maven.plugins
-- Renamed all properties from freehep to maven
-- Removed all $Id$ versions
-- Fixed warnings of incorrect use of Maven Archiver injection.
-- Removed dependencies on plexus (where possible) from pom.xml.
-- Added x86_64 for MacOS X into aol.properties
-- Moved tests all under src/it, to be run with -Prun-its
-- Added -fPIC option to amd64 compilers
-
 Bugs
 
 - Goal for Tests should be Install.
 
 - Excecutable needs a test to run and verify the output of Executable for it0001, it0002, it0007, it0008
   it0010
-
-- Resource directory seems in GIT while it should not, it should be generated in target
 
 - When it test fails it seems not reported in main pom, refer to executable 
 
