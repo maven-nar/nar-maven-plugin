@@ -20,14 +20,14 @@ under the License.
 <project name="maven-nar-plugin">
     <bannerLeft>
         <name>Maven NAR Plugin</name>
-        <src>http://maven.apache.org/images/apache-maven-project.png</src>
+        <src>http://maven.apache.org/images/apache-maven-project-2.png</src>
         <href>http://duns.github.com/maven-nar-plugin/</href>
     </bannerLeft>
       
   <body>
     <links>
         <item name="NAR Plugin for Maven1" href="http://java.freehep.org/maven1.x/freehep-nar-plugin"/>
-        <item name="Maven 2" href="http://maven.apache.org/maven2/"/>
+        <item name="Maven" href="http://maven.apache.org/"/>
     </links>
 
     <menu name="Overview">
