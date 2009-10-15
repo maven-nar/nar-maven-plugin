@@ -85,11 +85,13 @@
       <version>1.5.3</version>
     </dependency>
 
-    <!--
-      FIXME No Longer Needed ? <dependency>
+    <dependency>
       <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-utils</artifactId> <version>1.2</version>
-      </dependency> <dependency> <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId> 
+      <version>1.4.1</version>
+    </dependency> 
+<!--
+   <dependency> <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-archiver</artifactId>
       <version>1.0-alpha-11</version> </dependency>
     -->
