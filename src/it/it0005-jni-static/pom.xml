@@ -40,7 +40,7 @@ under the License.
   <url>http://maven.apache.org/</url>
   
   <properties>
-    <maven.test.skip.exec>true</maven.test.skip.exec>
+    <skipTests>true</skipTests>
   </properties>
 
   <build>
