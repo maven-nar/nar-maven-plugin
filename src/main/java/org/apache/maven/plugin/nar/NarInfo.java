@@ -21,6 +21,7 @@ package org.apache.maven.plugin.nar;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
@@ -28,6 +29,7 @@ import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 
 /**
@@ -44,7 +46,7 @@ public class NarInfo
 
     private Log log;
 
-    public NarInfo( String groupId, String artifactId, String version, Log log )
+    public NarInfo( String groupId, String artifactId, String version, Log log ) throws MojoExecutionException
     {
         this.groupId = groupId;
         this.artifactId = artifactId;
@@ -54,20 +56,19 @@ public class NarInfo
 
         // Fill with general properties.nar file
         File propertiesDir = new File( "src/main/resources/META-INF/nar/" + groupId + "/" + artifactId );
-        if ( !propertiesDir.exists() )
-        {
-            propertiesDir.mkdirs();
-        }
         File propertiesFile = new File( propertiesDir, NarInfo.NAR_PROPERTIES );
         try
         {
             info.load( new FileInputStream( propertiesFile ) );
         }
-        catch ( IOException ioe )
+        catch ( FileNotFoundException e )
         {
             // ignored
         }
-
+        catch ( IOException e )
+        {
+            throw new MojoExecutionException( "Problem loading "+propertiesFile, e );
+        }
     }
 
     public String toString()

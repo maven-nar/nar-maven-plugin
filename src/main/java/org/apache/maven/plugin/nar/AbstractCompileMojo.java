@@ -23,6 +23,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.tools.ant.Project;
 
 /**
@@ -170,32 +171,32 @@ public abstract class AbstractCompileMojo
         return fortran;
     }
 
-    protected int getMaxCores( AOL aol )
+    protected int getMaxCores( AOL aol ) throws MojoExecutionException
     {
         return getNarInfo().getProperty( aol, "maxCores", maxCores );
     }
 
-    protected boolean useLibtool( AOL aol )
+    protected boolean useLibtool( AOL aol ) throws MojoExecutionException
     {
         return getNarInfo().getProperty( aol, "libtool", libtool );
     }
 
-    protected boolean failOnError( AOL aol )
+    protected boolean failOnError( AOL aol ) throws MojoExecutionException
     {
         return getNarInfo().getProperty( aol, "failOnError", failOnError );
     }
 
-    protected String getRuntime( AOL aol )
+    protected String getRuntime( AOL aol ) throws MojoExecutionException
     {
         return getNarInfo().getProperty( aol, "runtime", runtime );
     }
 
-    protected String getOutput( AOL aol )
+    protected String getOutput( AOL aol ) throws MojoExecutionException
     {
         return getNarInfo().getProperty( aol, "output", output );
     }
 
-    protected File getJavaHome( AOL aol )
+    protected File getJavaHome( AOL aol ) throws MojoExecutionException
     {
         // FIXME should be easier by specifying default...
         return getNarInfo().getProperty( aol, "javaHome", NarUtil.getJavaHome( javaHome, getOS() ) );
@@ -241,7 +242,7 @@ public abstract class AbstractCompileMojo
         return dependencyLibOrder;
     }
 
-    protected NarInfo getNarInfo()
+    protected NarInfo getNarInfo() throws MojoExecutionException
     {
         if ( narInfo == null )
         {

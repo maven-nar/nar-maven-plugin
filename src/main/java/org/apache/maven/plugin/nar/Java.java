@@ -29,7 +29,9 @@ import net.sf.antcontrib.cpptasks.types.CommandLineArgument;
 import net.sf.antcontrib.cpptasks.types.LibrarySet;
 import net.sf.antcontrib.cpptasks.types.LinkerArgument;
 
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.tools.ant.BuildException;
 
 /**
  * Java specifications for NAR
@@ -90,7 +92,7 @@ public class Java
     }
 
     public void addIncludePaths( CCTask task, String outType )
-        throws MojoFailureException
+        throws MojoFailureException, BuildException, MojoExecutionException
     {
         if ( include || mojo.getJavah().getJniDirectory().exists() )
         {
