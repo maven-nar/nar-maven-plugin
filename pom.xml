@@ -131,6 +131,21 @@
 
   <build>
     <defaultGoal>install</defaultGoal>
+    <plugins>
+<!--
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-docck-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+-->
+    </plugins>
   </build>
 
   <reporting>
