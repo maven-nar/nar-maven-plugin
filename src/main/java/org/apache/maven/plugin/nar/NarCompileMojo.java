@@ -330,7 +330,7 @@ public class NarCompileMojo
                 String manifest = dll + ".manifest";
                 int result =
                     NarUtil.runCommand( "mt.exe", new String[] { "/manifest", manifest,
-                        "/outputresource:" + dll + ";#2" }, null, getLog() );
+                        "/outputresource:" + dll + ";#2" }, null, null, getLog() );
                 if ( result != 0 )
                     throw new MojoFailureException( "MT.EXE failed with exit code: " + result );
             }

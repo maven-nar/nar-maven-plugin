@@ -235,7 +235,7 @@ public class Javah
                     getTimestampDirectory().mkdirs();
 
                     mojo.getLog().info( "Running " + name + " compiler on " + files.size() + " classes..." );
-                    int result = NarUtil.runCommand( name, generateArgs( files ), null, mojo.getLog() );
+                    int result = NarUtil.runCommand( name, generateArgs( files ), null, null, mojo.getLog() );
                     if ( result != 0 )
                     {
                         throw new MojoFailureException( name + " failed with exit code " + result + " 0x"

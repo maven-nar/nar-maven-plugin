@@ -318,6 +318,14 @@ public class NarManager
         // FIXME this may not be the right way to do this.... -U ignored and
         // also SNAPSHOT not used
         List dependencies = getAttachedNarDependencies( narArtifacts, classifier );
+        
+        log.debug( "Download called with classifier: " + classifier + " for NarDependencies {" );
+        for ( Iterator i = dependencies.iterator(); i.hasNext(); )
+        {
+            log.debug( "  - " + ( (Artifact) i.next() ) );
+        }
+        log.debug( "}" );
+
         for ( Iterator i = dependencies.iterator(); i.hasNext(); )
         {
             Artifact dependency = (Artifact) i.next();
@@ -422,10 +430,6 @@ public class NarManager
             unArchiver.setSourceFile( file );
             unArchiver.setDestDirectory( location );
             unArchiver.extract();
-        }
-        catch ( IOException e )
-        {
-            throw new MojoExecutionException( "Error unpacking file: " + file + " to: " + location, e );
         }
         catch ( NoSuchArchiverException e )
         {

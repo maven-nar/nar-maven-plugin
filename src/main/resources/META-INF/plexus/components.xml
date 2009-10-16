@@ -29,13 +29,16 @@ under the License.
                     <initialize></initialize>
                     <generate-sources>org.apache.maven.plugins:maven-nar-plugin:nar-download,
                                       org.apache.maven.plugins:maven-nar-plugin:nar-system-generate</generate-sources>
-                    <process-sources>org.apache.maven.plugins:maven-nar-plugin:nar-unpack</process-sources>
+                    <process-sources>org.apache.maven.plugins:maven-nar-plugin:nar-unpack,
+                                     org.apache.maven.plugins:maven-nar-plugin:nar-gnu-configure</process-sources>
                     <generate-resources></generate-resources>
                     <process-resources>org.apache.maven.plugins:maven-resources-plugin:resources,
                                        org.apache.maven.plugins:maven-nar-plugin:nar-resources</process-resources>
                     <compile>org.apache.maven.plugins:maven-compiler-plugin:compile,
-                             org.apache.maven.plugins:maven-nar-plugin:nar-javah</compile>
-                    <process-classes>org.apache.maven.plugins:maven-nar-plugin:nar-compile</process-classes>
+                             org.apache.maven.plugins:maven-nar-plugin:nar-javah,
+                             org.apache.maven.plugins:maven-nar-plugin:nar-gnu-make</compile>
+                    <process-classes>org.apache.maven.plugins:maven-nar-plugin:nar-compile,
+                                     org.apache.maven.plugins:maven-nar-plugin:nar-gnu-process</process-classes>
                     <generate-test-sources></generate-test-sources>
                     <process-test-sources></process-test-sources>
                     <generate-test-resources></generate-test-resources>

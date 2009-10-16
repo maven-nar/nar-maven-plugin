@@ -38,6 +38,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.PropertyUtils;
+import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.Commandline;
 
 /**
@@ -154,7 +155,7 @@ public class NarUtil
         if ( file.isFile() && file.canRead() && file.canWrite() && !file.isHidden() )
         {
             // chmod +x file
-            int result = runCommand( "chmod", new String[] { "+x", file.getPath() }, null, log );
+            int result = runCommand( "chmod", new String[] { "+x", file.getPath() }, null, null, log );
             if ( result != 0 )
             {
                 throw new MojoExecutionException( "Failed to execute 'chmod +x " + file.getPath() + "'"
@@ -182,7 +183,7 @@ public class NarUtil
         if ( file.isFile() && file.canRead() && file.canWrite() && !file.isHidden() && file.getName().endsWith( ".a" ) )
         {
             // ranlib file
-            int result = runCommand( "ranlib", new String[] { file.getPath() }, null, log );
+            int result = runCommand( "ranlib", new String[] { file.getPath() }, null, null, log );
             if ( result != 0 )
             {
                 throw new MojoExecutionException( "Failed to execute 'ranlib " + file.getPath() + "'"
@@ -406,11 +407,11 @@ public class NarUtil
         return pathName + "=" + value;
     }
 
-    public static int runCommand( String cmd, String[] args, String[] env, Log log )
+    public static int runCommand( String cmd, String[] args, File workingDirectory, String[] env, Log log )
         throws MojoExecutionException, MojoFailureException
     {
         log.debug( "RunCommand: " + cmd );
-        Commandline cmdLine = new Commandline();
+        NarCommandLine cmdLine = new NarCommandLine();
         cmdLine.setExecutable( cmd );
         if ( args != null )
         {
@@ -419,6 +420,11 @@ public class NarUtil
                 log.debug( "  '" + args[i] + "'" );
             }
             cmdLine.addArguments( args );
+        }
+        if ( workingDirectory != null )
+        {
+            log.debug( "in: " + workingDirectory.getPath() );
+            cmdLine.setWorkingDirectory( workingDirectory );
         }
 
         if ( env != null )
@@ -429,7 +435,7 @@ public class NarUtil
                 String[] nameValue = env[i].split( "=", 2 );
                 if ( nameValue.length < 2 )
                     throw new MojoFailureException( "   Misformed env: '" + env[i] + "'" );
-                log.debug( "   '" + env[i] + "'" );
+                log.debug( "   '" + nameValue[0] + "=" + nameValue[1] + "'" );
                 cmdLine.addEnvironment( nameValue[0], nameValue[1] );
             }
         }
@@ -449,6 +455,18 @@ public class NarUtil
         {
             throw new MojoExecutionException( "Could not launch " + cmdLine, e );
         }
+    }
+
+    private static class NarCommandLine
+        extends Commandline
+    {
+        // Override this method to prevent addition (and obstruction) of system env variables
+        public String[] getEnvironmentVariables()
+            throws CommandLineException
+        {
+            return (String[]) envVars.toArray( new String[envVars.size()] );
+        }
+
     }
 
     static class StreamGobbler

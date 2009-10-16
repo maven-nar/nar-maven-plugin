@@ -16,13 +16,13 @@ standard maven goals) attached to them. The order is left to right, top to botto
 *------------------------+-------------------------------------------+ 
 | generate-sources       | <<nar-download>>, <<nar-system-generate>> |
 *------------------------+-------------------------------------------+ 
-| process-sources        | <<nar-unpack>>                            |
+| process-sources        | <<nar-unpack>>, <<nar-gnu-configure>>     |
 *------------------------+-------------------------------------------+ 
 | process-resources      | resources, <<nar-resources>>              |
 *------------------------+-------------------------------------------+ 
-| compile                | compile, <<nar-javah>>                    |
+| compile                | compile, <<nar-javah>>, <<nar-gnu-make>>  |
 *------------------------+-------------------------------------------+ 
-| process-classes        | <<nar-compile>>                           |
+| process-classes        | <<nar-compile>>, <<nar-gnu-process>>      |
 *------------------------+-------------------------------------------+ 
 | process-test-resources | testResources                             |
 *------------------------+-------------------------------------------+ 

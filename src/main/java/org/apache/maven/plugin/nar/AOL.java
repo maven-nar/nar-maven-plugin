@@ -58,6 +58,10 @@ public class AOL
         this.linkerName = linkerName;
     }
 
+    /**
+     * Returns an AOL string (arch-os-linker) to use as directory or file.
+     * @return dash separated AOL
+     */
     public String toString()
     {
         return architecture + ( ( os == null ) ? "" : "-" + os + ( ( linkerName == null ) ? "" : "-" + linkerName ) );
@@ -69,6 +73,10 @@ public class AOL
         return linkerName.equals( linker );
     }
 
+    /**
+     * Returns an AOL key (arch.os.linker) to search in the properties files. 
+     * @return dot separated AOL
+     */
     public String getKey()
     {
         return architecture + ( ( os == null ) ? "" : "." + os + ( ( linkerName == null ) ? "" : "." + linkerName ) );
