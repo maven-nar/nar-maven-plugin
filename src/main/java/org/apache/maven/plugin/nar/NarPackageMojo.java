@@ -74,7 +74,7 @@ public class NarPackageMojo
         String[] binAOLs = new File( narDirectory, bin ).list();
         for ( int i = 0; i < ( binAOLs != null ? binAOLs.length : 0 ); i++ )
         {
-            attachNar( bin + "/" + binAOLs[i], binAOLs[i], bin );
+            attachNar( bin + "/" + binAOLs[i], binAOLs[i], Library.EXECUTABLE );
         }
 
         // create nars for each type of library (static, shared).
