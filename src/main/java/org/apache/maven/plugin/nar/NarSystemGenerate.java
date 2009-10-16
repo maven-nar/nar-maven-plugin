@@ -73,6 +73,7 @@ public class NarSystemGenerate
         fullDir.mkdirs();
 
         File narSystem = new File( fullDir, narSystemName + ".java" );
+        getLog().info("Generating "+narSystem);
         try
         {
             FileOutputStream fos = new FileOutputStream( narSystem );

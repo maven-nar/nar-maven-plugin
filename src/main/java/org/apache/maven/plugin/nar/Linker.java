@@ -192,27 +192,36 @@ public class Linker
             Set defs = new HashSet();
             try
             {
-                File cSrcDir = mojo.getC().getSourceDirectory();
-                if ( cSrcDir.exists() )
-                    defs.addAll( FileUtils.getFiles( cSrcDir, "**/*.def", null ) );
+                List cSrcDirs = mojo.getC().getSourceDirectories();
+                for (Iterator i = cSrcDirs.iterator(); i.hasNext(); ) {
+                    File dir = (File)i.next();
+                    if ( dir.exists() )
+                        defs.addAll( FileUtils.getFiles( dir, "**/*.def", null ) );
+                }
             }
             catch ( IOException e )
             {
             }
             try
             {
-                File cppSrcDir = mojo.getCpp().getSourceDirectory();
-                if ( cppSrcDir.exists() )
-                    defs.addAll( FileUtils.getFiles( cppSrcDir, "**/*.def", null ) );
+                List cppSrcDirs = mojo.getCpp().getSourceDirectories();
+                for (Iterator i = cppSrcDirs.iterator(); i.hasNext(); ) {
+                    File dir = (File)i.next();
+                    if ( dir.exists() )
+                        defs.addAll( FileUtils.getFiles( dir, "**/*.def", null ) );
+                }
             }
             catch ( IOException e )
             {
             }
             try
             {
-                File fortranSrcDir = mojo.getFortran().getSourceDirectory();
-                if ( fortranSrcDir.exists() )
-                    defs.addAll( FileUtils.getFiles( fortranSrcDir, "**/*.def", null ) );
+                List fortranSrcDirs = mojo.getFortran().getSourceDirectories();
+                for (Iterator i = fortranSrcDirs.iterator(); i.hasNext(); ) {
+                    File dir = (File)i.next();
+                    if ( dir.exists() )
+                        defs.addAll( FileUtils.getFiles( dir, "**/*.def", null ) );
+                }
             }
             catch ( IOException e )
             {

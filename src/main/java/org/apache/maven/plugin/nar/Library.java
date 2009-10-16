@@ -143,4 +143,13 @@ public class Library
     {
         return narSystemDirectory;
     }
+
+    // FIXME incomplete
+    public String toString()
+    {
+        StringBuffer sb = new StringBuffer( "Library: " );
+        sb.append( "type: " );
+        sb.append( getType() );
+        return sb.toString();
+    }
 }

@@ -214,19 +214,24 @@ public abstract class Compiler
         this.mojo = mojo;
     }
 
-    public File getSourceDirectory()
+    public List/* <File> */getSourceDirectories()
     {
-        return getSourceDirectory( "dummy" );
+        return getSourceDirectories( "dummy" );
     }
 
-    protected File getSourceDirectory( String type )
+    private List/* <File> */getSourceDirectories( String type )
     {
+        List sourceDirectories = new ArrayList();
+
         if ( sourceDirectory == null )
         {
-            sourceDirectory =
-                new File( mojo.getMavenProject().getBasedir(), "src/" + ( type.equals( "test" ) ? "test" : "main" ) );
+            sourceDirectories.add( new File( mojo.getMavenProject().getBasedir(), "src/"
+                + ( type.equals( "test" ) ? "test" : "main" ) ) );
         }
-        return sourceDirectory;
+
+        // FIXME, see NAR-69
+        sourceDirectories.add( new File( mojo.getMavenProject().getBasedir(), "target/swig" ) );
+        return sourceDirectories;
     }
 
     protected List/* <String> */getIncludePaths( String type )
@@ -234,7 +239,10 @@ public abstract class Compiler
         if ( includePaths == null || ( includePaths.size() == 0 ) )
         {
             includePaths = new ArrayList();
-            includePaths.add( new File( getSourceDirectory( type ), "include" ).getPath() );
+            for ( Iterator i = getSourceDirectories( type ).iterator(); i.hasNext(); )
+            {
+                includePaths.add( new File( (File) i.next(), "include" ).getPath() );
+            }
         }
         return includePaths;
     }
@@ -487,7 +495,7 @@ public abstract class Compiler
         }
 
         // Add default fileset (if exists)
-        File srcDir = getSourceDirectory( type );
+        List srcDirs = getSourceDirectories( type );
         Set includes = getIncludes();
         Set excludes = getExcludes();
 
@@ -501,18 +509,22 @@ public abstract class Compiler
             }
         }
 
-        mojo.getLog().debug( "Checking for existence of " + getName() + " sourceDirectory: " + srcDir );
-        if ( srcDir.exists() )
+        for ( Iterator i = srcDirs.iterator(); i.hasNext(); )
         {
-            ConditionalFileSet fileSet = new ConditionalFileSet();
-            fileSet.setProject( mojo.getAntProject() );
-            fileSet.setIncludes( StringUtils.join( includes.iterator(), "," ) );
-            fileSet.setExcludes( StringUtils.join( excludes.iterator(), "," ) );
-            fileSet.setDir( srcDir );
-            compiler.addFileset( fileSet );
+            File srcDir = (File) i.next();
+            mojo.getLog().debug( "Checking for existence of " + getName() + " sourceDirectory: " + srcDir );
+            if ( srcDir.exists() )
+            {
+                ConditionalFileSet fileSet = new ConditionalFileSet();
+                fileSet.setProject( mojo.getAntProject() );
+                fileSet.setIncludes( StringUtils.join( includes.iterator(), "," ) );
+                fileSet.setExcludes( StringUtils.join( excludes.iterator(), "," ) );
+                fileSet.setDir( srcDir );
+                compiler.addFileset( fileSet );
+            }
         }
 
-        // add other sources
+        // add other sources, FIXME seems
         if ( !type.equals( "test" ) )
         {
             for ( Iterator i = mojo.getMavenProject().getCompileSourceRoots().iterator(); i.hasNext(); )

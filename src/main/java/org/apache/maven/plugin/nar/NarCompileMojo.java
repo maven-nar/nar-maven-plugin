@@ -21,6 +21,7 @@ package org.apache.maven.plugin.nar;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -70,10 +71,15 @@ public class NarCompileMojo
         noOfSources += getSourcesFor( getFortran() ).size();
         if ( noOfSources > 0 )
         {
+            getLog().info( "Compiling " + noOfSources + " native files" );
             for ( Iterator i = getLibraries().iterator(); i.hasNext(); )
             {
                 createLibrary( getAntProject(), (Library) i.next() );
             }
+        }
+        else
+        {
+            getLog().info( "Nothing to compile" );
         }
 
         try
@@ -92,10 +98,16 @@ public class NarCompileMojo
     {
         try
         {
-            File srcDir = compiler.getSourceDirectory();
-            return srcDir.exists() ? FileUtils.getFiles( srcDir, StringUtils.join( compiler.getIncludes().iterator(),
-                                                                                   "," ), null )
-                            : Collections.EMPTY_LIST;
+            List files = new ArrayList();
+            List srcDirs = compiler.getSourceDirectories();
+            for ( Iterator i = srcDirs.iterator(); i.hasNext(); )
+            {
+                File dir = (File) i.next();
+                if ( dir.exists() )
+                    files.addAll( FileUtils.getFiles( dir, StringUtils.join( compiler.getIncludes().iterator(), "," ),
+                                                      null ) );
+            }
+            return files;
         }
         catch ( IOException e )
         {
@@ -106,6 +118,7 @@ public class NarCompileMojo
     private void createLibrary( Project antProject, Library library )
         throws MojoExecutionException, MojoFailureException
     {
+        getLog().debug( "Creating Library " + library );
         // configure task
         CCTask task = new CCTask();
         task.setProject( antProject );
