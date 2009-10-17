@@ -234,11 +234,14 @@ public class Javah
                     getJniDirectory().mkdirs();
                     getTimestampDirectory().mkdirs();
 
-                    mojo.getLog().info( "Running " + name + " compiler on " + files.size() + " classes..." );
-                    int result = NarUtil.runCommand( name, generateArgs( files ), null, null, mojo.getLog() );
+                    File javahFile = new File( mojo.getJavaHome( mojo.getAOL() ), "bin" );
+                    String javah = new File(javahFile, name).getAbsolutePath();
+
+                    mojo.getLog().info( "Running " + javah + " compiler on " + files.size() + " classes..." );
+                    int result = NarUtil.runCommand( javah, generateArgs( files ), null, null, mojo.getLog() );
                     if ( result != 0 )
                     {
-                        throw new MojoFailureException( name + " failed with exit code " + result + " 0x"
+                        throw new MojoFailureException( javah + " failed with exit code " + result + " 0x"
                             + Integer.toHexString( result ) );
                     }
                     FileUtils.fileWrite( getTimestampDirectory() + "/" + getTimestampFile(), "" );
