@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Vector;
 import java.util.regex.Pattern;
 
 import org.apache.bcel.classfile.ClassFormatException;
@@ -39,6 +40,7 @@ import org.apache.maven.plugin.logging.Log;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
+import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.Commandline;
 
 /**
@@ -461,10 +463,42 @@ public class NarUtil
         extends Commandline
     {
         // Override this method to prevent addition (and obstruction) of system env variables
+        // but (for now) add them when no envVars are given.
+
+        // NOTE and FIXME: we need to properly put system variables in there
+        // mixed (overridden) by our own.
         public String[] getEnvironmentVariables()
             throws CommandLineException
         {
-            return (String[]) envVars.toArray( new String[envVars.size()] );
+            if ( envVars.size() == 0 )
+            {
+                try
+                {
+                    Vector systemEnvVars = getSystemEnvironment();
+                    return (String[]) systemEnvVars.toArray( new String[systemEnvVars.size()] );
+                }
+                catch ( IOException e )
+                {
+                    throw new CommandLineException( "Error setting up environmental variables", e );
+                }
+            }
+            else
+            {
+                return (String[]) envVars.toArray( new String[envVars.size()] );
+            }
+        }
+        
+        private Vector getSystemEnvironment() throws IOException {
+            Properties envVars = CommandLineUtils.getSystemEnvVars();
+            Vector systemEnvVars = new Vector(envVars.size());
+
+            for ( Iterator i = envVars.keySet().iterator(); i.hasNext(); )
+            {
+                String key = (String) i.next();
+                systemEnvVars.add( key + "=" + envVars.getProperty( key ) );
+            }
+
+            return systemEnvVars;
         }
 
     }
