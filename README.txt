@@ -1,6 +1,4 @@
-This plugin eventually replaces the freehep-nar-plugin.
-
-For now, see:
+This plugin replaces the freehep-nar-plugin.
 
 Documentation:
 
