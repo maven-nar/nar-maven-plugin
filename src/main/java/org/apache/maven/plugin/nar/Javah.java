@@ -33,6 +33,7 @@ import org.apache.bcel.classfile.Method;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.toolchain.Toolchain;
 import org.codehaus.plexus.compiler.util.scan.InclusionScanException;
 import org.codehaus.plexus.compiler.util.scan.SourceInclusionScanner;
 import org.codehaus.plexus.compiler.util.scan.StaleSourceScanner;
@@ -236,7 +237,7 @@ public class Javah
 
                     File javahFile = new File( mojo.getJavaHome( mojo.getAOL() ), "bin" );
                     String javah = new File(javahFile, name).getAbsolutePath();
-
+                    
                     mojo.getLog().info( "Running " + javah + " compiler on " + files.size() + " classes..." );
                     int result = NarUtil.runCommand( javah, generateArgs( files ), null, null, mojo.getLog() );
                     if ( result != 0 )

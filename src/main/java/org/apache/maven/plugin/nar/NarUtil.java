@@ -412,38 +412,40 @@ public class NarUtil
     public static int runCommand( String cmd, String[] args, File workingDirectory, String[] env, Log log )
         throws MojoExecutionException, MojoFailureException
     {
-        log.debug( "RunCommand: " + cmd );
         NarCommandLine cmdLine = new NarCommandLine();
-        cmdLine.setExecutable( cmd );
-        if ( args != null )
-        {
-            for ( int i = 0; i < args.length; i++ )
-            {
-                log.debug( "  '" + args[i] + "'" );
-            }
-            cmdLine.addArguments( args );
-        }
-        if ( workingDirectory != null )
-        {
-            log.debug( "in: " + workingDirectory.getPath() );
-            cmdLine.setWorkingDirectory( workingDirectory );
-        }
-
-        if ( env != null )
-        {
-            log.debug( "with Env:" );
-            for ( int i = 0; i < env.length; i++ )
-            {
-                String[] nameValue = env[i].split( "=", 2 );
-                if ( nameValue.length < 2 )
-                    throw new MojoFailureException( "   Misformed env: '" + env[i] + "'" );
-                log.debug( "   '" + nameValue[0] + "=" + nameValue[1] + "'" );
-                cmdLine.addEnvironment( nameValue[0], nameValue[1] );
-            }
-        }
-
+        
         try
         {
+             cmd = CommandLineUtils.quote( cmd );
+            log.debug( "RunCommand: " + cmd );
+            cmdLine.setExecutable( cmd );
+            if ( args != null )
+            {
+                for ( int i = 0; i < args.length; i++ )
+                {
+                    log.debug( "  '" + args[i] + "'" );
+                }
+                cmdLine.addArguments( args );
+            }
+            if ( workingDirectory != null )
+            {
+                log.debug( "in: " + workingDirectory.getPath() );
+                cmdLine.setWorkingDirectory( workingDirectory );
+            }
+
+            if ( env != null )
+            {
+                log.debug( "with Env:" );
+                for ( int i = 0; i < env.length; i++ )
+                {
+                    String[] nameValue = env[i].split( "=", 2 );
+                    if ( nameValue.length < 2 )
+                        throw new MojoFailureException( "   Misformed env: '" + env[i] + "'" );
+                    log.debug( "   '" + nameValue[0] + "=" + nameValue[1] + "'" );
+                    cmdLine.addEnvironment( nameValue[0], nameValue[1] );
+                }
+            }
+
             Process process = cmdLine.execute();
             StreamGobbler errorGobbler = new StreamGobbler( process.getErrorStream(), true, log );
             StreamGobbler outputGobbler = new StreamGobbler( process.getInputStream(), false, log );
@@ -487,10 +489,12 @@ public class NarUtil
                 return (String[]) envVars.toArray( new String[envVars.size()] );
             }
         }
-        
-        private Vector getSystemEnvironment() throws IOException {
+
+        private Vector getSystemEnvironment()
+            throws IOException
+        {
             Properties envVars = CommandLineUtils.getSystemEnvVars();
-            Vector systemEnvVars = new Vector(envVars.size());
+            Vector systemEnvVars = new Vector( envVars.size() );
 
             for ( Iterator i = envVars.keySet().iterator(); i.hasNext(); )
             {
