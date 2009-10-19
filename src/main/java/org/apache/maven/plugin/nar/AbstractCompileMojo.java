@@ -128,7 +128,7 @@ public abstract class AbstractCompileMojo
      * @parameter expression=""
      */
     private Java java;
-
+    
     private NarInfo narInfo;
 
     private List/* <String> */dependencyLibOrder;

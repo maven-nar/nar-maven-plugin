@@ -31,7 +31,6 @@ import org.apache.bcel.classfile.ClassFormatException;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.toolchain.Toolchain;
@@ -41,7 +40,6 @@ import org.codehaus.plexus.compiler.util.scan.SourceInclusionScanner;
 import org.codehaus.plexus.compiler.util.scan.StaleSourceScanner;
 import org.codehaus.plexus.compiler.util.scan.mapping.SingleTargetSourceMapping;
 import org.codehaus.plexus.compiler.util.scan.mapping.SuffixMapping;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -125,15 +123,6 @@ public class Javah
      * @parameter
      */
     private File timestampFile;
-    
-    /**
-     * The current build session instance. 
-     *
-     * @parameter expression="${session}"
-     * @required
-     * @readonly
-     */
-    private MavenSession session;
 
     private AbstractCompileMojo mojo;
 
@@ -250,6 +239,9 @@ public class Javah
                     File javahFile = new File( mojo.getJavaHome( mojo.getAOL() ), "bin" );
                     String javah = new File( javahFile, name ).getAbsolutePath();
 
+                    Toolchain tc = getToolchain();
+                    System.err.println( tc.findTool( "javac" ) );
+
                     mojo.getLog().info( "Running " + javah + " compiler on " + files.size() + " classes..." );
                     int result = NarUtil.runCommand( javah, generateArgs( files ), null, null, mojo.getLog() );
                     if ( result != 0 )
@@ -307,5 +299,21 @@ public class Javah
         }
 
         return (String[]) args.toArray( new String[args.size()] );
+    }
+    
+    //TODO remove the part with ToolchainManager lookup once we depend on
+    //2.0.9 (have it as prerequisite). Define as regular component field then.
+    private Toolchain getToolchain()
+    {
+        Toolchain toolChain = null;
+        ToolchainManager toolchainManager = ((NarJavahMojo)mojo).toolchainManager;
+        System.err.println("tcm: "+toolchainManager);
+        
+        if ( toolchainManager != null )
+        {
+            toolChain = toolchainManager.getToolchainFromBuildContext( "jdk", ((NarJavahMojo)mojo).session );
+            System.err.println("tc: "+toolChain);
+        }
+        return toolChain;
     }
 }

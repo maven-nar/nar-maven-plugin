@@ -19,8 +19,10 @@ package org.apache.maven.plugin.nar;
  * under the License.
  */
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.toolchain.ToolchainManager;
 
 /**
  * Compiles class files into c/c++ headers using "javah". Any class file that contains methods that were declared
@@ -33,6 +35,19 @@ import org.apache.maven.plugin.MojoFailureException;
 public class NarJavahMojo
     extends AbstractCompileMojo
 {
+    /**
+     * @component
+     */
+    ToolchainManager toolchainManager;
+
+    /**
+     * The current build session instance.
+     * 
+     * @parameter expression="${session}"
+     * @required
+     * @readonly
+     */
+    MavenSession session;
 
     public void execute()
         throws MojoExecutionException, MojoFailureException
