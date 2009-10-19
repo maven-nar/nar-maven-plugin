@@ -373,7 +373,7 @@ public class NarUtil
         char separator = ' ';
         if ( os.equals( OS.WINDOWS ) )
         {
-            pathName = "PATH";
+            pathName = "Path";
             separator = ';';
         }
         else if ( os.equals( OS.MACOSX ) )
