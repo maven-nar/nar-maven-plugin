@@ -468,7 +468,8 @@ public class NarUtil
 
         // NOTE and FIXME: we need to properly put system variables in there
         // mixed (overridden) by our own.
-        public String[] getEnvironmentVariables()
+/*
+    	public String[] getEnvironmentVariables()
             throws CommandLineException
         {
             if ( envVars.size() == 0 )
@@ -503,7 +504,7 @@ public class NarUtil
 
             return systemEnvVars;
         }
-
+*/
     }
 
     static class StreamGobbler

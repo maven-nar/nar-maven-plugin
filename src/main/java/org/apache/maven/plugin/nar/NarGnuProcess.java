@@ -23,7 +23,6 @@ import java.io.File;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.codehaus.plexus.archiver.manager.ArchiverManager;
 
 /**
  * Move the GNU style output in the correct directories for nar-package
@@ -36,14 +35,6 @@ import org.codehaus.plexus.archiver.manager.ArchiverManager;
 public class NarGnuProcess
     extends AbstractGnuMojo
 {
-    /**
-     * To look up Archiver/UnArchiver implementations
-     * 
-     * @component role="org.codehaus.plexus.archiver.manager.ArchiverManager"
-     * @required
-     */
-    private ArchiverManager archiverManager;
-
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
