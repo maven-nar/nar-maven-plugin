@@ -416,7 +416,6 @@ public class NarUtil
         
         try
         {
-             cmd = CommandLineUtils.quote( cmd );
             log.debug( "RunCommand: " + cmd );
             cmdLine.setExecutable( cmd );
             if ( args != null )
