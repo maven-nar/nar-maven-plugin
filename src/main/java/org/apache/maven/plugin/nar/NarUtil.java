@@ -412,7 +412,7 @@ public class NarUtil
     public static int runCommand( String cmd, String[] args, File workingDirectory, String[] env, Log log )
         throws MojoExecutionException, MojoFailureException
     {
-        NarCommandLine cmdLine = new NarCommandLine();
+        Commandline cmdLine = new Commandline();
         
         try
         {
@@ -460,52 +460,6 @@ public class NarUtil
         }
     }
 
-    private static class NarCommandLine
-        extends Commandline
-    {
-        // Override this method to prevent addition (and obstruction) of system env variables
-        // but (for now) add them when no envVars are given.
-
-        // NOTE and FIXME: we need to properly put system variables in there
-        // mixed (overridden) by our own.
-/*
-    	public String[] getEnvironmentVariables()
-            throws CommandLineException
-        {
-            if ( envVars.size() == 0 )
-            {
-                try
-                {
-                    Vector systemEnvVars = getSystemEnvironment();
-                    return (String[]) systemEnvVars.toArray( new String[systemEnvVars.size()] );
-                }
-                catch ( IOException e )
-                {
-                    throw new CommandLineException( "Error setting up environmental variables", e );
-                }
-            }
-            else
-            {
-                return (String[]) envVars.toArray( new String[envVars.size()] );
-            }
-        }
-
-        private Vector getSystemEnvironment()
-            throws IOException
-        {
-            Properties envVars = CommandLineUtils.getSystemEnvVars();
-            Vector systemEnvVars = new Vector( envVars.size() );
-
-            for ( Iterator i = envVars.keySet().iterator(); i.hasNext(); )
-            {
-                String key = (String) i.next();
-                systemEnvVars.add( key + "=" + envVars.getProperty( key ) );
-            }
-
-            return systemEnvVars;
-        }
-*/
-    }
 
     static class StreamGobbler
         extends Thread
