@@ -210,6 +210,7 @@
                 <pomExclude>it-parent/**</pomExclude>
               </pomExcludes>
               <localRepositoryPath>${project.build.directory}/it-repo</localRepositoryPath>
+              <settingsFile>src/it/settings.xml</settingsFile>
               <goals>
                 <goal>clean</goal>
                 <goal>install</goal>
