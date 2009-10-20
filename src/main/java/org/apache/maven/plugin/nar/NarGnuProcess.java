@@ -40,6 +40,9 @@ public class NarGnuProcess
     {
         if ( shouldSkip() )
             return;
+        
+        if ( !useGnu() )
+            return;
 
         File srcDir = getGnuAOLTargetDirectory();
         if ( srcDir.exists() )

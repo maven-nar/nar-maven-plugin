@@ -38,6 +38,13 @@ import org.codehaus.plexus.util.SelectorUtils;
 public class NarResourcesMojo
     extends AbstractResourcesMojo
 {
+    /**
+     * Use given AOL only. If false, copy for all available AOLs.
+     * 
+     * @parameter expression="${nar.resources.copy.aol}" default-value="true"
+     * @required
+     */
+    private boolean resourcesCopyAOL;
 
     /**
      * Directory for nar resources. Defaults to src/nar/resources
@@ -57,14 +64,18 @@ public class NarResourcesMojo
         File aolDir = new File( resourceDirectory, "aol" );
         if ( aolDir.exists() )
         {
-            String[] aols = aolDir.list();
-            for ( int i = 0; i < aols.length; i++ )
+            String[] aol = aolDir.list();
+            for ( int i = 0; i < aol.length; i++ )
             {
+                // copy onky resources of current AOL
+                if ( resourcesCopyAOL && ( !aol[i].equals( getAOL().toString() ) ) )
+                    continue;
+
                 boolean ignore = false;
                 for ( Iterator j = FileUtils.getDefaultExcludesAsList().iterator(); j.hasNext(); )
                 {
                     String exclude = (String) j.next();
-                    if ( SelectorUtils.matchPath( exclude.replace( '/', File.separatorChar ), aols[i] ) )
+                    if ( SelectorUtils.matchPath( exclude.replace( '/', File.separatorChar ), aol[i] ) )
                     {
                         ignore = true;
                         break;
@@ -72,8 +83,8 @@ public class NarResourcesMojo
                 }
                 if ( !ignore )
                 {
-                    File aol = new File( aolDir, aols[i] );
-                    copyResources( aol, aol.getName() );
+                    File aolFile = new File( aolDir, aol[i] );
+                    copyResources( aolFile, aolFile.getName() );
                 }
             }
         }

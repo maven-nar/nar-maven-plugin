@@ -41,6 +41,9 @@ public class NarGnuMakeMojo
         if ( shouldSkip() )
             return;
 
+        if ( !useGnu() )
+            return;
+
         File srcDir = getGnuAOLSourceDirectory();
         if ( srcDir.exists() )
         {

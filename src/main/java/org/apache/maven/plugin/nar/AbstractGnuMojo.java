@@ -32,6 +32,14 @@ public abstract class AbstractGnuMojo
     extends AbstractResourcesMojo
 {
     /**
+     * Use GNU goals on Windows
+     * 
+     * @parameter expresssion="nar.gnu.useonwindows" default-value="false"
+     * @required
+     */
+    private boolean gnuUseOnWindows;
+    
+    /**
      * Source directory for GNU style project
      * 
      * @parameter expression="${basedir}/src/gnu"
@@ -40,7 +48,7 @@ public abstract class AbstractGnuMojo
     protected File gnuSourceDirectory;
 
     /**
-     * @parameter expression="${project.build.directory}/gnu"
+     * @parameter expression="${project.build.directory}/nar/gnu"
      * @required
      */
     private File gnuTargetDirectory;
@@ -74,5 +82,13 @@ public abstract class AbstractGnuMojo
     {
         return new File( gnuTargetDirectory, getAOL().toString() );
     }
-
+    
+    /**
+     * Returns true if we do not want to use GNU on Windows
+     * 
+     * @return
+     */
+    protected boolean useGnu() {
+        return (gnuUseOnWindows || !NarUtil.getOS( null ).equals( OS.WINDOWS ));
+    }
 }

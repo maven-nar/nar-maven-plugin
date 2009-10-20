@@ -61,6 +61,9 @@ public class NarGnuConfigureMojo
         if ( shouldSkip() )
             return;
 
+        if ( !useGnu() )
+            return;
+
         if ( gnuSourceDirectory.exists() )
         {
             getLog().info( "Copying GNU sources" );
