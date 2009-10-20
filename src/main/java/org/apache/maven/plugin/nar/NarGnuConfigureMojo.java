@@ -43,10 +43,18 @@ public class NarGnuConfigureMojo
      * @parameter expression="${nar.gnu.autogen.skip}" default-value="false"
      */
     private boolean gnuAutogenSkip;
-    
-    private static String autogen = "autogen.sh";
-    private static String configure = "configure";
-    
+
+    /**
+     * Skip running of configure and therefore also autogen.sh
+     * 
+     * @parameter expression="${nar.gnu.configure.skip}" default-value="false"
+     */
+    private boolean gnuConfigureSkip;
+
+    private static final String AUTOGEN = "autogen.sh";
+
+    private static final String CONFIGURE = "configure";
+
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
@@ -68,14 +76,32 @@ public class NarGnuConfigureMojo
                 throw new MojoExecutionException( "Failed to copy GNU sources", e );
             }
 
-            if ((!gnuAutogenSkip) && new File(targetDir, "autogen.sh").exists()) {
-                getLog().info( "Running GNU "+autogen );
-                NarUtil.runCommand( "sh ./"+autogen, null, targetDir, null, getLog() );
+            File autogen = new File( targetDir, AUTOGEN );
+            if ( !gnuConfigureSkip && !gnuAutogenSkip && autogen.exists() )
+            {
+                getLog().info( "Running GNU " + AUTOGEN );
+                NarUtil.makeExecutable( autogen, getLog() );
+                int result = NarUtil.runCommand( "./" + autogen.getName(), null, targetDir, null, getLog() );
+                if ( result != 0 )
+                {
+                    System.err.println( targetDir );
+                    throw new MojoExecutionException( "'"+AUTOGEN+"' errorcode: " + result );
+                }
             }
 
-            getLog().info( "Running GNU "+configure );
-            NarUtil.runCommand( "sh ./"+configure, new String[] { "--disable-ccache", "--prefix="
-                + getGnuAOLTargetDirectory().getAbsolutePath() }, targetDir, null, getLog() );
+            File configure = new File( targetDir, CONFIGURE );
+            if ( !gnuConfigureSkip && configure.exists() )
+            {
+                getLog().info( "Running GNU " + CONFIGURE );
+                NarUtil.makeExecutable( configure, getLog() );
+                int result =
+                    NarUtil.runCommand( "./" + configure.getName(), new String[] { "--disable-ccache",
+                        "--prefix=" + getGnuAOLTargetDirectory().getAbsolutePath() }, targetDir, null, getLog() );
+                if ( result != 0 )
+                {
+                    throw new MojoExecutionException( "'"+CONFIGURE+"' errorcode: " + result );
+                }
+            }
         }
     }
 }

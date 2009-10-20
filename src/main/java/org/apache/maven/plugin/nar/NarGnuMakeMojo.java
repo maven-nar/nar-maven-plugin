@@ -45,8 +45,17 @@ public class NarGnuMakeMojo
         if ( srcDir.exists() )
         {
             getLog().info( "Running GNU make" );
-            NarUtil.runCommand( "make", null, srcDir, null, getLog() );
-            NarUtil.runCommand( "make", new String[] { "install" }, srcDir, null, getLog() );
+            int result = NarUtil.runCommand( "make", null, srcDir, null, getLog() );
+            if ( result != 0 )
+            {
+                throw new MojoExecutionException( "'make' errorcode: " + result );
+            }
+
+            result = NarUtil.runCommand( "make", new String[] { "install" }, srcDir, null, getLog() );
+            if ( result != 0 )
+            {
+                throw new MojoExecutionException( "'make install' errorcode: " + result );
+            }
         }
     }
 }
