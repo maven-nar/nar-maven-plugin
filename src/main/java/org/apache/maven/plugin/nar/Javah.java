@@ -239,9 +239,6 @@ public class Javah
                     File javahFile = new File( mojo.getJavaHome( mojo.getAOL() ), "bin" );
                     String javah = new File( javahFile, name ).getAbsolutePath();
 
-                    Toolchain tc = getToolchain();
-                    System.err.println( tc.findTool( "javac" ) );
-
                     mojo.getLog().info( "Running " + javah + " compiler on " + files.size() + " classes..." );
                     int result = NarUtil.runCommand( javah, generateArgs( files ), null, null, mojo.getLog() );
                     if ( result != 0 )
@@ -307,12 +304,10 @@ public class Javah
     {
         Toolchain toolChain = null;
         ToolchainManager toolchainManager = ((NarJavahMojo)mojo).toolchainManager;
-        System.err.println("tcm: "+toolchainManager);
         
         if ( toolchainManager != null )
         {
             toolChain = toolchainManager.getToolchainFromBuildContext( "jdk", ((NarJavahMojo)mojo).session );
-            System.err.println("tc: "+toolChain);
         }
         return toolChain;
     }
