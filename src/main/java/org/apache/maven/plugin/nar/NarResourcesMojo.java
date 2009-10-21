@@ -60,14 +60,14 @@ public class NarResourcesMojo
         if ( shouldSkip() )
             return;
 
-        // scan for AOLs
+        // scan resourceDirectory for AOLs
         File aolDir = new File( resourceDirectory, "aol" );
         if ( aolDir.exists() )
         {
             String[] aol = aolDir.list();
             for ( int i = 0; i < aol.length; i++ )
             {
-                // copy onky resources of current AOL
+                // copy only resources of current AOL
                 if ( resourcesCopyAOL && ( !aol[i].equals( getAOL().toString() ) ) )
                     continue;
 

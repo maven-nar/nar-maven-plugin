@@ -33,12 +33,13 @@ under the License.
                                      org.apache.maven.plugins:maven-nar-plugin:nar-gnu-configure</process-sources>
                     <generate-resources></generate-resources>
                     <process-resources>org.apache.maven.plugins:maven-resources-plugin:resources,
-                                       org.apache.maven.plugins:maven-nar-plugin:nar-resources</process-resources>
+                                       org.apache.maven.plugins:maven-nar-plugin:nar-resources,
+                                       org.apache.maven.plugins:maven-nar-plugin:nar-gnu-resources</process-resources>
                     <compile>org.apache.maven.plugins:maven-compiler-plugin:compile,
                              org.apache.maven.plugins:maven-nar-plugin:nar-javah,
-                             org.apache.maven.plugins:maven-nar-plugin:nar-gnu-make</compile>
-                    <process-classes>org.apache.maven.plugins:maven-nar-plugin:nar-compile,
-                                     org.apache.maven.plugins:maven-nar-plugin:nar-gnu-process</process-classes>
+                             org.apache.maven.plugins:maven-nar-plugin:nar-gnu-make,
+                             org.apache.maven.plugins:maven-nar-plugin:nar-compile</compile>
+                    <process-classes>org.apache.maven.plugins:maven-nar-plugin:nar-gnu-process</process-classes>
                     <generate-test-sources></generate-test-sources>
                     <process-test-sources></process-test-sources>
                     <generate-test-resources></generate-test-resources>

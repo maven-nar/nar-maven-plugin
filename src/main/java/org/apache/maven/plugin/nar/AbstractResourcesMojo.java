@@ -72,50 +72,76 @@ public abstract class AbstractResourcesMojo
      */
     private ArchiverManager archiverManager;
 
-    protected void copyResources( File srcDir, String aol)
+    protected int copyIncludes( File srcDir ) throws IOException
+    {
+        int copied = 0;
+        
+        // copy includes
+        File includeDir = new File( srcDir, resourceIncludeDir );
+        if ( includeDir.exists() )
+        {
+            File includeDstDir = new File( getTargetDirectory(), "include" );
+            copied += NarUtil.copyDirectoryStructure( includeDir, includeDstDir, null, NarUtil.DEFAULT_EXCLUDES );
+        }
+        
+        return copied;
+    }
+
+    protected int copyBinaries( File srcDir, String aol )
+        throws IOException {
+        int copied = 0;
+        
+        // copy binaries
+        File binDir = new File( srcDir, resourceBinDir );
+        if ( binDir.exists() )
+        {
+            File binDstDir = new File( getTargetDirectory(), "bin" );
+            binDstDir = new File( binDstDir, aol );
+
+            copied += NarUtil.copyDirectoryStructure( binDir, binDstDir, null, NarUtil.DEFAULT_EXCLUDES );
+        }
+
+        return copied;
+    }
+    
+    protected int copyLibraries( File srcDir, String aol) throws MojoFailureException, IOException {
+        int copied = 0;
+        
+        // copy libraries
+        File libDir = new File( srcDir, resourceLibDir );
+        if ( libDir.exists() )
+        {
+            // create all types of libs
+            for ( Iterator i = getLibraries().iterator(); i.hasNext(); )
+            {
+                Library library = (Library) i.next();
+                String type = library.getType();
+                File libDstDir = new File( getTargetDirectory(), "lib" );
+                libDstDir = new File( libDstDir, aol );
+                libDstDir = new File( libDstDir, type );
+
+                // filter files for lib
+                String includes =
+                    "**/*."
+                        + NarUtil.getDefaults().getProperty( NarUtil.getAOLKey( aol ) + "." + type + ".extension" );
+                copied += NarUtil.copyDirectoryStructure( libDir, libDstDir, includes, NarUtil.DEFAULT_EXCLUDES );
+            }
+        }
+        
+        return copied;
+    }
+    
+    protected void copyResources( File srcDir, String aol )
         throws MojoExecutionException, MojoFailureException
     {
         int copied = 0;
         try
         {
-            // copy headers
-            File includeDir = new File( srcDir, resourceIncludeDir );
-            if ( includeDir.exists() )
-            {
-                File includeDstDir = new File( getTargetDirectory(), "include" );
-                copied += NarUtil.copyDirectoryStructure( includeDir, includeDstDir, null, NarUtil.DEFAULT_EXCLUDES );
-            }
+            copied += copyIncludes( srcDir );
+            
+            copied += copyBinaries( srcDir, aol);
 
-            // copy binaries
-            File binDir = new File( srcDir, resourceBinDir );
-            if ( binDir.exists() )
-            {
-                File binDstDir = new File( getTargetDirectory(), "bin" );
-                binDstDir = new File( binDstDir, aol );
-
-                copied += NarUtil.copyDirectoryStructure( binDir, binDstDir, null, NarUtil.DEFAULT_EXCLUDES );
-            }
-
-            // copy libraries
-            File libDir = new File( srcDir, resourceLibDir );
-            if ( libDir.exists() )
-            {
-                // create all types of libs
-                for ( Iterator i = getLibraries().iterator(); i.hasNext(); )
-                {
-                    Library library = (Library) i.next();
-                    String type = library.getType();
-                    File libDstDir = new File( getTargetDirectory(), "lib" );
-                    libDstDir = new File( libDstDir, aol );
-                    libDstDir = new File( libDstDir, type );
-
-                    // filter files for lib
-                    String includes =
-                        "**/*."
-                            + NarUtil.getDefaults().getProperty( NarUtil.getAOLKey( aol ) + "." + type + ".extension" );
-                    copied += NarUtil.copyDirectoryStructure( libDir, libDstDir, includes, NarUtil.DEFAULT_EXCLUDES );
-                }
-            }
+            copied += copyLibraries( srcDir, aol );
 
             // unpack jar files
             File classesDirectory = new File( getOutputDirectory(), "classes" );

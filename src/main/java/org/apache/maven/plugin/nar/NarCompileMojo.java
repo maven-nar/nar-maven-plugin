@@ -47,7 +47,7 @@ import org.codehaus.plexus.util.StringUtils;
  * Compiles native source files.
  * 
  * @goal nar-compile
- * @phase process-classes
+ * @phase compile
  * @requiresDependencyResolution compile
  * @author Mark Donszelmann
  */

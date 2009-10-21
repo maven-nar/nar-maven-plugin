@@ -61,7 +61,9 @@ public class NarGnuConfigureMojo
         if ( shouldSkip() )
             return;
 
-        // always copy, in case we need libs or include dirs
+        if ( !useGnu() )
+            return;
+
         File targetDir = getGnuAOLSourceDirectory();
         if ( gnuSourceDirectory.exists() )
         {
@@ -76,13 +78,7 @@ public class NarGnuConfigureMojo
             {
                 throw new MojoExecutionException( "Failed to copy GNU sources", e );
             }
-        }
 
-        if ( !useGnu() )
-            return;
-
-        if ( targetDir.exists() )
-        {
             File autogen = new File( targetDir, AUTOGEN );
             if ( !gnuConfigureSkip && !gnuAutogenSkip && autogen.exists() )
             {
