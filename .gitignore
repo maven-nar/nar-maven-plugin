@@ -1,6 +1,7 @@
 .classpath
 .project
 .settings
+*.bak
 build.log
 bin
 target
