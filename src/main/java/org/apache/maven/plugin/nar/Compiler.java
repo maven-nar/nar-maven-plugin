@@ -65,6 +65,14 @@ public abstract class Compiler
     private File sourceDirectory;
 
     /**
+     * Source directory for native test files
+     * 
+     * @parameter expression="${basedir}/src/test"
+     * @required
+     */
+    private File testSourceDirectory;
+
+    /**
      * Include patterns for sources
      * 
      * @parameter expression=""
@@ -175,6 +183,13 @@ public abstract class Compiler
     private List includePaths;
 
     /**
+     * Test Include Paths. Defaults to "${testSourceDirectory}/include"
+     * 
+     * @parameter expression=""
+     */
+    private List testIncludePaths;
+
+    /**
      * System Include Paths, which are added at the end of all include paths
      * 
      * @parameter expression=""
@@ -223,10 +238,17 @@ public abstract class Compiler
     {
         List sourceDirectories = new ArrayList();
 
-        if ( sourceDirectory == null )
+        if ( type.equals( "test" ) )
         {
-            sourceDirectories.add( new File( mojo.getMavenProject().getBasedir(), "src/"
-                + ( type.equals( "test" ) ? "test" : "main" ) ) );
+            if ( testSourceDirectory == null )
+                testSourceDirectory = new File( mojo.getMavenProject().getBasedir(), "/src/test" );
+            sourceDirectories.add( testSourceDirectory );
+        }
+        else
+        {
+            if ( sourceDirectory == null )
+                sourceDirectory = new File( mojo.getMavenProject().getBasedir(), "src/main" );
+            sourceDirectories.add( sourceDirectory );
         }
 
         // FIXME, see NAR-69
@@ -236,15 +258,20 @@ public abstract class Compiler
 
     protected List/* <String> */getIncludePaths( String type )
     {
-        if ( includePaths == null || ( includePaths.size() == 0 ) )
+        return createIncludePaths( type, type.equals( "test" ) ? testIncludePaths : includePaths );
+    }
+
+    private List/* <String> */createIncludePaths( String type, List paths )
+    {
+        if ( paths == null || ( paths.size() == 0 ) )
         {
-            includePaths = new ArrayList();
+            paths = new ArrayList();
             for ( Iterator i = getSourceDirectories( type ).iterator(); i.hasNext(); )
             {
-                includePaths.add( new File( (File) i.next(), "include" ).getPath() );
+                paths.add( new File( (File) i.next(), "include" ).getPath() );
             }
         }
-        return includePaths;
+        return paths;
     }
 
     public Set getIncludes()
@@ -512,7 +539,7 @@ public abstract class Compiler
         for ( Iterator i = srcDirs.iterator(); i.hasNext(); )
         {
             File srcDir = (File) i.next();
-            mojo.getLog().debug( "Checking for existence of " + getName() + " sourceDirectory: " + srcDir );
+            mojo.getLog().debug( "Checking for existence of " + getName() + " source directory: " + srcDir );
             if ( srcDir.exists() )
             {
                 ConditionalFileSet fileSet = new ConditionalFileSet();
