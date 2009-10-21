@@ -81,6 +81,7 @@ public abstract class AbstractResourcesMojo
         if ( includeDir.exists() )
         {
             File includeDstDir = new File( getTargetDirectory(), "include" );
+            getLog().debug("Copying includes from "+includeDir+" to "+includeDstDir);
             copied += NarUtil.copyDirectoryStructure( includeDir, includeDstDir, null, NarUtil.DEFAULT_EXCLUDES );
         }
         
@@ -97,6 +98,7 @@ public abstract class AbstractResourcesMojo
         {
             File binDstDir = new File( getTargetDirectory(), "bin" );
             binDstDir = new File( binDstDir, aol );
+            getLog().debug("Copying binaries from "+binDir+" to "+binDstDir);
 
             copied += NarUtil.copyDirectoryStructure( binDir, binDstDir, null, NarUtil.DEFAULT_EXCLUDES );
         }
@@ -120,6 +122,8 @@ public abstract class AbstractResourcesMojo
                 libDstDir = new File( libDstDir, aol );
                 libDstDir = new File( libDstDir, type );
 
+                getLog().debug("Copying libraries from "+libDir+" to "+libDstDir);
+                
                 // filter files for lib
                 String includes =
                     "**/*."
