@@ -319,7 +319,7 @@ public class NarCompileMojo
         }
 
         // Add JVM to linker
-        getJava().addRuntime( task, getJavaHome( getAOL() ), getOS(), getAOL().getKey() + "java." );
+        getJava().addRuntime( task, getJavaHome( getAOL() ), getOS(), getAOL().getKey() + ".java." );
 
         // execute
         try

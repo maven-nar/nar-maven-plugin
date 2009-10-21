@@ -152,7 +152,7 @@ public class Java
                         throw new MojoFailureException( "NAR: Please specify a <RuntimeDirectory> as part of <Java>" );
                     }
                 }
-                mojo.getLog().debug( "Using Java Rumtime Directory: " + runtimeDirectory );
+                mojo.getLog().debug( "Using Java Runtime Directory: " + runtimeDirectory );
 
                 LibrarySet libset = new LibrarySet();
                 libset.setProject( mojo.getAntProject() );
