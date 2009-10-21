@@ -61,14 +61,12 @@ public class NarGnuConfigureMojo
         if ( shouldSkip() )
             return;
 
-        if ( !useGnu() )
-            return;
-
+        // always copy, in case we need libs or include dirs
+        File targetDir = getGnuAOLSourceDirectory();
         if ( gnuSourceDirectory.exists() )
         {
             getLog().info( "Copying GNU sources" );
 
-            File targetDir = getGnuAOLSourceDirectory();
             try
             {
                 FileUtils.mkdir( targetDir.getPath() );
@@ -78,7 +76,13 @@ public class NarGnuConfigureMojo
             {
                 throw new MojoExecutionException( "Failed to copy GNU sources", e );
             }
+        }
 
+        if ( !useGnu() )
+            return;
+
+        if ( targetDir.exists() )
+        {
             File autogen = new File( targetDir, AUTOGEN );
             if ( !gnuConfigureSkip && !gnuAutogenSkip && autogen.exists() )
             {
@@ -88,7 +92,7 @@ public class NarGnuConfigureMojo
                 if ( result != 0 )
                 {
                     System.err.println( targetDir );
-                    throw new MojoExecutionException( "'"+AUTOGEN+"' errorcode: " + result );
+                    throw new MojoExecutionException( "'" + AUTOGEN + "' errorcode: " + result );
                 }
             }
 
@@ -102,7 +106,7 @@ public class NarGnuConfigureMojo
                         "--prefix=" + getGnuAOLTargetDirectory().getAbsolutePath() }, targetDir, null, getLog() );
                 if ( result != 0 )
                 {
-                    throw new MojoExecutionException( "'"+CONFIGURE+"' errorcode: " + result );
+                    throw new MojoExecutionException( "'" + CONFIGURE + "' errorcode: " + result );
                 }
             }
         }
