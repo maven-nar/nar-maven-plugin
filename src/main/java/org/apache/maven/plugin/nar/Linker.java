@@ -163,9 +163,9 @@ public class Linker
         }
         if ( name == null )
         {
-            throw new MojoFailureException( "One of two things may be wrong here:\n"+
-                                            "1. <Name> tag is missing inside the <Linker> tag of your NAR configuration\n"+
-                                            "2. no linker is defined in the aol.properties file for '"+prefix+"'");
+            throw new MojoFailureException( "NAR: One of two things may be wrong here:\n\n"+
+                                            "1. <Name> tag is missing inside the <Linker> tag of your NAR configuration\n\n"+
+                                            "2. no linker is defined in the aol.properties file for '"+prefix+"linker'\n");
         }
         return name;
     }
