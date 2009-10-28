@@ -72,43 +72,47 @@ public abstract class AbstractResourcesMojo
      */
     private ArchiverManager archiverManager;
 
-    protected int copyIncludes( File srcDir ) throws IOException
+    protected int copyIncludes( File srcDir )
+        throws IOException
     {
         int copied = 0;
-        
+
         // copy includes
         File includeDir = new File( srcDir, resourceIncludeDir );
         if ( includeDir.exists() )
         {
             File includeDstDir = new File( getTargetDirectory(), "include" );
-            getLog().debug("Copying includes from "+includeDir+" to "+includeDstDir);
+            getLog().debug( "Copying includes from " + includeDir + " to " + includeDstDir );
             copied += NarUtil.copyDirectoryStructure( includeDir, includeDstDir, null, NarUtil.DEFAULT_EXCLUDES );
         }
-        
+
         return copied;
     }
 
     protected int copyBinaries( File srcDir, String aol )
-        throws IOException {
+        throws IOException
+    {
         int copied = 0;
-        
+
         // copy binaries
         File binDir = new File( srcDir, resourceBinDir );
         if ( binDir.exists() )
         {
             File binDstDir = new File( getTargetDirectory(), "bin" );
             binDstDir = new File( binDstDir, aol );
-            getLog().debug("Copying binaries from "+binDir+" to "+binDstDir);
+            getLog().debug( "Copying binaries from " + binDir + " to " + binDstDir );
 
             copied += NarUtil.copyDirectoryStructure( binDir, binDstDir, null, NarUtil.DEFAULT_EXCLUDES );
         }
 
         return copied;
     }
-    
-    protected int copyLibraries( File srcDir, String aol) throws MojoFailureException, IOException {
+
+    protected int copyLibraries( File srcDir, String aol )
+        throws MojoFailureException, IOException
+    {
         int copied = 0;
-        
+
         // copy libraries
         File libDir = new File( srcDir, resourceLibDir );
         if ( libDir.exists() )
@@ -122,19 +126,24 @@ public abstract class AbstractResourcesMojo
                 libDstDir = new File( libDstDir, aol );
                 libDstDir = new File( libDstDir, type );
 
-                getLog().debug("Copying libraries from "+libDir+" to "+libDstDir);
-                
+                getLog().debug( "Copying libraries from " + libDir + " to " + libDstDir );
+
                 // filter files for lib
                 String includes =
-                    "**/*."
-                        + NarUtil.getDefaults().getProperty( NarUtil.getAOLKey( aol ) + "." + type + ".extension" );
+                    "**/*." + NarUtil.getDefaults().getProperty( NarUtil.getAOLKey( aol ) + "." + type + ".extension" );
+
+                // add import lib for Windows shared libraries
+                if ( new AOL( aol ).getOS().equals( OS.WINDOWS ) && type.equals( Library.SHARED ) )
+                {
+                    includes += ",**/*.lib";
+                }
                 copied += NarUtil.copyDirectoryStructure( libDir, libDstDir, includes, NarUtil.DEFAULT_EXCLUDES );
             }
         }
-        
+
         return copied;
     }
-    
+
     protected void copyResources( File srcDir, String aol )
         throws MojoExecutionException, MojoFailureException
     {
@@ -142,8 +151,8 @@ public abstract class AbstractResourcesMojo
         try
         {
             copied += copyIncludes( srcDir );
-            
-            copied += copyBinaries( srcDir, aol);
+
+            copied += copyBinaries( srcDir, aol );
 
             copied += copyLibraries( srcDir, aol );
 

@@ -81,4 +81,8 @@ public class AOL
     {
         return architecture + ( ( os == null ) ? "" : "." + os + ( ( linkerName == null ) ? "" : "." + linkerName ) );
     }
+    
+    String getOS() {
+        return os;
+    }
 }
