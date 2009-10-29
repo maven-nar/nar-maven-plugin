@@ -87,7 +87,7 @@ public class Library
      * @parameter expression="${project.build.dir}/nar/nar-generated"
      * @required
      */
-    protected File narSystemDirectory = new File( "target/nar/nar-generated" );
+    protected String narSystemDirectory = "target/nar/nar-generated";
 
     /**
      * When true and if type is "executable" run this executable. Defaults to false;
@@ -139,7 +139,7 @@ public class Library
         return narSystemName;
     }
 
-    public File getNarSystemDirectory()
+    public String getNarSystemDirectory()
     {
         return narSystemDirectory;
     }

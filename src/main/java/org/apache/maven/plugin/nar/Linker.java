@@ -179,27 +179,37 @@ public class Linker
             throw new MojoFailureException( "Cannot deduce linker version if name is null" );
 
         String version = null;
-        
+
         TextStream out = new StringTextStream();
         TextStream err = new StringTextStream();
         TextStream dbg = new StringTextStream();
 
         if ( name.equals( "g++" ) || name.equals( "gcc" ) )
         {
-            NarUtil.runCommand( "gcc", new String[] { "--version" }, null, null, out, err, dbg );
+            int r = NarUtil.runCommand( "gcc", new String[] { "--version" }, null, null, out, err, dbg );
             Pattern p = Pattern.compile( "\\d+\\.\\d+\\.\\d+" );
             Matcher m = p.matcher( out.toString() );
-            if (m.find()) {
+            if ( m.find() )
+            {
                 version = m.group( 0 );
+            }
+            else
+            {
+                throw new MojoFailureException( "Cannot deduce version number from: " + out );
             }
         }
         else if ( name.equals( "msvc" ) )
         {
-            NarUtil.runCommand( "link", new String[] { "/version" }, null, null, out, err, dbg );
+            int r = NarUtil.runCommand( "link", new String[] { "/version" }, null, null, out, err, dbg );
             Pattern p = Pattern.compile( "\\d+\\.\\d+\\.\\d+" );
             Matcher m = p.matcher( out.toString() );
-            if (m.find()) {
+            if ( m.find() )
+            {
                 version = m.group( 0 );
+            }
+            else
+            {
+                throw new MojoFailureException( "Cannot deduce version number from: " + out );
             }
         }
         else

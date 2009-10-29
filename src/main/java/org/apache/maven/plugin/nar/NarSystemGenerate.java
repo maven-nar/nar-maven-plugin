@@ -49,8 +49,9 @@ public class NarSystemGenerate
         // get packageName if specified for JNI.
         String packageName = null;
         String narSystemName = null;
-        File narSystemDirectory = null;
-        for ( Iterator i = getLibraries().iterator(); i.hasNext() && ( packageName == null ); )
+        String narSystemDirectory = null;
+        boolean jniFound = false;
+        for ( Iterator i = getLibraries().iterator(); !jniFound && i.hasNext(); )
         {
             Library library = (Library) i.next();
             if ( library.getType().equals( Library.JNI ) )
@@ -58,18 +59,21 @@ public class NarSystemGenerate
                 packageName = library.getNarSystemPackage();
                 narSystemName = library.getNarSystemName();
                 narSystemDirectory = library.getNarSystemDirectory();
+                jniFound = true;
             }
         }
-
-        if ( packageName == null )
+        
+        if ( !jniFound )
             return;
 
+        File narSystemTarget = new File(getMavenProject().getBasedir(), narSystemDirectory);
+
         // make sure destination is there
-        narSystemDirectory.mkdirs();
+        narSystemTarget.mkdirs();
 
-        getMavenProject().addCompileSourceRoot( narSystemDirectory.getPath() );
+        getMavenProject().addCompileSourceRoot( narSystemTarget.getPath() );
 
-        File fullDir = new File( narSystemDirectory, packageName.replace( '.', '/' ) );
+        File fullDir = new File( narSystemTarget, packageName.replace( '.', '/' ) );
         fullDir.mkdirs();
 
         File narSystem = new File( fullDir, narSystemName + ".java" );

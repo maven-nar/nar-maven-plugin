@@ -80,10 +80,13 @@ public class NarTestMojo
         {
             String name = "target/test-nar/bin/" + getAOL() + "/" + test.getName();
             getLog().info( "Running test " + name );
+
+            File workingDir = getMavenProject().getBasedir();
+            getLog().info( "  in " + workingDir );
             List args = test.getArgs();
             int result =
                 NarUtil.runCommand( getMavenProject().getBasedir() + "/" + name,
-                                    (String[]) args.toArray( new String[args.size()] ), null, 
+                                    (String[]) args.toArray( new String[args.size()] ), workingDir,
                                     generateEnvironment( test, getLog() ), getLog() );
             if ( result != 0 )
                 throw new MojoFailureException( "Test " + name + " failed with exit code: " + result + " 0x"
@@ -102,7 +105,7 @@ public class NarTestMojo
             List args = library.getArgs();
             int result =
                 NarUtil.runCommand( project.getBasedir() + "/" + name,
-                                    (String[]) args.toArray( new String[args.size()] ), null, 
+                                    (String[]) args.toArray( new String[args.size()] ), null,
                                     generateEnvironment( library, getLog() ), getLog() );
             if ( result != 0 )
                 throw new MojoFailureException( "Test " + name + " failed with exit code: " + result + " 0x"
