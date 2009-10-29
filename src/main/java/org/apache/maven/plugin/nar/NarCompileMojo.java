@@ -330,11 +330,11 @@ public class NarCompileMojo
         {
             throw new MojoExecutionException( "NAR: Compile failed", e );
         }
-
+        
         // FIXME, this should be done in CPPTasks at some point
         if ( getRuntime( getAOL() ).equals( "dynamic" ) && getOS().equals( OS.WINDOWS )
             && getLinker().getName( null, null ).equals( "msvc" )
-            && NarUtil.getEnv( "MSVCVer", "MSVCVer", "6.0" ).startsWith( "8." ) )
+            && !getLinker().getVersion().startsWith( "6." ) )
         {
             String libType = library.getType();
             if ( libType.equals( Library.JNI ) || libType.equals( Library.SHARED ) )

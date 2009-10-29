@@ -206,9 +206,6 @@ public class Linker
         {
             throw new MojoFailureException( "Cannot find version number for linker '" + name + "'" );
         }
-        System.err.println( "O " + out );
-        System.err.println( "E " + err );
-        System.err.println( "D " + dbg );
         return version;
     }
 
