@@ -48,6 +48,8 @@ public abstract class AbstractGnuMojo
     protected File gnuSourceDirectory;
 
     /**
+     * Directory in which gnu sources are copied and "configured"
+     * 
      * @parameter expression="${project.build.directory}/nar/gnu"
      * @required
      */

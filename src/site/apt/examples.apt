@@ -5,11 +5,12 @@ Maven NAR Plugin
 Mark Donszelmann
 	---
 	
-HelloWorld Examples
+Examples
 
 	These example contain a simple C method "sayHello". This method can be called from a C program, a Java program, put into
 a static library, put into a shared library, use as a third party library, ...
-There are also some unit test which are run and call the same method. 
+There are also some unit test which are run and call the same method. All examples are available in the src/it
+directory. 
 
 	The following examples are available:
 

@@ -43,6 +43,7 @@ under the License.
       <item name="Configuration" href="configuration.html"/>
       <item name="FAQ" href="faq.html"/>
       <item name="AOL Properties" href="aol.html"/>
+      <item name="Examples" href="examples.html"/>
     </menu>
    
     <menu name="Developer Info">
@@ -56,9 +57,7 @@ under the License.
       <item name="Git Browse cpptasks" href="http://github.com/duns/cpptasks-parallel"/>
       <item name="Git Repository" href="source-repository.html"/>      
     </menu>
-    <menu name="Examples">
-      <item name="HelloWorld" href="HelloWorld.html"/>
-    </menu>
+
     <menu name="Other Information">
       <item name="Maven and other languages" href="http://docs.codehaus.org/display/MAVEN/Support+for+other+languages"/>
     </menu>
