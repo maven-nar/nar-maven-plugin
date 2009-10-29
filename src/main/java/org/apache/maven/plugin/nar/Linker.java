@@ -23,10 +23,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.LinkedList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.sf.antcontrib.cpptasks.CUtil;
 import net.sf.antcontrib.cpptasks.LinkerDef;
@@ -163,11 +165,51 @@ public class Linker
         }
         if ( name == null )
         {
-            throw new MojoFailureException( "NAR: One of two things may be wrong here:\n\n"+
-                                            "1. <Name> tag is missing inside the <Linker> tag of your NAR configuration\n\n"+
-                                            "2. no linker is defined in the aol.properties file for '"+prefix+"linker'\n");
+            throw new MojoFailureException( "NAR: One of two things may be wrong here:\n\n"
+                + "1. <Name> tag is missing inside the <Linker> tag of your NAR configuration\n\n"
+                + "2. no linker is defined in the aol.properties file for '" + prefix + "linker'\n" );
         }
         return name;
+    }
+
+    public String getVersion()
+        throws MojoFailureException, MojoExecutionException
+    {
+        if ( name == null )
+            throw new MojoFailureException( "Cannot deduce linker version if name is null" );
+
+        String version = null;
+        
+        TextStream out = new StringTextStream();
+        TextStream err = new StringTextStream();
+        TextStream dbg = new StringTextStream();
+
+        if ( name.equals( "g++" ) || name.equals( "gcc" ) )
+        {
+            NarUtil.runCommand( "gcc", new String[] { "--version" }, null, null, out, err, dbg );
+            Pattern p = Pattern.compile( "\\d+\\.\\d+\\.\\d+" );
+            Matcher m = p.matcher( out.toString() );
+            if (m.find()) {
+                version = m.group( 0 );
+            }
+        }
+        else if ( name.equals( "msvc" ) )
+        {
+            NarUtil.runCommand( "link", new String[] { "/version" }, null, null, out, err, dbg );
+            Pattern p = Pattern.compile( "\\d+\\.\\d+\\.\\d+" );
+            Matcher m = p.matcher( out.toString() );
+            if (m.find()) {
+                version = m.group( 0 );
+            }
+        }
+        else
+        {
+            throw new MojoFailureException( "Cannot find version number for linker '" + name + "'" );
+        }
+        System.err.println( "O " + out );
+        System.err.println( "E " + err );
+        System.err.println( "D " + dbg );
+        return version;
     }
 
     public LinkerDef getLinker( AbstractCompileMojo mojo, Project antProject, String os, String prefix, String type )
@@ -195,8 +237,9 @@ public class Linker
             try
             {
                 List cSrcDirs = mojo.getC().getSourceDirectories();
-                for (Iterator i = cSrcDirs.iterator(); i.hasNext(); ) {
-                    File dir = (File)i.next();
+                for ( Iterator i = cSrcDirs.iterator(); i.hasNext(); )
+                {
+                    File dir = (File) i.next();
                     if ( dir.exists() )
                         defs.addAll( FileUtils.getFiles( dir, "**/*.def", null ) );
                 }
@@ -207,8 +250,9 @@ public class Linker
             try
             {
                 List cppSrcDirs = mojo.getCpp().getSourceDirectories();
-                for (Iterator i = cppSrcDirs.iterator(); i.hasNext(); ) {
-                    File dir = (File)i.next();
+                for ( Iterator i = cppSrcDirs.iterator(); i.hasNext(); )
+                {
+                    File dir = (File) i.next();
                     if ( dir.exists() )
                         defs.addAll( FileUtils.getFiles( dir, "**/*.def", null ) );
                 }
@@ -219,8 +263,9 @@ public class Linker
             try
             {
                 List fortranSrcDirs = mojo.getFortran().getSourceDirectories();
-                for (Iterator i = fortranSrcDirs.iterator(); i.hasNext(); ) {
-                    File dir = (File)i.next();
+                for ( Iterator i = fortranSrcDirs.iterator(); i.hasNext(); )
+                {
+                    File dir = (File) i.next();
                     if ( dir.exists() )
                         defs.addAll( FileUtils.getFiles( dir, "**/*.def", null ) );
                 }

@@ -20,10 +20,13 @@ package org.apache.maven.plugin.nar;
  */
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -406,49 +409,76 @@ public class NarUtil
         return pathName + "=" + value;
     }
 
-    public static int runCommand( String cmd, String[] args, File workingDirectory, String[] env, Log log )
+    public static int runCommand( String cmd, String[] args, File workingDirectory, String[] env, final Log log )
+        throws MojoExecutionException, MojoFailureException
+    {
+        return runCommand( cmd, args, workingDirectory, env, new TextStream()
+        {
+            public void println( String text )
+            {
+                log.info( text );
+            }
+        }, new TextStream()
+        {
+            public void println( String text )
+            {
+                log.error( text );
+            }
+
+        }, new TextStream()
+        {
+            public void println( String text )
+            {
+                log.debug( text );
+            }
+        } );
+    }
+
+    public static int runCommand( String cmd, String[] args, File workingDirectory, String[] env, TextStream out,
+                                  TextStream err, TextStream dbg )
         throws MojoExecutionException, MojoFailureException
     {
         Commandline cmdLine = new Commandline();
-        
+
         try
         {
-            log.debug( "RunCommand: " + cmd );
+            dbg.println( "RunCommand: " + cmd );
             cmdLine.setExecutable( cmd );
             if ( args != null )
             {
                 for ( int i = 0; i < args.length; i++ )
                 {
-                    log.debug( "  '" + args[i] + "'" );
+                    dbg.println( "  '" + args[i] + "'" );
                 }
                 cmdLine.addArguments( args );
             }
             if ( workingDirectory != null )
             {
-                log.debug( "in: " + workingDirectory.getPath() );
+                dbg.println( "in: " + workingDirectory.getPath() );
                 cmdLine.setWorkingDirectory( workingDirectory );
             }
 
             if ( env != null )
             {
-                log.debug( "with Env:" );
+                dbg.println( "with Env:" );
                 for ( int i = 0; i < env.length; i++ )
                 {
                     String[] nameValue = env[i].split( "=", 2 );
                     if ( nameValue.length < 2 )
                         throw new MojoFailureException( "   Misformed env: '" + env[i] + "'" );
-                    log.debug( "   '" + nameValue[0] + "=" + nameValue[1] + "'" );
+                    dbg.println( "   '" + nameValue[0] + "=" + nameValue[1] + "'" );
                     cmdLine.addEnvironment( nameValue[0], nameValue[1] );
                 }
             }
 
             Process process = cmdLine.execute();
-            StreamGobbler errorGobbler = new StreamGobbler( process.getErrorStream(), true, log );
-            StreamGobbler outputGobbler = new StreamGobbler( process.getInputStream(), false, log );
+            StreamGobbler errorGobbler = new StreamGobbler( process.getErrorStream(), err );
+            StreamGobbler outputGobbler = new StreamGobbler( process.getInputStream(), out );
 
             errorGobbler.start();
             outputGobbler.start();
             process.waitFor();
+            dbg.println( "ExitValue: " + process.exitValue() );
             return process.exitValue();
         }
         catch ( Throwable e )
@@ -457,21 +487,17 @@ public class NarUtil
         }
     }
 
-
     static class StreamGobbler
         extends Thread
     {
         InputStream is;
 
-        boolean error;
+        TextStream ts;
 
-        Log log;
-
-        StreamGobbler( InputStream is, boolean error, Log log )
+        StreamGobbler( InputStream is, TextStream ts )
         {
             this.is = is;
-            this.error = error;
-            this.log = log;
+            this.ts = ts;
         }
 
         public void run()
@@ -482,14 +508,7 @@ public class NarUtil
                 String line = null;
                 while ( ( line = reader.readLine() ) != null )
                 {
-                    if ( error )
-                    {
-                        log.error( line );
-                    }
-                    else
-                    {
-                        log.debug( line );
-                    }
+                    ts.println( line );
                 }
                 reader.close();
             }
