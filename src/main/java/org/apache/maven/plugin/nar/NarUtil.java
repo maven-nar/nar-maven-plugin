@@ -479,6 +479,8 @@ public class NarUtil
             outputGobbler.start();
             process.waitFor();
             dbg.println( "ExitValue: " + process.exitValue() );
+            errorGobbler.join( 5000 );
+            outputGobbler.join( 5000 );
             return process.exitValue();
         }
         catch ( Throwable e )
