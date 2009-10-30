@@ -63,7 +63,7 @@ public class NarSystemGenerate
             }
         }
         
-        if ( !jniFound )
+        if ( !jniFound || packageName == null)
             return;
 
         File narSystemTarget = new File(getMavenProject().getBasedir(), narSystemDirectory);
