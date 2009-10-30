@@ -256,6 +256,8 @@ public class NarManager
             ;
 
         File file = new File( repository.getBasedir(), repository.pathOf( dependency ) );
+        if (!file.exists()) return null;
+        
         JarFile jar = null;
         try
         {
