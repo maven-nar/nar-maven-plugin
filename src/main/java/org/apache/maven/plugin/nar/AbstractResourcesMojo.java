@@ -81,6 +81,7 @@ public abstract class AbstractResourcesMojo
         File includeDir = new File( srcDir, resourceIncludeDir );
         if ( includeDir.exists() )
         {
+            // FIXME NAR-90
             File includeDstDir = new File( getTargetDirectory(), "include" );
             getLog().debug( "Copying includes from " + includeDir + " to " + includeDstDir );
             copied += NarUtil.copyDirectoryStructure( includeDir, includeDstDir, null, NarUtil.DEFAULT_EXCLUDES );
@@ -98,10 +99,8 @@ public abstract class AbstractResourcesMojo
         File binDir = new File( srcDir, resourceBinDir );
         if ( binDir.exists() )
         {
-            File binDstDir = new File( getTargetDirectory(), "bin" );
-            binDstDir = new File( binDstDir, aol );
+            File binDstDir = getLayout().getLibDirectory( getTargetDirectory(), aol, Library.EXECUTABLE );
             getLog().debug( "Copying binaries from " + binDir + " to " + binDstDir );
-
             copied += NarUtil.copyDirectoryStructure( binDir, binDstDir, null, NarUtil.DEFAULT_EXCLUDES );
         }
 
@@ -122,10 +121,7 @@ public abstract class AbstractResourcesMojo
             {
                 Library library = (Library) i.next();
                 String type = library.getType();
-                File libDstDir = new File( getTargetDirectory(), "lib" );
-                libDstDir = new File( libDstDir, aol );
-                libDstDir = new File( libDstDir, type );
-
+                File libDstDir = getLayout().getLibDirectory( getTargetDirectory(), aol, type );
                 getLog().debug( "Copying libraries from " + libDir + " to " + libDstDir );
 
                 // filter files for lib

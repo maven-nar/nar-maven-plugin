@@ -131,8 +131,7 @@ public class NarTestCompileMojo
         // FIXME hardcoded values
         String libName = getFinalName();
         File includeDir = new File( getMavenProject().getBuild().getDirectory(), "nar/include" );
-        File libDir =
-            new File( getMavenProject().getBuild().getDirectory(), "nar/lib/" + getAOL() + "/" + test.getLink() );
+        File libDir = getLayout().getLibDirectory( super.getTargetDirectory(), getAOL().toString(), test.getLink() );
 
         // copy shared library
         // FIXME why do we do this ?

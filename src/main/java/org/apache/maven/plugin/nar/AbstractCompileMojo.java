@@ -252,4 +252,10 @@ public abstract class AbstractCompileMojo
         }
         return narInfo;
     }
+    
+    // FIXME, needs to be configurable and maybe move up
+    protected NarLayout getLayout()
+    {
+        return new DefaultNarLayout();
+    }
 }

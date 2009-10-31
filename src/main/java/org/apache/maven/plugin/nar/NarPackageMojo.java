@@ -49,8 +49,6 @@ public class NarPackageMojo
      */
     private MavenProjectHelper projectHelper;
 
-    private File narDirectory;
-
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
@@ -60,21 +58,21 @@ public class NarPackageMojo
         // FIX for NARPLUGIN-??? where -DupdateReleaseInfo copies to a .nar file
         getMavenProject().getArtifact().setArtifactHandler( new NarArtifactHandler() );
 
-        narDirectory = new File( getOutputDirectory(), "nar" );
-
         // noarch
+        // FIXME NAR-90
         String include = "include";
-        if ( new File( narDirectory, include ).exists() )
+        if ( new File( getTargetDirectory(), include ).exists() )
         {
-            attachNar( "include", null, NAR_NO_ARCH );
+            attachNarOld( "include", null, NAR_NO_ARCH );
         }
 
         // create nar with binaries
+        // FIXME NAR-90
         String bin = "bin";
-        String[] binAOLs = new File( narDirectory, bin ).list();
+        String[] binAOLs = new File( getTargetDirectory(), bin ).list();
         for ( int i = 0; i < ( binAOLs != null ? binAOLs.length : 0 ); i++ )
         {
-            attachNar( bin + "/" + binAOLs[i], binAOLs[i], Library.EXECUTABLE );
+            attachNarOld( bin + "/" + binAOLs[i], binAOLs[i], Library.EXECUTABLE );
         }
 
         // create nars for each type of library (static, shared).
@@ -87,11 +85,12 @@ public class NarPackageMojo
                 bindingType = type;
 
             // create nar with libraries
-            String lib = "lib";
-            String[] libAOLs = new File( narDirectory, lib ).list();
-            for ( int j = 0; j < ( libAOLs != null ? libAOLs.length : 0 ); j++ )
+            // FIXME NAR-90, the resources nar may copy extra libs in.
+            File aolDirectory = getLayout().getAolDirectory( getTargetDirectory() );
+            String[] subDirs = aolDirectory.list();
+            for ( int j = 0; j < ( subDirs != null ? subDirs.length : 0 ); j++ )
             {
-                attachNar( lib + "/" + libAOLs[j] + "/" + type, libAOLs[j], type );
+                attachNar( new File( aolDirectory, subDirs[j] ), subDirs[j], type );
             }
         }
 
@@ -119,13 +118,35 @@ public class NarPackageMojo
         }
     }
 
-    private void attachNar( String dir, String aol, String type )
+    private String getNarReference( String type )
+    {
+        return getMavenProject().getGroupId() + ":" + getMavenProject().getArtifactId() + ":" + NAR_TYPE + ":"
+            + "${aol}-" + type;
+    }
+
+    /**
+     * @param file
+     * @param string
+     * @param type
+     * @throws MojoExecutionException
+     */
+    private void attachNar( File dir, String string, String type )
+        throws MojoExecutionException
+    {
+        String aolType = dir.getName();
+        File narFile = new File( getOutputDirectory(), getFinalName() + "-" + dir.getName() + "." + NAR_EXTENSION );
+        nar( narFile, dir );
+        projectHelper.attachArtifact( getMavenProject(), NAR_TYPE, aolType, narFile );
+        getNarInfo().setNar( null, type, getNarReference( type ) );
+    }
+
+    private void attachNarOld( String dir, String aol, String type )
         throws MojoExecutionException
     {
         File libFile =
             new File( getOutputDirectory(), getFinalName() + "-" + ( aol != null ? aol + "-" : "" ) + type + "."
                 + NAR_EXTENSION );
-        nar( libFile, narDirectory, new String[] { dir } );
+        narOld( libFile, getTargetDirectory(), new String[] { dir } );
         projectHelper.attachArtifact( getMavenProject(), NAR_TYPE, ( aol != null ? aol + "-" : "" ) + type, libFile );
         getNarInfo().setNar(
                              null,
@@ -135,7 +156,38 @@ public class NarPackageMojo
 
     }
 
-    private void nar( File nar, File dir, String[] dirs )
+    private void nar( File nar, File dir )
+        throws MojoExecutionException
+    {
+        try
+        {
+            if ( nar.exists() )
+            {
+                nar.delete();
+            }
+
+            Archiver archiver = new ZipArchiver();
+            // seems to return same archiver all the time
+            // archiverManager.getArchiver(NAR_ROLE_HINT);
+            String[] includes = new String[] { "*/**" };
+            archiver.addDirectory( dir, includes, null );
+            archiver.setDestFile( nar );
+            archiver.createArchive();
+        }
+        catch ( ArchiverException e )
+        {
+            throw new MojoExecutionException( "Error while creating NAR archive.", e );
+            // } catch (NoSuchArchiverException e) {
+            // throw new MojoExecutionException("Error while creating NAR
+            // archive.", e );
+        }
+        catch ( IOException e )
+        {
+            throw new MojoExecutionException( "Error while creating NAR archive.", e );
+        }
+    }
+
+    private void narOld( File nar, File dir, String[] dirs )
         throws MojoExecutionException
     {
         try

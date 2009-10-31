@@ -54,7 +54,6 @@ import org.codehaus.plexus.util.StringUtils;
 public class NarCompileMojo
     extends AbstractCompileMojo
 {
-
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
@@ -139,10 +138,7 @@ public class NarCompileMojo
         task.setLinkFortran( library.linkFortran() );
 
         // outDir
-        File outDir = new File( getTargetDirectory(), type.equals( Library.EXECUTABLE ) ? "bin" : "lib" );
-        outDir = new File( outDir, getAOL().toString() );
-        if ( !type.equals( Library.EXECUTABLE ) )
-            outDir = new File( outDir, type );
+        File outDir = getLayout().getLibDirectory( getTargetDirectory(), getAOL().toString(), type );
         outDir.mkdirs();
 
         // outFile
@@ -227,23 +223,19 @@ public class NarCompileMojo
             // to comply with the order specified by the user
             if ( ( depLibOrder != null ) && !depLibOrder.isEmpty() )
             {
-
                 List tmp = new LinkedList();
 
                 for ( Iterator i = depLibOrder.iterator(); i.hasNext(); )
                 {
-
                     String depToOrderName = (String) i.next();
 
                     for ( Iterator j = depLibs.iterator(); j.hasNext(); )
                     {
-
                         NarArtifact dep = (NarArtifact) j.next();
                         String depName = dep.getGroupId() + ":" + dep.getArtifactId();
 
                         if ( depName.equals( depToOrderName ) )
                         {
-
                             tmp.add( dep );
                             j.remove();
                         }
@@ -256,7 +248,6 @@ public class NarCompileMojo
 
             for ( Iterator i = depLibs.iterator(); i.hasNext(); )
             {
-
                 NarArtifact dependency = (NarArtifact) i.next();
 
                 // FIXME no handling of "local"
@@ -270,9 +261,10 @@ public class NarCompileMojo
 
                 if ( !binding.equals( Library.JNI ) )
                 {
-                    File dir =
-                        new File( getNarManager().getNarFile( dependency ).getParentFile(), "nar/lib/" + aol.toString()
-                            + "/" + binding );
+                    File dir = new File( getNarManager().getNarFile( dependency ).getParentFile(), "nar" );
+                    // FIXME NAR-90
+                    // dir = getLayout().getLibDirectory( dir, aol, binding );
+                    dir = new File(dir, "lib/"+aol.toString()+"/"+binding);
                     getLog().debug( "Looking for Library Directory: " + dir );
                     if ( dir.exists() )
                     {
@@ -330,11 +322,10 @@ public class NarCompileMojo
         {
             throw new MojoExecutionException( "NAR: Compile failed", e );
         }
-        
+
         // FIXME, this should be done in CPPTasks at some point
         if ( getRuntime( getAOL() ).equals( "dynamic" ) && getOS().equals( OS.WINDOWS )
-            && getLinker().getName( null, null ).equals( "msvc" )
-            && !getLinker().getVersion().startsWith( "6." ) )
+            && getLinker().getName( null, null ).equals( "msvc" ) && !getLinker().getVersion().startsWith( "6." ) )
         {
             String libType = library.getType();
             if ( libType.equals( Library.JNI ) || libType.equals( Library.SHARED ) )

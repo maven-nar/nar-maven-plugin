@@ -50,7 +50,7 @@ public class Library
      * 
      * @parameter expression=""
      */
-    protected String type = "shared";
+    protected String type = SHARED;
 
     /**
      * Link with stdcpp if necessary Defaults to true.

@@ -972,7 +972,7 @@ public class NarIntegrationTestMojo
             if ( testJNIModule() )
             {
                 // Add libraries to java.library.path for testing
-                File jniLibraryPathEntry = new File( project.getBasedir(), "target/nar/lib/" + getAOL() + "/jni" );
+                File jniLibraryPathEntry = getLayout().getLibDirectory( getTargetDirectory(), getAOL().toString(), Library.JNI );
                 if ( jniLibraryPathEntry.exists() )
                 {
                     getLog().debug( "Adding library directory to java.library.path: " + jniLibraryPathEntry );
@@ -981,7 +981,7 @@ public class NarIntegrationTestMojo
                     javaLibraryPath.append( jniLibraryPathEntry );
                 }
 
-                File sharedLibraryPathEntry = new File( project.getBasedir(), "target/nar/lib/" + getAOL() + "/shared" );
+                File sharedLibraryPathEntry = getLayout().getLibDirectory( getTargetDirectory(), getAOL().toString(), Library.SHARED );
                 if ( sharedLibraryPathEntry.exists() )
                 {
                     getLog().debug( "Adding library directory to java.library.path: " + sharedLibraryPathEntry );
@@ -1011,6 +1011,7 @@ public class NarIntegrationTestMojo
                     String binding = bindings[j];
                     if ( !binding.equals( Library.STATIC ) )
                     {
+                        // FIXME NAR-90 in repo
                         File depLibPathEntry =
                             new File( getNarManager().getNarFile( dependency ).getParent(), "nar/lib/" + getAOL() + "/"
                                 + binding );

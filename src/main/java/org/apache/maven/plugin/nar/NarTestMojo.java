@@ -44,7 +44,6 @@ import org.codehaus.plexus.util.StringUtils;
 public class NarTestMojo
     extends AbstractCompileMojo
 {
-
     /**
      * The classpath elements of the project being tested.
      * 
@@ -100,15 +99,16 @@ public class NarTestMojo
         if ( library.getType().equals( Library.EXECUTABLE ) && library.shouldRun() )
         {
             MavenProject project = getMavenProject();
-            String name = "target/nar/bin/" + getAOL() + "/" + project.getArtifactId();
-            getLog().info( "Running executable " + name );
+            // FIXME NAR-90, we could make dure we get the final name from layout
+            File executable = new File(getLayout().getLibDirectory( super.getTargetDirectory(), getAOL().toString(), library.getType() ), project.getArtifactId() );
+            getLog().info( "Running executable " + executable );
             List args = library.getArgs();
             int result =
-                NarUtil.runCommand( project.getBasedir() + "/" + name,
+                NarUtil.runCommand( executable.getPath(),
                                     (String[]) args.toArray( new String[args.size()] ), null,
                                     generateEnvironment( library, getLog() ), getLog() );
             if ( result != 0 )
-                throw new MojoFailureException( "Test " + name + " failed with exit code: " + result + " 0x"
+                throw new MojoFailureException( "Test " + executable + " failed with exit code: " + result + " 0x"
                     + Integer.toHexString( result ) );
         }
     }
@@ -131,8 +131,9 @@ public class NarTestMojo
             Library lib = (Library) i.next();
             if ( lib.getType().equals( Library.SHARED ) )
             {
-                sharedPaths.add( new File( getMavenProject().getBasedir(), "target/nar/lib/" + getAOL() + "/"
-                    + lib.getType() ) );
+                File path = getLayout().getLibDirectory( super.getTargetDirectory(), getAOL().toString(), lib.getType() );
+                getLog().debug( "Adding path to shared library: "+path );
+                sharedPaths.add( path );
             }
         }
 
@@ -151,6 +152,7 @@ public class NarTestMojo
             if ( dependency.isSnapshot() )
                 ;
 
+            // FIXME NAR-90
             File libDir = new File( getLocalRepository().pathOf( dependency ) );
             libDir = new File( getLocalRepository().getBasedir(), libDir.getParent() );
             libDir = new File( libDir, "nar/lib/" + getAOL() + "/shared" );
