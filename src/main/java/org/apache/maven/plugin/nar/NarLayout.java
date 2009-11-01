@@ -31,6 +31,13 @@ import java.io.File;
 public interface NarLayout
 {
     /**
+     * Specified wgere the noarch specific includes are unpacked
+     * 
+     * @return
+     */
+    public File getNoarchDirectory( File baseDir );
+
+    /**
      * Specifies where the aol specific libs are unpacked
      *
      * @return
@@ -43,4 +50,10 @@ public interface NarLayout
      * @return
      */
     public File getLibDirectory(File baseDir, String aol, String type);
+
+    /**
+     * Specifies where includes are stored
+     * @return
+     */
+    public File getIncludeDirectory( File targetDirectory );
 }

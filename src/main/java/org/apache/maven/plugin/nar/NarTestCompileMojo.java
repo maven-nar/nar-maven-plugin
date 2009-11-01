@@ -130,7 +130,7 @@ public class NarTestCompileMojo
 
         // FIXME hardcoded values
         String libName = getFinalName();
-        File includeDir = new File( getMavenProject().getBuild().getDirectory(), "nar/include" );
+        File includeDir = getLayout().getIncludeDirectory( super.getTargetDirectory() );
         File libDir = getLayout().getLibDirectory( super.getTargetDirectory(), getAOL().toString(), test.getLink() );
 
         // copy shared library

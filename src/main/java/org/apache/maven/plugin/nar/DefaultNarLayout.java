@@ -32,7 +32,7 @@ public class DefaultNarLayout
         return new File( baseDir, "aol" );
     }
 
-    private File getNoarchDirectory( File baseDir )
+    public File getNoarchDirectory( File baseDir )
     {
         return new File( baseDir, "noarch" );
     }
@@ -40,6 +40,17 @@ public class DefaultNarLayout
     private File getAolDirectory( File baseDir, String aol, String type )
     {
         return new File( getAolDirectory( baseDir ), aol + "-" + type );
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.apache.maven.plugin.nar.NarLayout#getIncludeDirectory(java.io.File)
+     */
+    public File getIncludeDirectory( File baseDir )
+    {
+        File dir = getNoarchDirectory( baseDir );
+        dir = new File( dir, "include" );
+        return dir;
     }
 
     /*

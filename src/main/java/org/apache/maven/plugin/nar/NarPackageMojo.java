@@ -59,11 +59,16 @@ public class NarPackageMojo
         getMavenProject().getArtifact().setArtifactHandler( new NarArtifactHandler() );
 
         // noarch
-        // FIXME NAR-90
-        String include = "include";
-        if ( new File( getTargetDirectory(), include ).exists() )
+        File noarchDir = getLayout().getNoarchDirectory( getTargetDirectory() );
+        if ( noarchDir.exists() )
         {
-            attachNarOld( "include", null, NAR_NO_ARCH );
+            String type = noarchDir.getName();
+            attachNar( noarchDir, type );
+            getNarInfo().setNar(
+                                 null,
+                                 type,
+                                 getMavenProject().getGroupId() + ":" + getMavenProject().getArtifactId() + ":"
+                                     + NAR_TYPE + ":" + type );
         }
 
         // create nar with binaries
@@ -90,7 +95,12 @@ public class NarPackageMojo
             String[] subDirs = aolDirectory.list();
             for ( int j = 0; j < ( subDirs != null ? subDirs.length : 0 ); j++ )
             {
-                attachNar( new File( aolDirectory, subDirs[j] ), subDirs[j], type );
+                attachNar( new File( aolDirectory, subDirs[j] ), subDirs[j] );
+                getNarInfo().setNar(
+                                     null,
+                                     type,
+                                     getMavenProject().getGroupId() + ":" + getMavenProject().getArtifactId() + ":"
+                                         + NAR_TYPE + ":" + "${aol}-" + type );
             }
         }
 
@@ -118,26 +128,19 @@ public class NarPackageMojo
         }
     }
 
-    private String getNarReference( String type )
-    {
-        return getMavenProject().getGroupId() + ":" + getMavenProject().getArtifactId() + ":" + NAR_TYPE + ":"
-            + "${aol}-" + type;
-    }
-
     /**
      * @param file
      * @param string
      * @param type
      * @throws MojoExecutionException
      */
-    private void attachNar( File dir, String string, String type )
+    private void attachNar( File dir, String string )
         throws MojoExecutionException
     {
         String aolType = dir.getName();
         File narFile = new File( getOutputDirectory(), getFinalName() + "-" + dir.getName() + "." + NAR_EXTENSION );
         nar( narFile, dir );
         projectHelper.attachArtifact( getMavenProject(), NAR_TYPE, aolType, narFile );
-        getNarInfo().setNar( null, type, getNarReference( type ) );
     }
 
     private void attachNarOld( String dir, String aol, String type )

@@ -81,8 +81,7 @@ public abstract class AbstractResourcesMojo
         File includeDir = new File( srcDir, resourceIncludeDir );
         if ( includeDir.exists() )
         {
-            // FIXME NAR-90
-            File includeDstDir = new File( getTargetDirectory(), "include" );
+            File includeDstDir = getLayout().getIncludeDirectory( getTargetDirectory() );
             getLog().debug( "Copying includes from " + includeDir + " to " + includeDstDir );
             copied += NarUtil.copyDirectoryStructure( includeDir, includeDstDir, null, NarUtil.DEFAULT_EXCLUDES );
         }

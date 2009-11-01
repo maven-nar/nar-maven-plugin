@@ -84,7 +84,7 @@ public class NarCompileMojo
         try
         {
             // FIXME, should the include paths be defined at a higher level ?
-            getCpp().copyIncludeFiles( getMavenProject(), new File( getTargetDirectory(), "include" ) );
+            getCpp().copyIncludeFiles( getMavenProject(), getLayout().getIncludeDirectory( getTargetDirectory() ) );
         }
         catch ( IOException e )
         {
@@ -142,6 +142,7 @@ public class NarCompileMojo
         outDir.mkdirs();
 
         // outFile
+        // FIXME NAR-90 we could get the final name from layout
         File outFile;
         if ( type.equals( Library.EXECUTABLE ) )
         {
@@ -264,7 +265,7 @@ public class NarCompileMojo
                     File dir = new File( getNarManager().getNarFile( dependency ).getParentFile(), "nar" );
                     // FIXME NAR-90
                     // dir = getLayout().getLibDirectory( dir, aol, binding );
-                    dir = new File(dir, "lib/"+aol.toString()+"/"+binding);
+                    dir = new File( dir, "lib/" + aol.toString() + "/" + binding );
                     getLog().debug( "Looking for Library Directory: " + dir );
                     if ( dir.exists() )
                     {
