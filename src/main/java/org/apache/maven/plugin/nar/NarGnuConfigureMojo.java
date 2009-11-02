@@ -83,6 +83,13 @@ public class NarGnuConfigureMojo
             if ( !gnuConfigureSkip && !gnuAutogenSkip && autogen.exists() )
             {
                 getLog().info( "Running GNU " + AUTOGEN );
+                
+                // fix missing config directory
+                File configDir = new File(targetDir, "config");
+                if (!configDir.exists()) {
+                    configDir.mkdirs();
+                }
+                
                 NarUtil.makeExecutable( autogen, getLog() );
                 int result = NarUtil.runCommand( "./" + autogen.getName(), null, targetDir, null, getLog() );
                 if ( result != 0 )
