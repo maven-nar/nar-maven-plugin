@@ -25,46 +25,6 @@ import java.io.File;
  * @author Mark Donszelmann (Mark.Donszelmann@gmail.com)
  */
 public class DefaultNarLayout
-    implements NarLayout
+    extends NarLayout21
 {
-    public File getAolDirectory( File baseDir )
-    {
-        return new File( baseDir, "aol" );
-    }
-
-    public File getNoarchDirectory( File baseDir )
-    {
-        return new File( baseDir, "noarch" );
-    }
-
-    private File getAolDirectory( File baseDir, String aol, String type )
-    {
-        return new File( getAolDirectory( baseDir ), aol + "-" + type );
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.apache.maven.plugin.nar.NarLayout#getIncludeDirectory(java.io.File)
-     */
-    public File getIncludeDirectory( File baseDir )
-    {
-        File dir = getNoarchDirectory( baseDir );
-        dir = new File( dir, "include" );
-        return dir;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.apache.maven.plugin.nar.NarLayout#getLibDir(org.apache.maven.plugin.nar.AOL, java.lang.String)
-     */
-    public File getLibDirectory( File baseDir, String aol, String type )
-    {
-        File dir = getAolDirectory( baseDir, aol, type );
-        dir = new File( dir, type.equals( Library.EXECUTABLE ) ? "bin" : "lib" );
-        dir = new File( dir, aol.toString() );
-        if ( !dir.equals( Library.EXECUTABLE ) )
-            dir = new File( dir, type );
-        return dir;
-    }
-
 }
