@@ -268,11 +268,6 @@ public abstract class Compiler
             }
         }
 
-        // FIXME, see NAR-69
-        File swigDir = new File( baseDir, "target/swig" );
-        if ( swigDir.exists() )
-            sourceDirectories.add( swigDir );
-
         if (mojo.getLog().isDebugEnabled()) {
         for ( Iterator i = sourceDirectories.iterator(); i.hasNext(); )
             mojo.getLog().debug( "Added to sourceDirectory: " + ((File)i.next()).getPath() );
