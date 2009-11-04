@@ -237,22 +237,46 @@ public abstract class Compiler
     private List/* <File> */getSourceDirectories( String type )
     {
         List sourceDirectories = new ArrayList();
+        File baseDir = mojo.getMavenProject().getBasedir();
 
         if ( type.equals( "test" ) )
         {
             if ( testSourceDirectory == null )
-                testSourceDirectory = new File( mojo.getMavenProject().getBasedir(), "/src/test" );
-            sourceDirectories.add( testSourceDirectory );
+                testSourceDirectory = new File( baseDir, "/src/test" );
+            if ( testSourceDirectory.exists() )
+                sourceDirectories.add( testSourceDirectory );
+
+            for ( Iterator i = mojo.getMavenProject().getTestCompileSourceRoots().iterator(); i.hasNext(); )
+            {
+                File extraTestSourceDirectory = new File( (String) i.next() );
+                if ( extraTestSourceDirectory.exists() )
+                    sourceDirectories.add( extraTestSourceDirectory );
+            }
         }
         else
         {
             if ( sourceDirectory == null )
-                sourceDirectory = new File( mojo.getMavenProject().getBasedir(), "src/main" );
-            sourceDirectories.add( sourceDirectory );
+                sourceDirectory = new File( baseDir, "src/main" );
+            if ( sourceDirectory.exists() )
+                sourceDirectories.add( sourceDirectory );
+
+            for ( Iterator i = mojo.getMavenProject().getCompileSourceRoots().iterator(); i.hasNext(); )
+            {
+                File extraSourceDirectory = new File( (String) i.next() );
+                if ( extraSourceDirectory.exists() )
+                    sourceDirectories.add( extraSourceDirectory );
+            }
         }
 
         // FIXME, see NAR-69
-        sourceDirectories.add( new File( mojo.getMavenProject().getBasedir(), "target/swig" ) );
+        File swigDir = new File( baseDir, "target/swig" );
+        if ( swigDir.exists() )
+            sourceDirectories.add( swigDir );
+
+        if (mojo.getLog().isDebugEnabled()) {
+        for ( Iterator i = sourceDirectories.iterator(); i.hasNext(); )
+            mojo.getLog().debug( "Added to sourceDirectory: " + ((File)i.next()).getPath() );
+        }
         return sourceDirectories;
     }
 
