@@ -236,9 +236,8 @@ public class Javah
                     getJniDirectory().mkdirs();
                     getTimestampDirectory().mkdirs();
 
-                    File javahFile = new File( mojo.getJavaHome( mojo.getAOL() ), "bin" );
-                    String javah = new File( javahFile, name ).getAbsolutePath();
-
+                    String javah = getJavah();
+                    
                     mojo.getLog().info( "Running " + javah + " compiler on " + files.size() + " classes..." );
                     int result = NarUtil.runCommand( javah, generateArgs( files ), null, null, mojo.getLog() );
                     if ( result != 0 )
@@ -296,6 +295,29 @@ public class Javah
         }
 
         return (String[]) args.toArray( new String[args.size()] );
+    }
+    
+    private String getJavah() throws MojoExecutionException, MojoFailureException {
+        String javah = null;
+
+        // try toolchain
+        Toolchain toolchain = getToolchain();
+        if (toolchain != null) {
+            javah = toolchain.findTool( "javah" );
+        }
+
+        // try java home
+        if (javah == null) {
+            File javahFile = new File( mojo.getJavaHome( mojo.getAOL() ), "bin" );
+            javah = new File( javahFile, name ).getAbsolutePath();
+        }
+        
+        // forget it...
+        if (javah == null) {
+            throw new MojoExecutionException( "NAR: Cannot find 'javah' in Toolchain or on JavaHome" );
+        }
+        
+        return javah;
     }
     
     //TODO remove the part with ToolchainManager lookup once we depend on
