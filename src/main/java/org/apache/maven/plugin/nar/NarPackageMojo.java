@@ -72,13 +72,14 @@ public class NarPackageMojo
         }
 
         // create nar with binaries
-        // FIXME NAR-90
+        /* OLD CODE
         String bin = "bin";
         String[] binAOLs = new File( getTargetDirectory(), bin ).list();
         for ( int i = 0; i < ( binAOLs != null ? binAOLs.length : 0 ); i++ )
         {
             attachNarOld( bin + "/" + binAOLs[i], binAOLs[i], Library.EXECUTABLE );
         }
+        */
 
         // create nars for each type of library (static, shared).
         String bindingType = null;
@@ -134,13 +135,12 @@ public class NarPackageMojo
      * @param type
      * @throws MojoExecutionException
      */
-    private void attachNar( File dir, String string )
+    private void attachNar( File dir, String classifier )
         throws MojoExecutionException
     {
-        String aolType = dir.getName();
-        File narFile = new File( getOutputDirectory(), getFinalName() + "-" + dir.getName() + "." + NAR_EXTENSION );
+        File narFile = new File( getOutputDirectory(), getFinalName() + "-" + classifier + "." + NAR_EXTENSION );
         nar( narFile, dir );
-        projectHelper.attachArtifact( getMavenProject(), NAR_TYPE, aolType, narFile );
+        projectHelper.attachArtifact( getMavenProject(), NAR_TYPE, classifier, narFile );
     }
 
     private void attachNarOld( String dir, String aol, String type )
