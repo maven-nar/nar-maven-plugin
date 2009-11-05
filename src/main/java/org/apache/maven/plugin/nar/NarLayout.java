@@ -2,6 +2,10 @@ package org.apache.maven.plugin.nar;
 
 import java.io.File;
 
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectHelper;
+
 /*
 
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,37 +27,38 @@ import java.io.File;
  */
 
 /**
- * Interface to define the layout of nar files (executables, libs, include dirs) in both the
- * repository (local, unpacked) as well as in target.
+ * Interface to define the layout of nar files (executables, libs, include dirs) in both the repository (local,
+ * unpacked) as well as in target.
  * 
  * @author Mark Donszelmann (Mark.Donszelmann@gmail.com)
  */
 public interface NarLayout
 {
     /**
-     * Specified wgere the noarch specific includes are unpacked
-     * 
-     * @return
-     */
-    public File getNoarchDirectory( File baseDir );
-
-    /**
-     * Specifies where the aol specific libs are unpacked
-     *
-     * @return
-     */
-    public File getAolDirectory( File baseDir );
-    
-    /**
      * Specifies where libraries are stored
      * 
      * @return
      */
-    public File getLibDirectory(File baseDir, String aol, String type);
+    public File getLibDirectory( File baseDir, String aol, String type );
 
     /**
      * Specifies where includes are stored
+     * 
      * @return
      */
     public File getIncludeDirectory( File targetDirectory );
+
+    /**
+     * Specifies where binaries are stored
+     * 
+     * @return
+     */
+    public File getBinDirectory( File baseDir, String aol );
+
+    /**
+     * Called to attach nars to main jar file. This method needs to produce all the attached nar files and set NarInfo
+     * accordingly.
+     */
+    public void attachNars( File baseDir, MavenProjectHelper projectHelper, MavenProject project, NarInfo narInfo )
+        throws MojoExecutionException;
 }

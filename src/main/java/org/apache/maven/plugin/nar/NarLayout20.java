@@ -2,6 +2,10 @@ package org.apache.maven.plugin.nar;
 
 import java.io.File;
 
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectHelper;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -24,54 +28,106 @@ import java.io.File;
 /**
  * Initial layout which expands a nar file into:
  * 
- * <pre> 
+ * <pre>
  * nar/includue
  * nar/bin
  * nar/lib
  * </pre>
  * 
- * this layout was abandoned bacuse there is no one-to-one relation between the
- * nar file and its directory structure. Therefore SNAPSHOTS could not be fully
- * deleted when replaced.
+ * this layout was abandoned because there is no one-to-one relation between the nar file and its directory structure.
+ * Therefore SNAPSHOTS could not be fully deleted when replaced.
  * 
  * @author Mark Donszelmann (Mark.Donszelmann@gmail.com)
  */
 public class NarLayout20
-    implements NarLayout
+    extends AbstractNarLayout
 {
-    public File getAolDirectory( File baseDir )
-    {
-        return baseDir;
-    }
-
-    public File getNoarchDirectory( File baseDir )
-    {
-        return baseDir;
-    }
-
     /*
      * (non-Javadoc)
      * @see org.apache.maven.plugin.nar.NarLayout#getIncludeDirectory(java.io.File)
      */
     public File getIncludeDirectory( File baseDir )
     {
-        File dir = getNoarchDirectory( baseDir );
-        dir = new File( dir, "include" );
+        return new File( baseDir, "include" );
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.apache.maven.plugin.nar.NarLayout#getLibDir(java.io.File, org.apache.maven.plugin.nar.AOL, String type)
+     */
+    public File getLibDirectory( File baseDir, String aol, String type )
+    {
+        if ( type.equals( Library.EXECUTABLE ) )
+        {
+            System.err.println( "WARNING, Replace call to getLibDirectory with getBinDirectory" );
+            Thread.dumpStack();
+        }
+
+        File dir = new File( baseDir, "lib" );
+        dir = new File( dir, aol.toString() );
+        dir = new File( dir, type );
         return dir;
     }
 
     /*
      * (non-Javadoc)
-     * @see org.apache.maven.plugin.nar.NarLayout#getLibDir(org.apache.maven.plugin.nar.AOL, java.lang.String)
+     * @see org.apache.maven.plugin.nar.NarLayout#getBinDirectory(java.io.File, java.lang.String)
      */
-    public File getLibDirectory( File baseDir, String aol, String type )
+    public File getBinDirectory( File baseDir, String aol )
     {
-        File dir = getAolDirectory( baseDir );
-        dir = new File( dir, type.equals( Library.EXECUTABLE ) ? "bin" : "lib" );
+        File dir = new File( baseDir, "bin" );
         dir = new File( dir, aol.toString() );
-        if ( !type.equals( Library.EXECUTABLE ) )
-            dir = new File( dir, type );
         return dir;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.apache.maven.plugin.nar.NarLayout#attachNars(java.io.File, org.apache.maven.project.MavenProjectHelper,
+     * org.apache.maven.project.MavenProject, org.apache.maven.plugin.nar.NarInfo)
+     */
+    public void attachNars( File baseDir, MavenProjectHelper projectHelper, MavenProject project, NarInfo narInfo )
+        throws MojoExecutionException
+    {
+        if ( getIncludeDirectory( baseDir ).exists() )
+        {
+            attachNar( projectHelper, project, "noarch", baseDir, "include/**" );
+            narInfo.setNar( null, "noarch", project.getGroupId() + ":" + project.getArtifactId() + ":"
+                + NarConstants.NAR_TYPE + ":" + "noarch" );
+        }
+
+        String[] binAOL = new File( baseDir, "bin" ).list();
+        for ( int i = 0; ( binAOL != null ) && ( i < binAOL.length ); i++ )
+        {
+            attachNar( projectHelper, project, binAOL[i] + "-" + Library.EXECUTABLE, baseDir, "bin/" + binAOL[i]
+                + "/**" );
+            narInfo.setNar( null, Library.EXECUTABLE, project.getGroupId() + ":" + project.getArtifactId() + ":"
+                + NarConstants.NAR_TYPE + ":" + "${aol}" + "-" + Library.EXECUTABLE );
+        }
+
+        File libDir = new File( baseDir, "lib" );
+        String[] libAOL = libDir.list();
+        for ( int i = 0; ( libAOL != null ) && ( i < libAOL.length ); i++ )
+        {
+            String bindingType = null;
+            String[] libType = new File( libDir, libAOL[i] ).list();
+            for ( int j = 0; ( libType != null ) && ( j < libType.length ); j++ )
+            {
+                attachNar( projectHelper, project, libAOL[i] + "-" + libType[j], baseDir, "lib/" + libAOL[i] + "/"
+                    + libType[j] + "/**" );
+                narInfo.setNar( null, libType[j], project.getGroupId() + ":" + project.getArtifactId() + ":"
+                    + NarConstants.NAR_TYPE + ":" + "${aol}" + "-" + libType[j] );
+
+                // set if not set or override if SHARED
+                if ( ( bindingType == null ) || libType[j].equals( Library.SHARED ) )
+                {
+                    bindingType = libType[j];
+                }
+            }
+
+            if ( narInfo.getBinding( null, null ) == null )
+            {
+                narInfo.setBinding( null, bindingType != null ? bindingType : Library.NONE );
+            }
+        }
+    }
 }

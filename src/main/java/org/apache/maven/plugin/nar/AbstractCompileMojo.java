@@ -129,6 +129,15 @@ public abstract class AbstractCompileMojo
      */
     private Java java;
     
+    /**
+     * Layout to be used for building and upacking artifacts
+     * 
+     * @parameter expression="${nar.layout}" default-value="org.apache.maven.plugin.nar.NarLayout21"
+     * @required
+     */
+    private String layout;
+    private NarLayout narLayout;
+    
     private NarInfo narInfo;
 
     private List/* <String> */dependencyLibOrder;
@@ -253,9 +262,31 @@ public abstract class AbstractCompileMojo
         return narInfo;
     }
     
-    // FIXME, needs to be configurable and maybe move up
-    protected NarLayout getLayout()
+    // FIXME, needs to maybe move up
+    protected NarLayout getLayout() throws MojoExecutionException
     {
-        return new DefaultNarLayout();
+        if (narLayout == null) {
+            String className = layout.indexOf( '.' ) < 0 ? NarLayout21.class.getPackage().getName()+"."+layout : layout;
+            getLog().debug( "Using "+className);
+            Class cls;
+            try
+            {
+                cls = Class.forName( className );
+                narLayout = (NarLayout)cls.newInstance();
+            }
+            catch ( ClassNotFoundException e )
+            {
+                throw new MojoExecutionException( "Cannot find class for layout "+className, e );
+            }
+            catch ( InstantiationException e )
+            {
+                throw new MojoExecutionException( "Cannot instantiate class for layout "+className, e );
+            }
+            catch ( IllegalAccessException e )
+            {
+                throw new MojoExecutionException( "Cannot access class for layout "+className, e );
+            }
+        }
+        return narLayout;
     }
 }

@@ -73,7 +73,7 @@ public abstract class AbstractResourcesMojo
     private ArchiverManager archiverManager;
 
     protected int copyIncludes( File srcDir )
-        throws IOException
+        throws IOException, MojoExecutionException
     {
         int copied = 0;
 
@@ -90,7 +90,7 @@ public abstract class AbstractResourcesMojo
     }
 
     protected int copyBinaries( File srcDir, String aol )
-        throws IOException
+        throws IOException, MojoExecutionException
     {
         int copied = 0;
 
@@ -107,7 +107,7 @@ public abstract class AbstractResourcesMojo
     }
 
     protected int copyLibraries( File srcDir, String aol )
-        throws MojoFailureException, IOException
+        throws MojoFailureException, IOException, MojoExecutionException
     {
         int copied = 0;
 
