@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="gcc 3.1 ppc-darwin-pipe -c -g -DDEBUG -D_DEBUG -DSHORE_STORE_MEM -Isrc/include -I${env.XSBHOME}/include">
+      <target file="MetamodellDb.o" lastModified="f74b969978">
+         <source file="../../../../src/db/mm/MetamodellDb.cpp" lastModified="f6d9bc4488"/>
+      </target>
+      <target file="AbstractObjsIterator.o" lastModified="f74b963bb8">
+         <source file="../../../../src/db/mm/AbstractObjsIterator.cpp" lastModified="f6cdec9dd8"/>
+      </target>
+      <target file="ObjectDb.o" lastModified="f74b958038">
+         <source file="../../../../src/db/mm/ObjectDb.cpp" lastModified="f14b4a5528"/>
+      </target>
+      <target file="AbstractDocsIterator.o" lastModified="f74b9610c0">
+         <source file="../../../../src/db/mm/AbstractDocsIterator.cpp" lastModified="f6cdec9dd8"/>
+      </target>
+      <target file="ResourceDb.o" lastModified="f74b9560f8">
+         <source file="../../../../src/db/mm/ResourceDb.cpp" lastModified="f14b4a5528"/>
+      </target>
+      <target file="RelationDb.o" lastModified="f74b95b6e8">
+         <source file="../../../../src/db/mm/RelationDb.cpp" lastModified="f6cdec9dd8"/>
+      </target>
+      <target file="UndefObjsIterator.o" lastModified="f74b958fd8">
+         <source file="../../../../src/db/mm/UndefObjsIterator.cpp" lastModified="f14b4a5528"/>
+      </target>
+      <target file="ModellDb.o" lastModified="f74b972230">
+         <source file="../../../../src/db/mm/ModellDb.cpp" lastModified="f6cdec9dd8"/>
+      </target>
+      <target file="SearchableDocTypesFilter.o" lastModified="f74b9499c0">
+         <source file="../../../../src/db/mm/SearchableDocTypesFilter.cpp" lastModified="f6cdec9dd8"/>
+      </target>
+      <target file="RelationIterator.o" lastModified="f74b9735b8">
+         <source file="../../../../src/db/mm/RelationIterator.cpp" lastModified="f14b4a5528"/>
+      </target>
+      <target file="DocumentFilter.o" lastModified="f74b9545a0">
+         <source file="../../../../src/db/mm/DocumentFilter.cpp" lastModified="f6cdec9dd8"/>
+      </target>
+      <target file="DocumentDb.o" lastModified="f74b94ebc8">
+         <source file="../../../../src/db/mm/DocumentDb.cpp" lastModified="f14b4a5528"/>
+      </target>
+      <target file="Cardinality.o" lastModified="f74b961c78">
+         <source file="../../../../src/db/mm/Cardinality.cpp" lastModified="f14b4a5528"/>
+      </target>
+      <target file="RelationFilter.o" lastModified="f74b953600">
+         <source file="../../../../src/db/mm/RelationFilter.cpp" lastModified="f14b4a5528"/>
+      </target>
+      <target file="RelTypeDb.o" lastModified="f74b95e9b0">
+         <source file="../../../../src/db/mm/RelTypeDb.cpp" lastModified="f6d9bc4488"/>
+      </target>
+      <target file="mm-container.o" lastModified="f74b9ccf50">
+         <source file="../../../../src/db/mm/mm-container.cpp" lastModified="f6dee59658"/>
+      </target>
+      <target file="BaseDb.o" lastModified="f74b974940">
+         <source file="../../../../src/db/mm/BaseDb.cpp" lastModified="f14b4a5528"/>
+      </target>
+      <target file="DocTypeDb.o" lastModified="f74b96cc40">
+         <source file="../../../../src/db/mm/DocTypeDb.cpp" lastModified="f6d9bc4488"/>
+      </target>
+      <target file="TypeDb.o" lastModified="f74b962c18">
+         <source file="../../../../src/db/mm/TypeDb.cpp" lastModified="f14b4a5528"/>
+      </target>
+      <target file="ObjTypeDb.o" lastModified="f74b952660">
+         <source file="../../../../src/db/mm/ObjTypeDb.cpp" lastModified="f705153108"/>
+      </target>
+      <target file="UndefDocsIterator.o" lastModified="f74b96dfc8">
+         <source file="../../../../src/db/mm/UndefDocsIterator.cpp" lastModified="f14b4a5528"/>
+      </target>
+      <target file="ResTypeDb.o" lastModified="f74b960120">
+         <source file="../../../../src/db/mm/ResTypeDb.cpp" lastModified="f6cdec9dd8"/>
+      </target>
+      <target file="SearchableDocsFilter.o" lastModified="f74b948e08">
+         <source file="../../../../src/db/mm/SearchableDocsFilter.cpp" lastModified="f6cdec9dd8"/>
+      </target>
+   </processor>
+</history>

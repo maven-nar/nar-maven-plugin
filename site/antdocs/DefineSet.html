@@ -1,0 +1,288 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>cpptasks: Compile tasks for Apache Ant - defineset</title>
+    <style type="text/css" media="all">
+      @import url("../css/maven-base.css");
+      @import url("../css/maven-theme.css");
+      @import url("../css/site.css");
+    </style>
+    <link rel="stylesheet" href="../css/print.css" type="text/css" media="print" />
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+      </head>
+  <body class="composite">
+    <div id="banner">
+                  <a href="http://ant-contrib.sourceforge.net/" id="bannerLeft">
+    
+            ant-contrib
+    
+            </a>
+                        <a href="http://www.sourceforge.net/" id="bannerRight">
+    
+                                    <img src="http://sflogo.sourceforge.net/sflogo.php?group_id=36177&type=5" alt="" />
+    
+            </a>
+            <div class="clear">
+        <hr/>
+      </div>
+    </div>
+    <div id="breadcrumbs">
+          
+  
+
+  
+    
+  
+  
+    
+            <div class="xleft">
+        Last Published: 2008-04-02
+                          |   
+                <a href="http://ant-contrib.sourceforge.net/" class="externalLink">ant-contrib</a>
+                &gt;
+      
+                <a href="../">cpptasks</a>
+                          </div>
+            <div class="xright">      
+  
+
+  
+    
+  
+  
+    
+  </div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+    <div id="leftColumn">
+      <div id="navcolumn">
+           
+  
+
+  
+    
+  
+  
+    
+                   <h5>Get cpptasks</h5>
+            <ul>
+              
+    <li class="none">
+                    <a href="http://sourceforge.net/project/showfiles.php?group_id=36177" class="externalLink">Download</a>
+          </li>
+              
+    <li class="none">
+                    <a href="../changes-report.html">Changes</a>
+          </li>
+              
+    <li class="none">
+                    <a href="../license.html">License</a>
+          </li>
+          </ul>
+              <h5>About cpptasks</h5>
+            <ul>
+              
+    <li class="none">
+                    <a href="../index.html">Usage</a>
+          </li>
+          </ul>
+              <h5>Elements</h5>
+            <ul>
+              
+    <li class="none">
+                    <a href="../antdocs/CCTask.html">cc</a>
+          </li>
+              
+    <li class="none">
+                    <a href="../antdocs/CompilerDef.html">compiler</a>
+          </li>
+              
+    <li class="none">
+              <strong>defineset</strong>
+        </li>
+              
+    <li class="none">
+                    <a href="../antdocs/DistributerDef.html">distributer</a>
+          </li>
+              
+    <li class="none">
+                    <a href="../antdocs/LibrarySet.html">libraryset</a>
+          </li>
+              
+    <li class="none">
+                    <a href="../antdocs/LinkerDef.html">linker</a>
+          </li>
+              
+    <li class="none">
+                    <a href="../antdocs/SystemLibrarySet.html">syslibraryset</a>
+          </li>
+              
+    <li class="none">
+                    <a href="../antdocs/TargetDef.html">targetplatform</a>
+          </li>
+              
+    <li class="none">
+                    <a href="../antdocs/VersionInfo.html">versioninfo</a>
+          </li>
+          </ul>
+              <h5>Community</h5>
+            <ul>
+              
+    <li class="none">
+                    <a href="../mail-lists.html">Mailing Lists</a>
+          </li>
+              
+    <li class="none">
+                    <a href="../issue-tracking.html">Issue Tracking</a>
+          </li>
+              
+    <li class="none">
+                    <a href="http://sourceforge.net/projects/ant-contrib/" class="externalLink">Project Page</a>
+          </li>
+              
+    <li class="none">
+                    <a href="http://sourceforge.net/news/?group_id=36177" class="externalLink">News</a>
+          </li>
+          </ul>
+              <h5>Development</h5>
+            <ul>
+              
+    <li class="none">
+                    <a href="../source-repository.html">Repository</a>
+          </li>
+              
+    <li class="none">
+                    <a href="../apidocs/index.html">JavaDoc</a>
+          </li>
+              
+    <li class="none">
+                    <a href="../integration.html">Continuous Integration</a>
+          </li>
+          </ul>
+                                           <a href="http://maven.apache.org/" title="Built by Maven" class="poweredBy">
+            <img alt="Built by Maven" src="../images/logos/maven-feather.png"></img>
+          </a>
+                       
+  
+
+  
+    
+  
+  
+    
+        </div>
+    </div>
+    <div id="bodyColumn">
+      <div id="contentBox">
+        <div class="section"><h2><a name="defineset"></a>
+defineset</h2>
+<div class="section"><h3><a name="Description"></a>
+Description</h3>
+Set of preprocessor macro defines and undefines.</div>
+<div class="section"><h3><a name="parameters"></a>
+parameters</h3>
+<table class="bodyTable"><tr class="a"><td><b>Attribute</b>
+</td>
+<td><b>Description</b>
+</td>
+<td><b>Type</b>
+</td>
+</tr>
+<tr class="b"><td>define</td>
+<td>A comma-separated list of preprocessor macros to define. Use nested
+ define elements to define macro values.</td>
+<td><a href="../apidocs/net/sf/antcontrib/cpptasks/CUtil/StringArrayBuilder.html">StringArrayBuilder</a>
+</td>
+</tr>
+<tr class="a"><td>description</td>
+<td>Sets a description of the current data type.</td>
+<td>String</td>
+</tr>
+<tr class="b"><td>id</td>
+<td>Sets an id that can be used to reference this element.</td>
+<td>String</td>
+</tr>
+<tr class="a"><td>if</td>
+<td>Sets the property name for the 'if' condition.
+ 
+ The define will be ignored unless the property is defined.
+ 
+ The value of the property is insignificant, but values that would imply
+ misinterpretation (&quot;false&quot;, &quot;no&quot;) will throw an exception when
+ evaluated.</td>
+<td>String</td>
+</tr>
+<tr class="b"><td>refid</td>
+<td>Specifies that this element should behave as if the content of the
+ element with the matching id attribute was inserted at this location. If
+ specified, no other attributes or child content should be specified,
+ other than &quot;description&quot;.</td>
+<td>Reference</td>
+</tr>
+<tr class="a"><td>undefine</td>
+<td>A comma-separated list of preprocessor macros to undefine.</td>
+<td><a href="../apidocs/net/sf/antcontrib/cpptasks/CUtil/StringArrayBuilder.html">StringArrayBuilder</a>
+</td>
+</tr>
+<tr class="b"><td>unless</td>
+<td>Set the property name for the 'unless' condition.
+ 
+ If named property is set, the define will be ignored.
+ 
+ The value of the property is insignificant, but values that would imply
+ misinterpretation (&quot;false&quot;, &quot;no&quot;) of the behavior will throw an
+ exception when evaluated.</td>
+<td>String</td>
+</tr>
+</table>
+</div>
+<div class="section"><h3><a name="parameters_as_nested_elements"></a>
+parameters as nested elements</h3>
+<dl><dt><a href="DefineArgument.html">define</a>
+</dt>
+<dd>Adds a define element.</dd>
+<dt><a href="UndefineArgument.html">undefine</a>
+</dt>
+<dd>Adds an undefine element.</dd>
+</dl>
+</div>
+</div>
+
+      </div>
+    </div>
+    <div class="clear">
+      <hr/>
+    </div>
+    <div id="footer">
+      <div class="xright">&#169;  
+          2001-2008
+    
+          Ant-Contrib Project
+          
+  
+
+  
+    
+  
+  
+    
+  </div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+  </body>
+</html>

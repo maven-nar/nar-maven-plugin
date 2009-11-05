@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+Licensed to the Ant-Contrib Project under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The Ant-Contrib Project licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+  -->
+<document xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:taskdocs="http://ant-contrib.sf.net/taskdocs">
+<properties>
+<title>undefinearg</title>
+</properties>
+<body>
+<section name="undefinearg">
+<subsection name="Description">Preprocessor macro undefinition.</subsection>
+<subsection name="parameters">
+<table>
+<tr>
+<td>
+<b>Attribute</b>
+</td>
+<td>
+<b>Description</b>
+</td>
+<td>
+<b>Type</b>
+</td>
+</tr>
+<tr>
+<td>if</td>
+<td>Sets the property name for the 'if' condition.
+ 
+ The define will be ignored unless the property is defined.
+ 
+ The value of the property is insignificant, but values that would imply
+ misinterpretation ("false", "no") will throw an exception when
+ evaluated.</td>
+<td>String</td>
+</tr>
+<tr>
+<td>name</td>
+<td>Set the name attribute</td>
+<td>String</td>
+</tr>
+<tr>
+<td>unless</td>
+<td>Set the property name for the 'unless' condition.
+ 
+ If named property is set, the define will be ignored.
+ 
+ The value of the property is insignificant, but values that would imply
+ misinterpretation ("false", "no") of the behavior will throw an
+ exception when evaluated.</td>
+<td>String</td>
+</tr>
+</table>
+</subsection>
+</section>
+</body>
+</document>

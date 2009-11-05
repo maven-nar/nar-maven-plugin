@@ -1,0 +1,11 @@
+net.sf.antcontrib.cpptasks
+net.sf.antcontrib.cpptasks.borland
+net.sf.antcontrib.cpptasks.compiler
+net.sf.antcontrib.cpptasks.devstudio
+net.sf.antcontrib.cpptasks.gcc
+net.sf.antcontrib.cpptasks.hp
+net.sf.antcontrib.cpptasks.ibm
+net.sf.antcontrib.cpptasks.parser
+net.sf.antcontrib.cpptasks.sun
+net.sf.antcontrib.cpptasks.trolltech
+net.sf.antcontrib.cpptasks.types
