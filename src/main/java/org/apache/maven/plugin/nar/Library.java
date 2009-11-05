@@ -86,7 +86,7 @@ public class Library
      * @parameter expression="${project.build.dir}/nar/nar-generated"
      * @required
      */
-    protected String narSystemDirectory = "target/nar/nar-generated";
+    protected String narSystemDirectory = "nar-generated";
 
     /**
      * When true and if type is "executable" run this executable. Defaults to false;

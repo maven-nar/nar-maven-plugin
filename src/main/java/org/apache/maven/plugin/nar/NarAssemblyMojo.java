@@ -87,7 +87,7 @@ public class NarAssemblyMojo
                 File srcDir = new File( getLocalRepository().pathOf( dependency ) );
                 srcDir = new File( getLocalRepository().getBasedir(), srcDir.getParent() );
                 srcDir = new File( srcDir, "nar/" );
-                File dstDir = new File( "target/nar/" );
+                File dstDir = getTargetDirectory();
                 try
                 {
                     FileUtils.mkdir( dstDir.getPath() );
