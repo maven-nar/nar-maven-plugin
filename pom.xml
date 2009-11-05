@@ -37,23 +37,6 @@
 
   <build>
     <defaultGoal>install</defaultGoal>
-    <sourceDirectory>src</sourceDirectory>
-    <resources>
-      <resource>
-        <directory>.</directory>
-        <includes>
-          <include>LICENSE</include>
-          <include>NOTICE</include>
-        </includes>
-      </resource>
-      <resource>
-        <directory>src</directory>
-        <includes>
-          <include>cpptasks.tasks</include>
-          <include>cpptasks.types</include>
-        </includes>
-      </resource>
-    </resources>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
