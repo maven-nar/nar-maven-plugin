@@ -48,6 +48,7 @@ under the License.
         <artifactId>maven-nar-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>
+          <layout>NarLayout20</layout>
           <libraries>
             <library>
               <type>executable</type>
