@@ -238,18 +238,19 @@ public class TestAbstractLdLinker extends TestCase {
         for (int i=0; i<endargs.size(); i++) System.err.println(endargs.get( i ));
 // NAR-103
 // BEGINFREEHEP
-        /*
-        assertEquals("-lbart", (String) endargs.elementAt(0));
-        assertEquals("-Bstatic", (String) endargs.elementAt(1));
-        assertEquals("-lcart", (String) endargs.elementAt(2));
-        assertEquals("-Bdynamic", (String) endargs.elementAt(3));
-        assertEquals("-ldart", (String) endargs.elementAt(4));
-        assertEquals(endargs.size(), 5);
-        */
-        assertEquals("-lbart", (String) endargs.elementAt(0));
-        assertEquals("-lcart", (String) endargs.elementAt(1));
-        assertEquals("-ldart", (String) endargs.elementAt(2));
-        assertEquals(endargs.size(), 3);
+        if (System.getProperty("os.name").equals("Mac OS X")) {
+            assertEquals("-lbart", (String) endargs.elementAt(0));
+            assertEquals("-lcart", (String) endargs.elementAt(1));
+            assertEquals("-ldart", (String) endargs.elementAt(2));
+            assertEquals(endargs.size(), 3);
+        } else {
+            assertEquals("-lbart", (String) endargs.elementAt(0));
+            assertEquals("-Bstatic", (String) endargs.elementAt(1));
+            assertEquals("-lcart", (String) endargs.elementAt(2));
+            assertEquals("-Bdynamic", (String) endargs.elementAt(3));
+            assertEquals("-ldart", (String) endargs.elementAt(4));
+            assertEquals(endargs.size(), 5);
+        }
 // ENDFREEHEP
     }
     public void testLibReturnValue() {
