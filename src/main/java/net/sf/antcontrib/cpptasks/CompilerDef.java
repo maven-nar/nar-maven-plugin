@@ -354,7 +354,7 @@ public final class CompilerDef extends ProcessorDef {
      * Enables or disables generation of multithreaded code. Unless specified,
      * multithreaded code generation is enabled.
      * 
-     * @param multi
+     * @param multithreaded
      *            If true, generated code may be multithreaded.
      */
     public void setMultithreaded(boolean multithreaded) {
@@ -483,7 +483,7 @@ public final class CompilerDef extends ProcessorDef {
     }
     /**
      * Enumerated attribute with the values "none", "severe", "default",
-     * "production", "diagnostic", and "failtask".
+     * "production", "diagnostic", and "aserror".
      */
     public void setWarnings(WarningLevelEnum level) {
         warnings = level.getIndex();

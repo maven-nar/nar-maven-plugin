@@ -1,0 +1,206 @@
+<?xml version="1.0"?>
+<!--
+
+Copyright 2004 The Ant-Contrib project
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!--  
+
+    build file for check 0.9.3 (http://check.sourceforge.net)
+    a C unit test framework for POSIX-like OS.
+    
+-->    
+<project name="check" default="test-all">
+
+<property name="base.dir" value="."/>
+<property name="debug" value="true"/>
+<property name="compiler" value="gcc"/>
+<property name="src.dir" location="${base.dir}/src"/>
+<property name="tests.dir" location="${base.dir}/tests"/>
+<property name="money.dir" location="${base.dir}/doc/money"/>
+<property name="build.dir" location="build"/>
+<property name="major" value="0"/>
+<property name="minor" value="9"/>
+<property name="build" value="3"/>
+<!-- specify api="unix" or api="win32" override platform default -->
+<property name="api" value="default"/>
+
+<taskdef resource="cpptasks.tasks"/>
+<typedef resource="cpptasks.types"/>
+
+<target name="usage">
+	<echo message="Builds check (http://check.sourceforge.net)."/>
+	<echo message="Usage:"/>
+	<echo message="ant -f cppunit.ant -Dbase.dir=c:/check-0.9.3"/>
+	<echo message="    -Dcompiler=[gcc | icc  ...]"/>
+</target>
+
+  <target name="init">
+    <mkdir dir="${build.dir}"/>
+    <property name="obj.dir" value="${build.dir}/obj"/>
+    <mkdir dir="${obj.dir}"/>
+    <condition property="is-gcc">
+      <or>
+        <equals arg1="${compiler}" arg2="gcc"/>
+        <equals arg1="${compiler}" arg2="g++"/>
+      </or>
+    </condition>
+    <condition property="is-msvc">
+      <or>
+        <equals arg1="${compiler}" arg2="msvc"/>
+      </or>
+    </condition>
+    <property environment="env"/>
+    <!--  in case not set in environment, use an insignificant value -->
+    <property name="env.LD_LIBRARY_PATH" value="."/>
+    <available property="configure-available" 
+               file="${base.dir}/configure"/>
+    <available property="config-available" 
+               file="${base.dir}/config.h"/>
+  </target>
+
+<target name="autogen" 
+        depends="init" 
+	      unless="configure-available">
+	<exec dir="${base.dir}" executable="bash">
+		<arg value="autogen.sh"/>
+	</exec>
+</target>
+
+
+<target name="configure" 
+        depends="autogen" 
+        unless="config-available">
+	<exec dir="${base.dir}" executable="bash">
+		<arg value="configure"/>
+	</exec>
+</target>
+
+<target name="clean">
+	<delete dir="${build.dir}"/>
+</target>
+
+
+<target name="static-lib" depends="configure">
+	<mkdir dir="${obj.dir}"/>
+	<cc subsystem="console" 
+		outfile="${build.dir}/check"
+		objdir="${obj.dir}" 
+		outtype="static" 
+		debug="${debug}"
+		warnings="diagnostic"
+	    optimize="speed"
+		name="${compiler}">
+		<fileset dir="${src.dir}" includes="*.c"/>
+		<includepath path="${base.dir};${src.dir}"/>
+		<defineset define="WIN32" if="is-win32"/>
+		<defineset define="HAVE_CONFIG_H"/>
+		<versioninfo refid="check-version"/>
+	</cc>
+</target>
+
+<target name="build-money" depends="static-lib">
+	<cc outfile="${build.dir}/money" 
+	    outtype="executable" 
+	    subsystem="console" 
+	    objdir="${obj.dir}" 
+	    debug="${debug}"
+	    warnings="diagnostic"
+	    name="${compiler}"
+	    outputfileproperty="money.exe">
+		<fileset dir="${money.dir}" includes="*.c"/>
+		<includepath path="${src.dir}"/>
+		<libset dir="${build.dir}" libs="check"/>
+		<defineset define="WIN32" if="is-win32"/>
+		<versioninfo refid="check-version"/>
+  </cc>
+</target>
+
+
+<target name="test-money" depends="build-money">
+	<exec dir="${build.dir}" 
+	      executable="${money.exe}"
+	      failonerror="false"/> 
+</target>
+
+<target name="build-check_check" depends="static-lib">
+
+    <!--  test expected file of test failure not to include
+             path, this change checks that the last 17 characters
+             of the file are check_check_sub.c   -->
+    <replace file="${tests.dir}/check_check_master.c"
+          token='strcmp(tr_lfile(tr_fail_array[i])'
+          value="strcmp(strchr(tr_lfile(tr_fail_array[i]), 0) - 17"/>
+
+    <!--   multiple tests expected error message not to include
+                 path to source file, changed hardcoded "check_check_fixture.c"
+                 to __FILE__   -->
+    <replace file="${tests.dir}/check_check_fixture.c"
+          token='"check_check_fixture.c:'
+          value='__FILE__ ":'/>
+          
+	<cc outfile="${build.dir}/check_check" 
+	    outtype="executable" 
+	    subsystem="console" 
+	    objdir="${obj.dir}" 
+	    debug="${debug}"
+	    warnings="diagnostic"
+	    name="${compiler}"
+	    outputfileproperty="check_check.exe">
+		<fileset dir="${tests.dir}" includes="check_check*.c, check_list.c"/>
+		<includepath path="${src.dir};${tests.dir}"/>
+		<libset dir="${build.dir}" libs="check"/>
+		<defineset define="WIN32" if="is-win32"/>
+		<versioninfo refid="check-version"/>
+  </cc>
+</target>
+
+
+<target name="test-check_check" depends="build-check_check">
+	<exec dir="${tests.dir}" 
+	      executable="${check_check.exe}"
+	      failonerror="true"/> 
+</target>
+
+<target name="build-check_stress" depends="static-lib">
+	<cc outfile="${build.dir}/check_stress" 
+	    outtype="executable" 
+	    subsystem="console" 
+	    objdir="${obj.dir}" 
+	    debug="${debug}"
+	    warnings="diagnostic"
+	    name="${compiler}"
+	    outputfileproperty="check_stress.exe">
+		<fileset dir="${tests.dir}" includes="check_stress.c"/>
+		<includepath path="${src.dir};${tests.dir}"/>
+		<libset dir="${build.dir}" libs="check"/>
+		<defineset define="WIN32" if="is-win32"/>
+		<versioninfo refid="check-version"/>
+  </cc>
+</target>
+
+
+<target name="test-check_stress" depends="build-check_stress">
+	<exec dir="${tests.dir}" 
+	      executable="${check_stress.exe}"
+	      failonerror="true"/> 
+</target>
+
+			    
+<target name="all" depends="build-money, build-check_check, build-check_stress"/>
+
+<target name="test-all" depends="test-money, test-check_check, test-check_stress"/>
+			    
+</project>

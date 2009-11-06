@@ -1,0 +1,17 @@
+-classpath '/Users/curta/ant-contrib/cpptasks-1.0b5/target/classes:/Users/curta/ant-contrib/cpptasks-1.0b5/target/test-classes:/Users/curta/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:/Users/curta/.m2/repository/xerces/xercesImpl/2.8.1/xercesImpl-2.8.1.jar:/Users/curta/.m2/repository/xml-apis/xml-apis/1.3.03/xml-apis-1.3.03.jar:/Users/curta/.m2/repository/ant/ant/1.6.5/ant-1.6.5.jar'
+ -protected
+-sourcepath
+'/Users/curta/ant-contrib/cpptasks-1.0b5/src/test/java'
+-author
+-bottom
+'Copyright © 2001-2008 <a href="http://ant-contrib.sourceforge.net">Ant-Contrib Project</a>. All Rights Reserved.'
+-charset
+'ISO-8859-1'
+-d
+'/Users/curta/ant-contrib/cpptasks-1.0b5/target/site/testapidocs'
+-doctitle
+'cpptasks 1.0b5 Test API'
+-use
+-version
+-windowtitle
+'cpptasks 1.0b5 Test API'

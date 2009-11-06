@@ -42,7 +42,7 @@ public class OutputTypeEnum extends EnumeratedAttribute {
         return new String[]{"executable", // executable program
                 "plugin", // plugin module
                 "shared", // dynamically linkable module
-                "static", // convenience library
+                "static",
 // FREEHEP
                 "jni"	  // jni module
         };

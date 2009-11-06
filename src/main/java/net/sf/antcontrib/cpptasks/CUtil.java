@@ -28,10 +28,13 @@ import org.apache.tools.ant.taskdefs.Execute;
 import org.apache.tools.ant.taskdefs.LogStreamHandler;
 import org.apache.tools.ant.types.Commandline;
 import org.apache.tools.ant.types.Environment;
+import org.apache.tools.ant.util.StringUtils;
+
 /**
  * Some utilities used by the CC and Link tasks.
  *
  * @author Adam Murdoch
+ * @author Curt Arnold
  */
 public class CUtil {
     /**
@@ -178,7 +181,6 @@ public class CUtil {
      * @return relative path of target file. Returns targetFile if there were
      *         no commonalities between the base and the target
      *
-     * @author Curt Arnold
      */
     public static String getRelativePath(final String base, final File targetFile) {
         try {
@@ -484,4 +486,38 @@ public class CUtil {
     public static boolean isSignificantlyAfter(long time1, long time2) {
       return time1 > (time2 + FILETIME_EPSILON);
     }
+
+
+    public static String toWindowsPath(final String path) {
+      if (File.separatorChar != '\\' && path.indexOf(File.separatorChar) != -1) {
+          return StringUtils.replace(path, File.separator, "\\");
+      }
+      return path;
+    }
+    
+    public static String toUnixPath(final String path) {
+      if (File.separatorChar != '/' && path.indexOf(File.separatorChar) != -1) {
+          return StringUtils.replace(path, File.separator, "/");
+      }
+      return path;
+    }
+
+    /**
+     *  Determines if source file has a system path,
+     *    that is part of the compiler or platform.
+     *   @param source source, may not be null.
+     *   @return true is source file appears to be system library
+     *         and its path should be discarded.
+     */
+     public static boolean isSystemPath(final File source) {
+         String lcPath = source.getAbsolutePath().toLowerCase(java.util.Locale.US);
+         return lcPath.indexOf("platformsdk") != -1
+             || lcPath.indexOf("microsoft") != -1 ||
+                lcPath == "/usr/include" ||
+                lcPath == "/usr/lib" ||
+                lcPath == "/usr/local/include" ||
+                lcPath == "/usr/local/lib";
+     }
+
+
 }

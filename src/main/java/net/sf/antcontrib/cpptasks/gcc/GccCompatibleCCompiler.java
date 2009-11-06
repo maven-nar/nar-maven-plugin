@@ -98,7 +98,7 @@ public abstract class GccCompatibleCCompiler extends CommandLineCCompiler {
                 args.addElement("-mwindows");
             }
         }
-// BEGINFREEHEP
+// BEGINFREEHEP, tests have been modified
         if (!exceptions) {
         	args.addElement("-fno-exceptions");
         }

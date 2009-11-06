@@ -31,7 +31,7 @@ public final class VisualAgeLinker extends AbstractLdLinker {
     private static final String[] objFiles = new String[]{".o", ".a", ".lib",
             ".dll", ".so", ".sl"};
     private static final VisualAgeLinker dllLinker = new VisualAgeLinker(
-            "makeC++SharedLib", objFiles, discardFiles, "lib", ".so");
+            "xlC", objFiles, discardFiles, "lib", ".a");
     private static final VisualAgeLinker instance = new VisualAgeLinker("xlC",
             objFiles, discardFiles, "", "");
     public static VisualAgeLinker getInstance() {
@@ -50,7 +50,7 @@ public final class VisualAgeLinker extends AbstractLdLinker {
             //args.addElement("-g");
         }
         if (linkType.isSharedLibrary()) {
-            //args.addElement("-G");
+            args.addElement("-qmkshrobj");
         }
     }
     public Linker getLinker(LinkType type) {
@@ -69,7 +69,15 @@ public final class VisualAgeLinker extends AbstractLdLinker {
      * would lock up.  Using a stock response.
      */
     public String getIdentifier() {
-    	return "VisualAge linker - unidentified version";
+        return "VisualAge linker - unidentified version";
+    }
+
+    protected String getDynamicLibFlag() {
+        return "-bdynamic";  
+    }
+
+    protected String getStaticLibFlag() {
+        return "-bstatic";
     }
     
 }

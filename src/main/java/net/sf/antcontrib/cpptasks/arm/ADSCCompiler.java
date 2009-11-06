@@ -112,11 +112,7 @@ public class ADSCCompiler extends CommandLineCCompiler {
                 null, newEnvironment, env);
     }
     /**
-     * Adds command switches for generic configuration options
-     * 
-     * @see net.sf.antcontrib.cpptasks.compiler.CommandLineCompiler#addImpliedArgs(java.util.Vector,
-     *      boolean, boolean, boolean,
-     *      net.sf.antcontrib.cpptasks.compiler.LinkType)
+     * {@inheritDoc}
      */
     protected void addImpliedArgs(Vector args, 
     		final boolean debug,

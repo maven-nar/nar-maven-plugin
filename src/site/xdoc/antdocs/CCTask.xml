@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+Licensed to the Ant-Contrib Project under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The Ant-Contrib Project licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+  -->
+<document xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:taskdocs="http://ant-contrib.sf.net/taskdocs">
+<properties>
+<title>cc</title>
+</properties>
+<body>
+<section name="cc">
+<subsection name="Description">Compile and link task.
+ 
+ <p>
+ This task can compile various source languages and produce executables,
+ shared libraries (aka DLL's) and static libraries. Compiler adaptors are
+ currently available for several C/C++ compilers, FORTRAN, MIDL and Windows
+ Resource files.
+ </p>
+ 
+ <p>
+ Copyright (c) 2001-2008, The Ant-Contrib project.
+ </p>
+ 
+ <p>
+ Licensed under the Apache Software License 2.0,
+ http://www.apache.org/licenses/LICENSE-2.0.
+ </p>
+ 
+ <p>
+ For use with Apache Ant 1.5 or later. This software is not a product of the
+ of the Apache Software Foundation and no endorsement is implied.
+ </p>
+ 
+ <p>
+ THIS SOFTWARE IS PROVIDED 'AS-IS', See 
+ http://www.apache.org/licenses/LICENSE-2.0 for additional disclaimers.
+ </p>
+ 
+ To use:
+ <ol>
+ <li>
+ Place cpptasks.jar into Ant's classpath by placing it in Ant's lib 
+ directory, adding it to the CLASSPATH environment variable or by using the
+ -lib command line option.
+  </li>
+ <li>
+ Add type and task definitions to the build file:
+ <ul>
+ <li>
+ Ant 1.6 or later:
+ <ul>
+ <li>Add xmlns:cpptasks="antlib:net.sf.antcontrib.cpptasks" to 
+ &lt;project&gt; element.
+ </li>
+ <li>
+ Add &lt;cpptasks:cc/&gt;, &lt;cpptasks:compiler/&gt; and 
+ &lt;cpptasks:linker/&gt; elements to the project.
+ </li>
+ </ul>
+ </li>
+ <li>
+ Ant 1.5 or later:
+ <ul>
+ <li>Add &lt;taskdef resource="cpptasks.tasks"/&gt; and 
+ &lt;typedef resource="cpptasks.types"/&gt; to body of &lt;project&gt; 
+ element.
+ </li>
+ <li>
+ Add &lt;cc/&gt;, &lt;compiler/&gt; and &lt;linker/&gt; elements to the
+ project.
+ </li>
+ </ul>
+ </li>
+ </ul>
+ </li>
+ <li>
+ Set the path and environment variables to be able to run compiler from
+ command line.
+ </li>
+ <li>
+ Build the project.
+ </li>
+ </ol>
+</subsection>
+<subsection name="parameters">
+<table>
+<tr>
+<td>
+<b>Attribute</b>
+</td>
+<td>
+<b>Description</b>
+</td>
+<td>
+<b>Type</b>
+</td>
+</tr>
+<tr>
+<td>classname</td>
+<td>Sets the default compiler adapter. Use the "name" attribute when the
+ compiler is a supported compiler.</td>
+<td>String</td>
+</tr>
+<tr>
+<td>dataset</td>
+<td>Sets the dataset for OS/390 builds.</td>
+<td>String</td>
+</tr>
+<tr>
+<td>debug</td>
+<td>Enables or disables generation of debug info.</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>dependencydepth</td>
+<td>Deprecated.
+ 
+ Controls the depth of the dependency evaluation. Used to do a quick
+ check of changes before a full build.
+ 
+ Any negative value which will perform full dependency checking. Positive
+ values will truncate dependency checking. A value of 0 will cause only
+ those files that changed to be recompiled, a value of 1 which cause
+ files that changed or that explicitly include a file that changed to be
+ recompiled.
+ 
+ Any non-negative value will cause a BuildException to be thrown before
+ attempting a link or completing the task.</td>
+<td>int</td>
+</tr>
+<tr>
+<td>description</td>
+<td></td>
+<td>String</td>
+</tr>
+<tr>
+<td>exceptions</td>
+<td>Enables generation of exception handling code</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>failonerror</td>
+<td>Indicates whether the build will continue
+ even if there are compilation errors; defaults to true.</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>incremental</td>
+<td>Enables or disables incremental linking.</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>libtool</td>
+<td>Set use of libtool.
+ 
+ If set to true, the "libtool " will be prepended to the command line for
+ compatible processors</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>link</td>
+<td>Sets the output file type. Supported values "executable", "shared", and
+ "static".  Deprecated, specify outtype instead.</td>
+<td>
+<a href="../apidocs/net/sf/antcontrib/cpptasks/OutputTypeEnum.html">OutputTypeEnum</a>
+</td>
+</tr>
+<tr>
+<td>location</td>
+<td></td>
+<td>Location</td>
+</tr>
+<tr>
+<td>multithreaded</td>
+<td>Enables or disables generation of multithreaded code</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>name</td>
+<td>Sets type of the default compiler and linker.
+ 
+ <table> <thead>Supported compilers </thead>
+ <tr>
+ <td>gcc (default)</td>
+ <td>GCC C++ compiler</td>
+ </tr>
+ <tr>
+ <td>g++</td>
+ <td>GCC C++ compiler</td>
+ </tr>
+ <tr>
+ <td>c++</td>
+ <td>GCC C++ compiler</td>
+ </tr>
+ <tr>
+ <td>g77</td>
+ <td>GNU FORTRAN compiler</td>
+ </tr>
+ <tr>
+ <td>msvc</td>
+ <td>Microsoft Visual C++</td>
+ </tr>
+ <tr>
+ <td>bcc</td>
+ <td>Borland C++ Compiler</td>
+ </tr>
+ <tr>
+ <td>msrc</td>
+ <td>Microsoft Resource Compiler</td>
+ </tr>
+ <tr>
+ <td>brc</td>
+ <td>Borland Resource Compiler</td>
+ </tr>
+ <tr>
+ <td>df</td>
+ <td>Compaq Visual Fortran Compiler</td>
+ </tr>
+ <tr>
+ <td>midl</td>
+ <td>Microsoft MIDL Compiler</td>
+ </tr>
+ <tr>
+ <td>icl</td>
+ <td>Intel C++ compiler for Windows (IA-32)</td>
+ </tr>
+ <tr>
+ <td>ecl</td>
+ <td>Intel C++ compiler for Windows (IA-64)</td>
+ </tr>
+ <tr>
+ <td>icc</td>
+ <td>Intel C++ compiler for Linux (IA-32)</td>
+ </tr>
+ <tr>
+ <td>ecc</td>
+ <td>Intel C++ compiler for Linux (IA-64)</td>
+ </tr>
+ <tr>
+ <td>CC</td>
+ <td>Sun ONE C++ compiler</td>
+ </tr>
+ <tr>
+ <td>aCC</td>
+ <td>HP aC++ C++ Compiler</td>
+ </tr>
+ <tr>
+ <td>os390</td>
+ <td>OS390 C Compiler</td>
+ </tr>
+ <tr>
+ <td>os400</td>
+ <td>Icc Compiler</td>
+ </tr>
+ <tr>
+ <td>sunc89</td>
+ <td>Sun C89 C Compiler</td>
+ </tr>
+ <tr>
+ <td>xlC</td>
+ <td>VisualAge C Compiler</td>
+ </tr>
+ <tr>
+ <td>uic</td>
+ <td>Qt user interface compiler (creates .h, .cpp and moc_*.cpp files).</td>
+ </tr>
+ <tr>
+ <td>moc</td>
+ <td>Qt meta-object compiler</td>
+ </tr>
+ <tr>
+ <td>xpidl</td>
+ <td>Mozilla xpidl compiler (creates .h and .xpt files).</td>
+ </tr>
+ <tr>
+ <td>wcl</td>
+ <td>OpenWatcom C/C++ compiler</td>
+ </tr>
+ <tr>
+ <td>wfl</td>
+ <td>OpenWatcom FORTRAN compiler</td>
+ </tr>
+ </table>
+</td>
+<td>
+<a href="../apidocs/net/sf/antcontrib/cpptasks/CompilerEnum.html">CompilerEnum</a>
+</td>
+</tr>
+<tr>
+<td>newenvironment</td>
+<td>Do not propagate old environment when new environment variables are
+ specified.</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>objdir</td>
+<td>Sets the destination directory for object files.
+ 
+ Generally this should be a property expression that evaluates to
+ distinct debug and release object file directories.</td>
+<td>File</td>
+</tr>
+<tr>
+<td>optimize</td>
+<td>Sets optimization.</td>
+<td>
+<a href="../apidocs/net/sf/antcontrib/cpptasks/OptimizationEnum.html">OptimizationEnum</a>
+</td>
+</tr>
+<tr>
+<td>outfile</td>
+<td>Sets the output file name. If not specified, the task will only compile
+ files and not attempt to link. If an extension is not specified, the
+ task may use a system appropriate extension and prefix, for example,
+ outfile="example" may result in "libexample.so" being created.</td>
+<td>File</td>
+</tr>
+<tr>
+<td>outputfileproperty</td>
+<td>Specifies the name of a property to set with the physical filename that
+ is produced by the linker</td>
+<td>String</td>
+</tr>
+<tr>
+<td>outtype</td>
+<td>Sets the output file type. Supported values "executable", "shared", and
+ "static".</td>
+<td>
+<a href="../apidocs/net/sf/antcontrib/cpptasks/OutputTypeEnum.html">OutputTypeEnum</a>
+</td>
+</tr>
+<tr>
+<td>owningtarget</td>
+<td></td>
+<td>Target</td>
+</tr>
+<tr>
+<td>projectsonly</td>
+<td></td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>rebuild</td>
+<td>If set to true, all files will be rebuilt.</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>relentless</td>
+<td>If set to true, compilation errors will not stop the task until all
+ files have been attempted.</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>rtti</td>
+<td>Enables run-time type information.</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>runtime</td>
+<td>Sets the type of runtime library, possible values "dynamic", "static".</td>
+<td>
+<a href="../apidocs/net/sf/antcontrib/cpptasks/RuntimeType.html">RuntimeType</a>
+</td>
+</tr>
+<tr>
+<td>subsystem</td>
+<td>Sets the nature of the subsystem under which that the program will
+ execute.
+ 
+ <table> <thead>Supported subsystems </thead>
+ <tr>
+ <td>gui</td>
+ <td>Graphical User Interface</td>
+ </tr>
+ <tr>
+ <td>console</td>
+ <td>Command Line Console</td>
+ </tr>
+ <tr>
+ <td>other</td>
+ <td>Other</td>
+ </tr>
+ </table>
+</td>
+<td>
+<a href="../apidocs/net/sf/antcontrib/cpptasks/SubsystemEnum.html">SubsystemEnum</a>
+</td>
+</tr>
+<tr>
+<td>taskname</td>
+<td></td>
+<td>String</td>
+</tr>
+<tr>
+<td>tasktype</td>
+<td></td>
+<td>String</td>
+</tr>
+<tr>
+<td>warnings</td>
+<td>Enumerated attribute with the values "none", "severe", "default",
+ "production", "diagnostic", and "aserror".</td>
+<td>
+<a href="../apidocs/net/sf/antcontrib/cpptasks/WarningLevelEnum.html">WarningLevelEnum</a>
+</td>
+</tr>
+</table>
+</subsection>
+<subsection name="parameters as nested elements">
+<dl>
+<dt>
+<a href="CompilerDef.html">compiler</a>
+</dt>
+<dd>Adds a compiler definition or reference.</dd>
+<dt>
+<a href="CompilerArgument.html">compilerarg</a>
+</dt>
+<dd>Adds a compiler command-line arg. Argument will be inherited by all
+ nested compiler elements that do not have inherit="false".</dd>
+<dt>
+<a href="DefineSet.html">defineset</a>
+</dt>
+<dd>Adds a defineset. Will be inherited by all compiler elements that do not
+ have inherit="false".</dd>
+<dt>
+<a href="DistributerDef.html">distributer</a>
+</dt>
+<dd>Adds a distributer definition or reference (Non-functional prototype).</dd>
+<dt>
+<a href="about:blank">env</a>
+</dt>
+<dd>Add an environment variable to the launched process.</dd>
+<dt>
+<a href="ConditionalFileSet.html">fileset</a>
+</dt>
+<dd>Adds a source file set.
+ 
+ Files in these filesets will be auctioned to the available compiler
+ configurations, with the default compiler implied by the cc element
+ bidding last. If no compiler is interested in the file, it will be
+ passed to the linker.
+ 
+ To have a file be processed by a particular compiler configuration, add
+ a fileset to the corresponding compiler element.</dd>
+<dt>
+<a href="IncludePath.html">includepath</a>
+</dt>
+<dd>Adds an include path.
+ 
+ Include paths will be inherited by nested compiler elements that do not
+ have inherit="false".</dd>
+<dt>
+<a href="LibrarySet.html">libset</a>
+</dt>
+<dd>Adds a library set.
+ 
+ Library sets will be inherited by all linker elements that do not have
+ inherit="false".</dd>
+<dt>
+<a href="LinkerDef.html">linker</a>
+</dt>
+<dd>Adds a linker definition. The first linker that is not disqualified by
+ its "if" and "unless" attributes will perform the link. If no child
+ linker element is active, the linker implied by the cc elements name or
+ classname attribute will be used.</dd>
+<dt>
+<a href="LinkerArgument.html">linkerarg</a>
+</dt>
+<dd>Adds a linker command-line arg. Argument will be inherited by all nested
+ linker elements that do not have inherit="false".</dd>
+<dt>
+<a href="PrecompileDef.html">precompile</a>
+</dt>
+<dd>Specifies precompilation prototype file and exclusions. Inherited by all
+ compilers that do not have inherit="false".</dd>
+<dt>
+<a href="ProjectDef.html">project</a>
+</dt>
+<dd>Specifies the generation of IDE project file.  Experimental.</dd>
+<dt>
+<a href="SystemIncludePath.html">sysincludepath</a>
+</dt>
+<dd>Adds a system include path. Locations and timestamps of files located
+ using the system include paths are not used in dependency analysis.
+ 
+ 
+ Standard include locations should not be specified. The compiler
+ adapters should recognized the settings from the appropriate environment
+ variables or configuration files.
+ 
+ System include paths will be inherited by nested compiler elements that
+ do not have inherit="false".</dd>
+<dt>
+<a href="SystemLibrarySet.html">syslibset</a>
+</dt>
+<dd>Adds a system library set. Timestamps and locations of system library
+ sets are not used in dependency analysis.
+ 
+ Essential libraries (such as C Runtime libraries) should not be
+ specified since the task will attempt to identify the correct libraries
+ based on the multithread, debug and runtime attributes.
+ 
+ System library sets will be inherited by all linker elements that do not
+ have inherit="false".</dd>
+<dt>
+<a href="TargetDef.html">target</a>
+</dt>
+<dd>Adds a target definition or reference (Non-functional prototype).</dd>
+<dt>
+<a href="VersionInfo.html">versioninfo</a>
+</dt>
+<dd>Adds desriptive version information to be included in the
+ generated file.  The first active version info block will
+ be used.</dd>
+</dl>
+</subsection>
+</section>
+</body>
+</document>

@@ -1,6 +1,6 @@
 /*
  *
- * Copyright 2004-2006 The Ant-Contrib project
+ * Copyright 2004-2008 The Ant-Contrib project
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import org.apache.tools.ant.types.DataType;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -83,6 +84,16 @@ public final class ProjectDef
    */
   private File objDir;
 
+    /**
+     * List of dependency definitions.
+     */
+  private List dependencies = new ArrayList();
+
+     /**
+	  *   List of comments.
+	  */
+  private List comments = new ArrayList();
+
   /**
    * Constructor.
    *
@@ -118,6 +129,10 @@ public final class ProjectDef
    * <tr>
    * <td>msvc8</td>
    * <td>Microsoft Visual C++ 2005</td>
+   * </tr>
+   * <tr>
+   * <td>msvc9</td>
+   * <td>Microsoft Visual C++ 2008</td>
    * </tr>
    * <tr>
    * <td>xcode</td>
@@ -317,6 +332,33 @@ public final class ProjectDef
    */
   public void getObjdir(final File oDir) {
     this.objDir = oDir;
+  }
+
+    /**
+     *  Add a dependency definition to the project.  
+     * @param dependency dependency.
+     */
+  public void addDependency(final DependencyDef dependency) {
+        dependencies.add(dependency);
+
+  }
+
+  public List getDependencies() {
+      return new ArrayList(dependencies);
+  }
+
+
+    /**
+	 *  Add comment for the generated project file.
+     * @param comment comment, may not be null.
+     */
+  public void addComment(final CommentDef comment) {
+        comments.add(comment);
+
+  }
+
+  public List getComments() {
+      return new ArrayList(comments);
   }
 
   /**

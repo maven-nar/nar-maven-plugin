@@ -1,0 +1,583 @@
+<?xml version="1.0"?>
+<!--
+
+Copyright 2004-2006 The Ant-Contrib project
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project name="cppunit" default="test-all-but-qt">
+
+<property name="base.dir" value="."/>
+<property name="debug" value="true"/>
+<property name="compiler" value="gcc"/>
+<property name="src.dir" location="${base.dir}/src"/>
+<property name="examples.dir" location="${base.dir}/examples"/>
+<property name="build.dir" location="build"/>
+<property name="projects.dir" location="${build.dir}"/>
+<property name="include.dir" location="${base.dir}/include"/>
+<property name="config.dir" location="${base.dir}/config"/>
+<property name="qt.dir" location="/usr/lib/qt3"/>
+<property name="major" value="1"/>
+<property name="minor" value="10"/>
+<property name="build" value="2"/>
+<!-- specify api="unix" or api="win32" override platform default -->
+<property name="api" value="default"/>
+
+<taskdef resource="cpptasks.tasks"/>
+<typedef resource="cpptasks.types"/>
+
+<target name="usage">
+	<echo message="Builds cppunit (http://cppunit.sf.net)."/>
+	<echo message="Usage:"/>
+	<echo message="ant -f cppunit.ant -Dbase.dir=c:\cppunit-1.10.2"/>
+	<echo message="    -Dcompiler=[gcc | msvc | icc | bcc ...]"/>
+	<echo message="Status:"/>
+	<echo message="test-all will pass for gcc and icc on Linux"/>
+	<echo message="test-all-but-qt will pass for gcc on Mac OS/X"/>
+	<echo message="test-all-but-qt will pass for msvc on Windows"/>
+	<echo message="all-but-qt will pass for bcc but test that divide by zero will fail"/>
+	<echo message="test-all-but-qt will pass for gcc and CC on Solaris,"/>
+	<echo message="but may be necessary to add /usr/ccs/bin so &quot;ar&quot; may be found and"/>
+	<echo message="add the location of libstdc++ to LD_LIBRARY_PATH"/>
+</target>
+
+<!--
+    sample versioninfo, targetplatform and distributer to check
+         if definitions are processed, not functional at this time
+-->
+<versioninfo id="cppunit-version"
+             fileversion="${major}.${minor}.${build}"
+             productversion="${major}.${minor}.${build}"
+             compatibilityversion="1"
+             legalcopyright="Copyright &#xA9; 1996-2000 by Michael Feathers &lt;mfeathers@objectmentor.com&gt;"
+             productname="cppunit"
+             companyname="Cppunit project &lt;http://cppunit.sourceforge.net&gt;"
+             />
+
+<target name="init">
+	<mkdir dir="${build.dir}"/>
+	<property name="obj.dir" value="${build.dir}/obj"/>
+	<mkdir dir="${obj.dir}"/>
+	<condition property="is-gcc">
+		<or>
+			<equals arg1="${compiler}" arg2="gcc"/>
+			<equals arg1="${compiler}" arg2="g++"/>
+		</or>
+	</condition>
+	<condition property="is-msvc">
+		<or>
+			<equals arg1="${compiler}" arg2="msvc"/>
+		</or>
+	</condition>
+	<condition property="is-windows"><os family="windows"/></condition>
+  <condition property="not-windows">
+    <not>
+      <isset property="is-windows"/>
+    </not>
+  </condition>
+  <condition property="is-win32">
+		<or>
+			<equals arg1="${api}" arg2="win32"/>
+			<and>
+				<equals arg1="${api}" arg2="default"/>
+				<isset property="is-windows"/>
+			</and>
+		</or>
+	</condition>
+	<property environment="env"/>
+	<!--  in case not set in environment, use an insignificant value -->
+	<property name="env.LD_LIBRARY_PATH" value="."/>
+  <available property="configure-available"
+	           file="${base.dir}/configure"/>
+  <available property="config-auto-available"
+	           file="${include.dir}/cppunit/config-auto.h"/>
+  <condition property="use-brc">
+    <equals arg1="${compiler}" arg2="bcc"/>
+  </condition>
+</target>
+
+  <target name="autogen"
+          depends="init"
+          if="not-windows" unless="configure-available">
+    <exec dir="${base.dir}" executable="bash">
+      <arg value="autogen.sh"/>
+    </exec>
+  </target>
+
+
+  <target name="configure"
+          depends="autogen"
+          if="not-windows" unless="config-available">
+    <exec dir="${base.dir}" executable="bash">
+      <arg value="configure"/>
+    </exec>
+  </target>
+
+
+
+  <target name="clean">
+	  <delete dir="${build.dir}"/>
+    <delete dir="${projects.dir}"/>
+  </target>
+
+
+<target name="shared-lib" depends="configure">
+	<mkdir dir="${obj.dir}/cppunit_shared"/>
+	<mkdir dir="${build.dir}/lib"/>
+  <mkdir dir="${projects.dir}"/>
+	<cc subsystem="console"
+	    objdir="${obj.dir}/cppunit_shared"
+	    debug="${debug}"
+	    outtype="shared"
+	    name="${compiler}"
+	    exceptions="true"
+	    rtti="true"
+	    optimize="speed"
+	    outfile="${build.dir}/lib/cppunit">
+	    <compiler name="brc" if="use-brc"/>
+	    <compiler name="msrc"/>
+		<fileset dir="${src.dir}/cppunit"
+		   includes="*.cpp" excludes="DllMain.cpp"/>
+		<fileset dir="${src.dir}/cppunit"
+			includes="DllMain.cpp"
+			if="is-windows"/>
+    <fileset dir="${include.dir}/cppunit" includes="**/*.h" excludes="**/MfcTestRunner.h"/>
+		<includepath path="${include.dir}"/>
+		<libset libs="dl" unless="is-win32"/>
+		<libset libs="stdc++" if="is-gcc"/>
+		<defineset define="CPPUNIT_BUILD_DLL"/>
+		<defineset define="WIN32" if="is-win32"/>
+		<versioninfo extends="cppunit-version" filedescription="Cppunit shared library"/>
+    <project outfile="${projects.dir}/shared" type="cbuilderx" name="cppunit" failonerror="false"/>
+    <project outfile="${projects.dir}/shared" type="msvc6" name="cppunit"  failonerror="false"/>
+    <project outfile="${projects.dir}/shared" type="msvc8" name="cppunit"  failonerror="false"/>
+    <project outfile="${projects.dir}/shared" type="xcode" name="cppunit" failonerror="false"/>
+  </cc>
+</target>
+
+<target name="static-lib" depends="configure">
+	<mkdir dir="${obj.dir}/cppunit_static"/>
+  <mkdir dir="${projects.dir}"/>
+  <cc subsystem="console"
+		outfile="${build.dir}/cppunit"
+		objdir="${obj.dir}/cppunit_static"
+		outtype="static"
+		debug="${debug}"
+	    exceptions="true"
+	    rtti="true"
+	    optimize="speed"
+		name="${compiler}">
+	    <compiler name="brc" if="use-brc"/>
+	    <compiler name="msrc"/>
+		<fileset dir="${src.dir}/cppunit"
+		   includes="*.cpp" excludes="DllMain.cpp"/>
+    <fileset dir="${include.dir}/cppunit" includes="**/*.h" excludes="**/MfcTestRunner.h"/>
+    <includepath path="${include.dir}"/>
+		<defineset define="WIN32" if="is-win32"/>
+		<libset libs="stdc++" if="is-gcc"/>
+		<versioninfo extends="cppunit-version" filedescription="Cppunit static library"/>
+	  <project outfile="${projects.dir}/static" type="cbuilderx" name="cppunit" failonerror="false"/>
+		<project outfile="${projects.dir}/static" type="msvc6" name="cppunit"  failonerror="false"/>
+    <project outfile="${projects.dir}/static" type="msvc8" name="cppunit"  failonerror="false"/>
+    <project outfile="${projects.dir}/static" type="xcode" name="cppunit" failonerror="false"/>
+  </cc>
+</target>
+
+<target name="compile-static-test" depends="static-lib">
+	<mkdir dir="${obj.dir}/cppunittestmain_static"/>
+  <cc outfile="${build.dir}/cppunittestmain_static"
+	    outtype="executable"
+	    subsystem="console"
+	    objdir="${obj.dir}/cppunittestmain_static"
+	    debug="${debug}"
+	    exceptions="true"
+	    rtti="true"
+	    optimize="speed"
+	    name="${compiler}"
+	    outputfileproperty="test-static.exe">
+	    <compiler name="brc" if="use-brc"/>
+	    <compiler name="msrc"/>
+		<fileset dir="${examples.dir}/cppunittest"
+		   includes="*.cpp, *.h" excludes="CppUnitTestPlugIn.cpp, MockProtector.h"/>
+		<includepath path="${include.dir}"/>
+		<libset dir="${build.dir}" libs="cppunit"/>
+		<defineset define="WIN32" if="is-win32"/>
+		<libset libs="stdc++" if="is-gcc"/>
+		<versioninfo extends="cppunit-version" filedescription="Self tests using static library"/>
+    <project outfile="${projects.dir}/test_static" type="cbuilderx" name="unittest" failonerror="false"/>
+    <project outfile="${projects.dir}/test_static" type="msvc6" name="unittest"  failonerror="false"/>
+    <project outfile="${projects.dir}/test_static" type="msvc8" name="unittest"  failonerror="false"/>
+    <project outfile="${projects.dir}/test_static" type="xcode" name="unittest" failonerror="false"/>
+	</cc>
+</target>
+
+<target name="compile-shared-test" depends="shared-lib">
+	<mkdir dir="${obj.dir}/cppunittestmain_shared"/>
+	<cc outfile="${build.dir}/lib/cppunittestmain_shared"
+	    outtype="executable"
+		subsystem="console"
+		objdir="${obj.dir}/cppunittestmain_shared"
+		debug="${debug}"
+		name="${compiler}"
+	    exceptions="true"
+	    rtti="true"
+	    optimize="speed"
+		outputfileproperty="test.exe">
+	    <compiler name="brc" if="use-brc"/>
+	    <compiler name="msrc"/>
+		<fileset dir="${examples.dir}/cppunittest"
+		   includes="*.cpp, *.h" excludes="CppUnitTestPlugIn.cpp, MockProtector.h"/>
+		<includepath path="${include.dir}"/>
+		<libset dir="${build.dir}/lib" libs="cppunit"/>
+		<defineset define="CPPUNIT_DLL"/>
+		<defineset define="WIN32" if="is-win32"/>
+		<libset libs="stdc++" if="is-gcc"/>
+		<versioninfo extends="cppunit-version" filedescription="Self tests using shared library"/>
+    <project outfile="${projects.dir}/test_shared" type="cbuilderx" name="unittest" failonerror="false"/>
+    <project outfile="${projects.dir}/test_shared" type="msvc6" name="unittest"  failonerror="false"/>
+    <project outfile="${projects.dir}/test_shared" type="msvc8" name="unittest"  failonerror="false"/>
+    <project outfile="${projects.dir}/test_shared" type="xcode" name="unittest" failonerror="false"/>
+  </cc>
+</target>
+
+<!--
+compile CPPUnit implementation and unit tests into a single executable
+-->
+<target name="compile-mono-test" depends="configure">
+	<mkdir dir="${obj.dir}/cppunittestmain_mono"/>
+  <mkdir dir="${build.dir}/lib"/>
+	<cc outfile="${build.dir}/lib/cppunittestmain"
+	    outtype="executable"
+		subsystem="console"
+		objdir="${obj.dir}/cppunittestmain_mono"
+		debug="${debug}"
+		name="${compiler}"
+	    exceptions="true"
+	    rtti="true"
+	    optimize="speed"
+	    outputfileproperty="test.exe">
+	    <compiler name="brc" if="use-brc"/>
+	    <compiler name="msrc"/>
+		<fileset dir="${src.dir}/cppunit"
+		   includes="*.cpp" excludes="DllMain.cpp"/>
+		<libset libs="dl" unless="is-win32"/>
+		<fileset dir="${examples.dir}/cppunittest"
+		   includes="*.cpp, *.h" excludes="CppUnitTestPlugIn.cpp, MockProtector.h"/>
+         <fileset dir="${include.dir}/cppunit" includes="**/*.h" 
+                  excludes="**/MfcTestRunner.h"/>
+    <includepath path="${include.dir}"/>
+		<defineset define="WIN32" if="is-win32"/>
+		<libset libs="stdc++" if="is-gcc"/>
+	    <versioninfo extends="cppunit-version" filedescription="Combined unit tests and implementation"/>
+    <project outfile="${projects.dir}/test" type="cbuilderx" name="unittest" failonerror="false"/>
+    <project outfile="${projects.dir}/test" type="msvc6" name="unittest"  failonerror="false"/>
+    <project outfile="${projects.dir}/test" type="msvc8" name="unittest"  failonerror="false"/>
+    <project outfile="${projects.dir}/test" type="xcode" name="unittest" failonerror="false"/>
+	</cc>
+</target>
+
+<target name="test-static" depends="compile-static-test">
+	<!-- return value (or Ant's treatment of it) is
+	           inconsistent on Linux   -->
+	<exec dir="${build.dir}"
+	      executable="${test-static.exe}"
+	      failonerror="true"/>
+</target>
+
+<target name="test-shared" depends="compile-shared-test">
+	<!-- return value (or Ant's treatment of it) is
+	           inconsistent on Linux   -->
+	<exec dir="${build.dir}"
+	      executable="${build.dir}/lib/cppunittestmain_shared"
+	      failonerror="true">
+	      <env key="LD_LIBRARY_PATH" value="${build.dir}/lib:${env.LD_LIBRARY_PATH}"/>
+	</exec>
+</target>
+
+<target name="test-mono" depends="compile-mono-test">
+	<exec dir="${build.dir}"
+	      executable="${build.dir}/lib/cppunittestmain"
+	      failonerror="true"/>
+</target>
+
+<target name="qttestrunner" depends="shared-lib">
+	<mkdir dir="${obj.dir}/qttestrunner"/>
+    <mkdir dir="${build.dir}/qttestrunner"/>
+	<cc outfile="${build.dir}/qttestrunner"
+	    outtype="shared"
+	    subsystem="console"
+	    objdir="${obj.dir}/qttestrunner"
+	    exceptions="true"
+	    name="${compiler}"
+	    rtti="true"
+	    optimize="speed"
+	    debug="${debug}">
+	    <compiler name="brc" if="use-brc"/>
+	    <compiler name="msrc"/>
+		<fileset dir="${src.dir}/qttestrunner" includes="*.cpp, *.h"/>
+		<compiler name="uic">
+			<fileset dir="${src.dir}/qttestrunner" includes="*.ui"/>
+		</compiler>
+		<defineset define="_REENTRANT,QT_NO_DEBUG,QT_THREAD_SUPPORT,QT_SHARED,QT_TABLE_SUPPORT"/>
+		<includepath path="${include.dir}"/>
+		<includepath path="${obj.dir}/qttestrunner"/>
+		<includepath path="${qt.dir}/include"/>
+		<libset dir="${build.dir}/lib" libs="cppunit"/>
+		<libset dir="${qt.dir}/lib" libs="qt-mt"/>
+		<libset libs="pthread"/>
+		<libset libs="stdc++" if="is-gcc"/>
+		<versioninfo extends="cppunit-version" filedescription="Qt test runner"/>
+    <project outfile="${projects.dir}/qttestrunner" type="cbuilderx" name="qttestrunner" failonerror="false"/>
+    <project outfile="${projects.dir}/qttestrunner" type="msvc6" name="qttestrunner"  failonerror="false"/>
+    <project outfile="${projects.dir}/qttestrunner" type="msvc8" name="qttestrunner"  failonerror="false"/>
+    <project outfile="${projects.dir}/qttestrunner" type="xcode" name="qttestrunner" failonerror="false"/>
+  </cc>
+
+</target>
+
+<target name="plugintester" depends="static-lib">
+	<mkdir dir="${obj.dir}/DllPlugInTester"/>
+	<cc outfile="${build.dir}/DllPlugInTester"
+	    outtype="executable"
+	    subsystem="console"
+	    objdir="${obj.dir}/DllPlugInTester"
+	    exceptions="true"
+	    rtti="true"
+	    optimize="speed"
+	    name="${compiler}"
+	    debug="${debug}">
+	    <compiler name="brc" if="use-brc"/>
+	    <compiler name="msrc"/>
+		<fileset dir="${src.dir}/DllPlugInTester"
+		    includes="*.cpp, *.h"
+		    excludes="DllPlugInTesterTest.cpp"/>
+		<includepath path="${include.dir}"/>
+		<libset dir="${build.dir}" libs="cppunit"/>
+		<libset libs="dl" unless="is-windows"/>
+		<libset libs="stdc++" if="is-gcc"/>
+		<defineset define="WIN32" if="is-windows"/>
+		<versioninfo extends="cppunit-version" fileversion="Dll Plug-in tester"/>
+    <project outfile="${projects.dir}/plugintester" type="cbuilderx" name="plugintester" failonerror="false"/>
+    <project outfile="${projects.dir}/plugintester" type="msvc6" name="plugintester"  failonerror="false"/>
+    <project outfile="${projects.dir}/plugintester" type="msvc8" name="plugintester"  failonerror="false"/>
+    <project outfile="${projects.dir}/plugintester" type="xcode" name="plugintester" failonerror="false"/>
+  </cc>
+</target>
+
+
+<target name="plugintestertest" depends="plugintester">
+	<mkdir dir="${obj.dir}/DllPlugInTester"/>
+	<cc outfile="${build.dir}/DllPlugInTesterTest"
+	    outtype="executable"
+	    subsystem="console"
+	    objdir="${obj.dir}/DllPlugInTester"
+	    name="${compiler}"
+	    exceptions="true"
+	    optimize="speed"
+	    rtti="true"
+	    debug="${debug}">
+		<fileset dir="${src.dir}/DllPlugInTester"
+		    includes="*.cpp, *.h"
+		    excludes="DllPlugInTester.cpp"/>
+		<includepath path="${include.dir}"/>
+	    <compiler name="brc" if="use-brc"/>
+	    <compiler name="msrc"/>
+		<libset dir="${build.dir}" libs="cppunit"/>
+		<libset libs="dl" unless="is-windows"/>
+		<libset libs="stdc++" if="is-gcc"/>
+		<defineset define="WIN32" if="is-windows"/>
+		<versioninfo extends="cppunit-version" filedescription="Tests for Plugin tester"/>
+    <project outfile="${projects.dir}/plugintester-test" type="cbuilderx" name="plugintester-test" failonerror="false"/>
+    <project outfile="${projects.dir}/plugintester-test" type="msvc6" name="plugintester-test"  failonerror="false"/>
+    <project outfile="${projects.dir}/plugintester-test" type="msvc8" name="plugintester-test"  failonerror="false"/>
+    <project outfile="${projects.dir}/plugintester-test" type="xcode" name="plugintester-test" failonerror="false"/>
+  </cc>
+</target>
+
+<target name="test-plugintestertest" depends="plugintestertest">
+	<exec executable="${build.dir}/DllPlugInTesterTest"/>
+</target>
+
+<target name="money" depends="static-lib">
+	<mkdir dir="${obj.dir}/money"/>
+	<cc outfile="${build.dir}/MoneyApp"
+	    outtype="executable"
+	    subsystem="console"
+	    name="${compiler}"
+	    objdir="${obj.dir}/money"
+	    exceptions="true"
+	    rtti="true"
+	    optimize="speed"
+	    debug="${debug}">
+	    <compiler name="brc" if="use-brc"/>
+	    <compiler name="msrc"/>
+		<fileset dir="${examples.dir}/money"
+		    includes="*.cpp, *.h"/>
+		<includepath path="${include.dir}"/>
+		<libset dir="${build.dir}" libs="cppunit"/>
+		<libset libs="dl" unless="is-windows"/>
+		<libset libs="stdc++" if="is-gcc"/>
+		<defineset define="WIN32" if="is-win32"/>
+		<versioninfo extends="cppunit-version" filedescription="Money example"/>
+    <project outfile="${projects.dir}/money" type="cbuilderx" name="money" failonerror="false"/>
+    <project outfile="${projects.dir}/money" type="msvc6" name="money"  failonerror="false"/>
+    <project outfile="${projects.dir}/money" type="msvc8" name="money"  failonerror="false"/>
+    <project outfile="${projects.dir}/money" type="xcode" name="money" failonerror="false"/>
+  </cc>
+</target>
+
+<target name="test-money" depends="money">
+	<exec executable="${build.dir}/MoneyApp"
+	      failonerror="true"/>
+</target>
+
+<target name="hierarchy" depends="static-lib">
+	<mkdir dir="${obj.dir}/hierarchy"/>
+	<cc outfile="${build.dir}/hierarchy"
+	    outtype="executable"
+	    subsystem="console"
+	    name="${compiler}"
+	    objdir="${obj.dir}/hierarchy"
+	    exceptions="true"
+	    rtti="true"
+	    optimize="speed"
+	    debug="${debug}">
+	    <compiler name="brc" if="use-brc"/>
+	    <compiler name="msrc"/>
+		<fileset dir="${examples.dir}/hierarchy"
+		    includes="*.cpp, *.h"/>
+		<includepath path="${include.dir}"/>
+		<libset dir="${build.dir}" libs="cppunit"/>
+		<libset libs="dl" unless="is-windows"/>
+		<libset libs="stdc++" if="is-gcc"/>
+		<defineset define="WIN32" if="is-win32"/>
+		<versioninfo extends="cppunit-version" filedescription="Hierarchy example"/>
+    <project outfile="${projects.dir}/hierarchy" type="cbuilderx" name="hierarchy" failonerror="false"/>
+    <project outfile="${projects.dir}/hierarchy" type="msvc6" name="hierarchy"  failonerror="false"/>
+    <project outfile="${projects.dir}/hierarchy" type="msvc8" name="hierarchy"  failonerror="false"/>
+    <project outfile="${projects.dir}/hierarchy" type="xcode" name="hierarchy" failonerror="false"/>
+  </cc>
+</target>
+
+<target name="test-hierarchy" depends="hierarchy">
+	<!--  some tests intentionally fail -->
+	<exec executable="${build.dir}/hierarchy"
+	      resultproperty="hierarchy-result"/>
+	<condition property="hierarchy-pass">
+		<equals arg1="${hierarchy-result}" arg2="0"/>
+	</condition>
+	<fail unless="hierarchy-pass"
+	      message="hierarchy erroneously passed all tests"/>
+</target>
+
+<target name="simple" depends="static-lib">
+	<mkdir dir="${obj.dir}/simple"/>
+	<cc outfile="${build.dir}/simple"
+	    outtype="executable"
+	    subsystem="console"
+	    name="${compiler}"
+	    exceptions="true"
+	    optimize="speed"
+	    rtti="true"
+	    objdir="${obj.dir}/simple"
+	    debug="${debug}">
+	    <compiler name="brc" if="use-brc"/>
+	    <compiler name="msrc"/>
+		<fileset dir="${examples.dir}/simple"
+		    includes="*.cpp, *.h" excludes="SimplePlugIn.cpp"/>
+		<includepath path="${include.dir}"/>
+		<!--  original was shared, but changing gives
+		          an error loading library  -->
+		<libset dir="${build.dir}" libs="cppunit"/>
+		<libset libs="dl" unless="is-windows"/>
+		<libset libs="stdc++" if="is-gcc"/>
+		<defineset define="WIN32" if="is-win32"/>
+		<versioninfo extends="cppunit-version" filedescription="Sample plug-in"/>
+    <project outfile="${projects.dir}/simple" type="cbuilderx" name="simple" failonerror="false"/>
+    <project outfile="${projects.dir}/simple" type="msvc6" name="simple"  failonerror="false"/>
+    <project outfile="${projects.dir}/simple" type="msvc8" name="simple"  failonerror="false"/>
+    <project outfile="${projects.dir}/simple" type="xcode" name="simple" failonerror="false"/>
+  </cc>
+</target>
+
+<target name="test-simple" depends="simple">
+	<!--  some tests intentionally fail -->
+	<exec executable="${build.dir}/simple"
+	      resultproperty="simple-result"/>
+	<condition property="simple-pass">
+		<equals arg1="${simple-result}" arg2="0"/>
+	</condition>
+	<!-- fail unless="simple-pass"
+	      message="simple erroneously passed all tests"/ -->
+</target>
+
+<target name="dsplugin" depends="static-lib" if="is-windows">
+	<mkdir dir="${obj.dir}/DSPlugIn"/>
+	<!--  DSPlugIn.rc required compiled tlb to be in same directory   -->
+	<cc objdir="${src.dir}/msvc6/DSPlugIn"
+		name="midl">
+		<fileset dir="${src.dir}/msvc6/DSPlugIn" includes="*.idl"/>
+	</cc>
+	<cc outfile="${build.dir}/TestRunnerDSPlugIn"
+	    outtype="shared"
+	    subsystem="gui"
+	    objdir="${obj.dir}/DSPlugIn"
+	    exceptions="true"
+	    name="${compiler}"
+	    optimize="speed"
+	    rtti="true"
+	    debug="${debug}">
+	    <compiler name="brc" if="use-brc"/>
+	    <compiler name="msrc"/>
+		<fileset dir="${src.dir}/msvc6/DSPlugIn"
+		    includes="*.cpp *.rc, *.h"/>
+		<compiler name="msrc"/>
+		<includepath path="${include.dir}"/>
+		<libset dir="${build.dir}" libs="cppunit"/>
+		<libset libs="stdc++" if="is-gcc"/>
+		<defineset define="WIN32" if="is-win32"/>
+		<versioninfo refid="cppunit-version"/>
+    <project outfile="${projects.dir}/TestRunnerDSPlugIn" type="cbuilderx" name="TestRunnerDSPlugIn" failonerror="false"/>
+    <project outfile="${projects.dir}/TestRunnerDSPlugIn" type="msvc6" name="TestRunnerDSPlugIn"  failonerror="false"/>
+    <project outfile="${projects.dir}/TestRunnerDSPlugIn" type="msvc8" name="TestRunnerDSPlugIn"  failonerror="false"/>
+    <project outfile="${projects.dir}/TestRunnerDSPlugIn" type="xcode" name="TestRunnerDSPlugIn" failonerror="false"/>
+  </cc>
+</target>
+
+
+
+<target name="all-static" depends="static-lib,
+			    plugintestertest,
+			    money,
+			    hierarchy,
+			    simple"/>
+
+<target name="test-all-static" depends="test-static,
+			    test-plugintestertest,
+			    test-money,
+			    test-hierarchy,
+			    test-simple"/>
+
+<target name="all-but-qt" depends="shared-lib,all-static"/>
+
+<target name="test-all-but-qt" depends="test-shared,test-all-static"/>
+
+<target name="all-qt" depends="qttestrunner"/>
+
+<target name="test-all-qt" depends="qttestrunner"/>
+
+<target name="all" depends="all-but-qt, all-qt"/>
+
+<target name="test-all" depends="test-all-but-qt, test-all-qt"/>
+
+</project>

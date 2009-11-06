@@ -19,7 +19,7 @@ import org.apache.tools.ant.types.EnumeratedAttribute;
 
 /**
  * Enumerated attribute with the values "none", "severe", "default",
- * "production", "diagnostic", and "failtask".
+ * "production", "diagnostic", and "aserror".
  */
 public final class WarningLevelEnum extends EnumeratedAttribute {
    /**

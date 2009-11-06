@@ -56,9 +56,6 @@ public final class PrecompileDef extends DataType {
      * Adds filesets that specify files that should not be processed with
      * precompiled headers enabled.
      * 
-     * @param exceptSet
-     *            FileSet specify files that should not be processed with
-     *            precompiled headers enabled.
      */
     public PrecompileExceptDef createExcept() {
         return new PrecompileExceptDef(this);

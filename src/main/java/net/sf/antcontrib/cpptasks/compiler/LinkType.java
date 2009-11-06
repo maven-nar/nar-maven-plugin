@@ -113,8 +113,7 @@ public class LinkType {
     /**
      * Sets the output type (execuable, shared, etc).
      * 
-     * @param outputType,
-     *            may not be null
+     * @param outputType may not be null
      */
     public void setOutputType(OutputTypeEnum outputType) {
         if (outputType == null) {

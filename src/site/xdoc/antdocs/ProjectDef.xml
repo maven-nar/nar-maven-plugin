@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+Licensed to the Ant-Contrib Project under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The Ant-Contrib Project licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+  -->
+<document xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:taskdocs="http://ant-contrib.sf.net/taskdocs">
+<properties>
+<title>project</title>
+</properties>
+<body>
+<section name="project">
+<subsection name="Description">Requests the creation of an IDE project file.  Experimental.
+
+ Implementation status: msdev5, msdev6 and cbuilderx
+ generate reasonable project files for simple projects,
+ xcode and msdev7 and msdev71 capture source file lists and
+ a few settings.</subsection>
+<subsection name="parameters">
+<table>
+<tr>
+<td>
+<b>Attribute</b>
+</td>
+<td>
+<b>Description</b>
+</td>
+<td>
+<b>Type</b>
+</td>
+</tr>
+<tr>
+<td>classname</td>
+<td>Class name for a user-supplied project writer.  Use the "type"
+ attribute to specify built-in project writer implementations.</td>
+<td>String</td>
+</tr>
+<tr>
+<td>description</td>
+<td></td>
+<td>String</td>
+</tr>
+<tr>
+<td>failonerror</td>
+<td>Sets whether a failure to write the project file should cause the
+ task to fail.  Default is true.</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>if</td>
+<td>Sets the property name for the 'if' condition.
+
+ The configuration will be ignored unless the property is defined.
+
+ The value of the property is insignificant, but values that would imply
+ misinterpretation ("false", "no") will throw an exception when
+ evaluated.</td>
+<td>String</td>
+</tr>
+<tr>
+<td>name</td>
+<td>Set name.</td>
+<td>String</td>
+</tr>
+<tr>
+<td>outfile</td>
+<td>Sets the name for the generated project file.</td>
+<td>File</td>
+</tr>
+<tr>
+<td>overwrite</td>
+<td>Sets whether an existing project file should be overwritten,
+ default is true.  If false and the project file exists,
+ the value of failonerror will determine if the task fails.</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>refid</td>
+<td></td>
+<td>Reference</td>
+</tr>
+<tr>
+<td>type</td>
+<td>Set project type.
+
+
+ <table> <thead>Supported project formats </thead>
+ <tr>
+ <td>cbuilderx</td>
+ <td>Borland C++BuilderX</td>
+ </tr>
+ <tr>
+ <td>msvc5</td>
+ <td>Microsoft Visual C++ 97</td>
+ </tr>
+ <tr>
+ <td>msvc6</td>
+ <td>Microsoft Visual C++ 6</td>
+ </tr>
+ <tr>
+ <td>msvc7</td>
+ <td>Microsoft Visual C++.NET</td>
+ </tr>
+ <tr>
+ <td>msvc71</td>
+ <td>Microsoft Visual C++.NET 2003</td>
+ </tr>
+ <tr>
+ <td>msvc8</td>
+ <td>Microsoft Visual C++ 2005</td>
+ </tr>
+ <tr>
+ <td>msvc9</td>
+ <td>Microsoft Visual C++ 2008</td>
+ </tr>
+ <tr>
+ <td>xcode</td>
+ <td>Apple Xcode</td>
+ </tr>
+ </table>
+</td>
+<td>
+<a href="../apidocs/net/sf/antcontrib/cpptasks/ide/ProjectWriterEnum.html">ProjectWriterEnum</a>
+</td>
+</tr>
+<tr>
+<td>unless</td>
+<td>Set the property name for the 'unless' condition.
+
+ If named property is set, the configuration will be ignored.
+
+ The value of the property is insignificant, but values that would imply
+ misinterpretation ("false", "no") of the behavior will throw an
+ exception when evaluated.</td>
+<td>String</td>
+</tr>
+</table>
+</subsection>
+<subsection name="parameters as nested elements">
+<dl>
+<dt>
+<a href="CommentDef.html">comment</a>
+</dt>
+<dd>Add comment for the generated project file.</dd>
+<dt>
+<a href="DependencyDef.html">dependency</a>
+</dt>
+<dd>Add a dependency definition to the project.</dd>
+</dl>
+</subsection>
+</section>
+</body>
+</document>

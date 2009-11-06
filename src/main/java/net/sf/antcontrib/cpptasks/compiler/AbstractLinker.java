@@ -95,7 +95,7 @@ public abstract class AbstractLinker extends AbstractProcessor
      * @param versionInfo version information
      * @param linkType link type
      * @param isDebug true if debug build
-     * @param executableName name of generated executable
+     * @param outputFile name of generated executable
      * @param objDir directory for generated files
      * @param matcher bidded fileset
      */

@@ -286,9 +286,10 @@ public abstract class CommandLineLinker extends AbstractLinker
      * Prepares argument list for exec command.  Will return null
      * if command line would exceed allowable command line buffer.
      *
+     * @param task compilation task.
      * @param outputFile linker output file
      * @param sourceFiles linker input files (.obj, .o, .res)
-     * @param args linker arguments
+     * @param config linker configuration
      * @return arguments for runTask
      */
     protected String[] prepareArguments(
@@ -324,7 +325,7 @@ public abstract class CommandLineLinker extends AbstractLinker
         }
         for (int i = 0; i < endargs.length; i++) {
           allArgs[index++] = decorateLinkerOption(buf, endargs[i]);
-        }        
+        }
         return allArgs;
     }
 
@@ -338,7 +339,7 @@ public abstract class CommandLineLinker extends AbstractLinker
         new File(sourceFile));
 // FREEHEP, return the shortest
 //      return quoteFilename(buf, sourceFile.length() > relativePath.length() ? relativePath : sourceFile);
-// FREEHEP trying with always absolute paths...
+// FREEHEP trying with always absolute paths, as Windows relPaths have a tighter restriction on length than absPaths...
       return quoteFilename(buf, sourceFile);
     }
 

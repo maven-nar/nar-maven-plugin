@@ -210,9 +210,9 @@ public final class VersionInfo extends DataType {
     }
 
     /**
-     * Returns a VersionInfo that reflects the state of
-     * @return
-     */
+     * Returns a VersionInfo that reflects any inherited version information.
+     * @return merged version information.
+\     */
     public VersionInfo merge() {
         if (isReference()) {
             VersionInfo refVersion = (VersionInfo)

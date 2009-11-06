@@ -160,7 +160,7 @@ public final class DependencyTable {
         /**
          * Visits the dependency info.
          *
-         * @returns true to continue towards recursion into included files
+         * @return true to continue towards recursion into included files
          */
         public abstract boolean visit(DependencyInfo dependInfo);
     }
@@ -248,8 +248,6 @@ public final class DependencyTable {
      * Creates a target history table from dependencies.xml in the prject
      * directory, if it exists. Otherwise, initializes the dependencies empty.
      *
-     * @param task
-     *            task used for logging history load errors
      * @param baseDir
      *            output directory for task
      */

@@ -1,0 +1,1113 @@
+<?xml version="1.0"?>
+
+<!--
+
+Copyright 2001-2004 The Ant-Contrib project
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project default="main" basedir=".">
+
+  <!-- Give user a chance to override without editing this file
+       (and without typing -D each time it compiles it) -->
+  <property file=".ant.properties" />
+  <property file="${user.home}/.ant.properties" />
+
+  <property name="Name" value="Apache Xerces-C"/>
+  <property name="name" value="xercesc"/>
+  <property name="version" value="1.5"/>
+
+  <property name="compiler" value="gcc"/>
+  <property name="debug" value="true" />
+  <property name="chmod.fail" value="true" />
+  <property name="platform" value="linux"/>
+  <property name="messageloader" value="inmem"/>
+  <property name="netaccessor" value="native"/>
+  <property name="transcoder" value="iconv"/>
+  <property name="thread" value="pthread"/>
+  <property name="subsystem" value="gui"/>
+
+  <!--  property compiler="gcc"/ -->
+
+  <!--
+       ===================================================================
+         Set the properties related to the source tree
+       ===================================================================
+  -->
+  <property name="src.dir" value="."/>
+  <property name="include.dir" value=".."/>
+  <property name="samples.dir" value="../../samples"/>
+  <property name="tests.dir" value="../../tests"/>
+  <property name="scripts.dir" value="scripts"/>
+  <property name="docs.dir" value="doc"/>
+  <property name="tests.dir" value="tests"/>
+  <property name="xml4com.dir" value="../../Build/Win32/xml4com"/>
+
+
+  <!--
+       ===================================================================
+         Set the properties for the build area
+       ===================================================================
+  -->
+
+  <!--
+  <taskdef resource="cpptasks.tasks"/>
+  <typedef resource="cpptasks.types"/>
+  -->
+  <taskdef name="cc" classname="net.sf.antcontrib.cpptasks.CCTask"/>
+  <typedef name="linker" classname="net.sf.antcontrib.cpptasks.LinkerDef"/>
+  <typedef name="compiler" classname="net.sf.antcontrib.cpptasks.CompilerDef"/>
+
+
+  <target name="pre-init">
+  	<condition property="windows">
+		<os family="windows"/>
+  	</condition>
+	<condition property="linux">
+        <equals arg1="${platform}" arg2="linux"/>
+	</condition>
+	<condition property="is-debug">
+        <isTrue value="${debug}"/>
+	</condition>
+	<condition property="use-msvc">
+	    <equals arg1="${compiler}" arg2="VC6"/>
+	</condition>
+	<condition property="use-gcc">
+		<equals arg1="${compiler}" arg2="gcc"/>
+	</condition>
+	<condition property="use-bcc">
+		<equals arg1="${compiler}" arg2="bcc"/>
+	</condition>
+	<condition property="use-icl">
+		<equals arg1="${compiler}" arg2="icl"/>
+	</condition>
+	<condition property="use-ecl">
+		<equals arg1="${compiler}" arg2="ecl"/>
+	</condition>
+	<condition property="use-icc">
+		<equals arg1="${compiler}" arg2="icc"/>
+	</condition>
+	<condition property="use-ecc">
+		<equals arg1="${compiler}" arg2="ecc"/>
+	</condition>
+    <condition property="use-CC">
+        <equals arg1="${compiler}" arg2="CC"/>
+    </condition>
+    <condition property="use-xlC">
+        <equals arg1="${compiler}" arg2="xlC"/>
+    </condition>
+    <condition property="inmem_messageloader">
+            <equals arg1="${messageloader}" arg2="inmem"/>
+    </condition>
+    <condition property="netaccessor_socket">
+            <equals arg1="${netaccessor}" arg2="socket"/>
+    </condition>
+    <condition property="native_transcoder">
+            <equals arg1="${transcoder}" arg2="native"/>
+    </condition>
+    <condition property="pthread">
+            <equals arg1="${thread}" arg2="pthread"/>
+    </condition>
+  </target>
+
+  <target name="win-debug-init" depends="pre-init" if="is-debug">
+	<property name="winbuild.dir" value="../../Build/Win32/${compiler}/Debug"/>
+	<property name="winbuild.obj.dir" value="${winbuild.dir}/obj"/>
+  </target>
+
+  <target name="exec-link">
+	<exec executable="link"/>
+  </target>
+
+  <target name="exec-link-bogus">
+	<exec executable="link">
+		<arg value="/bogus"/>
+	</exec>
+  </target>
+
+  <target name="win-release-init" depends="pre-init" unless="is-debug">
+	<property name="winbuild.dir" value="../../build/win32/${compiler}/Release"/>
+	<property name="winbuild.obj.dir" value="${winbuild.dir}/obj"/>
+  </target>
+
+  <target name="win-init" depends="win-debug-init,win-release-init" if="windows">
+	<echo message="is windows"/>
+      <property name="win32_transcoder" value=""/>
+      <property name="netaccessor_winsock" value=""/>
+      <property name="win32_msgloader" value=""/>
+      <property name="build.dir" value="${winbuild.dir}"/>
+      <property name="build.obj.dir" value="${winbuild.obj.dir}"/>
+  </target>
+
+  <target name="linux-init" depends="pre-init" if="linux">
+	<echo message="is linux"/>
+        <property name="build.obj.dir" value="../../antobj/LINUX"/>
+        <property name="build.dir" value="../../antlib"/>
+        <property name="netaccessor_socket" value=""/>
+        <property name="inmem_messageloader" value=""/>
+        <property name="pthreads" value=""/>
+        <property name="iconv_transcoder" value=""/>
+  </target>
+
+  <target name="init" depends="win-init,linux-init"/>
+
+  <target name="clean">
+	<delete dir="../../build"/>
+  </target>
+
+	<compiler id="base-msvc" name="msvc">
+		<!--  target Pentium Pro   -->
+		<compilerarg value="/G6"/>
+		<!--  display many warnings   -->
+		<compilerarg value="/W3"/>
+		<!--  maximize speed     -->
+		<compilerarg value="/O2" unless="is-debug"/>
+		<!--  auto-inlining    -->
+		<compilerarg value="/Ob2" unless="is-debug"/>
+		<defineset>
+			<define name="_CRTDBG_MAP_ALLOC" if="is-debug"/>
+		</defineset>
+	</compiler>
+
+	<compiler id="msvc" name="msvc" extends="base-msvc"  if="use-msvc">
+		<!--  disable Microsoft Extensions   -->
+		<compilerarg value="/Za"/>
+	</compiler>
+
+	<compiler id="msvc-with-extensions" extends="base-msvc"  if="use-msvc">
+		<!--  enable Microsoft Extensions   -->
+		<compilerarg value="/Ze"/>
+	</compiler>
+
+    <compiler id="icl" extends="base-msvc" name="icl" if="use-icl">
+		<!--  disable Microsoft Extensions   -->
+		<compilerarg value="/Za"/>
+	</compiler>
+	<compiler id="icl-with-extensions" extends="base-msvc" name="icl" if="use-icl">
+		<!--  enable Microsoft Extensions   -->
+		<compilerarg value="/Ze"/>
+	</compiler>
+
+    <compiler id="ecl" extends="base-msvc" name="ecl" if="use-ecl">
+		<!--  disable Microsoft Extensions   -->
+		<compilerarg value="/Za"/>
+	</compiler>
+	<compiler id="ecl-with-extensions" extends="base-msvc" name="ecl" if="use-ecl">
+		<!--  enable Microsoft Extensions   -->
+		<compilerarg value="/Ze"/>
+	</compiler>
+
+	<compiler id="bcc" name="bcc" if="use-bcc">
+		<!--  target Pentium Pro   -->
+		<compilerarg value="-6"/>
+		<!--  zero length empty class member functions -->
+		<compilerarg value="-Vx"/>
+		<compilerarg value="-Ve"/>
+		<!--   align on quad word boundaries   -->
+		<compilerarg value="-a8"/>
+		<!--   byte size enums   -->
+		<compilerarg value="-b-"/>
+		<compilerarg value="-k"/>
+		<compilerarg value="-y" if="is-debug"/>
+		<compilerarg value="-vi"/>
+		<compilerarg value="-r-" if="is-debug"/>
+		<!--  maximize speed     -->
+		<compilerarg value="-O2" unless="is-debug"/>
+	</compiler>
+
+	<compiler id="gcc" name="gcc" if="use-gcc">
+        <compilerarg value="-O" unless="is-debug"/>
+	</compiler>
+
+
+
+
+  <target name="XercesLib" depends="init">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="shared"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/xerces-c"
+	    multithreaded="true" exceptions="true" subsystem="${subsystem}" dependencyDepth="-1">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<compiler refid="icl"/>
+		<compiler refid="ecl"/>
+		<!-- speciality compiler for a few files that require MS extensions   -->
+		<compiler extends="msvc-with-extensions">
+			<fileset dir="${src.dir}">
+				<include name="util/Platforms/Win32/*.cpp"/>
+				<include name="util/MsgLoaders/Win32/*.cpp" if="win32_msgloader"/>
+				<include name="util/NetAccessors/WinSock/*.cpp" if="netaccessor_winsock"/>
+				<include name="util/Platforms/Win32/*.cpp"/>
+				<include name="util/Transcoders/Win32/*.cpp" if="win32_transcoder"/>
+			</fileset>
+		</compiler>
+		<compiler extends="icl-with-extensions">
+			<fileset dir="${src.dir}">
+				<include name="util/Platforms/Win32/*.cpp"/>
+				<include name="util/MsgLoaders/Win32/*.cpp" if="win32_msgloader"/>
+				<include name="util/NetAccessors/WinSock/*.cpp" if="netaccessor_winsock"/>
+				<include name="util/Platforms/Win32/*.cpp"/>
+				<include name="util/Transcoders/Win32/*.cpp" if="win32_transcoder"/>
+			</fileset>
+		</compiler>
+		<compiler extends="ecl-with-extensions">
+			<fileset dir="${src.dir}">
+				<include name="util/Platforms/Win32/*.cpp"/>
+				<include name="util/MsgLoaders/Win32/*.cpp" if="win32_msgloader"/>
+				<include name="util/NetAccessors/WinSock/*.cpp" if="netaccessor_winsock"/>
+				<include name="util/Platforms/Win32/*.cpp"/>
+				<include name="util/Transcoders/Win32/*.cpp" if="win32_transcoder"/>
+			</fileset>
+		</compiler>
+		<compiler name="msrc" if="use-msvc">
+			<compilerarg value="/l 0x409"/>
+			<fileset dir="${src.dir}" includes="util/Platforms/Win32/Version.rc"/>
+		</compiler>
+		<compiler name="brc" if="use-bcc" inherit="false">
+			<!--  version.rc includes afxres.h, I don't know why   -->
+			<includepath location="c:\msdev6\vc98\include"/>
+			<includepath location="c:\msdev6\vc98\mfc\include"/>
+			<fileset dir="${src.dir}" includes="util/Platforms/Win32/Version.rc"/>
+		</compiler>
+        <compiler if="linux" extends="gcc">
+           <defineset>
+              <define name="_GNU_SOURCE"/>
+              <define name="__USE_GNU"/>
+           </defineset>
+           <fileset dir="${src.dir}" includes="util/Platforms/Linux/*.cpp"/>
+        </compiler>
+		<linker name="gcc" if="use-gcc">
+			<syslibset libs="kernel32,user32,advapi32,ws2_32" if="windows"/>
+            <syslibset libs="pthread" if="pthreads"/>
+		</linker>
+		<!--  base is 0x12000000     -->
+    	<linker name="msvc" base="301989888" if="use-msvc">
+			<syslibset libs="kernel32,user32,advapi32,ws2_32"/>
+		</linker>
+    	<linker name="icl" base="301989888" if="use-icl">
+			<syslibset libs="kernel32,user32,advapi32,ws2_32"/>
+		</linker>
+		<linker name="bcc" if="use-bcc">
+			<syslibset libs="import32,cw32,ws2_32"/>
+		</linker>
+		<fileset dir="${src.dir}">
+			<include name="dom/*.cpp"/>
+			<include name="framework/*.cpp"/>
+			<include name="idom/*.cpp"/>
+			<include name="internal/*.cpp"/>
+			<include name="parsers/*.cpp"/>
+			<include name="sax/*.cpp"/>
+			<include name="sax2/*.cpp"/>
+			<include name="util/*.cpp"/>
+			<include name="validators/*.cpp"/>
+			<include name="validators/common/*.cpp"/>
+			<include name="validators/datatype/*.cpp"/>
+			<include name="validators/DTD/*.cpp"/>
+			<include name="validators/schema/*.cpp"/>
+			<include name="validators/schema/identity/*.cpp"/>
+			<include name="util/regx/*.cpp"/>
+			<!--   if using MS Visual C,
+						these must be compiled with MS Extension enabled
+				   otherwise they can compile with everything else  -->
+			<include name="util/Platforms/Win32/*.cpp" if="windows" unless="use-msvc"/>
+			<include name="util/MsgLoaders/Win32/*.cpp" if="win32_msgloader" unless="use-msvc"/>
+            <include name="util/MsgLoaders/InMemory/*.cpp" if="inmem_messageloader"/>
+			<include name="util/NetAccessors/WinSock/*.cpp" if="netaccessor_winsock" unless="use-msvc"/>
+            <include name="util/NetAccessors/Socket/*.cpp" if="netaccessor_socket"/>
+			<include name="util/Transcoders/Win32/*.cpp" if="win32_transcoder" unless="use-msvc"/>
+            <include name="util/Transcoders/Iconv/*.cpp" if="iconv_transcoder"/>
+            <include name="util/Transcoders/ICU/*.cpp" if="icu_transcoder"/>
+            <include name="util/Compilers/GCCDefs.cpp" if="use-gcc"/>
+		</fileset>
+		<!--   parent of the source directory   -->
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="PROJ_SAX2"/>
+			<define name="PROJ_XMLPARSER"/>
+			<define name="PROJ_XMLUTIL"/>
+			<define name="PROJ_PARSERS"/>
+			<define name="PROJ_SAX4C"/>
+			<define name="PROJ_DOM"/>
+			<define name="PROJ_VALIDATORS"/>
+			<define name="XML_SINGLEDLL"/>
+			<define name="WIN32" if="windows"/>
+			<define name="_WINDOWS" if="windows"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+			<define name="XML_USE_WIN32_TRANSCODER" if="win32_transcoder"/>
+			<define name="XML_USE_WIN32_MSGLOADER" if="win32_msgloader"/>
+			<define name="XML_USE_NETACCESSOR_WINSOCK" if="netaccessor_winsock"/>
+            <define name="LINUX" if="linux"/>
+            <define name="_REENTRANT" if="linux"/>
+            <define name="XML_USE_NATIVE_TRANSCODER" if="native_transcoder"/>
+            <define name="XML_USE_ICU_TRANSCODER" if="icu_transcoder"/>
+            <define name="XML_USE_INMEM_MESSAGELOADER" if="inmem_messageloader"/>
+            <define name="XML_USE_PTHREADS" if="pthreads"/>
+            <define name="XML_USE_NETACCESSOR_SOCKET" if="netaccessor_socket"/>
+		</defineset>
+	</cc>
+
+  </target>
+
+  <target name="CreateDOMDocument" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/CreateDOMDocument"
+	    multithreaded="true" exceptions="true">
+		<compiler extends="gcc">
+                   <compilerarg value="-fpic"/>
+                   <compilerarg value="-w"/>
+                   <compilerarg value="-O"/>
+                </compiler>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${samples.dir}" includes="CreateDOMDocument/CreateDOMDocument.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+  </target>
+
+  <target name="DOMCount" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/DOMCount"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${samples.dir}" includes="DOMCount/DOMCount.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+  </target>
+
+
+  <target name="DOMIDTest" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/DOMIDTest"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${tests.dir}" includes="DOM/DOMIDTest/DOMIDTest.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+  </target>
+
+
+
+  <target name="DOMMemTest" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/DOMMemTest"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${tests.dir}" includes="DOM/DOMMemTest/DOMMemTest.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+
+  </target>
+
+
+  <target name="DOMPrint" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/DOMPrint"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${samples.dir}" includes="DOMPrint/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+
+  </target>
+
+
+  <target name="DOMTest" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/DOMTest"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${tests.dir}" includes="DOM/DOMTest/*.cpp"/>
+		<fileset dir="${build.dir}" includes="xerces-c.lib"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+
+  </target>
+
+
+
+  <target name="DOMTraversalTest" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/DOMTraversalTest"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${tests.dir}" includes="DOM/Traversal/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+
+  </target>
+
+
+  <target name="EncodingTest" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/EncodingTest"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${tests.dir}" includes="EncodingTest/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+
+  </target>
+
+
+  <target name="EnumVal" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/EnumVal"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${samples.dir}" includes="EnumVal/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+            <define name="LINUX" if="linux"/>
+            <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+
+  </target>
+
+
+  <target name="IDOMCount" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/IDOMCount"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${samples.dir}" includes="IDOMCount/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+
+  </target>
+
+
+  <target name="IDOMMemTest" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/IDOMMemTest"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${tests.dir}" includes="IDom/IDOMMemTest/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+  </target>
+
+  <target name="IDOMPrint" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/IDOMPrint"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${samples.dir}" includes="IDOMPrint/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+  </target>
+
+  <target name="IDOMTest" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/IDOMTest"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${tests.dir}" includes="IDom/IDOMTest/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+  </target>
+
+  <target name="InitTermTest" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/InitTermTest"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${tests.dir}" includes="InitTermTest/*.cpp"/>
+		<fileset dir="${build.dir}" includes="xerces-c.lib"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+  </target>
+
+
+  <target name="IRangeTest" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/IRangeTest"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${tests.dir}" includes="IDom/IRangeTest/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+  </target>
+
+  <target name="ITraversal" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/ITraversal"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${tests.dir}" includes="IDom/ITraversal/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+  </target>
+
+  <target name="MemParse" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/MemParse"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${samples.dir}" includes="MemParse/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+  </target>
+
+  <target name="PParse" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/PParse"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${samples.dir}" includes="PParse/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+  </target>
+
+
+  <target name="RangeTest" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/RangeTest"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${tests.dir}" includes="DOM/RangeTest/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+  </target>
+
+  <target name="Redirect" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/Redirect"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	        <linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${samples.dir}" includes="Redirect/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+  </target>
+
+
+  <target name="SAX2Count" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/SAX2Count"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+    	<linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${samples.dir}" includes="SAX2Count/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+  </target>
+
+
+  <target name="SAXCount" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/SAXCount"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+        	<linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${samples.dir}" includes="SAXCount/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+  </target>
+
+
+  <target name="SAXPrint" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/SAXPrint"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+        	<linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${samples.dir}" includes="SAXPrint/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+  </target>
+
+
+  <target name="SEnumVal" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/SEnumVal"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+        	<linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${samples.dir}" includes="SEnumVal/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+  </target>
+
+
+  <target name="StdInParse" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/StdInParse"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+        	<linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${samples.dir}" includes="StdInParse/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+  </target>
+
+
+  <target name="ThreadTest" depends="XercesLib">
+    <mkdir dir="${build.obj.dir}"/>
+    <mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="executable"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/ThreadTest"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="gcc"/>
+		<compiler refid="msvc-with-extensions"/>
+		<compiler refid="bcc"/>
+		<linker name="gcc" if="use-gcc"/>
+        	<linker name="msvc" if="use-msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${tests.dir}" includes="ThreadTest/*.cpp"/>
+		<includepath location="${include.dir}"/>
+		<defineset>
+			<define name="CONSOLE"/>
+			<define name="PLATFORM_WIN32" if="windows"/>
+                        <define name="LINUX" if="linux"/>
+                        <define name="_REENTRANT" if="linux"/>
+		</defineset>
+        <libset dir="${build.dir}" libs="xerces-c"/>
+        <syslibset libs="c,stdc++" if="linux"/>
+	</cc>
+  </target>
+
+  <target name="XercesCOM_tlb" depends="init" if="windows">
+    <mkdir dir="${xml4com.dir}"/>
+	<cc debug="${debug}" objdir="${xml4com.dir}" name="midl">
+		<!--  output generated header file to use in next step  -->
+		<compilerarg value="/h"/>
+		<compilerarg value="xml4com.h"/>
+		<compilerarg value="/iid"/>
+		<compilerarg value="xml4com_i.c"/>
+		<fileset dir="${src.dir}" includes="com/xml4com.idl"/>
+		<includepath location="${src.dir}/com"/>
+	</cc>
+  </target>
+
+  <target name="XercesCOM" depends="XercesCOM_tlb,XercesLib" if="windows">
+    <mkdir dir="${build.obj.dir}"/>
+	<mkdir dir="${build.dir}"/>
+	<cc debug="${debug}" link="shared"
+	    objdir="${build.obj.dir}" outfile="${build.dir}/xml4com"
+	    multithreaded="true" exceptions="true">
+		<compiler refid="msvc-with-extensions"/>
+		<compiler refid="bcc"/>
+		<compiler name="msrc" if="use-msvc">
+			<compilerarg value="/l 0x409"/>
+			<fileset dir="${src.dir}" includes="com/*.rc"/>
+		</compiler>
+        <precompile prototype="${src.dir}/com/StdAfx.cpp">
+            <except>
+                <fileset dir="${src.dir}" includes="com/XMLDOM*.cpp"/>
+            </except>
+        </precompile>
+    	<linker name="msvc"/>
+		<linker name="bcc" if="use-bcc"/>
+		<fileset dir="${src.dir}" includes="com/*.cpp"/>
+		<fileset dir="${build.dir}" includes="xerces-c.lib"/>
+		<includepath location="${xml4com.dir}"/>
+		<includepath location="${include.dir}"/>
+		<includepath location="."/>
+		<defineset>
+			<define name="PLATFORM_WIN32" if="windows"/>
+		</defineset>
+		<syslibset libs="wininet,shlwapi"/>
+	</cc>
+  </target>
+
+
+  <target name="Samples" depends="CreateDOMDocument,DOMCount,
+  								  DOMPrint,
+  								  EnumVal,
+  								  IDOMCount,
+  								  IDOMPrint,
+  								  MemParse,
+  								  PParse,
+  								  Redirect,SAX2Count,
+  								  SAXCount,SAXPrint,
+  								  SEnumVal,StdInParse"/>
+
+  <target name="Tests" depends="DOMIDTest,DOMMemTest,
+  								  DOMTest,DOMTraversalTest,
+  								  EncodingTest,IDOMMemTest,
+  								  IDOMTest,ITraversal,
+  								  InitTermTest,IRangeTest,
+								  RangeTest,ThreadTest"/>
+
+  <target name="XercesAll" depends="Samples,Tests,XercesCOM"/>
+
+  <target name="main"
+          depends="XercesAll" />
+
+</project>

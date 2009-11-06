@@ -136,12 +136,12 @@ public final class BorlandLinker extends CommandLineLinker {
     /**
      * Prepares argument list for exec command.
      *
-     * @param outputFile
-     *            linker output file
+     * @param outputDir linker output directory
+     * @param outputName linker output name
      * @param sourceFiles
      *            linker input files (.obj, .o, .res)
-     * @param args
-     *            linker arguments
+     * @param config
+     *            linker configuration
      * @return arguments for runTask
      */
     protected String[] prepareArguments(
@@ -277,7 +277,7 @@ public final class BorlandLinker extends CommandLineLinker {
      * @param versionInfo version information
      * @param linkType link type
      * @param isDebug true if debug build
-     * @param executableName name of generated executable
+     * @param outputFile name of generated executable
      * @param objDir directory for generated files
      * @param matcher bidded fileset
      */

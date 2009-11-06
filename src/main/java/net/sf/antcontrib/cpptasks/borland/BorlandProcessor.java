@@ -61,8 +61,8 @@ public final class BorlandProcessor {
      *            Tool name, for example, "bcc32", "brc32", "ilink32"
      * @param switchChar
      *            Command line switch character, for example "L" for libraries
-     * @param defaultRelativePaths
-     *            default paths relative to executable directory
+     * @param defaultRelativePath
+     *            default path relative to executable directory
      * @return path
      */
     public static File[] getEnvironmentPath(String toolName, char switchChar,

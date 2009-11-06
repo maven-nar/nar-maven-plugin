@@ -15,6 +15,8 @@
  *  limitations under the License.
  */
 package net.sf.antcontrib.cpptasks;
+import org.apache.tools.ant.types.EnumeratedAttribute;
+
 import net.sf.antcontrib.cpptasks.arm.ADSLinker;
 import net.sf.antcontrib.cpptasks.borland.BorlandLinker;
 import net.sf.antcontrib.cpptasks.compaq.CompaqVisualFortranLinker;
@@ -38,8 +40,6 @@ import net.sf.antcontrib.cpptasks.os400.IccLinker;
 import net.sf.antcontrib.cpptasks.sun.C89Linker;
 import net.sf.antcontrib.cpptasks.sun.ForteCCLinker;
 import net.sf.antcontrib.cpptasks.ti.ClxxLinker;
-
-import org.apache.tools.ant.types.EnumeratedAttribute;
 
 /**
  * Enumeration of supported linkers

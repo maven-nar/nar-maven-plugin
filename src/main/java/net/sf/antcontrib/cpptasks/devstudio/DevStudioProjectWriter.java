@@ -1,6 +1,6 @@
 /*
  *
- * Copyright 2004 The Ant-Contrib project
+ * Copyright 2004-2008 The Ant-Contrib project
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,26 +16,25 @@
  */
 package net.sf.antcontrib.cpptasks.devstudio;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-
 import net.sf.antcontrib.cpptasks.CCTask;
 import net.sf.antcontrib.cpptasks.CUtil;
 import net.sf.antcontrib.cpptasks.TargetInfo;
 import net.sf.antcontrib.cpptasks.compiler.CommandLineCompilerConfiguration;
 import net.sf.antcontrib.cpptasks.compiler.CommandLineLinkerConfiguration;
 import net.sf.antcontrib.cpptasks.compiler.ProcessorConfiguration;
+import net.sf.antcontrib.cpptasks.ide.DependencyDef;
 import net.sf.antcontrib.cpptasks.ide.ProjectDef;
 import net.sf.antcontrib.cpptasks.ide.ProjectWriter;
+import net.sf.antcontrib.cpptasks.ide.CommentDef;
 import org.apache.tools.ant.BuildException;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.*;
+import java.text.MessageFormat;
 
 /**
  * Writes a Microsoft Visual Studio 97 or Visual Studio 6 project file.
@@ -60,6 +59,24 @@ public final class DevStudioProjectWriter
     this.version = versionArg;
   }
 
+  private static String toProjectName(final String name) {
+      //
+      //    some characters are apparently not allowed in VS project names
+      //       but have not been able to find them documented
+      //       limiting characters to alphas, numerics and hyphens
+      StringBuffer projectNameBuf = new StringBuffer(name);
+      for (int i = 0; i < projectNameBuf.length(); i++) {
+        final char ch = projectNameBuf.charAt(i);
+        if (!((ch >= 'a' && ch <= 'z')
+               || (ch >= 'A' && ch <= 'Z')
+               || (ch >= '0' && ch <= '9'))) {
+          projectNameBuf.setCharAt(i, '_');
+        }
+      }
+      return projectNameBuf.toString();
+
+  }
+
   /**
    *  Writes a project definition file.
    * @param fileName File name base, writer may append appropriate extension
@@ -81,22 +98,12 @@ public final class DevStudioProjectWriter
     //    some characters are apparently not allowed in VS project names
     //       but have not been able to find them documented
     //       limiting characters to alphas, numerics and hyphens
-    StringBuffer projectNameBuf;
     String projectName = projectDef.getName();
     if (projectName != null) {
-      projectNameBuf = new StringBuffer(projectName);
+      projectName = toProjectName(projectName);
     } else {
-      projectNameBuf = new StringBuffer(fileName.getName());
+      projectName = toProjectName(fileName.getName());
     }
-    for (int i = 0; i < projectNameBuf.length(); i++) {
-      final char ch = projectNameBuf.charAt(i);
-      if (!((ch >= 'a' && ch <= 'z')
-             || (ch >= 'A' && ch <= 'Z')
-             || (ch >= '0' && ch <= '9'))) {
-        projectNameBuf.setCharAt(i, '_');
-      }
-    }
-    projectName = projectNameBuf.toString();
 
     final String basePath = fileName.getAbsoluteFile().getParent();
 
@@ -128,15 +135,11 @@ public final class DevStudioProjectWriter
     writer.write(this.version);
     writer.write("\r\n");
     writer.write("# ** DO NOT EDIT **\r\n\r\n");
+
+	writeComments(writer, projectDef.getComments());
+
     String outputType = task.getOuttype();
     String subsystem = task.getSubsystem();
-    String configName = projectName;
-    final boolean isDebug = task.getDebug();
-    if (isDebug) {
-      configName += " - Win32 Debug";
-    } else {
-      configName += " - Win32 Release";
-    }
     String targtype = "Win32 (x86) Dynamic-Link Library";
     String targid = "0x0102";
     if ("executable".equals(outputType)) {
@@ -156,10 +159,11 @@ public final class DevStudioProjectWriter
     writer.write("\" ");
     writer.write(targid);
     writer.write("\r\n\r\nCFG=");
-    writer.write(configName);
+
+    writer.write(projectName + " - Win32 Debug");
     writer.write("\r\n");
 
-    writeMessage(writer, projectName, configName, targtype);
+    writeMessage(writer, projectName, targtype);
 
     writer.write("# Begin Project\r\n");
     if (version.equals("6.00")) {
@@ -170,59 +174,22 @@ public final class DevStudioProjectWriter
     writer.write("CPP=cl.exe\r\n");
     writer.write("MTL=midl.exe\r\n");
     writer.write("RSC=rc.exe\r\n");
-    writer.write("# PROP BASE Use_MFC 0\r\n");
 
-    writer.write("# PROP BASE Use_Debug_Libraries ");
-    if (isDebug) {
-      writer.write("1\r\n");
-    } else {
-      writer.write("0\r\n");
-    }
+    writer.write("\r\n!IF  \"$(CFG)\" == \"" + projectName + " - Win32 Release\"\r\n");
 
-    File objDir = task.getObjdir();
-    String objDirPath = CUtil.getRelativePath(basePath, objDir);
+    writeConfig(writer, false, projectDef.getDependencies(), basePath, compilerConfig, linkTarget, targets);
 
-    File outFile = task.getOutfile();
-    File buildDir = outFile.getParentFile();
-    String buildDirPath = CUtil.getRelativePath(basePath, buildDir);
+    writer.write("\r\n!ELSEIF  \"$(CFG)\" == \"" + projectName + " - Win32 Debug\"\r\n");
 
-    writer.write("# PROP BASE Output_Dir \"");
-    writer.write(buildDirPath);
-    writer.write("\"\r\n");
-    writer.write("# PROP BASE Intermediate_Dir \"");
-    writer.write(objDirPath);
-    writer.write("\"\r\n");
-    writer.write("# PROP BASE Target_Dir \"\"\r\n");
-    writer.write("# PROP Use_MFC 0\r\n");
-    writer.write("# PROP Use_Debug_Libraries ");
-    if (isDebug) {
-      writer.write("1\r\n");
-    } else {
-      writer.write("0\r\n");
-    }
-    writer.write("# PROP Output_Dir \"");
-    writer.write(buildDirPath);
-    writer.write("\"\r\n");
-    writer.write("# PROP Intermediate_Dir \"");
-    writer.write(objDirPath);
-    writer.write("\"\r\n");
-    writer.write("# PROP Target_Dir \"\"\r\n");
-    writeCompileOptions(writer, basePath, compilerConfig);
-    writer.write(
-        "# ADD BASE MTL /nologo /D \"_DEBUG\" /mktyplib203 /o NUL /win32\r\n");
-    writer.write(
-        "# ADD MTL /nologo /D \"_DEBUG\" /mktyplib203 /o NUL /win32\r\n");
-    writer.write("# ADD BASE RSC /l 0x409 /d \"_DEBUG\"\r\n");
-    writer.write("# ADD RSC /l 0x409 /d \"_DEBUG\"\r\n");
-    writer.write("BSC32=bscmake.exe\r\n");
-    writer.write("# ADD BASE BSC32 /nologo\r\n");
-    writer.write("# ADD BSC32 /nologo\r\n");
-    writer.write("LINK32=link.exe\r\n");
-    writeLinkOptions(writer, basePath, linkTarget, targets);
+    writeConfig(writer, true, projectDef.getDependencies(), basePath, compilerConfig, linkTarget, targets);
+
+    writer.write("\r\n!ENDIF\r\n");
+
     writer.write("# Begin Target\r\n\r\n");
-    writer.write("# Name \"");
-    writer.write(configName);
-    writer.write("\"\r\n");
+    writer.write("# Name \"" + projectName + " - Win32 Release\"\r\n");
+    writer.write("# Name \"" + projectName + " - Win32 Debug\"\r\n");
+      
+
 
     File[] sortedSources = getSources(files);
 
@@ -277,30 +244,128 @@ public final class DevStudioProjectWriter
     //    write workspace file
     //
     writer = new BufferedWriter(new FileWriter(dswFile));
-
-    writer.write("Microsoft Developer Studio Workspace File, Format Version ");
-    writer.write(version);
-    writer.write("\r\n");
-    writer.write("# WARNING: DO NOT EDIT OR DELETE");
-    writer.write(" THIS WORKSPACE FILE!\r\n\r\n");
-
-    writer.write("############################################");
-    writer.write("###################################\r\n\r\n");
-    writer.write("Project: \"" + projectName + "\"=.\\"
-                 + dspFile.getName()
-                 + " - Package Owner=<4>\r\n\r\n");
-
-    writer.write("Package=<5>\r\n{{{\r\n}}}\r\n\r\n");
-    writer.write("Package=<4>\r\n{{{\r\n}}}\r\n\r\n");
-    writer.write("######################################");
-    writer.write("#########################################\r\n\r\n");
-
-    writer.write("Global:\r\n\r\nPackage=<5>\r\n{{{\r\n}}}");
-    writer.write("\r\n\r\nPackage=<3>\r\n{{{\r\n}}}\r\n\r\n");
-
-    writer.write("########################################");
-    writer.write("#######################################\r\n\r\n");
+    writeWorkspace(writer, projectDef, projectName, dspFile);
     writer.close();
+
+  }
+
+  private void writeConfig(final Writer writer,
+                           boolean isDebug,
+                           final List dependencies,
+                           final String basePath,
+                           CommandLineCompilerConfiguration compilerConfig,
+                           TargetInfo linkTarget,
+                           Hashtable targets) throws IOException {
+      writer.write("# PROP BASE Use_MFC 0\r\n");
+
+      String configType = "Release";
+      String configInt = "0";
+      String configMacro = "NDEBUG";
+      if (isDebug) {
+        configType = "Debug";
+        configInt = "1";
+        configMacro = "_DEBUG";
+      }
+
+      writer.write("# PROP BASE Use_Debug_Libraries ");
+      writer.write(configInt);
+      writer.write("\r\n# PROP BASE Output_Dir \"");
+      writer.write(configType);
+      writer.write("\"\r\n");
+      writer.write("# PROP BASE Intermediate_Dir \"");
+      writer.write(configType);
+      writer.write("\"\r\n");
+      writer.write("# PROP BASE Target_Dir \"\"\r\n");
+      writer.write("# PROP Use_MFC 0\r\n");
+      writer.write("# PROP Use_Debug_Libraries ");
+      writer.write(configInt);
+      writer.write("\r\n# PROP Output_Dir \"");
+      writer.write(configType);
+      writer.write("\"\r\n");
+      writer.write("# PROP Intermediate_Dir \"");
+      writer.write(configType);
+      writer.write("\"\r\n");
+      writer.write("# PROP Target_Dir \"\"\r\n");
+      writeCompileOptions(writer, isDebug, basePath, compilerConfig);
+      writer.write(
+          "# ADD BASE MTL /nologo /D \"" + configMacro + "\" /mktyplib203 /o NUL /win32\r\n");
+      writer.write(
+          "# ADD MTL /nologo /D \"" + configMacro + "\" /mktyplib203 /o NUL /win32\r\n");
+      writer.write("# ADD BASE RSC /l 0x409 /d \"" + configMacro + "\"\r\n");
+      writer.write("# ADD RSC /l 0x409 /d \"" + configMacro + "\"\r\n");
+      writer.write("BSC32=bscmake.exe\r\n");
+      writer.write("# ADD BASE BSC32 /nologo\r\n");
+      writer.write("# ADD BSC32 /nologo\r\n");
+      writer.write("LINK32=link.exe\r\n");
+      writeLinkOptions(writer, isDebug, dependencies, basePath, linkTarget, targets);
+  }
+  private static void writeWorkspaceProject(final Writer writer,
+                                     final String projectName,
+                                     final String projectFile,
+                                     final List dependsOn) throws IOException {
+      writer.write("############################################");
+      writer.write("###################################\r\n\r\n");
+      String file = projectFile;
+      if(!file.startsWith(".") && !file.startsWith("\\") && !file.startsWith("/")) {
+          file = ".\\" + file;
+      }
+      writer.write("Project: \"" + projectName + "\"=\""
+                   + file
+                   + "\" - Package Owner=<4>\r\n\r\n");
+
+      writer.write("Package=<5>\r\n{{{\r\n}}}\r\n\r\n");
+      writer.write("Package=<4>\r\n{{{\r\n");
+      if (dependsOn != null) {
+        for(Iterator iter = dependsOn.iterator(); iter.hasNext();) {
+            writer.write("    Begin Project Dependency\r\n");
+            writer.write("    Project_Dep_Name " + toProjectName(String.valueOf(iter.next())) + "\r\n");
+            writer.write("    End Project Dependency\r\n");
+        }
+      }
+      writer.write("}}}\r\n\r\n");
+
+  }
+
+  private void writeWorkspace(final Writer writer,
+                              final ProjectDef project,
+                              final String projectName,
+                              final File dspFile) throws IOException {
+
+      writer.write("Microsoft Developer Studio Workspace File, Format Version ");
+      writer.write(version);
+      writer.write("\r\n");
+      writer.write("# WARNING: DO NOT EDIT OR DELETE");
+      writer.write(" THIS WORKSPACE FILE!\r\n\r\n");
+
+	  writeComments(writer, project.getComments());
+
+
+      List dependencies = project.getDependencies();
+      List projectDeps = new ArrayList();
+      String basePath = dspFile.getParent();
+      for(Iterator iter = dependencies.iterator(); iter.hasNext();) {
+          DependencyDef dep = (DependencyDef) iter.next();
+          if (dep.getFile() != null) {
+            String projName = toProjectName(dep.getName());
+            projectDeps.add(projName);
+            String depProject = CUtil.toWindowsPath(
+                      CUtil.getRelativePath(basePath,
+                              new File(dep.getFile() + ".dsp")));
+            writeWorkspaceProject(writer, projName, depProject, dep.getDependsList());
+          }
+      }
+
+      writeWorkspaceProject(writer, projectName, dspFile.getName(), projectDeps);
+
+      writer.write("############################################");
+      writer.write("###################################\r\n\r\n");
+
+
+      writer.write("Global:\r\n\r\nPackage=<5>\r\n{{{\r\n}}}");
+      writer.write("\r\n\r\nPackage=<3>\r\n{{{\r\n}}}\r\n\r\n");
+
+      writer.write("########################################");
+      writer.write("#######################################\r\n\r\n");
 
   }
 
@@ -344,7 +409,7 @@ public final class DevStudioProjectWriter
         && !relativePath.startsWith("\\")) {
       relativePath = ".\\" + relativePath;
     }
-    writer.write(relativePath);
+    writer.write(CUtil.toWindowsPath(relativePath));
     writer.write("\r\n# End Source File\r\n");
   }
 
@@ -368,14 +433,12 @@ public final class DevStudioProjectWriter
    * Writes "This is not a makefile" warning.
    * @param writer Writer writer
    * @param projectName String project name
-   * @param configName String configuration name
    * @param targtype String target type
    * @throws IOException if error writing project
    */
 
   private void writeMessage(final Writer writer,
                             final String projectName,
-                            final String configName,
                             final String targtype) throws IOException {
     writer.write(
         "!MESSAGE This is not a valid makefile. ");
@@ -395,16 +458,14 @@ public final class DevStudioProjectWriter
     writer.write("!MESSAGE NMAKE /f \"");
     writer.write(projectName);
     writer.write(".mak\" CFG=\"");
-    writer.write(configName);
-    writer.write("\"\r\n");
+    writer.write(projectName);
+    writer.write(" - Win32 Debug\"\r\n");
     writer.write("!MESSAGE \r\n");
     writer.write("!MESSAGE Possible choices for configuration are:\r\n");
     writer.write("!MESSAGE \r\n");
-    writer.write("!MESSAGE \"");
-    writer.write(configName);
-    writer.write("\" (based on \"");
-    writer.write(targtype);
-    writer.write("\")\r\n");
+    String pattern = "!MESSAGE \"{0} - Win32 {1}\" (based on \"{2}\")\r\n";
+    writer.write(MessageFormat.format(pattern, new Object[] { projectName, "Release", targtype }));
+    writer.write(MessageFormat.format(pattern, new Object[] { projectName, "Debug", targtype }));
     writer.write("!MESSAGE \r\n");
     writer.write("\r\n");
 
@@ -421,7 +482,7 @@ public final class DevStudioProjectWriter
     //
     //   find first target with an DevStudio C compilation
     //
-    CommandLineCompilerConfiguration compilerConfig = null;
+    CommandLineCompilerConfiguration compilerConfig;
     //
     //   get the first target and assume that it is representative
     //
@@ -429,7 +490,6 @@ public final class DevStudioProjectWriter
     while (targetIter.hasNext()) {
       TargetInfo targetInfo = (TargetInfo) targetIter.next();
       ProcessorConfiguration config = targetInfo.getConfiguration();
-      String identifier = config.getIdentifier();
       //
       //   for the first cl compiler
       //
@@ -446,11 +506,13 @@ public final class DevStudioProjectWriter
   /**
    * Writes compiler options.
    * @param writer Writer writer
+   * @param isDebug true if debug.
    * @param baseDir String base directory
    * @param compilerConfig compiler configuration
    * @throws IOException if error on writing project
    */
   private void writeCompileOptions(final Writer writer,
+                                   final boolean isDebug,
                                    final String baseDir,
                                    final CommandLineCompilerConfiguration
                                    compilerConfig) throws IOException {
@@ -462,9 +524,34 @@ public final class DevStudioProjectWriter
     for (int i = 0; i < includePath.length; i++) {
       options.append(" /I \"");
       String relPath = CUtil.getRelativePath(baseDir, includePath[i]);
-      options.append(relPath);
+      options.append(CUtil.toWindowsPath(relPath));
       options.append('"');
     }
+    Hashtable optionMap = new Hashtable();
+
+    if (isDebug) {
+        //
+        //   release options that should be mapped to debug counterparts
+        //
+        optionMap.put("/MT", "/MTd");
+        optionMap.put("/ML", "/MLd");
+        optionMap.put("/MD", "/MDd");
+        optionMap.put("/O2", "/Od");
+        optionMap.put("/O3", "/Od");
+    } else {
+        //
+        //   debug options that should be mapped to release counterparts
+        //
+        optionMap.put("/MTD", "/MT");
+        optionMap.put("/MLD", "/ML");
+        optionMap.put("/MDD", "/MD");
+        optionMap.put("/GM", "");
+        optionMap.put("/ZI", "");
+        optionMap.put("/OD", "/O2");
+        optionMap.put("/GZ", "");
+    }
+
+
 
     String[] preArgs = compilerConfig.getPreArguments();
     for (int i = 0; i < preArgs.length; i++) {
@@ -476,15 +563,30 @@ public final class DevStudioProjectWriter
           options.append(body);
           baseOptions.append(body);
         } else {
-          options.append('"');
-          options.append(body);
-          options.append('"');
+          StringBuffer buf = new StringBuffer("\"");
+          if ("NDEBUG".equals(body) || "_DEBUG".equals(body)) {
+            if (isDebug) {
+                buf.append("_DEBUG");
+            } else {
+                buf.append("NDEBUG");
+            }
+          } else {
+            buf.append(body);
+          }
+          buf.append("\"");
+          options.append(buf);
+          baseOptions.append(buf);
         }
       } else if (!preArgs[i].startsWith("/I")) {
+        String option = preArgs[i];
+        String key = option.toUpperCase(Locale.US);
+        if (optionMap.containsKey(key)) {
+            option = optionMap.get(key).toString();
+        }
         options.append(" ");
-        options.append(preArgs[i]);
+        options.append(option);
         baseOptions.append(" ");
-        baseOptions.append(preArgs[i]);
+        baseOptions.append(option);
       }
     }
     baseOptions.append("\r\n");
@@ -494,15 +596,22 @@ public final class DevStudioProjectWriter
 
   }
 
+
+
+
+
   /**
    * Writes link options.
    * @param writer Writer writer
    * @param basePath String base path
+   * @param dependencies project dependencies, used to suppress explicit linking.
    * @param linkTarget TargetInfo link target
    * @param targets Hashtable all targets
    * @throws IOException if unable to write to project file
    */
   private void writeLinkOptions(final Writer writer,
+                                final boolean isDebug,
+                                final List dependencies,
                                 final String basePath,
                                 final TargetInfo linkTarget,
                                 final Hashtable targets) throws IOException {
@@ -523,26 +632,51 @@ public final class DevStudioProjectWriter
         //   if file was not compiled or otherwise generated
         //
         if (targets.get(linkSources[i].getName()) == null) {
-          String relPath = CUtil.getRelativePath(basePath, linkSources[i]);
           //
-          //   if path has an embedded space then
-          //      must quote
-          if (relPath.indexOf(' ') > 0) {
-            options.append(" \"");
-            options.append(relPath);
-            options.append("\"");
-          } else {
-            options.append(' ');
-            options.append(relPath);
+          //   if source appears to be a system library or object file
+          //      just output the name of the file (advapi.lib for example)
+          //      otherwise construct a relative path.
+          //
+          String relPath = linkSources[i].getName();
+          //
+          //   check if file comes from a project dependency
+          //       if it does it should not be explicitly linked
+          boolean fromDependency = false;
+          if (relPath.indexOf(".") > 0) {
+              String baseName = relPath.substring(0, relPath.indexOf("."));
+              for(Iterator iter = dependencies.iterator(); iter.hasNext(); ) {
+                DependencyDef depend = (DependencyDef) iter.next();
+                if (baseName.compareToIgnoreCase(depend.getName()) == 0) {
+                    fromDependency = true;
+                }
+            }
           }
+          if (!fromDependency) {
+            if (!CUtil.isSystemPath(linkSources[i])) {
+              relPath = CUtil.getRelativePath(basePath, linkSources[i]);
+            }
+            //
+            //   if path has an embedded space then
+            //      must quote
+            if (relPath.indexOf(' ') > 0) {
+                options.append(" \"");
+                options.append(CUtil.toWindowsPath(relPath));
+                options.append("\"");
+            } else {
+                options.append(' ');
+                options.append(CUtil.toWindowsPath(relPath));
+            }
+           }
         }
       }
       String[] preArgs = linkConfig.getPreArguments();
       for (int i = 0; i < preArgs.length; i++) {
-        options.append(' ');
-        options.append(preArgs[i]);
-        baseOptions.append(' ');
-        baseOptions.append(preArgs[i]);
+        if (isDebug || !preArgs[i].equals("/DEBUG")) {
+            options.append(' ');
+            options.append(preArgs[i]);
+            baseOptions.append(' ');
+            baseOptions.append(preArgs[i]);
+        }
       }
       String[] endArgs = linkConfig.getEndArguments();
       for (int i = 0; i < endArgs.length; i++) {
@@ -556,5 +690,21 @@ public final class DevStudioProjectWriter
     options.append("\r\n");
     writer.write(baseOptions.toString());
     writer.write(options.toString());
+  }
+
+  private static void writeComments(final Writer writer,
+                             final List comments) throws IOException {
+		for(Iterator iter = comments.iterator();iter.hasNext();) {
+			String comment = ((CommentDef) iter.next()).getText();
+			if (comment != null) {
+				int start = 0;
+				for(int end = comment.indexOf('\n'); 
+					end != -1; 
+					end = comment.indexOf('\n', start)) {
+					writer.write("#" + comment.substring(start, end) + "\r\n");
+					start = end + 1;
+				}
+			}	
+		}
   }
 }

@@ -72,11 +72,7 @@ public abstract class DevStudioCompatibleCCompiler
         }
         if (debug) {
             mindex += 1;
-// FREEHEP changed /Zi into /Z7
-            args.addElement("/Zi");
-            args.addElement("/Od");
-            args.addElement("/GZ");
-            args.addElement("/D_DEBUG");
+            addDebugSwitch(args);
         } else {
                 if (optimization != null) {
                    if (optimization.isSize()) {
@@ -97,6 +93,12 @@ public abstract class DevStudioCompatibleCCompiler
         if (rtti != null && rtti.booleanValue()) {
                 args.addElement("/GR");
         }
+    }
+    protected void addDebugSwitch(Vector args) {
+        args.addElement("/Zi");
+        args.addElement("/Od");
+        args.addElement("/GZ");
+        args.addElement("/D_DEBUG");
     }
     protected void addWarningSwitch(Vector args, int level) {
         DevStudioProcessor.addWarningSwitch(args, level);

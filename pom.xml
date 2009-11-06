@@ -11,6 +11,15 @@
   </description>
   <url>http://github.com/duns/cpptasks-parallel</url>
 
+  <inceptionYear>2001</inceptionYear>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
   <scm>
     <connection>scm:git:git://github.com/duns/cpptasks-parallel.git</connection>
     <developerConnection>scm:git:git://github.com/duns/cpptasks-parallel.git</developerConnection>
@@ -43,72 +52,50 @@
         <configuration>
           <source>1.4</source>
           <target>1.4</target>
+          <optimize>true</optimize>
         </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
           <archive>
-            <manifest>
-              <mainClass>
-                net.sf.antcontrib.cpptasks.AboutCCTask
-              </mainClass>
-              <packageName>
-                net.sf.antcontrib.cpptasks
-              </packageName>
-            </manifest>
+            <manifestSections>
+              <manifestSection>
+                <name>net.sf.antcontrib.cpptasks</name>
+                <manifestEntries>
+                  <Implementation-Title>cpptasks: Compiler Tasks for Apache Ant.</Implementation-Title>
+                  <Implementation-Version>${project.version}</Implementation-Version>
+                  <Implementation-Vendor>Ant-Contrib Project</Implementation-Vendor>
+                </manifestEntries>
+              </manifestSection>
+            </manifestSections>
           </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <reportFormat>plain</reportFormat>
+          <excludes>
+              <exclude>**/TestInstalledDevStudioLinker.java</exclude>
+              <exclude>**/TestMetaObjectCompiler.java</exclude>
+              <exclude>**/TestAbstract*.java</exclude> 
+          </excludes>
         </configuration>
       </plugin>
     </plugins>
   </build>
 
-  <profiles>
-    <profile>
-      <id>jdk1.4</id>
-      <activation>
-        <jdk>1.4</jdk>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>xerces</groupId>
-          <artifactId>xercesImpl</artifactId>
-          <version>2.6.2</version>
-        </dependency>
-      </dependencies>
-    </profile>
-    <profile>
-      <id>jdk1.5</id>
-      <activation>
-        <jdk>1.5</jdk>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>xerces</groupId>
-          <artifactId>xercesImpl</artifactId>
-          <version>2.7.1</version>
-        </dependency>
-      </dependencies>
-    </profile>
-    <profile>
-      <id>jdk1.6</id>
-      <activation>
-        <jdk>1.6</jdk>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>xerces</groupId>
-          <artifactId>xercesImpl</artifactId>
-          <version>2.7.1</version>
-        </dependency>
-      </dependencies>
-    </profile>
-  </profiles>
   <dependencies>
     <dependency>
       <groupId>ant</groupId>
       <artifactId>ant</artifactId>
       <version>1.6.5</version>
+    </dependency>
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
+      <version>2.8.1</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

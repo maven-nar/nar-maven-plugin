@@ -117,7 +117,7 @@ public class GccProcessor {
      * -dumpversion. Attempts to use gcc -dumpspecs to provide this information
      * resulted in stalling on the Execute.run
      * 
-     * @returns contents of the specs file
+     * @return contents of the specs file
      */
     public static String[] getSpecs() {
         if (specs == null) {

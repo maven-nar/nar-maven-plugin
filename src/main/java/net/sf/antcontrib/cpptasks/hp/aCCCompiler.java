@@ -1,6 +1,6 @@
 /*
  * 
- * Copyright 2001-2004 The Ant-Contrib project
+ * Copyright 2001-2007 The Ant-Contrib project
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -31,8 +31,13 @@ import org.apache.tools.ant.types.Environment;
  * @author Curt Arnold
  */
 public final class aCCCompiler extends GccCompatibleCCompiler {
-    private static final aCCCompiler instance = new aCCCompiler("aCC", false,
-            null);
+    private final static String[] headerExtensions = new String[]{".h", ".hpp",
+            ".inl"};
+    private final static String[] sourceExtensions = new String[]{".c", ".cc",
+            ".cxx", ".cpp", ".c++", ".i", ".s"};
+    
+    private static final aCCCompiler instance = new aCCCompiler("aCC", 
+            sourceExtensions, headerExtensions, false, null);
     /**
      * Gets singleton instance of this class
      */
@@ -45,8 +50,11 @@ public final class aCCCompiler extends GccCompatibleCCompiler {
      * Private constructor. Use GccCCompiler.getInstance() to get singleton
      * instance of this class.
      */
-    private aCCCompiler(String command, boolean newEnvironment, Environment env) {
-        super(command, "-help", false, null, newEnvironment, env);
+    private aCCCompiler(String command, String[] sourceExtensions, 
+            String[] headerExtensions, boolean newEnvironment, 
+            Environment env) {
+        super(command, "-help", sourceExtensions, headerExtensions, false, 
+                null, newEnvironment, env);
     }
     public void addImpliedArgs(Vector args, boolean debug,
             boolean multithreaded, boolean exceptions, LinkType linkType,

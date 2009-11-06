@@ -129,7 +129,6 @@ public abstract class AbstractCompiler extends AbstractProcessor
      *            used to distinguish DependencyInfo's from different include
      *            path settings
      *
-     * @author Curt Arnold
      */
     public final DependencyInfo parseIncludes(CCTask task, File source,
             File[] includePath, File[] sysIncludePath, File[] envIncludePath,

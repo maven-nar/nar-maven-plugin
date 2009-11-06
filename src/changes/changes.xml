@@ -1,0 +1,60 @@
+<!--
+ Licensed to the Ant-Contrib Project under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The Ant-Contrib Project licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+-->
+  <document>
+  <properties>
+    <title>cpptasks: Compile tasks for Apache Ant</title>
+  </properties>
+  <body>
+  
+    <release version="1.0-beta5" date="2008-04-03" description="Improved IDE project generation, updated docs and packaging">
+        <action issue="980130">IDE project file generation.</action>
+        <action issue="1794857">history.xml not capturing mid and end arguments</action>
+        <action issue="1794867">LinkerDef not properly capturing references</action>
+        <action issue="1573193">Update documentation for antlib usage</action>
+        <action issue="1775873">Modify warning levels for sunpro</action>
+        <action issue="1715475">Modify CC, aCC and xlC to bid on .s files</action>
+        <action issue="1690945">Add msvc8 compiler to avoid deprecation warning on /GZ</action>
+        <action issue="1760649">Migrate to Maven 2 for build and documentation</action>
+        <action issue="1716271">Fix linked issues with shared libraries on VisualAge</action>
+    </release>
+
+    <release version="1.0-beta4" date="2006-05-19" description="IDE project generation">
+     </release>
+
+    <release version="1.0-beta3" date="2004-04-28" description="rtti and optimization switches, prototypes for versioninfo, target, distributer">
+        <action issue="937648">Sample build file for CPPUNIT</action>
+        <action issue="938336">Borland compilation repair</action>
+        <action issue="823577">Problem with linker extension</action>
+        <action issue="814132">Added type attribute to libset and syslibset so that dynamic or static could be chosen if both were available</action>
+        <action issue="940985">Added rtti and optimization attributes to cc and compiler</action>
+        <action issue="941119">Added versioninfo element (experimental)</action>
+        <action issue="749942">Add target element for cross-compilation (experimental)</action>
+        <action issue="941128">Add distributer element for distributed builds (experimental)</action>
+     </release>
+
+    <release version="1.0-beta2" date="2004-02-27" description="Switch of license to Apache License 2">
+     </release>
+
+    <release version="1.0-beta1" date="2002-08-17" description="xdoc generated documentation and 17 compilers">
+     </release>
+
+    <release version="1.0-alpha1" date="2002-01-08" description="Initial sourceforge release.">
+     </release>
+  </body>
+</document>
+

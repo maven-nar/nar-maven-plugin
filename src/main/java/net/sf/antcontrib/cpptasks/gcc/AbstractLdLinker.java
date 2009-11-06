@@ -108,12 +108,18 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
             File libdir = set.getDir(null);
             String[] libs = set.getLibs();
             if (libdir != null) {
+                    String relPath = libdir.getAbsolutePath();
+                    File outputFile = task.getOutfile();
+                    if (outputFile != null && outputFile.getParentFile() != null) {
+                        relPath = CUtil.getRelativePath(
+                            outputFile.getParentFile().getAbsolutePath(), libdir);
+                    }
                     if (set.getType() != null &&
                                     "framework".equals(set.getType().getValue()) &&
                                                 isDarwin()) {
-                            endargs.addElement("-F" + libdir.getAbsolutePath());
+                            endargs.addElement("-F" + relPath);
                     } else {
-                            endargs.addElement("-L" + libdir.getAbsolutePath());
+                            endargs.addElement("-L" + relPath);
                     }
             }
             //
@@ -123,7 +129,7 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
                     if (set.getType() != null && "static".equals(set.getType().getValue())) {
 // BEGINFREEHEP not on MacOS X
                     	if (!isDarwin()) {
-                            endargs.addElement("-Bstatic");
+                            endargs.addElement(getStaticLibFlag());
                             previousLibraryType = set.getType();
                     	}
 //ENDFREEHEP                          
@@ -132,7 +138,7 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
                             if (set.getType() == null ||
                                             !"framework".equals(set.getType().getValue()) &&
                                                         !isDarwin()) {
-                                    endargs.addElement("-Bdynamic");
+                                    endargs.addElement(getDynamicLibFlag());
                                     previousLibraryType = set.getType();
                             }
                     }
@@ -163,7 +169,7 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
         
 // BEGINFREEHEP if last was -Bstatic reset it to -Bdynamic so that libc and libm can be found as shareables
         if ((previousLibraryType != null) && previousLibraryType.getValue().equals("static") && !isDarwin()) {
-            endargs.addElement("-Bdynamic");
+            endargs.addElement(getDynamicLibFlag());
         }
 // ENDFREEHEP
         
@@ -286,8 +292,8 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
      *            linker output file
      * @param sourceFiles
      *            linker input files (.obj, .o, .res)
-     * @param args
-     *            linker arguments
+     * @param config
+     *            linker configuration
      * @return arguments for runTask
      */
     public String[] prepareArguments(CCTask task, String outputDir,
@@ -341,5 +347,13 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
         }
         return super.prepareArguments(task, outputDir, outputFile,
                 finalSources, config);
+    }
+
+    protected String getDynamicLibFlag() {
+        return "-Bdynamic";
+    }
+
+    protected String getStaticLibFlag() {
+        return "-Bstatic";
     }
 }

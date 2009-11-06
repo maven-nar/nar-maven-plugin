@@ -2,8 +2,14 @@ Modified version of ant contrib cpptasks, used in the freehep/maven-nar-plugin.
 
 *** ALL Changes marked with FREEHEP or BEGINFREEHEP-ENDFREEHEP.
 
+* cpptasks-1.0-beta-5-parallel-1-SNAPSHOT
+
+- merged with cpptasks-1.0b5.tar.gz
++++ some problems with tests may occur on other platforms than MacOS X.
+
 * cpptasks-1.0-beta-4-parallel-5
 
+- moved src to src/main/java, and some resource files to src/main/resources for easy merge with cpptasks-1.0b5
 - [src/net/sf/antcontrib/cpptasks/compiler/CommandLineLinker] use absolute paths for all paths to overcome windows file length limit.
 
 * cpptasks-1.0-beta-4-parallel-4

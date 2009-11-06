@@ -1,6 +1,6 @@
 /*
  *
- * Copyright 2004-2006 The Ant-Contrib project
+ * Copyright 2004-2008 The Ant-Contrib project
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -51,6 +51,10 @@ import org.apache.tools.ant.types.EnumeratedAttribute;
  * <td>Microsoft Visual C++ 2005</td>
  * </tr>
  * <tr>
+ * <td>msvc9</td>
+ * <td>Microsoft Visual C++ 2008</td>
+ * </tr>
+ * <tr>
  * <td>xcode</td>
  * <td>Apple Xcode</td>
  * </tr>
@@ -66,7 +70,7 @@ public final class ProjectWriterEnum
    */
   private static String[] values = new String[] {
       "cbuilderx", "msvc5",
-      "msvc6", "msvc7", "msvc71", "msvc8", "xcode"};
+      "msvc6", "msvc7", "msvc71", "msvc8", "msvc9", "xcode"};
 
   /**
    * Project writers associated with enumeration values.
@@ -77,6 +81,7 @@ public final class ProjectWriterEnum
       new VisualStudioNETProjectWriter("7.00", "TRUE", "FALSE"),
       new VisualStudioNETProjectWriter("7.10", "TRUE", "FALSE"),
       new VisualStudioNETProjectWriter("8.00", "true", "false"),
+      new VisualStudioNETProjectWriter("9.00", "true", "false"),
       new XcodeProjectWriter()};
 
   /**

@@ -30,8 +30,13 @@ import org.apache.tools.ant.types.Environment;
  * @author Curt Arnold
  */
 public final class VisualAgeCCompiler extends GccCompatibleCCompiler {
+    private final static String[] headerExtensions = new String[]{".h", ".hpp",
+            ".inl"};
+    private final static String[] sourceExtensions = new String[]{".c", ".cc",
+            ".cxx", ".cpp", ".i", ".s"};
+    
     private static final VisualAgeCCompiler instance = new VisualAgeCCompiler(
-            "xlC", false, null);
+            "xlC", sourceExtensions, headerExtensions, false, null);
     /**
      * Gets singleton instance of this class
      */
@@ -44,9 +49,11 @@ public final class VisualAgeCCompiler extends GccCompatibleCCompiler {
      * Private constructor. Use getInstance() to get singleton instance of this
      * class.
      */
-    private VisualAgeCCompiler(String command, boolean newEnvironment,
+    private VisualAgeCCompiler(String command, String[] sourceExtensions, 
+            String[] headerExtensions, boolean newEnvironment, 
             Environment env) {
-        super(command, "-help", false, null, newEnvironment, env);
+        super(command, "-help", sourceExtensions, headerExtensions, false, 
+                null, newEnvironment, env);
     }
     public void addImpliedArgs(final Vector args, 
     		final boolean debug,

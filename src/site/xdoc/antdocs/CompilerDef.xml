@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+Licensed to the Ant-Contrib Project under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The Ant-Contrib Project licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+  -->
+<document xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:taskdocs="http://ant-contrib.sf.net/taskdocs">
+<properties>
+<title>compiler</title>
+</properties>
+<body>
+<section name="compiler">
+<subsection name="Description">A compiler definition. compiler elements may be placed either as children of
+ a cc element or the project element. A compiler element with an id attribute
+ may be referenced from compiler elements with refid or extends attributes.</subsection>
+<subsection name="parameters">
+<table>
+<tr>
+<td>
+<b>Attribute</b>
+</td>
+<td>
+<b>Description</b>
+</td>
+<td>
+<b>Type</b>
+</td>
+</tr>
+<tr>
+<td>classname</td>
+<td>Sets the default compiler adapter. Use the "name" attribute when the
+ compiler is a supported compiler.</td>
+<td>String</td>
+</tr>
+<tr>
+<td>debug</td>
+<td>If set true, all targets will be built for debugging.</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>description</td>
+<td>Sets a description of the current data type.</td>
+<td>String</td>
+</tr>
+<tr>
+<td>exceptions</td>
+<td>Enables or disables exception support.</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>extends</td>
+<td>Specifies that this element extends the element with id attribute with a
+ matching value. The configuration will be constructed from the settings
+ of this element, element referenced by extends, and the containing cc
+ element.</td>
+<td>Reference</td>
+</tr>
+<tr>
+<td>id</td>
+<td>Sets an id that can be used to reference this element.</td>
+<td>String</td>
+</tr>
+<tr>
+<td>if</td>
+<td>Sets the property name for the 'if' condition.
+ 
+ The configuration will be ignored unless the property is defined.
+ 
+ The value of the property is insignificant, but values that would imply
+ misinterpretation ("false", "no") will throw an exception when
+ evaluated.</td>
+<td>String</td>
+</tr>
+<tr>
+<td>inherit</td>
+<td>If inherit has the default value of true, defines, includes and other
+ settings from the containing cc element will be inherited.</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>libtool</td>
+<td>Set use of libtool.
+ 
+ If set to true, the "libtool " will be prepended to the command line</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>multithreaded</td>
+<td>Enables or disables generation of multithreaded code. Unless specified,
+ multithreaded code generation is enabled.</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>name</td>
+<td>Sets compiler type.
+ 
+ 
+ <table> <thead>Supported compilers </thead>
+ <tr>
+ <td>gcc (default)</td>
+ <td>GCC C++ compiler</td>
+ </tr>
+ <tr>
+ <td>g++</td>
+ <td>GCC C++ compiler</td>
+ </tr>
+ <tr>
+ <td>c++</td>
+ <td>GCC C++ compiler</td>
+ </tr>
+ <tr>
+ <td>g77</td>
+ <td>GNU Fortran compiler</td>
+ </tr>
+ <tr>
+ <td>msvc</td>
+ <td>Microsoft Visual C++</td>
+ </tr>
+ <tr>
+ <td>bcc</td>
+ <td>Borland C++ Compiler</td>
+ </tr>
+ <tr>
+ <td>msrc</td>
+ <td>Microsoft Resource Compiler</td>
+ </tr>
+ <tr>
+ <td>brc</td>
+ <td>Borland Resource Compiler</td>
+ </tr>
+ <tr>
+ <td>df</td>
+ <td>Compaq Visual Fortran Compiler</td>
+ </tr>
+ <tr>
+ <td>midl</td>
+ <td>Microsoft MIDL Compiler</td>
+ </tr>
+ <tr>
+ <td>icl</td>
+ <td>Intel C++ compiler for Windows (IA-32)</td>
+ </tr>
+ <tr>
+ <td>ecl</td>
+ <td>Intel C++ compiler for Windows (IA-64)</td>
+ </tr>
+ <tr>
+ <td>icc</td>
+ <td>Intel C++ compiler for Linux (IA-32)</td>
+ </tr>
+ <tr>
+ <td>ecc</td>
+ <td>Intel C++ compiler for Linux (IA-64)</td>
+ </tr>
+ <tr>
+ <td>CC</td>
+ <td>Sun ONE C++ compiler</td>
+ </tr>
+ <tr>
+ <td>aCC</td>
+ <td>HP aC++ C++ Compiler</td>
+ </tr>
+ <tr>
+ <td>os390</td>
+ <td>OS390 C Compiler</td>
+ </tr>
+ <tr>
+ <td>os400</td>
+ <td>Icc Compiler</td>
+ </tr>
+ <tr>
+ <td>sunc89</td>
+ <td>Sun C89 C Compiler</td>
+ </tr>
+ <tr>
+ <td>xlC</td>
+ <td>VisualAge C Compiler</td>
+ </tr>
+ <tr>
+ <td>uic</td>
+ <td>Qt user interface compiler</td>
+ </tr>
+ <tr>
+ <td>moc</td>
+ <td>Qt meta-object compiler</td>
+ </tr>
+ <tr>
+ <td>wcl</td>
+ <td>OpenWatcom C/C++ compiler</td>
+ </tr>
+ <tr>
+ <td>wfl</td>
+ <td>OpenWatcom FORTRAN compiler</td>
+ </tr>
+ </table>
+</td>
+<td>
+<a href="../apidocs/net/sf/antcontrib/cpptasks/CompilerEnum.html">CompilerEnum</a>
+</td>
+</tr>
+<tr>
+<td>newenvironment</td>
+<td>Do not propagate old environment when new environment variables are
+ specified.</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>optimize</td>
+<td>Sets optimization level.</td>
+<td>
+<a href="../apidocs/net/sf/antcontrib/cpptasks/OptimizationEnum.html">OptimizationEnum</a>
+</td>
+</tr>
+<tr>
+<td>rebuild</td>
+<td>If set true, all targets will be unconditionally rebuilt.</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>refid</td>
+<td>Specifies that this element should behave as if the content of the
+ element with the matching id attribute was inserted at this location. If
+ specified, no other attributes or child content should be specified,
+ other than "if", "unless" and "description".</td>
+<td>Reference</td>
+</tr>
+<tr>
+<td>rtti</td>
+<td>Enables or disables run-time type information.</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>unless</td>
+<td>Set the property name for the 'unless' condition.
+ 
+ If named property is set, the configuration will be ignored.
+ 
+ The value of the property is insignificant, but values that would imply
+ misinterpretation ("false", "no") of the behavior will throw an
+ exception when evaluated.</td>
+<td>String</td>
+</tr>
+<tr>
+<td>warnings</td>
+<td>Enumerated attribute with the values "none", "severe", "default",
+ "production", "diagnostic", and "aserror".</td>
+<td>
+<a href="../apidocs/net/sf/antcontrib/cpptasks/WarningLevelEnum.html">WarningLevelEnum</a>
+</td>
+</tr>
+</table>
+</subsection>
+<subsection name="parameters as nested elements">
+<dl>
+<dt>
+<a href="CompilerArgument.html">compilerarg</a>
+</dt>
+<dd>Adds a compiler command-line arg.</dd>
+<dt>
+<a href="CompilerParam.html">compilerparam</a>
+</dt>
+<dd>Adds a compiler command-line arg.</dd>
+<dt>
+<a href="DefineSet.html">defineset</a>
+</dt>
+<dd>Adds a defineset.</dd>
+<dt>
+<a href="about:blank">env</a>
+</dt>
+<dd>Add an environment variable to the launched process.</dd>
+<dt>
+<a href="ConditionalFileSet.html">fileset</a>
+</dt>
+<dd>Adds a source file set.
+ 
+ Files in these set will be processed by this configuration and will not
+ participate in the auction.</dd>
+<dt>
+<a href="IncludePath.html">includepath</a>
+</dt>
+<dd>Creates an include path.</dd>
+<dt>
+<a href="PrecompileDef.html">precompile</a>
+</dt>
+<dd>Specifies precompilation prototype file and exclusions.</dd>
+<dt>
+<a href="SystemIncludePath.html">sysincludepath</a>
+</dt>
+<dd>Creates a system include path. Locations and timestamps of files located
+ using the system include paths are not used in dependency analysis.
+ 
+ 
+ Standard include locations should not be specified. The compiler
+ adapters should recognized the settings from the appropriate environment
+ variables or configuration files.</dd>
+</dl>
+</subsection>
+</section>
+</body>
+</document>
