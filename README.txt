@@ -5,7 +5,7 @@ Modified version of ant contrib cpptasks, used in the freehep/maven-nar-plugin.
 * cpptasks-1.0-beta-5-parallel-1-SNAPSHOT
 
 - merged with cpptasks-1.0b5.tar.gz
-+++ some problems with tests may occur on other platforms than MacOS X.
+- See NAR-103 for tests that have been changed
 
 * cpptasks-1.0-beta-4-parallel-5
 

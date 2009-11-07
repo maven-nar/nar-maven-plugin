@@ -235,7 +235,7 @@ public class TestAbstractLdLinker extends TestCase {
         Vector endargs = new Vector();
         String[] rc = linker.addLibrarySets(task, sets, preargs, midargs,
                 endargs);
-        for (int i=0; i<endargs.size(); i++) System.err.println(endargs.get( i ));
+//        for (int i=0; i<endargs.size(); i++) System.err.println(endargs.get( i ));
 // NAR-103
 // BEGINFREEHEP
         if (System.getProperty("os.name").equals("Mac OS X")) {
