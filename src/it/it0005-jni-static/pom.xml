@@ -43,23 +43,63 @@ under the License.
     <skipTests>true</skipTests>
   </properties>
 
-  <build>
-    <defaultGoal>install</defaultGoal>
-    <plugins>
-      <plugin>
-        <artifactId>maven-nar-plugin</artifactId>
-        <extensions>true</extensions>
-        <configuration>
-          <runtime>static</runtime>
-          <libraries>
-            <library>
-              <type>jni</type>
-              <narSystemPackage>it0005</narSystemPackage>
-              <linkCPP>false</linkCPP>
-            </library>
-          </libraries>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+  <profiles>
+    <profile>
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <defaultGoal>install</defaultGoal>
+        <plugins>
+          <plugin>
+            <artifactId>maven-nar-plugin</artifactId>
+            <extensions>true</extensions>
+            <configuration>
+              <runtime>static</runtime>
+              <libraries>
+                <library>
+                  <type>jni</type>
+                  <narSystemPackage>it0005</narSystemPackage>
+                  <linkCPP>false</linkCPP>
+                </library>
+              </libraries>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>      
+
+    <!-- does not build on AMD64 as this platforms needs all static (libc included) libraries to be compiled with -fPIC 
+    so, for now we build the shared version. -->
+    <profile>
+      <id>amd64</id>
+      <activation>
+        <os>
+          <family>unix</family>
+          <arch>amd64</arch>
+        </os>
+      </activation>
+      
+      <build>
+        <defaultGoal>install</defaultGoal>
+        <plugins>
+          <plugin>
+            <artifactId>maven-nar-plugin</artifactId>
+            <extensions>true</extensions>
+            <configuration>
+              <libraries>
+                <library>
+                  <type>jni</type>
+                  <narSystemPackage>it0005</narSystemPackage>
+                  <linkCPP>false</linkCPP>
+                </library>
+              </libraries>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
 </project>
