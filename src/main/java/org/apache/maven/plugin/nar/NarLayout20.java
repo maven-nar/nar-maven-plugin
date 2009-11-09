@@ -102,8 +102,8 @@ public class NarLayout20
                 + "/**" );
             narInfo.setNar( null, Library.EXECUTABLE, project.getGroupId() + ":" + project.getArtifactId() + ":"
                 + NarConstants.NAR_TYPE + ":" + "${aol}" + "-" + Library.EXECUTABLE );
-//            narInfo.setBinding( new AOL(binAOL[i]), Library.EXECUTABLE );
-//            narInfo.setBinding( null, Library.EXECUTABLE );
+            narInfo.setBinding( new AOL(binAOL[i]), Library.EXECUTABLE );
+            narInfo.setBinding( null, Library.EXECUTABLE );
         }
 
         File libDir = new File( baseDir, "lib" );

@@ -131,14 +131,14 @@ public class NarLayout21
                 type = Library.EXECUTABLE;
                 aol = new AOL(aolDir[0]);
   
-//                if ( narInfo.getBinding( aol, null ) == null )
-//                {
-//                    narInfo.setBinding( aol, Library.EXECUTABLE );
-//                }
-//                if ( narInfo.getBinding( null, null ) == null )
-//                {
-//                    narInfo.setBinding( null, Library.EXECUTABLE );
-//                }
+                if ( narInfo.getBinding( aol, null ) == null )
+                {
+                    narInfo.setBinding( aol, Library.EXECUTABLE );
+                }
+                if ( narInfo.getBinding( null, null ) == null )
+                {
+                    narInfo.setBinding( null, Library.EXECUTABLE );
+                }
             }
             else
             {
