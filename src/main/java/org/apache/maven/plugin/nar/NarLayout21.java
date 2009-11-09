@@ -131,10 +131,14 @@ public class NarLayout21
                 type = Library.EXECUTABLE;
                 aol = new AOL(aolDir[0]);
   
-                if ( narInfo.getBinding( aol, null ) == null )
-                {
-                    narInfo.setBinding( aol, Library.EXECUTABLE );
-                }
+//                if ( narInfo.getBinding( aol, null ) == null )
+//                {
+//                    narInfo.setBinding( aol, Library.EXECUTABLE );
+//                }
+//                if ( narInfo.getBinding( null, null ) == null )
+//                {
+//                    narInfo.setBinding( null, Library.EXECUTABLE );
+//                }
             }
             else
             {
@@ -158,6 +162,11 @@ public class NarLayout21
                 if (( narInfo.getBinding( aol, null ) == null ) || type.equals( Library.SHARED ) )
                 {
                     narInfo.setBinding( aol, type );
+                }
+                // and not set or override if SHARED
+                if (( narInfo.getBinding( null, null ) == null ) || type.equals( Library.SHARED ) )
+                {
+                    narInfo.setBinding( null, type );
                 }
             }
             
