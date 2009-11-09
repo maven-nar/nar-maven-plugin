@@ -138,7 +138,15 @@ public class NarCompileMojo
         task.setLinkFortran( library.linkFortran() );
 
         // outDir
-        File outDir = getLayout().getLibDirectory( getTargetDirectory(), getAOL().toString(), type );
+        File outDir;
+        if ( type.equals( Library.EXECUTABLE ) )
+        {
+            outDir = getLayout().getBinDirectory( getTargetDirectory(), getAOL().toString() );
+        }
+        else
+        {
+            outDir = getLayout().getLibDirectory( getTargetDirectory(), getAOL().toString(), type );
+        }
         outDir.mkdirs();
 
         // outFile

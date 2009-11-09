@@ -73,7 +73,7 @@ public abstract class AbstractResourcesMojo
     private ArchiverManager archiverManager;
 
     protected int copyIncludes( File srcDir )
-        throws IOException, MojoExecutionException
+        throws IOException, MojoExecutionException, MojoFailureException
     {
         int copied = 0;
 
@@ -90,7 +90,7 @@ public abstract class AbstractResourcesMojo
     }
 
     protected int copyBinaries( File srcDir, String aol )
-        throws IOException, MojoExecutionException
+        throws IOException, MojoExecutionException, MojoFailureException
     {
         int copied = 0;
 
@@ -98,7 +98,7 @@ public abstract class AbstractResourcesMojo
         File binDir = new File( srcDir, resourceBinDir );
         if ( binDir.exists() )
         {
-            File binDstDir = getLayout().getLibDirectory( getTargetDirectory(), aol, Library.EXECUTABLE );
+            File binDstDir = getLayout().getBinDirectory( getTargetDirectory(), aol );
             getLog().debug( "Copying binaries from " + binDir + " to " + binDstDir );
             copied += NarUtil.copyDirectoryStructure( binDir, binDstDir, null, NarUtil.DEFAULT_EXCLUDES );
         }

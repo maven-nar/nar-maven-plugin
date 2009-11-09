@@ -3,6 +3,7 @@ package org.apache.maven.plugin.nar;
 import java.io.File;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 
@@ -38,27 +39,28 @@ public interface NarLayout
      * Specifies where libraries are stored
      * 
      * @return
+     * @throws MojoExecutionException, MojoFailureException 
      */
-    public File getLibDirectory( File baseDir, String aol, String type );
+    public File getLibDirectory( File baseDir, String aol, String type ) throws MojoExecutionException, MojoFailureException;
 
     /**
      * Specifies where includes are stored
      * 
      * @return
      */
-    public File getIncludeDirectory( File targetDirectory );
+    public File getIncludeDirectory( File targetDirectory ) throws MojoExecutionException, MojoFailureException;
 
     /**
      * Specifies where binaries are stored
      * 
      * @return
      */
-    public File getBinDirectory( File baseDir, String aol );
+    public File getBinDirectory( File baseDir, String aol ) throws MojoExecutionException, MojoFailureException;
 
     /**
      * Called to attach nars to main jar file. This method needs to produce all the attached nar files and set NarInfo
      * accordingly.
      */
     public void attachNars( File baseDir, MavenProjectHelper projectHelper, MavenProject project, NarInfo narInfo )
-        throws MojoExecutionException;
+        throws MojoExecutionException, MojoFailureException;
 }

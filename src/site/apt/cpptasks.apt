@@ -13,7 +13,7 @@ from {{{http://ant-contrib.sourceforge.net/}ant-contrib}}.
 This library allows to specify compilers and linkers from ant (and thus from maven)
 and unifies most common options for those compilers and linkers.
 
-	The NAR Plugin uses cpptasks 1.0 beta 4 from 
+	The NAR Plugin uses cpptasks 1.0 beta 5 from 
 {{{http://sourceforge.net/project/showfiles.php?group_id=36177}sourceforge}}
 with some minor extensions:
 	

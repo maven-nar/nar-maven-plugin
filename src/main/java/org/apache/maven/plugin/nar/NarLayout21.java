@@ -71,11 +71,12 @@ public class NarLayout21
      * java.lang.String)
      */
     public File getLibDirectory( File baseDir, String aol, String type )
+        throws MojoExecutionException
     {
         if ( type.equals( Library.EXECUTABLE ) )
         {
-            System.err.println( "WARNING, Replace call to getLibDirectory with getBinDirectory" );
-            Thread.dumpStack();
+            throw new MojoExecutionException(
+                                              "NAR: for type EXECUTABLE call getBinDirectory instead of getLibDirectory" );
         }
 
         File dir = getAolDirectory( baseDir, aol, type );
@@ -106,13 +107,13 @@ public class NarLayout21
     public void attachNars( File baseDir, MavenProjectHelper projectHelper, MavenProject project, NarInfo narInfo )
         throws MojoExecutionException
     {
-        if (getNoarchDirectory( baseDir ).exists()) {
-        attachNar( projectHelper, project, "noarch", getNoarchDirectory( baseDir ), "*/**" );
-        narInfo.setNar( null, "noarch", project.getGroupId() + ":" + project.getArtifactId() + ":"
-            + NarConstants.NAR_TYPE + ":" + "noarch" );
+        if ( getNoarchDirectory( baseDir ).exists() )
+        {
+            attachNar( projectHelper, project, "noarch", getNoarchDirectory( baseDir ), "*/**" );
+            narInfo.setNar( null, "noarch", project.getGroupId() + ":" + project.getArtifactId() + ":"
+                + NarConstants.NAR_TYPE + ":" + "noarch" );
         }
-        
-        String bindingType = null;
+
         File classifierDir = getAolDirectory( baseDir );
         String[] classifier = classifierDir.list();
         for ( int i = 0; ( classifier != null ) && ( i < classifier.length ); i++ )
@@ -120,37 +121,51 @@ public class NarLayout21
             File dir = new File( classifierDir, classifier[i] );
             attachNar( projectHelper, project, classifier[i], dir, "*/**" );
 
-            // look for type in aol/lib/<aol>/type
-            String type = Library.EXECUTABLE;
-            File libDir = new File( dir, "lib" );
-            String[] aolDir = libDir.list();
+            String type = null;
+            AOL aol = null;
+
+            File binDir = new File( dir, "bin" );
+            String[] aolDir = binDir.list();
             if ( ( aolDir != null ) && aolDir.length > 0 )
             {
-                String[] typeDir = new File( libDir, aolDir[0] ).list();
-                if ( ( typeDir != null ) && ( typeDir.length > 0 ) )
+                type = Library.EXECUTABLE;
+                aol = new AOL(aolDir[0]);
+  
+                if ( narInfo.getBinding( aol, null ) == null )
                 {
-                    type = typeDir[0];
+                    narInfo.setBinding( aol, Library.EXECUTABLE );
                 }
             }
-
-            narInfo.setNar( null, type, project.getGroupId() + ":" + project.getArtifactId() + ":"
-                + NarConstants.NAR_TYPE + ":" + "${aol}" + "-" + type );
-
-            // set if not Executable 
-            if ( !type.equals( Library.EXECUTABLE ) )
+            else
             {
-                // and not set or override if SHARED
-                if ( ( bindingType == null ) || type.equals( Library.SHARED ) )
+                // look for type in aol/<aol-type>/lib/<aol>/<type>
+                File libDir = new File( dir, "lib" );
+                aolDir = libDir.list();
+                if ( ( aolDir != null ) && aolDir.length > 0 )
                 {
-                    bindingType = type;
+                    aol = new AOL(aolDir[0]);
+                    String[] typeDir = new File( libDir, aol.toString() ).list();
+                    if ( ( typeDir != null ) && ( typeDir.length > 0 ) )
+                    {
+                        type = typeDir[0];
+                    }
+                }
+                
+                assert(aol != null);
+                assert(type != null);
+
+                // and not set or override if SHARED
+                if (( narInfo.getBinding( aol, null ) == null ) || type.equals( Library.SHARED ) )
+                {
+                    narInfo.setBinding( aol, type );
                 }
             }
+            
+            assert(type != null);
+            narInfo.setNar( null, type, project.getGroupId() + ":" + project.getArtifactId() + ":"
+                            + NarConstants.NAR_TYPE + ":" + "${aol}" + "-" + type );
 
         }
 
-        if ( narInfo.getBinding( null, null ) == null )
-        {
-            narInfo.setBinding( null, bindingType != null ? bindingType : Library.NONE );
-        }
     }
 }

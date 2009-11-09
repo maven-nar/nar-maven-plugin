@@ -100,8 +100,8 @@ public class NarTestMojo
             MavenProject project = getMavenProject();
             // FIXME NAR-90, we could make dure we get the final name from layout
             File executable =
-                new File( getLayout().getLibDirectory( super.getTargetDirectory(), getAOL().toString(),
-                                                       library.getType() ), project.getArtifactId() );
+                new File( getLayout().getBinDirectory( super.getTargetDirectory(), getAOL().toString() ),
+                          project.getArtifactId() );
             getLog().info( "Running executable " + executable );
             List args = library.getArgs();
             int result =

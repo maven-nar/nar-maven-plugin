@@ -102,6 +102,7 @@ public class NarLayout20
                 + "/**" );
             narInfo.setNar( null, Library.EXECUTABLE, project.getGroupId() + ":" + project.getArtifactId() + ":"
                 + NarConstants.NAR_TYPE + ":" + "${aol}" + "-" + Library.EXECUTABLE );
+            narInfo.setBinding( new AOL(binAOL[i]), Library.EXECUTABLE );
         }
 
         File libDir = new File( baseDir, "lib" );
@@ -124,9 +125,10 @@ public class NarLayout20
                 }
             }
 
-            if ( narInfo.getBinding( null, null ) == null )
+            AOL aol = new AOL(libAOL[i]);
+            if ( narInfo.getBinding( aol, null ) == null )
             {
-                narInfo.setBinding( null, bindingType != null ? bindingType : Library.NONE );
+                narInfo.setBinding( aol, bindingType != null ? bindingType : Library.NONE );
             }
         }
     }
