@@ -288,6 +288,15 @@ public class Linker
                 linker.addConfiguredLinkerArg( arg );
             }
         }
+        
+        // FIXME, this should be done in CPPTasks at some point, and may not be necessary, but was for VS 2010 beta 2
+        if ( os.equals( OS.WINDOWS )
+            && getName( null, null ).equals( "msvc" ) && !getVersion().startsWith( "6." ) ) {
+            LinkerArgument arg = new LinkerArgument();
+            arg.setValue( "/MANIFEST" );
+            linker.addConfiguredLinkerArg( arg );            
+        }
+
 
         // Add options to linker
         if ( options != null )
