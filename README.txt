@@ -13,6 +13,10 @@ SCM:
 - http://github.com/duns/maven-nar-plugin
 - http://github.com/duns/cpptasks-parallel
 
+Repository:
+
+- http://duns.github.com/maven-snapshots (until it moves to maven central)
+
 Old:
 
 - http://java.freehep.org/freehep-nar-plugin/intro.html

@@ -19,7 +19,6 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-
   <parent>
     <artifactId>maven-plugins</artifactId>
     <groupId>org.apache.maven.plugins</groupId>
@@ -36,8 +35,19 @@
   </description>
   <url>http://duns.github.com/maven-nar-plugin/</url>
 
-  <!-- temporarily until we have a fixed site -->
+  <!-- to avoid MDEPLOY-50 and to deploy to duns' github repository -->
   <distributionManagement>
+  <repository>
+    <id>duns-maven-releases</id>
+    <name>Duns' Maven Releases</name>
+      <url>file:///Users/duns/sonatype/git/maven-releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>duns-maven-snapshots</id>
+      <name>Duns' Maven Snapshots</name>
+      <url>file:///Users/duns/sonatype/git/maven-snapshots</url>
+    </snapshotRepository>
+  <!-- temporarily until we have a fixed site -->
     <site>
       <id>local</id>
       <url>file:///Users/duns/sonatype/git/maven-nar-plugin-site</url>
