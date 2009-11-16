@@ -46,7 +46,9 @@ public abstract class AbstractNarLayout
             new File( project.getBuild().getDirectory(), project.getBuild().getFinalName() + "-" + classifier + "."
                 + NarConstants.NAR_EXTENSION );
         if ( narFile.exists() )
+        {
             narFile.delete();
+        }
         Archiver archiver = new ZipArchiver();
         try
         {

@@ -66,7 +66,9 @@ public class Test
         throws MojoFailureException
     {
         if ( name == null )
+        {
             throw new MojoFailureException( "NAR: Please specify <Name> as part of <Test>" );
+        }
         return name;
     }
 

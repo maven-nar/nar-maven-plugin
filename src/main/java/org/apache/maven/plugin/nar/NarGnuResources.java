@@ -39,7 +39,9 @@ public class NarGnuResources
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )
+        {
             return;
+        }
 
         if ( gnuSourceDirectory.exists() )
         {

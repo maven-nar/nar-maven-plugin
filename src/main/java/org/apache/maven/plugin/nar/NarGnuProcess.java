@@ -39,7 +39,9 @@ public class NarGnuProcess
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )
+        {
             return;
+        }
         
         File srcDir = getGnuAOLTargetDirectory();
         if ( srcDir.exists() )

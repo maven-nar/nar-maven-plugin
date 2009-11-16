@@ -49,7 +49,9 @@ public class NarPackageMojo
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )
+        {
             return;
+        }
 
         // Avoid that -DupdateReleaseInfo copies to a .nar file
         getMavenProject().getArtifact().setArtifactHandler( new NarArtifactHandler() );

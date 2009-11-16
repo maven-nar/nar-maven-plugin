@@ -57,7 +57,9 @@ public class NarTestMojo
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )
+        {
             return;
+        }
 
         // run all tests
         for ( Iterator i = getTests().iterator(); i.hasNext(); )
@@ -87,8 +89,10 @@ public class NarTestMojo
                 NarUtil.runCommand( name, (String[]) args.toArray( new String[args.size()] ), workingDir,
                                     generateEnvironment( test, getLog() ), getLog() );
             if ( result != 0 )
+            {
                 throw new MojoFailureException( "Test " + name + " failed with exit code: " + result + " 0x"
                     + Integer.toHexString( result ) );
+            }
         }
     }
 
@@ -108,8 +112,10 @@ public class NarTestMojo
                 NarUtil.runCommand( executable.getPath(), (String[]) args.toArray( new String[args.size()] ), null,
                                     generateEnvironment( library, getLog() ), getLog() );
             if ( result != 0 )
+            {
                 throw new MojoFailureException( "Test " + executable + " failed with exit code: " + result + " 0x"
                     + Integer.toHexString( result ) );
+            }
         }
     }
 
@@ -167,7 +173,9 @@ public class NarTestMojo
             {
                 sharedPath += ( (File) i.next() ).getPath();
                 if ( i.hasNext() )
+                {
                     sharedPath += File.pathSeparator;
+                }
             }
 
             String sharedEnv = NarUtil.addLibraryPathToEnv( sharedPath, null, getOS() );

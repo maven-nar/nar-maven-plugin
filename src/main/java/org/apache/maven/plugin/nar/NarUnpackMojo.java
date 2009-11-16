@@ -59,7 +59,9 @@ public class NarUnpackMojo
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )
+        {
             return;
+        }
 
         List narArtifacts = getNarManager().getNarDependencies( "compile" );
         if ( classifiers == null )

@@ -59,10 +59,14 @@ public class NarGnuConfigureMojo
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )
+        {
             return;
+        }
 
         if ( !useGnu() )
+        {
             return;
+        }
 
         File targetDir = getGnuAOLSourceDirectory();
         if ( gnuSourceDirectory.exists() )

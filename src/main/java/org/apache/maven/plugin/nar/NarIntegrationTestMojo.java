@@ -97,7 +97,9 @@ public class NarIntegrationTestMojo
         {
             Library lib = (Library) i.next();
             if ( lib.getType().equals( Library.JNI ) )
+            {
                 return true;
+            }
         }
         return false;
     }
@@ -591,13 +593,19 @@ public class NarIntegrationTestMojo
                 System.setProperties( originalSystemProperties );
             }
 
-            if ( result == 0 ) return;
+            if ( result == 0 )
+            {
+                return;
+            }
             
             String msg;
             
             if ( result == SurefireBooter.NO_TESTS_EXIT_CODE )
             {
-                if ( ( failIfNoTests == null ) || !failIfNoTests.booleanValue() ) return;
+                if ( ( failIfNoTests == null ) || !failIfNoTests.booleanValue() )
+                {
+                    return;
+                }
                 // TODO: i18n
                 throw new MojoFailureException( "No tests were executed!  (Set -DfailIfNoTests=false to ignore this error.)" );
             } else {
@@ -919,7 +927,9 @@ public class NarIntegrationTestMojo
 
         // DUNS
         if ( project.getPackaging().equals( "nar" ) || ( getNarManager().getNarDependencies( "test" ).size() > 0 ) )
+        {
             forkMode = "pertest";
+        }
 
         fork.setForkMode( forkMode );
 
@@ -966,7 +976,9 @@ public class NarIntegrationTestMojo
 
             // BEGINDUNS
             if ( argLine == null )
+            {
                 argLine = "";
+            }
 
             StringBuffer javaLibraryPath = new StringBuffer();
             if ( testJNIModule() )
@@ -977,7 +989,9 @@ public class NarIntegrationTestMojo
                 {
                     getLog().debug( "Adding library directory to java.library.path: " + jniLibraryPathEntry );
                     if ( javaLibraryPath.length() > 0 )
+                    {
                         javaLibraryPath.append( File.pathSeparator );
+                    }
                     javaLibraryPath.append( jniLibraryPathEntry );
                 }
 
@@ -986,7 +1000,9 @@ public class NarIntegrationTestMojo
                 {
                     getLog().debug( "Adding library directory to java.library.path: " + sharedLibraryPathEntry );
                     if ( javaLibraryPath.length() > 0 )
+                    {
                         javaLibraryPath.append( File.pathSeparator );
+                    }
                     javaLibraryPath.append( sharedLibraryPathEntry );
                 }
 
@@ -1019,7 +1035,9 @@ public class NarIntegrationTestMojo
                         {
                             getLog().debug( "Adding dependency directory to java.library.path: " + depLibPathEntry );
                             if ( javaLibraryPath.length() > 0 )
+                            {
                                 javaLibraryPath.append( File.pathSeparator );
+                            }
                             javaLibraryPath.append( depLibPathEntry );
                         }
                     }

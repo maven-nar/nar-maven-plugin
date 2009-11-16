@@ -58,7 +58,9 @@ public class NarCompileMojo
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )
+        {
             return;
+        }
 
         // make sure destination is there
         getTargetDirectory().mkdirs();
@@ -103,8 +105,10 @@ public class NarCompileMojo
             {
                 File dir = (File) i.next();
                 if ( dir.exists() )
+                {
                     files.addAll( FileUtils.getFiles( dir, StringUtils.join( compiler.getIncludes().iterator(), "," ),
                                                       null ) );
+                }
             }
             return files;
         }
@@ -191,7 +195,9 @@ public class NarCompileMojo
         // add javah include path
         File jniDirectory = getJavah().getJniDirectory();
         if ( jniDirectory.exists() )
+        {
             task.createIncludePath().setPath( jniDirectory.getPath() );
+        }
 
         // add java include paths
         getJava().addIncludePaths( task, type );
@@ -345,7 +351,9 @@ public class NarCompileMojo
                     NarUtil.runCommand( "mt.exe", new String[] { "/manifest", manifest,
                         "/outputresource:" + dll + ";#2" }, null, null, getLog() );
                 if ( result != 0 )
+                {
                     throw new MojoFailureException( "MT.EXE failed with exit code: " + result );
+                }
             }
         }
     }

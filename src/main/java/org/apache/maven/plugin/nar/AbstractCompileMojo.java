@@ -159,7 +159,9 @@ public abstract class AbstractCompileMojo
     protected C getC()
     {
         if ( c == null )
+        {
             c = new C();
+        }
         c.setAbstractCompileMojo( this );
         return c;
     }
@@ -167,7 +169,9 @@ public abstract class AbstractCompileMojo
     protected Cpp getCpp()
     {
         if ( cpp == null )
+        {
             cpp = new Cpp();
+        }
         cpp.setAbstractCompileMojo( this );
         return cpp;
     }
@@ -175,7 +179,9 @@ public abstract class AbstractCompileMojo
     protected Fortran getFortran()
     {
         if ( fortran == null )
+        {
             fortran = new Fortran();
+        }
         fortran.setAbstractCompileMojo( this );
         return fortran;
     }
@@ -214,21 +220,27 @@ public abstract class AbstractCompileMojo
     protected List getLibraries()
     {
         if ( libraries == null )
+        {
             libraries = Collections.EMPTY_LIST;
+        }
         return libraries;
     }
 
     protected List getTests()
     {
         if ( tests == null )
+        {
             tests = Collections.EMPTY_LIST;
+        }
         return tests;
     }
 
     protected Javah getJavah()
     {
         if ( javah == null )
+        {
             javah = new Javah();
+        }
         javah.setAbstractCompileMojo( this );
         return javah;
     }
@@ -236,7 +248,9 @@ public abstract class AbstractCompileMojo
     protected Java getJava()
     {
         if ( java == null )
+        {
             java = new Java();
+        }
         java.setAbstractCompileMojo( this );
         return java;
     }

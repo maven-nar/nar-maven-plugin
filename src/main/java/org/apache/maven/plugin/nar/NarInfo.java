@@ -193,7 +193,9 @@ public class NarInfo
     public String getProperty( AOL aol, String key, String defaultValue )
     {
         if ( key == null )
+        {
             return defaultValue;
+        }
         String value = info.getProperty( key, defaultValue );
         value = aol == null ? value : info.getProperty( aol.toString() + "." + key, value );
         log.debug( "getProperty(" + aol + ", " + key + ", " + defaultValue + ") = " + value );

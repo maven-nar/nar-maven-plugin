@@ -39,10 +39,14 @@ public class NarGnuMakeMojo
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )
+        {
             return;
+        }
 
         if ( !useGnu() )
+        {
             return;
+        }
 
         File srcDir = getGnuAOLSourceDirectory();
         if ( srcDir.exists() )

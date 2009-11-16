@@ -57,7 +57,9 @@ public class NarUtil
             defaults = PropertyUtils.loadProperties( NarUtil.class.getResourceAsStream( "aol.properties" ) );
         }
         if ( defaults == null )
+        {
             throw new MojoFailureException( "NAR: Could not load default properties file: 'aol.properties'." );
+        }
 
         return defaults;
     }
@@ -70,11 +72,17 @@ public class NarUtil
             os = System.getProperty( "os.name" );
             String name = os.toLowerCase();
             if ( name.startsWith( "windows" ) )
+            {
                 os = OS.WINDOWS;
+            }
             if ( name.startsWith( "linux" ) )
+            {
                 os = OS.LINUX;
+            }
             if ( name.equals( "mac os x" ) )
+            {
                 os = OS.MACOSX;
+            }
         }
         return os;
     }
@@ -141,7 +149,9 @@ public class NarUtil
         throws MojoExecutionException, MojoFailureException
     {
         if ( !file.exists() )
+        {
             return;
+        }
 
         if ( file.isDirectory() )
         {
@@ -246,7 +256,9 @@ public class NarUtil
     {
         int slashEIndex = s.indexOf( "\\E" );
         if ( slashEIndex == -1 )
+        {
             return "\\Q" + s + "\\E";
+        }
 
         StringBuffer sb = new StringBuffer( s.length() * 2 );
         sb.append( "\\Q" );
@@ -267,7 +279,9 @@ public class NarUtil
     private static String quoteReplacement( String s )
     {
         if ( ( s.indexOf( '\\' ) == -1 ) && ( s.indexOf( '$' ) == -1 ) )
+        {
             return s;
+        }
         StringBuffer sb = new StringBuffer();
         for ( int i = 0; i < s.length(); i++ )
         {
@@ -462,7 +476,9 @@ public class NarUtil
                 {
                     String[] nameValue = env[i].split( "=", 2 );
                     if ( nameValue.length < 2 )
+                    {
                         throw new MojoFailureException( "   Misformed env: '" + env[i] + "'" );
+                    }
                     dbg.println( "   '" + nameValue[0] + "=" + nameValue[1] + "'" );
                     cmdLine.addEnvironment( nameValue[0], nameValue[1] );
                 }

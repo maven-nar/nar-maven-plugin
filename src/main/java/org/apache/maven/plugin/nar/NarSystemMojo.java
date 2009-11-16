@@ -44,7 +44,9 @@ public class NarSystemMojo
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )
+        {
             return;
+        }
 
         // get packageName if specified for JNI.
         String packageName = null;
@@ -64,7 +66,9 @@ public class NarSystemMojo
         }
         
         if ( !jniFound || packageName == null)
+        {
             return;
+        }
 
         // make sure destination is there
         narSystemDirectory.mkdirs();

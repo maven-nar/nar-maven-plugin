@@ -160,7 +160,7 @@ public abstract class AbstractResourcesMojo
                 File jar = (File) i.next();
                 getLog().debug( "Unpacking jar " + jar );
                 UnArchiver unArchiver;
-                unArchiver = archiverManager.getUnArchiver( AbstractNarMojo.NAR_ROLE_HINT );
+                unArchiver = archiverManager.getUnArchiver( NarConstants.NAR_ROLE_HINT );
                 unArchiver.setSourceFile( jar );
                 unArchiver.setDestDirectory( classesDirectory );
                 unArchiver.extract();

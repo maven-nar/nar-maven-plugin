@@ -242,35 +242,49 @@ public abstract class Compiler
         if ( type.equals( "test" ) )
         {
             if ( testSourceDirectory == null )
+            {
                 testSourceDirectory = new File( baseDir, "/src/test" );
+            }
             if ( testSourceDirectory.exists() )
+            {
                 sourceDirectories.add( testSourceDirectory );
+            }
 
             for ( Iterator i = mojo.getMavenProject().getTestCompileSourceRoots().iterator(); i.hasNext(); )
             {
                 File extraTestSourceDirectory = new File( (String) i.next() );
                 if ( extraTestSourceDirectory.exists() )
+                {
                     sourceDirectories.add( extraTestSourceDirectory );
+                }
             }
         }
         else
         {
             if ( sourceDirectory == null )
+            {
                 sourceDirectory = new File( baseDir, "src/main" );
+            }
             if ( sourceDirectory.exists() )
+            {
                 sourceDirectories.add( sourceDirectory );
+            }
 
             for ( Iterator i = mojo.getMavenProject().getCompileSourceRoots().iterator(); i.hasNext(); )
             {
                 File extraSourceDirectory = new File( (String) i.next() );
                 if ( extraSourceDirectory.exists() )
+                {
                     sourceDirectories.add( extraSourceDirectory );
+                }
             }
         }
 
         if (mojo.getLog().isDebugEnabled()) {
         for ( Iterator i = sourceDirectories.iterator(); i.hasNext(); )
+        {
             mojo.getLog().debug( "Added to sourceDirectory: " + ((File)i.next()).getPath() );
+        }
         }
         return sourceDirectories;
     }
@@ -364,7 +378,9 @@ public abstract class Compiler
 
         // adjust default values
         if ( name == null )
+        {
             name = NarUtil.getDefaults().getProperty( getPrefix() + "compiler" );
+        }
         if ( name == null )
         {
             throw new MojoFailureException( "NAR: Please specify <Name> as part of <Cpp>, <C> or <Fortran> for "

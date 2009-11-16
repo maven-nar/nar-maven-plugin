@@ -112,7 +112,9 @@ public class NarManager
             {
                 List artifactList = getAttachedNarDependencies( dependency, defaultAOL, narTypes[j] );
                 if ( artifactList != null )
+                {
                     attachedNarDependencies.put( narTypes[j], artifactList );
+                }
             }
         }
         return attachedNarDependencies;
@@ -211,7 +213,9 @@ public class NarManager
             {
                 log.debug( "    Checking: " + nars[j] );
                 if ( nars[j].equals( "" ) )
+                {
                     continue;
+                }
                 String[] nar = nars[j].split( ":", 5 );
                 if ( nar.length >= 4 )
                 {
@@ -255,7 +259,10 @@ public class NarManager
         dependency.isSnapshot();
 
         File file = new File( repository.getBasedir(), repository.pathOf( dependency ) );
-        if (!file.exists()) return null;
+        if (!file.exists())
+        {
+            return null;
+        }
         
         JarFile jar = null;
         try
@@ -264,7 +271,9 @@ public class NarManager
             NarInfo info =
                 new NarInfo( dependency.getGroupId(), dependency.getArtifactId(), dependency.getVersion(), log );
             if ( !info.exists( jar ) )
+            {
                 return null;
+            }
             info.read( jar );
             return info;
         }
@@ -322,7 +331,7 @@ public class NarManager
         log.debug( "Download called with classifier: " + classifier + " for NarDependencies {" );
         for ( Iterator i = dependencies.iterator(); i.hasNext(); )
         {
-            log.debug( "  - " + ( (Artifact) i.next() ) );
+            log.debug( "  - " + ( i.next() ) );
         }
         log.debug( "}" );
 
@@ -354,7 +363,7 @@ public class NarManager
         log.debug( "Unpack called for OS: " + os + ", classifier: " + classifier + " for NarArtifacts {" );
         for ( Iterator i = narArtifacts.iterator(); i.hasNext(); )
         {
-            log.debug( "  - " + ( (NarArtifact) i.next() ) );
+            log.debug( "  - " + ( i.next() ) );
         }
         log.debug( "}" );
         // FIXME, kludge to get to download the -noarch, based on classifier
@@ -366,7 +375,7 @@ public class NarManager
             File file = getNarFile( dependency );
             File narLocation = new File( file.getParentFile(), "nar" );
             File flagFile =
-                new File( narLocation, FileUtils.basename( file.getPath(), "." + AbstractNarMojo.NAR_EXTENSION )
+                new File( narLocation, FileUtils.basename( file.getPath(), "." + NarConstants.NAR_EXTENSION )
                     + ".flag" );
 
             boolean process = false;
@@ -426,7 +435,7 @@ public class NarManager
         try
         {
             UnArchiver unArchiver;
-            unArchiver = manager.getUnArchiver( AbstractNarMojo.NAR_ROLE_HINT );
+            unArchiver = manager.getUnArchiver( NarConstants.NAR_ROLE_HINT );
             unArchiver.setSourceFile( file );
             unArchiver.setDestDirectory( location );
             unArchiver.extract();

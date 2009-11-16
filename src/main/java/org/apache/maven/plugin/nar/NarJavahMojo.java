@@ -53,7 +53,9 @@ public class NarJavahMojo
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )
+        {
             return;
+        }
 
         getJavah().execute();
     }

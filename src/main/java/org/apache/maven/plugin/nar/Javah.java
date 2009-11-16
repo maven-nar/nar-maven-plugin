@@ -227,7 +227,9 @@ public class Javah
                     for ( int j = 0; j < method.length; j++ )
                     {
                         if ( method[j].isNative() )
+                        {
                             files.add( clazz.getClassName() );
+                        }
                     }
                 }
 
@@ -290,7 +292,7 @@ public class Javah
         {
             for ( Iterator i = classes.iterator(); i.hasNext(); )
             {
-                args.add( (String) i.next() );
+                args.add( i.next() );
             }
         }
 

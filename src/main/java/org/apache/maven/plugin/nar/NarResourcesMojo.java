@@ -58,7 +58,9 @@ public class NarResourcesMojo
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )
+        {
             return;
+        }
 
         // scan resourceDirectory for AOLs
         File aolDir = new File( resourceDirectory, "aol" );
@@ -69,7 +71,9 @@ public class NarResourcesMojo
             {
                 // copy only resources of current AOL
                 if ( resourcesCopyAOL && ( !aol[i].equals( getAOL().toString() ) ) )
+                {
                     continue;
+                }
 
                 boolean ignore = false;
                 for ( Iterator j = FileUtils.getDefaultExcludesAsList().iterator(); j.hasNext(); )

@@ -176,7 +176,9 @@ public class Linker
         throws MojoFailureException, MojoExecutionException
     {
         if ( name == null )
+        {
             throw new MojoFailureException( "Cannot deduce linker version if name is null" );
+        }
 
         String version = null;
 
@@ -248,7 +250,9 @@ public class Linker
                 {
                     File dir = (File) i.next();
                     if ( dir.exists() )
+                    {
                         defs.addAll( FileUtils.getFiles( dir, "**/*.def", null ) );
+                    }
                 }
             }
             catch ( IOException e )
@@ -261,7 +265,9 @@ public class Linker
                 {
                     File dir = (File) i.next();
                     if ( dir.exists() )
+                    {
                         defs.addAll( FileUtils.getFiles( dir, "**/*.def", null ) );
+                    }
                 }
             }
             catch ( IOException e )
@@ -274,7 +280,9 @@ public class Linker
                 {
                     File dir = (File) i.next();
                     if ( dir.exists() )
+                    {
                         defs.addAll( FileUtils.getFiles( dir, "**/*.def", null ) );
+                    }
                 }
             }
             catch ( IOException e )
@@ -284,7 +292,7 @@ public class Linker
             for ( Iterator i = defs.iterator(); i.hasNext(); )
             {
                 LinkerArgument arg = new LinkerArgument();
-                arg.setValue( "/def:" + (File) i.next() );
+                arg.setValue( "/def:" + i.next() );
                 linker.addConfiguredLinkerArg( arg );
             }
         }

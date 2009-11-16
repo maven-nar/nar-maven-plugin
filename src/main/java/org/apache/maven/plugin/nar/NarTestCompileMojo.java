@@ -53,7 +53,9 @@ public class NarTestCompileMojo
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )
+        {
             return;
+        }
 
         // make sure destination is there
         getTargetDirectory().mkdirs();
