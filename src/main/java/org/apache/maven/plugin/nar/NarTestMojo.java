@@ -150,8 +150,7 @@ public class NarTestMojo
             // FIXME reported to maven developer list, isSnapshot
             // changes behaviour
             // of getBaseVersion, called in pathOf.
-            if ( dependency.isSnapshot() )
-                ;
+            dependency.isSnapshot();
 
             // FIXME NAR-90
             File libDir = new File( getLocalRepository().pathOf( dependency ) );

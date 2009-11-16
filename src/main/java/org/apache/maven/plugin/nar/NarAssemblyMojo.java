@@ -81,8 +81,7 @@ public class NarAssemblyMojo
                 // FIXME reported to maven developer list, isSnapshot
                 // changes behaviour
                 // of getBaseVersion, called in pathOf.
-                if ( dependency.isSnapshot() )
-                    ;
+                dependency.isSnapshot();
 
                 File srcDir = new File( getLocalRepository().pathOf( dependency ) );
                 srcDir = new File( getLocalRepository().getBasedir(), srcDir.getParent() );

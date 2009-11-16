@@ -91,6 +91,6 @@ public abstract class AbstractGnuMojo
      * @return
      */
     protected boolean useGnu() {
-        return (gnuUseOnWindows || !NarUtil.getOS( null ).equals( OS.WINDOWS ));
+        return gnuUseOnWindows || !OS.WINDOWS.equals(NarUtil.getOS( null ));
     }
 }

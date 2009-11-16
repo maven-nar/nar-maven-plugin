@@ -480,7 +480,7 @@ public class NarUtil
             outputGobbler.join( 5000 );
             return process.exitValue();
         }
-        catch ( Throwable e )
+        catch ( Exception e )
         {
             throw new MojoExecutionException( "Could not launch " + cmdLine, e );
         }

@@ -252,8 +252,7 @@ public class NarManager
     {
         // FIXME reported to maven developer list, isSnapshot changes behaviour
         // of getBaseVersion, called in pathOf.
-        if ( dependency.isSnapshot() )
-            ;
+        dependency.isSnapshot();
 
         File file = new File( repository.getBasedir(), repository.pathOf( dependency ) );
         if (!file.exists()) return null;
@@ -294,8 +293,7 @@ public class NarManager
     {
         // FIXME reported to maven developer list, isSnapshot changes behaviour
         // of getBaseVersion, called in pathOf.
-        if ( dependency.isSnapshot() )
-            ;
+        dependency.isSnapshot();
         return new File( repository.getBasedir(), NarUtil.replace( "${aol}", defaultAOL.toString(),
                                                                    repository.pathOf( dependency ) ) );
     }
