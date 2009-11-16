@@ -25,11 +25,11 @@ package org.apache.maven.plugin.nar;
 public interface OS
 {
 
-    public final String MACOSX = "MacOSX";
+    String MACOSX = "MacOSX";
 
-    public final String WINDOWS = "Windows";
+    String WINDOWS = "Windows";
 
-    public final String LINUX = "Linux";
+    String LINUX = "Linux";
 
-    public final String SUNOS = "SunOS";
+    String SUNOS = "SunOS";
 }

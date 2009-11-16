@@ -27,5 +27,5 @@ package org.apache.maven.plugin.nar;
  */
 public interface TextStream
 {
-    public void println(String text);
+    void println(String text);
 }

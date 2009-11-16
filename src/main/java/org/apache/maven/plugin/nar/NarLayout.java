@@ -41,26 +41,26 @@ public interface NarLayout
      * @return
      * @throws MojoExecutionException, MojoFailureException 
      */
-    public File getLibDirectory( File baseDir, String aol, String type ) throws MojoExecutionException, MojoFailureException;
+    File getLibDirectory( File baseDir, String aol, String type ) throws MojoExecutionException, MojoFailureException;
 
     /**
      * Specifies where includes are stored
      * 
      * @return
      */
-    public File getIncludeDirectory( File targetDirectory ) throws MojoExecutionException, MojoFailureException;
+    File getIncludeDirectory( File targetDirectory ) throws MojoExecutionException, MojoFailureException;
 
     /**
      * Specifies where binaries are stored
      * 
      * @return
      */
-    public File getBinDirectory( File baseDir, String aol ) throws MojoExecutionException, MojoFailureException;
+    File getBinDirectory( File baseDir, String aol ) throws MojoExecutionException, MojoFailureException;
 
     /**
      * Called to attach nars to main jar file. This method needs to produce all the attached nar files and set NarInfo
      * accordingly.
      */
-    public void attachNars( File baseDir, MavenProjectHelper projectHelper, MavenProject project, NarInfo narInfo )
+    void attachNars( File baseDir, MavenProjectHelper projectHelper, MavenProject project, NarInfo narInfo )
         throws MojoExecutionException, MojoFailureException;
 }
