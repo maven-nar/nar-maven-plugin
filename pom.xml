@@ -30,17 +30,17 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-<!-- to avoid MDEPLOY-50 -->
+<!-- to avoid MDEPLOY-50 and to deploy to duns' github repository -->
 <distributionManagement>
   <repository>
-    <id>repo</id>
-    <name>Repository Name</name>
-    <url>scp://host/path/to/repo</url>
+    <id>duns-maven-releases</id>
+    <name>Duns' Maven Releases</name>
+    <url>file:///Users/duns/sonatype/git/maven-releases</url>
   </repository>
   <snapshotRepository>
-    <id>repo</id>
-    <name>Repository Name</name>
-    <url>scp://host/path/to/repo</url>
+    <id>duns-maven-snapshots</id>
+    <name>Duns' Maven Snapshots</name>
+    <url>file:///Users/duns/sonatype/git/maven-snapshots</url>
   </snapshotRepository>
 </distributionManagement>
 
