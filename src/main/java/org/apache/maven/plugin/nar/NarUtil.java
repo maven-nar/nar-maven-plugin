@@ -506,7 +506,7 @@ public final class NarUtil
         }
     }
 
-    private final static class StreamGobbler
+    private static final class StreamGobbler
         extends Thread
     {
         private InputStream is;
