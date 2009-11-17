@@ -72,7 +72,7 @@ public abstract class AbstractResourcesMojo
      */
     private ArchiverManager archiverManager;
 
-    protected int copyIncludes( File srcDir )
+    protected final int copyIncludes( File srcDir )
         throws IOException, MojoExecutionException, MojoFailureException
     {
         int copied = 0;
@@ -89,7 +89,7 @@ public abstract class AbstractResourcesMojo
         return copied;
     }
 
-    protected int copyBinaries( File srcDir, String aol )
+    protected final int copyBinaries( File srcDir, String aol )
         throws IOException, MojoExecutionException, MojoFailureException
     {
         int copied = 0;
@@ -106,7 +106,7 @@ public abstract class AbstractResourcesMojo
         return copied;
     }
 
-    protected int copyLibraries( File srcDir, String aol )
+    protected final int copyLibraries( File srcDir, String aol )
         throws MojoFailureException, IOException, MojoExecutionException
     {
         int copied = 0;
@@ -139,7 +139,7 @@ public abstract class AbstractResourcesMojo
         return copied;
     }
 
-    protected void copyResources( File srcDir, String aol )
+    protected final void copyResources( File srcDir, String aol )
         throws MojoExecutionException, MojoFailureException
     {
         int copied = 0;

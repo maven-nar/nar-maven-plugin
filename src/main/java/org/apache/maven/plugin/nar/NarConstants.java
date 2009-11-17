@@ -24,13 +24,17 @@ package org.apache.maven.plugin.nar;
  */
 public interface NarConstants
 {
-    String NAR_EXTENSION = "nar";
+    String NAR = "nar";
+    
+    String NAR_EXTENSION = NAR;
 
     String NAR_NO_ARCH = "noarch";
+    
+    String NAR_AOL = "aol";
 
     String NAR_ROLE_HINT = "nar-library";
 
-    String NAR_TYPE = "nar";
+    String NAR_TYPE = NAR;
 
     int LOG_LEVEL_ERROR = 0;
 

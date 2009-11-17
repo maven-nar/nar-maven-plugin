@@ -47,7 +47,7 @@ public class NarLayout20
      * (non-Javadoc)
      * @see org.apache.maven.plugin.nar.NarLayout#getIncludeDirectory(java.io.File)
      */
-    public File getIncludeDirectory( File baseDir )
+    public final File getIncludeDirectory( File baseDir )
     {
         return new File( baseDir, "include" );
     }
@@ -56,7 +56,7 @@ public class NarLayout20
      * (non-Javadoc)
      * @see org.apache.maven.plugin.nar.NarLayout#getLibDir(java.io.File, org.apache.maven.plugin.nar.AOL, String type)
      */
-    public File getLibDirectory( File baseDir, String aol, String type ) throws MojoFailureException
+    public final File getLibDirectory( File baseDir, String aol, String type ) throws MojoFailureException
     {
         if ( type.equals( Library.EXECUTABLE ) )
         {
@@ -73,7 +73,7 @@ public class NarLayout20
      * (non-Javadoc)
      * @see org.apache.maven.plugin.nar.NarLayout#getBinDirectory(java.io.File, java.lang.String)
      */
-    public File getBinDirectory( File baseDir, String aol )
+    public final File getBinDirectory( File baseDir, String aol )
     {
         File dir = new File( baseDir, "bin" );
         dir = new File( dir, aol );
@@ -85,7 +85,7 @@ public class NarLayout20
      * @see org.apache.maven.plugin.nar.NarLayout#attachNars(java.io.File, org.apache.maven.project.MavenProjectHelper,
      * org.apache.maven.project.MavenProject, org.apache.maven.plugin.nar.NarInfo)
      */
-    public void attachNars( File baseDir, MavenProjectHelper projectHelper, MavenProject project, NarInfo narInfo )
+    public final void attachNars( File baseDir, MavenProjectHelper projectHelper, MavenProject project, NarInfo narInfo )
         throws MojoExecutionException
     {
         if ( getIncludeDirectory( baseDir ).exists() )

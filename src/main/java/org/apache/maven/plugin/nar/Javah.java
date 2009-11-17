@@ -130,12 +130,12 @@ public class Javah
     {
     }
 
-    public void setAbstractCompileMojo( AbstractCompileMojo mojo )
+    public final void setAbstractCompileMojo( AbstractCompileMojo mojo )
     {
         this.mojo = mojo;
     }
 
-    protected List getClassPaths()
+    protected final List getClassPaths()
         throws MojoExecutionException
     {
         if ( classPaths.isEmpty() )
@@ -152,7 +152,7 @@ public class Javah
         return classPaths;
     }
 
-    protected File getJniDirectory()
+    protected final File getJniDirectory()
     {
         if ( jniDirectory == null )
         {
@@ -161,7 +161,7 @@ public class Javah
         return jniDirectory;
     }
 
-    protected File getClassDirectory()
+    protected final File getClassDirectory()
     {
         if ( classDirectory == null )
         {
@@ -170,7 +170,7 @@ public class Javah
         return classDirectory;
     }
 
-    protected Set getIncludes()
+    protected final Set getIncludes()
     {
         if ( includes.isEmpty() )
         {
@@ -179,7 +179,7 @@ public class Javah
         return includes;
     }
 
-    protected File getTimestampDirectory()
+    protected final File getTimestampDirectory()
     {
         if ( timestampDirectory == null )
         {
@@ -188,7 +188,7 @@ public class Javah
         return timestampDirectory;
     }
 
-    protected File getTimestampFile()
+    protected final File getTimestampFile()
     {
         if ( timestampFile == null )
         {
@@ -197,7 +197,7 @@ public class Javah
         return timestampFile;
     }
 
-    public void execute()
+    public final void execute()
         throws MojoExecutionException, MojoFailureException
     {
         getClassDirectory().mkdirs();

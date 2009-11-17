@@ -49,15 +49,15 @@ public class NarJavahMojo
      */
     private MavenSession session;
     
-    protected ToolchainManager getToolchainManager() {
+    protected final ToolchainManager getToolchainManager() {
         return toolchainManager;
     }
     
-    protected MavenSession getSession() {
+    protected final MavenSession getSession() {
         return session;
     }
 
-    public void execute()
+    public final void execute()
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )

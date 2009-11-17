@@ -35,15 +35,19 @@ public class AOL
     // FIXME, need more complicated parsing for numbers as part of os.
     public AOL( String aol )
     {
-        String[] aolString = aol.split( "-", 3 );
+        final int linkerIndex = 2;
+        final int osIndex = 1;
+        final int architectureIndex = 0; 
+        
+        String[] aolString = aol.split( "-", linkerIndex+1 );
         switch ( aolString.length )
         {
-            case 3:
-                linkerName = aolString[2];
-            case 2:
-                os = aolString[1];
-            case 1:
-                architecture = aolString[0];
+            case linkerIndex+1:
+                linkerName = aolString[linkerIndex];
+            case osIndex+1:
+                os = aolString[osIndex];
+            case architectureIndex+1:
+                architecture = aolString[architectureIndex];
                 break;
 
             default:
@@ -62,13 +66,13 @@ public class AOL
      * Returns an AOL string (arch-os-linker) to use as directory or file.
      * @return dash separated AOL
      */
-    public String toString()
+    public final String toString()
     {
         return architecture + ( ( os == null ) ? "" : "-" + os + ( ( linkerName == null ) ? "" : "-" + linkerName ) );
     }
 
     // FIXME, maybe change to something like isCompatible (AOL).
-    public boolean hasLinker( String linker )
+    public final boolean hasLinker( String linker )
     {
         return linkerName.equals( linker );
     }
@@ -77,12 +81,12 @@ public class AOL
      * Returns an AOL key (arch.os.linker) to search in the properties files. 
      * @return dot separated AOL
      */
-    public String getKey()
+    public final String getKey()
     {
         return architecture + ( ( os == null ) ? "" : "." + os + ( ( linkerName == null ) ? "" : "." + linkerName ) );
     }
     
-    String getOS() {
+    final String getOS() {
         return os;
     }
 }

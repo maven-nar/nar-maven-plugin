@@ -220,6 +220,8 @@ public abstract class Compiler
 
     private AbstractCompileMojo mojo;
 
+    private static final String TEST = "test";
+    
     protected Compiler()
     {
     }
@@ -239,7 +241,7 @@ public abstract class Compiler
         List sourceDirectories = new ArrayList();
         File baseDir = mojo.getMavenProject().getBasedir();
 
-        if ( type.equals( "test" ) )
+        if ( type.equals( TEST ) )
         {
             if ( testSourceDirectory == null )
             {
@@ -291,7 +293,7 @@ public abstract class Compiler
 
     protected final List/* <String> */getIncludePaths( String type )
     {
-        return createIncludePaths( type, type.equals( "test" ) ? testIncludePaths : includePaths );
+        return createIncludePaths( type, type.equals( TEST ) ? testIncludePaths : includePaths );
     }
 
     private List/* <String> */createIncludePaths( String type, List paths )
@@ -317,7 +319,7 @@ public abstract class Compiler
         throws MojoFailureException
     {
         Set result = new HashSet();
-        if ( !type.equals( "test" ) && !includes.isEmpty() )
+        if ( !type.equals( TEST ) && !includes.isEmpty() )
         {
             result.addAll( includes );
         }
@@ -587,7 +589,7 @@ public abstract class Compiler
         }
 
         // add other sources, FIXME seems
-        if ( !type.equals( "test" ) )
+        if ( !type.equals( TEST ) )
         {
             for ( Iterator i = mojo.getMavenProject().getCompileSourceRoots().iterator(); i.hasNext(); )
             {

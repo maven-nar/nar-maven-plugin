@@ -62,7 +62,7 @@ public class Test
      */
     private List/* <String> */args = new ArrayList();
 
-    public String getName()
+    public final String getName()
         throws MojoFailureException
     {
         if ( name == null )
@@ -72,17 +72,17 @@ public class Test
         return name;
     }
 
-    public String getLink()
+    public final String getLink()
     {
         return link;
     }
 
-    public boolean shouldRun()
+    public final boolean shouldRun()
     {
         return run;
     }
 
-    public List/* <String> */getArgs()
+    public final List/* <String> */getArgs()
     {
         return args;
     }

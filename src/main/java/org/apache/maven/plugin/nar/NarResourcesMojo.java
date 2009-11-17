@@ -63,7 +63,7 @@ public class NarResourcesMojo
         }
 
         // scan resourceDirectory for AOLs
-        File aolDir = new File( resourceDirectory, "aol" );
+        File aolDir = new File( resourceDirectory, NarConstants.NAR_AOL );
         if ( aolDir.exists() )
         {
             String[] aol = aolDir.list();

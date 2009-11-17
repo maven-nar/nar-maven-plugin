@@ -27,37 +27,37 @@ import org.apache.maven.artifact.handler.ArtifactHandler;
 public class NarArtifactHandler
     implements ArtifactHandler
 {
-    public String getPackaging()
+    public final String getPackaging()
     {
         return "nar";
     }
 
-    public String getClassifier()
+    public final String getClassifier()
     {
         return null;
     }
 
-    public String getDirectory()
+    public final String getDirectory()
     {
         return getExtension() + "s";
     }
 
-    public String getExtension()
+    public final String getExtension()
     {
         return "jar";
     }
 
-    public String getLanguage()
+    public final String getLanguage()
     {
         return "java";
     }
 
-    public boolean isAddedToClasspath()
+    public final boolean isAddedToClasspath()
     {
         return true;
     }
 
-    public boolean isIncludesDependencies()
+    public final boolean isIncludesDependencies()
     {
         return false;
     }

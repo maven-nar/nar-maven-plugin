@@ -59,7 +59,7 @@ public abstract class AbstractGnuMojo
      * @return
      * @throws MojoFailureException
      */
-    protected File getGnuAOLSourceDirectory()
+    protected final File getGnuAOLSourceDirectory()
         throws MojoFailureException
     {
         return new File( getGnuAOLDirectory(), "src" );
@@ -69,13 +69,13 @@ public abstract class AbstractGnuMojo
      * @return
      * @throws MojoFailureException
      */
-    protected File getGnuAOLTargetDirectory()
+    protected final File getGnuAOLTargetDirectory()
         throws MojoFailureException
     {
         return new File( getGnuAOLDirectory(), "target" );
     }
     
-    protected File getGnuSourceDirectory() {
+    protected final File getGnuSourceDirectory() {
         return gnuSourceDirectory;
     }
 
@@ -94,7 +94,7 @@ public abstract class AbstractGnuMojo
      * 
      * @return
      */
-    protected boolean useGnu() {
+    protected final boolean useGnu() {
         return gnuUseOnWindows || !OS.WINDOWS.equals(NarUtil.getOS( null ));
     }
 }

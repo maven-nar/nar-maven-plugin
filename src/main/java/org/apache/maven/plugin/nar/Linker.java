@@ -156,7 +156,7 @@ public class Linker
         this.name = name;
     }
 
-    public String getName( Properties defaults, String prefix )
+    public final String getName( Properties defaults, String prefix )
         throws MojoFailureException
     {
         if ( ( name == null ) && ( defaults != null ) && ( prefix != null ) )
@@ -172,7 +172,7 @@ public class Linker
         return name;
     }
 
-    public String getVersion()
+    public final String getVersion()
         throws MojoFailureException, MojoExecutionException
     {
         if ( name == null )
@@ -221,7 +221,7 @@ public class Linker
         return version;
     }
 
-    public LinkerDef getLinker( AbstractCompileMojo mojo, Project antProject, String os, String prefix, String type )
+    public final LinkerDef getLinker( AbstractCompileMojo mojo, Project antProject, String os, String prefix, String type )
         throws MojoFailureException, MojoExecutionException
     {
         if ( name == null )

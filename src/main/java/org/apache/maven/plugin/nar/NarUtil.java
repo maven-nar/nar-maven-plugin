@@ -257,24 +257,30 @@ public final class NarUtil
     /* for jdk 1.4 */
     private static String quote( String s )
     {
-        int slashEIndex = s.indexOf( "\\E" );
+        final String escQ = "\\Q";
+        final String escE = "\\E";
+        
+        int slashEIndex = s.indexOf( escE );
         if ( slashEIndex == -1 )
         {
-            return "\\Q" + s + "\\E";
+            return escQ + s + escE;
         }
 
         StringBuffer sb = new StringBuffer( s.length() * 2 );
-        sb.append( "\\Q" );
+        sb.append( escQ );
         slashEIndex = 0;
         int current = 0;
-        while ( ( slashEIndex = s.indexOf( "\\E", current ) ) != -1 )
+        while ( ( slashEIndex = s.indexOf( escE, current ) ) != -1 )
         {
             sb.append( s.substring( current, slashEIndex ) );
             current = slashEIndex + 2;
-            sb.append( "\\E\\\\E\\Q" );
+            sb.append( escE );
+            sb.append( "\\" );
+            sb.append( escE );
+            sb.append( escQ );
         }
         sb.append( s.substring( current, s.length() ) );
-        sb.append( "\\E" );
+        sb.append( escE );
         return sb.toString();
     }
 

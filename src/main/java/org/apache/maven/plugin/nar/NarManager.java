@@ -24,9 +24,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.LinkedList;
 import java.util.jar.JarFile;
 
 import org.apache.maven.artifact.Artifact;
@@ -61,7 +61,7 @@ public class NarManager
 
     private String linkerName;
 
-    private String[] narTypes = { "noarch", Library.STATIC, Library.SHARED, Library.JNI, Library.PLUGIN };
+    private String[] narTypes = { NarConstants.NAR_NO_ARCH, Library.STATIC, Library.SHARED, Library.JNI, Library.PLUGIN };
 
     public NarManager( Log log, ArtifactRepository repository, MavenProject project, String architecture, String os,
                        Linker linker )
@@ -179,17 +179,17 @@ public class NarManager
             NarInfo narInfo = getNarInfo( dependency );
             if ( noarch )
             {
-                artifactList.addAll( getAttachedNarDependencies( dependency, null, "noarch" ) );
+                artifactList.addAll( getAttachedNarDependencies( dependency, null, NarConstants.NAR_NO_ARCH ) );
             }
 
             // use preferred binding, unless non existing.
-            String binding = narInfo.getBinding( aol, type != null ? type : "static" );
+            String binding = narInfo.getBinding( aol, type != null ? type : Library.STATIC );
 
             // FIXME kludge, but does not work anymore since AOL is now a class
-            if ( aol.equals( "noarch" ) )
+            if ( aol.equals( NarConstants.NAR_NO_ARCH ) )
             {
                 // FIXME no handling of local
-                artifactList.addAll( getAttachedNarDependencies( dependency, null, "noarch" ) );
+                artifactList.addAll( getAttachedNarDependencies( dependency, null, NarConstants.NAR_NO_ARCH ) );
             }
             else
             {
@@ -309,11 +309,11 @@ public class NarManager
 
     private List getDependencies( String scope )
     {
-        if ( scope.equals( "test" ) )
+        if ( scope.equals( Artifact.SCOPE_TEST ) )
         {
             return project.getTestArtifacts();
         }
-        else if ( scope.equals( "runtime" ) )
+        else if ( scope.equals( Artifact.SCOPE_RUNTIME ) )
         {
             return project.getRuntimeArtifacts();
         }
@@ -397,25 +397,28 @@ public class NarManager
             {
                 try
                 {
+                    final String gpp = "g++";
+                    final String gcc = "gcc";
+                    
                     unpackNar( manager, file, narLocation );
                     if ( !NarUtil.getOS( os ).equals( OS.WINDOWS ) )
                     {
                         NarUtil.makeExecutable( new File( narLocation, "bin/" + defaultAOL ), log );
                         // FIXME clumsy
-                        if ( defaultAOL.hasLinker( "g++" ) )
+                        if ( defaultAOL.hasLinker( gpp ) )
                         {
                             NarUtil.makeExecutable( new File( narLocation, "bin/"
-                                + NarUtil.replace( "g++", "gcc", defaultAOL.toString() ) ), log );
+                                + NarUtil.replace( gpp, gcc, defaultAOL.toString() ) ), log );
                         }
                     }
-                    if ( linkerName.equals( "gcc" ) || linkerName.equals( "g++" ) )
+                    if ( linkerName.equals( gcc ) || linkerName.equals( gpp ) )
                     {
                         NarUtil.runRanlib( new File( narLocation, "lib/" + defaultAOL ), log );
                         // FIXME clumsy
-                        if ( defaultAOL.hasLinker( "g++" ) )
+                        if ( defaultAOL.hasLinker( gpp ) )
                         {
                             NarUtil.runRanlib( new File( narLocation, "lib/"
-                                + NarUtil.replace( "g++", "gcc", defaultAOL.toString() ) ), log );
+                                + NarUtil.replace( gpp, gcc, defaultAOL.toString() ) ), log );
                         }
                     }
                     FileUtils.fileDelete( flagFile.getPath() );

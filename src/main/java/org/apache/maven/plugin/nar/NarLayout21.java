@@ -43,12 +43,12 @@ public class NarLayout21
 {
     private File getNoarchDirectory( File baseDir )
     {
-        return new File( baseDir, "noarch" );
+        return new File( baseDir, NarConstants.NAR_NO_ARCH );
     }
 
     private File getAolDirectory( File baseDir )
     {
-        return new File( baseDir, "aol" );
+        return new File( baseDir, NarConstants.NAR_AOL );
     }
 
     private File getAolDirectory( File baseDir, String aol, String type )
@@ -60,7 +60,7 @@ public class NarLayout21
      * (non-Javadoc)
      * @see org.apache.maven.plugin.nar.NarLayout#getIncludeDirectory(java.io.File)
      */
-    public File getIncludeDirectory( File baseDir )
+    public final File getIncludeDirectory( File baseDir )
     {
         return new File( getNoarchDirectory( baseDir ), "include" );
     }
@@ -70,7 +70,7 @@ public class NarLayout21
      * @see org.apache.maven.plugin.nar.NarLayout#getLibDir(java.io.File, org.apache.maven.plugin.nar.AOL,
      * java.lang.String)
      */
-    public File getLibDirectory( File baseDir, String aol, String type )
+    public final File getLibDirectory( File baseDir, String aol, String type )
         throws MojoExecutionException
     {
         if ( type.equals( Library.EXECUTABLE ) )
@@ -91,7 +91,7 @@ public class NarLayout21
      * @see org.apache.maven.plugin.nar.NarLayout#getLibDir(java.io.File, org.apache.maven.plugin.nar.AOL,
      * java.lang.String)
      */
-    public File getBinDirectory( File baseDir, String aol )
+    public final File getBinDirectory( File baseDir, String aol )
     {
         File dir = getAolDirectory( baseDir, aol, Library.EXECUTABLE );
         dir = new File( dir, "bin" );
@@ -104,14 +104,14 @@ public class NarLayout21
      * @see org.apache.maven.plugin.nar.NarLayout#attachNars(java.io.File, org.apache.maven.project.MavenProjectHelper,
      * org.apache.maven.project.MavenProject, org.apache.maven.plugin.nar.NarInfo)
      */
-    public void attachNars( File baseDir, MavenProjectHelper projectHelper, MavenProject project, NarInfo narInfo )
+    public final void attachNars( File baseDir, MavenProjectHelper projectHelper, MavenProject project, NarInfo narInfo )
         throws MojoExecutionException
     {
         if ( getNoarchDirectory( baseDir ).exists() )
         {
-            attachNar( projectHelper, project, "noarch", getNoarchDirectory( baseDir ), "*/**" );
-            narInfo.setNar( null, "noarch", project.getGroupId() + ":" + project.getArtifactId() + ":"
-                + NarConstants.NAR_TYPE + ":" + "noarch" );
+            attachNar( projectHelper, project, NarConstants.NAR_NO_ARCH, getNoarchDirectory( baseDir ), "*/**" );
+            narInfo.setNar( null, NarConstants.NAR_NO_ARCH, project.getGroupId() + ":" + project.getArtifactId() + ":"
+                + NarConstants.NAR_TYPE + ":" + NarConstants.NAR_NO_ARCH );
         }
 
         File classifierDir = getAolDirectory( baseDir );

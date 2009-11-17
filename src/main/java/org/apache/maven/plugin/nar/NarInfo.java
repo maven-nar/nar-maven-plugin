@@ -130,20 +130,20 @@ public class NarInfo
     // FIXME replace with list of AttachedNarArtifacts
     public final String[] getAttachedNars( AOL aol, String type )
     {
-        String attachedNars = getProperty( aol, "nar." + type );
+        String attachedNars = getProperty( aol, NarConstants.NAR+"." + type );
         return attachedNars != null ? attachedNars.split( "," ) : null;
     }
 
     public final void addNar( AOL aol, String type, String nar )
     {
-        String nars = getProperty( aol, "nar." + type );
+        String nars = getProperty( aol, NarConstants.NAR+"." + type );
         nars = ( nars == null ) ? nar : nars + ", " + nar;
-        setProperty( aol, "nar." + type, nars );
+        setProperty( aol, NarConstants.NAR+"." + type, nars );
     }
 
     public final void setNar( AOL aol, String type, String nar )
     {
-        setProperty( aol, "nar." + type, nar );
+        setProperty( aol, NarConstants.NAR+"." + type, nar );
     }
 
     public AOL getAOL( AOL aol )

@@ -85,12 +85,12 @@ public class Java
     {
     }
 
-    public void setAbstractCompileMojo( AbstractCompileMojo mojo )
+    public final void setAbstractCompileMojo( AbstractCompileMojo mojo )
     {
         this.mojo = mojo;
     }
 
-    public void addIncludePaths( CCTask task, String outType )
+    public final void addIncludePaths( CCTask task, String outType )
         throws MojoFailureException, MojoExecutionException
     {
         if ( include || mojo.getJavah().getJniDirectory().exists() )
@@ -120,7 +120,7 @@ public class Java
         }
     }
 
-    public void addRuntime( CCTask task, File javaHome, String os, String prefix )
+    public final void addRuntime( CCTask task, File javaHome, String os, String prefix )
         throws MojoFailureException
     {
         if ( link )
