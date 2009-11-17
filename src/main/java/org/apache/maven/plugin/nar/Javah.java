@@ -327,11 +327,11 @@ public class Javah
     private Toolchain getToolchain()
     {
         Toolchain toolChain = null;
-        ToolchainManager toolchainManager = ((NarJavahMojo)mojo).toolchainManager;
+        ToolchainManager toolchainManager = ((NarJavahMojo)mojo).getToolchainManager();
         
         if ( toolchainManager != null )
         {
-            toolChain = toolchainManager.getToolchainFromBuildContext( "jdk", ((NarJavahMojo)mojo).session );
+            toolChain = toolchainManager.getToolchainFromBuildContext( "jdk", ((NarJavahMojo)mojo).getSession() );
         }
         return toolChain;
     }

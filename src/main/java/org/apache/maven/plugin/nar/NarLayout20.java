@@ -3,6 +3,7 @@ package org.apache.maven.plugin.nar;
 import java.io.File;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 
@@ -55,16 +56,15 @@ public class NarLayout20
      * (non-Javadoc)
      * @see org.apache.maven.plugin.nar.NarLayout#getLibDir(java.io.File, org.apache.maven.plugin.nar.AOL, String type)
      */
-    public File getLibDirectory( File baseDir, String aol, String type )
+    public File getLibDirectory( File baseDir, String aol, String type ) throws MojoFailureException
     {
         if ( type.equals( Library.EXECUTABLE ) )
         {
-            System.err.println( "WARNING, Replace call to getLibDirectory with getBinDirectory" );
-            Thread.dumpStack();
+            throw new MojoFailureException( "INTERNAL ERROR, Replace call to getLibDirectory with getBinDirectory" );
         }
 
         File dir = new File( baseDir, "lib" );
-        dir = new File( dir, aol.toString() );
+        dir = new File( dir, aol );
         dir = new File( dir, type );
         return dir;
     }
@@ -76,7 +76,7 @@ public class NarLayout20
     public File getBinDirectory( File baseDir, String aol )
     {
         File dir = new File( baseDir, "bin" );
-        dir = new File( dir, aol.toString() );
+        dir = new File( dir, aol );
         return dir;
     }
 

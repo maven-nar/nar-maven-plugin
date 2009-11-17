@@ -77,7 +77,7 @@ public class NarManager
     /**
      * Returns dependencies which are dependent on NAR files (i.e. contain NarInfo)
      */
-    public List/* <NarArtifact> */getNarDependencies( String scope )
+    public final List/* <NarArtifact> */getNarDependencies( String scope )
         throws MojoExecutionException
     {
         List narDependencies = new LinkedList();
@@ -101,7 +101,7 @@ public class NarManager
      * 
      * @throws MojoFailureException
      */
-    public Map/* <String, List<AttachedNarArtifact>> */getAttachedNarDependencyMap( String scope )
+    public final Map/* <String, List<AttachedNarArtifact>> */getAttachedNarDependencyMap( String scope )
         throws MojoExecutionException, MojoFailureException
     {
         Map attachedNarDependencies = new HashMap();
@@ -120,13 +120,13 @@ public class NarManager
         return attachedNarDependencies;
     }
 
-    public List/* <AttachedNarArtifact> */getAttachedNarDependencies( List/* <NarArtifacts> */narArtifacts )
+    public final List/* <AttachedNarArtifact> */getAttachedNarDependencies( List/* <NarArtifacts> */narArtifacts )
         throws MojoExecutionException, MojoFailureException
     {
         return getAttachedNarDependencies( narArtifacts, null );
     }
 
-    public List/* <AttachedNarArtifact> */getAttachedNarDependencies( List/* <NarArtifacts> */narArtifacts,
+    public final List/* <AttachedNarArtifact> */getAttachedNarDependencies( List/* <NarArtifacts> */narArtifacts,
                                                                       String classifier )
         throws MojoExecutionException, MojoFailureException
     {
@@ -161,7 +161,7 @@ public class NarManager
      * @throws MojoExecutionException
      * @throws MojoFailureException
      */
-    public List/* <AttachedNarArtifact> */getAttachedNarDependencies( List/* <NarArtifacts> */narArtifacts, AOL aol,
+    public final List/* <AttachedNarArtifact> */getAttachedNarDependencies( List/* <NarArtifacts> */narArtifacts, AOL aol,
                                                                       String type )
         throws MojoExecutionException, MojoFailureException
     {
@@ -251,7 +251,7 @@ public class NarManager
         return artifactList;
     }
 
-    public NarInfo getNarInfo( Artifact dependency )
+    public final NarInfo getNarInfo( Artifact dependency )
         throws MojoExecutionException
     {
         // FIXME reported to maven developer list, isSnapshot changes behaviour
@@ -297,7 +297,7 @@ public class NarManager
         }
     }
 
-    public File getNarFile( Artifact dependency )
+    public final File getNarFile( Artifact dependency )
         throws MojoFailureException
     {
         // FIXME reported to maven developer list, isSnapshot changes behaviour
@@ -320,7 +320,7 @@ public class NarManager
         return project.getCompileArtifacts();
     }
 
-    public void downloadAttachedNars( List/* <NarArtifacts> */narArtifacts, List remoteRepositories,
+    public final void downloadAttachedNars( List/* <NarArtifacts> */narArtifacts, List remoteRepositories,
                                       ArtifactResolver resolver, String classifier )
         throws MojoExecutionException, MojoFailureException
     {
@@ -356,7 +356,7 @@ public class NarManager
         }
     }
 
-    public void unpackAttachedNars( List/* <NarArtifacts> */narArtifacts, ArchiverManager manager, String classifier,
+    public final void unpackAttachedNars( List/* <NarArtifacts> */narArtifacts, ArchiverManager manager, String classifier,
                                     String os )
         throws MojoExecutionException, MojoFailureException
     {

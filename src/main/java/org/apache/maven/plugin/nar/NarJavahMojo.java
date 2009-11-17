@@ -38,7 +38,7 @@ public class NarJavahMojo
     /**
      * @component
      */
-    ToolchainManager toolchainManager;
+    private ToolchainManager toolchainManager;
 
     /**
      * The current build session instance.
@@ -47,7 +47,15 @@ public class NarJavahMojo
      * @required
      * @readonly
      */
-    MavenSession session;
+    private MavenSession session;
+    
+    protected ToolchainManager getToolchainManager() {
+        return toolchainManager;
+    }
+    
+    protected MavenSession getSession() {
+        return session;
+    }
 
     public void execute()
         throws MojoExecutionException, MojoFailureException

@@ -47,7 +47,7 @@ public class AOL
                 break;
 
             default:
-                throw new RuntimeException( "AOL '" + aol + "' cannot be parsed." );
+                throw new IllegalArgumentException( "AOL '" + aol + "' cannot be parsed." );
         }
     }
 

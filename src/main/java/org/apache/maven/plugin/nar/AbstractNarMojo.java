@@ -98,46 +98,46 @@ public abstract class AbstractNarMojo
      */
     private MavenProject mavenProject;
 
-    protected boolean shouldSkip()
+    protected final boolean shouldSkip()
     {
         return skip;
     }
 
-    protected String getArchitecture()
+    protected final String getArchitecture()
     {
         architecture = NarUtil.getArchitecture( architecture );
         return architecture;
     }
 
-    protected String getOS()
+    protected final String getOS()
     {
         os = NarUtil.getOS( os );
         return os;
     }
 
-    protected AOL getAOL()
+    protected final AOL getAOL()
         throws MojoFailureException
     {
         return NarUtil.getAOL( architecture, os, linker, aol );
     }
 
-    protected Linker getLinker()
+    protected final Linker getLinker()
     {
         linker = NarUtil.getLinker( linker );
         return linker;
     }
 
-    protected File getOutputDirectory()
+    protected final File getOutputDirectory()
     {
         return outputDirectory;
     }
 
-    protected String getFinalName()
+    protected final String getFinalName()
     {
         return finalName;
     }
 
-    protected File getTargetDirectory()
+    protected final File getTargetDirectory()
     {
         if ( targetDirectory == null )
         {
@@ -146,7 +146,7 @@ public abstract class AbstractNarMojo
         return targetDirectory;
     }
 
-    protected MavenProject getMavenProject()
+    protected final MavenProject getMavenProject()
     {
         return mavenProject;
     }

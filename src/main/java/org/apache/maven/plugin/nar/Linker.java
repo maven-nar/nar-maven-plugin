@@ -188,7 +188,7 @@ public class Linker
 
         if ( name.equals( "g++" ) || name.equals( "gcc" ) )
         {
-            int r = NarUtil.runCommand( "gcc", new String[] { "--version" }, null, null, out, err, dbg );
+            NarUtil.runCommand( "gcc", new String[] { "--version" }, null, null, out, err, dbg );
             Pattern p = Pattern.compile( "\\d+\\.\\d+\\.\\d+" );
             Matcher m = p.matcher( out.toString() );
             if ( m.find() )
@@ -202,7 +202,7 @@ public class Linker
         }
         else if ( name.equals( "msvc" ) )
         {
-            int r = NarUtil.runCommand( "link", new String[] { "/version" }, null, null, out, err, dbg );
+            NarUtil.runCommand( "link", new String[] { "/version" }, null, null, out, err, dbg );
             Pattern p = Pattern.compile( "\\d+\\.\\d+\\.\\d+" );
             Matcher m = p.matcher( out.toString() );
             if ( m.find() )

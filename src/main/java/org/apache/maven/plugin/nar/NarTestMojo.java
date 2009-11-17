@@ -29,7 +29,6 @@ import java.util.Set;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -79,7 +78,7 @@ public class NarTestMojo
         // run if requested
         if ( test.shouldRun() )
         {
-            String name = getTargetDirectory().getPath() + "/bin/" + getAOL() + "/" + test.getName();
+            String name = getTestTargetDirectory().getPath() + "/bin/" + getAOL() + "/" + test.getName();
             getLog().info( "Running test " + name );
 
             File workingDir = getMavenProject().getBasedir();
@@ -87,7 +86,7 @@ public class NarTestMojo
             List args = test.getArgs();
             int result =
                 NarUtil.runCommand( name, (String[]) args.toArray( new String[args.size()] ), workingDir,
-                                    generateEnvironment( test, getLog() ), getLog() );
+                                    generateEnvironment(), getLog() );
             if ( result != 0 )
             {
                 throw new MojoFailureException( "Test " + name + " failed with exit code: " + result + " 0x"
@@ -104,13 +103,13 @@ public class NarTestMojo
             MavenProject project = getMavenProject();
             // FIXME NAR-90, we could make dure we get the final name from layout
             File executable =
-                new File( getLayout().getBinDirectory( super.getTargetDirectory(), getAOL().toString() ),
+                new File( getLayout().getBinDirectory( getTargetDirectory(), getAOL().toString() ),
                           project.getArtifactId() );
             getLog().info( "Running executable " + executable );
             List args = library.getArgs();
             int result =
                 NarUtil.runCommand( executable.getPath(), (String[]) args.toArray( new String[args.size()] ), null,
-                                    generateEnvironment( library, getLog() ), getLog() );
+                                    generateEnvironment(), getLog() );
             if ( result != 0 )
             {
                 throw new MojoFailureException( "Test " + executable + " failed with exit code: " + result + " 0x"
@@ -119,12 +118,12 @@ public class NarTestMojo
         }
     }
 
-    protected File getTargetDirectory()
+    protected File getTestTargetDirectory()
     {
         return new File( getMavenProject().getBuild().getDirectory(), "test-nar" );
     }
 
-    private String[] generateEnvironment( Executable exec, Log log )
+    private String[] generateEnvironment()
         throws MojoExecutionException, MojoFailureException
     {
         List env = new ArrayList();
@@ -138,7 +137,7 @@ public class NarTestMojo
             if ( lib.getType().equals( Library.SHARED ) )
             {
                 File path =
-                    getLayout().getLibDirectory( super.getTargetDirectory(), getAOL().toString(), lib.getType() );
+                    getLayout().getLibDirectory( getTargetDirectory(), getAOL().toString(), lib.getType() );
                 getLog().debug( "Adding path to shared library: " + path );
                 sharedPaths.add( path );
             }

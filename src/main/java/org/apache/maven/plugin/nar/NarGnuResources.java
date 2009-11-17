@@ -43,13 +43,13 @@ public class NarGnuResources
             return;
         }
 
-        if ( gnuSourceDirectory.exists() )
+        if ( getGnuSourceDirectory().exists() )
         {
             int copied = 0;
             
             try
             {
-                copied += copyIncludes( gnuSourceDirectory );
+                copied += copyIncludes( getGnuSourceDirectory() );
             }
             catch ( IOException e )
             {

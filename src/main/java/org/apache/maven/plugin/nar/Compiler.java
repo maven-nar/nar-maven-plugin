@@ -224,12 +224,12 @@ public abstract class Compiler
     {
     }
 
-    public void setAbstractCompileMojo( AbstractCompileMojo mojo )
+    public final void setAbstractCompileMojo( AbstractCompileMojo mojo )
     {
         this.mojo = mojo;
     }
 
-    public List/* <File> */getSourceDirectories()
+    public final List/* <File> */getSourceDirectories()
     {
         return getSourceDirectories( "dummy" );
     }
@@ -289,7 +289,7 @@ public abstract class Compiler
         return sourceDirectories;
     }
 
-    protected List/* <String> */getIncludePaths( String type )
+    protected final List/* <String> */getIncludePaths( String type )
     {
         return createIncludePaths( type, type.equals( "test" ) ? testIncludePaths : includePaths );
     }
@@ -307,13 +307,13 @@ public abstract class Compiler
         return paths;
     }
 
-    public Set getIncludes()
+    public final Set getIncludes()
         throws MojoFailureException
     {
         return getIncludes( "main" );
     }
 
-    protected Set getIncludes( String type )
+    protected final Set getIncludes( String type )
         throws MojoFailureException
     {
         Set result = new HashSet();
@@ -340,7 +340,7 @@ public abstract class Compiler
         return result;
     }
 
-    protected Set getExcludes()
+    protected final Set getExcludes()
         throws MojoFailureException
     {
         Set result = new HashSet();
@@ -366,13 +366,13 @@ public abstract class Compiler
         return result;
     }
 
-    protected String getPrefix()
+    protected final String getPrefix()
         throws MojoFailureException
     {
         return mojo.getAOL().getKey() + "." + getName() + ".";
     }
 
-    public CompilerDef getCompiler( String type, String output )
+    public final CompilerDef getCompiler( String type, String output )
         throws MojoFailureException
     {
 
@@ -609,7 +609,7 @@ public abstract class Compiler
 
     protected abstract String getName();
 
-    public void copyIncludeFiles( MavenProject mavenProject, File targetDirectory )
+    public final void copyIncludeFiles( MavenProject mavenProject, File targetDirectory )
         throws IOException
     {
         for ( Iterator i = getIncludePaths( "dummy" ).iterator(); i.hasNext(); )

@@ -39,28 +39,28 @@ public class Test
      * @required
      * @parameter expression=""
      */
-    protected String name = null;
+    private String name = null;
 
     /**
      * Type of linking used for this test Possible choices are: "shared" or "static". Defaults to "shared".
      * 
      * @parameter expression=""
      */
-    protected String link = Library.SHARED;
+    private String link = Library.SHARED;
 
     /**
      * When true run this test. Defaults to true;
      * 
      * @parameter expresssion=""
      */
-    protected boolean run = true;
+    private boolean run = true;
 
     /**
      * Arguments to be used for running this test. Defaults to empty list. This option is only used if run=true.
      * 
      * @parameter expression=""
      */
-    protected List/* <String> */args = new ArrayList();
+    private List/* <String> */args = new ArrayList();
 
     public String getName()
         throws MojoFailureException

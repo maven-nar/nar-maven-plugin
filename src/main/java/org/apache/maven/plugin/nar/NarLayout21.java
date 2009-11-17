@@ -81,7 +81,7 @@ public class NarLayout21
 
         File dir = getAolDirectory( baseDir, aol, type );
         dir = new File( dir, "lib" );
-        dir = new File( dir, aol.toString() );
+        dir = new File( dir, aol );
         dir = new File( dir, type );
         return dir;
     }
@@ -95,7 +95,7 @@ public class NarLayout21
     {
         File dir = getAolDirectory( baseDir, aol, Library.EXECUTABLE );
         dir = new File( dir, "bin" );
-        dir = new File( dir, aol.toString() );
+        dir = new File( dir, aol );
         return dir;
     }
 

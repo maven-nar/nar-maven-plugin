@@ -69,14 +69,14 @@ public class NarGnuConfigureMojo
         }
 
         File targetDir = getGnuAOLSourceDirectory();
-        if ( gnuSourceDirectory.exists() )
+        if ( getGnuSourceDirectory().exists() )
         {
             getLog().info( "Copying GNU sources" );
 
             try
             {
                 FileUtils.mkdir( targetDir.getPath() );
-                NarUtil.copyDirectoryStructure( gnuSourceDirectory, targetDir, null, null );
+                NarUtil.copyDirectoryStructure( getGnuSourceDirectory(), targetDir, null, null );
             }
             catch ( IOException e )
             {
@@ -98,7 +98,6 @@ public class NarGnuConfigureMojo
                 int result = NarUtil.runCommand( "./" + autogen.getName(), null, targetDir, null, getLog() );
                 if ( result != 0 )
                 {
-                    System.err.println( targetDir );
                     throw new MojoExecutionException( "'" + AUTOGEN + "' errorcode: " + result );
                 }
             }

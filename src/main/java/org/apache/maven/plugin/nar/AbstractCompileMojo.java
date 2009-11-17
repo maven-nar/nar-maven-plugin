@@ -144,7 +144,7 @@ public abstract class AbstractCompileMojo
 
     private Project antProject;
 
-    protected Project getAntProject()
+    protected final Project getAntProject()
     {
         if ( antProject == null )
         {
@@ -156,7 +156,7 @@ public abstract class AbstractCompileMojo
         return antProject;
     }
 
-    protected C getC()
+    protected final C getC()
     {
         if ( c == null )
         {
@@ -166,7 +166,7 @@ public abstract class AbstractCompileMojo
         return c;
     }
 
-    protected Cpp getCpp()
+    protected final Cpp getCpp()
     {
         if ( cpp == null )
         {
@@ -176,7 +176,7 @@ public abstract class AbstractCompileMojo
         return cpp;
     }
 
-    protected Fortran getFortran()
+    protected final Fortran getFortran()
     {
         if ( fortran == null )
         {
@@ -186,38 +186,38 @@ public abstract class AbstractCompileMojo
         return fortran;
     }
 
-    protected int getMaxCores( AOL aol ) throws MojoExecutionException
+    protected final int getMaxCores( AOL aol ) throws MojoExecutionException
     {
         return getNarInfo().getProperty( aol, "maxCores", maxCores );
     }
 
-    protected boolean useLibtool( AOL aol ) throws MojoExecutionException
+    protected final boolean useLibtool( AOL aol ) throws MojoExecutionException
     {
         return getNarInfo().getProperty( aol, "libtool", libtool );
     }
 
-    protected boolean failOnError( AOL aol ) throws MojoExecutionException
+    protected final boolean failOnError( AOL aol ) throws MojoExecutionException
     {
         return getNarInfo().getProperty( aol, "failOnError", failOnError );
     }
 
-    protected String getRuntime( AOL aol ) throws MojoExecutionException
+    protected final String getRuntime( AOL aol ) throws MojoExecutionException
     {
         return getNarInfo().getProperty( aol, "runtime", runtime );
     }
 
-    protected String getOutput( AOL aol ) throws MojoExecutionException
+    protected final String getOutput( AOL aol ) throws MojoExecutionException
     {
         return getNarInfo().getProperty( aol, "output", output );
     }
 
-    protected File getJavaHome( AOL aol ) throws MojoExecutionException
+    protected final File getJavaHome( AOL aol ) throws MojoExecutionException
     {
         // FIXME should be easier by specifying default...
         return getNarInfo().getProperty( aol, "javaHome", NarUtil.getJavaHome( javaHome, getOS() ) );
     }
 
-    protected List getLibraries()
+    protected final List getLibraries()
     {
         if ( libraries == null )
         {
@@ -226,7 +226,7 @@ public abstract class AbstractCompileMojo
         return libraries;
     }
 
-    protected List getTests()
+    protected final List getTests()
     {
         if ( tests == null )
         {
@@ -235,7 +235,7 @@ public abstract class AbstractCompileMojo
         return tests;
     }
 
-    protected Javah getJavah()
+    protected final Javah getJavah()
     {
         if ( javah == null )
         {
@@ -245,7 +245,7 @@ public abstract class AbstractCompileMojo
         return javah;
     }
 
-    protected Java getJava()
+    protected final Java getJava()
     {
         if ( java == null )
         {
@@ -255,17 +255,17 @@ public abstract class AbstractCompileMojo
         return java;
     }
 
-    public void setDependencyLibOrder( List/* <String> */order )
+    public final void setDependencyLibOrder( List/* <String> */order )
     {
         dependencyLibOrder = order;
     }
 
-    protected List/* <String> */getDependencyLibOrder()
+    protected final List/* <String> */getDependencyLibOrder()
     {
         return dependencyLibOrder;
     }
 
-    protected NarInfo getNarInfo() throws MojoExecutionException
+    protected final NarInfo getNarInfo() throws MojoExecutionException
     {
         if ( narInfo == null )
         {
@@ -277,7 +277,7 @@ public abstract class AbstractCompileMojo
     }
     
     // FIXME, needs to maybe move up
-    protected NarLayout getLayout() throws MojoExecutionException
+    protected final NarLayout getLayout() throws MojoExecutionException
     {
         if (narLayout == null) {
             String className = layout.indexOf( '.' ) < 0 ? NarLayout21.class.getPackage().getName()+"."+layout : layout;

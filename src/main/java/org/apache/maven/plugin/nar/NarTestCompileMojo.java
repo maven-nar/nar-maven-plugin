@@ -58,7 +58,7 @@ public class NarTestCompileMojo
         }
 
         // make sure destination is there
-        getTargetDirectory().mkdirs();
+        getTestTargetDirectory().mkdirs();
 
         for ( Iterator i = getTests().iterator(); i.hasNext(); )
         {
@@ -81,7 +81,7 @@ public class NarTestCompileMojo
         task.setOuttype( outTypeEnum );
 
         // outDir
-        File outDir = new File( getTargetDirectory(), "bin" );
+        File outDir = new File( getTestTargetDirectory(), "bin" );
         outDir = new File( outDir, getAOL().toString() );
         outDir.mkdirs();
 
@@ -91,7 +91,7 @@ public class NarTestCompileMojo
         task.setOutfile( outFile );
 
         // object directory
-        File objDir = new File( getTargetDirectory(), "obj" );
+        File objDir = new File( getTestTargetDirectory(), "obj" );
         objDir = new File( objDir, getAOL().toString() );
         objDir.mkdirs();
         task.setObjdir( objDir );
@@ -132,8 +132,8 @@ public class NarTestCompileMojo
 
         // FIXME hardcoded values
         String libName = getFinalName();
-        File includeDir = getLayout().getIncludeDirectory( super.getTargetDirectory() );
-        File libDir = getLayout().getLibDirectory( super.getTargetDirectory(), getAOL().toString(), test.getLink() );
+        File includeDir = getLayout().getIncludeDirectory( getTargetDirectory() );
+        File libDir = getLayout().getLibDirectory( getTargetDirectory(), getAOL().toString(), test.getLink() );
 
         // copy shared library
         // FIXME why do we do this ?
@@ -235,7 +235,7 @@ public class NarTestCompileMojo
         }
     }
 
-    protected File getTargetDirectory()
+    protected File getTestTargetDirectory()
     {
         return new File( getMavenProject().getBuild().getDirectory(), "test-nar" );
     }

@@ -49,28 +49,28 @@ public class Library
      * 
      * @parameter expression=""
      */
-    protected String type = SHARED;
+    private String type = SHARED;
 
     /**
      * Link with stdcpp if necessary Defaults to true.
      * 
      * @parameter expression=""
      */
-    protected boolean linkCPP = true;
+    private boolean linkCPP = true;
 
     /**
      * Link with fortran runtime if necessary Defaults to false.
      * 
      * @parameter expression=""
      */
-    protected boolean linkFortran = false;
+    private boolean linkFortran = false;
 
     /**
      * If specified will create the NarSystem class with methods to load a JNI library.
      * 
      * @parameter expression=""
      */
-    protected String narSystemPackage = null;
+    private String narSystemPackage = null;
 
     /**
      * Name of the NarSystem class
@@ -78,7 +78,7 @@ public class Library
      * @parameter expression="NarSystem"
      * @required
      */
-    protected String narSystemName = "NarSystem";
+    private String narSystemName = "NarSystem";
 
     /**
      * The target directory into which to generate the output.
@@ -86,14 +86,14 @@ public class Library
      * @parameter expression="${project.build.dir}/nar/nar-generated"
      * @required
      */
-    protected String narSystemDirectory = "nar-generated";
+    private String narSystemDirectory = "nar-generated";
 
     /**
      * When true and if type is "executable" run this executable. Defaults to false;
      * 
      * @parameter expression=""
      */
-    protected boolean run = false;
+    private boolean run = false;
 
     /**
      * Arguments to be used for running this executable. Defaults to empty list. This option is only used if run=true
@@ -101,50 +101,50 @@ public class Library
      * 
      * @parameter expression=""
      */
-    protected List/* <String> */args = new ArrayList();
+    private List/* <String> */args = new ArrayList();
 
-    public String getType()
+    public final String getType()
     {
         return type;
     }
 
-    public boolean linkCPP()
+    public final boolean linkCPP()
     {
         return linkCPP;
     }
 
-    public boolean linkFortran()
+    public final boolean linkFortran()
     {
         return linkFortran;
     }
 
-    public String getNarSystemPackage()
+    public final String getNarSystemPackage()
     {
         return narSystemPackage;
     }
 
-    public boolean shouldRun()
+    public final boolean shouldRun()
     {
         return run;
     }
 
-    public List/* <String> */getArgs()
+    public final List/* <String> */getArgs()
     {
         return args;
     }
 
-    public String getNarSystemName()
+    public final String getNarSystemName()
     {
         return narSystemName;
     }
 
-    public String getNarSystemDirectory()
+    public final String getNarSystemDirectory()
     {
         return narSystemDirectory;
     }
 
     // FIXME incomplete
-    public String toString()
+    public final String toString()
     {
         StringBuffer sb = new StringBuffer( "Library: " );
         sb.append( "type: " );

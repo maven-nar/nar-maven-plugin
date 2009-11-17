@@ -45,7 +45,7 @@ public abstract class AbstractGnuMojo
      * @parameter expression="${basedir}/src/gnu"
      * @required
      */
-    protected File gnuSourceDirectory;
+    private File gnuSourceDirectory;
 
     /**
      * Directory in which gnu sources are copied and "configured"
@@ -73,6 +73,10 @@ public abstract class AbstractGnuMojo
         throws MojoFailureException
     {
         return new File( getGnuAOLDirectory(), "target" );
+    }
+    
+    protected File getGnuSourceDirectory() {
+        return gnuSourceDirectory;
     }
 
     /**

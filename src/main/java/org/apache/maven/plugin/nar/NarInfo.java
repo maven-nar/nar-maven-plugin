@@ -71,7 +71,7 @@ public class NarInfo
         }
     }
 
-    public String toString()
+    public final String toString()
     {
         StringBuffer s = new StringBuffer( "NarInfo for " );
         s.append( groupId );
@@ -95,12 +95,12 @@ public class NarInfo
         return s.toString();
     }
 
-    public boolean exists( JarFile jar )
+    public final boolean exists( JarFile jar )
     {
         return getNarPropertiesEntry( jar ) != null;
     }
 
-    public void read( JarFile jar )
+    public final void read( JarFile jar )
         throws IOException
     {
         info.load( jar.getInputStream( getNarPropertiesEntry( jar ) ) );
@@ -117,31 +117,31 @@ public class NarInfo
      * @param aol
      * @return
      */
-    public String getBinding( AOL aol, String defaultBinding )
+    public final String getBinding( AOL aol, String defaultBinding )
     {
         return getProperty( aol, "libs.binding", defaultBinding );
     }
 
-    public void setBinding( AOL aol, String value )
+    public final void setBinding( AOL aol, String value )
     {
         setProperty( aol, "libs.binding", value );
     }
 
     // FIXME replace with list of AttachedNarArtifacts
-    public String[] getAttachedNars( AOL aol, String type )
+    public final String[] getAttachedNars( AOL aol, String type )
     {
         String attachedNars = getProperty( aol, "nar." + type );
         return attachedNars != null ? attachedNars.split( "," ) : null;
     }
 
-    public void addNar( AOL aol, String type, String nar )
+    public final void addNar( AOL aol, String type, String nar )
     {
         String nars = getProperty( aol, "nar." + type );
         nars = ( nars == null ) ? nar : nars + ", " + nar;
         setProperty( aol, "nar." + type, nars );
     }
 
-    public void setNar( AOL aol, String type, String nar )
+    public final void setNar( AOL aol, String type, String nar )
     {
         setProperty( aol, "nar." + type, nar );
     }
@@ -151,22 +151,22 @@ public class NarInfo
         return aol == null ? null : new AOL( getProperty( aol, aol.toString(), aol.toString() ) );
     }
 
-    public String getOptions( AOL aol )
+    public final String getOptions( AOL aol )
     {
         return getProperty( aol, "linker.options" );
     }
 
-    public String getLibs( AOL aol )
+    public final String getLibs( AOL aol )
     {
         return getProperty( aol, "libs.names", artifactId + "-" + version );
     }
 
-    public String getSysLibs( AOL aol )
+    public final String getSysLibs( AOL aol )
     {
         return getProperty( aol, "syslibs.names" );
     }
 
-    public void writeToFile( File file )
+    public final void writeToFile( File file )
         throws IOException
     {
         info.store( new FileOutputStream( ( file ) ), "NAR Properties for " + groupId + "." + artifactId + "-"
@@ -185,12 +185,12 @@ public class NarInfo
         }
     }
 
-    public String getProperty( AOL aol, String key )
+    public final String getProperty( AOL aol, String key )
     {
         return getProperty( aol, key, (String) null );
     }
 
-    public String getProperty( AOL aol, String key, String defaultValue )
+    public final String getProperty( AOL aol, String key, String defaultValue )
     {
         if ( key == null )
         {
@@ -202,17 +202,17 @@ public class NarInfo
         return value;
     }
 
-    public int getProperty( AOL aol, String key, int defaultValue )
+    public final int getProperty( AOL aol, String key, int defaultValue )
     {
         return Integer.parseInt( getProperty( aol, key, Integer.toString( defaultValue ) ) );
     }
 
-    public boolean getProperty( AOL aol, String key, boolean defaultValue )
+    public final boolean getProperty( AOL aol, String key, boolean defaultValue )
     {
         return Boolean.parseBoolean( getProperty( aol, key, String.valueOf( defaultValue ) ) );
     }
 
-    public File getProperty( AOL aol, String key, File defaultValue )
+    public final File getProperty( AOL aol, String key, File defaultValue )
     {
         return new File( getProperty( aol, key, defaultValue.getPath() ) );
     }

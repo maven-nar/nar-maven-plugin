@@ -184,7 +184,8 @@ public class NarIntegrationTestMojo
      * @required
      * @readonly
      */
-    protected MavenProject project;
+    // DUNS, made private
+    private MavenProject project;
 
     /**
      * The classpath elements of the project being tested.

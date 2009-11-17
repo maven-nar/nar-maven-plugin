@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-import org.apache.bcel.classfile.ClassFormatException;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -43,9 +42,13 @@ import org.codehaus.plexus.util.cli.Commandline;
 /**
  * @author Mark Donszelmann
  */
-public class NarUtil
+public final class NarUtil
 {
 
+    private NarUtil() {
+        // never instantiate
+    }
+    
     private static Properties defaults;
 
     public static Properties getDefaults()
@@ -189,7 +192,7 @@ public class NarUtil
                 runRanlib( files[i], log );
             }
         }
-        if ( file.isFile() && file.canRead() && file.canWrite() && !file.isHidden() && file.getName().endsWith( ".a" ) )
+        if ( file.isFile() && file.canWrite() && !file.isHidden() && file.getName().endsWith( ".a" ) )
         {
             // ranlib file
             int result = runCommand( "ranlib", new String[] { file.getPath() }, null, null, log );
@@ -206,10 +209,10 @@ public class NarUtil
      * 
      * @param filename the absolute file name of the class
      * @return the Bcel Class.
-     * @throws IOException, ClassFormatException
+     * @throws IOException
      */
-    public static final JavaClass getBcelClass( String filename )
-        throws IOException, ClassFormatException
+    public static JavaClass getBcelClass( String filename )
+        throws IOException
     {
         ClassParser parser = new ClassParser( filename );
         return parser.parse();
@@ -221,7 +224,7 @@ public class NarUtil
      * @param filename the absolute file name of the class
      * @return the header file name.
      */
-    public static final String getHeaderName( String base, String filename )
+    public static String getHeaderName( String base, String filename )
     {
         base = base.replaceAll( "\\\\", "/" );
         filename = filename.replaceAll( "\\\\", "/" );
@@ -492,8 +495,9 @@ public class NarUtil
             outputGobbler.start();
             process.waitFor();
             dbg.println( "ExitValue: " + process.exitValue() );
-            errorGobbler.join( 5000 );
-            outputGobbler.join( 5000 );
+            final int timeout = 5000;
+            errorGobbler.join( timeout );
+            outputGobbler.join( timeout );
             return process.exitValue();
         }
         catch ( Exception e )
@@ -502,14 +506,13 @@ public class NarUtil
         }
     }
 
-    static class StreamGobbler
+    private final static class StreamGobbler
         extends Thread
     {
-        InputStream is;
+        private InputStream is;
+        private TextStream ts;
 
-        TextStream ts;
-
-        StreamGobbler( InputStream is, TextStream ts )
+        private StreamGobbler( InputStream is, TextStream ts )
         {
             this.is = is;
             this.ts = ts;
@@ -529,7 +532,11 @@ public class NarUtil
             }
             catch ( IOException e )
             {
-                e.printStackTrace();
+                // e.printStackTrace()
+                StackTraceElement[] stackTrace = e.getStackTrace();
+                for (int i=0; i<stackTrace.length; i++) {
+                    ts.println( stackTrace[i].toString());
+                }
             }
         }
     }
