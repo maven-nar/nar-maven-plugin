@@ -33,7 +33,6 @@ import org.apache.maven.artifact.versioning.VersionRange;
 public class AttachedNarArtifact
     extends DefaultArtifact
 {
-
     public AttachedNarArtifact( String groupId, String artifactId, String version, String scope, String type,
                                 String classifier, boolean optional )
         throws InvalidVersionSpecificationException

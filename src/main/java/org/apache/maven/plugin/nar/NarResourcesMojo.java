@@ -54,7 +54,7 @@ public class NarResourcesMojo
      */
     private File resourceDirectory;
 
-    public void execute()
+    public final void execute()
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )

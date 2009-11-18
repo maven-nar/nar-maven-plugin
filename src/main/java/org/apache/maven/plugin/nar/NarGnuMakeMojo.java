@@ -35,7 +35,7 @@ import org.apache.maven.plugin.MojoFailureException;
 public class NarGnuMakeMojo
     extends AbstractGnuMojo
 {
-    public void execute()
+    public final void execute()
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )

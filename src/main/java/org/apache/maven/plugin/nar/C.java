@@ -32,7 +32,7 @@ public class C
     {
     }
 
-    public String getName()
+    public final String getLanguage()
     {
         return "c";
     }

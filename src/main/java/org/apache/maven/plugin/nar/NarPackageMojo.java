@@ -45,7 +45,7 @@ public class NarPackageMojo
      */
     private MavenProjectHelper projectHelper;
 
-    public void execute()
+    public final void execute()
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )

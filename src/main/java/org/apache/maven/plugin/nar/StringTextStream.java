@@ -43,13 +43,13 @@ public class StringTextStream
      * (non-Javadoc)
      * @see org.apache.maven.plugin.nar.TextStream#println(java.lang.String)
      */
-    public void println( String text )
+    public final void println( String text )
     {
         sb.append( text );
         sb.append( lineSeparator );
     }
 
-    public String toString()
+    public final String toString()
     {
         return sb.toString();
     }

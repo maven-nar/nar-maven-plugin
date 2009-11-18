@@ -25,8 +25,7 @@ import org.junit.Test;
 
 public class HelloWorldSharedLibJNITest
 {
-    @Test
-    public void testNativeHelloWorldSharedLibJNI()
+    @Test public final void testNativeHelloWorldSharedLibJNI()
         throws Exception
     {
         HelloWorldSharedLibJNI app = new HelloWorldSharedLibJNI();

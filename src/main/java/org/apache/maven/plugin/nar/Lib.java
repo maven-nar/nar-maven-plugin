@@ -72,57 +72,69 @@ public class Lib
      */
     private List/* <Lib> */libs;
 
-    public void addLibSet( AbstractDependencyMojo mojo, LinkerDef linker, Project antProject )
-        throws MojoFailureException, MojoExecutionException
-    {
-        addLibSet( mojo, linker, antProject, name, directory );
-    }
-
-    private void addLibSet( AbstractDependencyMojo mojo, LinkerDef linker, Project antProject, String name, File dir )
+    public final void addLibSet( AbstractDependencyMojo mojo, LinkerDef linker, Project antProject )
         throws MojoFailureException, MojoExecutionException
     {
         if ( name == null )
         {
             throw new MojoFailureException( "NAR: Please specify <Name> as part of <Lib>" );
         }
+        addLibSet( mojo, linker, antProject, name, directory );
+    }
+
+    private void addLibSet( AbstractDependencyMojo mojo, LinkerDef linker, Project antProject, String name, File dir )
+        throws MojoFailureException, MojoExecutionException
+    {
         if ( libs == null )
         {
-            if ( !type.equals( "framework" ) && ( dir == null ) )
-            {
-                throw new MojoFailureException( "NAR: Please specify <Directory> as part of <Lib>" );
-            }
-            LibrarySet libSet = new LibrarySet();
-            libSet.setProject( antProject );
-            libSet.setLibs( new CUtil.StringArrayBuilder( name ) );
-            LibraryTypeEnum libType = new LibraryTypeEnum();
-            libType.setValue( type );
-            libSet.setType( libType );
-            libSet.setDir( dir );
-            linker.addLibset( libSet );
+            addSingleLibSet( linker, antProject, name, dir );
         }
         else
         {
-            List dependencies = mojo.getNarManager().getNarDependencies( "compile" );
-            for ( Iterator i = libs.iterator(); i.hasNext(); )
+            addMultipleLibSets( mojo, linker, antProject, name );
+        }
+    }
+
+    private void addSingleLibSet( LinkerDef linker, Project antProject, String name, File dir )
+        throws MojoFailureException, MojoExecutionException
+    {
+        if ( !type.equals( "framework" ) && ( dir == null ) )
+        {
+            throw new MojoFailureException( "NAR: Please specify <Directory> as part of <Lib>" );
+        }
+        LibrarySet libSet = new LibrarySet();
+        libSet.setProject( antProject );
+        libSet.setLibs( new CUtil.StringArrayBuilder( name ) );
+        LibraryTypeEnum libType = new LibraryTypeEnum();
+        libType.setValue( type );
+        libSet.setType( libType );
+        libSet.setDir( dir );
+        linker.addLibset( libSet );
+    }
+
+    private void addMultipleLibSets( AbstractDependencyMojo mojo, LinkerDef linker, Project antProject, String name )
+        throws MojoFailureException, MojoExecutionException
+    {
+        List dependencies = mojo.getNarManager().getNarDependencies( "compile" );
+        for ( Iterator i = libs.iterator(); i.hasNext(); )
+        {
+            Lib lib = (Lib) i.next();
+            String[] ids = name.split( ":", 2 );
+            if ( ids.length != 2 )
             {
-                Lib lib = (Lib) i.next();
-                String[] ids = name.split( ":", 2 );
-                if ( ids.length != 2 )
+                throw new MojoFailureException(
+                                                "NAR: Please specify <Name> as part of <Lib> in format 'groupId:artifactId'" );
+            }
+            for ( Iterator j = dependencies.iterator(); j.hasNext(); )
+            {
+                Artifact dependency = (Artifact) j.next();
+                if ( dependency.getGroupId().equals( ids[0] ) && dependency.getArtifactId().equals( ids[1] ) )
                 {
-                    throw new MojoFailureException(
-                                                    "NAR: Please specify <Name> as part of <Lib> in format 'groupId:artifactId'" );
-                }
-                for ( Iterator j = dependencies.iterator(); j.hasNext(); )
-                {
-                    Artifact dependency = (Artifact) j.next();
-                    if ( dependency.getGroupId().equals( ids[0] ) && dependency.getArtifactId().equals( ids[1] ) )
-                    {
-                        File narDir =
-                            new File( mojo.getNarManager().getNarFile( dependency ).getParentFile(), "nar/lib/"
-                                + mojo.getAOL() + "/" + lib.type );
-                        String narName = dependency.getArtifactId() + "-" + lib.name + "-" + dependency.getVersion();
-                        lib.addLibSet( mojo, linker, antProject, narName, narDir );
-                    }
+                    File narDir =
+                        new File( mojo.getNarManager().getNarFile( dependency ).getParentFile(), "nar/lib/"
+                            + mojo.getAOL() + "/" + lib.type );
+                    String narName = dependency.getArtifactId() + "-" + lib.name + "-" + dependency.getVersion();
+                    lib.addLibSet( mojo, linker, antProject, narName, narDir );
                 }
             }
         }

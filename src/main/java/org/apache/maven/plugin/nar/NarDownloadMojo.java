@@ -64,7 +64,7 @@ public class NarDownloadMojo
      */
     private List classifiers;
 
-    public void execute()
+    public final void execute()
         throws MojoExecutionException, MojoFailureException
     {
         getLog().info( "Using AOL: " + getAOL() );

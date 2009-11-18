@@ -39,7 +39,7 @@ public class NarArtifact
         this.narInfo = narInfo;
     }
 
-    public NarInfo getNarInfo()
+    public final NarInfo getNarInfo()
     {
         return narInfo;
     }

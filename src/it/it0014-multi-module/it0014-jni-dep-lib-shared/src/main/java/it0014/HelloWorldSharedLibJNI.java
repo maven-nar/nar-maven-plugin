@@ -26,7 +26,7 @@ public class HelloWorldSharedLibJNI
         NarSystem.loadLibrary();
     }
 
-    public native String sayHello();
+    public final native String sayHello();
 
     public static void main( String[] args )
     {

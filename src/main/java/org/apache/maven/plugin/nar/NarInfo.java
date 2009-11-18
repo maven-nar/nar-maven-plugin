@@ -146,7 +146,7 @@ public class NarInfo
         setProperty( aol, NarConstants.NAR+"." + type, nar );
     }
 
-    public AOL getAOL( AOL aol )
+    public final AOL getAOL( AOL aol )
     {
         return aol == null ? null : new AOL( getProperty( aol, aol.toString(), aol.toString() ) );
     }

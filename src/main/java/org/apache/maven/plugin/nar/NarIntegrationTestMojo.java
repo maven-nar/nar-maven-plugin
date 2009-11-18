@@ -783,8 +783,8 @@ public class NarIntegrationTestMojo
         }
         else
         {
-            List includes;
-            List excludes;
+            List includeList;
+            List excludeList;
 
             if ( test != null )
             {
@@ -793,9 +793,9 @@ public class NarIntegrationTestMojo
 
                 // FooTest -> **/FooTest.java
 
-                includes = new ArrayList();
+                includeList = new ArrayList();
 
-                excludes = new ArrayList();
+                excludeList = new ArrayList();
 
                 if ( failIfNoTests == null )
                 {
@@ -813,26 +813,26 @@ public class NarIntegrationTestMojo
                     }
                     // Allow paths delimited by '.' or '/'
                     testRegex = testRegex.replace('.', '/');
-                    includes.add( "**/" + testRegex + ".java" );
+                    includeList.add( "**/" + testRegex + ".java" );
                 }
             }
             else
             {
-                includes = this.includes;
+                includeList = this.includes;
 
-                excludes = this.excludes;
+                excludeList = this.excludes;
 
                 // defaults here, qdox doesn't like the end javadoc value
                 // Have to wrap in an ArrayList as surefire expects an ArrayList instead of a List for some reason
-                if ( includes == null || includes.size() == 0 )
+                if ( includeList == null || includeList.size() == 0 )
                 {
-                    includes =
+                    includeList =
                         new ArrayList( Arrays.asList( new String[] { "**/Test*.java", "**/*Test.java",
                             "**/*TestCase.java" } ) );
                 }
-                if ( excludes == null || excludes.size() == 0 )
+                if ( excludeList == null || excludeList.size() == 0 )
                 {
-                    excludes =
+                    excludeList =
                         new ArrayList( Arrays.asList( new String[] { "**/*$*" } ) );
                 }
             }
@@ -840,7 +840,7 @@ public class NarIntegrationTestMojo
             if ( testNgArtifact != null )
             {
                 surefireBooter.addTestSuite( "org.apache.maven.surefire.testng.TestNGDirectoryTestSuite", new Object[] {
-                    testClassesDirectory, includes, excludes, testSourceDirectory.getAbsolutePath(),
+                    testClassesDirectory, includeList, excludeList, testSourceDirectory.getAbsolutePath(),
                     testNgArtifact.getVersion(), testNgArtifact.getClassifier(), properties, reportsDirectory} );
             }
             else
@@ -858,8 +858,8 @@ public class NarIntegrationTestMojo
 
                 // fall back to JUnit, which also contains POJO support. Also it can run
                 // classes compiled against JUnit since it has a dependency on JUnit itself.
-                surefireBooter.addTestSuite( junitDirectoryTestSuite, new Object[] { testClassesDirectory, includes,
-                    excludes } );
+                surefireBooter.addTestSuite( junitDirectoryTestSuite, new Object[] { testClassesDirectory, includeList,
+                    excludeList } );
             }
         }
 

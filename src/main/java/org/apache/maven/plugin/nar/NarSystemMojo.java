@@ -40,7 +40,7 @@ public class NarSystemMojo
     extends AbstractCompileMojo
 {
 
-    public void execute()
+    public final void execute()
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )
@@ -94,7 +94,7 @@ public class NarSystemMojo
             p.println( " *" );            
             p.println( " * @author maven-nar-plugin" );            
             p.println( " */" );            
-            p.println( "public class NarSystem" );
+            p.println( "public final class NarSystem" );
             p.println( "{" );
             p.println( "" );
             p.println( "    private NarSystem() " );

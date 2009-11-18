@@ -161,11 +161,12 @@ public class NarManager
      * @throws MojoExecutionException
      * @throws MojoFailureException
      */
-    public final List/* <AttachedNarArtifact> */getAttachedNarDependencies( List/* <NarArtifacts> */narArtifacts, AOL aol,
+    public final List/* <AttachedNarArtifact> */getAttachedNarDependencies( List/* <NarArtifacts> */narArtifacts, AOL archOsLinker,
                                                                       String type )
         throws MojoExecutionException, MojoFailureException
     {
         boolean noarch = false;
+        AOL aol = archOsLinker;
         if ( aol == null )
         {
             noarch = true;
@@ -199,9 +200,10 @@ public class NarManager
         return artifactList;
     }
 
-    private List/* <AttachedNarArtifact> */getAttachedNarDependencies( Artifact dependency, AOL aol, String type )
+    private List/* <AttachedNarArtifact> */getAttachedNarDependencies( Artifact dependency, AOL archOsLinker, String type )
         throws MojoExecutionException, MojoFailureException
     {
+        AOL aol = archOsLinker;
         log.debug( "GetNarDependencies for " + dependency + ", aol: " + aol + ", type: " + type );
         List artifactList = new ArrayList();
         NarInfo narInfo = getNarInfo( dependency );

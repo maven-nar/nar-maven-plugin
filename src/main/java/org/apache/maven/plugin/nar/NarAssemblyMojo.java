@@ -54,7 +54,7 @@ public class NarAssemblyMojo
     /**
      * Copies the unpacked nar libraries and files into the projects target area
      */
-    public void execute()
+    public final void execute()
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )

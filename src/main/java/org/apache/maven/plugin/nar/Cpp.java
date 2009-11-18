@@ -31,7 +31,7 @@ public class Cpp
     {
     }
 
-    public String getName()
+    public final String getLanguage()
     {
         return "cpp";
     }

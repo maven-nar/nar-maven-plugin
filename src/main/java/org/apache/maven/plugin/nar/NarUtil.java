@@ -67,8 +67,9 @@ public final class NarUtil
         return defaults;
     }
 
-    public static String getOS( String os )
+    public static String getOS( String defaultOs )
     {
+        String os = defaultOs;
         // adjust OS if not given
         if ( os == null )
         {
@@ -97,11 +98,12 @@ public final class NarUtil
 
     public static Linker getLinker( Linker linker )
     {
-        if ( linker == null )
+        Linker link = linker;
+        if ( link == null )
         {
-            linker = new Linker();
+            link = new Linker();
         }
-        return linker;
+        return link;
     }
 
     public static String getLinkerName( String architecture, String os, Linker linker )
@@ -136,16 +138,17 @@ public final class NarUtil
 
     public static File getJavaHome( File javaHome, String os )
     {
+        File home = javaHome;
         // adjust JavaHome
-        if ( javaHome == null )
+        if ( home == null )
         {
-            javaHome = new File( System.getProperty( "java.home" ) );
+            home = new File( System.getProperty( "java.home" ) );
             if ( !getOS( os ).equals( OS.MACOSX ) )
             {
-                javaHome = new File( javaHome, ".." );
+                home = new File( home, ".." );
             }
         }
-        return javaHome;
+        return home;
     }
 
     public static void makeExecutable( File file, final Log log )
@@ -224,15 +227,15 @@ public final class NarUtil
      * @param filename the absolute file name of the class
      * @return the header file name.
      */
-    public static String getHeaderName( String base, String filename )
+    public static String getHeaderName( String basename, String filename )
     {
-        base = base.replaceAll( "\\\\", "/" );
-        filename = filename.replaceAll( "\\\\", "/" );
-        if ( !filename.startsWith( base ) )
+        String base = basename.replaceAll( "\\\\", "/" );
+        String file = filename.replaceAll( "\\\\", "/" );
+        if ( !file.startsWith( base ) )
         {
-            throw new IllegalArgumentException( "Error " + filename + " does not start with " + base );
+            throw new IllegalArgumentException( "Error " + file + " does not start with " + base );
         }
-        String header = filename.substring( base.length() + 1 );
+        String header = file.substring( base.length() + 1 );
         header = header.replaceAll( "/", "_" );
         header = header.replaceAll( "\\.class", ".h" );
         return header;
@@ -413,14 +416,15 @@ public final class NarUtil
             value = NarUtil.getEnv( pathName, pathName, null );
         }
 
-        path = path.replace( File.pathSeparatorChar, separator );
+        String libPath = path;
+        libPath = libPath.replace( File.pathSeparatorChar, separator );
         if ( value != null )
         {
-            value += separator + path;
+            value += separator + libPath;
         }
         else
         {
-            value = path;
+            value = libPath;
         }
         if ( environment != null )
         {

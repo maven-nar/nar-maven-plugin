@@ -33,7 +33,6 @@ import org.apache.tools.ant.Project;
  */
 public class SysLib
 {
-
     /**
      * Name of the system library
      * 
@@ -50,7 +49,7 @@ public class SysLib
      */
     private String type = Library.SHARED;
 
-    public SystemLibrarySet getSysLibSet( Project antProject )
+    public final SystemLibrarySet getSysLibSet( Project antProject )
         throws MojoFailureException
     {
         if ( name == null )

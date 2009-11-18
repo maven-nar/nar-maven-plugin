@@ -64,7 +64,7 @@ public class NarLogger
     {
     }
 
-    public void messageLogged( BuildEvent event )
+    public final void messageLogged( BuildEvent event )
     {
         String msg = event.getMessage();
         switch ( event.getPriority() )

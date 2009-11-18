@@ -334,14 +334,14 @@ public class Linker
 
         if ( !clearDefaultOptions )
         {
-            String options = NarUtil.getDefaults().getProperty( prefix + "options" );
-            if ( options != null )
+            String option = NarUtil.getDefaults().getProperty( prefix + "options" );
+            if ( option != null )
             {
-                String[] option = options.split( " " );
-                for ( int i = 0; i < option.length; i++ )
+                String[] opt = option.split( " " );
+                for ( int i = 0; i < opt.length; i++ )
                 {
                     LinkerArgument arg = new LinkerArgument();
-                    arg.setValue( option[i] );
+                    arg.setValue( opt[i] );
                     linker.addConfiguredLinkerArg( arg );
                 }
             }
@@ -353,11 +353,11 @@ public class Linker
 
             List libOrder = new LinkedList();
 
-            String[] libs = narDependencyLibOrder.split( "," );
+            String[] lib = narDependencyLibOrder.split( "," );
 
-            for ( int i = 0; i < libs.length; i++ )
+            for ( int i = 0; i < lib.length; i++ )
             {
-                libOrder.add( libs[i].trim() );
+                libOrder.add( lib[i].trim() );
             }
 
             mojo.setDependencyLibOrder( libOrder );

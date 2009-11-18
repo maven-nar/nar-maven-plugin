@@ -54,7 +54,7 @@ import org.codehaus.plexus.util.StringUtils;
 public class NarCompileMojo
     extends AbstractCompileMojo
 {
-    public void execute()
+    public final void execute()
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )

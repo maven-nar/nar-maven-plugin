@@ -36,12 +36,12 @@ public abstract class AbstractDependencyMojo
      */
     private ArtifactRepository localRepository;
 
-    protected ArtifactRepository getLocalRepository()
+    protected final ArtifactRepository getLocalRepository()
     {
         return localRepository;
     }
 
-    protected NarManager getNarManager()
+    protected final NarManager getNarManager()
         throws MojoFailureException
     {
         return new NarManager( getLog(), getLocalRepository(), getMavenProject(), getArchitecture(), getOS(),

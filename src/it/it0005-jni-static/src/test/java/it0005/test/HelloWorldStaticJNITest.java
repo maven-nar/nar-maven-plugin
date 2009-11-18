@@ -25,8 +25,7 @@ import org.junit.Test;
 
 public class HelloWorldStaticJNITest
 {
-    @Test
-    public void testNativeHelloWorldJNI()
+    @Test public final void testNativeHelloWorldJNI()
         throws Exception
     {
         HelloWorldStaticJNI app = new HelloWorldStaticJNI();

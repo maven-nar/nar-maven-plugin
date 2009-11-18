@@ -49,7 +49,7 @@ public abstract class Compiler
 {
 
     /**
-     * The name of the compiler Some choices are: "msvc", "g++", "gcc", "CC", "cc", "icc", "icpc", ... Default is
+     * The name of the compiler. Some choices are: "msvc", "g++", "gcc", "CC", "cc", "icc", "icpc", ... Default is
      * Architecture-OS-Linker specific: FIXME: table missing
      * 
      * @parameter expression=""
@@ -226,6 +226,20 @@ public abstract class Compiler
     {
     }
 
+    private String getName() throws MojoFailureException {
+        // adjust default values
+        if ( name == null )
+        {
+            name = NarUtil.getDefaults().getProperty( getPrefix() + "compiler" );
+        }
+        if ( name == null )
+        {
+            throw new MojoFailureException( "NAR: No compiler name defined for aol: "
+                + getPrefix() );
+        }
+        return name;
+    }
+    
     public final void setAbstractCompileMojo( AbstractCompileMojo mojo )
     {
         this.mojo = mojo;
@@ -298,15 +312,16 @@ public abstract class Compiler
 
     private List/* <String> */createIncludePaths( String type, List paths )
     {
-        if ( paths == null || ( paths.size() == 0 ) )
+        List includeList = paths;
+        if ( includeList == null || ( paths.size() == 0 ) )
         {
-            paths = new ArrayList();
+            includeList = new ArrayList();
             for ( Iterator i = getSourceDirectories( type ).iterator(); i.hasNext(); )
             {
-                paths.add( new File( (File) i.next(), "include" ).getPath() );
+                includeList.add( new File( (File) i.next(), "include" ).getPath() );
             }
         }
-        return paths;
+        return includeList;
     }
 
     public final Set getIncludes()
@@ -371,28 +386,16 @@ public abstract class Compiler
     protected final String getPrefix()
         throws MojoFailureException
     {
-        return mojo.getAOL().getKey() + "." + getName() + ".";
+        return mojo.getAOL().getKey() + "." + getLanguage() + ".";
     }
 
     public final CompilerDef getCompiler( String type, String output )
         throws MojoFailureException
     {
-
-        // adjust default values
-        if ( name == null )
-        {
-            name = NarUtil.getDefaults().getProperty( getPrefix() + "compiler" );
-        }
-        if ( name == null )
-        {
-            throw new MojoFailureException( "NAR: Please specify <Name> as part of <Cpp>, <C> or <Fortran> for "
-                + getPrefix() );
-        }
-
         CompilerDef compiler = new CompilerDef();
         compiler.setProject( mojo.getAntProject() );
         CompilerEnum compilerName = new CompilerEnum();
-        compilerName.setValue( name );
+        compilerName.setValue( getName() );
         compiler.setName( compilerName );
 
         // debug, exceptions, rtti, multiThreaded
@@ -450,16 +453,16 @@ public abstract class Compiler
         // add defines
         if ( defines != null )
         {
-            DefineSet defineSet = new DefineSet();
+            DefineSet ds = new DefineSet();
             for ( Iterator i = defines.iterator(); i.hasNext(); )
             {
                 DefineArgument define = new DefineArgument();
                 String[] pair = ( (String) i.next() ).split( "=", 2 );
                 define.setName( pair[0] );
                 define.setValue( pair.length > 1 ? pair[1] : null );
-                defineSet.addDefine( define );
+                ds.addDefine( define );
             }
-            compiler.addConfiguredDefineset( defineSet );
+            compiler.addConfiguredDefineset( ds );
         }
 
         if ( defineSet != null )
@@ -485,28 +488,28 @@ public abstract class Compiler
 
         if ( !clearDefaultDefines )
         {
-            DefineSet defineSet = new DefineSet();
+            DefineSet ds = new DefineSet();
             String defaultDefines = NarUtil.getDefaults().getProperty( getPrefix() + "defines" );
             if ( defaultDefines != null )
             {
-                defineSet.setDefine( new CUtil.StringArrayBuilder( defaultDefines ) );
+                ds.setDefine( new CUtil.StringArrayBuilder( defaultDefines ) );
             }
-            compiler.addConfiguredDefineset( defineSet );
+            compiler.addConfiguredDefineset( ds );
         }
 
         // add undefines
         if ( undefines != null )
         {
-            DefineSet undefineSet = new DefineSet();
+            DefineSet us = new DefineSet();
             for ( Iterator i = undefines.iterator(); i.hasNext(); )
             {
                 DefineArgument undefine = new DefineArgument();
                 String[] pair = ( (String) i.next() ).split( "=", 2 );
                 undefine.setName( pair[0] );
                 undefine.setValue( pair.length > 1 ? pair[1] : null );
-                undefineSet.addUndefine( undefine );
+                us.addUndefine( undefine );
             }
-            compiler.addConfiguredDefineset( undefineSet );
+            compiler.addConfiguredDefineset( us );
         }
 
         if ( undefineSet != null )
@@ -532,13 +535,13 @@ public abstract class Compiler
 
         if ( !clearDefaultUndefines )
         {
-            DefineSet undefineSet = new DefineSet();
+            DefineSet us = new DefineSet();
             String defaultUndefines = NarUtil.getDefaults().getProperty( getPrefix() + "undefines" );
             if ( defaultUndefines != null )
             {
-                undefineSet.setUndefine( new CUtil.StringArrayBuilder( defaultUndefines ) );
+                us.setUndefine( new CUtil.StringArrayBuilder( defaultUndefines ) );
             }
-            compiler.addConfiguredDefineset( undefineSet );
+            compiler.addConfiguredDefineset( us );
         }
 
         // add include path
@@ -560,8 +563,8 @@ public abstract class Compiler
 
         // Add default fileset (if exists)
         List srcDirs = getSourceDirectories( type );
-        Set includes = getIncludes();
-        Set excludes = getExcludes();
+        Set includeSet = getIncludes();
+        Set excludeSet = getExcludes();
 
         // now add all but the current test to the excludes
         for ( Iterator i = mojo.getTests().iterator(); i.hasNext(); )
@@ -569,20 +572,20 @@ public abstract class Compiler
             Test test = (Test) i.next();
             if ( !test.getName().equals( output ) )
             {
-                excludes.add( "**/" + test.getName() + ".*" );
+                excludeSet.add( "**/" + test.getName() + ".*" );
             }
         }
 
         for ( Iterator i = srcDirs.iterator(); i.hasNext(); )
         {
             File srcDir = (File) i.next();
-            mojo.getLog().debug( "Checking for existence of " + getName() + " source directory: " + srcDir );
+            mojo.getLog().debug( "Checking for existence of " + getLanguage() + " source directory: " + srcDir );
             if ( srcDir.exists() )
             {
                 ConditionalFileSet fileSet = new ConditionalFileSet();
                 fileSet.setProject( mojo.getAntProject() );
-                fileSet.setIncludes( StringUtils.join( includes.iterator(), "," ) );
-                fileSet.setExcludes( StringUtils.join( excludes.iterator(), "," ) );
+                fileSet.setIncludes( StringUtils.join( includeSet.iterator(), "," ) );
+                fileSet.setExcludes( StringUtils.join( excludeSet.iterator(), "," ) );
                 fileSet.setDir( srcDir );
                 compiler.addFileset( fileSet );
             }
@@ -594,13 +597,13 @@ public abstract class Compiler
             for ( Iterator i = mojo.getMavenProject().getCompileSourceRoots().iterator(); i.hasNext(); )
             {
                 File dir = new File( (String) i.next() );
-                mojo.getLog().debug( "Checking for existence of " + getName() + " sourceCompileRoot: " + dir );
+                mojo.getLog().debug( "Checking for existence of " + getLanguage() + " sourceCompileRoot: " + dir );
                 if ( dir.exists() )
                 {
                     ConditionalFileSet otherFileSet = new ConditionalFileSet();
                     otherFileSet.setProject( mojo.getAntProject() );
-                    otherFileSet.setIncludes( StringUtils.join( includes.iterator(), "," ) );
-                    otherFileSet.setExcludes( StringUtils.join( excludes.iterator(), "," ) );
+                    otherFileSet.setIncludes( StringUtils.join( includeSet.iterator(), "," ) );
+                    otherFileSet.setExcludes( StringUtils.join( excludeSet.iterator(), "," ) );
                     otherFileSet.setDir( dir );
                     compiler.addFileset( otherFileSet );
                 }
@@ -609,7 +612,7 @@ public abstract class Compiler
         return compiler;
     }
 
-    protected abstract String getName();
+    protected abstract String getLanguage();
 
     public final void copyIncludeFiles( MavenProject mavenProject, File targetDirectory )
         throws IOException

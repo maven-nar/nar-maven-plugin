@@ -55,7 +55,7 @@ public class NarUnpackMojo
      */
     private ArchiverManager archiverManager;
 
-    public void execute()
+    public final void execute()
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )

@@ -52,7 +52,7 @@ public class NarTestMojo
      */
     private List classpathElements;
 
-    public void execute()
+    public final void execute()
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )
@@ -118,7 +118,7 @@ public class NarTestMojo
         }
     }
 
-    protected File getTestTargetDirectory()
+    protected final File getTestTargetDirectory()
     {
         return new File( getMavenProject().getBuild().getDirectory(), "test-nar" );
     }

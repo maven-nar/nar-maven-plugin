@@ -38,7 +38,7 @@ public abstract class AbstractNarLayout
     implements NarLayout, NarConstants
 {
 
-    protected void attachNar( MavenProjectHelper projectHelper, MavenProject project, String classifier, File dir,
+    protected final void attachNar( MavenProjectHelper projectHelper, MavenProject project, String classifier, File dir,
                               String include )
         throws MojoExecutionException
     {

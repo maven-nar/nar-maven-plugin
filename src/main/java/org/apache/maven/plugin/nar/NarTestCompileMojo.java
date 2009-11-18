@@ -49,7 +49,7 @@ public class NarTestCompileMojo
     extends AbstractCompileMojo
 {
 
-    public void execute()
+    public final void execute()
         throws MojoExecutionException, MojoFailureException
     {
         if ( shouldSkip() )
@@ -235,7 +235,7 @@ public class NarTestCompileMojo
         }
     }
 
-    protected File getTestTargetDirectory()
+    protected final File getTestTargetDirectory()
     {
         return new File( getMavenProject().getBuild().getDirectory(), "test-nar" );
     }
