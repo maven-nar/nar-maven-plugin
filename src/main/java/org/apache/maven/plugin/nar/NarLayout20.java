@@ -6,6 +6,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
+import org.codehaus.plexus.archiver.manager.ArchiverManager;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -85,12 +86,12 @@ public class NarLayout20
      * @see org.apache.maven.plugin.nar.NarLayout#attachNars(java.io.File, org.apache.maven.project.MavenProjectHelper,
      * org.apache.maven.project.MavenProject, org.apache.maven.plugin.nar.NarInfo)
      */
-    public final void attachNars( File baseDir, MavenProjectHelper projectHelper, MavenProject project, NarInfo narInfo )
+    public final void attachNars( File baseDir, ArchiverManager archiverManager, MavenProjectHelper projectHelper, MavenProject project, NarInfo narInfo )
         throws MojoExecutionException
     {
         if ( getIncludeDirectory( baseDir ).exists() )
         {
-            attachNar( projectHelper, project, "noarch", baseDir, "include/**" );
+            attachNar( archiverManager, projectHelper, project, "noarch", baseDir, "include/**" );
             narInfo.setNar( null, "noarch", project.getGroupId() + ":" + project.getArtifactId() + ":"
                 + NarConstants.NAR_TYPE + ":" + "noarch" );
         }
@@ -98,7 +99,7 @@ public class NarLayout20
         String[] binAOL = new File( baseDir, "bin" ).list();
         for ( int i = 0; ( binAOL != null ) && ( i < binAOL.length ); i++ )
         {
-            attachNar( projectHelper, project, binAOL[i] + "-" + Library.EXECUTABLE, baseDir, "bin/" + binAOL[i]
+            attachNar( archiverManager, projectHelper, project, binAOL[i] + "-" + Library.EXECUTABLE, baseDir, "bin/" + binAOL[i]
                 + "/**" );
             narInfo.setNar( null, Library.EXECUTABLE, project.getGroupId() + ":" + project.getArtifactId() + ":"
                 + NarConstants.NAR_TYPE + ":" + "${aol}" + "-" + Library.EXECUTABLE );
@@ -114,7 +115,7 @@ public class NarLayout20
             String[] libType = new File( libDir, libAOL[i] ).list();
             for ( int j = 0; ( libType != null ) && ( j < libType.length ); j++ )
             {
-                attachNar( projectHelper, project, libAOL[i] + "-" + libType[j], baseDir, "lib/" + libAOL[i] + "/"
+                attachNar( archiverManager, projectHelper, project, libAOL[i] + "-" + libType[j], baseDir, "lib/" + libAOL[i] + "/"
                     + libType[j] + "/**" );
                 narInfo.setNar( null, libType[j], project.getGroupId() + ":" + project.getArtifactId() + ":"
                     + NarConstants.NAR_TYPE + ":" + "${aol}" + "-" + libType[j] );

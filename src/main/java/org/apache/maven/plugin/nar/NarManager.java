@@ -434,13 +434,13 @@ public class NarManager
         }
     }
 
-    private void unpackNar( ArchiverManager manager, File file, File location )
+    private void unpackNar( ArchiverManager archiverManager, File file, File location )
         throws MojoExecutionException
     {
         try
         {
             UnArchiver unArchiver;
-            unArchiver = manager.getUnArchiver( NarConstants.NAR_ROLE_HINT );
+            unArchiver = archiverManager.getUnArchiver( NarConstants.NAR_ROLE_HINT );
             unArchiver.setSourceFile( file );
             unArchiver.setDestDirectory( location );
             unArchiver.extract();

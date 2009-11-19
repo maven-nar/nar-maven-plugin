@@ -32,7 +32,7 @@ public interface NarConstants
     
     String NAR_AOL = "aol";
 
-    String NAR_ROLE_HINT = "nar-library";
+    String NAR_ROLE_HINT = NAR;
 
     String NAR_TYPE = NAR;
 

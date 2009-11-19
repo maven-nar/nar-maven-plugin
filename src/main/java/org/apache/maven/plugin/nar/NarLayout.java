@@ -6,6 +6,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
+import org.codehaus.plexus.archiver.manager.ArchiverManager;
 
 /*
 
@@ -61,6 +62,6 @@ public interface NarLayout
      * Called to attach nars to main jar file. This method needs to produce all the attached nar files and set NarInfo
      * accordingly.
      */
-    void attachNars( File baseDir, MavenProjectHelper projectHelper, MavenProject project, NarInfo narInfo )
+    void attachNars( File baseDir, ArchiverManager archiverManager, MavenProjectHelper projectHelper, MavenProject project, NarInfo narInfo )
         throws MojoExecutionException, MojoFailureException;
 }

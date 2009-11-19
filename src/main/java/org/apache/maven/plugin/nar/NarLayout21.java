@@ -5,6 +5,7 @@ import java.io.File;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
+import org.codehaus.plexus.archiver.manager.ArchiverManager;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -104,12 +105,12 @@ public class NarLayout21
      * @see org.apache.maven.plugin.nar.NarLayout#attachNars(java.io.File, org.apache.maven.project.MavenProjectHelper,
      * org.apache.maven.project.MavenProject, org.apache.maven.plugin.nar.NarInfo)
      */
-    public final void attachNars( File baseDir, MavenProjectHelper projectHelper, MavenProject project, NarInfo narInfo )
+    public final void attachNars( File baseDir, ArchiverManager archiverManager,  MavenProjectHelper projectHelper, MavenProject project, NarInfo narInfo )
         throws MojoExecutionException
     {
         if ( getNoarchDirectory( baseDir ).exists() )
         {
-            attachNar( projectHelper, project, NarConstants.NAR_NO_ARCH, getNoarchDirectory( baseDir ), "*/**" );
+            attachNar( archiverManager, projectHelper, project, NarConstants.NAR_NO_ARCH, getNoarchDirectory( baseDir ), "*/**" );
             narInfo.setNar( null, NarConstants.NAR_NO_ARCH, project.getGroupId() + ":" + project.getArtifactId() + ":"
                 + NarConstants.NAR_TYPE + ":" + NarConstants.NAR_NO_ARCH );
         }
@@ -119,7 +120,7 @@ public class NarLayout21
         for ( int i = 0; ( classifier != null ) && ( i < classifier.length ); i++ )
         {
             File dir = new File( classifierDir, classifier[i] );
-            attachNar( projectHelper, project, classifier[i], dir, "*/**" );
+            attachNar( archiverManager, projectHelper, project, classifier[i], dir, "*/**" );
 
             String type = null;
             AOL aol = null;
