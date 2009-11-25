@@ -77,4 +77,10 @@ public class TestGccCCompiler extends TestGccCompatibleCCompiler {
                 new File("foo.FoR"));
         assertTrue(parser instanceof FortranParser);
     }
+    public void testCreateFortranParser3() {
+        Parser parser = GccCCompiler.getInstance().createParser(
+                new File("foo.f90"));
+        assertTrue(parser instanceof FortranParser);
+    }
+    
 }

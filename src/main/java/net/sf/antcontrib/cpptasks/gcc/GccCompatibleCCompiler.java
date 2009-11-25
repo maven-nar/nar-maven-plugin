@@ -34,7 +34,7 @@ public abstract class GccCompatibleCCompiler extends CommandLineCCompiler {
     private final static String[] headerExtensions = new String[]{".h", ".hpp",
             ".inl"};
     private final static String[] sourceExtensions = new String[]{".c", ".cc",
-            ".cpp", ".cxx", ".c++", ".i", ".f", ".for"};
+            ".cpp", ".cxx", ".c++", ".i", ".f", ".for", ".f90"};
     /**
      * Private constructor. Use GccCCompiler.getInstance() to get singleton
      * instance of this class.

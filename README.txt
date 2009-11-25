@@ -4,6 +4,7 @@ Modified version of ant contrib cpptasks, used in the freehep/maven-nar-plugin.
 
 * cpptasks-1.0-beta-5-parallel-1-SNAPSHOT
 
+- added .f90 as extension for the fortran compiler, see NAR-108
 - merged with cpptasks-1.0b5.tar.gz
 - See NAR-103 for tests that have been changed
 

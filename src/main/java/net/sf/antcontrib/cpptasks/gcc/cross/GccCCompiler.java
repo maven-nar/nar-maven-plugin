@@ -50,6 +50,7 @@ public final class GccCCompiler extends GccCompatibleCCompiler {
             ".ii", /* preprocessed C++ */
             ".f", /* FORTRAN */
             ".for", /* FORTRAN */
+            ".f90", /* FORTRAN */
             ".m", /* Objective-C */
             ".mm", /* Objected-C++ */
             ".s" /* Assembly */
