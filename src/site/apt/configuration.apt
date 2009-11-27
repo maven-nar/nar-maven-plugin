@@ -104,6 +104,7 @@ NAR Configuration
       <option/>
     </options>
     <clearDefaultOptions/>
+    <compileOrder/>
   </cpp>
 
   <c>
