@@ -20,10 +20,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import net.sf.antcontrib.cpptasks.CCTask;
 import net.sf.antcontrib.cpptasks.CUtil;
@@ -76,7 +76,7 @@ public final class CBuilderXProjectWriter
                            final CCTask task,
                            final ProjectDef projectDef,
 						   final List sources,
-                           final Hashtable targets,
+                           final Map targets,
                            final TargetInfo linkTarget) throws
       IOException,
       SAXException {
@@ -302,7 +302,7 @@ public final class CBuilderXProjectWriter
    * @return representative (hopefully) compiler configuration
    */
   private CommandLineCompilerConfiguration
-      getBaseCompilerConfiguration(final Hashtable targets) {
+      getBaseCompilerConfiguration(final Map targets) {
     //
     //   find first target with an gcc or bcc compilation
     //

@@ -91,7 +91,7 @@ public final class DevStudioProjectWriter
                            final CCTask task,
                            final ProjectDef projectDef,
                            final List files,
-                           final Hashtable targets,
+                           final Map targets,
                            final TargetInfo linkTarget) throws IOException {
 
     //
@@ -255,7 +255,7 @@ public final class DevStudioProjectWriter
                            final String basePath,
                            CommandLineCompilerConfiguration compilerConfig,
                            TargetInfo linkTarget,
-                           Hashtable targets) throws IOException {
+                           Map targets) throws IOException {
       writer.write("# PROP BASE Use_MFC 0\r\n");
 
       String configType = "Release";
@@ -478,7 +478,7 @@ public final class DevStudioProjectWriter
    * @return representative (hopefully) compiler configuration
    */
   private CommandLineCompilerConfiguration
-      getBaseCompilerConfiguration(final Hashtable targets) {
+      getBaseCompilerConfiguration(final Map targets) {
     //
     //   find first target with an DevStudio C compilation
     //
@@ -614,7 +614,7 @@ public final class DevStudioProjectWriter
                                 final List dependencies,
                                 final String basePath,
                                 final TargetInfo linkTarget,
-                                final Hashtable targets) throws IOException {
+                                final Map targets) throws IOException {
 
     StringBuffer baseOptions = new StringBuffer(100);
     StringBuffer options = new StringBuffer(100);

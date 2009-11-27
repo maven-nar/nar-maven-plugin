@@ -18,11 +18,12 @@ package net.sf.antcontrib.cpptasks.ide;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.antcontrib.cpptasks.CCTask;
 import net.sf.antcontrib.cpptasks.TargetInfo;
+
 import org.xml.sax.SAXException;
 
 /**
@@ -47,7 +48,7 @@ public interface ProjectWriter {
                     final CCTask task,
                     final ProjectDef projectDef,
                     final List files,
-                    final Hashtable targets,
+                    final Map targets,
                     final TargetInfo linkTarget)
       throws IOException, SAXException;
 }

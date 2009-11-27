@@ -16,33 +16,33 @@
  */
 package net.sf.antcontrib.cpptasks.devstudio;
 
-import net.sf.antcontrib.cpptasks.CCTask;
-import net.sf.antcontrib.cpptasks.CUtil;
-import net.sf.antcontrib.cpptasks.TargetInfo;
-import net.sf.antcontrib.cpptasks.compiler.CommandLineCompilerConfiguration;
-import net.sf.antcontrib.cpptasks.compiler.ProcessorConfiguration;
-import net.sf.antcontrib.cpptasks.compiler.CommandLineLinkerConfiguration;
-import net.sf.antcontrib.cpptasks.ide.ProjectDef;
-import net.sf.antcontrib.cpptasks.ide.CommentDef;
-import net.sf.antcontrib.cpptasks.ide.ProjectWriter;
-import net.sf.antcontrib.cpptasks.ide.DependencyDef;
-import org.apache.tools.ant.BuildException;
-import org.apache.xml.serialize.OutputFormat;
-import org.apache.xml.serialize.XMLSerializer;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import net.sf.antcontrib.cpptasks.CCTask;
+import net.sf.antcontrib.cpptasks.CUtil;
+import net.sf.antcontrib.cpptasks.TargetInfo;
+import net.sf.antcontrib.cpptasks.compiler.CommandLineCompilerConfiguration;
+import net.sf.antcontrib.cpptasks.compiler.CommandLineLinkerConfiguration;
+import net.sf.antcontrib.cpptasks.compiler.ProcessorConfiguration;
+import net.sf.antcontrib.cpptasks.ide.CommentDef;
+import net.sf.antcontrib.cpptasks.ide.DependencyDef;
+import net.sf.antcontrib.cpptasks.ide.ProjectDef;
+import net.sf.antcontrib.cpptasks.ide.ProjectWriter;
+
+import org.apache.tools.ant.BuildException;
+import org.apache.xml.serialize.OutputFormat;
+import org.apache.xml.serialize.XMLSerializer;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * Writes a Visual Studio.NET project file.
@@ -647,7 +647,7 @@ public final class VisualStudioNETProjectWriter
                              final CCTask task,
                              final ProjectDef projectDef,
                              final List sources,
-                             final Hashtable targets,
+                             final Map targets,
                              final TargetInfo linkTarget) throws
             IOException,
             SAXException {
@@ -840,7 +840,7 @@ public final class VisualStudioNETProjectWriter
      * @return representative (hopefully) compiler configuration
      */
     private CommandLineCompilerConfiguration
-            getBaseCompilerConfiguration(final Hashtable targets) {
+            getBaseCompilerConfiguration(final Map targets) {
         //
         //   get the first target and assume that it is representative
         //

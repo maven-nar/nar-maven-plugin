@@ -16,6 +16,21 @@
  */
 package net.sf.antcontrib.cpptasks.apple;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.xml.transform.TransformerConfigurationException;
+
 import net.sf.antcontrib.cpptasks.CCTask;
 import net.sf.antcontrib.cpptasks.CUtil;
 import net.sf.antcontrib.cpptasks.TargetInfo;
@@ -26,23 +41,9 @@ import net.sf.antcontrib.cpptasks.gcc.GccCCompiler;
 import net.sf.antcontrib.cpptasks.ide.DependencyDef;
 import net.sf.antcontrib.cpptasks.ide.ProjectDef;
 import net.sf.antcontrib.cpptasks.ide.ProjectWriter;
+
 import org.apache.tools.ant.BuildException;
 import org.xml.sax.SAXException;
-
-import javax.xml.transform.TransformerConfigurationException;
-import java.io.File;
-import java.io.IOException;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 
 /**
@@ -74,7 +75,7 @@ public final class XcodeProjectWriter
                              final CCTask task,
                              final ProjectDef projectDef,
                              final List sources,
-                             final Hashtable targets,
+                             final Map targets,
                              final TargetInfo linkTarget) throws IOException {
 
         File xcodeDir = new File(fileName + ".xcodeproj");
@@ -337,7 +338,7 @@ public final class XcodeProjectWriter
     private List addSources(final Map objects,
                             final String sourceTree,
                             final String basePath,
-                            final Hashtable targets) {
+                            final Map targets) {
         List sourceGroupChildren = new ArrayList();
 
         ArrayList sourceList = new ArrayList(targets.size());
@@ -988,7 +989,7 @@ public final class XcodeProjectWriter
      * @return representative (hopefully) compiler configuration
      */
     private CommandLineCompilerConfiguration
-    getBaseCompilerConfiguration(Hashtable targets) {
+    getBaseCompilerConfiguration(Map targets) {
         //
         //   find first target with an GNU C++ compilation
         //

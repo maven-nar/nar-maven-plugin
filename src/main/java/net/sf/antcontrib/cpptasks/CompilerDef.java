@@ -16,6 +16,7 @@
  */
 package net.sf.antcontrib.cpptasks;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 
 import net.sf.antcontrib.cpptasks.compiler.CommandLineCompiler;
@@ -49,6 +50,7 @@ public final class CompilerDef extends ProcessorDef {
     private final Vector sysIncludePaths = new Vector();
     private OptimizationEnum optimization;
     private int warnings = -1;
+	private List order;
     public CompilerDef() {
     }
     /**
@@ -499,4 +501,17 @@ public final class CompilerDef extends ProcessorDef {
     	}
     	this.optimization = value;
     }
+    
+    // FREEHEP
+	/**
+	 * List of source filenames without extensions
+	 * @param asList
+	 */
+	public void setOrder(List/*<String>*/ order) {
+		this.order = order;
+	}
+	
+	public List getOrder() {
+		return order;
+	}
 }

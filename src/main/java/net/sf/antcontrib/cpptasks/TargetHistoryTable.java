@@ -23,6 +23,8 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.xml.parsers.SAXParser;
@@ -317,10 +319,10 @@ public final class TargetHistoryTable {
         }
         return targetHistory;
     }
-    public void markForRebuild(Hashtable targetInfos) {
-        Enumeration targetInfoEnum = targetInfos.elements();
-        while (targetInfoEnum.hasMoreElements()) {
-            markForRebuild((TargetInfo) targetInfoEnum.nextElement());
+    public void markForRebuild(Map targetInfos) {
+        Iterator targetInfoEnum = targetInfos.values().iterator();
+        while (targetInfoEnum.hasNext()) {
+            markForRebuild((TargetInfo) targetInfoEnum.next());
         }
     }
  // FREEHEP added synchronized    

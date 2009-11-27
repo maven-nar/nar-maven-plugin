@@ -19,11 +19,13 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import net.sf.antcontrib.cpptasks.compiler.CompilerConfiguration;
@@ -171,11 +173,11 @@ public class CCTask extends Task {
      * Builds a Hashtable to targets needing to be rebuilt keyed by compiler
      * configuration
      */
-    public static Hashtable getTargetsToBuildByConfiguration(Hashtable targets) {
+    public static Hashtable getTargetsToBuildByConfiguration(Map targets) {
         Hashtable targetsByConfig = new Hashtable();
-        Enumeration targetEnum = targets.elements();
-        while (targetEnum.hasMoreElements()) {
-            TargetInfo target = (TargetInfo) targetEnum.nextElement();
+        Iterator targetEnum = targets.values().iterator();
+        while (targetEnum.hasNext()) {
+            TargetInfo target = (TargetInfo) targetEnum.next();
             if (target.getRebuild()) {
                 Vector targetsForSameConfig = (Vector) targetsByConfig
                         .get(target.getConfiguration());
@@ -193,6 +195,7 @@ public class CCTask extends Task {
     }
     // FREEHEP
     private int maxCores = 0;
+    private boolean ordered = false;
     /** The compiler definitions. */
     private Vector _compilers = new Vector();
     /** The output file type. */
@@ -395,12 +398,12 @@ public class CCTask extends Task {
      * @return total number of targets to be rebuilt
      *  
      */
-    protected int checkForChangedIncludeFiles(Hashtable targets) {
+    protected int checkForChangedIncludeFiles(Map targets) {
         int potentialTargets = 0;
         int definiteTargets = 0;
-        Enumeration targetEnum = targets.elements();
-        while (targetEnum.hasMoreElements()) {
-            TargetInfo target = (TargetInfo) targetEnum.nextElement();
+        Iterator targetEnum = targets.values().iterator();
+        while (targetEnum.hasNext()) {
+            TargetInfo target = (TargetInfo) targetEnum.next();
             if (!target.getRebuild()) {
                 potentialTargets++;
             } else {
@@ -420,9 +423,9 @@ public class CCTask extends Task {
             } catch (Exception ex) {
                 log("Problem reading dependencies.xml: " + ex.toString());
             }
-            targetEnum = targets.elements();
-            while (targetEnum.hasMoreElements()) {
-                TargetInfo target = (TargetInfo) targetEnum.nextElement();
+            targetEnum = targets.values().iterator();
+            while (targetEnum.hasNext()) {
+                TargetInfo target = (TargetInfo) targetEnum.next();
                 if (!target.getRebuild()) {
                     if (dependencyTable.needsRebuild(this, target,
                             dependencyDepth)) {
@@ -436,9 +439,9 @@ public class CCTask extends Task {
         //   count files being rebuilt now
         //
         int currentTargets = 0;
-        targetEnum = targets.elements();
-        while (targetEnum.hasMoreElements()) {
-            TargetInfo target = (TargetInfo) targetEnum.nextElement();
+        targetEnum = targets.values().iterator();
+        while (targetEnum.hasNext()) {
+            TargetInfo target = (TargetInfo) targetEnum.next();
             if (target.getRebuild()) {
                 currentTargets++;
             }
@@ -631,7 +634,7 @@ public class CCTask extends Task {
         //   Assemble hashtable of all files
         //       that we know how to compile (keyed by output file name)
         //
-        Hashtable targets = getTargets(linkerConfig, objectFiles, versionInfo, _outfile);
+        Map targets = getTargets(linkerConfig, objectFiles, versionInfo, _outfile);
         TargetInfo linkTarget = null;
         //
         //   if output file is not specified,
@@ -750,11 +753,14 @@ public class CCTask extends Task {
                     noOfCores = noOfFiles;
                     log("Limited used processors to "+noOfCores);                   
                 }
+                if (ordered) {
+                	noOfCores = 1;
+                	log("Limited processors to 1 due to ordering of source files");
+                }
                 
-                Set[] sourceFiles = new HashSet[noOfCores];
+                List[] sourceFiles = new List[noOfCores];
                 for (int j = 0; j < sourceFiles.length; j++) {
-                    sourceFiles[j] = new HashSet(noOfFiles
-                            / sourceFiles.length);
+                    sourceFiles[j] = new ArrayList(noOfFiles / sourceFiles.length);
                 }
                 Enumeration targetsEnum = targetsForConfig.elements();
                 index = 0;
@@ -956,13 +962,13 @@ public class CCTask extends Task {
         private CCTask task;
         private CompilerConfiguration config;
         private File objDir;
-        private Set sourceFiles;
+        private List sourceFiles;
         private boolean relentless;
         private CCTaskProgressMonitor monitor;
         private Exception compileException;
 
         Core(CCTask task, int coreNo, CompilerConfiguration config, File objDir,
-                Set set, boolean relentless,
+                List set, boolean relentless,
                 CCTaskProgressMonitor monitor) {
             super("Core "+coreNo);
             this.task = task;
@@ -982,6 +988,7 @@ public class CCTask extends Task {
             try {
                 String[] sources = new String[sourceFiles.size()];
                 sources = (String[]) sourceFiles.toArray(sources);
+                
                 config.compile(task, objDir, sources, relentless, monitor);
             } catch (Exception ex) {
                 if (compileException == null) {
@@ -1066,7 +1073,7 @@ public class CCTask extends Task {
     }
     protected TargetInfo getLinkTarget(LinkerConfiguration linkerConfig,
             Vector objectFiles, Vector sysObjectFiles, 
-			Hashtable compileTargets, VersionInfo versionInfo) {
+			Map compileTargets, VersionInfo versionInfo) {
         //
         //  walk the compile phase targets and
         //     add those sources that have already been
@@ -1074,10 +1081,10 @@ public class CCTask extends Task {
         //     our output files the linker knows how to consume
         //     files the linker knows how to consume
         //
-        Enumeration compileTargetsEnum = compileTargets.elements();
-        while (compileTargetsEnum.hasMoreElements()) {
-            TargetInfo compileTarget = (TargetInfo) compileTargetsEnum
-                    .nextElement();
+        Iterator compileTargetsIterator = compileTargets.values().iterator();
+        while (compileTargetsIterator.hasNext()) {
+            TargetInfo compileTarget = (TargetInfo) compileTargetsIterator
+                    .next();
             //
             //   output of compile tasks
             //
@@ -1113,9 +1120,48 @@ public class CCTask extends Task {
      * appropriate compiler configurations for their possible compilation
      *  
      */
-    private Hashtable getTargets(LinkerConfiguration linkerConfig,
+    private Map getTargets(LinkerConfiguration linkerConfig,
             Vector objectFiles, VersionInfo versionInfo, File outputFile) {
-        Hashtable targets = new Hashtable(1000);
+        // FREEHEP
+        final List order = new ArrayList();
+    	
+        Map targets = new TreeMap(new Comparator() {
+        	// Order according to "order" List followed by alphabetical order
+            public int compare( Object arg0, Object arg1 ) {
+                String f0 = (String)arg0;
+                f0 = f0.lastIndexOf('.') < 0 ? f0 : f0.substring(0, f0.lastIndexOf('.'));
+                String f1 = (String)arg1;
+                f1 = f1.lastIndexOf('.') < 0 ? f1 : f1.substring(0, f1.lastIndexOf('.'));
+                                                
+                if (order.isEmpty()) return f0.compareTo(f1);
+
+                // make sure we use only one core
+                ordered = true;
+                
+                // order according to list or alphabetical
+                int i0 = order.indexOf(f0);
+                int i1 = order.indexOf(f1);
+                
+                if (i0 < 0) {
+                	if (i1 < 0) {
+                		// none in list
+                		return f0.compareTo(f1);
+                	} else {
+                		// i1 in list
+                		return +1;
+                	}
+                } else {
+                	if (i1 < 0) {
+                		// i0 in list
+                		return -1;
+                	} else {
+                		// both in list
+                		return i0 == i1 ? 0 : i0 < i1 ? -1 : +1;
+                	}
+                }
+            }
+        });
+        
         TargetDef targetPlatform = getTargetPlatform();
         //
         //   find active (specialized) compilers
@@ -1180,6 +1226,15 @@ public class CCTask extends Task {
                         localConfigs[1] = config;
                     }
                 }
+            	// BEGINFREEHEP
+                // a little trick here, the inner function needs the list to be final, so we repopulate it
+                order.clear();
+            	List newOrder = currentCompilerDef.getOrder();
+            	if (newOrder != null) {
+            		order.addAll(newOrder);
+            	}
+                // ENDFREEHEP
+            	
                 //
                 //   if the compiler has a fileset
                 //       then allow it to add its files

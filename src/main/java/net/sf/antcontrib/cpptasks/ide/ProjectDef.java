@@ -16,18 +16,19 @@
  */
 package net.sf.antcontrib.cpptasks.ide;
 
-import net.sf.antcontrib.cpptasks.CCTask;
-import net.sf.antcontrib.cpptasks.CUtil;
-import net.sf.antcontrib.cpptasks.TargetInfo;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.types.DataType;
-
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
+
+import net.sf.antcontrib.cpptasks.CCTask;
+import net.sf.antcontrib.cpptasks.CUtil;
+import net.sf.antcontrib.cpptasks.TargetInfo;
+
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.types.DataType;
 
 /**
  *  Requests the creation of an IDE project file.  Experimental.
@@ -294,7 +295,7 @@ public final class ProjectDef
    */
   public void execute(final CCTask task,
                       final List sources,
-                      final Hashtable targets,
+                      final Map targets,
                       final TargetInfo linkTarget) {
     try {
       projectWriter.writeProject(outFile,

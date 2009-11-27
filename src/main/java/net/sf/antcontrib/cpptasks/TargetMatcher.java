@@ -16,7 +16,7 @@
  */
 package net.sf.antcontrib.cpptasks;
 import java.io.File;
-import java.util.Hashtable;
+import java.util.Map;
 import java.util.Vector;
 
 import net.sf.antcontrib.cpptasks.compiler.LinkerConfiguration;
@@ -34,12 +34,12 @@ public final class TargetMatcher implements FileVisitor {
     private File outputDir;
     private ProcessorConfiguration[] processors;
     private final File sourceFiles[] = new File[1];
-    private Hashtable targets;
+    private Map targets;
     private VersionInfo versionInfo;
     private CCTask task;
     public TargetMatcher(CCTask task, File outputDir,
             ProcessorConfiguration[] processors, LinkerConfiguration linker,
-            Vector objectFiles, Hashtable targets,
+            Vector objectFiles, Map targets,
 			VersionInfo versionInfo) {
         this.task = task;
         this.outputDir = outputDir;
