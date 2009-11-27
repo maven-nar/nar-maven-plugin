@@ -22,6 +22,7 @@ package org.apache.maven.plugin.nar;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -217,6 +218,13 @@ public abstract class Compiler
      * @required
      */
     private boolean clearDefaultOptions;
+    
+    /**
+     * Comma separated list of filenames to compile in order
+     * 
+     * @parameter expression=""
+     */
+    private String compileOrder;
 
     private AbstractCompileMojo mojo;
 
@@ -582,6 +590,10 @@ public abstract class Compiler
             mojo.getLog().debug( "Checking for existence of " + getLanguage() + " source directory: " + srcDir );
             if ( srcDir.exists() )
             {
+                if (compileOrder != null) {
+                    compiler.setOrder(Arrays.asList(StringUtils.split(compileOrder, ", ")));
+                }
+                
                 ConditionalFileSet fileSet = new ConditionalFileSet();
                 fileSet.setProject( mojo.getAntProject() );
                 fileSet.setIncludes( StringUtils.join( includeSet.iterator(), "," ) );

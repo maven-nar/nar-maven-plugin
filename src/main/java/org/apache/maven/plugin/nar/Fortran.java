@@ -27,7 +27,6 @@ package org.apache.maven.plugin.nar;
 public class Fortran
     extends Compiler
 {
-
     public Fortran()
     {
     }
