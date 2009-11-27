@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -173,8 +174,8 @@ public class CCTask extends Task {
      * Builds a Hashtable to targets needing to be rebuilt keyed by compiler
      * configuration
      */
-    public static Hashtable getTargetsToBuildByConfiguration(Map targets) {
-        Hashtable targetsByConfig = new Hashtable();
+    public static Map getTargetsToBuildByConfiguration(Map targets) {
+        Map targetsByConfig = new HashMap();
         Iterator targetEnum = targets.values().iterator();
         while (targetEnum.hasNext()) {
             TargetInfo target = (TargetInfo) targetEnum.next();
@@ -688,17 +689,17 @@ public class CCTask extends Task {
             //
             //    compile all targets with getRebuild() == true
             //
-            Hashtable targetsByConfig = getTargetsToBuildByConfiguration(targets);
+            Map targetsByConfig = getTargetsToBuildByConfiguration(targets);
             //
             //    build array containing Vectors with precompiled generation
             //       steps going first
             //
             Vector[] targetVectors = new Vector[targetsByConfig.size()];
             int index = 0;
-            Enumeration targetVectorEnum = targetsByConfig.elements();
-            while (targetVectorEnum.hasMoreElements()) {
+            Iterator targetVectorEnum = targetsByConfig.values().iterator();
+            while (targetVectorEnum.hasNext()) {
                 Vector targetsForConfig = (Vector) targetVectorEnum
-                        .nextElement();
+                        .next();
                 //
                 //    get the configuration from the first entry
                 //
@@ -708,10 +709,10 @@ public class CCTask extends Task {
                     targetVectors[index++] = targetsForConfig;
                 }
             }
-            targetVectorEnum = targetsByConfig.elements();
-            while (targetVectorEnum.hasMoreElements()) {
+            targetVectorEnum = targetsByConfig.values().iterator();
+            while (targetVectorEnum.hasNext()) {
                 Vector targetsForConfig = (Vector) targetVectorEnum
-                        .nextElement();
+                        .next();
                 for (int i = 0; i < targetVectors.length; i++) {
                     if (targetVectors[i] == targetsForConfig) {
                         break;

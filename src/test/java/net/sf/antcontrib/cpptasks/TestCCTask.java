@@ -19,8 +19,10 @@ package net.sf.antcontrib.cpptasks;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
+
 import junit.framework.TestCase;
 import net.sf.antcontrib.cpptasks.compiler.CommandLineCompilerConfiguration;
 import net.sf.antcontrib.cpptasks.compiler.CompilerConfiguration;
@@ -53,9 +55,9 @@ public final class TestCCTask
     TargetInfo target1 = new TargetInfo(config1, new File[] {new File(
         "src/foo.bar")}
                                         , null, new File("foo.obj"), true);
-    Hashtable targets = new Hashtable();
+    Map targets = new HashMap();
     targets.put(target1.getOutput(), target1);
-    Hashtable targetsByConfig = CCTask
+    Map targetsByConfig = CCTask
         .getTargetsToBuildByConfiguration(targets);
     Vector targetsForConfig1 = (Vector) targetsByConfig.get(config1);
     assertNotNull(targetsForConfig1);
@@ -80,12 +82,12 @@ public final class TestCCTask
     TargetInfo target1 = new TargetInfo(config1, new File[] {new File(
         "src/foo.bar")}
                                         , null, new File("foo.obj"), false);
-    Hashtable targets = new Hashtable();
+    Map targets = new HashMap();
     targets.put(target1.getOutput(), target1);
     //
     //    no targets need to be built, return a zero-length hashtable
     //
-    Hashtable targetsByConfig = CCTask
+    Map targetsByConfig = CCTask
         .getTargetsToBuildByConfiguration(targets);
     assertEquals(0, targetsByConfig.size());
   }
