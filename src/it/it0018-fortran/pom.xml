@@ -62,14 +62,9 @@ under the License.
               <libraries>
                 <library>
                   <type>executable</type>
-                  <linkFortran />
+                  <linkFortran>true</linkFortran>
                 </library>
               </libraries>
-              <linker>
-                <options>
-                  <option>-lgfortran</option>
-                </options>
-              </linker>
             </configuration>
           </plugin>
         </plugins>
