@@ -71,6 +71,29 @@ under the License.
       </build>
     </profile>      
 
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+
+      <build>
+        <defaultGoal>install</defaultGoal>
+        <plugins>
+          <plugin>
+            <artifactId>maven-nar-plugin</artifactId>
+            <extensions>true</extensions>
+            <configuration>
+              <skip>true</skip>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+
   </profiles>
 
 </project>

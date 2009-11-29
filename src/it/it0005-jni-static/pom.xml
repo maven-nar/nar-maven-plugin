@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--
-Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
+  <!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements. See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to you under the Apache License, Version
+    2.0 (the "License"); you may not use this file except in compliance
+    with the License. You may obtain a copy of the License at
 
-  http://www.apache.org/licenses/LICENSE-2.0
+    http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+    applicable law or agreed to in writing, software distributed under
+    the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
+    OR CONDITIONS OF ANY KIND, either express or implied. See the
+    License for the specific language governing permissions and
+    limitations under the License.
+  -->
 
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
--->
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -31,14 +29,14 @@ under the License.
 
   <artifactId>it0005-jni-static</artifactId>
   <packaging>nar</packaging>
-  
+
   <name>Maven NAR Static JNI Test</name>
   <version>1.0-SNAPSHOT</version>
   <description>
     Simple Static JNI Library
   </description>
   <url>http://maven.apache.org/</url>
-  
+
   <properties>
     <skipTests>true</skipTests>
   </properties>
@@ -68,10 +66,12 @@ under the License.
           </plugin>
         </plugins>
       </build>
-    </profile>      
+    </profile>
 
-    <!-- does not build on AMD64 as this platforms needs all static (libc included) libraries to be compiled with -fPIC 
-    so, for now we build the shared version. -->
+    <!--
+      does not build on AMD64 as this platforms needs all static (libc
+      included) libraries to be compiled with -fPIC
+    -->
     <profile>
       <id>amd64</id>
       <activation>
@@ -80,7 +80,7 @@ under the License.
           <arch>amd64</arch>
         </os>
       </activation>
-      
+
       <build>
         <defaultGoal>install</defaultGoal>
         <plugins>
@@ -88,13 +88,7 @@ under the License.
             <artifactId>maven-nar-plugin</artifactId>
             <extensions>true</extensions>
             <configuration>
-              <libraries>
-                <library>
-                  <type>jni</type>
-                  <narSystemPackage>it0005</narSystemPackage>
-                  <linkCPP>false</linkCPP>
-                </library>
-              </libraries>
+              <skip>true</skip>
             </configuration>
           </plugin>
         </plugins>
