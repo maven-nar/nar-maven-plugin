@@ -66,6 +66,13 @@ public class Library
     private boolean linkFortran = false;
 
     /**
+     * Link with fortran startup, so that the gcc linker can find the "main" of fortran. Defaults to false.
+     * 
+     * @parameter expression=""
+     */
+    private boolean linkFortranMain = false;
+
+    /**
      * If specified will create the NarSystem class with methods to load a JNI library.
      * 
      * @parameter expression=""
@@ -116,6 +123,11 @@ public class Library
     public final boolean linkFortran()
     {
         return linkFortran;
+    }
+
+    public final boolean linkFortranMain()
+    {
+        return linkFortranMain;
     }
 
     public final String getNarSystemPackage()

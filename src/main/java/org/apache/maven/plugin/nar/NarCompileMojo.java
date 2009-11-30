@@ -140,6 +140,7 @@ public class NarCompileMojo
 
         // fortran
         task.setLinkFortran( library.linkFortran() );
+        task.setLinkFortranMain( library.linkFortranMain() );
 
         // outDir
         File outDir;

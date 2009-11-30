@@ -63,6 +63,7 @@ under the License.
                 <library>
                   <type>executable</type>
                   <linkFortran>true</linkFortran>
+                  <linkFortranMain>true</linkFortranMain>
                 </library>
               </libraries>
             </configuration>

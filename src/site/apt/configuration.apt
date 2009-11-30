@@ -32,6 +32,7 @@ NAR Configuration
       <type/>
       <linkCPP/>
       <linkFortran/>
+      <linkFortranMain/>
       <run/>
       <args>
         <arg/>
