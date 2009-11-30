@@ -26,6 +26,7 @@ import java.util.List;
 
 import net.sf.antcontrib.cpptasks.CCTask;
 import net.sf.antcontrib.cpptasks.CUtil;
+import net.sf.antcontrib.cpptasks.CompilerDef;
 import net.sf.antcontrib.cpptasks.OutputTypeEnum;
 import net.sf.antcontrib.cpptasks.RuntimeType;
 import net.sf.antcontrib.cpptasks.types.LibrarySet;
@@ -105,14 +106,31 @@ public class NarTestCompileMojo
         runtimeType.setValue( getRuntime( getAOL() ) );
         task.setRuntime( runtimeType );
 
+        int noOfCompilers = 0;
+
         // add C++ compiler
-        task.addConfiguredCompiler( getCpp().getCompiler( type, test.getName() ) );
+        CompilerDef cpp = getCpp().getCompiler( type, test.getName() );
+        if ( cpp != null )
+        {
+            task.addConfiguredCompiler( cpp );
+            noOfCompilers++;
+        }
 
         // add C compiler
-        task.addConfiguredCompiler( getC().getCompiler( type, test.getName() ) );
+        CompilerDef c = getC().getCompiler( type, test.getName() );
+        if ( c != null )
+        {
+            task.addConfiguredCompiler( c );
+            noOfCompilers++;
+        }
 
         // add Fortran compiler
-        task.addConfiguredCompiler( getFortran().getCompiler( type, test.getName() ) );
+        CompilerDef fortran = getFortran().getCompiler( type, test.getName() );
+        if ( fortran != null )
+        {
+            task.addConfiguredCompiler( fortran );
+            noOfCompilers++;
+        }
 
         // add java include paths
         getJava().addIncludePaths( task, type );

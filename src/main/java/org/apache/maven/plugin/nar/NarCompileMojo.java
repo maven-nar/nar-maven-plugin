@@ -29,6 +29,7 @@ import java.util.List;
 
 import net.sf.antcontrib.cpptasks.CCTask;
 import net.sf.antcontrib.cpptasks.CUtil;
+import net.sf.antcontrib.cpptasks.CompilerDef;
 import net.sf.antcontrib.cpptasks.LinkerDef;
 import net.sf.antcontrib.cpptasks.OutputTypeEnum;
 import net.sf.antcontrib.cpptasks.RuntimeType;
@@ -184,15 +185,32 @@ public class NarCompileMojo
         runtimeType.setValue( getRuntime( getAOL() ) );
         task.setRuntime( runtimeType );
 
+        int noOfCompilers = 0;
+
         // add C++ compiler
-        task.addConfiguredCompiler( getCpp().getCompiler( type, getOutput( getAOL() ) ) );
+        CompilerDef cpp = getCpp().getCompiler( type, getOutput( getAOL() ) );
+        if ( cpp != null )
+        {
+            task.addConfiguredCompiler( cpp );
+            noOfCompilers++;
+        }
 
         // add C compiler
-        task.addConfiguredCompiler( getC().getCompiler( type, getOutput( getAOL() ) ) );
+        CompilerDef c = getC().getCompiler( type, getOutput( getAOL() ) );
+        if ( c != null )
+        {
+            task.addConfiguredCompiler( c );
+            noOfCompilers++;
+        }
 
         // add Fortran compiler
-        task.addConfiguredCompiler( getFortran().getCompiler( type, getOutput( getAOL() ) ) );
-
+        CompilerDef fortran = getFortran().getCompiler( type, getOutput( getAOL() ) );
+        if ( fortran != null )
+        {
+            task.addConfiguredCompiler( fortran );
+            noOfCompilers++;
+        }
+        
         // add javah include path
         File jniDirectory = getJavah().getJniDirectory();
         if ( jniDirectory.exists() )

@@ -218,7 +218,7 @@ public abstract class Compiler
      * @required
      */
     private boolean clearDefaultOptions;
-    
+
     /**
      * Comma separated list of filenames to compile in order
      * 
@@ -229,25 +229,22 @@ public abstract class Compiler
     private AbstractCompileMojo mojo;
 
     private static final String TEST = "test";
-    
+
     protected Compiler()
     {
     }
 
-    private String getName() throws MojoFailureException {
+    private String getName()
+        throws MojoFailureException
+    {
         // adjust default values
         if ( name == null )
         {
             name = NarUtil.getDefaults().getProperty( getPrefix() + "compiler" );
         }
-        if ( name == null )
-        {
-            throw new MojoFailureException( "NAR: No compiler name defined for aol: "
-                + getPrefix() );
-        }
         return name;
     }
-    
+
     public final void setAbstractCompileMojo( AbstractCompileMojo mojo )
     {
         this.mojo = mojo;
@@ -304,11 +301,12 @@ public abstract class Compiler
             }
         }
 
-        if (mojo.getLog().isDebugEnabled()) {
-        for ( Iterator i = sourceDirectories.iterator(); i.hasNext(); )
+        if ( mojo.getLog().isDebugEnabled() )
         {
-            mojo.getLog().debug( "Added to sourceDirectory: " + ((File)i.next()).getPath() );
-        }
+            for ( Iterator i = sourceDirectories.iterator(); i.hasNext(); )
+            {
+                mojo.getLog().debug( "Added to sourceDirectory: " + ( (File) i.next() ).getPath() );
+            }
         }
         return sourceDirectories;
     }
@@ -349,17 +347,13 @@ public abstract class Compiler
         else
         {
             String defaultIncludes = NarUtil.getDefaults().getProperty( getPrefix() + "includes" );
-            if ( defaultIncludes == null )
+            if ( defaultIncludes != null )
             {
-                throw new MojoFailureException(
-                                                "NAR: Please specify <Includes> as part of <Cpp>, <C> or <Fortran> for "
-                                                    + getPrefix() );
-            }
-
-            String[] include = defaultIncludes.split( " " );
-            for ( int i = 0; i < include.length; i++ )
-            {
-                result.add( include[i].trim() );
+                String[] include = defaultIncludes.split( " " );
+                for ( int i = 0; i < include.length; i++ )
+                {
+                    result.add( include[i].trim() );
+                }
             }
         }
         return result;
@@ -400,10 +394,13 @@ public abstract class Compiler
     public final CompilerDef getCompiler( String type, String output )
         throws MojoFailureException
     {
+        String name = getName();
+        if (name == null) return null;
+        
         CompilerDef compiler = new CompilerDef();
         compiler.setProject( mojo.getAntProject() );
         CompilerEnum compilerName = new CompilerEnum();
-        compilerName.setValue( getName() );
+        compilerName.setValue( name );
         compiler.setName( compilerName );
 
         // debug, exceptions, rtti, multiThreaded
@@ -590,10 +587,11 @@ public abstract class Compiler
             mojo.getLog().debug( "Checking for existence of " + getLanguage() + " source directory: " + srcDir );
             if ( srcDir.exists() )
             {
-                if (compileOrder != null) {
-                    compiler.setOrder(Arrays.asList(StringUtils.split(compileOrder, ", ")));
+                if ( compileOrder != null )
+                {
+                    compiler.setOrder( Arrays.asList( StringUtils.split( compileOrder, ", " ) ) );
                 }
-                
+
                 ConditionalFileSet fileSet = new ConditionalFileSet();
                 fileSet.setProject( mojo.getAntProject() );
                 fileSet.setIncludes( StringUtils.join( includeSet.iterator(), "," ) );
