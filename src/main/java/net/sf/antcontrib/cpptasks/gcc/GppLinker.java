@@ -63,7 +63,7 @@ public class GppLinker extends AbstractLdLinker {
     private File[] libDirs;
     private String runtimeLibrary;
     // FREEEHEP
-    private String gccLibrary, gfortranLibrary;
+    private String gccLibrary, gfortranLibrary, gfortranMainLibrary;
 
     protected GppLinker(String command, String[] extensions,
             String[] ignoredExtensions, String outputPrefix,
@@ -96,6 +96,22 @@ public class GppLinker extends AbstractLdLinker {
             } else {
                 gfortranLibrary = "-lgfortran";
             }
+        }
+        
+        gfortranMainLibrary = null;
+        if (linkType.linkFortran()) {
+        	if (linkType.isExecutable() && linkType.linkFortranMain() && !isDarwin()) {
+                if (linkType.isStaticRuntime()) {
+                    String[] cmdin = new String[] { "gfortran",
+                            "-print-file-name=libgfortranbegin.a" };
+                    String[] cmdout = CaptureStreamHandler.run(cmdin);
+                    if ((cmdout.length > 0) && (cmdout[0].indexOf('/') >= 0)) {
+                    	gfortranMainLibrary = cmdout[0];
+                    }
+                } else {
+                	gfortranMainLibrary = "-lgfortranbegin";
+                }        		
+        	}
         }
 
         runtimeLibrary = null;
@@ -136,6 +152,9 @@ public class GppLinker extends AbstractLdLinker {
         // BEGINFREEHEP
         if (gfortranLibrary != null) {
             endargs.addElement(gfortranLibrary);
+        }
+        if (gfortranMainLibrary != null) {
+            endargs.addElement(gfortranMainLibrary);
         }
         if (gccLibrary != null) {
             endargs.addElement(gccLibrary);

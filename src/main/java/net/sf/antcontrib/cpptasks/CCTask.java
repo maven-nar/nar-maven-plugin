@@ -1389,6 +1389,9 @@ public class CCTask extends Task {
         linkType.setLinkFortran(linkFortran);
     }
 
+    public void setLinkFortranMain(boolean linkFortranMain) {
+        linkType.setLinkFortranMain(linkFortranMain);
+    }
     // ENDFREEHEP
 
     /**
