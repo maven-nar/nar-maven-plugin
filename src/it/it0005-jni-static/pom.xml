@@ -90,9 +90,9 @@
               <excludes>
                 <exclude>**/*.java</exclude>
               </excludes>
-              <testexcludes>
-                <testexclude>**/*.java</testexclude>
-              </testexcludes>
+              <testExcludes>
+                <testExclude>**/*.java</testExclude>
+              </testExcludes>
             </configuration>
           </plugin>
           <plugin>
