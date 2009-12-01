@@ -43,6 +43,8 @@ public class NarGnuResources
             return;
         }
 
+        validate();
+
         if ( getGnuSourceDirectory().exists() )
         {
             int copied = 0;

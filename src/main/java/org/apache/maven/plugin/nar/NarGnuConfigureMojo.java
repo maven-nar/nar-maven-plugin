@@ -62,6 +62,8 @@ public class NarGnuConfigureMojo
         {
             return;
         }
+        
+        validate();
 
         if ( !useGnu() )
         {

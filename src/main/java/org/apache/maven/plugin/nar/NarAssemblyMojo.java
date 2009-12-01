@@ -65,6 +65,8 @@ public class NarAssemblyMojo
             // NOTE: continue since the standard assemble mojo fails if we do
             // not create the directories...
         }
+        
+        validate();
 
         for ( Iterator j = classifiers.iterator(); j.hasNext(); )
         {

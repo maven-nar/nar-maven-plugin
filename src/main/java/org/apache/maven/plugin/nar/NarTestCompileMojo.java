@@ -57,6 +57,8 @@ public class NarTestCompileMojo
         {
             return;
         }
+        
+        validate();
 
         // make sure destination is there
         getTestTargetDirectory().mkdirs();
@@ -106,14 +108,11 @@ public class NarTestCompileMojo
         runtimeType.setValue( getRuntime( getAOL() ) );
         task.setRuntime( runtimeType );
 
-        int noOfCompilers = 0;
-
         // add C++ compiler
         CompilerDef cpp = getCpp().getCompiler( type, test.getName() );
         if ( cpp != null )
         {
             task.addConfiguredCompiler( cpp );
-            noOfCompilers++;
         }
 
         // add C compiler
@@ -121,7 +120,6 @@ public class NarTestCompileMojo
         if ( c != null )
         {
             task.addConfiguredCompiler( c );
-            noOfCompilers++;
         }
 
         // add Fortran compiler
@@ -129,7 +127,6 @@ public class NarTestCompileMojo
         if ( fortran != null )
         {
             task.addConfiguredCompiler( fortran );
-            noOfCompilers++;
         }
 
         // add java include paths

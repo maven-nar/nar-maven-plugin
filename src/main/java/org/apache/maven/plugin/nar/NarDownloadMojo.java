@@ -67,16 +67,12 @@ public class NarDownloadMojo
     public final void execute()
         throws MojoExecutionException, MojoFailureException
     {
-        getLog().info( "Using AOL: " + getAOL() );
-
         if ( shouldSkip() )
         {
-            getLog().info( "***********************************************************************" );
-            getLog().info( "NAR Plugin SKIPPED, no NAR Libraries will be produced." );
-            getLog().info( "***********************************************************************" );
-
             return;
         }
+        
+        validate();
 
         List narArtifacts = getNarManager().getNarDependencies( "compile" );
         if ( classifiers == null )

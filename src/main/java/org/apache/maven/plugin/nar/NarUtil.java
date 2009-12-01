@@ -107,13 +107,13 @@ public final class NarUtil
     }
 
     public static String getLinkerName( String architecture, String os, Linker linker )
-        throws MojoFailureException
+        throws MojoFailureException, MojoExecutionException
     {
         return getLinker( linker ).getName( getDefaults(), getArchitecture( architecture ) + "." + getOS( os ) + "." );
     }
 
     public static AOL getAOL( String architecture, String os, Linker linker, String aol )
-        throws MojoFailureException
+        throws MojoFailureException, MojoExecutionException
     {
         // adjust aol
         return aol == null ? new AOL( getArchitecture( architecture ), getOS( os ), getLinkerName( architecture, os,
@@ -123,7 +123,7 @@ public final class NarUtil
 
     // FIXME, should go to AOL.
     public static String getAOLKey( String architecture, String os, Linker linker )
-        throws MojoFailureException
+        throws MojoFailureException, MojoExecutionException
     {
         // construct AOL key prefix
         return getArchitecture( architecture ) + "." + getOS( os ) + "." + getLinkerName( architecture, os, linker )

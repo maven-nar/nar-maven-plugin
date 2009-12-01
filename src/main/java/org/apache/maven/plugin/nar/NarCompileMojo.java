@@ -63,6 +63,8 @@ public class NarCompileMojo
             return;
         }
 
+        validate();
+
         // make sure destination is there
         getTargetDirectory().mkdirs();
 
@@ -96,7 +98,7 @@ public class NarCompileMojo
     }
 
     private List getSourcesFor( Compiler compiler )
-        throws MojoFailureException
+        throws MojoFailureException, MojoExecutionException
     {
         try
         {
@@ -185,14 +187,11 @@ public class NarCompileMojo
         runtimeType.setValue( getRuntime( getAOL() ) );
         task.setRuntime( runtimeType );
 
-        int noOfCompilers = 0;
-
         // add C++ compiler
         CompilerDef cpp = getCpp().getCompiler( type, getOutput( getAOL() ) );
         if ( cpp != null )
         {
             task.addConfiguredCompiler( cpp );
-            noOfCompilers++;
         }
 
         // add C compiler
@@ -200,7 +199,6 @@ public class NarCompileMojo
         if ( c != null )
         {
             task.addConfiguredCompiler( c );
-            noOfCompilers++;
         }
 
         // add Fortran compiler
@@ -208,9 +206,8 @@ public class NarCompileMojo
         if ( fortran != null )
         {
             task.addConfiguredCompiler( fortran );
-            noOfCompilers++;
         }
-        
+                
         // add javah include path
         File jniDirectory = getJavah().getJniDirectory();
         if ( jniDirectory.exists() )

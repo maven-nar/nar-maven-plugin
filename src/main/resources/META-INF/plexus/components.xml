@@ -24,7 +24,7 @@
       </implementation>
       <configuration>
         <phases>
-          <validate></validate>
+          <validate>org.apache.maven.plugins:maven-nar-plugin:nar-validate</validate>
           <initialize></initialize>
           <generate-sources>org.apache.maven.plugins:maven-nar-plugin:nar-download,
             org.apache.maven.plugins:maven-nar-plugin:nar-system-generate

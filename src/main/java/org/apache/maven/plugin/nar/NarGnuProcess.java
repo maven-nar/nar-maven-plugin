@@ -42,7 +42,9 @@ public class NarGnuProcess
         {
             return;
         }
-        
+
+        validate();
+
         File srcDir = getGnuAOLTargetDirectory();
         if ( srcDir.exists() )
         {

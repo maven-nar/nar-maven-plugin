@@ -22,6 +22,7 @@ package org.apache.maven.plugin.nar;
 import java.io.File;
 
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
@@ -97,33 +98,45 @@ public abstract class AbstractNarMojo
      * @required
      */
     private MavenProject mavenProject;
+    
+    private AOL aolId;
 
+    protected final void validate() throws MojoFailureException, MojoExecutionException {
+        linker = NarUtil.getLinker( linker );
+
+        architecture = NarUtil.getArchitecture( architecture );
+        os = NarUtil.getOS( os );
+        aolId = NarUtil.getAOL( architecture, os, linker, aol );
+
+        if ( targetDirectory == null )
+        {
+            targetDirectory = new File( mavenProject.getBuild().getDirectory(), "nar" );
+        }
+    }
+    
     protected final boolean shouldSkip()
     {
         return skip;
     }
 
     protected final String getArchitecture()
-    {
-        architecture = NarUtil.getArchitecture( architecture );
+    {       
         return architecture;
     }
 
     protected final String getOS()
     {
-        os = NarUtil.getOS( os );
         return os;
     }
 
     protected final AOL getAOL()
-        throws MojoFailureException
+        throws MojoFailureException, MojoExecutionException
     {
-        return NarUtil.getAOL( architecture, os, linker, aol );
+        return aolId;
     }
 
     protected final Linker getLinker()
     {
-        linker = NarUtil.getLinker( linker );
         return linker;
     }
 
@@ -139,10 +152,6 @@ public abstract class AbstractNarMojo
 
     protected final File getTargetDirectory()
     {
-        if ( targetDirectory == null )
-        {
-            targetDirectory = new File( mavenProject.getBuild().getDirectory(), "nar" );
-        }
         return targetDirectory;
     }
 

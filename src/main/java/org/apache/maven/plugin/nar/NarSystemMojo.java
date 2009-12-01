@@ -47,6 +47,8 @@ public class NarSystemMojo
         {
             return;
         }
+        
+        validate();
 
         // get packageName if specified for JNI.
         String packageName = null;

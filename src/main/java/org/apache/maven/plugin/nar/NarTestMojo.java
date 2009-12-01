@@ -60,6 +60,8 @@ public class NarTestMojo
             return;
         }
 
+        validate();
+
         // run all tests
         for ( Iterator i = getTests().iterator(); i.hasNext(); )
         {

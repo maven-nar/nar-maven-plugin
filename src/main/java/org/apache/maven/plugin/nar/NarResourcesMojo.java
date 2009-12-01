@@ -62,6 +62,8 @@ public class NarResourcesMojo
             return;
         }
 
+        validate();
+
         // scan resourceDirectory for AOLs
         File aolDir = new File( resourceDirectory, NarConstants.NAR_AOL );
         if ( aolDir.exists() )

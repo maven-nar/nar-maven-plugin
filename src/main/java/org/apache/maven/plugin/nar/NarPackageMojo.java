@@ -67,6 +67,8 @@ public class NarPackageMojo
         {
             return;
         }
+        
+        validate();
 
         // Avoid that -DupdateReleaseInfo copies to a .nar file
         getMavenProject().getArtifact().setArtifactHandler( narArtifactHandler );

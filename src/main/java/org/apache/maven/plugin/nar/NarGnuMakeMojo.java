@@ -43,6 +43,8 @@ public class NarGnuMakeMojo
             return;
         }
 
+        validate();
+        
         if ( !useGnu() )
         {
             return;

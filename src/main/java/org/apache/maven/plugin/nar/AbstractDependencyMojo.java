@@ -20,6 +20,7 @@ package org.apache.maven.plugin.nar;
  */
 
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**
@@ -42,7 +43,7 @@ public abstract class AbstractDependencyMojo
     }
 
     protected final NarManager getNarManager()
-        throws MojoFailureException
+        throws MojoFailureException, MojoExecutionException
     {
         return new NarManager( getLog(), getLocalRepository(), getMavenProject(), getArchitecture(), getOS(),
                                getLinker() );

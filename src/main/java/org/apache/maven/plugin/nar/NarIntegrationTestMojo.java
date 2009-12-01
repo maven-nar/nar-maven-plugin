@@ -568,6 +568,9 @@ public class NarIntegrationTestMojo
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
+        // DUNS
+        validate();
+
         if ( verifyParameters() )
         {
             SurefireBooter surefireBooter = constructSurefireBooter();

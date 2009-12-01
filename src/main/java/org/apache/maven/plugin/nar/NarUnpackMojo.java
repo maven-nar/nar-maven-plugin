@@ -62,6 +62,8 @@ public class NarUnpackMojo
         {
             return;
         }
+        
+        validate();
 
         List narArtifacts = getNarManager().getNarDependencies( "compile" );
         if ( classifiers == null )

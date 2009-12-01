@@ -65,6 +65,8 @@ public class NarJavahMojo
             return;
         }
 
+        validate();
+
         getJavah().execute();
     }
 }

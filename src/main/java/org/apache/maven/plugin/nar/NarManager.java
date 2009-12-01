@@ -65,7 +65,7 @@ public class NarManager
 
     public NarManager( Log log, ArtifactRepository repository, MavenProject project, String architecture, String os,
                        Linker linker )
-        throws MojoFailureException
+        throws MojoFailureException, MojoExecutionException
     {
         this.log = log;
         this.repository = repository;

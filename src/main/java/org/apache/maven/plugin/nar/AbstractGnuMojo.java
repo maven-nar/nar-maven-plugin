@@ -21,6 +21,7 @@ package org.apache.maven.plugin.nar;
 
 import java.io.File;
 
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**
@@ -58,9 +59,10 @@ public abstract class AbstractGnuMojo
     /**
      * @return
      * @throws MojoFailureException
+     * @throws MojoExecutionException 
      */
     protected final File getGnuAOLSourceDirectory()
-        throws MojoFailureException
+        throws MojoFailureException, MojoExecutionException
     {
         return new File( getGnuAOLDirectory(), "src" );
     }
@@ -68,9 +70,10 @@ public abstract class AbstractGnuMojo
     /**
      * @return
      * @throws MojoFailureException
+     * @throws MojoExecutionException 
      */
     protected final File getGnuAOLTargetDirectory()
-        throws MojoFailureException
+        throws MojoFailureException, MojoExecutionException
     {
         return new File( getGnuAOLDirectory(), "target" );
     }
@@ -82,9 +85,10 @@ public abstract class AbstractGnuMojo
     /**
      * @return
      * @throws MojoFailureException
+     * @throws MojoExecutionException 
      */
     private File getGnuAOLDirectory()
-        throws MojoFailureException
+        throws MojoFailureException, MojoExecutionException
     {
         return new File( gnuTargetDirectory, getAOL().toString() );
     }

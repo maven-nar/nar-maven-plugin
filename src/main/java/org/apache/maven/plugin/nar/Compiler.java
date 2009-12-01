@@ -37,6 +37,7 @@ import net.sf.antcontrib.cpptasks.types.ConditionalFileSet;
 import net.sf.antcontrib.cpptasks.types.DefineArgument;
 import net.sf.antcontrib.cpptasks.types.DefineSet;
 
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
@@ -228,14 +229,15 @@ public abstract class Compiler
 
     private AbstractCompileMojo mojo;
 
-    private static final String TEST = "test";
+    public static final String MAIN = "main";
+    public static final String TEST = "test";
 
     protected Compiler()
     {
     }
 
-    private String getName()
-        throws MojoFailureException
+    public String getName()
+        throws MojoFailureException, MojoExecutionException
     {
         // adjust default values
         if ( name == null )
@@ -331,13 +333,13 @@ public abstract class Compiler
     }
 
     public final Set getIncludes()
-        throws MojoFailureException
+        throws MojoFailureException, MojoExecutionException
     {
         return getIncludes( "main" );
     }
 
     protected final Set getIncludes( String type )
-        throws MojoFailureException
+        throws MojoFailureException, MojoExecutionException
     {
         Set result = new HashSet();
         if ( !type.equals( TEST ) && !includes.isEmpty() )
@@ -360,7 +362,7 @@ public abstract class Compiler
     }
 
     protected final Set getExcludes()
-        throws MojoFailureException
+        throws MojoFailureException, MojoExecutionException
     {
         Set result = new HashSet();
 
@@ -386,13 +388,13 @@ public abstract class Compiler
     }
 
     protected final String getPrefix()
-        throws MojoFailureException
+        throws MojoFailureException, MojoExecutionException
     {
         return mojo.getAOL().getKey() + "." + getLanguage() + ".";
     }
 
     public final CompilerDef getCompiler( String type, String output )
-        throws MojoFailureException
+        throws MojoFailureException, MojoExecutionException
     {
         String name = getName();
         if (name == null) return null;
