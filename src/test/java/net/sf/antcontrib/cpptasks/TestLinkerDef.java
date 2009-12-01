@@ -243,8 +243,7 @@ public final class TestLinkerDef
     setLinkerName(extendedLinker, "msvc");
     String[] preArgs = getPreArguments(extendedLinker);
     assertEquals("/NOLOGO", preArgs[0]);
-    // FREEHEP changed from WINDOWS into CONSOLE
-    assertEquals("/SUBSYSTEM:CONSOLE", preArgs[1]);
+    assertEquals("/SUBSYSTEM:WINDOWS", preArgs[1]);
     assertEquals("/INCREMENTAL:NO", preArgs[2]);
     assertEquals("/BASE:0x2710", preArgs[3]);
   }
@@ -261,8 +260,7 @@ public final class TestLinkerDef
     setLinkerName(extendedLinker, "msvc");
     String[] preArgs = getPreArguments(extendedLinker);
     assertEquals("/NOLOGO", preArgs[0]);
-    // FREEHEP changed from WINDOWS into CONSOLE
-    assertEquals("/SUBSYSTEM:CONSOLE", preArgs[1]);
+    assertEquals("/SUBSYSTEM:WINDOWS", preArgs[1]);
     assertEquals("/INCREMENTAL:NO", preArgs[2]);
     assertEquals("/STACK:0x2710", preArgs[3]);
   }
@@ -293,8 +291,7 @@ public final class TestLinkerDef
     setLinkerName(extendedLinker, "msvc");
     String[] preArgs = getPreArguments(extendedLinker);
     assertEquals("/NOLOGO", preArgs[0]);
-    // FREEHEP changed from WINDOWS into CONSOLE
-    assertEquals("/SUBSYSTEM:CONSOLE", preArgs[1]);
+    assertEquals("/SUBSYSTEM:WINDOWS", preArgs[1]);
     assertEquals("/INCREMENTAL:NO", preArgs[2]);
     assertEquals("/FIXED", preArgs[3]);
   }
@@ -311,8 +308,7 @@ public final class TestLinkerDef
     setLinkerName(extendedLinker, "msvc");
     String[] preArgs = getPreArguments(extendedLinker);
     assertEquals("/NOLOGO", preArgs[0]);
-    // FREEHEP changed from WINDOWS into CONSOLE
-    assertEquals("/SUBSYSTEM:CONSOLE", preArgs[1]);
+    assertEquals("/SUBSYSTEM:WINDOWS", preArgs[1]);
     assertEquals("/INCREMENTAL:YES", preArgs[2]);
   }
 
@@ -328,8 +324,7 @@ public final class TestLinkerDef
     setLinkerName(extendedLinker, "msvc");
     String[] preArgs = getPreArguments(extendedLinker);
     assertEquals("/NOLOGO", preArgs[0]);
-    // FREEHEP changed from WINDOWS into CONSOLE
-    assertEquals("/SUBSYSTEM:CONSOLE", preArgs[1]);
+    assertEquals("/SUBSYSTEM:WINDOWS", preArgs[1]);
     assertEquals("/INCREMENTAL:NO", preArgs[2]);
     assertEquals("/MAP", preArgs[3]);
   }
@@ -354,8 +349,7 @@ public final class TestLinkerDef
     extendedLinker.setBase(new FlexLong("10000"));
     String[] preArgs = getPreArguments(extendedLinker);
     assertEquals("/NOLOGO", preArgs[0]);
-    // FREEHEP changed from WINDOWS into CONSOLE
-    assertEquals("/SUBSYSTEM:CONSOLE", preArgs[1]);
+    assertEquals("/SUBSYSTEM:WINDOWS", preArgs[1]);
     assertEquals("/INCREMENTAL:NO", preArgs[2]);
     assertEquals("/BASE:0x2710", preArgs[3]);
   }
@@ -373,8 +367,7 @@ public final class TestLinkerDef
     extendedLinker.setBase(new FlexLong("10000"));
     String[] preArgs = getPreArguments(extendedLinker);
     assertEquals("/NOLOGO", preArgs[0]);
-    // FREEHEP changed from WINDOWS into CONSOLE
-    assertEquals("/SUBSYSTEM:CONSOLE", preArgs[1]);
+    assertEquals("/SUBSYSTEM:WINDOWS", preArgs[1]);
     assertEquals("/INCREMENTAL:NO", preArgs[2]);
     assertEquals("/BASE:0x2710", preArgs[3]);
   }

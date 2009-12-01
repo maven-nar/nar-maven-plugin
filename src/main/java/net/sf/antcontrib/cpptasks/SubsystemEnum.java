@@ -26,8 +26,7 @@ public final class SubsystemEnum extends EnumeratedAttribute {
     private final static String[] values = new String[]{"gui", "console",
             "other"};
     public SubsystemEnum() {
-// FREEHEP changed from gui into console
-        setValue("console");
+        setValue("gui");
     }
     public String[] getValues() {
         return (String[]) values.clone();

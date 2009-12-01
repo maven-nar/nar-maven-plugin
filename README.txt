@@ -4,6 +4,7 @@ Modified version of ant contrib cpptasks, used in the freehep/maven-nar-plugin.
 
 * cpptasks-1.0-beta-5-parallel-1-SNAPSHOT
 
+- changed default subsystem back to gui
 - added linkFortranMain option to link with gfortranbegin, see NAR-112
 - added compileOrder to the compilerDef (and thus changed most Hashtables into Maps), see NAR-109
 - added .f90 as extension for the fortran compiler, see NAR-108
