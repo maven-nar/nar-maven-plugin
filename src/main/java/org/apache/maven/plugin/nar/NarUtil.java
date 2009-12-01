@@ -45,10 +45,11 @@ import org.codehaus.plexus.util.cli.Commandline;
 public final class NarUtil
 {
 
-    private NarUtil() {
+    private NarUtil()
+    {
         // never instantiate
     }
-    
+
     private static Properties defaults;
 
     public static Properties getDefaults()
@@ -207,6 +208,40 @@ public final class NarUtil
         }
     }
 
+    public static void makeLink( File file, final Log log )
+        throws MojoExecutionException, MojoFailureException
+    {
+        if ( !file.exists() )
+        {
+            return;
+        }
+
+        if ( file.isDirectory() )
+        {
+            File[] files = file.listFiles();
+            for ( int i = 0; i < files.length; i++ )
+            {
+                makeLink( files[i], log );
+            }
+        }
+        if ( file.isFile() && file.canRead() && file.canWrite() && !file.isHidden()
+            && file.getName().matches( ".*\\.so(\\.\\d+)+$" ) )
+        {
+            File sofile =
+                new File( file.getParent(), file.getName().substring( 0, file.getName().indexOf( ".so" ) + 3 ) );
+            if ( !sofile.exists() )
+            {
+                // ln -s lib.so.xx lib.so
+                int result = runCommand( "ln", new String[] { "-s", file.getName(), sofile.getPath() }, null, null, log );
+                if ( result != 0 )
+                {
+                    throw new MojoExecutionException( "Failed to execute 'ln -s " + file.getName() + " "
+                        + sofile.getPath() + "'" + " return code: \'" + result + "\'." );
+                }
+            }
+        }
+    }
+
     /**
      * Returns the Bcel Class corresponding to the given class filename
      * 
@@ -262,7 +297,7 @@ public final class NarUtil
     {
         final String escQ = "\\Q";
         final String escE = "\\E";
-        
+
         int slashEIndex = s.indexOf( escE );
         if ( slashEIndex == -1 )
         {
@@ -520,6 +555,7 @@ public final class NarUtil
         extends Thread
     {
         private InputStream is;
+
         private TextStream ts;
 
         private StreamGobbler( InputStream is, TextStream ts )
@@ -544,8 +580,9 @@ public final class NarUtil
             {
                 // e.printStackTrace()
                 StackTraceElement[] stackTrace = e.getStackTrace();
-                for (int i=0; i<stackTrace.length; i++) {
-                    ts.println( stackTrace[i].toString());
+                for ( int i = 0; i < stackTrace.length; i++ )
+                {
+                    ts.println( stackTrace[i].toString() );
                 }
             }
         }

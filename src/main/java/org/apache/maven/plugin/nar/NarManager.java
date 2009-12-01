@@ -412,6 +412,8 @@ public class NarManager
                             NarUtil.makeExecutable( new File( narLocation, "bin/"
                                 + NarUtil.replace( gpp, gcc, defaultAOL.toString() ) ), log );
                         }
+                        // add link to versioned so files
+                        NarUtil.makeLink(new File(narLocation, "lib/"+defaultAOL), log);
                     }
                     if ( linkerName.equals( gcc ) || linkerName.equals( gpp ) )
                     {
