@@ -155,8 +155,9 @@ public class Linker
     {
         this.name = name;
     }
-    
-    public final String getName() {
+
+    public final String getName()
+    {
         return name;
     }
 
@@ -218,6 +219,20 @@ public class Linker
                 throw new MojoFailureException( "Cannot deduce version number from: " + out );
             }
         }
+        else if ( name.equals( "icc" ) || name.equals( "icpc" ) )
+        {
+            NarUtil.runCommand( "icc", new String[] { "--version" }, null, null, out, err, dbg );
+            Pattern p = Pattern.compile( "\\d+\\.\\d+" );
+            Matcher m = p.matcher( out.toString() );
+            if ( m.find() )
+            {
+                version = m.group( 0 );
+            }
+            else
+            {
+                throw new MojoFailureException( "Cannot deduce version number from: " + out );
+            }
+        }
         else
         {
             throw new MojoFailureException( "Cannot find version number for linker '" + name + "'" );
@@ -225,7 +240,8 @@ public class Linker
         return version;
     }
 
-    public final LinkerDef getLinker( AbstractCompileMojo mojo, Project antProject, String os, String prefix, String type )
+    public final LinkerDef getLinker( AbstractCompileMojo mojo, Project antProject, String os, String prefix,
+                                      String type )
         throws MojoFailureException, MojoExecutionException
     {
         if ( name == null )
@@ -300,15 +316,14 @@ public class Linker
                 linker.addConfiguredLinkerArg( arg );
             }
         }
-        
+
         // FIXME, this should be done in CPPTasks at some point, and may not be necessary, but was for VS 2010 beta 2
-        if ( os.equals( OS.WINDOWS )
-            && getName( null, null ).equals( "msvc" ) && !getVersion().startsWith( "6." ) ) {
+        if ( os.equals( OS.WINDOWS ) && getName( null, null ).equals( "msvc" ) && !getVersion().startsWith( "6." ) )
+        {
             LinkerArgument arg = new LinkerArgument();
             arg.setValue( "/MANIFEST" );
-            linker.addConfiguredLinkerArg( arg );            
+            linker.addConfiguredLinkerArg( arg );
         }
-
 
         // Add options to linker
         if ( options != null )
