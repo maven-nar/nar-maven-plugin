@@ -33,6 +33,7 @@ NAR Configuration
   <libraries>
     <library>
       <type/>
+      <subSystem/>
       <linkCPP/>
       <linkFortran/>
       <linkFortranMain/>

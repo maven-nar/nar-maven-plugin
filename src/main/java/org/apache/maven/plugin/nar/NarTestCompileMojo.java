@@ -29,6 +29,7 @@ import net.sf.antcontrib.cpptasks.CUtil;
 import net.sf.antcontrib.cpptasks.CompilerDef;
 import net.sf.antcontrib.cpptasks.OutputTypeEnum;
 import net.sf.antcontrib.cpptasks.RuntimeType;
+import net.sf.antcontrib.cpptasks.SubsystemEnum;
 import net.sf.antcontrib.cpptasks.types.LibrarySet;
 import net.sf.antcontrib.cpptasks.types.LibraryTypeEnum;
 
@@ -76,6 +77,11 @@ public class NarTestCompileMojo
         // configure task
         CCTask task = new CCTask();
         task.setProject( antProject );
+
+        // subsystem
+        SubsystemEnum subSystem = new SubsystemEnum();
+        subSystem.setValue( "console" );
+        task.setSubsystem( subSystem );
 
         // outtype
         OutputTypeEnum outTypeEnum = new OutputTypeEnum();

@@ -50,7 +50,14 @@ public class Library
      * @parameter expression=""
      */
     private String type = SHARED;
-
+    
+    /**
+     * Type of subsystem to generate: "gui", "console", "other". Defaults to "console".
+     *
+     * @parameter expression=""
+     */
+    private String subSystem = "console";
+    
     /**
      * Link with stdcpp if necessary Defaults to true.
      * 
@@ -162,5 +169,10 @@ public class Library
         sb.append( "type: " );
         sb.append( getType() );
         return sb.toString();
+    }
+
+    public String getSubSystem()
+    {
+        return subSystem;
     }
 }

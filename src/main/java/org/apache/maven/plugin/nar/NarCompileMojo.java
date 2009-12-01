@@ -33,6 +33,7 @@ import net.sf.antcontrib.cpptasks.CompilerDef;
 import net.sf.antcontrib.cpptasks.LinkerDef;
 import net.sf.antcontrib.cpptasks.OutputTypeEnum;
 import net.sf.antcontrib.cpptasks.RuntimeType;
+import net.sf.antcontrib.cpptasks.SubsystemEnum;
 import net.sf.antcontrib.cpptasks.types.LibrarySet;
 import net.sf.antcontrib.cpptasks.types.LinkerArgument;
 import net.sf.antcontrib.cpptasks.types.SystemLibrarySet;
@@ -121,6 +122,11 @@ public class NarCompileMojo
         // configure task
         CCTask task = new CCTask();
         task.setProject( antProject );
+        
+        // subsystem
+        SubsystemEnum subSystem = new SubsystemEnum();
+        subSystem.setValue( library.getSubSystem() );
+        task.setSubsystem( subSystem );
 
         // set max cores
         task.setMaxCores( getMaxCores( getAOL() ) );
