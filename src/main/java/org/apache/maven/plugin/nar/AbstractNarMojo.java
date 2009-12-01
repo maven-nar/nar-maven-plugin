@@ -42,6 +42,13 @@ public abstract class AbstractNarMojo
     private boolean skip;
 
     /**
+     * Ignore errors and failures.
+     * 
+     * @parameter expression="${nar.ignore}" default-value="false"
+     */
+    private boolean ignore;
+
+    /**
      * The Architecture for the nar, Some choices are: "x86", "i386", "amd64", "ppc", "sparc", ... Defaults to a derived
      * value from ${os.arch}
      * 
@@ -98,10 +105,12 @@ public abstract class AbstractNarMojo
      * @required
      */
     private MavenProject mavenProject;
-    
+
     private AOL aolId;
 
-    protected final void validate() throws MojoFailureException, MojoExecutionException {
+    protected final void validate()
+        throws MojoFailureException, MojoExecutionException
+    {
         linker = NarUtil.getLinker( linker );
 
         architecture = NarUtil.getArchitecture( architecture );
@@ -113,14 +122,9 @@ public abstract class AbstractNarMojo
             targetDirectory = new File( mavenProject.getBuild().getDirectory(), "nar" );
         }
     }
-    
-    protected final boolean shouldSkip()
-    {
-        return skip;
-    }
 
     protected final String getArchitecture()
-    {       
+    {
         return architecture;
     }
 
@@ -159,4 +163,45 @@ public abstract class AbstractNarMojo
     {
         return mavenProject;
     }
+
+    public final void execute()
+        throws MojoExecutionException, MojoFailureException
+    {
+        if ( skip )
+        {
+            getLog().info( getClass().getName() + " skipped" );
+            return;
+        }
+
+        try
+        {
+            validate();
+            narExecute();
+        }
+        catch ( MojoFailureException mfe )
+        {
+            if ( ignore )
+            {
+                getLog().warn( "IGNORED: " + mfe.getMessage() );
+            }
+            else
+            {
+                throw mfe;
+            }
+        }
+        catch ( MojoExecutionException mee )
+        {
+            if ( ignore )
+            {
+                getLog().warn( "IGNORED: " + mee.getMessage() );
+            }
+            else
+            {
+                throw mee;
+            }
+        }
+    }
+
+    public abstract void narExecute()
+        throws MojoFailureException, MojoExecutionException;
 }

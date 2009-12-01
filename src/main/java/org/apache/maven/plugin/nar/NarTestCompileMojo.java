@@ -56,16 +56,9 @@ public class NarTestCompileMojo
      */
     private boolean skipNar;
 
-    public final void execute()
+    public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        if ( shouldSkip() || skipNar)
-        {
-            return;
-        }
-        
-        validate();
-
         // make sure destination is there
         getTestTargetDirectory().mkdirs();
 

@@ -40,16 +40,9 @@ public class NarSystemMojo
     extends AbstractCompileMojo
 {
 
-    public final void execute()
+    public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        if ( shouldSkip() )
-        {
-            return;
-        }
-        
-        validate();
-
         // get packageName if specified for JNI.
         String packageName = null;
         String narSystemName = null;

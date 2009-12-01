@@ -33,21 +33,9 @@ import org.apache.maven.plugin.MojoFailureException;
 public class NarValidateMojo
     extends AbstractCompileMojo
 {
-    public final void execute()
+    public final void narExecute()
         throws MojoExecutionException, MojoFailureException
-    {
-        if ( shouldSkip() )
-        {
-            getLog().info( "***********************************************************************" );
-            getLog().info( "NAR Plugin SKIPPED, no NAR Libraries will be produced." );
-            getLog().info( "***********************************************************************" );
-
-            return;
-        }
-        
-        // first validate
-        validate();
-        
+    {         
         // check aol
         AOL aol = getAOL();    
         getLog().info( "Using AOL: " + aol );

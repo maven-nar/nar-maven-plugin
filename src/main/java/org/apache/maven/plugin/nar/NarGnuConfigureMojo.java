@@ -55,15 +55,9 @@ public class NarGnuConfigureMojo
 
     private static final String CONFIGURE = "configure";
 
-    public final void execute()
+    public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        if ( shouldSkip() )
-        {
-            return;
-        }
-        
-        validate();
 
         if ( !useGnu() )
         {

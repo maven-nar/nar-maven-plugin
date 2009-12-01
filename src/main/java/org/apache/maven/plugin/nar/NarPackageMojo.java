@@ -60,16 +60,9 @@ public class NarPackageMojo
      */
     private MavenProjectHelper projectHelper;
 
-    public final void execute()
+    public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        if ( shouldSkip() )
-        {
-            return;
-        }
-        
-        validate();
-
         // Avoid that -DupdateReleaseInfo copies to a .nar file
         getMavenProject().getArtifact().setArtifactHandler( narArtifactHandler );
 

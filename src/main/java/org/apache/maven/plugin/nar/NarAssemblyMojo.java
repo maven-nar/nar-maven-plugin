@@ -54,20 +54,9 @@ public class NarAssemblyMojo
     /**
      * Copies the unpacked nar libraries and files into the projects target area
      */
-    public final void execute()
+    public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        if ( shouldSkip() )
-        {
-            getLog().info( "***********************************************************************" );
-            getLog().info( "NAR Assembly SKIPPED since no NAR libraries were built/downloaded." );
-            getLog().info( "***********************************************************************" );
-            // NOTE: continue since the standard assemble mojo fails if we do
-            // not create the directories...
-        }
-        
-        validate();
-
         for ( Iterator j = classifiers.iterator(); j.hasNext(); )
         {
             String classifier = (String) j.next();
@@ -92,22 +81,10 @@ public class NarAssemblyMojo
                 try
                 {
                     FileUtils.mkdir( dstDir.getPath() );
-                    if ( shouldSkip() )
+                    getLog().debug( "SrcDir: " + srcDir );
+                    if ( srcDir.exists() )
                     {
-                        File note = new File( dstDir, "NAR_ASSEMBLY_SKIPPED" );
-                        FileUtils.fileWrite(
-                                             note.getPath(),
-                                             "The NAR Libraries of this distribution are missing because \n"
-                                                 + "the NAR dependencies were not built/downloaded, presumably because\n"
-                                                 + "the the distribution was built with the '-Dnar.skip=true' flag." );
-                    }
-                    else
-                    {
-                        getLog().debug( "SrcDir: " + srcDir );
-                        if ( srcDir.exists() )
-                        {
-                            FileUtils.copyDirectoryStructure( srcDir, dstDir );
-                        }
+                        FileUtils.copyDirectoryStructure( srcDir, dstDir );
                     }
                 }
                 catch ( IOException ioe )

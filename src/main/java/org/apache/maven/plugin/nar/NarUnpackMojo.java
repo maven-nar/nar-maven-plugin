@@ -55,16 +55,9 @@ public class NarUnpackMojo
      */
     private ArchiverManager archiverManager;
 
-    public final void execute()
+    public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        if ( shouldSkip() )
-        {
-            return;
-        }
-        
-        validate();
-
         List narArtifacts = getNarManager().getNarDependencies( "compile" );
         if ( classifiers == null )
         {

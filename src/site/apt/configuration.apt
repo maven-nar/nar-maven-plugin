@@ -11,6 +11,7 @@ NAR Configuration
 
 +--
 <configuration>
+  <ignore/>
   <skip/>
   <skipNar/>
   <skipNarTest/>

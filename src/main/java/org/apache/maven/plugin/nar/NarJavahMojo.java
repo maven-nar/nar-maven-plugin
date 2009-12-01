@@ -57,16 +57,9 @@ public class NarJavahMojo
         return session;
     }
 
-    public final void execute()
+    public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        if ( shouldSkip() )
-        {
-            return;
-        }
-
-        validate();
-
         getJavah().execute();
     }
 }

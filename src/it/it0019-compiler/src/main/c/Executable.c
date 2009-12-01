@@ -1,5 +1,3 @@
-package org.apache.maven.plugin.nar;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,31 +17,11 @@ package org.apache.maven.plugin.nar;
  * under the License.
  */
 
-import java.io.File;
+#include <stdio.h>
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-
-/**
- * Move the GNU style output in the correct directories for nar-package
- * 
- * @goal nar-gnu-process
- * @phase process-classes
- * @requiresProject
- * @author Mark Donszelmann
- */
-public class NarGnuProcess
-    extends AbstractGnuMojo
-{
-    public final void narExecute()
-        throws MojoExecutionException, MojoFailureException
-    {
-        File srcDir = getGnuAOLTargetDirectory();
-        if ( srcDir.exists() )
-        {
-            getLog().info( "Running GNU process" );
-
-            copyResources( srcDir, getAOL().toString() );
-        }
-    }
+int main(int argc, char *argv[]) {
+	printf("Helloworld\n");
+	return 0;
 }
+
+

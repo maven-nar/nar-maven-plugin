@@ -52,16 +52,9 @@ public class NarTestMojo
      */
     private List classpathElements;
 
-    public final void execute()
+    public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        if ( shouldSkip() )
-        {
-            return;
-        }
-
-        validate();
-
         // run all tests
         for ( Iterator i = getTests().iterator(); i.hasNext(); )
         {

@@ -54,16 +54,9 @@ public class NarResourcesMojo
      */
     private File resourceDirectory;
 
-    public final void execute()
+    public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        if ( shouldSkip() )
-        {
-            return;
-        }
-
-        validate();
-
         // scan resourceDirectory for AOLs
         File aolDir = new File( resourceDirectory, NarConstants.NAR_AOL );
         if ( aolDir.exists() )

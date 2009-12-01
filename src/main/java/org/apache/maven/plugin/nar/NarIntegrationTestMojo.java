@@ -555,12 +555,10 @@ public class NarIntegrationTestMojo
     private MavenSession session;
     
 
-    public void execute()
+    // DUNS, changed name
+    public void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        // DUNS
-        validate();
-
         if ( verifyParameters() )
         {
             SurefireBooter surefireBooter = constructSurefireBooter();
@@ -622,11 +620,6 @@ public class NarIntegrationTestMojo
     private boolean verifyParameters()
         throws MojoFailureException
     {   
-        // DUNS
-        if (shouldSkip() ) {
-            return false;
-        }
-        
         // DUNS
         if ( skipNar || skipNarTests || skipNarExec )
         {

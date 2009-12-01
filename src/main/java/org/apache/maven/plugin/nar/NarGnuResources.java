@@ -35,16 +35,9 @@ import org.apache.maven.plugin.MojoFailureException;
 public class NarGnuResources
     extends AbstractGnuMojo
 {
-    public final void execute()
+    public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        if ( shouldSkip() )
-        {
-            return;
-        }
-
-        validate();
-
         if ( getGnuSourceDirectory().exists() )
         {
             int copied = 0;

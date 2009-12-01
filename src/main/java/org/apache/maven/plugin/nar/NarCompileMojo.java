@@ -55,16 +55,9 @@ import org.codehaus.plexus.util.StringUtils;
 public class NarCompileMojo
     extends AbstractCompileMojo
 {
-    public final void execute()
+    public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        if ( shouldSkip() )
-        {
-            return;
-        }
-
-        validate();
-
         // make sure destination is there
         getTargetDirectory().mkdirs();
 
