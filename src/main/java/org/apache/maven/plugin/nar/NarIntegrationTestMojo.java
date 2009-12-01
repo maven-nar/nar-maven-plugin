@@ -106,21 +106,21 @@ public class NarIntegrationTestMojo
 
     // DUNS added because of naming conflict
     /**
-     * Skip running of NAR plugins (any) altogether.
-     * 
-     * @parameter expression="${nar.skip}" default-value="false"
+     * Skip running of NAR integration test plugin
+     *
+     * @parameter expression="${skipNar}" default-value="false"
      */
-    private boolean skipNAR;
-    
+    private boolean skipNar;
+
     // DUNS changed to nar. because of naming conflict
     /**
      * Set this to 'true' to skip running tests, but still compile them. Its use is NOT RECOMMENDED, but quite
      * convenient on occasion.
      * 
-     * @parameter expression="${nar.skipTests}"
+     * @parameter expression="${skipNarTests}"
      * @since 2.4
      */
-    private boolean skipTests;
+    private boolean skipNarTests;
     
     // DUNS changed to nar. because of naming conflict
     /**
@@ -131,18 +131,8 @@ public class NarIntegrationTestMojo
      * @parameter expression="${nar.test.skip.exec}"
      * @since 2.3
      */
-    private boolean skipExec;
+    private boolean skipNarExec;
     
-    // DUNS changed to nar. because of naming conflict
-    /**
-     * Set this to 'true' to bypass unit tests entirely. Its use is NOT RECOMMENDED, especially if you
-     * enable it using the "maven.test.skip" property, because maven.test.skip disables both running the
-     * tests and compiling the tests.  Consider using the skipTests parameter instead.
-     * 
-     * @parameter expression="${nar.test.skip}"
-     */
-    private boolean skip;
-
     // DUNS changed to nar. because of naming conflict
     /**
      * Set this to true to ignore a failure during testing. Its use is NOT RECOMMENDED, but quite convenient on
@@ -631,17 +621,14 @@ public class NarIntegrationTestMojo
 
     private boolean verifyParameters()
         throws MojoFailureException
-    {
-        // DUNS, shouldSkip() does not work...
-        if ( skipNAR )
-        {
-            getLog().info( "***********************************************************************" );
-            getLog().info( "NAR Integration Tests are SKIPPED since no NAR libraries were built." );
-            getLog().info( "***********************************************************************" );
+    {   
+        // DUNS
+        if (shouldSkip() ) {
             return false;
         }
-
-        if ( skip || skipTests || skipExec )
+        
+        // DUNS
+        if ( skipNar || skipNarTests || skipNarExec )
         {
             getLog().info( "Tests are skipped." );
             return false;
@@ -1272,7 +1259,7 @@ public class NarIntegrationTestMojo
      */
     public boolean isSkipExec()
     {
-        return this.skipTests;
+        return this.skipNarTests;
     }
 
     /**
@@ -1280,7 +1267,7 @@ public class NarIntegrationTestMojo
      */
     public void setSkipExec( boolean skipExec )
     {
-        this.skipTests = skipExec;
+        this.skipNarTests = skipExec;
     }
     
     //TODO remove the part with ToolchainManager lookup once we depend on

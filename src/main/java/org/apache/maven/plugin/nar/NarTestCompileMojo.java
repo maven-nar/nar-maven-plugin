@@ -49,11 +49,17 @@ import org.apache.tools.ant.Project;
 public class NarTestCompileMojo
     extends AbstractCompileMojo
 {
+    /**
+     * Skip running of NAR integration test plugins.
+     * 
+     * @parameter expression="${skipNar}" default-value="false"
+     */
+    private boolean skipNar;
 
     public final void execute()
         throws MojoExecutionException, MojoFailureException
     {
-        if ( shouldSkip() )
+        if ( shouldSkip() || skipNar)
         {
             return;
         }

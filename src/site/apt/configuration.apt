@@ -12,6 +12,8 @@ NAR Configuration
 +--
 <configuration>
   <skip/>
+  <skipNar/>
+  <skipNarTest/>
   <arch/>
   <os/>
   <javaHome/>
