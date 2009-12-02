@@ -44,6 +44,15 @@ import org.codehaus.plexus.archiver.manager.ArchiverManager;
 public class NarLayout20
     extends AbstractNarLayout
 {
+    /* (non-Javadoc)
+     * @see org.apache.maven.plugin.nar.NarLayout#getNoArchDirectory(java.io.File)
+     */
+    public File getNoArchDirectory( File baseDir )
+        throws MojoExecutionException, MojoFailureException
+    {
+        return baseDir;
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.apache.maven.plugin.nar.NarLayout#getIncludeDirectory(java.io.File)

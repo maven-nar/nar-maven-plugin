@@ -168,15 +168,15 @@ public abstract class AbstractResourcesMojo
         }
         catch ( IOException e )
         {
-            throw new MojoExecutionException( "NAR: Could not copy resources", e );
+            throw new MojoExecutionException( "NAR: Could not copy resources for " + aol, e );
         }
         catch ( NoSuchArchiverException e )
         {
-            throw new MojoExecutionException( "NAR: Could not find archiver", e );
+            throw new MojoExecutionException( "NAR: Could not find archiver for " + aol, e );
         }
         catch ( ArchiverException e )
         {
-            throw new MojoExecutionException( "NAR: Could not unarchive jar file", e );
+            throw new MojoExecutionException( "NAR: Could not unarchive jar file for " + aol, e );
         }
         getLog().info( "Copied " + copied + " resources for " + aol );
     }

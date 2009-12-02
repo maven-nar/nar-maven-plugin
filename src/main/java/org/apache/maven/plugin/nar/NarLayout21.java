@@ -42,7 +42,7 @@ import org.codehaus.plexus.archiver.manager.ArchiverManager;
 public class NarLayout21
     extends AbstractNarLayout
 {
-    private File getNoarchDirectory( File baseDir )
+    public File getNoArchDirectory( File baseDir )
     {
         return new File( baseDir, NarConstants.NAR_NO_ARCH );
     }
@@ -63,7 +63,7 @@ public class NarLayout21
      */
     public final File getIncludeDirectory( File baseDir )
     {
-        return new File( getNoarchDirectory( baseDir ), "include" );
+        return new File( getNoArchDirectory( baseDir ), "include" );
     }
 
     /*
@@ -108,9 +108,9 @@ public class NarLayout21
     public final void attachNars( File baseDir, ArchiverManager archiverManager,  MavenProjectHelper projectHelper, MavenProject project, NarInfo narInfo )
         throws MojoExecutionException
     {
-        if ( getNoarchDirectory( baseDir ).exists() )
+        if ( getNoArchDirectory( baseDir ).exists() )
         {
-            attachNar( archiverManager, projectHelper, project, NarConstants.NAR_NO_ARCH, getNoarchDirectory( baseDir ), "*/**" );
+            attachNar( archiverManager, projectHelper, project, NarConstants.NAR_NO_ARCH, getNoArchDirectory( baseDir ), "*/**" );
             narInfo.setNar( null, NarConstants.NAR_NO_ARCH, project.getGroupId() + ":" + project.getArtifactId() + ":"
                 + NarConstants.NAR_TYPE + ":" + NarConstants.NAR_NO_ARCH );
         }

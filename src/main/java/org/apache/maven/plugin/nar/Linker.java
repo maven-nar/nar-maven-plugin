@@ -177,7 +177,7 @@ public class Linker
         return name;
     }
 
-    public final String getVersion()
+    public final String getVersion() 
         throws MojoFailureException, MojoExecutionException
     {
         if ( name == null )

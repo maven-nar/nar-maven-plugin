@@ -20,6 +20,7 @@ package org.apache.maven.plugin.nar;
  */
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 
 import org.apache.maven.plugin.MojoExecutionException;
@@ -57,6 +58,24 @@ public class NarResourcesMojo
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
+        // noarch resources
+        try
+        {
+            int copied = 0;
+            File noarchDir = new File( resourceDirectory, NarConstants.NAR_NO_ARCH );
+            if ( noarchDir.exists() )
+            {
+                File noarchDstDir = getLayout().getNoArchDirectory( getTargetDirectory() );
+                getLog().debug( "Copying noarch from " + noarchDir + " to " + noarchDstDir );
+                copied += NarUtil.copyDirectoryStructure( noarchDir, noarchDstDir, null, NarUtil.DEFAULT_EXCLUDES );
+            }
+            getLog().info( "Copied " + copied + " resources" );
+        }
+        catch ( IOException e )
+        {
+            throw new MojoExecutionException( "NAR: Could not copy resources", e );
+        }
+        
         // scan resourceDirectory for AOLs
         File aolDir = new File( resourceDirectory, NarConstants.NAR_AOL );
         if ( aolDir.exists() )

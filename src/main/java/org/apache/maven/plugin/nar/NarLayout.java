@@ -37,31 +37,41 @@ import org.codehaus.plexus.archiver.manager.ArchiverManager;
 public interface NarLayout
 {
     /**
+     * Specifies where all the "no architecture" specific files are stored
+     */
+    File getNoArchDirectory( File baseDir )
+        throws MojoExecutionException, MojoFailureException;
+    
+    /**
      * Specifies where libraries are stored
      * 
      * @return
-     * @throws MojoExecutionException, MojoFailureException 
+     * @throws MojoExecutionException, MojoFailureException
      */
-    File getLibDirectory( File baseDir, String aol, String type ) throws MojoExecutionException, MojoFailureException;
+    File getLibDirectory( File baseDir, String aol, String type )
+        throws MojoExecutionException, MojoFailureException;
 
     /**
      * Specifies where includes are stored
      * 
      * @return
      */
-    File getIncludeDirectory( File targetDirectory ) throws MojoExecutionException, MojoFailureException;
+    File getIncludeDirectory( File baseDir )
+        throws MojoExecutionException, MojoFailureException;
 
     /**
      * Specifies where binaries are stored
      * 
      * @return
      */
-    File getBinDirectory( File baseDir, String aol ) throws MojoExecutionException, MojoFailureException;
+    File getBinDirectory( File baseDir, String aol )
+        throws MojoExecutionException, MojoFailureException;
 
     /**
      * Called to attach nars to main jar file. This method needs to produce all the attached nar files and set NarInfo
      * accordingly.
      */
-    void attachNars( File baseDir, ArchiverManager archiverManager, MavenProjectHelper projectHelper, MavenProject project, NarInfo narInfo )
+    void attachNars( File baseDir, ArchiverManager archiverManager, MavenProjectHelper projectHelper,
+                     MavenProject project, NarInfo narInfo )
         throws MojoExecutionException, MojoFailureException;
 }
