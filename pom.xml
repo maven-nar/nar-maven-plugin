@@ -162,30 +162,6 @@
 
   <build>
     <defaultGoal>install</defaultGoal>
-    <plugins>
-<!-- FIXME NAR-73, wait for this plugin to be available
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-toolchains-plugin</artifactId>
-        <version>1.0</version>
-        <executions>
-          <execution>
-            <phase>validate</phase>
-            <goals>
-              <goal>toolchain</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <toolchains>
-            <jdk>
-              <version>[1.4)</version>
-            </jdk>
-          </toolchains>
-        </configuration>
-      </plugin>
--->
-    </plugins>
   </build>
 
   <reporting>
@@ -243,12 +219,14 @@
                 <setupInclude>it0003-jni/pom.xml</setupInclude>
                 <setupInclude>it0007-lib-shared/pom.xml</setupInclude>
                 <setupInclude>it0010-lib-static/pom.xml</setupInclude>
+                <setupInclude>it0020-lib-3rdparty/pom.xml</setupInclude>
               </setupIncludes>
               <pomIncludes>
               	<pomInclude>*/pom.xml</pomInclude>
               </pomIncludes>
               <pomExcludes>
                 <pomExclude>it-parent/**</pomExclude>
+                <pomExclude>it0021-*/**</pomExclude>
               </pomExcludes>
               <localRepositoryPath>${project.build.directory}/it-repo</localRepositoryPath>
               <settingsFile>src/it/settings.xml</settingsFile>
