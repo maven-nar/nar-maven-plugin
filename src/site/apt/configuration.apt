@@ -29,6 +29,12 @@ NAR Configuration
   <failOnError/>
   <runtime/>
   <libtool/>
+  
+  <gnuUseOnWindows/>
+  <gnuSourceDirectory/>
+  <gnuTargetDirectory/>
+  <gnuAutogenSkip/>
+  <gnuConfigureSkip/>
 
   <libraries>
     <library>

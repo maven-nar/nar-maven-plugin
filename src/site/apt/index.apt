@@ -29,17 +29,27 @@ The goals are part of the
 <<<nar>>> packaging/{{{lifecycle.html}lifecycle}}, which inserts the nar goals into the standard lifecyle. Using nar packaging
 allows you to build a jar file as well as nar files. The list below shows the sequence of the NAR goals:
 
+    [[1]] {{{#nar-validate}nar-validate}}
+    
     [[1]] {{{#nar-download}nar-download}}
     
     [[2]] {{{#nar-system-generate}nar-system-generate}}
     
     [[3]] {{{#nar-unpack}nar-unpack}}
     
+    [[3]] {{{#nar-gnu-configure}nar-gnu-configure}}
+    
     [[4]] {{{#nar-resources}nar-resources}}
+    
+    [[4]] {{{#nar-gnu-resources}nar-gnu-resources}}
     
     [[5]] {{{#nar-javah}nar-javah}}
     
+    [[6]] {{{#nar-gnu-make}nar-gnu-make}}
+
     [[6]] {{{#nar-compile}nar-compile}}
+    
+    [[6]] {{{#nar-gnu-process}nar-gnu-process}}
     
     [[7]] {{{#nar-testCompile}nar-testCompile}}
    
@@ -62,7 +72,7 @@ in the goals below. The configuration section of the NAR plugin allows one to ov
 most of the default settings. The default settings come from the AOL properties file 
 which allows us to specify different defaults depending on the architecture-os-linker
 combination, see {{{aol.html}AOL Properties}}.
-                
+               
 	The NAR Plugin tries to deduce the "Operating System"
 and the "Architecture" of the machine. Both can be overridden by setting <<<os>>>
 and <<<arch>>> in the {{{configuration.html}configuration}}.
@@ -73,7 +83,12 @@ configuration section). Now that the linker name is known
 all other properties are looked up with a prefix of <<<[arch.[os.[linker.]]]>>> from the AOL Properties
 file, but can be overridden in the configuration section (which can be made AOL specific by
 putting it inside a profile.
-               
+ 
+* {nar-validate}
+                
+    The NAR plugin makes sure the linker name can be found and that at least one compiler exists
+for this linker. It further check the version number of the linker to see if the linker is actually
+found on the path.               
    
 * {nar-download}
 
@@ -98,12 +113,23 @@ class will then end up in this package.
 the "nar" subdirectory of the local repository. A flag is set not to download and unpack this nar file again, 
 except if it is a SNAPSHOT artifact. <<TBD The actual nar file is deleted to preserve diskspace.>>
         
+* {nar-gnu-configure} 
+
+    If you store files in the gnuSourceDirectory (src/gnu) the NAR plugin will try to run autogen and configure
+over them with a target set to gnuTargetDirectory. This process can be inhibited by setting gnuAutogenSkip and or 
+gnuConfigureSkip and normally does not take place on Windows, unless gnuUseOnWindows is set. The generated and configured
+files are all stored in gnuTargetDirectory and will be handled in subsequent NAR goals.    
+        
 * {nar-resources}
 
 	This is an optional goal. It will take any resources in src/nar/resources and copy them into
 specific areas under target/nar. Resources may include pre-compiled/linked libraries and other 
 shareable items. This goal can be used to create a nar library from a distribution that comes
 with compiled shareable libraries.
+  
+* {nar-gnu-resources}
+
+    Copies the resourceIncludeDir (include) from the gunSourceDirectory (src/gnu) into the noarch area inside target.
                 
 * {nar-javah}
                 
@@ -115,6 +141,11 @@ You can also set a boot classpath using <<<javah.bootClassPaths>>>.
 
 	This goal has no effect if there are no java sources, or if none of the java classes contain a native
 method.
+                
+* {nar-gnu-make}  
+
+    runs "make" followed by "make install" to put the final files in position for copying to the NAR target areas by the 
+nar-gnu-process goal.
                 
 * {nar-compile}
                 
@@ -174,7 +205,10 @@ in the noarch nar file.
 skipped. This flag can be used if you want to distribute a library that only contains pure
 abstract classes in include files.>>
                 
+* {nar-gnu-process}  
 
+    Copies the gnu "install"-ed area into the NAR target area for testing and packing. 
+                
 * {nar-testCompile}
 
 	This goal will compile the native test source code (c, c++ or fortran) and create executables from it.
