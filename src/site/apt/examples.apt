@@ -58,6 +58,28 @@ directory.
 	"lib-static" and links statically with it.
 	
 	[]
+	
+	[it0013-gnu-executable] A gnu autogen and configurable package.
+	
+	[it0014-multi-module] A multi module package, consisting of a library and an executable dependent on that library. 
+	
+	[it0015-cpp-executable] A C++ program.
+	
+	[it0016-layout] Tests for different repository layouts, currently NarLayout20 and NarLayout21.
+	
+	[it0017-toolchain] Tests which use the toolchain to find tools such as javah. 
+	
+	[it0018-fortran] A Fortran 90 program, not enabled on Windows. 
+	
+	[it0019-compiler] Test to run with the Intel compiler.
+	
+	[]
+	
+	[it0020-lib-3rdparty] A 3rd party library, including header files. 
+	
+	[it0021-executable-dep-lib-3rdparty] An executable dependent on the 3rd party library. 
+	
+	[] 
 
 	These examples are now all run as integration tests by running maven on the maven-nar-plugin from its top-level directory with the profile "run-its".
 

@@ -31,37 +31,37 @@ allows you to build a jar file as well as nar files. The list below shows the se
 
     [[1]] {{{#nar-validate}nar-validate}}
     
-    [[1]] {{{#nar-download}nar-download}}
+    [[2]] {{{#nar-download}nar-download}}
     
-    [[2]] {{{#nar-system-generate}nar-system-generate}}
+    [[3]] {{{#nar-system-generate}nar-system-generate}}
     
-    [[3]] {{{#nar-unpack}nar-unpack}}
+    [[4]] {{{#nar-unpack}nar-unpack}}
     
-    [[3]] {{{#nar-gnu-configure}nar-gnu-configure}}
+    [[5]] {{{#nar-gnu-configure}nar-gnu-configure}}
     
-    [[4]] {{{#nar-resources}nar-resources}}
+    [[6]] {{{#nar-resources}nar-resources}}
     
-    [[4]] {{{#nar-gnu-resources}nar-gnu-resources}}
+    [[7]] {{{#nar-gnu-resources}nar-gnu-resources}}
     
-    [[5]] {{{#nar-javah}nar-javah}}
+    [[8]] {{{#nar-javah}nar-javah}}
     
-    [[6]] {{{#nar-gnu-make}nar-gnu-make}}
+    [[9]] {{{#nar-gnu-make}nar-gnu-make}}
 
-    [[6]] {{{#nar-compile}nar-compile}}
+    [[10]] {{{#nar-compile}nar-compile}}
     
-    [[6]] {{{#nar-gnu-process}nar-gnu-process}}
+    [[11]] {{{#nar-gnu-process}nar-gnu-process}}
     
-    [[7]] {{{#nar-testCompile}nar-testCompile}}
+    [[12]] {{{#nar-testCompile}nar-testCompile}}
    
-    [[8]] {{{#nar-test}nar-test}}
+    [[13]] {{{#nar-test}nar-test}}
     
-    [[9]] {{{#nar-package}nar-package}}
+    [[14]] {{{#nar-package}nar-package}}
     
-    [[10]] {{{#nar-integration-test}nar-integration-test}}
+    [[15]] {{{#nar-integration-test}nar-integration-test}}
     
-    [[11]] {{{#install}install (standard maven goal)}}
+    [[16]] {{{#install}install (standard maven goal)}}
     
-    [[12]] {{{#deploy}deploy (standard maven goal)}}
+    [[17]] {{{#deploy}deploy (standard maven goal)}}
 
 	[]
 	
