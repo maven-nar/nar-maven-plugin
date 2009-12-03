@@ -26,13 +26,13 @@
         <phases>
           <validate>org.apache.maven.plugins:maven-nar-plugin:nar-validate</validate>
           <initialize></initialize>
-          <generate-sources>org.apache.maven.plugins:maven-nar-plugin:nar-download,
-            org.apache.maven.plugins:maven-nar-plugin:nar-system-generate
+          <generate-sources>org.apache.maven.plugins:maven-nar-plugin:nar-download
           </generate-sources>
           <process-sources>org.apache.maven.plugins:maven-nar-plugin:nar-unpack,
             org.apache.maven.plugins:maven-nar-plugin:nar-gnu-configure
           </process-sources>
-          <generate-resources></generate-resources>
+          <generate-resources>org.apache.maven.plugins:maven-nar-plugin:nar-system-generate
+          </generate-resources>
           <process-resources>org.apache.maven.plugins:maven-resources-plugin:resources,
             org.apache.maven.plugins:maven-nar-plugin:nar-resources,
             org.apache.maven.plugins:maven-nar-plugin:nar-gnu-resources

@@ -30,9 +30,11 @@ import org.apache.maven.plugin.MojoFailureException;
 
 /**
  * Generates a NarSystem class with static methods to use inside the java part of the library.
+ * Runs in generate-resources rather than generate-sources to allow the maven-swig-plugin (which runs in
+ * generate-sources) to configure the nar plugin and to let it generate a proper system file. 
  * 
  * @goal nar-system-generate
- * @phase generate-sources
+ * @phase generate-resources
  * @requiresProject
  * @author Mark Donszelmann
  */

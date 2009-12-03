@@ -33,11 +33,11 @@ allows you to build a jar file as well as nar files. The list below shows the se
     
     [[2]] {{{#nar-download}nar-download}}
     
-    [[3]] {{{#nar-system-generate}nar-system-generate}}
+    [[3]] {{{#nar-unpack}nar-unpack}}
     
-    [[4]] {{{#nar-unpack}nar-unpack}}
+    [[4]] {{{#nar-gnu-configure}nar-gnu-configure}}
     
-    [[5]] {{{#nar-gnu-configure}nar-gnu-configure}}
+    [[5]] {{{#nar-system-generate}nar-system-generate}}
     
     [[6]] {{{#nar-resources}nar-resources}}
     
@@ -99,14 +99,6 @@ all dependent jar files some of which may include a nar.properties file.
 This property file contains information on what other machine dependent and machine independent nar files to download.
 This goal will download any further necessary nar files into the local repository.
 
-* {nar-system-generate}
-
-	This goal generates a NarSystem class if necessary. This class contains helper methods for your
-code to handle things at run-time. The static method "loadLibrary()" is currently the only method
-generated and will load your JNI library with name "artifactId-version". This goals only executed
-if you produce a JNI library and you specify a <packageName> as subtag of <library>. The NarSystem
-class will then end up in this package.
-                                            
 * {nar-unpack}
 
 	Since a nar file is of no use to any native compilation process the nar-unpack goal unpacks the nar into
@@ -120,6 +112,14 @@ over them with a target set to gnuTargetDirectory. This process can be inhibited
 gnuConfigureSkip and normally does not take place on Windows, unless gnuUseOnWindows is set. The generated and configured
 files are all stored in gnuTargetDirectory and will be handled in subsequent NAR goals.    
         
+* {nar-system-generate}
+
+    This goal generates a NarSystem class if necessary. This class contains helper methods for your
+code to handle things at run-time. The static method "loadLibrary()" is currently the only method
+generated and will load your JNI library with name "artifactId-version". This goals only executed
+if you produce a JNI library and you specify a <packageName> as subtag of <library>. The NarSystem
+class will then end up in this package.
+                                            
 * {nar-resources}
 
 	This is an optional goal. It will take any resources in src/nar/resources and copy them into
