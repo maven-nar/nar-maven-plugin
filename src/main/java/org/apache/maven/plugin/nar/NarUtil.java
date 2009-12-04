@@ -24,6 +24,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -232,7 +234,8 @@ public final class NarUtil
             if ( !sofile.exists() )
             {
                 // ln -s lib.so.xx lib.so
-                int result = runCommand( "ln", new String[] { "-s", file.getName(), sofile.getPath() }, null, null, log );
+                int result =
+                    runCommand( "ln", new String[] { "-s", file.getName(), sofile.getPath() }, null, null, log );
                 if ( result != 0 )
                 {
                     throw new MojoExecutionException( "Failed to execute 'ln -s " + file.getName() + " "
@@ -374,11 +377,45 @@ public final class NarUtil
             String dest = file.getAbsolutePath();
             dest = dest.substring( sourcePath.length() + 1 );
             File destination = new File( destinationDirectory, dest );
+            System.err.println( "** " + destination );
             if ( file.isFile() )
             {
-                destination = destination.getParentFile();
-                FileUtils.copyFileToDirectory( file, destination );
+                // destination = destination.getParentFile();
+                FileUtils.copyFile( file, destination );
                 copied++;
+
+                // copy executable bit
+                try
+                {
+                    // 1.6 only so coded using introspection
+                    // destination.setExecutable( file.canExecute(), false );
+                    Method canExecute = file.getClass().getDeclaredMethod( "canExecute", new Class[] {} );
+                    Method setExecutable =
+                        destination.getClass().getDeclaredMethod( "setExecutable",
+                                                                  new Class[] { boolean.class, boolean.class } );
+                    setExecutable.invoke( destination, new Object[] {
+                        (Boolean) canExecute.invoke( file, new Object[] {} ), Boolean.FALSE } );
+                }
+                catch ( SecurityException e )
+                {
+                    // ignored
+                }
+                catch ( NoSuchMethodException e )
+                {
+                    // ignored
+                }
+                catch ( IllegalArgumentException e )
+                {
+                    // ignored
+                }
+                catch ( IllegalAccessException e )
+                {
+                    // ignored
+                }
+                catch ( InvocationTargetException e )
+                {
+                    // ignored
+                }
             }
             else if ( file.isDirectory() )
             {

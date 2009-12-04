@@ -53,9 +53,7 @@ under the License.
           <libraries>
             <library>
               <type>executable</type>
-<!-- NAR-84 
               <run>true</run>
--->
             </library>
           </libraries>
         </configuration>
