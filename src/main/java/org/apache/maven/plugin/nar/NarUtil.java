@@ -377,7 +377,6 @@ public final class NarUtil
             String dest = file.getAbsolutePath();
             dest = dest.substring( sourcePath.length() + 1 );
             File destination = new File( destinationDirectory, dest );
-            System.err.println( "** " + destination );
             if ( file.isFile() )
             {
                 // destination = destination.getParentFile();
