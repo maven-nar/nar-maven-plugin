@@ -233,6 +233,20 @@ public class Linker
                 throw new MojoFailureException( "Cannot deduce version number from: " + out );
             }
         }
+        else if ( name.equals( "icl" ) )
+        {
+            NarUtil.runCommand( "icl", new String[] { "/QV" }, null, null, out, err, dbg );
+            Pattern p = Pattern.compile( "\\d+\\.\\d+" );
+            Matcher m = p.matcher( err.toString() );
+            if ( m.find() )
+            {
+                version = m.group( 0 );
+            }
+            else
+            {
+                throw new MojoFailureException( "Cannot deduce version number from: " + out.toString() );
+            }
+        }
         else
         {
             throw new MojoFailureException( "Cannot find version number for linker '" + name + "'" );
