@@ -38,8 +38,11 @@ import net.sf.antcontrib.cpptasks.types.LibrarySet;
 import net.sf.antcontrib.cpptasks.types.LinkerArgument;
 import net.sf.antcontrib.cpptasks.types.SystemLibrarySet;
 
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.codehaus.plexus.util.FileUtils;
@@ -50,15 +53,60 @@ import org.codehaus.plexus.util.StringUtils;
  * 
  * @goal nar-compile
  * @phase compile
+ * @requiresSession
+ * @requiresProject
  * @requiresDependencyResolution compile
  * @author Mark Donszelmann
  */
 public class NarCompileMojo
     extends AbstractCompileMojo
 {
+    /**
+     * The current build session instance.
+     * 
+     * @parameter expression="${session}"
+     * @required
+     * @readonly
+     */
+    private MavenSession session;
+
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
+        for ( Iterator i = session.getSortedProjects().iterator(); i.hasNext(); )
+        {
+            MavenProject project = (MavenProject) i.next();
+            if ( !project.getPackaging().equals( NarConstants.NAR ) )
+            {
+                continue;
+            }
+            if ( project.isExecutionRoot() )
+            {
+                continue;
+            }
+
+            // is this me ? bail out, the list was sorted
+            MavenProject me = getMavenProject();
+            if ( project.getArtifact().equals( me.getArtifact() ) )
+            {
+                break;
+            }
+
+            // search the dependency list
+            for ( Iterator it = me.getArtifacts().iterator(); it.hasNext(); )
+            {
+                Artifact dependency = (Artifact) it.next();
+                // equals will not work here as the project type is "nar" while the dependencies type is "jar"
+                // 
+                if ( dependency.getArtifactId().equals( project.getArtifactId() )
+                    && dependency.getGroupId().equals( project.getGroupId() )
+                    && dependency.getVersion().equals( project.getVersion() ) && dependency.getType().equals( "jar" ) )
+                {
+                    getLog().info( "Added intermodule dependency to " + project.getArtifact()+" in "+project.getBuild().getDirectory() );
+                }
+            }
+        }
+        
         // make sure destination is there
         getTargetDirectory().mkdirs();
 

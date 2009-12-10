@@ -27,7 +27,6 @@ import org.apache.maven.plugin.MojoFailureException;
  * 
  * @goal nar-validate
  * @phase validate
- * @requiresProject
  * @author Mark Donszelmann
  */
 public class NarValidateMojo
@@ -35,45 +34,52 @@ public class NarValidateMojo
 {
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
-    {         
+    {
         // check aol
-        AOL aol = getAOL();    
+        AOL aol = getAOL();
         getLog().info( "Using AOL: " + aol );
-        
+
         // check linker exists in retrieving the version number
-        Linker linker = getLinker();        
-        getLog().debug( "Using linker version: "+linker.getVersion());
-        
+        Linker linker = getLinker();
+        getLog().debug( "Using linker version: " + linker.getVersion() );
+
         // check compilers
         int noOfCompilers = 0;
         Compiler cpp = getCpp();
-        if (cpp.getName() != null) {
+        if ( cpp.getName() != null )
+        {
             noOfCompilers++;
             // need includes
-            if (cpp.getIncludes( Compiler.MAIN ).isEmpty()) {
-                throw new MojoExecutionException( "No includes defined for compiler "+cpp.getName() );
+            if ( cpp.getIncludes( Compiler.MAIN ).isEmpty() )
+            {
+                throw new MojoExecutionException( "No includes defined for compiler " + cpp.getName() );
             }
         }
         Compiler c = getC();
-        if (c.getName() != null) {
+        if ( c.getName() != null )
+        {
             noOfCompilers++;
             // need includes
-            if (c.getIncludes( Compiler.MAIN ).isEmpty()) {
-                throw new MojoExecutionException( "No includes defined for compiler "+c.getName() );
+            if ( c.getIncludes( Compiler.MAIN ).isEmpty() )
+            {
+                throw new MojoExecutionException( "No includes defined for compiler " + c.getName() );
             }
         }
         Compiler fortran = getCpp();
-        if (fortran.getName() != null) {
+        if ( fortran.getName() != null )
+        {
             noOfCompilers++;
             // need includes
-            if (fortran.getIncludes( Compiler.MAIN ).isEmpty()) {
-                throw new MojoExecutionException( "No includes defined for compiler "+fortran.getName() );
+            if ( fortran.getIncludes( Compiler.MAIN ).isEmpty() )
+            {
+                throw new MojoExecutionException( "No includes defined for compiler " + fortran.getName() );
             }
         }
 
         // at least one compiler has to be defined
-        if (noOfCompilers == 0) {
-            throw new MojoExecutionException( "No compilers defined for linker "+linker.getName() );
+        if ( noOfCompilers == 0 )
+        {
+            throw new MojoExecutionException( "No compilers defined for linker " + linker.getName() );
         }
     }
 }

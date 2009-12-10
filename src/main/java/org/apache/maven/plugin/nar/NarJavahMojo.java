@@ -30,6 +30,7 @@ import org.apache.maven.toolchain.ToolchainManager;
  * 
  * @goal nar-javah
  * @phase compile
+ * @requiresSession
  * @author Mark Donszelmann
  */
 public class NarJavahMojo
