@@ -1,5 +1,3 @@
-package org.apache.maven.plugin.nar;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,32 +17,34 @@ package org.apache.maven.plugin.nar;
  * under the License.
  */
 
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DefaultArtifact;
+package org.apache.maven.plugin.nar;
+
 
 /**
- * @author Mark Donszelmann
+ * Defines the layout inside the nar file.
+ * 
+ * @author Mark Donszelmann (Mark.Donszelmann@gmail.com)
  */
-public class NarArtifact
-    extends DefaultArtifact
+public interface NarFileLayout
 {
+    /**
+     * Specifies where libraries are stored
+     * 
+     * @return
+     */
+    String getLibDirectory(String aol, String type );
 
-    private NarInfo narInfo;
+    /**
+     * Specifies where includes are stored
+     * 
+     * @return
+     */
+    String getIncludeDirectory();
 
-    public NarArtifact( Artifact dependency, NarInfo narInfo )
-    {
-        super( dependency.getGroupId(), dependency.getArtifactId(), dependency.getVersionRange(),
-               dependency.getScope(), dependency.getType(), dependency.getClassifier(),
-               dependency.getArtifactHandler(), dependency.isOptional() );
-        this.narInfo = narInfo;
-    }
-
-    public final NarInfo getNarInfo()
-    {
-        return narInfo;
-    }
-    
-    public String getBaseFilename() {
-        return getArtifactId()+"-"+getVersion()+"-"+getClassifier();
-    }
+    /**
+     * Specifies where binaries are stored
+     * 
+     * @return
+     */
+    String getBinDirectory(String aol );
 }

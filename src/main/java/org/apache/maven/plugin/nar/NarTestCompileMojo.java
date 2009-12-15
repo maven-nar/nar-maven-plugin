@@ -140,7 +140,11 @@ public class NarTestCompileMojo
         // add dependency include paths
         for ( Iterator i = getNarManager().getNarDependencies( "test" ).iterator(); i.hasNext(); )
         {
-            File include = new File( getNarManager().getNarFile( (Artifact) i.next() ).getParentFile(), "nar/include" );
+            // FIXED NAR-90
+            Artifact artifact = (Artifact) i.next();
+            File include =
+                getLayout().getIncludeDirectory( getNarManager().getUnpackDirectory( artifact ),
+                                                 artifact.getArtifactId(), artifact.getVersion() );
             if ( include.exists() )
             {
                 task.createIncludePath().setPath( include.getPath() );
@@ -152,8 +156,12 @@ public class NarTestCompileMojo
 
         // FIXME hardcoded values
         String libName = getFinalName();
-        File includeDir = getLayout().getIncludeDirectory( getTargetDirectory() );
-        File libDir = getLayout().getLibDirectory( getTargetDirectory(), getAOL().toString(), test.getLink() );
+        File includeDir =
+            getLayout().getIncludeDirectory( getTargetDirectory(), getMavenProject().getArtifactId(),
+                                             getMavenProject().getVersion() );
+        File libDir =
+            getLayout().getLibDirectory( getTargetDirectory(), getMavenProject().getArtifactId(),
+                                         getMavenProject().getVersion(), getAOL().toString(), test.getLink() );
 
         // copy shared library
         // FIXME why do we do this ?
@@ -227,16 +235,18 @@ public class NarTestCompileMojo
 
             Artifact dependency = (Artifact) i.next();
             // FIXME: this should be preferred binding
-            File lib =
-                new File( getNarManager().getNarFile( dependency ).getParentFile(), "nar/lib/" + getAOL() + "/"
-                    + test.getLink() );
-            if ( lib.exists() )
+            // FIXED NAR-90
+            File libDirectory =
+                getLayout().getLibDirectory( getNarManager().getUnpackDirectory( dependency ),
+                                             dependency.getArtifactId(), dependency.getVersion(), getAOL().toString(),
+                                             test.getLink() );
+            if ( libDirectory.exists() )
             {
                 LibrarySet libset = new LibrarySet();
                 libset.setProject( antProject );
                 libset.setLibs( new CUtil.StringArrayBuilder( dependency.getArtifactId() + "-"
                     + dependency.getVersion() ) );
-                libset.setDir( lib );
+                libset.setDir( libDirectory );
                 task.addLibset( libset );
             }
         }

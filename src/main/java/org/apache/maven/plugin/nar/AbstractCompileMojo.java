@@ -128,7 +128,7 @@ public abstract class AbstractCompileMojo
      * @parameter expression=""
      */
     private Java java;
-    
+
     /**
      * Layout to be used for building and upacking artifacts
      * 
@@ -136,8 +136,9 @@ public abstract class AbstractCompileMojo
      * @required
      */
     private String layout;
+
     private NarLayout narLayout;
-    
+
     private NarInfo narInfo;
 
     private List/* <String> */dependencyLibOrder;
@@ -186,32 +187,38 @@ public abstract class AbstractCompileMojo
         return fortran;
     }
 
-    protected final int getMaxCores( AOL aol ) throws MojoExecutionException
+    protected final int getMaxCores( AOL aol )
+        throws MojoExecutionException
     {
         return getNarInfo().getProperty( aol, "maxCores", maxCores );
     }
 
-    protected final boolean useLibtool( AOL aol ) throws MojoExecutionException
+    protected final boolean useLibtool( AOL aol )
+        throws MojoExecutionException
     {
         return getNarInfo().getProperty( aol, "libtool", libtool );
     }
 
-    protected final boolean failOnError( AOL aol ) throws MojoExecutionException
+    protected final boolean failOnError( AOL aol )
+        throws MojoExecutionException
     {
         return getNarInfo().getProperty( aol, "failOnError", failOnError );
     }
 
-    protected final String getRuntime( AOL aol ) throws MojoExecutionException
+    protected final String getRuntime( AOL aol )
+        throws MojoExecutionException
     {
         return getNarInfo().getProperty( aol, "runtime", runtime );
     }
 
-    protected final String getOutput( AOL aol ) throws MojoExecutionException
+    protected final String getOutput( AOL aol )
+        throws MojoExecutionException
     {
         return getNarInfo().getProperty( aol, "output", output );
     }
 
-    protected final File getJavaHome( AOL aol ) throws MojoExecutionException
+    protected final File getJavaHome( AOL aol )
+        throws MojoExecutionException
     {
         // FIXME should be easier by specifying default...
         return getNarInfo().getProperty( aol, "javaHome", NarUtil.getJavaHome( javaHome, getOS() ) );
@@ -265,7 +272,8 @@ public abstract class AbstractCompileMojo
         return dependencyLibOrder;
     }
 
-    protected final NarInfo getNarInfo() throws MojoExecutionException
+    protected final NarInfo getNarInfo()
+        throws MojoExecutionException
     {
         if ( narInfo == null )
         {
@@ -275,31 +283,15 @@ public abstract class AbstractCompileMojo
         }
         return narInfo;
     }
-    
+
     // FIXME, needs to maybe move up
-    protected final NarLayout getLayout() throws MojoExecutionException
+    protected final NarLayout getLayout()
+        throws MojoExecutionException
     {
-        if (narLayout == null) {
-            String className = layout.indexOf( '.' ) < 0 ? NarLayout21.class.getPackage().getName()+"."+layout : layout;
-            getLog().debug( "Using "+className);
-            Class cls;
-            try
-            {
-                cls = Class.forName( className );
-                narLayout = (NarLayout)cls.newInstance();
-            }
-            catch ( ClassNotFoundException e )
-            {
-                throw new MojoExecutionException( "Cannot find class for layout "+className, e );
-            }
-            catch ( InstantiationException e )
-            {
-                throw new MojoExecutionException( "Cannot instantiate class for layout "+className, e );
-            }
-            catch ( IllegalAccessException e )
-            {
-                throw new MojoExecutionException( "Cannot access class for layout "+className, e );
-            }
+        if ( narLayout == null )
+        {
+            narLayout =
+                AbstractNarLayout.getLayout( layout, getLog() );
         }
         return narLayout;
     }

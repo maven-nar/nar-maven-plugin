@@ -28,10 +28,10 @@ under the License.
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>it0016-executable-dep-lib-shared</artifactId>
+  <artifactId>it0016-executable-dep-lib-shared-layout21</artifactId>
   <packaging>nar</packaging>
   
-  <name>Maven NAR Executable and Shared Library</name>
+  <name>Maven NAR Executable and Shared Library (Layout21)</name>
   <version>1.0-SNAPSHOT</version>
   <description>
     Executable depending on a shared library.
@@ -48,7 +48,6 @@ under the License.
         <artifactId>maven-nar-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>
-          <layout>NarLayout20</layout>
           <libraries>
             <library>
               <type>executable</type>
@@ -62,7 +61,7 @@ under the License.
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.its.nar</groupId>
-      <artifactId>it0016-lib-shared</artifactId>
+      <artifactId>it0016-lib-shared-layout21</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
   </dependencies>

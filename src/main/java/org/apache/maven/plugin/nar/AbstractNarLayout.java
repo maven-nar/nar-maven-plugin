@@ -21,12 +21,17 @@ package org.apache.maven.plugin.nar;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 import org.codehaus.plexus.archiver.Archiver;
 import org.codehaus.plexus.archiver.ArchiverException;
+import org.codehaus.plexus.archiver.UnArchiver;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
 import org.codehaus.plexus.archiver.manager.NoSuchArchiverException;
 
@@ -37,9 +42,20 @@ import org.codehaus.plexus.archiver.manager.NoSuchArchiverException;
 public abstract class AbstractNarLayout
     implements NarLayout, NarConstants
 {
+    private Log log;
 
-    protected final void attachNar( ArchiverManager archiverManager, MavenProjectHelper projectHelper, MavenProject project,
-                                    String classifier, File dir, String include )
+    protected AbstractNarLayout( Log log )
+    {
+        this.log = log;
+    }
+
+    protected Log getLog()
+    {
+        return log;
+    }
+
+    protected final void attachNar( ArchiverManager archiverManager, MavenProjectHelper projectHelper,
+                                    MavenProject project, String classifier, File dir, String include )
         throws MojoExecutionException
     {
         File narFile =
@@ -70,4 +86,106 @@ public abstract class AbstractNarLayout
         }
         projectHelper.attachArtifact( project, NarConstants.NAR_TYPE, classifier, narFile );
     }
+
+    protected void unpackNarAndProcess( ArchiverManager archiverManager, File file, File narLocation, String os,
+                                        String linkerName, AOL defaultAOL )
+        throws MojoExecutionException, MojoFailureException
+    {
+
+        final String gpp = "g++";
+        final String gcc = "gcc";
+
+        narLocation.mkdirs();
+
+        // unpack
+        try
+        {
+            UnArchiver unArchiver;
+            unArchiver = archiverManager.getUnArchiver( NarConstants.NAR_ROLE_HINT );
+            unArchiver.setSourceFile( file );
+            unArchiver.setDestDirectory( narLocation );
+            unArchiver.extract();
+        }
+        catch ( NoSuchArchiverException e )
+        {
+            throw new MojoExecutionException( "Error unpacking file: " + file + " to: " + narLocation, e );
+        }
+        catch ( ArchiverException e )
+        {
+            throw new MojoExecutionException( "Error unpacking file: " + file + " to: " + narLocation, e );
+        }
+
+        // process
+        if ( !NarUtil.getOS( os ).equals( OS.WINDOWS ) )
+        {
+            NarUtil.makeExecutable( new File( narLocation, "bin/" + defaultAOL ), log );
+            // FIXME clumsy
+            if ( defaultAOL.hasLinker( gpp ) )
+            {
+                NarUtil.makeExecutable( new File( narLocation, "bin/"
+                    + NarUtil.replace( gpp, gcc, defaultAOL.toString() ) ), log );
+            }
+            // add link to versioned so files
+            NarUtil.makeLink( new File( narLocation, "lib/" + defaultAOL ), log );
+        }
+        if ( linkerName.equals( gcc ) || linkerName.equals( gpp ) )
+        {
+            NarUtil.runRanlib( new File( narLocation, "lib/" + defaultAOL ), log );
+            // FIXME clumsy
+            if ( defaultAOL.hasLinker( gpp ) )
+            {
+                NarUtil.runRanlib(
+                                   new File( narLocation, "lib/" + NarUtil.replace( gpp, gcc, defaultAOL.toString() ) ),
+                                   log );
+            }
+        }
+    }
+
+    /**
+     * @return
+     * @throws MojoExecutionException
+     */
+    public static NarLayout getLayout( String layoutName, Log log )
+        throws MojoExecutionException
+    {
+        String className =
+            layoutName.indexOf( '.' ) < 0 ? NarLayout21.class.getPackage().getName() + "." + layoutName : layoutName;
+        log.debug( "Using " + className );
+        Class cls;
+        try
+        {
+            cls = Class.forName( className );
+            Constructor ctor = cls.getConstructor( new Class[] { Log.class } );
+            return (NarLayout) ctor.newInstance( new Object[] { log } );
+        }
+        catch ( ClassNotFoundException e )
+        {
+            throw new MojoExecutionException( "Cannot find class for layout " + className, e );
+        }
+        catch ( InstantiationException e )
+        {
+            throw new MojoExecutionException( "Cannot instantiate class for layout " + className, e );
+        }
+        catch ( IllegalAccessException e )
+        {
+            throw new MojoExecutionException( "Cannot access class for layout " + className, e );
+        }
+        catch ( SecurityException e )
+        {
+            throw new MojoExecutionException( "Cannot access class for layout " + className, e );
+        }
+        catch ( NoSuchMethodException e )
+        {
+            throw new MojoExecutionException( "Cannot find ctor(Log) for layout " + className, e );
+        }
+        catch ( IllegalArgumentException e )
+        {
+            throw new MojoExecutionException( "Wrong arguments ctor(Log) for layout " + className, e );
+        }
+        catch ( InvocationTargetException e )
+        {
+            throw new MojoExecutionException( "Cannot invokector(Log) for layout " + className, e );
+        }
+    }
+
 }

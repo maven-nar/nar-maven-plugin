@@ -39,16 +39,16 @@ public interface NarLayout
     /**
      * Specifies where all the "no architecture" specific files are stored
      */
-    File getNoArchDirectory( File baseDir )
+    File getNoArchDirectory( File baseDir, String artifactId, String version )
         throws MojoExecutionException, MojoFailureException;
-    
+
     /**
      * Specifies where libraries are stored
      * 
      * @return
      * @throws MojoExecutionException, MojoFailureException
      */
-    File getLibDirectory( File baseDir, String aol, String type )
+    File getLibDirectory( File baseDir, String artifactId, String version, String aol, String type )
         throws MojoExecutionException, MojoFailureException;
 
     /**
@@ -56,7 +56,7 @@ public interface NarLayout
      * 
      * @return
      */
-    File getIncludeDirectory( File baseDir )
+    File getIncludeDirectory( File baseDir, String artifactId, String version )
         throws MojoExecutionException, MojoFailureException;
 
     /**
@@ -64,7 +64,7 @@ public interface NarLayout
      * 
      * @return
      */
-    File getBinDirectory( File baseDir, String aol )
+    File getBinDirectory( File baseDir, String artifactId, String version, String aol )
         throws MojoExecutionException, MojoFailureException;
 
     /**
@@ -73,5 +73,13 @@ public interface NarLayout
      */
     void attachNars( File baseDir, ArchiverManager archiverManager, MavenProjectHelper projectHelper,
                      MavenProject project, NarInfo narInfo )
+        throws MojoExecutionException, MojoFailureException;
+
+    /**
+     * Called to unpack a nar file
+     * @param defaultAOL 
+     * @param linkerName 
+     */
+    void unpackNar( ArchiverManager archiverManager, File file, String os, String linkerName, AOL defaultAOL )
         throws MojoExecutionException, MojoFailureException;
 }

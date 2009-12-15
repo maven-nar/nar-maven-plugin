@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="4.2.1 -dynamiclib -fexceptions -lstdc++">
+      <target file="libit0016-lib-shared-1.0-SNAPSHOT.dylib" lastModified="125783ffc48">
+         <source file="../../../../../obj/x86_64-MacOSX-g++/HelloWorldLib.o" lastModified="125783ff478"/>
+      </target>
+   </processor>
+</history>

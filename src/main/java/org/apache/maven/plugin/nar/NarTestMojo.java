@@ -73,6 +73,7 @@ public class NarTestMojo
         // run if requested
         if ( test.shouldRun() )
         {
+            // FIXME NAR-90
             String name = getTestTargetDirectory().getPath() + "/bin/" + getAOL() + "/" + test.getName();
             getLog().info( "Running test " + name );
 
@@ -96,9 +97,10 @@ public class NarTestMojo
         if ( library.getType().equals( Library.EXECUTABLE ) && library.shouldRun() )
         {
             MavenProject project = getMavenProject();
-            // FIXME NAR-90, we could make dure we get the final name from layout
+            // FIXME NAR-90, we could make sure we get the final name from layout
             File executable =
-                new File( getLayout().getBinDirectory( getTargetDirectory(), getAOL().toString() ),
+                new File( getLayout().getBinDirectory( getTargetDirectory(), getMavenProject().getArtifactId(),
+                                                       getMavenProject().getVersion(), getAOL().toString() ),
                           project.getArtifactId() );
             getLog().info( "Running executable " + executable );
             List args = library.getArgs();
@@ -132,7 +134,8 @@ public class NarTestMojo
             if ( lib.getType().equals( Library.SHARED ) )
             {
                 File path =
-                    getLayout().getLibDirectory( getTargetDirectory(), getAOL().toString(), lib.getType() );
+                    getLayout().getLibDirectory( getTargetDirectory(), getMavenProject().getArtifactId(),
+                                                 getMavenProject().getVersion(), getAOL().toString(), lib.getType() );
                 getLog().debug( "Adding path to shared library: " + path );
                 sharedPaths.add( path );
             }
@@ -152,11 +155,12 @@ public class NarTestMojo
             // of getBaseVersion, called in pathOf.
             dependency.isSnapshot();
 
-            // FIXME NAR-90
-            File libDir = new File( getLocalRepository().pathOf( dependency ) );
-            libDir = new File( getLocalRepository().getBasedir(), libDir.getParent() );
-            libDir = new File( libDir, "nar/lib/" + getAOL() + "/shared" );
-            sharedPaths.add( libDir );
+            // FIXED NAR-90
+            File libDirectory =
+                getLayout().getLibDirectory( getNarManager().getUnpackDirectory( dependency ),
+                                             dependency.getArtifactId(), dependency.getVersion(), getAOL().toString(),
+                                             Library.SHARED );
+            sharedPaths.add( libDirectory );
         }
 
         // set environment

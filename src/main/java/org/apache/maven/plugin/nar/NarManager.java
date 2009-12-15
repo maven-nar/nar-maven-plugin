@@ -39,11 +39,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.archiver.ArchiverException;
-import org.codehaus.plexus.archiver.UnArchiver;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
-import org.codehaus.plexus.archiver.manager.NoSuchArchiverException;
-import org.codehaus.plexus.util.FileUtils;
 
 /**
  * @author Mark Donszelmann (Mark.Donszelmann@gmail.com)
@@ -61,7 +57,8 @@ public class NarManager
 
     private String linkerName;
 
-    private String[] narTypes = { NarConstants.NAR_NO_ARCH, Library.STATIC, Library.SHARED, Library.JNI, Library.PLUGIN };
+    private String[] narTypes =
+        { NarConstants.NAR_NO_ARCH, Library.STATIC, Library.SHARED, Library.JNI, Library.PLUGIN };
 
     public NarManager( Log log, ArtifactRepository repository, MavenProject project, String architecture, String os,
                        Linker linker )
@@ -127,7 +124,7 @@ public class NarManager
     }
 
     public final List/* <AttachedNarArtifact> */getAttachedNarDependencies( List/* <NarArtifacts> */narArtifacts,
-                                                                      String classifier )
+                                                                            String classifier )
         throws MojoExecutionException, MojoFailureException
     {
         AOL aol = null;
@@ -161,8 +158,8 @@ public class NarManager
      * @throws MojoExecutionException
      * @throws MojoFailureException
      */
-    public final List/* <AttachedNarArtifact> */getAttachedNarDependencies( List/* <NarArtifacts> */narArtifacts, AOL archOsLinker,
-                                                                      String type )
+    public final List/* <AttachedNarArtifact> */getAttachedNarDependencies( List/* <NarArtifacts> */narArtifacts,
+                                                                            AOL archOsLinker, String type )
         throws MojoExecutionException, MojoFailureException
     {
         boolean noarch = false;
@@ -200,7 +197,8 @@ public class NarManager
         return artifactList;
     }
 
-    private List/* <AttachedNarArtifact> */getAttachedNarDependencies( Artifact dependency, AOL archOsLinker, String type )
+    private List/* <AttachedNarArtifact> */getAttachedNarDependencies( Artifact dependency, AOL archOsLinker,
+                                                                       String type )
         throws MojoExecutionException, MojoFailureException
     {
         AOL aol = archOsLinker;
@@ -261,11 +259,11 @@ public class NarManager
         dependency.isSnapshot();
 
         File file = new File( repository.getBasedir(), repository.pathOf( dependency ) );
-        if (!file.exists())
+        if ( !file.exists() )
         {
             return null;
         }
-        
+
         JarFile jar = null;
         try
         {
@@ -323,13 +321,13 @@ public class NarManager
     }
 
     public final void downloadAttachedNars( List/* <NarArtifacts> */narArtifacts, List remoteRepositories,
-                                      ArtifactResolver resolver, String classifier )
+                                            ArtifactResolver resolver, String classifier )
         throws MojoExecutionException, MojoFailureException
     {
         // FIXME this may not be the right way to do this.... -U ignored and
         // also SNAPSHOT not used
         List dependencies = getAttachedNarDependencies( narArtifacts, classifier );
-        
+
         log.debug( "Download called with classifier: " + classifier + " for NarDependencies {" );
         for ( Iterator i = dependencies.iterator(); i.hasNext(); )
         {
@@ -358,8 +356,8 @@ public class NarManager
         }
     }
 
-    public final void unpackAttachedNars( List/* <NarArtifacts> */narArtifacts, ArchiverManager manager, String classifier,
-                                    String os )
+    public final void unpackAttachedNars( List/* <NarArtifacts> */narArtifacts, ArchiverManager archiverManager,
+                                          String classifier, String os, NarLayout layout )
         throws MojoExecutionException, MojoFailureException
     {
         log.debug( "Unpack called for OS: " + os + ", classifier: " + classifier + " for NarArtifacts {" );
@@ -375,85 +373,18 @@ public class NarManager
             Artifact dependency = (Artifact) i.next();
             log.debug( "Unpack " + dependency );
             File file = getNarFile( dependency );
-            File narLocation = new File( file.getParentFile(), "nar" );
-            File flagFile =
-                new File( narLocation, FileUtils.basename( file.getPath(), "." + NarConstants.NAR_EXTENSION )
-                    + ".flag" );
 
-            boolean process = false;
-            if ( !narLocation.exists() )
-            {
-                narLocation.mkdirs();
-                process = true;
-            }
-            else if ( !flagFile.exists() )
-            {
-                process = true;
-            }
-            else if ( file.lastModified() > flagFile.lastModified() )
-            {
-                process = true;
-            }
-
-            if ( process )
-            {
-                try
-                {
-                    final String gpp = "g++";
-                    final String gcc = "gcc";
-                    
-                    unpackNar( manager, file, narLocation );
-                    if ( !NarUtil.getOS( os ).equals( OS.WINDOWS ) )
-                    {
-                        NarUtil.makeExecutable( new File( narLocation, "bin/" + defaultAOL ), log );
-                        // FIXME clumsy
-                        if ( defaultAOL.hasLinker( gpp ) )
-                        {
-                            NarUtil.makeExecutable( new File( narLocation, "bin/"
-                                + NarUtil.replace( gpp, gcc, defaultAOL.toString() ) ), log );
-                        }
-                        // add link to versioned so files
-                        NarUtil.makeLink(new File(narLocation, "lib/"+defaultAOL), log);
-                    }
-                    if ( linkerName.equals( gcc ) || linkerName.equals( gpp ) )
-                    {
-                        NarUtil.runRanlib( new File( narLocation, "lib/" + defaultAOL ), log );
-                        // FIXME clumsy
-                        if ( defaultAOL.hasLinker( gpp ) )
-                        {
-                            NarUtil.runRanlib( new File( narLocation, "lib/"
-                                + NarUtil.replace( gpp, gcc, defaultAOL.toString() ) ), log );
-                        }
-                    }
-                    FileUtils.fileDelete( flagFile.getPath() );
-                    FileUtils.fileWrite( flagFile.getPath(), "" );
-                }
-                catch ( IOException e )
-                {
-                    log.warn( "Cannot create flag file: " + flagFile.getPath() );
-                }
-            }
+            layout.unpackNar(archiverManager, file, os, linkerName, defaultAOL);            
         }
     }
 
-    private void unpackNar( ArchiverManager archiverManager, File file, File location )
-        throws MojoExecutionException
+    /**
+     * @param narDependency
+     * @return
+     * @throws MojoFailureException 
+     */
+    public File getUnpackDirectory( Artifact narDependency ) throws MojoFailureException
     {
-        try
-        {
-            UnArchiver unArchiver;
-            unArchiver = archiverManager.getUnArchiver( NarConstants.NAR_ROLE_HINT );
-            unArchiver.setSourceFile( file );
-            unArchiver.setDestDirectory( location );
-            unArchiver.extract();
-        }
-        catch ( NoSuchArchiverException e )
-        {
-            throw new MojoExecutionException( "Error unpacking file: " + file + " to: " + location, e );
-        }
-        catch ( ArchiverException e )
-        {
-            throw new MojoExecutionException( "Error unpacking file: " + file + " to: " + location, e );
-        }
+        return new File(getNarFile( narDependency ).getParentFile(), "nar");
     }
 }

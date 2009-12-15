@@ -86,7 +86,7 @@ import org.codehaus.plexus.util.StringUtils;
  * @goal nar-integration-test
  * @phase integration-test
  */
-//DUNS, changed class name, inheritance, goal and phase
+// DUNS, changed class name, inheritance, goal and phase
 public class NarIntegrationTestMojo
     extends AbstractCompileMojo
 {
@@ -107,7 +107,7 @@ public class NarIntegrationTestMojo
     // DUNS added because of naming conflict
     /**
      * Skip running of NAR integration test plugin
-     *
+     * 
      * @parameter expression="${skipNar}" default-value="false"
      */
     private boolean skipNar;
@@ -121,18 +121,18 @@ public class NarIntegrationTestMojo
      * @since 2.4
      */
     private boolean skipNarTests;
-    
+
     // DUNS changed to nar. because of naming conflict
     /**
-     * DEPRECATED This old parameter is just like skipTests, but bound to the old property maven.test.skip.exec.
-     * Use -DskipTests instead; it's shorter.
+     * DEPRECATED This old parameter is just like skipTests, but bound to the old property maven.test.skip.exec. Use
+     * -DskipTests instead; it's shorter.
      * 
      * @deprecated
      * @parameter expression="${nar.test.skip.exec}"
      * @since 2.3
      */
     private boolean skipNarExec;
-    
+
     // DUNS changed to nar. because of naming conflict
     /**
      * Set this to true to ignore a failure during testing. Its use is NOT RECOMMENDED, but quite convenient on
@@ -161,7 +161,7 @@ public class NarIntegrationTestMojo
 
     /**
      * The directory containing generated classes of the project being tested.
-     *
+     * 
      * @parameter expression="${project.build.outputDirectory}"
      * @required
      */
@@ -169,7 +169,7 @@ public class NarIntegrationTestMojo
 
     /**
      * The Maven Project Object
-     *
+     * 
      * @parameter expression="${project}"
      * @required
      * @readonly
@@ -193,7 +193,7 @@ public class NarIntegrationTestMojo
      * @since 2.4
      */
     private List additionalClasspathElements;
-    
+
     /**
      * Base directory where all reports are written to.
      * 
@@ -212,10 +212,9 @@ public class NarIntegrationTestMojo
 
     /**
      * Specify this parameter to run individual tests by file name, overriding the <code>includes/excludes</code>
-     * parameters.  Each pattern you specify here will be used to create an 
-     * include pattern formatted like <code>**&#47;${test}.java</code>, so you can just type "-Dtest=MyTest"
-     * to run a single test called "foo/MyTest.java".  This parameter will override the TestNG suiteXmlFiles
-     * parameter.
+     * parameters. Each pattern you specify here will be used to create an include pattern formatted like
+     * <code>**&#47;${test}.java</code>, so you can just type "-Dtest=MyTest" to run a single test called
+     * "foo/MyTest.java". This parameter will override the TestNG suiteXmlFiles parameter.
      * 
      * @parameter expression="${test}"
      */
@@ -224,8 +223,8 @@ public class NarIntegrationTestMojo
     /**
      * List of patterns (separated by commas) used to specify the tests that should be included in testing. When not
      * specified and when the <code>test</code> parameter is not specified, the default includes will be
-     * <code>**&#47;Test*.java   **&#47;*Test.java   **&#47;*TestCase.java</code>.  This parameter is ignored if
-     * TestNG suiteXmlFiles are specified.
+     * <code>**&#47;Test*.java   **&#47;*Test.java   **&#47;*TestCase.java</code>. This parameter is ignored if TestNG
+     * suiteXmlFiles are specified.
      * 
      * @parameter
      */
@@ -234,8 +233,8 @@ public class NarIntegrationTestMojo
     /**
      * List of patterns (separated by commas) used to specify the tests that should be excluded in testing. When not
      * specified and when the <code>test</code> parameter is not specified, the default excludes will be
-     * <code>**&#47;*$*</code> (which excludes all inner classes).  This parameter is ignored if
-     * TestNG suiteXmlFiles are specified.
+     * <code>**&#47;*$*</code> (which excludes all inner classes). This parameter is ignored if TestNG suiteXmlFiles are
+     * specified.
      * 
      * @parameter
      */
@@ -250,7 +249,7 @@ public class NarIntegrationTestMojo
      * @readonly
      */
     // DUNS, removed, already in superclass
-    //private ArtifactRepository localRepository;
+    // private ArtifactRepository localRepository;
 
     /**
      * List of System properties to pass to the JUnit tests.
@@ -260,9 +259,9 @@ public class NarIntegrationTestMojo
     private Properties systemProperties;
 
     /**
-     * List of properties for configuring all TestNG related configurations. This is the new
-     * preferred method of configuring TestNG.
-     *
+     * List of properties for configuring all TestNG related configurations. This is the new preferred method of
+     * configuring TestNG.
+     * 
      * @parameter
      * @since 2.4
      */
@@ -324,7 +323,7 @@ public class NarIntegrationTestMojo
      * @since 2.4
      */
     private Boolean failIfNoTests;
-    
+
     /**
      * Option to specify the forking mode. Can be "never", "once" or "always". "none" and "pertest" are also accepted
      * for backwards compatibility.
@@ -352,25 +351,24 @@ public class NarIntegrationTestMojo
     private String argLine;
 
     /**
-     * Attach a debugger to the forked JVM.  If set to "true", the process will suspend and 
-     * wait for a debugger to attach on port 5005.  If set to some other string, that
-     * string will be appended to the argLine, allowing you to configure arbitrary
-     * debuggability options (without overwriting the other options specified in the argLine).
+     * Attach a debugger to the forked JVM. If set to "true", the process will suspend and wait for a debugger to attach
+     * on port 5005. If set to some other string, that string will be appended to the argLine, allowing you to configure
+     * arbitrary debuggability options (without overwriting the other options specified in the argLine).
      * 
      * @parameter expression="${maven.surefire.debug}"
      * @since 2.4
      */
     private String debugForkedProcess;
-    
+
     /**
-     * Kill the forked test process after a certain number of seconds.  If set to 0,
-     * wait forever for the process, never timing out.
+     * Kill the forked test process after a certain number of seconds. If set to 0, wait forever for the process, never
+     * timing out.
      * 
      * @parameter expression="${surefire.timeout}"
      * @since 2.4
      */
     private int forkedProcessTimeoutInSeconds;
-    
+
     /**
      * Additional environments to set on the command line.
      * 
@@ -389,8 +387,9 @@ public class NarIntegrationTestMojo
 
     /**
      * When false it makes tests run using the standard classloader delegation instead of the default Maven isolated
-     * classloader. Only used when forking (forkMode is not "none").<br/> Setting it to false helps with some problems
-     * caused by conflicts between xml parsers in the classpath and the Java 5 provider parser.
+     * classloader. Only used when forking (forkMode is not "none").<br/>
+     * Setting it to false helps with some problems caused by conflicts between xml parsers in the classpath and the
+     * Java 5 provider parser.
      * 
      * @parameter expression="${childDelegation}" default-value="false"
      * @since 2.1
@@ -398,8 +397,8 @@ public class NarIntegrationTestMojo
     private boolean childDelegation;
 
     /**
-     * (TestNG only) Groups for this test. Only classes/methods/etc decorated with one of the groups specified here will be included
-     * in test run, if specified.  This parameter is overridden if suiteXmlFiles are specified.
+     * (TestNG only) Groups for this test. Only classes/methods/etc decorated with one of the groups specified here will
+     * be included in test run, if specified. This parameter is overridden if suiteXmlFiles are specified.
      * 
      * @parameter expression="${groups}"
      * @since 2.2
@@ -407,8 +406,8 @@ public class NarIntegrationTestMojo
     private String groups;
 
     /**
-     * (TestNG only) Excluded groups. Any methods/classes/etc with one of the groups specified in this list will specifically not be
-     * run.  This parameter is overridden if suiteXmlFiles are specified.
+     * (TestNG only) Excluded groups. Any methods/classes/etc with one of the groups specified in this list will
+     * specifically not be run. This parameter is overridden if suiteXmlFiles are specified.
      * 
      * @parameter expression="${excludedGroups}"
      * @since 2.2
@@ -416,15 +415,15 @@ public class NarIntegrationTestMojo
     private String excludedGroups;
 
     /**
-     * (TestNG only) List of TestNG suite xml file locations, seperated by commas. Note that suiteXmlFiles is incompatible
-     * with several other parameters on this plugin, like includes/excludes.  This parameter is ignored if
+     * (TestNG only) List of TestNG suite xml file locations, seperated by commas. Note that suiteXmlFiles is
+     * incompatible with several other parameters on this plugin, like includes/excludes. This parameter is ignored if
      * the "test" parameter is specified (allowing you to run a single test instead of an entire suite).
      * 
      * @parameter
      * @since 2.2
      */
     private File[] suiteXmlFiles;
-    
+
     /**
      * Allows you to specify the name of the JUnit artifact. If not set, <code>junit:junit</code> will be used.
      * 
@@ -432,7 +431,7 @@ public class NarIntegrationTestMojo
      * @since 2.3.1
      */
     private String junitArtifactName;
-    
+
     /**
      * Allows you to specify the name of the TestNG artifact. If not set, <code>org.testng:testng</code> will be used.
      * 
@@ -440,10 +439,10 @@ public class NarIntegrationTestMojo
      * @since 2.3.1
      */
     private String testNGArtifactName;
-    
+
     /**
-     * (TestNG only) The attribute thread-count allows you to specify how many threads should be allocated for this execution. Only
-     * makes sense to use in conjunction with parallel.
+     * (TestNG only) The attribute thread-count allows you to specify how many threads should be allocated for this
+     * execution. Only makes sense to use in conjunction with parallel.
      * 
      * @parameter expression="${threadCount}"
      * @since 2.2
@@ -451,9 +450,9 @@ public class NarIntegrationTestMojo
     private int threadCount;
 
     /**
-     * (TestNG only) When you use the parallel attribute, TestNG will try to run all your test methods in separate threads, except for
-     * methods that depend on each other, which will be run in the same thread in order to respect their order of
-     * execution.
+     * (TestNG only) When you use the parallel attribute, TestNG will try to run all your test methods in separate
+     * threads, except for methods that depend on each other, which will be run in the same thread in order to respect
+     * their order of execution.
      * 
      * @parameter expression="${parallel}"
      * @todo test how this works with forking, and console/file output parallelism
@@ -515,21 +514,19 @@ public class NarIntegrationTestMojo
     /**
      * Option to pass dependencies to the system's classloader instead of using an isolated class loader when forking.
      * Prevents problems with JDKs which implement the service provider lookup mechanism by using the system's
-     * classloader.  Default value is "true".
+     * classloader. Default value is "true".
      * 
      * @parameter expression="${surefire.useSystemClassLoader}"
      * @since 2.3
      */
     private Boolean useSystemClassLoader;
-    
+
     /**
-     * By default, Surefire forks your tests using a manifest-only jar; set this parameter
-     * to "false" to force it to launch your tests with a plain old Java classpath.
-     * (See http://maven.apache.org/plugins/maven-surefire-plugin/examples/class-loading.html
-     * for a more detailed explanation of manifest-only jars and their benefits.)
-     * 
-     * Default value is "true".  Beware, setting this to "false" may cause your tests to
-     * fail on Windows if your classpath is too long.
+     * By default, Surefire forks your tests using a manifest-only jar; set this parameter to "false" to force it to
+     * launch your tests with a plain old Java classpath. (See
+     * http://maven.apache.org/plugins/maven-surefire-plugin/examples/class-loading.html for a more detailed explanation
+     * of manifest-only jars and their benefits.) Default value is "true". Beware, setting this to "false" may cause
+     * your tests to fail on Windows if your classpath is too long.
      * 
      * @parameter expression="${surefire.useManifestOnlyJar}" default-value="true"
      * @since 2.4.3
@@ -544,16 +541,15 @@ public class NarIntegrationTestMojo
      * @since 2.3.1
      */
     private boolean enableAssertions;
-    
+
     /**
-     * The current build session instance. 
-     *
+     * The current build session instance.
+     * 
      * @parameter expression="${session}"
      * @required
      * @readonly
      */
     private MavenSession session;
-    
 
     // DUNS, changed name
     public void narExecute()
@@ -579,7 +575,7 @@ public class NarIntegrationTestMojo
                 throw new MojoExecutionException( e.getMessage(), e );
             }
 
-            if ( originalSystemProperties != null  && !surefireBooter.isForking() )
+            if ( originalSystemProperties != null && !surefireBooter.isForking() )
             {
                 // restore system properties, only makes sense when not forking..
                 System.setProperties( originalSystemProperties );
@@ -589,9 +585,9 @@ public class NarIntegrationTestMojo
             {
                 return;
             }
-            
+
             String msg;
-            
+
             if ( result == SurefireBooter.NO_TESTS_EXIT_CODE )
             {
                 if ( ( failIfNoTests == null ) || !failIfNoTests.booleanValue() )
@@ -599,13 +595,18 @@ public class NarIntegrationTestMojo
                     return;
                 }
                 // TODO: i18n
-                throw new MojoFailureException( "No tests were executed!  (Set -DfailIfNoTests=false to ignore this error.)" );
-            } else {
+                throw new MojoFailureException(
+                                                "No tests were executed!  (Set -DfailIfNoTests=false to ignore this error.)" );
+            }
+            else
+            {
                 // TODO: i18n
-                msg = "There are test failures.\n\nPlease refer to " + reportsDirectory + " for the individual test results.";
+                msg =
+                    "There are test failures.\n\nPlease refer to " + reportsDirectory
+                        + " for the individual test results.";
 
             }
-            
+
             if ( testFailureIgnore )
             {
                 getLog().error( msg );
@@ -619,7 +620,7 @@ public class NarIntegrationTestMojo
 
     private boolean verifyParameters()
         throws MojoFailureException
-    {   
+    {
         // DUNS
         if ( skipNar || skipNarTests || skipNarExec )
         {
@@ -646,8 +647,8 @@ public class NarIntegrationTestMojo
     }
 
     /**
-     * Converts old TestNG configuration parameters over to new properties based configuration
-     * method. (if any are defined the old way)
+     * Converts old TestNG configuration parameters over to new properties based configuration method. (if any are
+     * defined the old way)
      */
     private void convertTestNGParameters()
     {
@@ -708,11 +709,11 @@ public class NarIntegrationTestMojo
             if ( testNgArtifact != null )
             {
                 VersionRange range = VersionRange.createFromVersionSpec( "[4.7,)" );
-                if ( !range.containsVersion( new DefaultArtifactVersion(testNgArtifact.getVersion()) ) )
+                if ( !range.containsVersion( new DefaultArtifactVersion( testNgArtifact.getVersion() ) ) )
                 {
                     throw new MojoFailureException(
-                                                    "TestNG support requires version 4.7 or above. You have declared version " +
-                                                        testNgArtifact.getVersion() );
+                                                    "TestNG support requires version 4.7 or above. You have declared version "
+                                                        + testNgArtifact.getVersion() );
                 }
 
                 convertTestNGParameters();
@@ -741,8 +742,8 @@ public class NarIntegrationTestMojo
         }
         catch ( ArtifactNotFoundException e )
         {
-            throw new MojoExecutionException( "Unable to locate required surefire provider dependency: " +
-                e.getMessage(), e );
+            throw new MojoExecutionException( "Unable to locate required surefire provider dependency: "
+                + e.getMessage(), e );
         }
         catch ( InvalidVersionSpecificationException e )
         {
@@ -759,10 +760,11 @@ public class NarIntegrationTestMojo
             {
                 throw new MojoExecutionException( "suiteXmlFiles is configured, but there is no TestNG dependency" );
             }
- 
+
             // TODO: properties should be passed in here too
-            surefireBooter.addTestSuite( "org.apache.maven.surefire.testng.TestNGXmlTestSuite", new Object[]{
-                suiteXmlFiles, testSourceDirectory.getAbsolutePath(), testNgArtifact.getVersion(), testNgArtifact.getClassifier(), properties, reportsDirectory} );
+            surefireBooter.addTestSuite( "org.apache.maven.surefire.testng.TestNGXmlTestSuite", new Object[] {
+                suiteXmlFiles, testSourceDirectory.getAbsolutePath(), testNgArtifact.getVersion(),
+                testNgArtifact.getClassifier(), properties, reportsDirectory } );
         }
         else
         {
@@ -790,12 +792,12 @@ public class NarIntegrationTestMojo
                 for ( int i = 0; i < testRegexes.length; i++ )
                 {
                     String testRegex = testRegexes[i];
-                    if (testRegex.endsWith( ".java" ))
+                    if ( testRegex.endsWith( ".java" ) )
                     {
                         testRegex = testRegex.substring( 0, testRegex.length() - 5 );
                     }
                     // Allow paths delimited by '.' or '/'
-                    testRegex = testRegex.replace('.', '/');
+                    testRegex = testRegex.replace( '.', '/' );
                     includeList.add( "**/" + testRegex + ".java" );
                 }
             }
@@ -815,8 +817,7 @@ public class NarIntegrationTestMojo
                 }
                 if ( excludeList == null || excludeList.size() == 0 )
                 {
-                    excludeList =
-                        new ArrayList( Arrays.asList( new String[] { "**/*$*" } ) );
+                    excludeList = new ArrayList( Arrays.asList( new String[] { "**/*$*" } ) );
                 }
             }
 
@@ -824,13 +825,13 @@ public class NarIntegrationTestMojo
             {
                 surefireBooter.addTestSuite( "org.apache.maven.surefire.testng.TestNGDirectoryTestSuite", new Object[] {
                     testClassesDirectory, includeList, excludeList, testSourceDirectory.getAbsolutePath(),
-                    testNgArtifact.getVersion(), testNgArtifact.getClassifier(), properties, reportsDirectory} );
+                    testNgArtifact.getVersion(), testNgArtifact.getClassifier(), properties, reportsDirectory } );
             }
             else
             {
                 String junitDirectoryTestSuite;
-                if ( junitArtifact != null && junitArtifact.getBaseVersion() != null &&
-                    junitArtifact.getBaseVersion().startsWith( "4" ) )
+                if ( junitArtifact != null && junitArtifact.getBaseVersion() != null
+                    && junitArtifact.getBaseVersion().startsWith( "4" ) )
                 {
                     junitDirectoryTestSuite = "org.apache.maven.surefire.junit4.JUnit4DirectoryTestSuite";
                 }
@@ -873,36 +874,38 @@ public class NarIntegrationTestMojo
 
             surefireBooter.addClassPathUrl( classpathElement );
         }
-        
+
         Toolchain tc = getToolchain();
-        
-        if (tc != null) 
+
+        if ( tc != null )
         {
-            getLog().info("Toolchain in surefire-plugin: " + tc);
-            if (ForkConfiguration.FORK_NEVER.equals( forkMode ) ) 
+            getLog().info( "Toolchain in surefire-plugin: " + tc );
+            if ( ForkConfiguration.FORK_NEVER.equals( forkMode ) )
             {
                 forkMode = ForkConfiguration.FORK_ONCE;
             }
-            if ( jvm  != null ) 
+            if ( jvm != null )
             {
-                getLog().warn("Toolchains are ignored, 'executable' parameter is set to " + jvm);
-            } else {
-                jvm = tc.findTool("java"); //NOI18N
+                getLog().warn( "Toolchains are ignored, 'executable' parameter is set to " + jvm );
+            }
+            else
+            {
+                jvm = tc.findTool( "java" ); // NOI18N
             }
         }
-        
+
         if ( additionalClasspathElements != null )
         {
             for ( Iterator i = additionalClasspathElements.iterator(); i.hasNext(); )
             {
                 String classpathElement = (String) i.next();
-    
+
                 getLog().debug( "  " + classpathElement );
-    
+
                 surefireBooter.addClassPathUrl( classpathElement );
             }
         }
-        
+
         // ----------------------------------------------------------------------
         // Forking
         // ----------------------------------------------------------------------
@@ -931,12 +934,13 @@ public class NarIntegrationTestMojo
             fork.setUseManifestOnlyJar( useManifestOnlyJar );
 
             fork.setSystemProperties( systemProperties );
-            
+
             if ( "true".equals( debugForkedProcess ) )
             {
-                debugForkedProcess = "-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005";
+                debugForkedProcess =
+                    "-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005";
             }
-            
+
             fork.setDebugLine( debugForkedProcess );
 
             if ( jvm == null || "".equals( jvm ) )
@@ -957,7 +961,6 @@ public class NarIntegrationTestMojo
                 fork.setWorkingDirectory( basedir );
             }
 
-
             // BEGINDUNS
             if ( argLine == null )
             {
@@ -968,7 +971,9 @@ public class NarIntegrationTestMojo
             if ( testJNIModule() )
             {
                 // Add libraries to java.library.path for testing
-                File jniLibraryPathEntry = getLayout().getLibDirectory( getTargetDirectory(), getAOL().toString(), Library.JNI );
+                File jniLibraryPathEntry =
+                    getLayout().getLibDirectory( getTargetDirectory(), getMavenProject().getArtifactId(),
+                                                 getMavenProject().getVersion(), getAOL().toString(), Library.JNI );
                 if ( jniLibraryPathEntry.exists() )
                 {
                     getLog().debug( "Adding library directory to java.library.path: " + jniLibraryPathEntry );
@@ -979,7 +984,9 @@ public class NarIntegrationTestMojo
                     javaLibraryPath.append( jniLibraryPathEntry );
                 }
 
-                File sharedLibraryPathEntry = getLayout().getLibDirectory( getTargetDirectory(), getAOL().toString(), Library.SHARED );
+                File sharedLibraryPathEntry =
+                    getLayout().getLibDirectory( getTargetDirectory(), getMavenProject().getArtifactId(),
+                                                 getMavenProject().getVersion(), getAOL().toString(), Library.SHARED );
                 if ( sharedLibraryPathEntry.exists() )
                 {
                     getLog().debug( "Adding library directory to java.library.path: " + sharedLibraryPathEntry );
@@ -1011,10 +1018,11 @@ public class NarIntegrationTestMojo
                     String binding = bindings[j];
                     if ( !binding.equals( Library.STATIC ) )
                     {
-                        // FIXME NAR-90 in repo
+                        // FIXED NAR-90
                         File depLibPathEntry =
-                            new File( getNarManager().getNarFile( dependency ).getParent(), "nar/lib/" + getAOL() + "/"
-                                + binding );
+                            getLayout().getLibDirectory( getNarManager().getUnpackDirectory( dependency ),
+                                                         dependency.getArtifactId(), dependency.getVersion(),
+                                                         getAOL().toString(), binding );
                         if ( depLibPathEntry.exists() )
                         {
                             getLog().debug( "Adding dependency directory to java.library.path: " + depLibPathEntry );
@@ -1047,7 +1055,6 @@ public class NarIntegrationTestMojo
             }
             // ENDDUNS
 
-
             fork.setArgLine( argLine );
 
             fork.setEnvironmentVariables( environmentVariables );
@@ -1070,7 +1077,7 @@ public class NarIntegrationTestMojo
         }
 
         surefireBooter.setFailIfNoTests( failIfNoTests == null ? false : failIfNoTests.booleanValue() );
-        
+
         surefireBooter.setForkedProcessTimeoutInSeconds( forkedProcessTimeoutInSeconds );
 
         surefireBooter.setRedirectTestOutputToFile( redirectTestOutputToFile );
@@ -1124,8 +1131,8 @@ public class NarIntegrationTestMojo
         if ( filteredArtifact != null )
         {
             filter =
-                new ExcludesArtifactFilter( Collections.singletonList( filteredArtifact.getGroupId() + ":" +
-                    filteredArtifact.getArtifactId() ) );
+                new ExcludesArtifactFilter( Collections.singletonList( filteredArtifact.getGroupId() + ":"
+                    + filteredArtifact.getArtifactId() ) );
         }
 
         Artifact originatingArtifact = artifactFactory.createBuildArtifact( "dummy", "dummy", "1.0", "jar" );
@@ -1158,16 +1165,16 @@ public class NarIntegrationTestMojo
         }
 
         originalSystemProperties = (Properties) System.getProperties().clone();
-        
+
         // We used to take all of our system properties and dump them in with the
         // user specified properties for SUREFIRE-121, causing SUREFIRE-491.
         // Not gonna do THAT any more... but I'm leaving this code here in case
         // we need it later when we try to fix SUREFIRE-121 again.
-        
+
         // Get the properties from the MavenSession instance to make embedded use work correctly
         Properties userSpecifiedProperties = (Properties) session.getExecutionProperties().clone();
         userSpecifiedProperties.putAll( systemProperties );
-        //systemProperties = userSpecifiedProperties;
+        // systemProperties = userSpecifiedProperties;
 
         systemProperties.setProperty( "basedir", basedir.getAbsolutePath() );
         systemProperties.setProperty( "user.dir", workingDirectory.getAbsolutePath() );
@@ -1262,24 +1269,27 @@ public class NarIntegrationTestMojo
     {
         this.skipNarTests = skipExec;
     }
-    
-    //TODO remove the part with ToolchainManager lookup once we depend on
-    //3.0.9 (have it as prerequisite). Define as regular component field then.
-    private Toolchain getToolchain() 
+
+    // TODO remove the part with ToolchainManager lookup once we depend on
+    // 3.0.9 (have it as prerequisite). Define as regular component field then.
+    private Toolchain getToolchain()
     {
         Toolchain tc = null;
-        try 
+        try
         {
-            if (session != null) //session is null in tests..
+            if ( session != null ) // session is null in tests..
             {
-                ToolchainManager toolchainManager = (ToolchainManager) session.getContainer().lookup(ToolchainManager.ROLE);
-                if (toolchainManager != null) 
+                ToolchainManager toolchainManager =
+                    (ToolchainManager) session.getContainer().lookup( ToolchainManager.ROLE );
+                if ( toolchainManager != null )
                 {
-                    tc = toolchainManager.getToolchainFromBuildContext("jdk", session);
+                    tc = toolchainManager.getToolchainFromBuildContext( "jdk", session );
                 }
             }
-        } catch (ComponentLookupException componentLookupException) {
-            //just ignore, could happen in pre-3.0.9 builds..
+        }
+        catch ( ComponentLookupException componentLookupException )
+        {
+            // just ignore, could happen in pre-3.0.9 builds..
         }
         return tc;
     }

@@ -102,11 +102,13 @@ public class NarCompileMojo
                     && dependency.getGroupId().equals( project.getGroupId() )
                     && dependency.getVersion().equals( project.getVersion() ) && dependency.getType().equals( "jar" ) )
                 {
-                    getLog().info( "Added intermodule dependency to " + project.getArtifact()+" in "+project.getBuild().getDirectory() );
+                    getLog().info(
+                                   "Added intermodule dependency to " + project.getArtifact() + " in "
+                                       + project.getBuild().getDirectory() );
                 }
             }
         }
-        
+
         // make sure destination is there
         getTargetDirectory().mkdirs();
 
@@ -131,7 +133,11 @@ public class NarCompileMojo
         try
         {
             // FIXME, should the include paths be defined at a higher level ?
-            getCpp().copyIncludeFiles( getMavenProject(), getLayout().getIncludeDirectory( getTargetDirectory() ) );
+            getCpp().copyIncludeFiles(
+                                       getMavenProject(),
+                                       getLayout().getIncludeDirectory( getTargetDirectory(),
+                                                                        getMavenProject().getArtifactId(),
+                                                                        getMavenProject().getVersion() ) );
         }
         catch ( IOException e )
         {
@@ -170,7 +176,7 @@ public class NarCompileMojo
         // configure task
         CCTask task = new CCTask();
         task.setProject( antProject );
-        
+
         // subsystem
         SubsystemEnum subSystem = new SubsystemEnum();
         subSystem.setValue( library.getSubSystem() );
@@ -196,11 +202,15 @@ public class NarCompileMojo
         File outDir;
         if ( type.equals( Library.EXECUTABLE ) )
         {
-            outDir = getLayout().getBinDirectory( getTargetDirectory(), getAOL().toString() );
+            outDir =
+                getLayout().getBinDirectory( getTargetDirectory(), getMavenProject().getArtifactId(),
+                                             getMavenProject().getVersion(), getAOL().toString() );
         }
         else
         {
-            outDir = getLayout().getLibDirectory( getTargetDirectory(), getAOL().toString(), type );
+            outDir =
+                getLayout().getLibDirectory( getTargetDirectory(), getMavenProject().getArtifactId(),
+                                             getMavenProject().getVersion(), getAOL().toString(), type );
         }
         outDir.mkdirs();
 
@@ -254,7 +264,7 @@ public class NarCompileMojo
         {
             task.addConfiguredCompiler( fortran );
         }
-                
+
         // add javah include path
         File jniDirectory = getJavah().getJniDirectory();
         if ( jniDirectory.exists() )
@@ -274,8 +284,12 @@ public class NarCompileMojo
             getLog().debug( "Looking for " + narDependency + " found binding " + binding );
             if ( !binding.equals( Library.JNI ) )
             {
-                File include = new File( getNarManager().getNarFile( narDependency ).getParentFile(), "nar/include" );
-                getLog().debug( "Looking for for directory: " + include );
+                // FIXED NAR-90
+                File unpackDirectory = getNarManager().getUnpackDirectory( narDependency );
+                File include =
+                    getLayout().getIncludeDirectory( unpackDirectory, narDependency.getArtifactId(),
+                                                     narDependency.getVersion() );
+                getLog().info( "Looking for include directory: " + include );
                 if ( include.exists() )
                 {
                     task.createIncludePath().setPath( include.getPath() );
@@ -339,11 +353,15 @@ public class NarCompileMojo
 
                 if ( !binding.equals( Library.JNI ) )
                 {
-                    File dir = new File( getNarManager().getNarFile( dependency ).getParentFile(), "nar" );
-                    // FIXME NAR-90
-                    // dir = getLayout().getLibDirectory( dir, aol, binding );
-                    dir = new File( dir, "lib/" + aol.toString() + "/" + binding );
-                    getLog().debug( "Looking for Library Directory: " + dir );
+                    File unpackDirectory = getNarManager().getUnpackDirectory( dependency );
+
+                    // FIXED NAR-90
+                    File dir =
+                        getLayout().getLibDirectory( unpackDirectory, dependency.getArtifactId(),
+                                                     dependency.getVersion(), aol.toString(), binding );
+
+                    // dir = new File( dir, "lib/" + aol.toString() + "/" + binding );
+                    getLog().info( "Looking for Library Directory: " + dir );
                     if ( dir.exists() )
                     {
                         LibrarySet libSet = new LibrarySet();

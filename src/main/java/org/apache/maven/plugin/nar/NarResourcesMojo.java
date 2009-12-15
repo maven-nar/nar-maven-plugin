@@ -65,7 +65,7 @@ public class NarResourcesMojo
             File noarchDir = new File( resourceDirectory, NarConstants.NAR_NO_ARCH );
             if ( noarchDir.exists() )
             {
-                File noarchDstDir = getLayout().getNoArchDirectory( getTargetDirectory() );
+                File noarchDstDir = getLayout().getNoArchDirectory( getTargetDirectory(), getMavenProject().getArtifactId(), getMavenProject().getVersion() );
                 getLog().debug( "Copying noarch from " + noarchDir + " to " + noarchDstDir );
                 copied += NarUtil.copyDirectoryStructure( noarchDir, noarchDstDir, null, NarUtil.DEFAULT_EXCLUDES );
             }

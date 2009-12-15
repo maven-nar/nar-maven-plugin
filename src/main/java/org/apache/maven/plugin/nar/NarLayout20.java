@@ -1,12 +1,15 @@
 package org.apache.maven.plugin.nar;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
+import org.codehaus.plexus.util.FileUtils;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -44,38 +47,46 @@ import org.codehaus.plexus.archiver.manager.ArchiverManager;
 public class NarLayout20
     extends AbstractNarLayout
 {
-    /* (non-Javadoc)
+    private NarFileLayout fileLayout;
+
+    public NarLayout20( Log log )
+    {
+        super( log );
+        this.fileLayout = new NarFileLayout10();
+    }
+
+    /*
+     * (non-Javadoc)
      * @see org.apache.maven.plugin.nar.NarLayout#getNoArchDirectory(java.io.File)
      */
-    public File getNoArchDirectory( File baseDir )
+    public File getNoArchDirectory( File baseDir, String artifactId, String version )
         throws MojoExecutionException, MojoFailureException
     {
         return baseDir;
     }
-    
+
     /*
      * (non-Javadoc)
      * @see org.apache.maven.plugin.nar.NarLayout#getIncludeDirectory(java.io.File)
      */
-    public final File getIncludeDirectory( File baseDir )
+    public final File getIncludeDirectory( File baseDir, String artifactId, String version )
     {
-        return new File( baseDir, "include" );
+        return new File( baseDir, fileLayout.getIncludeDirectory() );
     }
 
     /*
      * (non-Javadoc)
      * @see org.apache.maven.plugin.nar.NarLayout#getLibDir(java.io.File, org.apache.maven.plugin.nar.AOL, String type)
      */
-    public final File getLibDirectory( File baseDir, String aol, String type ) throws MojoFailureException
+    public final File getLibDirectory( File baseDir, String artifactId, String version, String aol, String type )
+        throws MojoFailureException
     {
         if ( type.equals( Library.EXECUTABLE ) )
         {
             throw new MojoFailureException( "INTERNAL ERROR, Replace call to getLibDirectory with getBinDirectory" );
         }
 
-        File dir = new File( baseDir, "lib" );
-        dir = new File( dir, aol );
-        dir = new File( dir, type );
+        File dir = new File( baseDir, fileLayout.getLibDirectory( aol, type ) );
         return dir;
     }
 
@@ -83,10 +94,9 @@ public class NarLayout20
      * (non-Javadoc)
      * @see org.apache.maven.plugin.nar.NarLayout#getBinDirectory(java.io.File, java.lang.String)
      */
-    public final File getBinDirectory( File baseDir, String aol )
+    public final File getBinDirectory( File baseDir, String artifactId, String version, String aol )
     {
-        File dir = new File( baseDir, "bin" );
-        dir = new File( dir, aol );
+        File dir = new File( baseDir, fileLayout.getBinDirectory( aol ));
         return dir;
     }
 
@@ -95,10 +105,11 @@ public class NarLayout20
      * @see org.apache.maven.plugin.nar.NarLayout#attachNars(java.io.File, org.apache.maven.project.MavenProjectHelper,
      * org.apache.maven.project.MavenProject, org.apache.maven.plugin.nar.NarInfo)
      */
-    public final void attachNars( File baseDir, ArchiverManager archiverManager, MavenProjectHelper projectHelper, MavenProject project, NarInfo narInfo )
+    public final void attachNars( File baseDir, ArchiverManager archiverManager, MavenProjectHelper projectHelper,
+                                  MavenProject project, NarInfo narInfo )
         throws MojoExecutionException
     {
-        if ( getIncludeDirectory( baseDir ).exists() )
+        if ( getIncludeDirectory( baseDir, project.getArtifactId(), project.getVersion() ).exists() )
         {
             attachNar( archiverManager, projectHelper, project, "noarch", baseDir, "include/**" );
             narInfo.setNar( null, "noarch", project.getGroupId() + ":" + project.getArtifactId() + ":"
@@ -108,11 +119,11 @@ public class NarLayout20
         String[] binAOL = new File( baseDir, "bin" ).list();
         for ( int i = 0; ( binAOL != null ) && ( i < binAOL.length ); i++ )
         {
-            attachNar( archiverManager, projectHelper, project, binAOL[i] + "-" + Library.EXECUTABLE, baseDir, "bin/" + binAOL[i]
-                + "/**" );
+            attachNar( archiverManager, projectHelper, project, binAOL[i] + "-" + Library.EXECUTABLE, baseDir, "bin/"
+                + binAOL[i] + "/**" );
             narInfo.setNar( null, Library.EXECUTABLE, project.getGroupId() + ":" + project.getArtifactId() + ":"
                 + NarConstants.NAR_TYPE + ":" + "${aol}" + "-" + Library.EXECUTABLE );
-            narInfo.setBinding( new AOL(binAOL[i]), Library.EXECUTABLE );
+            narInfo.setBinding( new AOL( binAOL[i] ), Library.EXECUTABLE );
             narInfo.setBinding( null, Library.EXECUTABLE );
         }
 
@@ -124,8 +135,8 @@ public class NarLayout20
             String[] libType = new File( libDir, libAOL[i] ).list();
             for ( int j = 0; ( libType != null ) && ( j < libType.length ); j++ )
             {
-                attachNar( archiverManager, projectHelper, project, libAOL[i] + "-" + libType[j], baseDir, "lib/" + libAOL[i] + "/"
-                    + libType[j] + "/**" );
+                attachNar( archiverManager, projectHelper, project, libAOL[i] + "-" + libType[j], baseDir, "lib/"
+                    + libAOL[i] + "/" + libType[j] + "/**" );
                 narInfo.setNar( null, libType[j], project.getGroupId() + ":" + project.getArtifactId() + ":"
                     + NarConstants.NAR_TYPE + ":" + "${aol}" + "-" + libType[j] );
 
@@ -136,7 +147,7 @@ public class NarLayout20
                 }
             }
 
-            AOL aol = new AOL(libAOL[i]);
+            AOL aol = new AOL( libAOL[i] );
             if ( narInfo.getBinding( aol, null ) == null )
             {
                 narInfo.setBinding( aol, bindingType != null ? bindingType : Library.NONE );
@@ -147,4 +158,43 @@ public class NarLayout20
             }
         }
     }
+
+    public void unpackNar( ArchiverManager archiverManager, File file, String os, String linkerName, AOL defaultAOL )
+        throws MojoExecutionException, MojoFailureException
+    {
+        File narLocation = new File( file.getParentFile(), "nar" );
+
+        File flagFile =
+            new File( narLocation, FileUtils.basename( file.getPath(), "." + NarConstants.NAR_EXTENSION ) + ".flag" );
+
+        boolean process = false;
+        if ( !narLocation.exists() )
+        {
+            narLocation.mkdirs();
+            process = true;
+        }
+        else if ( !flagFile.exists() )
+        {
+            process = true;
+        }
+        else if ( file.lastModified() > flagFile.lastModified() )
+        {
+            process = true;
+        }
+
+        if ( process )
+        {
+            try
+            {
+                unpackNarAndProcess( archiverManager, file, narLocation, os, linkerName, defaultAOL );
+                FileUtils.fileDelete( flagFile.getPath() );
+                FileUtils.fileWrite( flagFile.getPath(), "" );
+            }
+            catch ( IOException e )
+            {
+                throw new MojoFailureException( "Cannot create flag file: " + flagFile.getPath(), e );
+            }
+        }
+    }
+
 }

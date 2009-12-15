@@ -37,7 +37,7 @@ import org.codehaus.plexus.archiver.manager.ArchiverManager;
  * @author Mark Donszelmann
  */
 public class NarUnpackMojo
-    extends AbstractDependencyMojo
+    extends AbstractCompileMojo
 {
 
     /**
@@ -61,13 +61,13 @@ public class NarUnpackMojo
         List narArtifacts = getNarManager().getNarDependencies( "compile" );
         if ( classifiers == null )
         {
-            getNarManager().unpackAttachedNars( narArtifacts, archiverManager, null, getOS() );
+            getNarManager().unpackAttachedNars( narArtifacts, archiverManager, null, getOS(), getLayout() );
         }
         else
         {
             for ( Iterator j = classifiers.iterator(); j.hasNext(); )
             {
-                getNarManager().unpackAttachedNars( narArtifacts, archiverManager, (String) j.next(), getOS() );
+                getNarManager().unpackAttachedNars( narArtifacts, archiverManager, (String) j.next(), getOS(), getLayout() );
             }
         }
     }

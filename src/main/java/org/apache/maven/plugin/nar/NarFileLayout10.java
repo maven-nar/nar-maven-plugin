@@ -1,5 +1,3 @@
-package org.apache.maven.plugin.nar;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,32 +17,41 @@ package org.apache.maven.plugin.nar;
  * under the License.
  */
 
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DefaultArtifact;
+package org.apache.maven.plugin.nar;
+
+import java.io.File;
 
 /**
- * @author Mark Donszelmann
+ * @author Mark Donszelmann (Mark.Donszelmann@gmail.com)
  */
-public class NarArtifact
-    extends DefaultArtifact
+public class NarFileLayout10
+    implements NarFileLayout
 {
 
-    private NarInfo narInfo;
-
-    public NarArtifact( Artifact dependency, NarInfo narInfo )
+    /*
+     * (non-Javadoc)
+     * @see org.apache.maven.plugin.nar.NarFileLayout#getIncludeDirectory()
+     */
+    public String getIncludeDirectory()
     {
-        super( dependency.getGroupId(), dependency.getArtifactId(), dependency.getVersionRange(),
-               dependency.getScope(), dependency.getType(), dependency.getClassifier(),
-               dependency.getArtifactHandler(), dependency.isOptional() );
-        this.narInfo = narInfo;
+        return "include";
     }
 
-    public final NarInfo getNarInfo()
+    /*
+     * (non-Javadoc)
+     * @see org.apache.maven.plugin.nar.NarFileLayout#getLibDirectory(java.lang.String, java.lang.String)
+     */
+    public String getLibDirectory( String aol, String type )
     {
-        return narInfo;
+        return "lib" + File.separator + aol + File.separator + type;
     }
-    
-    public String getBaseFilename() {
-        return getArtifactId()+"-"+getVersion()+"-"+getClassifier();
+
+    /*
+     * (non-Javadoc)
+     * @see org.apache.maven.plugin.nar.NarFileLayout#getBinDirectory(java.lang.String)
+     */
+    public String getBinDirectory( String aol )
+    {
+        return "bin" + File.separator + aol;
     }
 }
