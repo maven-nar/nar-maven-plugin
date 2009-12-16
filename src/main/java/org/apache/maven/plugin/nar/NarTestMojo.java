@@ -155,9 +155,8 @@ public class NarTestMojo
             dependency.isSnapshot();
 
             File libDirectory =
-                getLayout().getLibDirectory( getNarManager().getUnpackDirectory( dependency ),
-                                             dependency.getArtifactId(), dependency.getVersion(), getAOL().toString(),
-                                             Library.SHARED );
+                getLayout().getLibDirectory( getUnpackDirectory(), dependency.getArtifactId(), dependency.getVersion(),
+                                             getAOL().toString(), Library.SHARED );
             sharedPaths.add( libDirectory );
         }
 

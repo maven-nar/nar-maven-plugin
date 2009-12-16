@@ -92,12 +92,19 @@ public abstract class AbstractNarMojo
     private String finalName;
 
     /**
-     * Target directory for Nar file construction Defaults to "${project.build.directory}/nar" for "nar-compile" goal
+     * Target directory for Nar file construction. Defaults to "${project.build.directory}/nar" for "nar-compile" goal
      * Defaults to "${project.build.directory}/test-nar" for "nar-testCompile" goal
      * 
      * @parameter expression=""
      */
     private File targetDirectory;
+
+    /**
+     * Target directory for Nar file unpacking. Defaults to "${targetDirectory}/depenencies"
+     * 
+     * @parameter expression=""
+     */
+    private File unpackDirectory;
 
     /**
      * @parameter expression="${project}"
@@ -120,6 +127,11 @@ public abstract class AbstractNarMojo
         if ( targetDirectory == null )
         {
             targetDirectory = new File( mavenProject.getBuild().getDirectory(), "nar" );
+        }
+
+        if ( unpackDirectory == null )
+        {
+            unpackDirectory = new File( targetDirectory, "dependencies" );
         }
     }
 
@@ -157,6 +169,11 @@ public abstract class AbstractNarMojo
     protected final File getTargetDirectory()
     {
         return targetDirectory;
+    }
+
+    protected final File getUnpackDirectory()
+    {
+        return unpackDirectory;
     }
 
     protected final MavenProject getMavenProject()

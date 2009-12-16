@@ -174,17 +174,17 @@ public class NarLayout21
         }
     }
 
-    public void unpackNar( ArchiverManager archiverManager, File file, String os, String linkerName, AOL defaultAOL )
+    public void unpackNar( File unpackDirectory, ArchiverManager archiverManager, File file, String os, String linkerName,
+                           AOL defaultAOL )
         throws MojoExecutionException, MojoFailureException
     {
-        File narLocation = new File( file.getParentFile(), "nar" );
-        File dir = new File( narLocation, FileUtils.basename( file.getPath(), "." + NarConstants.NAR_EXTENSION ) );
+        File dir = new File( unpackDirectory, FileUtils.basename( file.getPath(), "." + NarConstants.NAR_EXTENSION ) );
 
         boolean process = false;
-        
-        if ( !narLocation.exists() )
+
+        if ( !unpackDirectory.exists() )
         {
-            narLocation.mkdirs();
+            unpackDirectory.mkdirs();
             process = true;
         }
         else if ( !dir.exists() )

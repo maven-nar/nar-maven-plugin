@@ -96,7 +96,7 @@ public class NarLayout20
      */
     public final File getBinDirectory( File baseDir, String artifactId, String version, String aol )
     {
-        File dir = new File( baseDir, fileLayout.getBinDirectory( aol ));
+        File dir = new File( baseDir, fileLayout.getBinDirectory( aol ) );
         return dir;
     }
 
@@ -159,18 +159,17 @@ public class NarLayout20
         }
     }
 
-    public void unpackNar( ArchiverManager archiverManager, File file, String os, String linkerName, AOL defaultAOL )
+    public void unpackNar( File unpackDir, ArchiverManager archiverManager, File file, String os, String linkerName,
+                           AOL defaultAOL )
         throws MojoExecutionException, MojoFailureException
     {
-        File narLocation = new File( file.getParentFile(), "nar" );
-
         File flagFile =
-            new File( narLocation, FileUtils.basename( file.getPath(), "." + NarConstants.NAR_EXTENSION ) + ".flag" );
+            new File( unpackDir, FileUtils.basename( file.getPath(), "." + NarConstants.NAR_EXTENSION ) + ".flag" );
 
         boolean process = false;
-        if ( !narLocation.exists() )
+        if ( !unpackDir.exists() )
         {
-            narLocation.mkdirs();
+            unpackDir.mkdirs();
             process = true;
         }
         else if ( !flagFile.exists() )
@@ -186,7 +185,7 @@ public class NarLayout20
         {
             try
             {
-                unpackNarAndProcess( archiverManager, file, narLocation, os, linkerName, defaultAOL );
+                unpackNarAndProcess( archiverManager, file, unpackDir, os, linkerName, defaultAOL );
                 FileUtils.fileDelete( flagFile.getPath() );
                 FileUtils.fileWrite( flagFile.getPath(), "" );
             }

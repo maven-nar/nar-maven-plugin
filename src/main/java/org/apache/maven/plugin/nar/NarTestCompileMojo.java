@@ -142,8 +142,7 @@ public class NarTestCompileMojo
         {
             Artifact artifact = (Artifact) i.next();
             File include =
-                getLayout().getIncludeDirectory( getNarManager().getUnpackDirectory( artifact ),
-                                                 artifact.getArtifactId(), artifact.getVersion() );
+                getLayout().getIncludeDirectory( getUnpackDirectory(), artifact.getArtifactId(), artifact.getVersion() );
             if ( include.exists() )
             {
                 task.createIncludePath().setPath( include.getPath() );
@@ -235,9 +234,8 @@ public class NarTestCompileMojo
             Artifact dependency = (Artifact) i.next();
             // FIXME: this should be preferred binding
             File libDirectory =
-                getLayout().getLibDirectory( getNarManager().getUnpackDirectory( dependency ),
-                                             dependency.getArtifactId(), dependency.getVersion(), getAOL().toString(),
-                                             test.getLink() );
+                getLayout().getLibDirectory( getUnpackDirectory(), dependency.getArtifactId(), dependency.getVersion(),
+                                             getAOL().toString(), test.getLink() );
             if ( libDirectory.exists() )
             {
                 LibrarySet libset = new LibrarySet();

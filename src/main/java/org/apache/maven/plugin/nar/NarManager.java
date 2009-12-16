@@ -357,7 +357,7 @@ public class NarManager
     }
 
     public final void unpackAttachedNars( List/* <NarArtifacts> */narArtifacts, ArchiverManager archiverManager,
-                                          String classifier, String os, NarLayout layout )
+                                          String classifier, String os, NarLayout layout, File unpackDir )
         throws MojoExecutionException, MojoFailureException
     {
         log.debug( "Unpack called for OS: " + os + ", classifier: " + classifier + " for NarArtifacts {" );
@@ -374,17 +374,7 @@ public class NarManager
             log.debug( "Unpack " + dependency );
             File file = getNarFile( dependency );
 
-            layout.unpackNar(archiverManager, file, os, linkerName, defaultAOL);            
+            layout.unpackNar(unpackDir, archiverManager, file, os, linkerName, defaultAOL);            
         }
-    }
-
-    /**
-     * @param narDependency
-     * @return
-     * @throws MojoFailureException 
-     */
-    public File getUnpackDirectory( Artifact narDependency ) throws MojoFailureException
-    {
-        return new File(getNarFile( narDependency ).getParentFile(), "nar");
     }
 }

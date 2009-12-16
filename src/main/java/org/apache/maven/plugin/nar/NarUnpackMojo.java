@@ -61,13 +61,13 @@ public class NarUnpackMojo
         List narArtifacts = getNarManager().getNarDependencies( "compile" );
         if ( classifiers == null )
         {
-            getNarManager().unpackAttachedNars( narArtifacts, archiverManager, null, getOS(), getLayout() );
+            getNarManager().unpackAttachedNars( narArtifacts, archiverManager, null, getOS(), getLayout(), getUnpackDirectory() );
         }
         else
         {
             for ( Iterator j = classifiers.iterator(); j.hasNext(); )
             {
-                getNarManager().unpackAttachedNars( narArtifacts, archiverManager, (String) j.next(), getOS(), getLayout() );
+                getNarManager().unpackAttachedNars( narArtifacts, archiverManager, (String) j.next(), getOS(), getLayout(), getUnpackDirectory() );
             }
         }
     }

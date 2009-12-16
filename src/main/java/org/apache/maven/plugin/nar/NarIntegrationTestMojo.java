@@ -1019,9 +1019,8 @@ public class NarIntegrationTestMojo
                     if ( !binding.equals( Library.STATIC ) )
                     {
                         File depLibPathEntry =
-                            getLayout().getLibDirectory( getNarManager().getUnpackDirectory( dependency ),
-                                                         dependency.getArtifactId(), dependency.getVersion(),
-                                                         getAOL().toString(), binding );
+                            getLayout().getLibDirectory( getUnpackDirectory(), dependency.getArtifactId(),
+                                                         dependency.getVersion(), getAOL().toString(), binding );
                         if ( depLibPathEntry.exists() )
                         {
                             getLog().debug( "Adding dependency directory to java.library.path: " + depLibPathEntry );

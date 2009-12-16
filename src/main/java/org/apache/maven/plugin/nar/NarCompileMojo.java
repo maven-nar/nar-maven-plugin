@@ -284,7 +284,7 @@ public class NarCompileMojo
             getLog().debug( "Looking for " + narDependency + " found binding " + binding );
             if ( !binding.equals( Library.JNI ) )
             {
-                File unpackDirectory = getNarManager().getUnpackDirectory( narDependency );
+                File unpackDirectory = getUnpackDirectory();
                 File include =
                     getLayout().getIncludeDirectory( unpackDirectory, narDependency.getArtifactId(),
                                                      narDependency.getVersion() );
@@ -352,7 +352,7 @@ public class NarCompileMojo
 
                 if ( !binding.equals( Library.JNI ) )
                 {
-                    File unpackDirectory = getNarManager().getUnpackDirectory( dependency );
+                    File unpackDirectory = getUnpackDirectory();
 
                     File dir =
                         getLayout().getLibDirectory( unpackDirectory, dependency.getArtifactId(),
