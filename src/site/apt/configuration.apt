@@ -25,6 +25,7 @@ NAR Configuration
   <resourceLibDir/>
   <maxCores/>
   <targetDirectory/>
+  <unpackDirectory/>
   <output/>
   <failOnError/>
   <runtime/>
