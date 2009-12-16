@@ -73,7 +73,6 @@ public class NarTestMojo
         // run if requested
         if ( test.shouldRun() )
         {
-            // FIXME NAR-90
             String name = getTestTargetDirectory().getPath() + "/bin/" + getAOL() + "/" + test.getName();
             getLog().info( "Running test " + name );
 
@@ -155,7 +154,6 @@ public class NarTestMojo
             // of getBaseVersion, called in pathOf.
             dependency.isSnapshot();
 
-            // FIXED NAR-90
             File libDirectory =
                 getLayout().getLibDirectory( getNarManager().getUnpackDirectory( dependency ),
                                              dependency.getArtifactId(), dependency.getVersion(), getAOL().toString(),

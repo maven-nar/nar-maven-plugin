@@ -1,6 +1,7 @@
 package org.apache.maven.plugin.nar;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -46,7 +47,7 @@ public class NarLayout21
     extends AbstractNarLayout
 {
     private NarFileLayout fileLayout;
-    
+
     public NarLayout21( Log log )
     {
         super( log );
@@ -99,7 +100,7 @@ public class NarLayout21
     public final File getBinDirectory( File baseDir, String artifactId, String version, String aol )
     {
         File dir = getAolDirectory( baseDir, artifactId, version, aol, Library.EXECUTABLE );
-        dir = new File(dir, fileLayout.getBinDirectory( aol ));
+        dir = new File( dir, fileLayout.getBinDirectory( aol ) );
         return dir;
     }
 
@@ -124,24 +125,26 @@ public class NarLayout21
         String[] subDirs = baseDir.list();
         for ( int i = 0; ( subDirs != null ) && ( i < subDirs.length ); i++ )
         {
-            String artifactIdVersion = project.getArtifactId()+"-"+project.getVersion();
-            
+            String artifactIdVersion = project.getArtifactId() + "-" + project.getVersion();
+
             // skip entries not belonging to this project
-            if (!subDirs[i].startsWith( artifactIdVersion )) continue;
-            
-            String classifier = subDirs[i].substring( artifactIdVersion.length()+1 );
-            System.err.println("*** "+classifier);
+            if ( !subDirs[i].startsWith( artifactIdVersion ) )
+                continue;
+
+            String classifier = subDirs[i].substring( artifactIdVersion.length() + 1 );
+
             // skip noarch here
-            if (classifier.equals( NarConstants.NAR_NO_ARCH )) continue;
-             
+            if ( classifier.equals( NarConstants.NAR_NO_ARCH ) )
+                continue;
+
             File dir = new File( baseDir, subDirs[i] );
             attachNar( archiverManager, projectHelper, project, classifier, dir, "*/**" );
 
             int lastDash = classifier.lastIndexOf( '-' );
-            String type = classifier.substring( lastDash+1);
-            AOL aol = new AOL(classifier.substring( 0, lastDash-1 ));
+            String type = classifier.substring( lastDash + 1 );
+            AOL aol = new AOL( classifier.substring( 0, lastDash - 1 ) );
 
-            if (type.equals( Library.EXECUTABLE ))
+            if ( type.equals( Library.EXECUTABLE ) )
             {
                 if ( narInfo.getBinding( aol, null ) == null )
                 {
@@ -178,6 +181,7 @@ public class NarLayout21
         File dir = new File( narLocation, FileUtils.basename( file.getPath(), "." + NarConstants.NAR_EXTENSION ) );
 
         boolean process = false;
+        
         if ( !narLocation.exists() )
         {
             narLocation.mkdirs();
@@ -189,6 +193,15 @@ public class NarLayout21
         }
         else if ( file.lastModified() > dir.lastModified() )
         {
+            try
+            {
+                FileUtils.deleteDirectory( dir );
+            }
+            catch ( IOException e )
+            {
+                throw new MojoExecutionException( "Could not delete directory: " + dir, e );
+            }
+
             process = true;
         }
 

@@ -284,12 +284,11 @@ public class NarCompileMojo
             getLog().debug( "Looking for " + narDependency + " found binding " + binding );
             if ( !binding.equals( Library.JNI ) )
             {
-                // FIXED NAR-90
                 File unpackDirectory = getNarManager().getUnpackDirectory( narDependency );
                 File include =
                     getLayout().getIncludeDirectory( unpackDirectory, narDependency.getArtifactId(),
                                                      narDependency.getVersion() );
-                getLog().info( "Looking for include directory: " + include );
+                getLog().debug( "Looking for include directory: " + include );
                 if ( include.exists() )
                 {
                     task.createIncludePath().setPath( include.getPath() );
@@ -355,13 +354,11 @@ public class NarCompileMojo
                 {
                     File unpackDirectory = getNarManager().getUnpackDirectory( dependency );
 
-                    // FIXED NAR-90
                     File dir =
                         getLayout().getLibDirectory( unpackDirectory, dependency.getArtifactId(),
                                                      dependency.getVersion(), aol.toString(), binding );
 
-                    // dir = new File( dir, "lib/" + aol.toString() + "/" + binding );
-                    getLog().info( "Looking for Library Directory: " + dir );
+                    getLog().debug( "Looking for Library Directory: " + dir );
                     if ( dir.exists() )
                     {
                         LibrarySet libSet = new LibrarySet();

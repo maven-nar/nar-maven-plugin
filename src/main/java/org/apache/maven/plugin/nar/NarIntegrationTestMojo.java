@@ -1018,7 +1018,6 @@ public class NarIntegrationTestMojo
                     String binding = bindings[j];
                     if ( !binding.equals( Library.STATIC ) )
                     {
-                        // FIXED NAR-90
                         File depLibPathEntry =
                             getLayout().getLibDirectory( getNarManager().getUnpackDirectory( dependency ),
                                                          dependency.getArtifactId(), dependency.getVersion(),

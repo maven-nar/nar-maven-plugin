@@ -140,7 +140,6 @@ public class NarTestCompileMojo
         // add dependency include paths
         for ( Iterator i = getNarManager().getNarDependencies( "test" ).iterator(); i.hasNext(); )
         {
-            // FIXED NAR-90
             Artifact artifact = (Artifact) i.next();
             File include =
                 getLayout().getIncludeDirectory( getNarManager().getUnpackDirectory( artifact ),
@@ -235,7 +234,6 @@ public class NarTestCompileMojo
 
             Artifact dependency = (Artifact) i.next();
             // FIXME: this should be preferred binding
-            // FIXED NAR-90
             File libDirectory =
                 getLayout().getLibDirectory( getNarManager().getUnpackDirectory( dependency ),
                                              dependency.getArtifactId(), dependency.getVersion(), getAOL().toString(),
