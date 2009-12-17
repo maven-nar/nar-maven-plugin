@@ -124,6 +124,10 @@ public abstract class AbstractResourcesMojo
             {
                 Library library = (Library) i.next();
                 String type = library.getType();
+                
+                File typedLibDir = new File( libDir, type );
+                if ( typedLibDir.exists() ) libDir = typedLibDir;
+                
                 File libDstDir =
                     getLayout().getLibDirectory( getTargetDirectory(), getMavenProject().getArtifactId(),
                                                  getMavenProject().getVersion(), aol, type );
