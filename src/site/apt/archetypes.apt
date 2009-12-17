@@ -1,0 +1,18 @@
+	---
+Maven NAR Plugin
+	---
+	---
+Mark Donszelmann
+	---
+	
+Archetypes
+
+	The following archetypes are available for the nar plugin:
+
+	* maven-archetype-nar-jni, a project with a native file, its java jni class and a java test class
+
+      	* maven-archetype-nar-lib, a project with a native library, its header file and a c test program
+
+	* maven-archetype-nar-exec, a project with a native file which compiles into an executable
+
+	[]
