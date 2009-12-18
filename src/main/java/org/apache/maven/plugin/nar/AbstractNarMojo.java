@@ -107,6 +107,16 @@ public abstract class AbstractNarMojo
     private File unpackDirectory;
 
     /**
+     * Layout to be used for building and unpacking artifacts
+     * 
+     * @parameter expression="${nar.layout}" default-value="org.apache.maven.plugin.nar.NarLayout21"
+     * @required
+     */
+    private String layout;
+    
+    private NarLayout narLayout;
+
+    /**
      * @parameter expression="${project}"
      * @readonly
      * @required
@@ -174,6 +184,17 @@ public abstract class AbstractNarMojo
     protected final File getUnpackDirectory()
     {
         return unpackDirectory;
+    }
+
+    protected final NarLayout getLayout()
+        throws MojoExecutionException
+    {
+        if ( narLayout == null )
+        {
+            narLayout =
+                AbstractNarLayout.getLayout( layout, getLog() );
+        }
+        return narLayout;
     }
 
     protected final MavenProject getMavenProject()

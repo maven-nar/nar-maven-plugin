@@ -129,18 +129,6 @@ public abstract class AbstractCompileMojo
      */
     private Java java;
 
-    /**
-     * Layout to be used for building and unpacking artifacts
-     * 
-     * @parameter expression="${nar.layout}" default-value="org.apache.maven.plugin.nar.NarLayout21"
-     * @required
-     */
-    private String layout;
-    
-    
-
-    private NarLayout narLayout;
-
     private NarInfo narInfo;
 
     private List/* <String> */dependencyLibOrder;
@@ -284,17 +272,5 @@ public abstract class AbstractCompileMojo
                              getMavenProject().getVersion(), getLog() );
         }
         return narInfo;
-    }
-
-    // FIXME, needs to maybe move up
-    protected final NarLayout getLayout()
-        throws MojoExecutionException
-    {
-        if ( narLayout == null )
-        {
-            narLayout =
-                AbstractNarLayout.getLayout( layout, getLog() );
-        }
-        return narLayout;
     }
 }
