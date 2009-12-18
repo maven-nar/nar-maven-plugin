@@ -174,14 +174,11 @@ public class NarManager
         for ( Iterator i = narArtifacts.iterator(); i.hasNext(); )
         {
             Artifact dependency = (Artifact) i.next();
-            NarInfo narInfo = getNarInfo( dependency );
+
             if ( noarch )
             {
                 artifactList.addAll( getAttachedNarDependencies( dependency, null, NarConstants.NAR_NO_ARCH ) );
             }
-
-            // use preferred binding, unless non existing.
-            String binding = narInfo.getBinding( aol, type != null ? type : Library.STATIC );
 
             // FIXME kludge, but does not work anymore since AOL is now a class
             if ( aol.equals( NarConstants.NAR_NO_ARCH ) )
@@ -191,7 +188,17 @@ public class NarManager
             }
             else
             {
-                artifactList.addAll( getAttachedNarDependencies( dependency, aol, binding ) );
+                if ( type != null )
+                {
+                    artifactList.addAll( getAttachedNarDependencies( dependency, aol, type ) );
+                }
+                else
+                {
+                    for ( int j = 0; j < narTypes.length; j++ )
+                    {
+                        artifactList.addAll( getAttachedNarDependencies( dependency, aol, narTypes[j] ));
+                    }
+                }
             }
         }
         return artifactList;
