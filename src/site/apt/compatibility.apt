@@ -27,6 +27,11 @@ locally in a multi-module build.
 	* The main artifact is a jar file, where the NAR plugin attaches a -noarch nar file and some 
 platform specific nar files. When installed and or deployed the main jar file is renamed to a nar file,
 hence the dependecy type change from jar to nar. 
+
+	* The unpacking of nar files used to take place in a subdirectory of the local repositories 
+directory of that artifact. As of 2.1.x we unpack in a subdirectory of the target directory. This 
+used more diskspace (and a little time), however it avoids concurrent access to possibly half unpacked
+nar files when 2 or more maven invocations are running in parallel.
 	
 	[]
  

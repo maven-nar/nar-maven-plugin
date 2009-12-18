@@ -93,17 +93,16 @@ found on the path.
 * {nar-download}
 
 	Your NAR artifact(s) may be dependent on other nar artifacts. The standard maven dependency 
-declaration in the POM is used to describe such dependencies, see {{{nar-dependencies.html}
+declaration in the POM is used to describe such dependencies of type "nar", see {{{nar-dependencies.html}
 nar-dependencies}}. By the time this goal is running maven will have already downloaded 
-all dependent jar files some of which may include a nar.properties file. 
+all dependent jar and nar files some of which may include a nar.properties file. 
 This property file contains information on what other machine dependent and machine independent nar files to download.
 This goal will download any further necessary nar files into the local repository.
 
 * {nar-unpack}
 
 	Since a nar file is of no use to any native compilation process the nar-unpack goal unpacks the nar into
-the "nar" subdirectory of the local repository. A flag is set not to download and unpack this nar file again, 
-except if it is a SNAPSHOT artifact. <<TBD The actual nar file is deleted to preserve diskspace.>>
+the "nar/dependencies" subdirectory of the target directory.
         
 * {nar-gnu-configure} 
 
@@ -241,7 +240,7 @@ The following jar and nar files are created:
 
     * \<Artifact\>-\<version\>.jar, containing a property file describing the behaviour of the 
     library and other nar files available. For a description see {{{nar-dependencies.html}
-    nar-dependencies}}.
+    nar-dependencies}}. This jar file is renamed to nar when installed or deployed.
     
     * \<Artifact\>-\<version\>-noarch.nar, a compressed jar file containing non machine
     specific parts of the distribution, such as the include directories.

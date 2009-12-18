@@ -8,10 +8,10 @@ Mark Donszelmann
 NAR Dependencies
 
 	Dependencies on other NARs are handled by the standard maven dependency mechanism.
-The type for NAR files is <<<nar>>>, however to ease the inclusion of Java code and
-lookup of properties any nar file is always published as an attached artifact
-to  a jar artifact. A nar dependency therefore becomes a jar dependency and is
-declared in the following way:
+The type for NAR files is <<<nar>>>.
+The main nar file is equivalent to a jar file, but with some nar specific information in it. 
+The other nar files are always published as attached artifacts
+to the main nar artifact. A nar dependency is declared in the following way:
 
 +--
 <project>
@@ -21,23 +21,23 @@ declared in the following way:
       <groupId>dependent-group</groupId>
       <artifactId>dependent-artifact</artifactId>
       <version>dependent-version</version>
+      <type>nar</type>
     </dependency>
   </dependencies>
 </project>
 +--
         
-	as is any other jar dependency. Maven will automatically download this jar file
-for any goal that requires it.
+	As of version 2.1.x the type needs to be declared as "nar". 
+Maven will automatically download this nar file for any goal that requires it.
 
-	The NAR plugin knows this is a nar dependency
-by looking inside the jar file for a properties file with the following name:
+	The NAR plugin knows this is a true nar dependency
+by looking inside the nar file for a properties file with the following name:
 
 +--
 META-INF/nar/groupId/artifactId/nar.properties
 +--
 
-	This file is normally generated in the nar-package goal for pickup by
-the standard package goal to be included in the jar file.
+	This file is normally generated in the nar-package goal.
 <<TBD there is no way to include a hand-written file>>.
 
 	The file may contain the following properties:

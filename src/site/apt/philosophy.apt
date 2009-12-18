@@ -71,7 +71,7 @@ for both people and the plugins that need to work with them.
 		
 ** {A single Native project produces a single output}
 		
-	Maven produces one primary output (jar) per project. For the NAR Plugin 
+	Maven produces one primary output (jar, war, ...) per project. For the NAR Plugin 
 the produced nar files are secondary outputs or attached artifact to the 
 primary output. There are several reasons why the native artifacts are not 
 primary outputs:
@@ -91,10 +91,10 @@ primary outputs:
          necessary header file from java, which would make the JNI library
          dependent on the jar file. Since this is impossible it would be
          better to attach the JNI library (in its nar file) as a secondary
-         artifact to the primary jar file.
+         artifact to the primary nar file.
 
     * When depending on a native library the user should just specify
-         the artifactId, groupId and version, and <<not>> the architecture,
+         the artifactId, groupId, version and type, but <<not>> the architecture,
          os and linker it was build with. The latter is a derived value 
          of the executable or library one is building at this time. Not 
          specifying architecture, os and linker also means that the POM 
@@ -145,7 +145,7 @@ platform the NAR Plugin is running on. An example is below:
 
 	The NAR Plugin provides multiple goals organized in the "nar" lifecycle.
 The "nar" lifecycle integrates nicely with the default "jar" lifecycle to 
-build both jar and nar artifacts in parallel. Each of the NAR Plugin goals
+build java and native files into nar artifacts in parallel. Each of the NAR Plugin goals
 can of course also be configured separately if needed.
 
 	Most NAR goals are executed using the NarManager, which provides an API 
@@ -186,6 +186,7 @@ shared library, which depends on a native math library (nmath).
       <groupId>org.freehep</groupId>
       <artifactId>nmath</artifactId>
       <version>4.5.1</version>
+      <type>nar</type>
     </dependency>
   </dependencies>
 </project>
@@ -220,10 +221,8 @@ the dependency is downloaded to the local repository and used from there by
 any of the plugins.
 
 	The NAR Plugin uses the same organization of dependencies and repositories.
-Note that the dependency declared in the example above is a standard "jar"
-dependency. It becomes a NAR depenency only because it contains the nar.properties
-file and the NAR Plugin is configured for this project. When a user executes
-install or deploy on a NAR project the jar file with its attached nar artifacts
+When a user executes
+install or deploy on a NAR project the main nar file with its attached nar artifacts
 will be installed in the local repository or deployed in the remote repository.
 
 	A remote repository for the native math library would probably look
@@ -252,58 +251,14 @@ remoterepo/
                                    ...
 +--
 
-	When a NAR dependency is encountered the jar file is already downloaded into
+	When a NAR dependency is encountered the main nar file is already downloaded into
 the local repository by maven itself. The nar-download goal will download any
-attached NAR artifacts into the local repository and store them alongside the
-jar file and the POM. Note that for these jar and nar files there is just one
+attached NAR artifacts into the local repository and store them alongside the main
+nar file and the POM. Note that for these main nar and attached nar files there is just one
 POM, since it is just one artifact. If the nar files are already in the local
 repository, due to someone calling nar-install on them, no extra download occurs.
 
-	Now that the POM, jar and nar files are all in the local repository, the 
-nar-unpack goal unpacks the nar files. This is necessary because none of the 
-native compiler/linker tools understands nar files, so an unpacked directory 
-structure should be created. Unpacking only happens in the local repository. 
-A remote repository <<never>> contains an unpacked nar file. If unpacking was
-already done, then no action is taken by the nar-unpack goal, unless the 
-artifact is a SNAPSHOT.
-
-	The local repository for the native math library may look similar to this
-if we were running on a MacOS X PowerPC system (Note the unpacked nar directory
-and nar only for one platform):
-
-+--
-repository/
-           org/
-               freehep/
-                       nmath/
-                             4.5.1/
-                                   nmath-4.5.1.pom
-                                   nmath-4.5.1.pom.sha1
-                                   nmath-4.5.1.jar
-                                   nmath-4.5.1.jar.sha1
-                                   nmath-4.5.1-noarch.nar
-                                   nmath-4.5.1-noarch.nar.sha1
-                                   nmath-4.5.1-MacOSX-g++-shared.nar
-                                   nmath-4.5.1-MacOSX-g++-shared.nar.sha1
-                                   ...
-                                   nar/
-                                       bin/
-                                           ppc-MacOSX-g++/
-                                                          NMath
-                                       include/
-                                               nmath/
-                                                     NMath.hh
-                                       data/
-                                            NMath.data
-                                       lib/
-                                           ppc-MacOSX-g++/
-                                                          shared/
-                                                                 libNMath.so
-                                                                 libNMathExtra.so
-+--
-
-	The usage of local repository by the NAR Plugin works seamlessly with the 
-usage of it by other Maven plugins. The SWIG Plugin for instance downloads
-the native swig executable (wrapped in a NAR artifact), installs and unpacks
-it in the local repository and then uses the executable in the bin directory
-location.
+	Now that the POM, main nar and attached nar files are all in the local repository, the 
+nar-unpack goal unpacks the nar files in an area in the target directory of the project. 
+This is necessary because none of the native compiler/linker tools understands nar files. 
+Compilation and linking can thus search the local target area.
