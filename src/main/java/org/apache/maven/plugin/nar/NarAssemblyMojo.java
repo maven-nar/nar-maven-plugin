@@ -45,9 +45,6 @@ public class NarAssemblyMojo
     /**
      * List of classifiers which you want to assemble. Example ppc-MacOSX-g++-static, x86-Windows-msvc-shared,
      * i386-Linux-g++-executable, ....
-     * 
-     * @parameter expression=""
-     * @required
      */
     private List classifiers;
 
@@ -57,45 +54,42 @@ public class NarAssemblyMojo
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        for ( Iterator j = classifiers.iterator(); j.hasNext(); )
+        List narArtifacts = getNarManager().getNarDependencies( "compile" );
+        
+        List dependencies = getNarManager().getAttachedNarDependencies( narArtifacts, classifiers );
+
+        // this may make some extra copies...
+        for ( Iterator d = dependencies.iterator(); d.hasNext(); )
         {
-            String classifier = (String) j.next();
+            Artifact dependency = (Artifact) d.next();
+            getLog().debug( "Assemble from " + dependency );
 
-            List narArtifacts = getNarManager().getNarDependencies( "compile" );
-            List dependencies = getNarManager().getAttachedNarDependencies( narArtifacts, classifier );
-            // this may make some extra copies...
-            for ( Iterator d = dependencies.iterator(); d.hasNext(); )
-            {
-                Artifact dependency = (Artifact) d.next();
-                getLog().debug( "Assemble from " + dependency );
+            // FIXME reported to maven developer list, isSnapshot
+            // changes behaviour
+            // of getBaseVersion, called in pathOf.
+            dependency.isSnapshot();
 
-                // FIXME reported to maven developer list, isSnapshot
-                // changes behaviour
-                // of getBaseVersion, called in pathOf.
-                dependency.isSnapshot();
-
-                File srcDir = getLayout().getNarUnpackDirectory(
-                        getUnpackDirectory(), 
-                        getNarManager().getNarFile( dependency ));
+            File srcDir = getLayout().getNarUnpackDirectory(
+                    getUnpackDirectory(), 
+                    getNarManager().getNarFile( dependency ));
 //                File srcDir = new File( getLocalRepository().pathOf( dependency ) );
 //                srcDir = new File( getLocalRepository().getBasedir(), srcDir.getParent() );
 //                srcDir = new File( srcDir, "nar/" );
 
-                File dstDir = getTargetDirectory();
-                try
+            File dstDir = getTargetDirectory();
+            try
+            {
+                FileUtils.mkdir( dstDir.getPath() );
+                getLog().debug( "SrcDir: " + srcDir );
+                if ( srcDir.exists() )
                 {
-                    FileUtils.mkdir( dstDir.getPath() );
-                    getLog().debug( "SrcDir: " + srcDir );
-                    if ( srcDir.exists() )
-                    {
-                        FileUtils.copyDirectoryStructure( srcDir, dstDir );
-                    }
+                    FileUtils.copyDirectoryStructure( srcDir, dstDir );
                 }
-                catch ( IOException ioe )
-                {
-                    throw new MojoExecutionException( "Failed to copy directory for dependency " + dependency
-                        + " from " + srcDir + " to " + dstDir, ioe );
-                }
+            }
+            catch ( IOException ioe )
+            {
+                throw new MojoExecutionException( "Failed to copy directory for dependency " + dependency
+                    + " from " + srcDir + " to " + dstDir, ioe );
             }
         }
     }

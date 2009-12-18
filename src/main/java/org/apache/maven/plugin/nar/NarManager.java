@@ -120,7 +120,7 @@ public class NarManager
     public final List/* <AttachedNarArtifact> */getAttachedNarDependencies( List/* <NarArtifacts> */narArtifacts )
         throws MojoExecutionException, MojoFailureException
     {
-        return getAttachedNarDependencies( narArtifacts, null );
+        return getAttachedNarDependencies( narArtifacts, ( String )null );
     }
 
     public final List/* <AttachedNarArtifact> */getAttachedNarDependencies( List/* <NarArtifacts> */narArtifacts,
@@ -144,6 +144,34 @@ public class NarManager
             }
         }
         return getAttachedNarDependencies( narArtifacts, aol, type );
+    }
+
+    public final List/* <AttachedNarArtifact> */getAttachedNarDependencies(
+            List/* <NarArtifacts> */narArtifacts, List classifiers) 
+                throws MojoExecutionException, MojoFailureException
+    {
+        String[] types;
+        
+        List artifactList = new ArrayList();
+
+        if( classifiers != null && !classifiers.isEmpty() )
+        {
+            types = (String[]) classifiers.toArray();
+
+            for ( int j = 0; j < types.length; j++ )
+            {
+                if ( artifactList != null )
+                {
+                    artifactList.addAll( getAttachedNarDependencies( narArtifacts, types[j] ));
+                }
+            }
+}
+        else
+        {
+            artifactList.addAll( getAttachedNarDependencies( narArtifacts, ( String )null ));
+        }
+
+        return artifactList;
     }
 
     /**
