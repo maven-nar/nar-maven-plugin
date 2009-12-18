@@ -999,9 +999,9 @@ public class NarIntegrationTestMojo
 
                 // add jar file to classpath, as one may want to read a
                 // properties file for artifactId and version
-                String jarFile = "target/" + project.getArtifactId() + "-" + project.getVersion() + ".jar";
-                getLog().debug( "Adding to surefire test classpath: " + jarFile );
-                surefireBooter.addClassPathUrl( jarFile );
+                String narFile = "target/" + project.getArtifactId() + "-" + project.getVersion() + ".jar";
+                getLog().debug( "Adding to surefire test classpath: " + narFile );
+                surefireBooter.addClassPathUrl( narFile );
             }
 
             List dependencies = getNarManager().getNarDependencies( "test" );

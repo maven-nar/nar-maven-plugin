@@ -1,0 +1,32 @@
+	---
+Maven NAR Plugin
+	---
+	---
+Mark Donszelmann
+	---
+	
+Compatibility
+
+	For most of the NAR plugin we try to keep things backwards compatible. Versions 1.x were
+made for Maven 1 and therefore we are not compatible with those.
+
+	In the NAR Plugin 2.x series we had to introduce some backward incompatibilites and other changes.
+Below a (rather incomplete) list.
+
+* Version 2.1.x
+
+	* The internal layout of the nar files (.nar extension) is stable. No changes were made.
+
+	* The layout of the files under target and under the unpacked directory has changed. For more
+information see NarLayout21 (version 2.1.x and up) and NarLayout20 (version 2.0.x).
+
+	* The dependency in 2.0 used to be without a <type> specified. You now need to specify <type>nar</type>
+as this is more in line with the standard of maven. It also allows the NAR plugin to find dependencies 
+locally in a multi-module build. 
+
+	* The main artifact is a jar file, where the NAR plugin attaches a -noarch nar file and some 
+platform specific nar files. When installed and or deployed the main jar file is renamed to a nar file,
+hence the dependecy type change from jar to nar. 
+	
+	[]
+ 

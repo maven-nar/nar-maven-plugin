@@ -40,7 +40,9 @@ public class NarPackageMojo
     extends AbstractCompileMojo
 {
     /**
-     * @component role="org.apache.maven.artifact.handler.ArtifactHandler" roleHint="nar-package"
+     * NAR-121 was nar-package
+     * 
+     * @component role="org.apache.maven.artifact.handler.ArtifactHandler" roleHint="nar"
      * @required
      */
     private ArtifactHandler narArtifactHandler;
@@ -64,8 +66,10 @@ public class NarPackageMojo
         throws MojoExecutionException, MojoFailureException
     {
         // Avoid that -DupdateReleaseInfo copies to a .nar file
-        getMavenProject().getArtifact().setArtifactHandler( narArtifactHandler );
-
+        // NAR-121
+//        getMavenProject().getArtifact().setArtifactHandler( narArtifactHandler );
+        System.err.println("***"+getMavenProject().getArtifact().getArtifactHandler().getExtension());
+        System.err.println("***"+getFinalName());
         // let the layout decide which nars to attach
         getLayout().attachNars( getTargetDirectory(), archiverManager, projectHelper, getMavenProject(), getNarInfo() );
         

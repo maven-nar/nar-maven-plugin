@@ -68,7 +68,7 @@ public interface NarLayout
         throws MojoExecutionException, MojoFailureException;
 
     /**
-     * Called to attach nars to main jar file. This method needs to produce all the attached nar files and set NarInfo
+     * Called to attach nars to main nar/jar file. This method needs to produce all the attached nar files and set NarInfo
      * accordingly.
      */
     void attachNars( File baseDir, ArchiverManager archiverManager, MavenProjectHelper projectHelper,

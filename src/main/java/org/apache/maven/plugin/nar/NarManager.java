@@ -264,17 +264,17 @@ public class NarManager
             return null;
         }
 
-        JarFile jar = null;
+        JarFile nar = null;
         try
         {
-            jar = new JarFile( file );
+            nar = new JarFile( file );
             NarInfo info =
                 new NarInfo( dependency.getGroupId(), dependency.getArtifactId(), dependency.getVersion(), log );
-            if ( !info.exists( jar ) )
+            if ( !info.exists( nar ) )
             {
                 return null;
             }
-            info.read( jar );
+            info.read( nar );
             return info;
         }
         catch ( IOException e )
@@ -283,11 +283,11 @@ public class NarManager
         }
         finally
         {
-            if ( jar != null )
+            if ( nar != null )
             {
                 try
                 {
-                    jar.close();
+                    nar.close();
                 }
                 catch ( IOException e )
                 {

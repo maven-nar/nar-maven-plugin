@@ -73,12 +73,18 @@
 <!-- Do not declare the NarArtifactHandler here for role-hint nar, as we really use the DefaultArtifactHandler, except for packing -->
     <component>
       <role>org.apache.maven.artifact.handler.ArtifactHandler</role>
+<!-- NAR-121
       <role-hint>nar-package</role-hint>
+      -->
+      <role-hint>nar</role-hint>
       <implementation>org.apache.maven.artifact.handler.DefaultArtifactHandler
       </implementation>
       <configuration>
         <type>nar</type>
+<!-- NAR-121
         <extension>jar</extension>
+-->
+        <extension>nar</extension>
         <packaging>nar</packaging>
         <language>java</language>
         <addedToClasspath>true</addedToClasspath>

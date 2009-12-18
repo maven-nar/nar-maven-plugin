@@ -40,7 +40,7 @@ public class NarDownloadMojo
 {
 
     /**
-     * Artifact resolver, needed to download source jars for inclusion in classpath.
+     * Artifact resolver, needed to download the attached nar files.
      * 
      * @component role="org.apache.maven.artifact.resolver.ArtifactResolver"
      * @required
@@ -49,7 +49,7 @@ public class NarDownloadMojo
     private ArtifactResolver artifactResolver;
 
     /**
-     * Remote repositories which will be searched for source attachments.
+     * Remote repositories which will be searched for nar attachments.
      * 
      * @parameter expression="${project.remoteArtifactRepositories}"
      * @required

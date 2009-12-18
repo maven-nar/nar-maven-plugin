@@ -59,11 +59,13 @@ under the License.
       </plugin>
     </plugins>
   </build>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.its.nar</groupId>
       <artifactId>it0007-lib-shared</artifactId>
       <version>1.0-SNAPSHOT</version>
+      <type>nar</type>
     </dependency>
   </dependencies>
 </project>
