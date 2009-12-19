@@ -130,8 +130,9 @@ public class Lib
                 Artifact dependency = (Artifact) j.next();
                 if ( dependency.getGroupId().equals( ids[0] ) && dependency.getArtifactId().equals( ids[1] ) )
                 {
+                    // FIXME NAR-90
                     File narDir =
-                        new File( mojo.getNarManager().getNarFile( dependency ).getParentFile(), "nar/lib/"
+                        new File( dependency.getFile().getParentFile(), "nar/lib/"
                             + mojo.getAOL() + "/" + lib.type );
                     String narName = dependency.getArtifactId() + "-" + lib.name + "-" + dependency.getVersion();
                     lib.addLibSet( mojo, linker, antProject, narName, narDir );

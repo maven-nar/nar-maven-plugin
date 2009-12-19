@@ -22,7 +22,6 @@ package org.apache.maven.plugin.nar;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProjectHelper;
@@ -38,15 +37,7 @@ import org.codehaus.plexus.archiver.manager.ArchiverManager;
  */
 public class NarPackageMojo
     extends AbstractCompileMojo
-{
-    /**
-     * NAR-121 was nar-package
-     * 
-     * @component role="org.apache.maven.artifact.handler.ArtifactHandler" roleHint="nar"
-     * @required
-     */
-    private ArtifactHandler narArtifactHandler;
-    
+{    
     /**
      * To look up Archiver/UnArchiver implementations
      * 
@@ -65,11 +56,6 @@ public class NarPackageMojo
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        // Avoid that -DupdateReleaseInfo copies to a .nar file
-        // NAR-121
-//        getMavenProject().getArtifact().setArtifactHandler( narArtifactHandler );
-        System.err.println("***"+getMavenProject().getArtifact().getArtifactHandler().getExtension());
-        System.err.println("***"+getFinalName());
         // let the layout decide which nars to attach
         getLayout().attachNars( getTargetDirectory(), archiverManager, projectHelper, getMavenProject(), getNarInfo() );
         

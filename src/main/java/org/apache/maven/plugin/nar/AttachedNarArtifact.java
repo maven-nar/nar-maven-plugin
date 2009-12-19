@@ -19,6 +19,8 @@ package org.apache.maven.plugin.nar;
  * under the License.
  */
 
+import java.io.File;
+
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.handler.ArtifactHandler;
@@ -34,14 +36,16 @@ public class AttachedNarArtifact
     extends DefaultArtifact
 {
     public AttachedNarArtifact( String groupId, String artifactId, String version, String scope, String type,
-                                String classifier, boolean optional )
+                                String classifier, boolean optional, File file )
         throws InvalidVersionSpecificationException
     {
         super( groupId, artifactId, VersionRange.createFromVersionSpec( version ), scope, type, classifier, null,
                optional );
         setArtifactHandler( new Handler( classifier ) );
+        setFile(new File(file.getParentFile(), artifactId+"-"+VersionRange.createFromVersionSpec( version )+"-"+classifier+"."+type));
     }
 
+    // NOTE: not used
     public AttachedNarArtifact( Artifact parent, String type, String classifier )
     {
         super( parent.getGroupId(), parent.getArtifactId(), parent.getVersionRange(), parent.getScope(), type,

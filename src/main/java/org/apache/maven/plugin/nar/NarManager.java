@@ -232,8 +232,9 @@ public class NarManager
                             classifier = NarUtil.replace( "${aol}", aol.toString(), classifier );
                         }
                         String version = nar.length >= 5 ? nar[4].trim() : dependency.getVersion();
+                        File file = dependency.getFile();
                         artifactList.add( new AttachedNarArtifact( groupId, artifactId, version, dependency.getScope(),
-                                                                   ext, classifier, dependency.isOptional() ) );
+                                                                   ext, classifier, dependency.isOptional(), file ) );
                     }
                     catch ( InvalidVersionSpecificationException e )
                     {
@@ -258,12 +259,7 @@ public class NarManager
         // of getBaseVersion, called in pathOf.
         dependency.isSnapshot();
 
-        File file = new File( repository.getBasedir(), repository.pathOf( dependency ) );
-        if ( !file.exists() )
-        {
-            return null;
-        }
-
+        File file = dependency.getFile();
         JarFile nar = null;
         try
         {
@@ -297,16 +293,6 @@ public class NarManager
         }
     }
 
-    public final File getNarFile( Artifact dependency )
-        throws MojoFailureException
-    {
-        // FIXME reported to maven developer list, isSnapshot changes behaviour
-        // of getBaseVersion, called in pathOf.
-        dependency.isSnapshot();
-        return new File( repository.getBasedir(), NarUtil.replace( "${aol}", defaultAOL.toString(),
-                                                                   repository.pathOf( dependency ) ) );
-    }
-
     private List getDependencies( String scope )
     {
         if ( scope.equals( Artifact.SCOPE_TEST ) )
@@ -338,6 +324,10 @@ public class NarManager
         for ( Iterator i = dependencies.iterator(); i.hasNext(); )
         {
             Artifact dependency = (Artifact) i.next();
+            File file = dependency.getFile();
+            if ( file != null && file.exists() )
+                continue;
+
             try
             {
                 log.debug( "Resolving " + dependency );
@@ -372,9 +362,8 @@ public class NarManager
         {
             Artifact dependency = (Artifact) i.next();
             log.debug( "Unpack " + dependency );
-            File file = getNarFile( dependency );
 
-            layout.unpackNar(unpackDir, archiverManager, file, os, linkerName, defaultAOL);            
+            layout.unpackNar( unpackDir, archiverManager, dependency.getFile(), os, linkerName, defaultAOL );
         }
     }
 }

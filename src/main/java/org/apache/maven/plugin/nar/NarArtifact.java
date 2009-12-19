@@ -36,6 +36,7 @@ public class NarArtifact
         super( dependency.getGroupId(), dependency.getArtifactId(), dependency.getVersionRange(),
                dependency.getScope(), dependency.getType(), dependency.getClassifier(),
                dependency.getArtifactHandler(), dependency.isOptional() );
+        this.setFile( dependency.getFile() );
         this.narInfo = narInfo;
     }
 

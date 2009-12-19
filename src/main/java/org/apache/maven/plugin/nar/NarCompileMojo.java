@@ -100,7 +100,7 @@ public class NarCompileMojo
                 // 
                 if ( dependency.getArtifactId().equals( project.getArtifactId() )
                     && dependency.getGroupId().equals( project.getGroupId() )
-                    && dependency.getVersion().equals( project.getVersion() ) && dependency.getType().equals( "jar" ) )
+                    && dependency.getVersion().equals( project.getVersion() ) && dependency.getType().equals( "nar" ) )
                 {
                     getLog().info(
                                    "Added intermodule dependency to " + project.getArtifact() + " in "
