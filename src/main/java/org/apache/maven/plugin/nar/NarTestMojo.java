@@ -73,9 +73,13 @@ public class NarTestMojo
         // run if requested
         if ( test.shouldRun() )
         {
-            String name = getTestTargetDirectory().getPath() + "/bin/" + getAOL() + "/" + test.getName();
-            if (!new File(name).exists()) {
-                getLog().warn( "Skipping non-existing test "+name );
+            // NOTE should we use layout here ?
+            String name =
+                getTestTargetDirectory().getPath() + File.separator + "bin" + File.separator + getAOL()
+                    + File.separator + test.getName();
+            if ( !new File( name ).exists() )
+            {
+                getLog().warn( "Skipping non-existing test " + name );
                 return;
             }
             getLog().info( "Running test " + name );
@@ -105,8 +109,9 @@ public class NarTestMojo
                 new File( getLayout().getBinDirectory( getTargetDirectory(), getMavenProject().getArtifactId(),
                                                        getMavenProject().getVersion(), getAOL().toString() ),
                           project.getArtifactId() );
-            if (!executable.exists()) {
-                getLog().warn( "Skipping non-existing executable "+executable );
+            if ( !executable.exists() )
+            {
+                getLog().warn( "Skipping non-existing executable " + executable );
                 return;
             }
             getLog().info( "Running executable " + executable );
