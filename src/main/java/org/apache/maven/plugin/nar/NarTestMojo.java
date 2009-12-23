@@ -74,9 +74,10 @@ public class NarTestMojo
         if ( test.shouldRun() )
         {
             // NOTE should we use layout here ?
+            String extension = getOS().equals( OS.WINDOWS ) ? ".exe" : "";
             String name =
                 getTestTargetDirectory().getPath() + File.separator + "bin" + File.separator + getAOL()
-                    + File.separator + test.getName();
+                    + File.separator + test.getName() + extension;
             if ( !new File( name ).exists() )
             {
                 getLog().warn( "Skipping non-existing test " + name );
@@ -105,10 +106,11 @@ public class NarTestMojo
         {
             MavenProject project = getMavenProject();
             // FIXME NAR-90, we could make sure we get the final name from layout
+            String extension = getOS().equals( OS.WINDOWS ) ? ".exe" : "";
             File executable =
                 new File( getLayout().getBinDirectory( getTargetDirectory(), getMavenProject().getArtifactId(),
                                                        getMavenProject().getVersion(), getAOL().toString() ),
-                          project.getArtifactId() );
+                          project.getArtifactId() + extension );
             if ( !executable.exists() )
             {
                 getLog().warn( "Skipping non-existing executable " + executable );
