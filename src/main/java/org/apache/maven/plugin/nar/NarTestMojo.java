@@ -75,7 +75,7 @@ public class NarTestMojo
         {
             String name = getTestTargetDirectory().getPath() + "/bin/" + getAOL() + "/" + test.getName();
             if (!new File(name).exists()) {
-                getLog().warn( "Skipping test "+name );
+                getLog().warn( "Skipping non-existing test "+name );
                 return;
             }
             getLog().info( "Running test " + name );
@@ -106,7 +106,7 @@ public class NarTestMojo
                                                        getMavenProject().getVersion(), getAOL().toString() ),
                           project.getArtifactId() );
             if (!executable.exists()) {
-                getLog().warn( "Skipping executable "+executable );
+                getLog().warn( "Skipping non-existing executable "+executable );
                 return;
             }
             getLog().info( "Running executable " + executable );
