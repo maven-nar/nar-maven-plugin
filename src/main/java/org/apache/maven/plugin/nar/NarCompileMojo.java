@@ -73,41 +73,6 @@ public class NarCompileMojo
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        for ( Iterator i = session.getSortedProjects().iterator(); i.hasNext(); )
-        {
-            MavenProject project = (MavenProject) i.next();
-            if ( !project.getPackaging().equals( NarConstants.NAR ) )
-            {
-                continue;
-            }
-            if ( project.isExecutionRoot() )
-            {
-                continue;
-            }
-
-            // is this me ? bail out, the list was sorted
-            MavenProject me = getMavenProject();
-            if ( project.getArtifact().equals( me.getArtifact() ) )
-            {
-                break;
-            }
-
-            // search the dependency list
-            for ( Iterator it = me.getArtifacts().iterator(); it.hasNext(); )
-            {
-                Artifact dependency = (Artifact) it.next();
-                // equals will not work here as the project type is "nar" while the dependencies type is "jar"
-                // 
-                if ( dependency.getArtifactId().equals( project.getArtifactId() )
-                    && dependency.getGroupId().equals( project.getGroupId() )
-                    && dependency.getVersion().equals( project.getVersion() ) && dependency.getType().equals( "nar" ) )
-                {
-                    getLog().info(
-                                   "Added intermodule dependency to " + project.getArtifact() + " in "
-                                       + project.getBuild().getDirectory() );
-                }
-            }
-        }
 
         // make sure destination is there
         getTargetDirectory().mkdirs();
