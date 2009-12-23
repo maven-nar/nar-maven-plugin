@@ -105,6 +105,10 @@ public class NarTestMojo
                 new File( getLayout().getBinDirectory( getTargetDirectory(), getMavenProject().getArtifactId(),
                                                        getMavenProject().getVersion(), getAOL().toString() ),
                           project.getArtifactId() );
+            if (!executable.exists()) {
+                getLog().warn( "Skipping executable "+executable );
+                return;
+            }
             getLog().info( "Running executable " + executable );
             List args = library.getArgs();
             int result =
