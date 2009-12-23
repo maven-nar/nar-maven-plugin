@@ -74,6 +74,10 @@ public class NarTestMojo
         if ( test.shouldRun() )
         {
             String name = getTestTargetDirectory().getPath() + "/bin/" + getAOL() + "/" + test.getName();
+            if (!new File(name).exists()) {
+                getLog().warn( "Skipping test "+name );
+                return;
+            }
             getLog().info( "Running test " + name );
 
             File workingDir = getMavenProject().getBasedir();
