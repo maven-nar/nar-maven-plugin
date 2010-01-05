@@ -27,11 +27,14 @@ import java.util.List;
 import net.sf.antcontrib.cpptasks.CCTask;
 import net.sf.antcontrib.cpptasks.CUtil;
 import net.sf.antcontrib.cpptasks.CompilerDef;
+import net.sf.antcontrib.cpptasks.LinkerDef;
 import net.sf.antcontrib.cpptasks.OutputTypeEnum;
 import net.sf.antcontrib.cpptasks.RuntimeType;
 import net.sf.antcontrib.cpptasks.SubsystemEnum;
 import net.sf.antcontrib.cpptasks.types.LibrarySet;
 import net.sf.antcontrib.cpptasks.types.LibraryTypeEnum;
+import net.sf.antcontrib.cpptasks.types.LinkerArgument;
+import net.sf.antcontrib.cpptasks.types.SystemLibrarySet;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -150,7 +153,9 @@ public class NarTestCompileMojo
         }
 
         // add linker
-        task.addConfiguredLinker( getLinker().getLinker( this, antProject, getOS(), getAOL().getKey() + "linker.", type ) );
+        LinkerDef linkerDefinition =
+            getLinker().getLinker( this, antProject, getOS(), getAOL().getKey() + ".linker.", type );
+        task.addConfiguredLinker( linkerDefinition );
 
         // FIXME hardcoded values
         String libName = getFinalName();
@@ -230,20 +235,66 @@ public class NarTestCompileMojo
 
         for ( Iterator i = depLibs.iterator(); i.hasNext(); )
         {
+            NarArtifact dependency = (NarArtifact) i.next();
 
-            Artifact dependency = (Artifact) i.next();
-            // FIXME: this should be preferred binding
-            File libDirectory =
-                getLayout().getLibDirectory( getUnpackDirectory(), dependency.getArtifactId(), dependency.getVersion(),
-                                             getAOL().toString(), test.getLink() );
-            if ( libDirectory.exists() )
+            // FIXME no handling of "local"
+
+            // FIXME, no way to override this at this stage
+            String binding = dependency.getNarInfo().getBinding( getAOL(), Library.NONE );
+            getLog().debug( "Using Binding: " + binding );
+            AOL aol = getAOL();
+            aol = dependency.getNarInfo().getAOL( getAOL() );
+            getLog().debug( "Using Library AOL: " + aol.toString() );
+
+            if ( !binding.equals( Library.JNI ) && !binding.equals( Library.NONE ) )
             {
-                LibrarySet libset = new LibrarySet();
-                libset.setProject( antProject );
-                libset.setLibs( new CUtil.StringArrayBuilder( dependency.getArtifactId() + "-"
-                    + dependency.getVersion() ) );
-                libset.setDir( libDirectory );
-                task.addLibset( libset );
+                File unpackDirectory = getUnpackDirectory();
+
+                File dir =
+                    getLayout().getLibDirectory( unpackDirectory, dependency.getArtifactId(),
+                                                  dependency.getVersion(), aol.toString(), binding );
+
+                getLog().debug( "Looking for Library Directory: " + dir );
+                if ( dir.exists() )
+                {
+                    LibrarySet libSet = new LibrarySet();
+                    libSet.setProject( antProject );
+
+                    // FIXME, no way to override
+                    String libs = dependency.getNarInfo().getLibs( getAOL() );
+                    if ( ( libs != null ) && !libs.equals( "" ) )
+                    {
+                        getLog().debug( "Using LIBS = " + libs );
+                        libSet.setLibs( new CUtil.StringArrayBuilder( libs ) );
+                        libSet.setDir( dir );
+                        task.addLibset( libSet );
+                    }
+                }
+                else
+                {
+                    getLog().debug( "Library Directory " + dir + " does NOT exist." );
+                }
+
+                // FIXME, look again at this, for multiple dependencies we may need to remove duplicates
+                String options = dependency.getNarInfo().getOptions( getAOL() );
+                if ( ( options != null ) && !options.equals( "" ) )
+                {
+                    getLog().debug( "Using OPTIONS = " + options );
+                    LinkerArgument arg = new LinkerArgument();
+                    arg.setValue( options );
+                    linkerDefinition.addConfiguredLinkerArg( arg );
+                }
+
+                String sysLibs = dependency.getNarInfo().getSysLibs( getAOL() );
+                if ( ( sysLibs != null ) && !sysLibs.equals( "" ) )
+                {
+                    getLog().debug( "Using SYSLIBS = " + sysLibs );
+                    SystemLibrarySet sysLibSet = new SystemLibrarySet();
+                    sysLibSet.setProject( antProject );
+
+                    sysLibSet.setLibs( new CUtil.StringArrayBuilder( sysLibs ) );
+                    task.addSyslibset( sysLibSet );
+                }
             }
         }
 
