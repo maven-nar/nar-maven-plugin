@@ -196,4 +196,11 @@ public class NarLayout20
         }
     }
 
+    public File getNarUnpackDirectory(File baseUnpackDirectory, File narFile)
+    {
+        File dir = new File(
+            baseUnpackDirectory,
+            FileUtils.basename( narFile.getPath(), "." + NarConstants.NAR_EXTENSION ));
+        return dir;
+    }
 }
