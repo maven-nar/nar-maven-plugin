@@ -309,13 +309,13 @@ public class NarCompileMojo
                 // FIXME no handling of "local"
 
                 // FIXME, no way to override this at this stage
-                String binding = dependency.getNarInfo().getBinding( getAOL(), Library.STATIC );
+                String binding = dependency.getNarInfo().getBinding( getAOL(), Library.NONE );
                 getLog().debug( "Using Binding: " + binding );
                 AOL aol = getAOL();
                 aol = dependency.getNarInfo().getAOL( getAOL() );
                 getLog().debug( "Using Library AOL: " + aol.toString() );
 
-                if ( !binding.equals( Library.JNI ) )
+                if ( !binding.equals( Library.JNI ) && !binding.equals( Library.NONE ) )
                 {
                     File unpackDirectory = getUnpackDirectory();
 
