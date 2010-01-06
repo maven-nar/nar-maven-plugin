@@ -74,9 +74,13 @@ public class NarAssemblyMojo
                 // of getBaseVersion, called in pathOf.
                 dependency.isSnapshot();
 
-                File srcDir = new File( getLocalRepository().pathOf( dependency ) );
-                srcDir = new File( getLocalRepository().getBasedir(), srcDir.getParent() );
-                srcDir = new File( srcDir, "nar/" );
+                File srcDir = getLayout().getNarUnpackDirectory(
+                        getUnpackDirectory(), 
+                        getNarManager().getNarFile( dependency ));
+//                File srcDir = new File( getLocalRepository().pathOf( dependency ) );
+//                srcDir = new File( getLocalRepository().getBasedir(), srcDir.getParent() );
+//                srcDir = new File( srcDir, "nar/" );
+
                 File dstDir = getTargetDirectory();
                 try
                 {

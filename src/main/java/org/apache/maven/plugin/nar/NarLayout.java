@@ -82,4 +82,10 @@ public interface NarLayout
      */
     void unpackNar( File baseDir, ArchiverManager archiverManager, File file, String os, String linkerName, AOL defaultAOL )
         throws MojoExecutionException, MojoFailureException;
+    
+    /**
+     * Returns the unpack directory of a specific nar file.
+     */
+    File getNarUnpackDirectory(File baseUnpackDirectory, File narFile);
+
 }

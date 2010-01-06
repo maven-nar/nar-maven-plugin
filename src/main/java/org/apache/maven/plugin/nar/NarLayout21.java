@@ -178,7 +178,7 @@ public class NarLayout21
                            AOL defaultAOL )
         throws MojoExecutionException, MojoFailureException
     {
-        File dir = new File( unpackDirectory, FileUtils.basename( file.getPath(), "." + NarConstants.NAR_EXTENSION ) );
+        File dir = getNarUnpackDirectory(unpackDirectory, file);
 
         boolean process = false;
 
@@ -209,5 +209,13 @@ public class NarLayout21
         {
             unpackNarAndProcess( archiverManager, file, dir, os, linkerName, defaultAOL );
         }
+    }
+
+    public File getNarUnpackDirectory(File baseUnpackDirectory, File narFile)
+    {
+        File dir = new File( 
+            baseUnpackDirectory, 
+            FileUtils.basename( narFile.getPath(), "." + NarConstants.NAR_EXTENSION ));
+        return dir;
     }
 }
