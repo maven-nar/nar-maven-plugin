@@ -65,7 +65,7 @@ public class NarValidateMojo
                 throw new MojoExecutionException( "No includes defined for compiler " + c.getName() );
             }
         }
-        Compiler fortran = getCpp();
+        Compiler fortran = getFortran();
         if ( fortran.getName() != null )
         {
             noOfCompilers++;
