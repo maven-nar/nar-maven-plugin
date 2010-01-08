@@ -33,6 +33,7 @@ import net.sf.antcontrib.cpptasks.TargetDef;
 import net.sf.antcontrib.cpptasks.VersionInfo;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.taskdefs.condition.Os;
 import org.apache.tools.ant.types.Environment;
 
 
@@ -335,12 +336,11 @@ public abstract class CommandLineLinker extends AbstractLinker
      */
     protected String prepareFilename(StringBuffer buf,
       String outputDir, String sourceFile) {
-      String relativePath = CUtil.getRelativePath(outputDir,
-        new File(sourceFile));
-// FREEHEP, return the shortest
-//      return quoteFilename(buf, sourceFile.length() > relativePath.length() ? relativePath : sourceFile);
-// FREEHEP trying with always absolute paths, as Windows relPaths have a tighter restriction on length than absPaths...
-      System.err.println(sourceFile.length()+" "+relativePath.length()+" "+sourceFile);
+// FREEHEP BEGIN return relatuve path if absolute path is too long
+      if (isWindows() && sourceFile.length() > 250) {
+        sourceFile = CUtil.getRelativePath(outputDir, new File(sourceFile));
+      }
+// FREEHEP END 
       return quoteFilename(buf, sourceFile);
     }
 
