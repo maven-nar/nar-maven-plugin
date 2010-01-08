@@ -340,6 +340,7 @@ public abstract class CommandLineLinker extends AbstractLinker
 // FREEHEP, return the shortest
 //      return quoteFilename(buf, sourceFile.length() > relativePath.length() ? relativePath : sourceFile);
 // FREEHEP trying with always absolute paths, as Windows relPaths have a tighter restriction on length than absPaths...
+      System.err.println(sourceFile.length()+" "+relativePath.length()+" "+sourceFile);
       return quoteFilename(buf, sourceFile);
     }
 
