@@ -44,9 +44,11 @@ public class NarAssemblyMojo
 
     /**
      * List of classifiers which you want to assemble. Example ppc-MacOSX-g++-static, x86-Windows-msvc-shared,
-     * i386-Linux-g++-executable, ....
+     * i386-Linux-g++-executable, .... not setting means all.
+     * 
+     * @parameter
      */
-    private List classifiers;
+    private List classifiers = null;
 
     /**
      * Copies the unpacked nar libraries and files into the projects target area
@@ -55,7 +57,7 @@ public class NarAssemblyMojo
         throws MojoExecutionException, MojoFailureException
     {
         List narArtifacts = getNarManager().getNarDependencies( "compile" );
-        
+
         List dependencies = getNarManager().getAttachedNarDependencies( narArtifacts, classifiers );
 
         // this may make some extra copies...
@@ -69,12 +71,11 @@ public class NarAssemblyMojo
             // of getBaseVersion, called in pathOf.
             dependency.isSnapshot();
 
-            File srcDir = getLayout().getNarUnpackDirectory(
-                    getUnpackDirectory(), 
-                    getNarManager().getNarFile( dependency ));
-//                File srcDir = new File( getLocalRepository().pathOf( dependency ) );
-//                srcDir = new File( getLocalRepository().getBasedir(), srcDir.getParent() );
-//                srcDir = new File( srcDir, "nar/" );
+            File srcDir =
+                getLayout().getNarUnpackDirectory( getUnpackDirectory(), getNarManager().getNarFile( dependency ) );
+            // File srcDir = new File( getLocalRepository().pathOf( dependency ) );
+            // srcDir = new File( getLocalRepository().getBasedir(), srcDir.getParent() );
+            // srcDir = new File( srcDir, "nar/" );
 
             File dstDir = getTargetDirectory();
             try
@@ -88,8 +89,8 @@ public class NarAssemblyMojo
             }
             catch ( IOException ioe )
             {
-                throw new MojoExecutionException( "Failed to copy directory for dependency " + dependency
-                    + " from " + srcDir + " to " + dstDir, ioe );
+                throw new MojoExecutionException( "Failed to copy directory for dependency " + dependency + " from "
+                    + srcDir + " to " + dstDir, ioe );
             }
         }
     }
