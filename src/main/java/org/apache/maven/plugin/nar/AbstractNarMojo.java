@@ -100,7 +100,7 @@ public abstract class AbstractNarMojo
     private File targetDirectory;
 
     /**
-     * Target directory for Nar file unpacking. Defaults to "${targetDirectory}/depenencies"
+     * Target directory for Nar file unpacking. Defaults to "${targetDirectory}"
      * 
      * @parameter expression=""
      */
@@ -141,7 +141,7 @@ public abstract class AbstractNarMojo
 
         if ( unpackDirectory == null )
         {
-            unpackDirectory = new File( targetDirectory, "dependencies" );
+            unpackDirectory = targetDirectory;
         }
     }
 
