@@ -28,7 +28,7 @@ under the License.
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>it0016-executable-dep-lib-shared-layout21</artifactId>
+  <artifactId>it0016-exe-dep-lib-shared-layout21</artifactId>
   <packaging>nar</packaging>
   
   <name>Maven NAR Executable and Shared Library (Layout21)</name>
