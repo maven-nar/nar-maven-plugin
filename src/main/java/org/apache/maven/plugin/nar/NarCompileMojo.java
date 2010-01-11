@@ -141,7 +141,7 @@ public class NarCompileMojo
         // configure task
         CCTask task = new CCTask();
         task.setProject( antProject );
-
+        
         // subsystem
         SubsystemEnum subSystem = new SubsystemEnum();
         subSystem.setValue( library.getSubSystem() );
