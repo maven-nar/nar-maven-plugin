@@ -28,10 +28,10 @@ under the License.
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>it0016-lib-shared-layout20</artifactId>
+  <artifactId>it0016-lib-layout21</artifactId>
   <packaging>nar</packaging>
   
-  <name>Maven NAR Shared Library (Layout20)</name>
+  <name>Maven NAR Shared Library (Layout21)</name>
   <version>1.0-SNAPSHOT</version>  
   <description>
     Simple shared library and test file
@@ -49,7 +49,7 @@ under the License.
         <artifactId>maven-nar-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>
-          <layout>NarLayout20</layout>
+          <layout>NarLayout21</layout>
           <libraries>
             <library>
               <type>shared</type>

@@ -44,9 +44,9 @@ under the License.
   </build>
 
   <modules>
-    <module>it0016-exe-dep-lib-shared-layout20</module>
-    <module>it0016-exe-dep-lib-shared-layout21</module>
-    <module>it0016-lib-shared-layout20</module>
-    <module>it0016-lib-shared-layout21</module>
+    <module>it0016-exe-dep-lib-layout20</module>
+    <module>it0016-exe-dep-lib-layout21</module>
+    <module>it0016-lib-layout20</module>
+    <module>it0016-lib-layout21</module>
   </modules>
 </project>
