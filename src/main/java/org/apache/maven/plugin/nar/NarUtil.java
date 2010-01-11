@@ -26,10 +26,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.bcel.classfile.ClassParser;
@@ -46,7 +48,6 @@ import org.codehaus.plexus.util.cli.Commandline;
  */
 public final class NarUtil
 {
-
     private NarUtil()
     {
         // never instantiate
@@ -208,6 +209,95 @@ public final class NarUtil
                     + " return code: \'" + result + "\'." );
             }
         }
+    }
+
+    static void runInstallNameTool( File[] files, final Log log )
+        throws MojoExecutionException, MojoFailureException
+    {
+        Set libs = findInstallNameToolCandidates( files, log );
+
+        for ( Iterator i = libs.iterator(); i.hasNext(); )
+        {
+            File subjectFile = ( File )i.next();
+            String subjectName = subjectFile.getName();
+            String subjectPath = subjectFile.getPath();
+            
+            int idResult = runCommand(
+                    "install_name_tool",
+                    new String[] { "-id", subjectPath, subjectPath },
+                    null, null, log );
+
+            if ( idResult != 0 )
+            {
+                throw new MojoExecutionException(
+                    "Failed to execute 'install_name_tool -id "
+                    + subjectPath
+                    + " "
+                    + subjectPath
+                    + "'"
+                    + " return code: \'"
+                    + idResult
+                    + "\'." );
+             }
+
+             for ( Iterator j = libs.iterator(); j.hasNext(); )
+             {
+                 File dependentFile = ( File )j.next();
+                 String dependentPath = dependentFile.getPath();
+
+                 if (dependentPath == subjectPath) continue;
+                 
+                 int changeResult = runCommand(
+                        "install_name_tool",
+                         new String[] { "-change", subjectName, subjectPath, dependentPath },
+                         null, null, log );
+
+                 if ( changeResult != 0 )
+                 {
+                     throw new MojoExecutionException(
+                         "Failed to execute 'install_name_tool -change "
+                         + subjectName
+                         + " "
+                         + subjectPath
+                         + " "
+                         + dependentPath
+                         + "'"
+                         + " return code: \'"
+                         + changeResult
+                         + "\'." );
+                  }
+             }
+        }
+    }
+
+    static Set findInstallNameToolCandidates( File[] files, final Log log )
+        throws MojoExecutionException, MojoFailureException
+    {
+        HashSet candidates = new HashSet();
+
+        for (int i = 0; i < files.length; i++)
+        {
+            File file = files[i];
+
+            if ( !file.exists() )
+            {
+                continue;
+            }
+
+            if ( file.isDirectory() )
+            {
+                candidates.addAll(findInstallNameToolCandidates( file.listFiles(), log ));
+            }
+
+            String fileName = file.getName();
+            if ( file.isFile() && file.canWrite()
+               && ( fileName.endsWith( ".dylib" ) || (fileName.endsWith( ".jnilib" ))))
+            {
+                candidates.add(file);
+            }
+        }
+
+        return candidates;
     }
 
     public static void makeLink( File file, final Log log )
