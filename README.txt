@@ -10,6 +10,7 @@ Modified version of ant contrib cpptasks, used in the freehep/maven-nar-plugin.
 - added .f90 as extension for the fortran compiler, see NAR-108
 - merged with cpptasks-1.0b5.tar.gz
 - See NAR-103 for tests that have been changed
+- [src/net/sf/antcontrib/cpptasks/compiler/CommandLineLinker] throw buildException when absolute paths are too long, Windows only.
 
 * cpptasks-1.0-beta-4-parallel-5
 

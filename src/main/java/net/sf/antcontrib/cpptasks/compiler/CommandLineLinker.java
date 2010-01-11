@@ -336,9 +336,10 @@ public abstract class CommandLineLinker extends AbstractLinker
      */
     protected String prepareFilename(StringBuffer buf,
       String outputDir, String sourceFile) {
-// FREEHEP BEGIN return relatuve path if absolute path is too long
-      if (isWindows() && sourceFile.length() > 250) {
-        sourceFile = CUtil.getRelativePath(outputDir, new File(sourceFile));
+// FREEHEP BEGIN exit if absolute path is too long. Max length on relative paths in windows is even shorter.
+      int maxPathLength = 250;
+      if (isWindows() && sourceFile.length() > maxPathLength) {
+    	  throw new BuildException("Absolute path too long, "+sourceFile.length()+" > "+maxPathLength+": '"+sourceFile);
       }
 // FREEHEP END 
       return quoteFilename(buf, sourceFile);
