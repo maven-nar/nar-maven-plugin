@@ -33,7 +33,6 @@ import net.sf.antcontrib.cpptasks.TargetDef;
 import net.sf.antcontrib.cpptasks.VersionInfo;
 
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.taskdefs.condition.Os;
 import org.apache.tools.ant.types.Environment;
 
 
@@ -54,6 +53,9 @@ public abstract class CommandLineLinker extends AbstractLinker
     private CommandLineLinker libtoolLinker;
     private boolean newEnvironment = false;
     private String outputSuffix;
+    
+    // FREEHEP
+    private int maxPathLength = 250;
 
 
     /** Creates a comand line linker invocation */
@@ -224,6 +226,11 @@ public abstract class CommandLineLinker extends AbstractLinker
     }
 
     protected String[] getOutputFileSwitch(CCTask task, String outputFile) {
+    	// FREEHEP BEGIN
+    	if (isWindows() && outputFile.length() > maxPathLength) {
+    		throw new BuildException("Absolute path too long, "+outputFile.length()+" > "+maxPathLength+": '"+outputFile);
+    	}
+    	// FREEHEP END
         return getOutputFileSwitch(outputFile);
     }
     protected abstract String[] getOutputFileSwitch(String outputFile);
@@ -337,7 +344,6 @@ public abstract class CommandLineLinker extends AbstractLinker
     protected String prepareFilename(StringBuffer buf,
       String outputDir, String sourceFile) {
 // FREEHEP BEGIN exit if absolute path is too long. Max length on relative paths in windows is even shorter.
-      int maxPathLength = 250;
       if (isWindows() && sourceFile.length() > maxPathLength) {
     	  throw new BuildException("Absolute path too long, "+sourceFile.length()+" > "+maxPathLength+": '"+sourceFile);
       }
