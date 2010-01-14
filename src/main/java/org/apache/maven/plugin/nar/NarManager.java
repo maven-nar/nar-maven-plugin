@@ -297,7 +297,7 @@ public class NarManager
         {
             jar = new JarFile( file );
             NarInfo info =
-                new NarInfo( dependency.getGroupId(), dependency.getArtifactId(), dependency.getVersion(), log );
+                new NarInfo( dependency.getGroupId(), dependency.getArtifactId(), dependency.getBaseVersion(), log );
             if ( !info.exists( jar ) )
             {
                 return null;
