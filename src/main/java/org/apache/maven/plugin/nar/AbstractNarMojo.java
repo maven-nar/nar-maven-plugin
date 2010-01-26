@@ -20,7 +20,9 @@ package org.apache.maven.plugin.nar;
  */
 
 import java.io.File;
+import java.util.Properties;
 
+import org.apache.maven.model.Model;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -133,6 +135,15 @@ public abstract class AbstractNarMojo
         architecture = NarUtil.getArchitecture( architecture );
         os = NarUtil.getOS( os );
         aolId = NarUtil.getAOL( architecture, os, linker, aol );
+        
+        Model model = mavenProject.getModel();
+        Properties properties = model.getProperties();
+        properties.setProperty("nar.arch", getArchitecture());
+        properties.setProperty("nar.os", getOS());
+        properties.setProperty("nar.linker", getLinker().getName());
+        properties.setProperty("nar.aol", aolId.toString());
+        properties.setProperty("nar.aol.group", aolId.getKey());
+        model.setProperties(properties);
 
         if ( targetDirectory == null )
         {
