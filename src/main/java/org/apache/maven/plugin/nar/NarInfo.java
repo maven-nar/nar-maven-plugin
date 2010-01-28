@@ -48,6 +48,11 @@ public class NarInfo
 
     public NarInfo( String groupId, String artifactId, String version, Log log ) throws MojoExecutionException
     {
+        this( groupId, artifactId, version, log, null );
+    }
+    
+    public NarInfo( String groupId, String artifactId, String version, Log log, File propertiesFile ) throws MojoExecutionException
+    {
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.version = version;
@@ -55,19 +60,20 @@ public class NarInfo
         info = new Properties();
 
         // Fill with general properties.nar file
-        File propertiesDir = new File( "src/main/resources/META-INF/nar/" + groupId + "/" + artifactId );
-        File propertiesFile = new File( propertiesDir, NarInfo.NAR_PROPERTIES );
-        try
+        if( propertiesFile != null )
         {
-            info.load( new FileInputStream( propertiesFile ) );
-        }
-        catch ( FileNotFoundException e )
-        {
-            // ignored
-        }
-        catch ( IOException e )
-        {
-            throw new MojoExecutionException( "Problem loading "+propertiesFile, e );
+            try
+            {
+                info.load( new FileInputStream( propertiesFile ) );
+            }
+            catch ( FileNotFoundException e )
+            {
+                // ignored
+            }
+            catch ( IOException e )
+            {
+                throw new MojoExecutionException( "Problem loading "+propertiesFile, e );
+            }
         }
     }
 

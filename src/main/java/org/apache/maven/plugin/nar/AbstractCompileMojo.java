@@ -267,9 +267,17 @@ public abstract class AbstractCompileMojo
     {
         if ( narInfo == null )
         {
-            narInfo =
-                new NarInfo( getMavenProject().getGroupId(), getMavenProject().getArtifactId(),
-                             getMavenProject().getVersion(), getLog() );
+        	String groupId = getMavenProject().getGroupId();
+        	String artifactId = getMavenProject().getArtifactId();
+        	
+            File propertiesDir = new File( getMavenProject().getBasedir(), "src/main/resources/META-INF/nar/" + groupId + "/" + artifactId );
+            File propertiesFile = new File( propertiesDir, NarInfo.NAR_PROPERTIES );
+
+            narInfo = new NarInfo( 
+                groupId, artifactId,
+                getMavenProject().getVersion(), 
+                getLog(),
+                propertiesFile );
         }
         return narInfo;
     }
