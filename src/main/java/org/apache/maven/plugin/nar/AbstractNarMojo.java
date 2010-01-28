@@ -142,7 +142,7 @@ public abstract class AbstractNarMojo
         properties.setProperty("nar.os", getOS());
         properties.setProperty("nar.linker", getLinker().getName());
         properties.setProperty("nar.aol", aolId.toString());
-        properties.setProperty("nar.aol.group", aolId.getKey());
+        properties.setProperty("nar.aol.key", aolId.getKey());
         model.setProperties(properties);
 
         if ( targetDirectory == null )
