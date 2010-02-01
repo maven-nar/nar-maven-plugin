@@ -38,7 +38,7 @@ public class NarGnuConfigureMojo
     extends AbstractGnuMojo
 {
     /**
-     * Skip running of autogen.sh.
+     * Skip running of autogen.sh (aka buildconf).
      * 
      * @parameter expression="${nar.gnu.autogen.skip}" default-value="false"
      */
@@ -52,6 +52,8 @@ public class NarGnuConfigureMojo
     private boolean gnuConfigureSkip;
 
     private static final String AUTOGEN = "autogen.sh";
+
+    private static final String BUILDCONF = "buildconf";
 
     private static final String CONFIGURE = "configure";
 
@@ -79,22 +81,17 @@ public class NarGnuConfigureMojo
                 throw new MojoExecutionException( "Failed to copy GNU sources", e );
             }
 
-            File autogen = new File( targetDir, AUTOGEN );
-            if ( !gnuConfigureSkip && !gnuAutogenSkip && autogen.exists() )
+            if ( !gnuConfigureSkip && !gnuAutogenSkip )
             {
-                getLog().info( "Running GNU " + AUTOGEN );
-                
-                // fix missing config directory
-                File configDir = new File(targetDir, "config");
-                if (!configDir.exists()) {
-                    configDir.mkdirs();
-                }
-                
-                NarUtil.makeExecutable( autogen, getLog() );
-                int result = NarUtil.runCommand( "./" + autogen.getName(), null, targetDir, null, getLog() );
-                if ( result != 0 )
+                File autogen = new File( targetDir, AUTOGEN );
+                File buildconf = new File( targetDir, BUILDCONF );
+                if ( autogen.exists() )
                 {
-                    throw new MojoExecutionException( "'" + AUTOGEN + "' errorcode: " + result );
+                    getLog().info( "Running GNU " + AUTOGEN );
+                    runAutogen(autogen, targetDir);
+                } else if ( buildconf.exists() ) {
+                    getLog().info( "Running GNU " + BUILDCONF );
+                    runAutogen(buildconf, targetDir);
                 }
             }
 
@@ -111,6 +108,23 @@ public class NarGnuConfigureMojo
                     throw new MojoExecutionException( "'" + CONFIGURE + "' errorcode: " + result );
                 }
             }
+        }
+    }
+
+    private void runAutogen(File autogen, File targetDir)
+        throws MojoExecutionException, MojoFailureException
+    {
+        // fix missing config directory
+        File configDir = new File(targetDir, "config");
+        if (!configDir.exists()) {
+            configDir.mkdirs();
+        }
+        
+        NarUtil.makeExecutable( autogen, getLog() );
+        int result = NarUtil.runCommand( "./" + autogen.getName(), null, targetDir, null, getLog() );
+        if ( result != 0 )
+        {
+            throw new MojoExecutionException( "'" + autogen.getName() + "' errorcode: " + result );
         }
     }
 }
