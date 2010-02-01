@@ -2,6 +2,7 @@
 .project
 .settings
 *.bak
+.*.swp
 build.log
 bin
 target
