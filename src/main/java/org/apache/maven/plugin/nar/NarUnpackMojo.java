@@ -33,7 +33,7 @@ import org.codehaus.plexus.archiver.manager.ArchiverManager;
  * @goal nar-unpack
  * @phase process-sources
  * @requiresProject
- * @requiresDependencyResolution
+ * @requiresDependencyResolution test
  * @author Mark Donszelmann
  */
 public class NarUnpackMojo
@@ -59,6 +59,14 @@ public class NarUnpackMojo
         throws MojoExecutionException, MojoFailureException
     {
         List narArtifacts = getNarManager().getNarDependencies( "compile" );
+        unpackNars(narArtifacts);
+        List testNarArtifacts = getNarManager().getNarDependencies( "test" );
+        unpackNars(testNarArtifacts);
+    }
+
+    private void unpackNars(List narArtifacts)
+        throws MojoExecutionException, MojoFailureException
+    {
         if ( classifiers == null )
         {
             getNarManager().unpackAttachedNars( narArtifacts, archiverManager, null, getOS(), getLayout(), getUnpackDirectory() );
