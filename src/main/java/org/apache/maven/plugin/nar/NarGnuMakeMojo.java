@@ -35,6 +35,27 @@ import org.apache.maven.plugin.MojoFailureException;
 public class NarGnuMakeMojo
     extends AbstractGnuMojo
 {
+    /**
+     * Space delimited list of arguments to pass to make
+     *
+     * @parameter expression=""
+     */
+    private String gnuMakeArgs;
+
+    /**
+     * Comma delimited list of environment variables to setup before running make
+     *
+     * @parameter expression=""
+     */
+    private String gnuMakeEnv;
+
+    /**
+     * Boolean to control if we should run make instal after the make
+     *
+     * @parameter expression="" default-value="false"
+     */
+    private boolean gnuMakeInstallSkip;
+
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
@@ -46,17 +67,42 @@ public class NarGnuMakeMojo
         File srcDir = getGnuAOLSourceDirectory();
         if ( srcDir.exists() )
         {
+            String[] args= null;
+            String[] env= null;
+
+            if ( gnuMakeArgs != null )
+            {
+               args= gnuMakeArgs.split( " " );
+            }
+            if ( gnuMakeEnv != null )
+            {
+               env= gnuMakeEnv.split( "," );
+            }
+
             getLog().info( "Running GNU make" );
-            int result = NarUtil.runCommand( "make", null, srcDir, null, getLog() );
+            int result = NarUtil.runCommand( "make", args, srcDir, env, getLog() );
             if ( result != 0 )
             {
                 throw new MojoExecutionException( "'make' errorcode: " + result );
             }
 
-            result = NarUtil.runCommand( "make", new String[] { "install" }, srcDir, null, getLog() );
-            if ( result != 0 )
+            if ( !gnuMakeInstallSkip )
             {
-                throw new MojoExecutionException( "'make install' errorcode: " + result );
+               getLog().info( "Running make install" );
+               if ( args != null )
+               {
+                  gnuMakeArgs= gnuMakeArgs + " install";
+                  args= gnuMakeArgs.split( " " );
+               }
+               else
+               {
+                  args= new String[] { "install" };
+               }
+               result = NarUtil.runCommand( "make", args, srcDir, null, getLog() );
+               if ( result != 0 )
+               {
+                   throw new MojoExecutionException( "'make install' errorcode: " + result );
+               }
             }
         }
     }
