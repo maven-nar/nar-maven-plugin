@@ -291,7 +291,7 @@ public final class NarUtil
 
             String fileName = file.getName();
             if ( file.isFile() && file.canWrite()
-               && ( fileName.endsWith( ".dylib" ) || (fileName.endsWith( ".jnilib" ))))
+               && ( fileName.endsWith( ".so" ) || fileName.endsWith( ".dylib" ) || (fileName.endsWith( ".jnilib" ))))
             {
                 candidates.add(file);
             }
