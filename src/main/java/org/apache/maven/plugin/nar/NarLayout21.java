@@ -158,12 +158,12 @@ public class NarLayout21
             else
             {
                 // and not set or override if SHARED
-                if ( ( narInfo.getBinding( aol, null ) == null ) || type.equals( Library.SHARED ) )
+                if ( ( narInfo.getBinding( aol, null ) == null ) || !type.equals( Library.SHARED ) )
                 {
                     narInfo.setBinding( aol, type );
                 }
                 // and not set or override if SHARED
-                if ( ( narInfo.getBinding( null, null ) == null ) || type.equals( Library.SHARED ) )
+                if ( ( narInfo.getBinding( null, null ) == null ) || !type.equals( Library.SHARED ) )
                 {
                     narInfo.setBinding( null, type );
                 }
