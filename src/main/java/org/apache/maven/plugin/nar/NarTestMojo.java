@@ -74,22 +74,23 @@ public class NarTestMojo
         if ( test.shouldRun() )
         {
             // NOTE should we use layout here ?
-            String extension = getOS().equals( OS.WINDOWS ) ? ".exe" : "";
-            String name =
-                getTestTargetDirectory().getPath() + File.separator + "bin" + File.separator + getAOL()
-                    + File.separator + test.getName() + extension;
-            if ( !new File( name ).exists() )
+            String name = test.getName() + (getOS().equals( OS.WINDOWS ) ? ".exe" : "");
+            File path = new File( getTestTargetDirectory(), "bin" );
+            path = new File( path, getAOL().toString() );
+            path = new File( path, name );
+            if ( !path.exists() )
             {
-                getLog().warn( "Skipping non-existing test " + name );
+                getLog().warn( "Skipping non-existing test " + path );
                 return;
             }
-            getLog().info( "Running test " + name );
+            
+            File workingDir = new File( getTestTargetDirectory(), "test-reports" );
+            workingDir.mkdirs();
+            getLog().info( "Running test " + name + " in " + workingDir );
 
-            File workingDir = getMavenProject().getBasedir();
-            getLog().info( "  in " + workingDir );
             List args = test.getArgs();
             int result =
-                NarUtil.runCommand( name, (String[]) args.toArray( new String[args.size()] ), workingDir,
+                NarUtil.runCommand( path.toString(), (String[]) args.toArray( new String[args.size()] ), workingDir,
                                     generateEnvironment(), getLog() );
             if ( result != 0 )
             {
@@ -127,11 +128,6 @@ public class NarTestMojo
                     + Integer.toHexString( result ) );
             }
         }
-    }
-
-    protected final File getTestTargetDirectory()
-    {
-        return new File( getMavenProject().getBuild().getDirectory(), "test-nar" );
     }
 
     private String[] generateEnvironment()

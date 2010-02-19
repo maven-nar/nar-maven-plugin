@@ -29,31 +29,23 @@ import org.codehaus.plexus.archiver.manager.ArchiverManager;
 /**
  * Unpacks NAR files. Unpacking happens in the local repository, and also sets flags on binaries and corrects static
  * libraries.
- * 
- * @goal nar-unpack
- * @phase process-sources
- * @requiresProject
- * @requiresDependencyResolution
- * @author Mark Donszelmann
  */
-public class NarUnpackMojo
-    extends AbstractUnpackMojo
+public abstract class AbstractUnpackMojo
+    extends AbstractCompileMojo
 {
 
-    public final void narExecute()
-        throws MojoExecutionException, MojoFailureException
-    {
-        List narArtifacts = getNarManager().getNarDependencies( "compile" );
-        if ( classifiers == null )
-        {
-            getNarManager().unpackAttachedNars( narArtifacts, archiverManager, null, getOS(), getLayout(), getUnpackDirectory() );
-        }
-        else
-        {
-            for ( Iterator j = classifiers.iterator(); j.hasNext(); )
-            {
-                getNarManager().unpackAttachedNars( narArtifacts, archiverManager, (String) j.next(), getOS(), getLayout(), getUnpackDirectory() );
-            }
-        }
-    }
+    /**
+     * List of classifiers which you want unpack. Example ppc-MacOSX-g++, x86-Windows-msvc, i386-Linux-g++.
+     * 
+     * @parameter expression=""
+     */
+    protected List classifiers;
+
+    /**
+     * To look up Archiver/UnArchiver implementations
+     * 
+     * @component role="org.codehaus.plexus.archiver.manager.ArchiverManager"
+     * @required
+     */
+    protected ArchiverManager archiverManager;
 }

@@ -95,11 +95,17 @@ public abstract class AbstractNarMojo
 
     /**
      * Target directory for Nar file construction. Defaults to "${project.build.directory}/nar" for "nar-compile" goal
-     * Defaults to "${project.build.directory}/test-nar" for "nar-testCompile" goal
      * 
      * @parameter expression=""
      */
     private File targetDirectory;
+
+    /**
+     * Target directory for Nar test construction. Defaults to "${project.build.directory}/test-nar" for "nar-testCompile" goal
+     * 
+     * @parameter expression=""
+     */
+    private File testTargetDirectory;
 
     /**
      * Target directory for Nar file unpacking. Defaults to "${targetDirectory}"
@@ -107,6 +113,13 @@ public abstract class AbstractNarMojo
      * @parameter expression=""
      */
     private File unpackDirectory;
+
+    /**
+     * Target directory for Nar test unpacking. Defaults to "${testTargetDirectory}"
+     * 
+     * @parameter expression=""
+     */
+    private File testUnpackDirectory;
 
     /**
      * Layout to be used for building and unpacking artifacts
@@ -149,10 +162,18 @@ public abstract class AbstractNarMojo
         {
             targetDirectory = new File( mavenProject.getBuild().getDirectory(), "nar" );
         }
+        if ( testTargetDirectory == null )
+        {
+            testTargetDirectory = new File( mavenProject.getBuild().getDirectory(), "test-nar" );
+        }
 
         if ( unpackDirectory == null )
         {
             unpackDirectory = targetDirectory;
+        }
+        if ( testUnpackDirectory == null )
+        {
+            testUnpackDirectory = testTargetDirectory;
         }
     }
 
@@ -191,10 +212,18 @@ public abstract class AbstractNarMojo
     {
         return targetDirectory;
     }
+    protected final File getTestTargetDirectory()
+    {
+        return testTargetDirectory;
+    }
 
     protected final File getUnpackDirectory()
     {
         return unpackDirectory;
+    }
+    protected final File getTestUnpackDirectory()
+    {
+        return testUnpackDirectory;
     }
 
     protected final NarLayout getLayout()

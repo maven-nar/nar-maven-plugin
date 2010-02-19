@@ -144,10 +144,18 @@ public class NarTestCompileMojo
         for ( Iterator i = getNarManager().getNarDependencies( "test" ).iterator(); i.hasNext(); )
         {
             Artifact artifact = (Artifact) i.next();
-            File include =
+            
+            // check if it exists in the normal unpack directory
+            File include = 
                 getLayout().getIncludeDirectory( getUnpackDirectory(), artifact.getArtifactId(), artifact.getVersion() );
-            if ( include.exists() )
+            if ( !include.exists() )
             {
+                // otherwise try the test unpack directory
+                include = 
+                    getLayout().getIncludeDirectory( getTestUnpackDirectory(), artifact.getArtifactId(), artifact.getVersion() );
+            }
+            if ( include.exists() )
+            {                
                 task.createIncludePath().setPath( include.getPath() );
             }
         }
@@ -248,13 +256,20 @@ public class NarTestCompileMojo
 
             if ( !binding.equals( Library.JNI ) && !binding.equals( Library.NONE ) )
             {
-                File unpackDirectory = getUnpackDirectory();
-
+                // check if it exists in the normal unpack directory 
                 File dir =
-                    getLayout().getLibDirectory( unpackDirectory, dependency.getArtifactId(),
+                    getLayout().getLibDirectory( getUnpackDirectory(), dependency.getArtifactId(),
                                                   dependency.getVersion(), aol.toString(), binding );
-
                 getLog().debug( "Looking for Library Directory: " + dir );
+                if ( !dir.exists() )
+                {
+                    getLog().debug( "Library Directory " + dir + " does NOT exist." );
+
+                    // otherwise try the test unpack directory
+                    dir = getLayout().getLibDirectory( getTestUnpackDirectory(), dependency.getArtifactId(),
+                                                        dependency.getVersion(), aol.toString(), binding );
+                    getLog().debug( "Looking for Library Directory: " + dir );
+                }
                 if ( dir.exists() )
                 {
                     LibrarySet libSet = new LibrarySet();
@@ -310,11 +325,6 @@ public class NarTestCompileMojo
         {
             throw new MojoExecutionException( "NAR: Test-Compile failed", e );
         }
-    }
-
-    protected final File getTestTargetDirectory()
-    {
-        return new File( getMavenProject().getBuild().getDirectory(), "test-nar" );
     }
 
 }

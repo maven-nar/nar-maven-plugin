@@ -29,20 +29,20 @@ import org.apache.maven.plugin.MojoFailureException;
 /**
  * Downloads any dependent NAR files. This includes the noarch and aol type NAR files.
  * 
- * @goal nar-download
- * @phase generate-sources
+ * @goal nar-testDownload
+ * @phase generate-test-sources
  * @requiresProject
- * @requiresDependencyResolution
+ * @requiresDependencyResolution test
  * @author Mark Donszelmann
  */
-public class NarDownloadMojo
+public class NarTestDownloadMojo
     extends AbstractDownloadMojo
 {
 
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        List narArtifacts = getNarManager().getNarDependencies( "compile" );
+        List narArtifacts = getNarManager().getNarDependencies( "test" );
         if ( classifiers == null )
         {
             getNarManager().downloadAttachedNars( narArtifacts, remoteArtifactRepositories, artifactResolver, null );

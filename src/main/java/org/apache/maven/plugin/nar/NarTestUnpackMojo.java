@@ -22,37 +22,38 @@ package org.apache.maven.plugin.nar;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.codehaus.plexus.archiver.manager.ArchiverManager;
 
 /**
- * Downloads any dependent NAR files. This includes the noarch and aol type NAR files.
+ * Unpacks NAR files. Unpacking happens in the local repository, and also sets flags on binaries and corrects static
+ * libraries.
  * 
- * @goal nar-download
- * @phase generate-sources
+ * @goal nar-testUnpack
+ * @phase process-test-sources
  * @requiresProject
- * @requiresDependencyResolution
+ * @requiresDependencyResolution test
  * @author Mark Donszelmann
  */
-public class NarDownloadMojo
-    extends AbstractDownloadMojo
+public class NarTestUnpackMojo
+    extends AbstractUnpackMojo
 {
 
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        List narArtifacts = getNarManager().getNarDependencies( "compile" );
+        NarManager mgr = getNarManager();
+        List narArtifacts = mgr.getNarDependencies( "test" );
         if ( classifiers == null )
         {
-            getNarManager().downloadAttachedNars( narArtifacts, remoteArtifactRepositories, artifactResolver, null );
+            mgr.unpackAttachedNars( narArtifacts, archiverManager, null, getOS(), getLayout(), getTestUnpackDirectory() );
         }
         else
         {
             for ( Iterator j = classifiers.iterator(); j.hasNext(); )
             {
-                getNarManager().downloadAttachedNars( narArtifacts, remoteArtifactRepositories, artifactResolver,
-                                                      (String) j.next() );
+                mgr.unpackAttachedNars( narArtifacts, archiverManager, (String) j.next(), getOS(), getLayout(), getTestUnpackDirectory() );
             }
         }
     }

@@ -28,32 +28,33 @@ import org.apache.maven.plugin.MojoFailureException;
 
 /**
  * Downloads any dependent NAR files. This includes the noarch and aol type NAR files.
- * 
- * @goal nar-download
- * @phase generate-sources
- * @requiresProject
- * @requiresDependencyResolution
- * @author Mark Donszelmann
  */
-public class NarDownloadMojo
-    extends AbstractDownloadMojo
+public abstract class AbstractDownloadMojo
+    extends AbstractDependencyMojo
 {
 
-    public final void narExecute()
-        throws MojoExecutionException, MojoFailureException
-    {
-        List narArtifacts = getNarManager().getNarDependencies( "compile" );
-        if ( classifiers == null )
-        {
-            getNarManager().downloadAttachedNars( narArtifacts, remoteArtifactRepositories, artifactResolver, null );
-        }
-        else
-        {
-            for ( Iterator j = classifiers.iterator(); j.hasNext(); )
-            {
-                getNarManager().downloadAttachedNars( narArtifacts, remoteArtifactRepositories, artifactResolver,
-                                                      (String) j.next() );
-            }
-        }
-    }
+    /**
+     * Artifact resolver, needed to download the attached nar files.
+     * 
+     * @component role="org.apache.maven.artifact.resolver.ArtifactResolver"
+     * @required
+     * @readonly
+     */
+    protected ArtifactResolver artifactResolver;
+
+    /**
+     * Remote repositories which will be searched for nar attachments.
+     * 
+     * @parameter expression="${project.remoteArtifactRepositories}"
+     * @required
+     * @readonly
+     */
+    protected List remoteArtifactRepositories;
+
+    /**
+     * List of classifiers which you want download. Example ppc-MacOSX-g++, x86-Windows-msvc, i386-Linux-g++.
+     * 
+     * @parameter expression=""
+     */
+    protected List classifiers;
 }
