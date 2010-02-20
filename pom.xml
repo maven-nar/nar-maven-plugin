@@ -35,7 +35,7 @@
   </description>
   <url>http://duns.github.com/maven-nar-plugin/</url>
 
-  <!-- to avoid MDEPLOY-50 and to deploy to duns' github repository -->
+  <!-- deploy to duns' github repository -->
   <distributionManagement>
   <repository>
     <id>duns-maven-releases</id>
@@ -162,6 +162,15 @@
 
   <build>
     <defaultGoal>install</defaultGoal>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.5</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>  
   </build>
 
   <reporting>
