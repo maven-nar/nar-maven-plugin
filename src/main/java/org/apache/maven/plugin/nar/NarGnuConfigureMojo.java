@@ -21,6 +21,7 @@ package org.apache.maven.plugin.nar;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -99,10 +100,31 @@ public class NarGnuConfigureMojo
             if ( !gnuConfigureSkip && configure.exists() )
             {
                 getLog().info( "Running GNU " + CONFIGURE );
+
                 NarUtil.makeExecutable( configure, getLog() );
-                int result =
-                    NarUtil.runCommand( "./" + configure.getName(), new String[] {
-                        "--prefix=" + getGnuAOLTargetDirectory().getAbsolutePath() }, targetDir, null, getLog() );
+                String[] args = null;
+
+                // create the array to hold constant and additional args 
+                if ( gnuConfigureArgs != null )
+                {
+                    String[] a = gnuConfigureArgs.split( " " );
+                    args = new String[a.length + 2];
+                    for ( int i = 0; i < a.length; i++ )
+                    {
+                        args[i+2] = a[i];
+                    }
+                }
+                else
+                {
+                    args = new String[2];
+                }
+
+                //first 2 args are constant
+                args[0] = "./" + configure.getName();
+                args[1] = "--prefix=" + getGnuAOLTargetDirectory().getAbsolutePath();
+
+                getLog().info( "args: " + Arrays.toString(args) );
+                int result = NarUtil.runCommand( "sh", args, targetDir, null, getLog() );
                 if ( result != 0 )
                 {
                     throw new MojoExecutionException( "'" + CONFIGURE + "' errorcode: " + result );
