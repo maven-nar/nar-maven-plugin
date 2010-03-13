@@ -37,12 +37,13 @@
 
   <!-- deploy to duns' github repository -->
   <distributionManagement>
-  <repository>
-    <id>duns-maven-releases</id>
-    <name>Duns' Maven Releases</name>
-      <url>file:///Users/duns/sonatype/git/maven-releases</url>
-    </repository>
+    <repository>
+      <id>duns-maven-releases</id>
+      <name>Duns' Maven Releases</name>
+        <url>file:///Users/duns/sonatype/git/maven-releases</url>
+      </repository>
     <snapshotRepository>
+      <uniqueVersion>false</uniqueVersion>
       <id>duns-maven-snapshots</id>
       <name>Duns' Maven Snapshots</name>
       <url>file:///Users/duns/sonatype/git/maven-snapshots</url>
