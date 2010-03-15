@@ -53,11 +53,18 @@ public class NarGnuConfigureMojo
     private boolean gnuConfigureSkip;
 
     /**
-     * Skip running of configure and therefore also autogen.sh
+     * Arguments to pass to GNU configure.
      * 
      * @parameter expression="${nar.gnu.configure.args}" default-value=""
      */
     private String gnuConfigureArgs;
+
+    /**
+     * Arguments to pass to GNU buildconf.
+     * 
+     * @parameter expression="${nar.gnu.buildconf.args}" default-value=""
+     */
+    private String gnuBuildconfArgs;
 
     private static final String AUTOGEN = "autogen.sh";
 
@@ -96,10 +103,15 @@ public class NarGnuConfigureMojo
                 if ( autogen.exists() )
                 {
                     getLog().info( "Running GNU " + AUTOGEN );
-                    runAutogen(autogen, targetDir);
+                    runAutogen(autogen, targetDir, null);
                 } else if ( buildconf.exists() ) {
                     getLog().info( "Running GNU " + BUILDCONF );
-                    runAutogen(buildconf, targetDir);
+                    String gnuBuildconfArgsArray[] = null;
+                    if (gnuBuildconfArgs != null)
+                    {
+                        gnuBuildconfArgsArray = gnuBuildconfArgs.split("\\s");
+                    }
+                    runAutogen(buildconf, targetDir, gnuBuildconfArgsArray);
                 }
             }
 
@@ -111,11 +123,12 @@ public class NarGnuConfigureMojo
                 NarUtil.makeExecutable( configure, getLog() );
                 String[] args = null;
 
-                // create the array to hold constant and additional args 
+                // create the array to hold constant and additional args
                 if ( gnuConfigureArgs != null )
                 {
                     String[] a = gnuConfigureArgs.split( " " );
                     args = new String[a.length + 2];
+
                     for ( int i = 0; i < a.length; i++ )
                     {
                         args[i+2] = a[i];
@@ -140,17 +153,37 @@ public class NarGnuConfigureMojo
         }
     }
 
-    private void runAutogen(File autogen, File targetDir)
+    private void runAutogen(final File autogen, final File targetDir, final String args[])
         throws MojoExecutionException, MojoFailureException
     {
         // fix missing config directory
-        File configDir = new File(targetDir, "config");
+        final File configDir = new File(targetDir, "config");
         if (!configDir.exists()) {
             configDir.mkdirs();
         }
-        
+
         NarUtil.makeExecutable( autogen, getLog() );
-        int result = NarUtil.runCommand( "./" + autogen.getName(), null, targetDir, null, getLog() );
+        getLog().debug("running sh ./" + autogen.getName());
+
+        String arguments[] = null;
+        if (args != null)
+        {
+            arguments = new String[2 + args.length];
+            for (int i = 0; i < args.length; ++i)
+            {
+                arguments[i+2] = args[i];
+            }
+        }
+        else
+        {
+            arguments = new String[2];
+        }
+        arguments[0] = "./";
+        arguments[1] = autogen.getName();
+
+        getLog().info( "args: " + Arrays.toString(arguments) );
+
+        final int result = NarUtil.runCommand( "sh", arguments, targetDir, null, getLog() );
         if ( result != 0 )
         {
             throw new MojoExecutionException( "'" + autogen.getName() + "' errorcode: " + result );
