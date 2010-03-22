@@ -104,7 +104,7 @@ public class NarGnuConfigureMojo
                 getLog().info( "Running GNU " + CONFIGURE );
                 NarUtil.makeExecutable( configure, getLog() );
                 int result =
-                    NarUtil.runCommand( "./" + configure.getName(), new String[] { "--disable-ccache",
+                    NarUtil.runCommand( "./" + configure.getName(), new String[] {
                         "--prefix=" + getGnuAOLTargetDirectory().getAbsolutePath() }, targetDir, null, getLog() );
                 if ( result != 0 )
                 {
