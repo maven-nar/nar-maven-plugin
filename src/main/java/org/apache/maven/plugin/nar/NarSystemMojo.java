@@ -53,7 +53,8 @@ public class NarSystemMojo
         for ( Iterator i = getLibraries().iterator(); !jniFound && i.hasNext(); )
         {
             Library library = (Library) i.next();
-            if ( library.getType().equals( Library.JNI ) )
+            if ( library.getType().equals( Library.JNI ) 
+		 || library.getType().equals( Library.SHARED )) 
             {
                 packageName = library.getNarSystemPackage();
                 narSystemName = library.getNarSystemName();
@@ -64,6 +65,12 @@ public class NarSystemMojo
         
         if ( !jniFound || packageName == null)
         {
+	    if ( !jniFound ) {
+		getLog().debug("NAR: not building a shared or JNI library, so not generating NarSystem class.");
+	    } else {
+		getLog().warn(
+			      "NAR: no system package specified; unable to generate NarSystem class.");
+	    }
             return;
         }
 
@@ -108,6 +115,12 @@ public class NarSystemMojo
             p.println( "        System.loadLibrary(\"" + artifactId + "-"
                 + version + "\");" );
             p.println( "    }" );
+	    p.println("");
+	    p.println("    public static int runUnitTests() {");
+	    p.println("	       return new NarSystem().runUnitTestsNative();");
+	    p.println("}");
+	    p.println("");
+	    p.println("    public native int runUnitTestsNative();");
             p.println( "}" );
             p.close();
             fos.close();

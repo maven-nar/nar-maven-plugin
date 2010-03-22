@@ -48,9 +48,9 @@ public class AOL
                 os = aolString[osIndex];
             case architectureIndex+1:
                 architecture = aolString[architectureIndex];
-                break;
+            break;
 
-            default:
+        default:
                 throw new IllegalArgumentException( "AOL '" + aol + "' cannot be parsed." );
         }
     }
@@ -68,24 +68,46 @@ public class AOL
      */
     public final String toString()
     {
-        return architecture + ( ( os == null ) ? "" : "-" + os + ( ( linkerName == null ) ? "" : "-" + linkerName ) );
+        String tempLinkerName = null;
+        if ( linkerName == null ) {
+            tempLinkerName = "";
+        } else if ( linkerName.equals("g++") ) {
+            tempLinkerName = "-gpp";
+        } else {
+            tempLinkerName = "-" + linkerName;
+        }
+        
+        return architecture
+                + ((os == null) ? "" : "-" + os
+                        + tempLinkerName);
     }
 
     // FIXME, maybe change to something like isCompatible (AOL).
     public final boolean hasLinker( String linker )
     {
-        return linkerName.equals( linker );
+        return linkerName.equals(linker);
     }
 
     /**
      * Returns an AOL key (arch.os.linker) to search in the properties files. 
      * @return dot separated AOL
      */
-    public final String getKey()
+    public final String getKey() 
     {
-        return architecture + ( ( os == null ) ? "" : "." + os + ( ( linkerName == null ) ? "" : "." + linkerName ) );
-    }
-    
+        String tempLinkerName = null;
+        if ( linkerName == null ) {
+            tempLinkerName = "";
+        } else if ( linkerName.equals("g++") ) {
+            tempLinkerName = ".gpp";
+        } else {
+            tempLinkerName = "." + linkerName;
+        }
+        
+        return architecture
+                + ((os == null) ? "" : "." + os
+                        + tempLinkerName);
+    }     
+
     final String getOS() {
         return os;
     }

@@ -35,7 +35,8 @@
           </generate-resources>
           <process-resources>org.apache.maven.plugins:maven-resources-plugin:resources,
             org.apache.maven.plugins:maven-nar-plugin:nar-resources,
-            org.apache.maven.plugins:maven-nar-plugin:nar-gnu-resources
+            org.apache.maven.plugins:maven-nar-plugin:nar-gnu-resources,
+            org.apache.maven.plugins:maven-nar-plugin:nar-vcproj
           </process-resources>
           <compile>org.apache.maven.plugins:maven-compiler-plugin:compile,
             org.apache.maven.plugins:maven-nar-plugin:nar-javah,

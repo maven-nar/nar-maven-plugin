@@ -39,6 +39,7 @@ import org.apache.bcel.classfile.JavaClass;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.cli.Commandline;
@@ -714,4 +715,23 @@ public final class NarUtil
         }
     }
 
+
+	/**
+	 * (Darren) this code lifted from mvn help:active-profiles plugin Recurses
+	 * into the project's parent poms to find the active profiles of the
+	 * specified project and all its parents.
+	 * 
+	 * @param project
+	 *            The project to start with
+	 * @return A list of active profiles
+	 */
+	static List collectActiveProfiles(MavenProject project) {
+		List profiles = project.getActiveProfiles();
+
+		if (project.hasParent()) {
+			profiles.addAll(collectActiveProfiles(project.getParent()));
+		}
+
+		return profiles;
+	}
 }

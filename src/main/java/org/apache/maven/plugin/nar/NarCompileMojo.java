@@ -79,15 +79,15 @@ public class NarCompileMojo
 
         // check for source files
         int noOfSources = 0;
-        noOfSources += getSourcesFor( getCpp() ).size();
-        noOfSources += getSourcesFor( getC() ).size();
-        noOfSources += getSourcesFor( getFortran() ).size();
+        noOfSources += getSourcesFor(getCpp()).size();
+        noOfSources += getSourcesFor(getC()).size();
+        noOfSources += getSourcesFor(getFortran()).size();
         if ( noOfSources > 0 )
         {
             getLog().info( "Compiling " + noOfSources + " native files" );
             for ( Iterator i = getLibraries().iterator(); i.hasNext(); )
             {
-                createLibrary( getAntProject(), (Library) i.next() );
+                createLibrary(getAntProject(), (Library) i.next());
             }
         }
         else
@@ -134,33 +134,33 @@ public class NarCompileMojo
         }
     }
 
-    private void createLibrary( Project antProject, Library library )
-        throws MojoExecutionException, MojoFailureException
+    private void createLibrary(Project antProject, Library library)
+        throws MojoExecutionException, MojoFailureException 
     {
         getLog().debug( "Creating Library " + library );
         // configure task
         CCTask task = new CCTask();
-        task.setProject( antProject );
-        
+        task.setProject(antProject);
+
         // subsystem
         SubsystemEnum subSystem = new SubsystemEnum();
         subSystem.setValue( library.getSubSystem() );
         task.setSubsystem( subSystem );
 
         // set max cores
-        task.setMaxCores( getMaxCores( getAOL() ) );
+        task.setMaxCores(getMaxCores(getAOL()));
 
         // outtype
         OutputTypeEnum outTypeEnum = new OutputTypeEnum();
         String type = library.getType();
-        outTypeEnum.setValue( type );
-        task.setOuttype( outTypeEnum );
+        outTypeEnum.setValue(type);
+        task.setOuttype(outTypeEnum);
 
         // stdc++
-        task.setLinkCPP( library.linkCPP() );
+        task.setLinkCPP(library.linkCPP());
 
         // fortran
-        task.setLinkFortran( library.linkFortran() );
+        task.setLinkFortran(library.linkFortran());
         task.setLinkFortranMain( library.linkFortranMain() );
 
         // outDir
@@ -185,69 +185,72 @@ public class NarCompileMojo
         if ( type.equals( Library.EXECUTABLE ) )
         {
             // executable has no version number
-            outFile = new File( outDir, getMavenProject().getArtifactId() );
+            outFile = new File(outDir, getMavenProject().getArtifactId());
         }
         else
         {
-            outFile = new File( outDir, getOutput( getAOL() ) );
+            outFile = new File(outDir, getOutput(getAOL()));
         }
-        getLog().debug( "NAR - output: '" + outFile + "'" );
-        task.setOutfile( outFile );
+        getLog().debug("NAR - output: '" + outFile + "'");
+        task.setOutfile(outFile);
 
         // object directory
-        File objDir = new File( getTargetDirectory(), "obj" );
-        objDir = new File( objDir, getAOL().toString() );
+        File objDir = new File(getTargetDirectory(), "obj");
+        objDir = new File(objDir, getAOL().toString());
         objDir.mkdirs();
-        task.setObjdir( objDir );
+        task.setObjdir(objDir);
 
         // failOnError, libtool
-        task.setFailonerror( failOnError( getAOL() ) );
-        task.setLibtool( useLibtool( getAOL() ) );
+        task.setFailonerror(failOnError(getAOL()));
+        task.setLibtool(useLibtool(getAOL()));
 
         // runtime
         RuntimeType runtimeType = new RuntimeType();
-        runtimeType.setValue( getRuntime( getAOL() ) );
-        task.setRuntime( runtimeType );
+        runtimeType.setValue(getRuntime(getAOL()));
+        task.setRuntime(runtimeType);
 
+        // Darren Sargent Feb 11 2010: Use Compiler.MAIN for "type"...appears the wrong "type" variable was being used
+        // since getCompiler() expects "main" or "test", whereas the "type" variable here is "executable", "shared" etc.
         // add C++ compiler
-        CompilerDef cpp = getCpp().getCompiler( type, getOutput( getAOL() ) );
+        CompilerDef cpp = getCpp().getCompiler( Compiler.MAIN, getOutput( getAOL() ) );
         if ( cpp != null )
         {
             task.addConfiguredCompiler( cpp );
         }
 
         // add C compiler
-        CompilerDef c = getC().getCompiler( type, getOutput( getAOL() ) );
+        CompilerDef c = getC().getCompiler( Compiler.MAIN, getOutput( getAOL() ) );
         if ( c != null )
         {
             task.addConfiguredCompiler( c );
         }
 
         // add Fortran compiler
-        CompilerDef fortran = getFortran().getCompiler( type, getOutput( getAOL() ) );
+        CompilerDef fortran = getFortran().getCompiler( Compiler.MAIN, getOutput( getAOL() ) );
         if ( fortran != null )
         {
             task.addConfiguredCompiler( fortran );
         }
+        // end Darren
 
         // add javah include path
         File jniDirectory = getJavah().getJniDirectory();
-        if ( jniDirectory.exists() )
+        if (jniDirectory.exists())
         {
-            task.createIncludePath().setPath( jniDirectory.getPath() );
+            task.createIncludePath().setPath(jniDirectory.getPath());
         }
 
         // add java include paths
-        getJava().addIncludePaths( task, type );
+        getJava().addIncludePaths(task, type);
 
         // add dependency include paths
         for ( Iterator i = getNarManager().getNarDependencies( "compile" ).iterator(); i.hasNext(); )
         {
             // FIXME, handle multiple includes from one NAR
             NarArtifact narDependency = (NarArtifact) i.next();
-            String binding = narDependency.getNarInfo().getBinding( getAOL(), Library.STATIC );
-            getLog().debug( "Looking for " + narDependency + " found binding " + binding );
-            if ( !binding.equals( Library.JNI ) )
+            String binding = narDependency.getNarInfo().getBinding(getAOL(), Library.STATIC);
+            getLog().debug( "Looking for " + narDependency + " found binding " + binding);
+            if ( !binding.equals(Library.JNI ) )
             {
                 File unpackDirectory = getUnpackDirectory();
                 File include =
@@ -256,7 +259,10 @@ public class NarCompileMojo
                 getLog().debug( "Looking for include directory: " + include );
                 if ( include.exists() )
                 {
-                    task.createIncludePath().setPath( include.getPath() );
+                    task.createIncludePath().setPath(include.getPath());
+                } else {
+                    throw new MojoExecutionException(
+                            "NAR: unable to locate include path: " + include);
                 }
             }
         }
@@ -264,7 +270,7 @@ public class NarCompileMojo
         // add linker
         LinkerDef linkerDefinition =
             getLinker().getLinker( this, antProject, getOS(), getAOL().getKey() + ".linker.", type );
-        task.addConfiguredLinker( linkerDefinition );
+        task.addConfiguredLinker(linkerDefinition);
 
         // add dependency libraries
         // FIXME: what about PLUGIN and STATIC, depending on STATIC, should we
@@ -273,7 +279,7 @@ public class NarCompileMojo
         {
 
             List depLibOrder = getDependencyLibOrder();
-            List depLibs = getNarManager().getNarDependencies( "compile" );
+            List depLibs = getNarManager().getNarDependencies("compile");
 
             // reorder the libraries that come from the nar dependencies
             // to comply with the order specified by the user
@@ -290,15 +296,15 @@ public class NarCompileMojo
                         NarArtifact dep = (NarArtifact) j.next();
                         String depName = dep.getGroupId() + ":" + dep.getArtifactId();
 
-                        if ( depName.equals( depToOrderName ) )
+                        if (depName.equals(depToOrderName)) 
                         {
-                            tmp.add( dep );
+                            tmp.add(dep);
                             j.remove();
                         }
                     }
                 }
 
-                tmp.addAll( depLibs );
+                tmp.addAll(depLibs);
                 depLibs = tmp;
             }
 
@@ -310,12 +316,12 @@ public class NarCompileMojo
 
                 // FIXME, no way to override this at this stage
                 String binding = dependency.getNarInfo().getBinding( getAOL(), Library.NONE );
-                getLog().debug( "Using Binding: " + binding );
+                getLog().debug("Using Binding: " + binding);
                 AOL aol = getAOL();
-                aol = dependency.getNarInfo().getAOL( getAOL() );
-                getLog().debug( "Using Library AOL: " + aol.toString() );
+                aol = dependency.getNarInfo().getAOL(getAOL());
+                getLog().debug("Using Library AOL: " + aol.toString());
 
-                if ( !binding.equals( Library.JNI ) && !binding.equals( Library.NONE ) )
+                if ( !binding.equals( Library.JNI ) && !binding.equals( Library.NONE ) && !binding.equals( Library.EXECUTABLE) )
                 {
                     File unpackDirectory = getUnpackDirectory();
 
@@ -323,20 +329,20 @@ public class NarCompileMojo
                         getLayout().getLibDirectory( unpackDirectory, dependency.getArtifactId(),
                                                      dependency.getVersion(), aol.toString(), binding );
 
-                    getLog().debug( "Looking for Library Directory: " + dir );
+                    getLog().debug("Looking for Library Directory: " + dir);
                     if ( dir.exists() )
                     {
                         LibrarySet libSet = new LibrarySet();
-                        libSet.setProject( antProject );
+                        libSet.setProject(antProject);
 
                         // FIXME, no way to override
-                        String libs = dependency.getNarInfo().getLibs( getAOL() );
+                        String libs = dependency.getNarInfo().getLibs(getAOL());
                         if ( ( libs != null ) && !libs.equals( "" ) )
                         {
-                            getLog().debug( "Using LIBS = " + libs );
-                            libSet.setLibs( new CUtil.StringArrayBuilder( libs ) );
-                            libSet.setDir( dir );
-                            task.addLibset( libSet );
+                            getLog().debug("Using LIBS = " + libs);
+                            libSet.setLibs(new CUtil.StringArrayBuilder(libs));
+                            libSet.setDir(dir);
+                            task.addLibset(libSet);
                         }
                     }
                     else
@@ -348,21 +354,21 @@ public class NarCompileMojo
                     String options = dependency.getNarInfo().getOptions( getAOL() );
                     if ( ( options != null ) && !options.equals( "" ) )
                     {
-                        getLog().debug( "Using OPTIONS = " + options );
+                        getLog().debug("Using OPTIONS = " + options);
                         LinkerArgument arg = new LinkerArgument();
-                        arg.setValue( options );
-                        linkerDefinition.addConfiguredLinkerArg( arg );
+                        arg.setValue(options);
+                        linkerDefinition.addConfiguredLinkerArg(arg);
                     }
 
                     String sysLibs = dependency.getNarInfo().getSysLibs( getAOL() );
                     if ( ( sysLibs != null ) && !sysLibs.equals( "" ) )
                     {
-                        getLog().debug( "Using SYSLIBS = " + sysLibs );
+                        getLog().debug("Using SYSLIBS = " + sysLibs);
                         SystemLibrarySet sysLibSet = new SystemLibrarySet();
-                        sysLibSet.setProject( antProject );
+                        sysLibSet.setProject(antProject);
 
                         sysLibSet.setLibs( new CUtil.StringArrayBuilder( sysLibs ) );
-                        task.addSyslibset( sysLibSet );
+                        task.addSyslibset(sysLibSet);
                     }
                 }
             }
@@ -378,7 +384,7 @@ public class NarCompileMojo
         }
         catch ( BuildException e )
         {
-            throw new MojoExecutionException( "NAR: Compile failed", e );
+            throw new MojoExecutionException("NAR: Compile failed", e);
         }
 
         // FIXME, this should be done in CPPTasks at some point
@@ -393,10 +399,19 @@ public class NarCompileMojo
                 int result =
                     NarUtil.runCommand( "mt.exe", new String[] { "/manifest", manifest,
                         "/outputresource:" + dll + ";#2" }, null, null, getLog() );
-                if ( result != 0 )
+                if (result != 0)
                 {
-                    throw new MojoFailureException( "MT.EXE failed with exit code: " + result );
+                    throw new MojoFailureException("MT.EXE failed with exit code: " + result);
                 }
+            } else if (libType.equals(Library.EXECUTABLE)) {
+                String exe = outFile.getPath() + ".exe";
+                String manifest = exe + ".manifest";
+                int result = NarUtil.runCommand("mt.exe",
+                        new String[] { "/manifest", manifest,
+                                "/outputresource:" + exe + ";#1" }, null, null, getLog());
+                if (result != 0)
+                    throw new MojoFailureException(
+                            "MT.EXE failed with exit code: " + result);
             }
         }
     }

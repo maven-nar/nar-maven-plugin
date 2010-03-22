@@ -326,7 +326,11 @@ public abstract class Compiler
             includeList = new ArrayList();
             for ( Iterator i = getSourceDirectories( type ).iterator(); i.hasNext(); )
             {
-                includeList.add( new File( (File) i.next(), "include" ).getPath() );
+		//VR 20100318 only add include directories that exist - we now fail the build fast if an include directory does not exist 
+                File includePath = new File( (File) i.next(), "include" );
+                if(includePath.isDirectory()) {
+                	includeList.add( includePath.getPath() );
+                }
             }
         }
         return includeList;
@@ -555,6 +559,10 @@ public abstract class Compiler
         for ( Iterator i = getIncludePaths( type ).iterator(); i.hasNext(); )
         {
             String path = (String) i.next();
+            // Darren Sargent, 30Jan2008 - fail build if invalid include path(s) specified.
+			if ( ! new File(path).exists() ) {
+				throw new MojoFailureException("NAR: Include path not found: " + path);
+			}
             compiler.createIncludePath().setPath( path );
         }
 
@@ -603,24 +611,6 @@ public abstract class Compiler
             }
         }
 
-        // add other sources, FIXME seems
-        if ( !type.equals( TEST ) )
-        {
-            for ( Iterator i = mojo.getMavenProject().getCompileSourceRoots().iterator(); i.hasNext(); )
-            {
-                File dir = new File( (String) i.next() );
-                mojo.getLog().debug( "Checking for existence of " + getLanguage() + " sourceCompileRoot: " + dir );
-                if ( dir.exists() )
-                {
-                    ConditionalFileSet otherFileSet = new ConditionalFileSet();
-                    otherFileSet.setProject( mojo.getAntProject() );
-                    otherFileSet.setIncludes( StringUtils.join( includeSet.iterator(), "," ) );
-                    otherFileSet.setExcludes( StringUtils.join( excludeSet.iterator(), "," ) );
-                    otherFileSet.setDir( dir );
-                    compiler.addFileset( otherFileSet );
-                }
-            }
-        }
         return compiler;
     }
 
