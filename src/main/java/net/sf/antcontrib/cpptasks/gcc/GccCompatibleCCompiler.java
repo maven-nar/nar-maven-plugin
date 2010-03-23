@@ -142,8 +142,16 @@ public abstract class GccCompatibleCCompiler extends CommandLineCCompiler {
     protected File[] getEnvironmentIncludePath() {
         return CUtil.getPathFromEnvironment("INCLUDE", ":");
     }
+    // Darren Sargent 22Oct2008 - added overloads to properly handle system paths
     public String getIncludeDirSwitch(String includeDir) {
+    	return getIncludeDirSwitch(includeDir, false);
+    }
+    public String getIncludeDirSwitch(String includeDir, boolean isSystem) {
+    	if ( isSystem ) {
+    		return "-isystem" + includeDir;
+    	} else {
         return "-I" + includeDir;
+    }
     }
     public void getUndefineSwitch(StringBuffer buffer, String define) {
         buffer.append("-U");

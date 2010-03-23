@@ -555,8 +555,21 @@ public final class DependencyTable {
                     //
                     for (int i = 0; i < includeInfos.length; i++) {
                         DependencyInfo includeInfo = includeInfos[i];
-                        walkDependencies(task, includeInfo, compiler, stack,
-                                visitor);
+						// Darren Sargent 23Oct2008
+						// only recurse for direct includes of current source
+						// file
+						if (includeInfo.getSource().contains(
+								File.separatorChar + "src" + File.separatorChar
+										+ "main")
+								|| includeInfo.getSource().contains(
+										File.separatorChar + "src"
+												+ File.separatorChar + "test")) {
+							task.log("Walking dependencies for "
+									+ includeInfo.getSource(),
+									Project.MSG_VERBOSE);
+							walkDependencies(task, includeInfo, compiler,
+									stack, visitor);
+						}
                     }
                 }
             }

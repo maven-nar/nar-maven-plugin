@@ -92,6 +92,10 @@ public abstract class DevStudioCompatibleCCompiler
         args.addElement(mflag);
         if (rtti != null && rtti.booleanValue()) {
                 args.addElement("/GR");
+         } else {
+                // added by Darren Sargent, 21Mar2008 -- /GR is default so need
+                // /GR- to disable it
+                args.addElement("/GR-");
         }
     }
     protected void addDebugSwitch(Vector args) {
@@ -118,6 +122,7 @@ public abstract class DevStudioCompatibleCCompiler
         String[] additionalArgs = new String[]{
                 "/Fp" + CUtil.getBasename(prototype) + ".pch",
                 "/Yu" + lastInclude};
+
         return new CommandLineCompilerConfiguration(baseConfig, additionalArgs,
                 exceptFiles, false);
     }

@@ -48,6 +48,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
     private final boolean newEnvironment;
     protected CommandLineCompiler(String command, String identifierArg,
             String[] sourceExtensions, String[] headerExtensions,
+
             String outputSuffix, boolean libtool,
             CommandLineCompiler libtoolCompiler, boolean newEnvironment,
             Environment env) {
@@ -83,14 +84,15 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
      *            configuration identifier
      */
     protected void addIncludes(String baseDirPath, File[] includeDirs,
-            Vector args, Vector relativeArgs, StringBuffer includePathId) {
+			Vector args, Vector relativeArgs, StringBuffer includePathId,
+			boolean isSystem) {
         for (int i = 0; i < includeDirs.length; i++) {
             args.addElement(getIncludeDirSwitch(includeDirs[i]
-                    .getAbsolutePath()));
+					.getAbsolutePath(), isSystem));
             if (relativeArgs != null) {
-                String relative = CUtil.getRelativePath(baseDirPath,
+				String relative = CUtil.getRelativePath(baseDirPath,
                         includeDirs[i]);
-                relativeArgs.addElement(getIncludeDirSwitch(relative));
+				relativeArgs.addElement(getIncludeDirSwitch(relative, isSystem));
                 if (includePathId != null) {
                     if (includePathId.length() == 0) {
                         includePathId.append("/I");
@@ -199,6 +201,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
             int retval = runCommand(task, outputDir, commandline);
             if (monitor != null) {
                 String[] fileNames = new String[firstFileNextExec - sourceIndex];
+
                 for (int j = 0; j < fileNames.length; j++) {
                     fileNames[j] = sourceFiles[sourceIndex + j];
                 }
@@ -215,6 +218,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
                 exc = new BuildException(this.getCommand()
                         + " failed with return code " + retval, task
                         .getLocation());
+
                 //
                 //   and throw it now unless we are relentless
                 //
@@ -278,6 +282,8 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
         Boolean rtti = specificDef.getRtti(defaultProviders, 1);
         OptimizationEnum optimization = specificDef.getOptimization(defaultProviders, 1);
         this.addImpliedArgs(args, debug, multithreaded, exceptions, linkType, rtti, optimization);
+
+
         //
         //    add all appropriate defines and undefines
         //
@@ -346,8 +352,8 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
             sysIncPath[i] = new File((String) sysIncludePath.elementAt(i));
         }
         addIncludes(baseDirPath, incPath, args, relativeArgs,
-                includePathIdentifier);
-        addIncludes(baseDirPath, sysIncPath, args, null, null);
+				includePathIdentifier, false);
+		addIncludes(baseDirPath, sysIncPath, args, null, null, true);
         StringBuffer buf = new StringBuffer(getIdentifier());
         for (int i = 0; i < relativeArgs.size(); i++) {
             buf.append(' ');
@@ -387,7 +393,23 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
         return identifier;
     }
     abstract protected String getIncludeDirSwitch(String source);
-    protected String getInputFileArgument(File outputDir, String filename,
+    
+	/**
+	 * Added by Darren Sargent 22Oct2008 Returns the include dir switch value.
+	 * Default implementation doesn't treat system includes specially, for
+	 * compilers which don't care.
+	 * 
+	 * @param source
+	 *            the given source value.
+	 * @param isSystem
+	 *            "true" if this is a system include path
+	 * 
+	 * @return the include dir switch value.
+	 */
+	protected String getIncludeDirSwitch(String source, boolean isSystem) {
+		return getIncludeDirSwitch(source);
+	}
+	protected String getInputFileArgument(File outputDir, String filename,
             int index) {
         //
         //   if there is an embedded space,

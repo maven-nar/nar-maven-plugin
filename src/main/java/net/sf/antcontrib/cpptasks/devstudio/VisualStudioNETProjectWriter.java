@@ -200,12 +200,18 @@ public final class VisualStudioNETProjectWriter
             final CommandLineCompilerConfiguration compilerConfig) {
         File[] includePath = compilerConfig.getIncludePath();
         StringBuffer includeDirs = new StringBuffer();
-        for (int i = 0; i < includePath.length; i++) {
-          String relPath = CUtil.getRelativePath(baseDir, includePath[i]);
-          includeDirs.append(CUtil.toWindowsPath(relPath));
+		// Darren Sargent Feb 10 2010 -- reverted to older code to ensure sys
+		// includes get, erm, included
+		String[] args = compilerConfig.getPreArguments();
+
+		for (int i = 0; i < args.length; i++) {
+			if (args[i].startsWith("/I")) {
+				includeDirs.append(args[i].substring(2));
           includeDirs.append(';');
         }
 
+		}
+		// end Darren
 
         if (includeDirs.length() > 0) {
             includeDirs.setLength(includeDirs.length() - 1);
@@ -360,6 +366,11 @@ public final class VisualStudioNETProjectWriter
             if ("/W3".equals(args[i])) {
                 warn = "3";
             }
+			// Added by Darren Sargent, 2/26/2008
+			if ("/W4".equals(args[i])) {
+				warn = "4";
+			}
+			// end added
         }
         return warn;
     }

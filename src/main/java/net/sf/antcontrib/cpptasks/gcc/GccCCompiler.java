@@ -135,7 +135,8 @@ public final class GccCCompiler extends GccCompatibleCCompiler {
 // BEGINFREEHEP
         // Add -fno_rtti only for g++ and c++
         if (!getCommand().equals("g77") && !getCommand().equals("gcc") && (rtti != null) && (!rtti.booleanValue())) {
-        	args.addElement("-fno_rtti");
+            // Darren Sargent: fix RTTI option
+            args.addElement("-fno-rtti");
         }
 // ENDFREEHEP
     }

@@ -279,9 +279,10 @@ public final class TestCompilerDef
     SystemIncludePath path = baseCompiler.createSysIncludePath();
     path.setPath("/tmp");
     String[] preArgs = getPreArguments(extendedCompiler);
+    System.out.println("Class: " + baseCompiler + " and: " + extendedCompiler);
     // BEGINFREEHEP, passes extra option
     assertEquals(3, preArgs.length);
-    assertEquals("-I", preArgs[2].substring(0, 2));
+    assertEquals("-isystem", preArgs[2].substring(0, 8));
     // ENDFREEHEP
   }
 
