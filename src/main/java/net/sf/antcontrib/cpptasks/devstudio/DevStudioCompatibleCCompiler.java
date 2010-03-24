@@ -101,7 +101,7 @@ public abstract class DevStudioCompatibleCCompiler
     protected void addDebugSwitch(Vector args) {
         args.addElement("/Zi");
         args.addElement("/Od");
-        args.addElement("/GZ");
+        args.addElement("/RTC1");
         args.addElement("/D_DEBUG");
     }
     protected void addWarningSwitch(Vector args, int level) {

@@ -33,7 +33,7 @@ public class TestDevStudioCCompiler extends TestCase {
         assertEquals(4, args.size());
         assertEquals("/Zi", args.elementAt(0));
         assertEquals("/Od", args.elementAt(1));
-        assertEquals("/GZ", args.elementAt(2));
+        assertEquals("/RTC1", args.elementAt(2));
         assertEquals("/D_DEBUG", args.elementAt(3));
     }
 }
