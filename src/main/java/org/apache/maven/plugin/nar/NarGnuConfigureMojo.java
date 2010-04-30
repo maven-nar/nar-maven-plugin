@@ -168,18 +168,17 @@ public class NarGnuConfigureMojo
         String arguments[] = null;
         if (args != null)
         {
-            arguments = new String[2 + args.length];
+            arguments = new String[1 + args.length];
             for (int i = 0; i < args.length; ++i)
             {
-                arguments[i+2] = args[i];
+                arguments[i+1] = args[i];
             }
         }
         else
         {
-            arguments = new String[2];
+            arguments = new String[1];
         }
-        arguments[0] = "./";
-        arguments[1] = autogen.getName();
+        arguments[0] = "./" + autogen.getName();
 
         getLog().info( "args: " + Arrays.toString(arguments) );
 
