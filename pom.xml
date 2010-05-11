@@ -237,6 +237,7 @@
               <pomExcludes>
                 <pomExclude>it-parent/**</pomExclude>
                 <pomExclude>it0021-*/**</pomExclude>
+                <pomExclude>it0022-*/**</pomExclude>
               </pomExcludes>
               <localRepositoryPath>${project.build.directory}/it-repo</localRepositoryPath>
               <settingsFile>src/it/settings.xml</settingsFile>
