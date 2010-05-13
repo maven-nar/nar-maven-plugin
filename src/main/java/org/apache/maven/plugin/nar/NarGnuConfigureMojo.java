@@ -52,6 +52,13 @@ public class NarGnuConfigureMojo
      */
     private boolean gnuConfigureSkip;
 
+    /**
+     * Skip running of configure and therefore also autogen.sh
+     * 
+     * @parameter expression="${nar.gnu.configure.args}" default-value=""
+     */
+    private String gnuConfigureArgs;
+
     private static final String AUTOGEN = "autogen.sh";
 
     private static final String BUILDCONF = "buildconf";
