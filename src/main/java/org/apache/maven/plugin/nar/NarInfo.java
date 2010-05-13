@@ -215,7 +215,7 @@ public class NarInfo
 
     public final boolean getProperty( AOL aol, String key, boolean defaultValue )
     {
-        return Boolean.parseBoolean( getProperty( aol, key, String.valueOf( defaultValue ) ) );
+        return (new Boolean( getProperty( aol, key, String.valueOf( defaultValue ) ) )).booleanValue();
     }
 
     public final File getProperty( AOL aol, String key, File defaultValue )
