@@ -21,6 +21,7 @@ package org.apache.maven.plugin.nar;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class NarAssemblyMojo
      * 
      * @parameter
      */
-    private List classifiers = null;
+    private String[] classifiers = null;
 
     /**
      * Copies the unpacked nar libraries and files into the projects target area

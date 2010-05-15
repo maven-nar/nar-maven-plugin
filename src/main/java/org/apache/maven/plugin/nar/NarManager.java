@@ -147,25 +147,23 @@ public class NarManager
 	}
 
 	public final List/* <AttachedNarArtifact> */getAttachedNarDependencies(
-			List/* <NarArtifacts> */narArtifacts, List classifiers)
+			List/* <NarArtifacts> */narArtifacts, String[] classifiers)
                 throws MojoExecutionException, MojoFailureException
     {
-		String[] types;
 
 		List artifactList = new ArrayList();
 
-        if( classifiers != null && !classifiers.isEmpty() )
+        if( classifiers != null && classifiers.length > 0 )
         {
-			types = (String[]) classifiers.toArray();
 
-            for ( int j = 0; j < types.length; j++ )
+            for ( int j = 0; j < classifiers.length; j++ )
             {
                 if ( artifactList != null )
                 {
-                    artifactList.addAll( getAttachedNarDependencies( narArtifacts, types[j] ));
+                    artifactList.addAll( getAttachedNarDependencies( narArtifacts, classifiers[j] ));
                 }
             }
-}
+        }
         else
         {
             artifactList.addAll( getAttachedNarDependencies( narArtifacts, ( String )null ));
