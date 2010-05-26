@@ -141,6 +141,9 @@ to pick up the unpacked libraries.
 	Note there is no "nar" packaging as the normal packaging for 
 assemblies would be "pom".
 
+	This example assumes that the dependencies are jni libraries.
+In other cases the classifiers must be adapted accordingly.
+
 +--
 <project>
   ...
@@ -166,9 +169,9 @@ assemblies would be "pom".
         <artifactId>maven-nar-plugin</artifactId>
         <configuration>
           <classifiers>
-            <classifier>x86-Windows-msvc</classifier>
-            <classifier>ppc-MacOSX-g++</classifier>
-            <classifier>i386-Linux-g++</classifier>
+            <classifier>x86-Windows-msvc-jni</classifier>
+            <classifier>ppc-MacOSX-g++-jni</classifier>
+            <classifier>i386-Linux-g++-jni</classifier>
           </classifiers>
         </configuration>
         <executions>
