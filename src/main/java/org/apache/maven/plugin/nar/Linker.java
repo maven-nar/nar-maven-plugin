@@ -279,13 +279,16 @@ public class Linker
             Set defs = new HashSet();
             try
             {
-                List cSrcDirs = mojo.getC().getSourceDirectories();
-                for ( Iterator i = cSrcDirs.iterator(); i.hasNext(); )
+                if ( mojo.getC() != null )
                 {
-                    File dir = (File) i.next();
-                    if ( dir.exists() )
+                    List cSrcDirs = mojo.getC().getSourceDirectories();
+                    for ( Iterator i = cSrcDirs.iterator(); i.hasNext(); )
                     {
-                        defs.addAll( FileUtils.getFiles( dir, "**/*.def", null ) );
+                        File dir = (File) i.next();
+                        if ( dir.exists() )
+                        {
+                            defs.addAll( FileUtils.getFiles( dir, "**/*.def", null ) );
+                        }
                     }
                 }
             }
@@ -294,13 +297,16 @@ public class Linker
             }
             try
             {
-                List cppSrcDirs = mojo.getCpp().getSourceDirectories();
-                for ( Iterator i = cppSrcDirs.iterator(); i.hasNext(); )
+                if ( mojo.getCpp() != null )
                 {
-                    File dir = (File) i.next();
-                    if ( dir.exists() )
+                    List cppSrcDirs = mojo.getCpp().getSourceDirectories();
+                    for ( Iterator i = cppSrcDirs.iterator(); i.hasNext(); )
                     {
-                        defs.addAll( FileUtils.getFiles( dir, "**/*.def", null ) );
+                        File dir = (File) i.next();
+                        if ( dir.exists() )
+                        {
+                            defs.addAll( FileUtils.getFiles( dir, "**/*.def", null ) );
+                        }
                     }
                 }
             }
@@ -309,13 +315,16 @@ public class Linker
             }
             try
             {
-                List fortranSrcDirs = mojo.getFortran().getSourceDirectories();
-                for ( Iterator i = fortranSrcDirs.iterator(); i.hasNext(); )
+                if ( mojo.getFortran() != null )
                 {
-                    File dir = (File) i.next();
-                    if ( dir.exists() )
+                    List fortranSrcDirs = mojo.getFortran().getSourceDirectories();
+                    for ( Iterator i = fortranSrcDirs.iterator(); i.hasNext(); )
                     {
-                        defs.addAll( FileUtils.getFiles( dir, "**/*.def", null ) );
+                        File dir = (File) i.next();
+                        if ( dir.exists() )
+                        {
+                            defs.addAll( FileUtils.getFiles( dir, "**/*.def", null ) );
+                        }
                     }
                 }
             }

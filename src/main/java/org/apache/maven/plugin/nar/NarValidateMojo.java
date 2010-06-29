@@ -21,6 +21,10 @@ package org.apache.maven.plugin.nar;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
+
+import java.io.File;
 
 /**
  * Validates the configuration of the NAR project (aol and pom)
@@ -44,42 +48,57 @@ public class NarValidateMojo
         getLog().debug( "Using linker version: " + linker.getVersion() );
 
         // check compilers
-        int noOfCompilers = 0;
-        Compiler cpp = getCpp();
-        if ( cpp.getName() != null )
+        int noOfCompilers = 0;        
+        if ( getCpp() != null && getCpp().getName() != null )
         {
             noOfCompilers++;
             // need includes
-            if ( cpp.getIncludes( Compiler.MAIN ).isEmpty() )
+            if ( getCpp().getIncludes( Compiler.MAIN ).isEmpty() )
             {
-                throw new MojoExecutionException( "No includes defined for compiler " + cpp.getName() );
+                throw new MojoExecutionException( "No includes defined for compiler " + getCpp().getName() );
             }
         }
-        Compiler c = getC();
-        if ( c.getName() != null )
+        
+        if ( getC() != null && getC().getName() != null )
         {
             noOfCompilers++;
             // need includes
-            if ( c.getIncludes( Compiler.MAIN ).isEmpty() )
+            if ( getC().getIncludes( Compiler.MAIN ).isEmpty() )
             {
-                throw new MojoExecutionException( "No includes defined for compiler " + c.getName() );
+                throw new MojoExecutionException( "No includes defined for compiler " + getC().getName() );
+            }
+        }        
+        
+        if ( getFortran() != null && getFortran().getName() != null )
+        {
+            noOfCompilers++;
+            // need includes
+            if ( getFortran().getIncludes( Compiler.MAIN ).isEmpty() )
+            {
+                throw new MojoExecutionException( "No includes defined for compiler " + getFortran().getName() );
             }
         }
-        Compiler fortran = getFortran();
-        if ( fortran.getName() != null )
+
+        final MavenProject project = this.getMavenProject();
+        final Xpp3Dom configuration = project.getGoalConfiguration( "org.apache.maven.plugins", "maven-nar-plugin", null,
+                null );
+        File gnuSourceDir = null;
+        if ( configuration != null && configuration.getChildCount() > 0 )
         {
-            noOfCompilers++;
-            // need includes
-            if ( fortran.getIncludes( Compiler.MAIN ).isEmpty() )
-            {
-                throw new MojoExecutionException( "No includes defined for compiler " + fortran.getName() );
+            for ( int i = 0; i < configuration.getChildCount(); i++ ) {
+                if ( configuration.getChild( i ).getName().equals( "gnuSourceDirectory" ) ) {
+                    gnuSourceDir = new File( project.getBasedir(), configuration.getChild( i ).getValue() );
+                }
             }
         }
 
         // at least one compiler has to be defined
-        if ( noOfCompilers == 0 )
+        // OR
+        // a <gnuSourceDirectory> is configured.
+        if ( noOfCompilers == 0 && gnuSourceDir == null )
         {
-            throw new MojoExecutionException( "No compilers defined for linker " + linker.getName() );
+            throw new MojoExecutionException( "No compilers defined for linker " + linker.getName() + ", and no" +
+                    " <gnuSourceDirectory> is defined.  Either define a compiler or a linker." );     
         }
     }
 }
