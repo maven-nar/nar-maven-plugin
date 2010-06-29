@@ -50,7 +50,7 @@ public class NarGnuMakeMojo
     private String gnuMakeEnv;
 
     /**
-     * Boolean to control if we should run make instal after the make
+     * Boolean to control if we should skip 'make install' after the make
      *
      * @parameter expression="" default-value="false"
      */
