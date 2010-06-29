@@ -96,11 +96,14 @@ public class NarCompileMojo
         try
         {
             // FIXME, should the include paths be defined at a higher level ?
-            getCpp().copyIncludeFiles(
-                                       getMavenProject(),
-                                       getLayout().getIncludeDirectory( getTargetDirectory(),
-                                                                        getMavenProject().getArtifactId(),
-                                                                        getMavenProject().getVersion() ) );
+            if ( getCpp() != null )
+            {
+                getCpp().copyIncludeFiles(
+                                           getMavenProject(),
+                                           getLayout().getIncludeDirectory( getTargetDirectory(),
+                                                                            getMavenProject().getArtifactId(),
+                                                                            getMavenProject().getVersion() ) );
+            }
         }
         catch ( IOException e )
         {
@@ -111,6 +114,11 @@ public class NarCompileMojo
     private List getSourcesFor( Compiler compiler )
         throws MojoFailureException, MojoExecutionException
     {
+        if ( compiler == null )
+        {
+            return Collections.EMPTY_LIST;
+        }
+        
         try
         {
             List files = new ArrayList();
@@ -210,24 +218,30 @@ public class NarCompileMojo
         // Darren Sargent Feb 11 2010: Use Compiler.MAIN for "type"...appears the wrong "type" variable was being used
         // since getCompiler() expects "main" or "test", whereas the "type" variable here is "executable", "shared" etc.
         // add C++ compiler
-        CompilerDef cpp = getCpp().getCompiler( Compiler.MAIN, getOutput( getAOL() ) );
-        if ( cpp != null )
-        {
-            task.addConfiguredCompiler( cpp );
+        if (getCpp() != null) {
+            CompilerDef cpp = getCpp().getCompiler( Compiler.MAIN, getOutput( getAOL() ) );
+            if ( cpp != null )
+            {
+                task.addConfiguredCompiler( cpp );
+            }
         }
 
         // add C compiler
-        CompilerDef c = getC().getCompiler( Compiler.MAIN, getOutput( getAOL() ) );
-        if ( c != null )
-        {
-            task.addConfiguredCompiler( c );
+        if (getC() != null) {
+            CompilerDef c = getC().getCompiler( Compiler.MAIN, getOutput( getAOL() ) );
+            if ( c != null )
+            {
+                task.addConfiguredCompiler( c );
+            }
         }
 
         // add Fortran compiler
-        CompilerDef fortran = getFortran().getCompiler( Compiler.MAIN, getOutput( getAOL() ) );
-        if ( fortran != null )
-        {
-            task.addConfiguredCompiler( fortran );
+        if (getFortran() != null) {
+            CompilerDef fortran = getFortran().getCompiler( Compiler.MAIN, getOutput( getAOL() ) );
+            if ( fortran != null )
+            {
+                task.addConfiguredCompiler( fortran );
+            }
         }
         // end Darren
 

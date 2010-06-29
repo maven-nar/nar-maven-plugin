@@ -147,33 +147,33 @@ public abstract class AbstractCompileMojo
         return antProject;
     }
 
+    public void setCpp(Cpp cpp) {
+        this.cpp = cpp;
+        cpp.setAbstractCompileMojo( this );
+    }
+
+    public void setC(C c) {
+        this.c = c;
+        c.setAbstractCompileMojo( this );
+    }
+
+    public void setFortran(Fortran fortran) {
+        this.fortran = fortran;
+        fortran.setAbstractCompileMojo( this );
+    }
+
     protected final C getC()
     {
-        if ( c == null )
-        {
-            c = new C();
-        }
-        c.setAbstractCompileMojo( this );
         return c;
     }
 
     protected final Cpp getCpp()
     {
-        if ( cpp == null )
-        {
-            cpp = new Cpp();
-        }
-        cpp.setAbstractCompileMojo( this );
         return cpp;
     }
 
     protected final Fortran getFortran()
     {
-        if ( fortran == null )
-        {
-            fortran = new Fortran();
-        }
-        fortran.setAbstractCompileMojo( this );
         return fortran;
     }
 
