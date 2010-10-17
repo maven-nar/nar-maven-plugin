@@ -240,6 +240,7 @@
             <version>1.5</version>
             <configuration>
               <debug>false</debug>
+              <ignoreFailures>false</ignoreFailures>
               <!-- FAILS to run, see ReleaseNotes
               <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
                -->
