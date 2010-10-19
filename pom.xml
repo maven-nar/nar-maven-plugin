@@ -245,6 +245,8 @@
               <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
                -->
               <setupIncludes>
+<!-- special for mvn 3 (see below) -->
+                <setupInclude>it-parent/pom.xml</setupInclude>
                 <setupInclude>it0003-jni/pom.xml</setupInclude>
                 <setupInclude>it0007-lib-shared/pom.xml</setupInclude>
                 <setupInclude>it0010-lib-static/pom.xml</setupInclude>
@@ -254,7 +256,9 @@
               	<pomInclude>*/pom.xml</pomInclude>
               </pomIncludes>
               <pomExcludes>
+<!-- Include to handle mvn 3 problem not finding parent for a dependency
                 <pomExclude>it-parent/**</pomExclude>
+-->
                 <pomExclude>it0021-*/**</pomExclude>
                 <pomExclude>it0022-*/**</pomExclude>
               </pomExcludes>
