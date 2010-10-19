@@ -3,6 +3,7 @@ This plugin replaces the freehep-nar-plugin.
 Documentation:
 
 - http://duns.github.com/maven-nar-plugin
+- https://docs.sonatype.org/display/NAR/Index (empty still)
 
 Issues:
 
