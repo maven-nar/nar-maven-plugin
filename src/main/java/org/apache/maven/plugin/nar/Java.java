@@ -106,7 +106,7 @@ public class Java
             else
             {
                 String prefix = mojo.getAOL().getKey() + ".java.";
-                String includes = NarUtil.getDefaults().getProperty( prefix + "include" );
+                String includes = NarProperties.getInstance(mojo.getMavenProject()).getProperty( prefix + "include" );
                 if ( includes != null )
                 {
                     String[] path = includes.split( ";" );
@@ -145,7 +145,7 @@ public class Java
             {
                 if ( runtimeDirectory == null )
                 {
-                    runtimeDirectory = NarUtil.getDefaults().getProperty( prefix + "runtimeDirectory" );
+                    runtimeDirectory = NarProperties.getInstance(mojo.getMavenProject()).getProperty( prefix + "runtimeDirectory" );
                     if ( runtimeDirectory == null )
                     {
                         throw new MojoFailureException( "NAR: Please specify a <RuntimeDirectory> as part of <Java>" );

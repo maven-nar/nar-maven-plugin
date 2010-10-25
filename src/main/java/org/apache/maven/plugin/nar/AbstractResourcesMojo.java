@@ -135,7 +135,7 @@ public abstract class AbstractResourcesMojo
 
                 // filter files for lib
                 String includes =
-                    "**/*." + NarUtil.getDefaults().getProperty( NarUtil.getAOLKey( aol ) + "." + type + ".extension" );
+                    "**/*." + NarProperties.getInstance(getMavenProject()).getProperty( NarUtil.getAOLKey( aol ) + "." + type + ".extension" );
 
                 // add import lib for Windows shared libraries
                 if ( new AOL( aol ).getOS().equals( OS.WINDOWS ) && type.equals( Library.SHARED ) )

@@ -242,7 +242,7 @@ public abstract class Compiler
         // adjust default values
         if ( name == null )
         {
-            name = NarUtil.getDefaults().getProperty( getPrefix() + "compiler" );
+            name = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "compiler" );
         }
         return name;
     }
@@ -352,7 +352,7 @@ public abstract class Compiler
         }
         else
         {
-            String defaultIncludes = NarUtil.getDefaults().getProperty( getPrefix() + "includes" );
+            String defaultIncludes = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "includes" );
             if ( defaultIncludes != null )
             {
                 String[] include = defaultIncludes.split( " " );
@@ -373,7 +373,7 @@ public abstract class Compiler
         // add all excludes
         if ( excludes.isEmpty() )
         {
-            String defaultExcludes = NarUtil.getDefaults().getProperty( getPrefix() + "excludes" );
+            String defaultExcludes = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "excludes" );
             if ( defaultExcludes != null )
             {
                 String[] exclude = defaultExcludes.split( " " );
@@ -448,7 +448,7 @@ public abstract class Compiler
 
         if ( !clearDefaultOptions )
         {
-            String optionsProperty = NarUtil.getDefaults().getProperty( getPrefix() + "options" );
+            String optionsProperty = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "options" );
             if ( optionsProperty != null )
             {
                 String[] option = optionsProperty.split( " " );
@@ -500,7 +500,7 @@ public abstract class Compiler
         if ( !clearDefaultDefines )
         {
             DefineSet ds = new DefineSet();
-            String defaultDefines = NarUtil.getDefaults().getProperty( getPrefix() + "defines" );
+            String defaultDefines = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "defines" );
             if ( defaultDefines != null )
             {
                 ds.setDefine( new CUtil.StringArrayBuilder( defaultDefines ) );
@@ -547,7 +547,7 @@ public abstract class Compiler
         if ( !clearDefaultUndefines )
         {
             DefineSet us = new DefineSet();
-            String defaultUndefines = NarUtil.getDefaults().getProperty( getPrefix() + "undefines" );
+            String defaultUndefines = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "undefines" );
             if ( defaultUndefines != null )
             {
                 us.setUndefine( new CUtil.StringArrayBuilder( defaultUndefines ) );

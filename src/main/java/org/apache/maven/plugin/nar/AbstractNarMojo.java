@@ -88,6 +88,12 @@ public abstract class AbstractNarMojo
     private File outputDirectory;
 
     /**
+     * @parameter expression="${project.basedir}"
+     * @readonly
+     */
+    private File baseDir;
+
+    /**
      * @parameter expression="${project.build.finalName}"
      * @readonly
      */
@@ -147,7 +153,7 @@ public abstract class AbstractNarMojo
 
         architecture = NarUtil.getArchitecture( architecture );
         os = NarUtil.getOS( os );
-        aolId = NarUtil.getAOL( architecture, os, linker, aol );
+        aolId = NarUtil.getAOL(mavenProject, architecture, os, linker, aol );
         
         Model model = mavenProject.getModel();
         Properties properties = model.getProperties();
@@ -196,6 +202,11 @@ public abstract class AbstractNarMojo
     protected final Linker getLinker()
     {
         return linker;
+    }
+    
+    protected final File getBasedir()
+    {
+    	return baseDir;
     }
 
     protected final File getOutputDirectory()
