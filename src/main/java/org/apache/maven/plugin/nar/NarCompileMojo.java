@@ -38,11 +38,9 @@ import net.sf.antcontrib.cpptasks.types.LibrarySet;
 import net.sf.antcontrib.cpptasks.types.LinkerArgument;
 import net.sf.antcontrib.cpptasks.types.SystemLibrarySet;
 
-import org.apache.maven.artifact.Artifact;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.codehaus.plexus.util.FileUtils;
@@ -68,7 +66,7 @@ public class NarCompileMojo
      * @required
      * @readonly
      */
-    private MavenSession session;
+    protected MavenSession session;
 
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException

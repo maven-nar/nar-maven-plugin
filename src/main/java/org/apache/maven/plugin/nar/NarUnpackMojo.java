@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.codehaus.plexus.archiver.manager.ArchiverManager;
 
 /**
  * Unpacks NAR files. Unpacking happens in the local repository, and also sets flags on binaries and corrects static

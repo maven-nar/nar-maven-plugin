@@ -19,11 +19,8 @@ package org.apache.maven.plugin.nar;
  * under the License.
  */
 
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
 
 /**

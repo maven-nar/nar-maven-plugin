@@ -35,8 +35,7 @@ public class StringTextStream
     public StringTextStream()
     {
         sb = new StringBuffer();
-        lineSeparator = System.getProperty( "line.separator" );
-        assert ( lineSeparator != null );
+        lineSeparator = System.getProperty( "line.separator", "\n" );
     }
 
     /*

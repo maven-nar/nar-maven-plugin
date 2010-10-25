@@ -35,15 +35,15 @@ import junit.framework.TestCase;
 public class TestNarFileLayout10
     extends TestCase
 {
-    private NarFileLayout fileLayout;
+    protected NarFileLayout fileLayout;
 
-    private String artifactId;
+    protected String artifactId;
 
-    private String version;
+    protected String version;
 
-    private String aol;
+    protected String aol;
 
-    private String type;
+    protected String type;
 
     /*
      * (non-Javadoc)

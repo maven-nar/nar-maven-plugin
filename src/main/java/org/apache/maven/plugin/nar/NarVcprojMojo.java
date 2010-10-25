@@ -13,7 +13,6 @@ import net.sf.antcontrib.cpptasks.LinkerDef;
 import net.sf.antcontrib.cpptasks.OutputTypeEnum;
 import net.sf.antcontrib.cpptasks.RuntimeType;
 import net.sf.antcontrib.cpptasks.SubsystemEnum;
-import net.sf.antcontrib.cpptasks.ide.DependencyDef;
 import net.sf.antcontrib.cpptasks.ide.ProjectDef;
 import net.sf.antcontrib.cpptasks.ide.ProjectWriterEnum;
 import net.sf.antcontrib.cpptasks.types.DefineArgument;

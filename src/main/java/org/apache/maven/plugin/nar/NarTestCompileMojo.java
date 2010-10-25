@@ -58,7 +58,7 @@ public class NarTestCompileMojo
      * 
      * @parameter expression="${skipNar}" default-value="false"
      */
-    private boolean skipNar;
+    protected boolean skipNar;
 
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException

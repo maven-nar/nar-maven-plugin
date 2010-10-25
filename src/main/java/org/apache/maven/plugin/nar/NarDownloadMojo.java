@@ -22,7 +22,6 @@ package org.apache.maven.plugin.nar;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
