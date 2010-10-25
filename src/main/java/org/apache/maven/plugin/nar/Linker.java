@@ -200,10 +200,6 @@ public class Linker
             {
                 version = m.group( 0 );
             }
-            else
-            {
-                throw new MojoFailureException( "Cannot deduce version number from: " + out );
-            }
         }
         else if ( name.equals( "msvc" ) )
         {
@@ -213,10 +209,6 @@ public class Linker
             if ( m.find() )
             {
                 version = m.group( 0 );
-            }
-            else
-            {
-                throw new MojoFailureException( "Cannot deduce version number from: " + out );
             }
         }
         else if ( name.equals( "icc" ) || name.equals( "icpc" ) )
@@ -228,10 +220,6 @@ public class Linker
             {
                 version = m.group( 0 );
             }
-            else
-            {
-                throw new MojoFailureException( "Cannot deduce version number from: " + out );
-            }
         }
         else if ( name.equals( "icl" ) )
         {
@@ -242,14 +230,24 @@ public class Linker
             {
                 version = m.group( 0 );
             }
-            else
-            {
-                throw new MojoFailureException( "Cannot deduce version number from: " + out.toString() );
-            }
+        }
+        else if ( name.equals( "CC" ) )
+        {
+        	NarUtil.runCommand( "CC", new String[] { "-V" }, null, null, out, err, dbg );
+        	Pattern p = Pattern.compile( "\\d+\\.d+" );
+        	Matcher m = p.matcher( err.toString() );
+        	if ( m.find() )
+        	{ 
+        		version = m.group( 0 ); 
+        	}
         }
         else
         {
             throw new MojoFailureException( "Cannot find version number for linker '" + name + "'" );
+        }
+        
+        if (version == null) {
+        	throw new MojoFailureException( "Cannot deduce version number from: " + out.toString() );
         }
         return version;
     }
