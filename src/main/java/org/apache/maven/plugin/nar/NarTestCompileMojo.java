@@ -159,6 +159,12 @@ public class NarTestCompileMojo
                 task.createIncludePath().setPath( include.getPath() );
             }
         }
+        
+        // add javah generated include path
+        File jniIncludeDir = getJavah().getJniDirectory();
+        if (jniIncludeDir.exists()) {
+        	task.createIncludePath().setPath(jniIncludeDir.getPath());
+        }
 
         // add linker
         LinkerDef linkerDefinition =
@@ -170,6 +176,7 @@ public class NarTestCompileMojo
         File includeDir =
             getLayout().getIncludeDirectory( getTargetDirectory(), getMavenProject().getArtifactId(),
                                              getMavenProject().getVersion() );
+
         File libDir =
             getLayout().getLibDirectory( getTargetDirectory(), getMavenProject().getArtifactId(),
                                          getMavenProject().getVersion(), getAOL().toString(), test.getLink() );

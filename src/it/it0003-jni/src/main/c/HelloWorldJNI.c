@@ -33,3 +33,8 @@ JNIEXPORT jstring JNICALL Java_it0003_HelloWorldJNI_sayHello( JNIEnv *env, jobje
 	return value;
 }
 
+JNIEXPORT jint JNICALL Java_it0003_HelloWorldJNI_timesHello
+  (JNIEnv *env, jobject obj, jint x, jint y) {
+	return x * y;
+}
+
