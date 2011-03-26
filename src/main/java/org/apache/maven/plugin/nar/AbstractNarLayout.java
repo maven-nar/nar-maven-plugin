@@ -139,14 +139,14 @@ public abstract class AbstractNarLayout
                                    log );
             }
         }
-        if ( NarUtil.getOS( os ).equals( OS.MACOSX ) )
-        {
-            File[] dylibDirs = new File[2];
-            dylibDirs[0] = new File( narLocation, "lib/" + defaultAOL + "/" + Library.SHARED );
-            dylibDirs[1] = new File( narLocation, "lib/" + defaultAOL + "/" + Library.JNI );
-
-            NarUtil.runInstallNameTool( dylibDirs, log );
-        }
+//        if ( NarUtil.getOS( os ).equals( OS.MACOSX ) )
+//        {
+//            File[] dylibDirs = new File[2];
+//            dylibDirs[0] = new File( narLocation, "lib/" + defaultAOL + "/" + Library.SHARED );
+//            dylibDirs[1] = new File( narLocation, "lib/" + defaultAOL + "/" + Library.JNI );
+//
+//            NarUtil.runInstallNameTool( dylibDirs, log );
+//        }
     }
 
     /**
