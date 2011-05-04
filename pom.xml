@@ -37,16 +37,17 @@
 
   <!-- deploy to duns' github repository -->
   <distributionManagement>
-       <repository>                                                                                                                         
-            <id>archiva.internal</id>                                                                                                        
-            <name>Internal Release Repository</name>                                                                                         
-            <url>dav:http://archiva.int.master.lan/archiva/repository/internal/</url>                                                        
-        </repository>                                                                                                                        
-        <snapshotRepository>                                                                                                                 
-            <id>archiva.internal</id>                                                                                                        
-            <name>Internal Snapshot Repository</name>                                                                                        
-            <url>dav:http://archiva.int.master.lan/archiva/repository/internal/</url>                                                        
-        </snapshotRepository>
+    <repository>
+      <id>duns-maven-releases</id>
+      <name>Duns' Maven Releases</name>
+        <url>file:///Users/duns/sonatype/git/maven-releases</url>
+      </repository>
+    <snapshotRepository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>duns-maven-snapshots</id>
+      <name>Duns' Maven Snapshots</name>
+      <url>file:///Users/duns/sonatype/git/maven-snapshots</url>
+    </snapshotRepository>
   <!-- temporarily until we have a fixed site -->
     <site>
       <id>local</id>
