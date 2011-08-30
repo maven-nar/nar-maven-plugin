@@ -34,10 +34,11 @@ import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Tests NAR files. Runs Native Tests and executables if produced.
- * 
+ *
  * @goal nar-test
  * @phase test
  * @requiresProject
+ * @requiresDependencyResolution
  * @author Mark Donszelmann
  */
 public class NarTestMojo
