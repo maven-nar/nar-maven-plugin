@@ -37,6 +37,7 @@ import net.sf.antcontrib.cpptasks.types.LinkerArgument;
 import net.sf.antcontrib.cpptasks.types.SystemLibrarySet;
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.tools.ant.BuildException;
@@ -59,6 +60,24 @@ public class NarTestCompileMojo
      * @parameter expression="${skipNar}" default-value="false"
      */
     protected boolean skipNar;
+
+    /**
+     * Artifact resolver, needed to download the attached nar files.
+     *
+     * @component role="org.apache.maven.artifact.resolver.ArtifactResolver"
+     * @required
+     * @readonly
+     */
+    private ArtifactResolver artifactResolver;
+
+    /**
+     * Remote repositories which will be searched for nar attachments.
+     *
+     * @parameter expression="${project.remoteArtifactRepositories}"
+     * @required
+     * @readonly
+     */
+    private List remoteArtifactRepositories;
 
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
@@ -141,7 +160,7 @@ public class NarTestCompileMojo
         getJava().addIncludePaths( task, type );
 
         // add dependency include paths
-        for ( Iterator i = getNarManager().getNarDependencies( "test" ).iterator(); i.hasNext(); )
+        for ( Iterator i = getNarManager().getNarDependencies( "test", remoteArtifactRepositories, artifactResolver ).iterator(); i.hasNext(); )
         {
             Artifact artifact = (Artifact) i.next();
             
@@ -215,7 +234,7 @@ public class NarTestCompileMojo
 
         // add dependency libraries
         List depLibOrder = getDependencyLibOrder();
-        List depLibs = getNarManager().getNarDependencies( "test" );
+        List depLibs = getNarManager().getNarDependencies( "test", remoteArtifactRepositories, artifactResolver );
 
         // reorder the libraries that come from the nar dependencies
         // to comply with the order specified by the user

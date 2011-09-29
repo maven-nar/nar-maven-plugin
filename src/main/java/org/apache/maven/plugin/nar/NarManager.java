@@ -18,7 +18,6 @@ package org.apache.maven.plugin.nar;
  * specific language governing permissions and limitations
  * under the License.
  */
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,336 +70,321 @@ public class NarManager
 		this.linkerName = NarUtil.getLinkerName(project, architecture, os, linker);
 	}
 
-	/**
+    /**
      * Returns dependencies which are dependent on NAR files (i.e. contain NarInfo)
-	 */
-	public final List/* <NarArtifact> */getNarDependencies(String scope)
-        throws MojoExecutionException
-    {
-		List narDependencies = new LinkedList();
-        for ( Iterator i = getDependencies( scope ).iterator(); i.hasNext(); )
-        {
-			Artifact dependency = (Artifact) i.next();
-			log.debug("Examining artifact for NarInfo: " + dependency);
+     */
+    public final List/* <NarArtifact> */ getNarDependencies(String scope, List remoteRepositories,
+            ArtifactResolver resolver)
+            throws MojoExecutionException {
+        List narDependencies = new LinkedList();
+        for (Iterator i = getDependencies(scope).iterator(); i.hasNext();) {
+            Artifact dependency = (Artifact) i.next();
+            log.debug("Examining artifact for NarInfo: " + dependency);
 
-			NarInfo narInfo = getNarInfo(dependency);
-            if ( narInfo != null )
-            {
-				log.debug("    - added as NarDependency");
-				narDependencies.add(new NarArtifact(dependency, narInfo));
-			}
-		}
-		return narDependencies;
-	}
-
-	/**
-     * Returns all NAR dependencies by type: noarch, static, dynamic, jni, plugin.
-	 * 
-	 * @throws MojoFailureException
-	 */
-    public final Map/* <String, List<AttachedNarArtifact>> */getAttachedNarDependencyMap( String scope )
-        throws MojoExecutionException, MojoFailureException
-    {
-		Map attachedNarDependencies = new HashMap();
-        for ( Iterator i = getNarDependencies( scope ).iterator(); i.hasNext(); )
-        {
-			Artifact dependency = (Artifact) i.next();
-            for ( int j = 0; j < narTypes.length; j++ )
-            {
-                List artifactList = getAttachedNarDependencies( dependency, defaultAOL, narTypes[j] );
-                if ( artifactList != null )
-                {
-					attachedNarDependencies.put(narTypes[j], artifactList);
-				}
-			}
-		}
-		return attachedNarDependencies;
-	}
-
-    public final List/* <AttachedNarArtifact> */getAttachedNarDependencies( List/* <NarArtifacts> */narArtifacts )
-        throws MojoExecutionException, MojoFailureException
-    {
-		return getAttachedNarDependencies(narArtifacts, (String) null);
-	}
-
-    public final List/* <AttachedNarArtifact> */getAttachedNarDependencies( List/* <NarArtifacts> */narArtifacts,
-                                                                            String classifier )
-        throws MojoExecutionException, MojoFailureException
-    {
-		AOL aol = null;
-		String type = null;
-        if ( classifier != null )
-        {
-			int dash = classifier.lastIndexOf('-');
-            if ( dash < 0 )
-            {
-				aol = new AOL(classifier);
-				type = null;
+            NarInfo narInfo = getNarInfo(dependency, remoteRepositories, resolver);
+            if (narInfo != null) {
+                log.debug("    - added as NarDependency");
+                narDependencies.add(new NarArtifact(dependency, narInfo));
             }
-            else
-            {
-				aol = new AOL(classifier.substring(0, dash));
-				type = classifier.substring(dash + 1);
-			}
-		}
-		return getAttachedNarDependencies(narArtifacts, aol, type);
-	}
+        }
+        return narDependencies;
+    }
 
-	public final List/* <AttachedNarArtifact> */getAttachedNarDependencies(
-			List/* <NarArtifacts> */narArtifacts, String[] classifiers)
-                throws MojoExecutionException, MojoFailureException
-    {
-
-		List artifactList = new ArrayList();
-
-        if( classifiers != null && classifiers.length > 0 )
-        {
-
-            for ( int j = 0; j < classifiers.length; j++ )
-            {
-                if ( artifactList != null )
-                {
-                    artifactList.addAll( getAttachedNarDependencies( narArtifacts, classifiers[j] ));
+    /**
+     * Returns all NAR dependencies by type: noarch, static, dynamic, jni, plugin.
+     *
+     * @throws MojoFailureException
+     */
+    public final Map/* <String, List<AttachedNarArtifact>> */ getAttachedNarDependencyMap(String scope, List remoteRepositories,
+            ArtifactResolver resolver)
+            throws MojoExecutionException, MojoFailureException {
+        Map attachedNarDependencies = new HashMap();
+        for (Iterator i = getNarDependencies(scope, remoteRepositories, resolver).iterator(); i.hasNext();) {
+            Artifact dependency = (Artifact) i.next();
+            for (int j = 0; j < narTypes.length; j++) {
+                List artifactList = getAttachedNarDependencies(dependency, defaultAOL, narTypes[j], remoteRepositories,
+                        resolver);
+                if (artifactList != null) {
+                    attachedNarDependencies.put(narTypes[j], artifactList);
                 }
             }
         }
-        else
-        {
-            artifactList.addAll( getAttachedNarDependencies( narArtifacts, ( String )null ));
-		}
+        return attachedNarDependencies;
+    }
 
-		return artifactList;
-	}
+    public final List/* <AttachedNarArtifact> */ getAttachedNarDependencies(List/* <NarArtifacts> */ narArtifacts, List remoteRepositories,
+            ArtifactResolver resolver)
+            throws MojoExecutionException, MojoFailureException {
+        return getAttachedNarDependencies(narArtifacts, (String) null, remoteRepositories,
+                resolver);
+    }
 
-	/**
+    public final List/* <AttachedNarArtifact> */ getAttachedNarDependencies(List/* <NarArtifacts> */ narArtifacts,
+            String classifier, List remoteRepositories,
+            ArtifactResolver resolver)
+            throws MojoExecutionException, MojoFailureException {
+        AOL aol = null;
+        String type = null;
+        if (classifier != null) {
+            int dash = classifier.lastIndexOf('-');
+            if (dash < 0) {
+                aol = new AOL(classifier);
+                type = null;
+            } else {
+                //aol = new AOL(classifier.substring(0, dash));
+                aol = new AOL(classifier);
+                type = classifier.substring(dash + 1);
+            }
+        }
+        return getAttachedNarDependencies(narArtifacts, aol, type, remoteRepositories,
+                resolver);
+    }
+
+    public final List/* <AttachedNarArtifact> */ getAttachedNarDependencies(
+            List/* <NarArtifacts> */ narArtifacts, List classifiers, List remoteRepositories,
+            ArtifactResolver resolver)
+            throws MojoExecutionException, MojoFailureException {
+        String[] types;
+
+        List artifactList = new ArrayList();
+
+        if (classifiers != null && !classifiers.isEmpty()) {
+            types = (String[]) classifiers.toArray();
+
+            for (int j = 0; j < types.length; j++) {
+                if (artifactList != null) {
+                    artifactList.addAll(getAttachedNarDependencies(narArtifacts, types[j], remoteRepositories,
+                            resolver));
+                }
+            }
+        } else {
+            artifactList.addAll(getAttachedNarDependencies(narArtifacts, (String) null, remoteRepositories,
+                    resolver));
+        }
+
+        return artifactList;
+    }
+
+    /**
      * Returns a list of all attached nar dependencies for a specific binding and "noarch", but not where "local" is
      * specified
-	 * 
+     *
      * @param scope compile, test, runtime, ....
      * @param aol either a valid aol, noarch or null. In case of null both the default getAOL() and noarch dependencies
      *            are returned.
      * @param type noarch, static, shared, jni, or null. In case of null the default binding found in narInfo is used.
-	 * @return
-	 * @throws MojoExecutionException
-	 * @throws MojoFailureException
-	 */
-    public final List/* <AttachedNarArtifact> */getAttachedNarDependencies( List/* <NarArtifacts> */narArtifacts,
-                                                                            AOL archOsLinker, String type )
-        throws MojoExecutionException, MojoFailureException
-    {
-		boolean noarch = false;
-		AOL aol = archOsLinker;
-        if ( aol == null )
-        {
-			noarch = true;
-			aol = defaultAOL;
-		}
+     * @return
+     * @throws MojoExecutionException
+     * @throws MojoFailureException
+     */
+    public final List/* <AttachedNarArtifact> */ getAttachedNarDependencies(List/* <NarArtifacts> */ narArtifacts,
+            AOL archOsLinker, String type, List remoteRepositories,
+            ArtifactResolver resolver)
+            throws MojoExecutionException, MojoFailureException {
+        boolean noarch = false;
+        AOL aol = archOsLinker;
+        if (aol == null) {
+            noarch = true;
+            aol = defaultAOL;
+        }
 
-		List artifactList = new ArrayList();
-        for ( Iterator i = narArtifacts.iterator(); i.hasNext(); )
-        {
-			Artifact dependency = (Artifact) i.next();
-			NarInfo narInfo = getNarInfo(dependency);
-            if ( noarch )
-            {
-                artifactList.addAll( getAttachedNarDependencies( dependency, null, NarConstants.NAR_NO_ARCH ) );
-			}
-
-			// use preferred binding, unless non existing.
-            String binding = narInfo.getBinding( aol, type != null ? type : Library.STATIC );
-
-			// FIXME kludge, but does not work anymore since AOL is now a class
-            if ( aol.equals( NarConstants.NAR_NO_ARCH ) )
-            {
-				// FIXME no handling of local
-                artifactList.addAll( getAttachedNarDependencies( dependency, null, NarConstants.NAR_NO_ARCH ) );
+        List artifactList = new ArrayList();
+        for (Iterator i = narArtifacts.iterator(); i.hasNext();) {
+            Artifact dependency = (Artifact) i.next();
+            NarInfo narInfo = getNarInfo(dependency, remoteRepositories, resolver);
+            if (noarch) {
+                artifactList.addAll(getAttachedNarDependencies(dependency, null, NarConstants.NAR_NO_ARCH, remoteRepositories,
+                        resolver));
             }
-            else
-            {
-                artifactList.addAll( getAttachedNarDependencies( dependency, aol, binding ) );
-			}
-		}
-		return artifactList;
-	}
 
-    private List/* <AttachedNarArtifact> */getAttachedNarDependencies( Artifact dependency, AOL archOsLinker,
-                                                                       String type )
-        throws MojoExecutionException, MojoFailureException
-    {
-		AOL aol = archOsLinker;
-        log.debug( "GetNarDependencies for " + dependency + ", aol: " + aol + ", type: " + type );
-		List artifactList = new ArrayList();
-		NarInfo narInfo = getNarInfo(dependency);
-		String[] nars = narInfo.getAttachedNars(aol, type);
-		// FIXME Move this to NarInfo....
-        if ( nars != null )
-        {
-            for ( int j = 0; j < nars.length; j++ )
-            {
-				log.debug("    Checking: " + nars[j]);
-                if ( nars[j].equals( "" ) )
-                {
-					continue;
-				}
-				String[] nar = nars[j].split(":", 5);
-                if ( nar.length >= 4 )
-                {
-                    try
-                    {
-						String groupId = nar[0].trim();
-						String artifactId = nar[1].trim();
-						String ext = nar[2].trim();
-						String classifier = nar[3].trim();
-						// translate for instance g++ to gcc...
-						aol = narInfo.getAOL(aol);
-                        if ( aol != null )
-                        {
-                            classifier = NarUtil.replace( "${aol}", aol.toString(), classifier );
+            // use preferred binding, unless non existing.
+            String binding = narInfo.getBinding(aol, type != null ? type : Library.STATIC);
+            // FIXME kludge, but does not work anymore since AOL is now a class
+            if (aol.equals(NarConstants.NAR_NO_ARCH)) {
+                // FIXME no handling of local
+                artifactList.addAll(getAttachedNarDependencies(dependency, null, NarConstants.NAR_NO_ARCH, remoteRepositories,
+                        resolver));
+            } else {
+                artifactList.addAll(getAttachedNarDependencies(dependency, aol, binding, remoteRepositories,
+                        resolver));
+            }
+        }
+        return artifactList;
+    }
+
+    private List/* <AttachedNarArtifact> */ getAttachedNarDependencies(Artifact dependency, AOL archOsLinker,
+            String type, List remoteRepositories,
+            ArtifactResolver resolver)
+            throws MojoExecutionException, MojoFailureException {
+        AOL aol = archOsLinker;
+        log.debug("GetNarDependencies for " + dependency + ", aol: " + aol + ", type: " + type);
+        List artifactList = new ArrayList();
+        NarInfo narInfo = getNarInfo(dependency, remoteRepositories, resolver);
+        String[] nars = narInfo.getAttachedNars(aol, type);
+        // FIXME Move this to NarInfo....
+        if (nars != null) {
+            for (int j = 0; j < nars.length; j++) {
+                log.debug("    Checking: " + nars[j]);
+                if (nars[j].equals("")) {
+                    continue;
+                }
+                String[] nar = nars[j].split(":", 5);
+                if (nar.length >= 4) {
+                    try {
+                        String groupId = nar[0].trim();
+                        String artifactId = nar[1].trim();
+                        String ext = nar[2].trim();
+                        String classifier = nar[3].trim();
+                        // translate for instance g++ to gcc...
+                        aol = narInfo.getAOL(aol);
+                        if (aol != null) {
+                            classifier = NarUtil.replace("${aol}", aol.toString(), classifier);
                         }
                         String version = nar.length >= 5 ? nar[4].trim() : dependency.getVersion();
-                        artifactList.add( new AttachedNarArtifact( groupId, artifactId, version, dependency.getScope(),
-                                                                   ext, classifier, dependency.isOptional(), dependency.getFile() ));
+                        artifactList.add(new AttachedNarArtifact(groupId, artifactId, version, dependency.getScope(),
+                                ext, classifier, dependency.isOptional(), dependency.getFile()));
+                    } catch (InvalidVersionSpecificationException e) {
+                        throw new MojoExecutionException("Error while reading nar file for dependency " + dependency,
+                                e);
                     }
-                    catch ( InvalidVersionSpecificationException e )
-                    {
-                        throw new MojoExecutionException( "Error while reading nar file for dependency " + dependency,
-                                                          e );
-                    }
+                } else {
+                    log.warn("nars property in " + dependency.getArtifactId() + " contains invalid field: '" + nars[j]
+                            + "' for type: " + type);
                 }
-                else
-                {
-                    log.warn( "nars property in " + dependency.getArtifactId() + " contains invalid field: '" + nars[j]
-							+ "' for type: " + type);
-				}
-			}
-		}
-		return artifactList;
-	}
+            }
+        }
+        return artifactList;
+    }
 
-	public final NarInfo getNarInfo(Artifact dependency)
-        throws MojoExecutionException
-    {
-		// FIXME reported to maven developer list, isSnapshot changes behaviour
-		// of getBaseVersion, called in pathOf.
-		dependency.isSnapshot();
+    public final NarInfo getNarInfo(Artifact dependency, List remoteRepositories,
+            ArtifactResolver resolver)
+            throws MojoExecutionException {
+        // FIXME reported to maven developer list, isSnapshot changes behaviour
+        // of getBaseVersion, called in pathOf.
+        dependency.isSnapshot();
 
-        File file = new File( repository.getBasedir(), repository.pathOf( dependency ) );
-        if ( !file.exists() )
-        {
-			return null;
-		}
+        try {
+            if ("nar".equalsIgnoreCase(dependency.getType())) {
+                log.debug("Download URL is: " + dependency.getDownloadUrl() + " for " + dependency.getArtifactId() + ":" + dependency.getScope() + ":" + dependency.getType());
+                resolver.resolve(dependency, remoteRepositories, repository);
+            }
+        } catch (ArtifactResolutionException ex) {
+            log.warn("Couldn't resolve artifact", ex);
+        } catch (ArtifactNotFoundException ex) {
+            log.warn("No Artifact found", ex);
+        }
+        File file = new File(repository.getBasedir(), repository.pathOf(dependency));
+        log.debug("File location: " + file.getAbsolutePath());
+        if (!file.exists()) {
+            return null;
+        }
 
-		JarFile jar = null;
-        try
-        {
-			jar = new JarFile(file);
+        JarFile jar = null;
+        try {
+            jar = new JarFile(file);
             NarInfo info =
-                new NarInfo( dependency.getGroupId(), dependency.getArtifactId(), dependency.getBaseVersion(), log );
-            if ( !info.exists( jar ) )
-            {
-				return null;
-			}
-			info.read(jar);
-			return info;
-        }
-        catch ( IOException e )
-        {
-			throw new MojoExecutionException("Error while reading " + file, e);
-        }
-        finally
-        {
-            if ( jar != null )
-            {
-                try
-                {
-					jar.close();
+                    new NarInfo(dependency.getGroupId(), dependency.getArtifactId(), dependency.getBaseVersion(), log);
+            if (!info.exists(jar)) {
+                return null;
+            }
+            info.read(jar);
+            return info;
+        } catch (IOException e) {
+            throw new MojoExecutionException("Error while reading " + file, e);
+        } finally {
+            if (jar != null) {
+                try {
+                    jar.close();
+                } catch (IOException e) {
+                    // ignore
                 }
-                catch ( IOException e )
-                {
-					// ignore
-				}
-			}
-		}
-	}
-
-	public final File getNarFile(Artifact dependency)
-        throws MojoFailureException
-    {
-		// FIXME reported to maven developer list, isSnapshot changes behaviour
-		// of getBaseVersion, called in pathOf.
-		dependency.isSnapshot();
-        return new File( repository.getBasedir(), NarUtil.replace( "${aol}", defaultAOL.toString(),
-                                                                   repository.pathOf( dependency ) ) );
-	}
-
-    private List getDependencies( String scope )
-    {
-        if ( scope.equals( Artifact.SCOPE_TEST ) )
-        {
-			return project.getTestArtifacts();
+            }
         }
-        else if ( scope.equals( Artifact.SCOPE_RUNTIME ) )
-        {
-			return project.getRuntimeArtifacts();
-		}
-		return project.getCompileArtifacts();
-	}
+    }
 
-    public final void downloadAttachedNars( List/* <NarArtifacts> */narArtifacts, List remoteRepositories,
-			ArtifactResolver resolver, String classifier)
-        throws MojoExecutionException, MojoFailureException
-    {
-		// FIXME this may not be the right way to do this.... -U ignored and
-		// also SNAPSHOT not used
-		List dependencies = getAttachedNarDependencies(narArtifacts, classifier);
-
-        log.debug( "Download called with classifier: " + classifier + " for NarDependencies {" );
-        for ( Iterator i = dependencies.iterator(); i.hasNext(); )
-        {
-			log.debug("  - " + (i.next()));
-		}
-		log.debug("}");
-
-        for ( Iterator i = dependencies.iterator(); i.hasNext(); )
-        {
-			Artifact dependency = (Artifact) i.next();
-            try
-            {
-				log.debug("Resolving " + dependency);
-				resolver.resolve(dependency, remoteRepositories, repository);
+    public final File getNarFile(Artifact dependency, List remoteRepositories,
+            ArtifactResolver resolver)
+            throws MojoFailureException {
+        // FIXME reported to maven developer list, isSnapshot changes behaviour
+        // of getBaseVersion, called in pathOf.
+        dependency.isSnapshot();
+        try {
+            if(log.isDebugEnabled()){
+                log.debug("Trying to obtain NarFile :" + NarUtil.replace("${aol}", defaultAOL.toString(), repository.pathOf(dependency))
+                        + ", DefaultAOL: " + defaultAOL.toString()
+                        + ", Repo Path: " + repository.pathOf(dependency)
+                        + ", Dependency: " + dependency.toString());
             }
-            catch ( ArtifactNotFoundException e )
-            {
-				String message = "nar not found " + dependency.getId();
-				throw new MojoExecutionException(message, e);
-            }
-            catch ( ArtifactResolutionException e )
-            {
-				String message = "nar cannot resolve " + dependency.getId();
-				throw new MojoExecutionException(message, e);
-			}
-		}
-	}
+            resolver.resolve(dependency, remoteRepositories, repository);
+        } catch (ArtifactResolutionException ex) {
+            ex.printStackTrace();
+        } catch (ArtifactNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        return new File(repository.getBasedir(), NarUtil.replace("${aol}", defaultAOL.toString(),
+                repository.pathOf(dependency)));
+    }
 
-    public final void unpackAttachedNars( List/* <NarArtifacts> */narArtifacts, ArchiverManager archiverManager,
-                                          String classifier, String os, NarLayout layout, File unpackDir )
-        throws MojoExecutionException, MojoFailureException
-    {
-        log.debug( "Unpack called for OS: " + os + ", classifier: " + classifier + " for NarArtifacts {" );
-        for ( Iterator i = narArtifacts.iterator(); i.hasNext(); )
-        {
-			log.debug("  - " + (i.next()));
-		}
-		log.debug("}");
-		// FIXME, kludge to get to download the -noarch, based on classifier
-		List dependencies = getAttachedNarDependencies(narArtifacts, classifier);
-        for ( Iterator i = dependencies.iterator(); i.hasNext(); )
-        {
-			Artifact dependency = (Artifact) i.next();
+    private List getDependencies(String scope) {
+        if (scope.equals(Artifact.SCOPE_TEST)) {
+            return project.getTestArtifacts();
+        } else if (scope.equals(Artifact.SCOPE_RUNTIME)) {
+            return project.getRuntimeArtifacts();
+        }
+        return project.getCompileArtifacts();
+    }
+
+    public final void downloadAttachedNars(List/* <NarArtifacts> */ narArtifacts, List remoteRepositories,
+            ArtifactResolver resolver, String classifier)
+            throws MojoExecutionException, MojoFailureException {
+        // FIXME this may not be the right way to do this.... -U ignored and
+        // also SNAPSHOT not used
+        log.debug("classifier: " + classifier);
+        List dependencies = getAttachedNarDependencies(narArtifacts, classifier, remoteRepositories,
+                resolver);
+        if(log.isDebugEnabled()){
+            log.debug("Download called with classifier: " + classifier + " for NarDependencies {");
+            for (Iterator i = dependencies.iterator(); i.hasNext();) {
+                log.debug("  - " + (i.next()));
+            }
+            log.debug("}");
+        }
+
+        for (Iterator i = dependencies.iterator(); i.hasNext();) {
+            Artifact dependency = (Artifact) i.next();
+            try {
+                log.debug("Resolving " + dependency);
+                resolver.resolve(dependency, remoteRepositories, repository);
+            } catch (ArtifactNotFoundException e) {
+                String message = "nar not found " + dependency.getId();
+                throw new MojoExecutionException(message, e);
+            } catch (ArtifactResolutionException e) {
+                String message = "nar cannot resolve " + dependency.getId();
+                throw new MojoExecutionException(message, e);
+            }
+        }
+    }
+
+    
+    public final void unpackAttachedNars(List/* <NarArtifacts> */ narArtifacts, ArchiverManager archiverManager,
+            String classifier, String os, NarLayout layout, File unpackDir, List remoteRepositories,
+            ArtifactResolver resolver)
+            throws MojoExecutionException, MojoFailureException {
+        log.debug("Unpack called for OS: " + os + ", classifier: " + classifier + " for NarArtifacts {");
+        for (Iterator i = narArtifacts.iterator(); i.hasNext();) {
+            log.debug("  - " + (i.next()));
+        }
+        log.debug("}");
+        // FIXME, kludge to get to download the -noarch, based on classifier
+        List dependencies = getAttachedNarDependencies(narArtifacts, classifier, remoteRepositories,
+                resolver);
+        for (Iterator i = dependencies.iterator(); i.hasNext();) {
+            Artifact dependency = (Artifact) i.next();
             log.debug("Unpack " + dependency + " to " + unpackDir);
-			File file = getNarFile(dependency);
+            File file = getNarFile(dependency, remoteRepositories,
+                    resolver);
 
-            layout.unpackNar(unpackDir, archiverManager, file, os, linkerName, defaultAOL);            
-		}
-	}
+            layout.unpackNar(unpackDir, archiverManager, file, os, linkerName, defaultAOL);
+        }
+    }
 }

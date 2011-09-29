@@ -22,6 +22,7 @@ package org.apache.maven.plugin.nar;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
+import org.apache.maven.artifact.resolver.ArtifactResolver;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.tools.ant.Project;
@@ -134,6 +135,24 @@ public abstract class AbstractCompileMojo
     private List/* <String> */dependencyLibOrder;
 
     private Project antProject;
+
+    /**
+     * Artifact resolver, needed to download the attached nar files.
+     *
+     * @component role="org.apache.maven.artifact.resolver.ArtifactResolver"
+     * @required
+     * @readonly
+     */
+    ArtifactResolver artifactResolver;
+
+    /**
+     * Remote repositories which will be searched for nar attachments.
+     *
+     * @parameter expression="${project.remoteArtifactRepositories}"
+     * @required
+     * @readonly
+     */
+    List remoteArtifactRepositories;
 
     protected final Project getAntProject()
     {

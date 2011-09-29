@@ -41,7 +41,7 @@ public class NarTestDownloadMojo
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        List narArtifacts = getNarManager().getNarDependencies( "test" );
+        List narArtifacts = getNarManager().getNarDependencies( "test", remoteArtifactRepositories, artifactResolver );
         if ( classifiers == null )
         {
             getNarManager().downloadAttachedNars( narArtifacts, remoteArtifactRepositories, artifactResolver, null );

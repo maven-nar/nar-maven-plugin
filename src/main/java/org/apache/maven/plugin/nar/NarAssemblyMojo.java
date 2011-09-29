@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.FileUtils;
@@ -48,7 +49,25 @@ public class NarAssemblyMojo
      * 
      * @parameter
      */
-    private String[] classifiers = null;
+    private List classifiers = null;
+
+    /**
+     * Artifact resolver, needed to download the attached nar files.
+     *
+     * @component role="org.apache.maven.artifact.resolver.ArtifactResolver"
+     * @required
+     * @readonly
+     */
+    private ArtifactResolver artifactResolver;
+
+    /**
+     * Remote repositories which will be searched for nar attachments.
+     *
+     * @parameter expression="${project.remoteArtifactRepositories}"
+     * @required
+     * @readonly
+     */
+    private List remoteArtifactRepositories;
 
     /**
      * Copies the unpacked nar libraries and files into the projects target area
@@ -56,9 +75,9 @@ public class NarAssemblyMojo
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        List narArtifacts = getNarManager().getNarDependencies( "compile" );
+        List narArtifacts = getNarManager().getNarDependencies( "compile", remoteArtifactRepositories, artifactResolver );
 
-        List dependencies = getNarManager().getAttachedNarDependencies( narArtifacts, classifiers );
+        List dependencies = getNarManager().getAttachedNarDependencies( narArtifacts, classifiers, remoteArtifactRepositories, artifactResolver );
 
         // this may make some extra copies...
         for ( Iterator d = dependencies.iterator(); d.hasNext(); )
@@ -72,7 +91,8 @@ public class NarAssemblyMojo
             dependency.isSnapshot();
 
             File srcDir =
-                getLayout().getNarUnpackDirectory( getUnpackDirectory(), getNarManager().getNarFile( dependency ) );
+                getLayout().getNarUnpackDirectory( getUnpackDirectory(), getNarManager().getNarFile( dependency, remoteArtifactRepositories,
+			 artifactResolver ) );
             // File srcDir = new File( getLocalRepository().pathOf( dependency ) );
             // srcDir = new File( getLocalRepository().getBasedir(), srcDir.getParent() );
             // srcDir = new File( srcDir, "nar/" );

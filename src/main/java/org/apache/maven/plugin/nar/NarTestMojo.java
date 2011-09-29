@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
@@ -51,6 +52,24 @@ public class NarTestMojo
      * @readonly
      */
     private List classpathElements;
+
+    /**
+     * Artifact resolver, needed to download the attached nar files.
+     *
+     * @component role="org.apache.maven.artifact.resolver.ArtifactResolver"
+     * @required
+     * @readonly
+     */
+    private ArtifactResolver artifactResolver;
+
+    /**
+     * Remote repositories which will be searched for nar attachments.
+     *
+     * @parameter expression="${project.remoteArtifactRepositories}"
+     * @required
+     * @readonly
+     */
+    private List remoteArtifactRepositories;
 
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
@@ -153,8 +172,8 @@ public class NarTestMojo
 
         // add dependent shared libraries
         String classifier = getAOL() + "-shared";
-        List narArtifacts = getNarManager().getNarDependencies( "compile" );
-        List dependencies = getNarManager().getAttachedNarDependencies( narArtifacts, classifier );
+        List narArtifacts = getNarManager().getNarDependencies( "compile", remoteArtifactRepositories, artifactResolver );
+        List dependencies = getNarManager().getAttachedNarDependencies( narArtifacts, classifier, remoteArtifactRepositories, artifactResolver );
         for ( Iterator d = dependencies.iterator(); d.hasNext(); )
         {
             Artifact dependency = (Artifact) d.next();

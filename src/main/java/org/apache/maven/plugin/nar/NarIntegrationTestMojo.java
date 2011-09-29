@@ -913,7 +913,7 @@ public class NarIntegrationTestMojo
         ForkConfiguration fork = new ForkConfiguration();
 
         // DUNS
-        if ( project.getPackaging().equals( "nar" ) || ( getNarManager().getNarDependencies( "test" ).size() > 0 ) )
+        if ( project.getPackaging().equals( "nar" ) || ( getNarManager().getNarDependencies( "test", remoteRepositories, artifactResolver ).size() > 0 ) )
         {
             forkMode = "pertest";
         }
@@ -1004,7 +1004,7 @@ public class NarIntegrationTestMojo
                 surefireBooter.addClassPathUrl( narFile );
             }
 
-            List dependencies = getNarManager().getNarDependencies( "test" );
+            List dependencies = getNarManager().getNarDependencies( "test", remoteRepositories, artifactResolver );
             for ( Iterator i = dependencies.iterator(); i.hasNext(); )
             {
                 NarArtifact dependency = (NarArtifact) i.next();
