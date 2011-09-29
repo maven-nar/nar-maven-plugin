@@ -25,52 +25,107 @@
     <version>18</version>
   </parent>
 
+  <groupId>net.mjahn</groupId>
   <artifactId>maven-nar-plugin</artifactId>
   <version>2.1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
-  <name>Maven NAR Plugin</name>
+  <name>Forked Maven NAR Plugin</name>
   <description>
-    This plugin compiles native code and publishes native artifacts in the for of nar files.
+    This plugin is a bugfix version of the original org.apache.maven.plugins:maven-nar-plugin:2.1-SNAPSHOT
   </description>
   <url>http://duns.github.com/maven-nar-plugin/</url>
 
-  <!-- deploy to duns' github repository -->
+
   <distributionManagement>
-    <repository>
-      <id>duns-maven-releases</id>
-      <name>Duns' Maven Releases</name>
-        <url>file:///Users/duns/sonatype/git/maven-releases</url>
-      </repository>
-    <snapshotRepository>
-      <uniqueVersion>false</uniqueVersion>
-      <id>duns-maven-snapshots</id>
-      <name>Duns' Maven Snapshots</name>
-      <url>file:///Users/duns/sonatype/git/maven-snapshots</url>
-    </snapshotRepository>
-  <!-- temporarily until we have a fixed site -->
+    <downloadUrl>http://github.com/mirkojahn/maven-nar-plugin/downloads</downloadUrl>
     <site>
-      <id>local</id>
-      <url>file:///Users/duns/sonatype/git/maven-nar-plugin-site</url>
+      <id>forked-nar-plugin</id>
+      <name>maven-nar-plugin</name>
+      <url>http://github.com/mirkojahn/maven-nar-plugin</url>
     </site>
+    <snapshotRepository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>sonatype-nexus-staging</id>
+      <name>Nexus Release Repository</name>
+      <url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+
   </distributionManagement>
 
+  <repositories>
+    <repository>
+      <id>nexus-oss-snapshots</id>
+      <name>Nexus OSS Snapshot Repository</name>
+      <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <updatePolicy>daily</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </snapshots>
+    </repository>
+    <repository>
+        <id>duns.github.com</id>
+        <url>http://duns.github.com/maven-snapshots</url>
+      <releases>
+        <updatePolicy>daily</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>daily</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </snapshots>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+        <id>nexus-oss-plugins-snapshots</id>
+        <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <updatePolicy>daily</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>nexus-oss-plugins-staging</id>
+      <url>http://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+      <releases>
+        <updatePolicy>daily</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+        <id>duns.github.com</id>
+        <url>http://duns.github.com/maven-snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>daily</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </snapshots>
+    </pluginRepository>
+
+  </pluginRepositories>
+
   <prerequisites>
-    <maven>2.0.9</maven>
+    <maven>2.2.1</maven>
   </prerequisites>
 
-  <scm>
-    <connection>scm:git:git://github.com/duns/maven-nar-plugin.git</connection>
-    <developerConnection>scm:git:git://github.com/duns/maven-nar-plugin.git</developerConnection>
-    <url>http://github.com/duns/maven-nar-plugin</url>
-  </scm>
-  <issueManagement>
-    <system>jira</system>
-    <url>http://issues.sonatype.org/browse/NAR</url>
-  </issueManagement>
-
   <properties>
-    <mavenVersion>2.0.9</mavenVersion>
+    <mavenVersion>2.2.1</mavenVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
@@ -241,9 +296,9 @@
             <configuration>
               <debug>false</debug>
               <ignoreFailures>false</ignoreFailures>
-              <!-- FAILS to run, see ReleaseNotes
+              <!-- FAILS to run, see ReleaseNotes -->
               <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
-               -->
+               
               <setupIncludes>
 <!-- special for mvn 3 (see below) -->
                 <setupInclude>it-parent/pom.xml</setupInclude>
