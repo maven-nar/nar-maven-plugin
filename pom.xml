@@ -3,7 +3,7 @@
 
   <groupId>net.sf.antcontrib</groupId>
   <artifactId>cpptasks-parallel</artifactId>
-  <version>1.0-beta-5-parallel-1-SNAPSHOT</version>
+  <version>1.0-beta-5-parallel-1-20120403</version>
 
   <name>CPPTasks (parallel)</name>
   <description>
