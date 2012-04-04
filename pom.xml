@@ -34,7 +34,7 @@
   <repository>
     <id>imagej.releases</id>
     <name>ImageJ Releases Repository</name>
-    <url>dav:http://maven.imagej.net/content/repositories/releases</url>
+    <url>dav:http://maven.imagej.net/content/repositories/thirdparty</url>
   </repository>
   <snapshotRepository>
     <id>imagej.snapshots</id>
