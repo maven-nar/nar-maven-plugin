@@ -36,6 +36,14 @@ import java.io.File;
 public class NarValidateMojo
     extends AbstractCompileMojo
 {
+    /**
+     * Source directory for GNU style project
+     * 
+     * @parameter expression="${basedir}/src/gnu"
+     * @required
+     */
+    private File gnuSourceDirectory;
+    
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
@@ -79,23 +87,10 @@ public class NarValidateMojo
             }
         }
 
-        final MavenProject project = this.getMavenProject();
-        final Xpp3Dom configuration = project.getGoalConfiguration( "org.apache.maven.plugins", "maven-nar-plugin", null,
-                null );
-        File gnuSourceDir = null;
-        if ( configuration != null && configuration.getChildCount() > 0 )
-        {
-            for ( int i = 0; i < configuration.getChildCount(); i++ ) {
-                if ( configuration.getChild( i ).getName().equals( "gnuSourceDirectory" ) ) {
-                    gnuSourceDir = new File( project.getBasedir(), configuration.getChild( i ).getValue() );
-                }
-            }
-        }
-
         // at least one compiler has to be defined
         // OR
         // a <gnuSourceDirectory> is configured.
-        if ( noOfCompilers == 0 && gnuSourceDir == null )
+        if ( noOfCompilers == 0 && ( gnuSourceDirectory == null || !gnuSourceDirectory.exists() ) )
         {
             throw new MojoExecutionException( "No compilers defined for linker " + linker.getName() + ", and no" +
                     " <gnuSourceDirectory> is defined.  Either define a compiler or a linker." );     
