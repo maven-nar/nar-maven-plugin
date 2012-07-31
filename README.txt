@@ -52,7 +52,7 @@ mephi42/maven-nar-plugin master
   seems reasonable, complicated due to narRunMojo change.
 
 rockdreamer/maven-nar-plugin master
-- AIX aol.properties (?)
+- AIX aol.properties (applied)
 
 emetsger/maven-nar-plugin master
 - Fix off by one (applied)
@@ -62,11 +62,11 @@ emetsger/maven-nar-plugin master
   add revised - new flag to run only configured compilers
   
 mirkojahn/maven-nar-plugin master
-- AIX aol.properties (?)
-- Local & Remote repositories (?)
+- AIX aol.properties (applied)
+- Local & Remote repositories (considered, revised)
 
 sugree/maven-nar-plugin master
-- wingw (g++)  aol.properties (?)
+- wingw (g++)  aol.properties (applied)
 
 
 ** deploy change only - not merged
