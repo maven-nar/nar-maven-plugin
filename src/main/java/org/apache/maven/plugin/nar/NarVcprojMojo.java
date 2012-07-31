@@ -103,13 +103,14 @@ public class NarVcprojMojo extends AbstractCompileMojo {
 		// stdc++
 		task.setLinkCPP(library.linkCPP());
 
+		// TODO: this should match the standard NAR location defined by layout similar to Nar Compile
 		// outDir
 		File outDir = new File(getTargetDirectory(), "bin");
 		outDir = new File(outDir, getAOL().toString());
 		outDir.mkdirs();
 
 		// outFile
-		File outFile = new File(outDir, getMavenProject().getArtifactId());
+		File outFile = new File(outDir, getOutput(getAOL(), type) );
 
 		getLog().debug("NAR - output: '" + outFile + "'");
 		task.setOutfile(outFile);
@@ -130,8 +131,7 @@ public class NarVcprojMojo extends AbstractCompileMojo {
 		task.setRuntime(runtimeType);
 
 		// add C++ compiler
-		CompilerDef cpp = getCpp().getCompiler(Compiler.MAIN,
-				getOutput(getAOL()));
+		CompilerDef cpp = getCpp().getCompiler(Compiler.MAIN,null);
 		if (cpp != null) {
 			task.addConfiguredCompiler(cpp);
 		}

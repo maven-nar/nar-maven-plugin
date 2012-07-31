@@ -221,10 +221,10 @@ public abstract class AbstractCompileMojo
         return getNarInfo().getProperty( aol, "runtime", runtime );
     }
 
-    protected final String getOutput( AOL aol )
+    protected final String getOutput( AOL aol, String type )
         throws MojoExecutionException
     {
-        return getNarInfo().getProperty( aol, "output", output );
+        return getNarInfo().getProperty( aol, "output", getOutput( ! aol.getOS().equals( OS.WINDOWS ) && !  Library.EXECUTABLE.equals( type ) ) );
     }
 
     protected final File getJavaHome( AOL aol )

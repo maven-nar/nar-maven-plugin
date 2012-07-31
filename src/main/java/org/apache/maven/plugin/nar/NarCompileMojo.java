@@ -187,16 +187,7 @@ public class NarCompileMojo
 
         // outFile
         // FIXME NAR-90 we could get the final name from layout
-        File outFile;
-        if ( type.equals( Library.EXECUTABLE ) )
-        {
-            // executable has no version number
-            outFile = new File(outDir, getMavenProject().getArtifactId());
-        }
-        else
-        {
-            outFile = new File(outDir, getOutput(getAOL()));
-        }
+        File outFile = new File(outDir, getOutput(getAOL(), type) );
         getLog().debug("NAR - output: '" + outFile + "'");
         task.setOutfile(outFile);
 
@@ -219,7 +210,7 @@ public class NarCompileMojo
         // since getCompiler() expects "main" or "test", whereas the "type" variable here is "executable", "shared" etc.
         // add C++ compiler
         if (getCpp() != null) {
-            CompilerDef cpp = getCpp().getCompiler( Compiler.MAIN, getOutput( getAOL() ) );
+            CompilerDef cpp = getCpp().getCompiler( Compiler.MAIN, null );
             if ( cpp != null )
             {
                 task.addConfiguredCompiler( cpp );
@@ -228,7 +219,7 @@ public class NarCompileMojo
 
         // add C compiler
         if (getC() != null) {
-            CompilerDef c = getC().getCompiler( Compiler.MAIN, getOutput( getAOL() ) );
+            CompilerDef c = getC().getCompiler( Compiler.MAIN, null );
             if ( c != null )
             {
                 task.addConfiguredCompiler( c );
@@ -237,7 +228,7 @@ public class NarCompileMojo
 
         // add Fortran compiler
         if (getFortran() != null) {
-            CompilerDef fortran = getFortran().getCompiler( Compiler.MAIN, getOutput( getAOL() ) );
+            CompilerDef fortran = getFortran().getCompiler( Compiler.MAIN, null );
             if ( fortran != null )
             {
                 task.addConfiguredCompiler( fortran );

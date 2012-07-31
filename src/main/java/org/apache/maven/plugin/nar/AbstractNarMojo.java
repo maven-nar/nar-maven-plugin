@@ -88,6 +88,17 @@ public abstract class AbstractNarMojo
     private File outputDirectory;
 
     /**
+     * Name of the output
+     *  - for jni default to expression="${project.artifactId}-${project.version}"
+     *  - for libs default to expression="${project.artifactId}-${project.version}"
+     *  - for exe default to expression="${project.artifactId}"
+     *  -- for tests default to expression="${test.name}"
+     * 
+     * @parameter 
+     */
+    private String output;
+
+    /**
      * @parameter expression="${project.basedir}"
      * @readonly
      */
@@ -183,6 +194,19 @@ public abstract class AbstractNarMojo
         }
     }
 
+    protected final String getOutput( boolean versioned )
+    	    throws MojoExecutionException
+	{
+	    if( output != null && !output.trim().isEmpty()){
+	    	return output; 
+	    } else {
+	    	if( versioned )
+	    		return getMavenProject().getArtifactId() + "-" + getMavenProject().getVersion();
+	    	else 
+	    		return getMavenProject().getArtifactId();
+	    }
+	}
+    
     protected final String getArchitecture()
     {
         return architecture;
