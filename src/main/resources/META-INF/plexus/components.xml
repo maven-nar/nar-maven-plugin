@@ -56,6 +56,7 @@
           </process-test-classes>
           <test>org.apache.maven.plugins:maven-surefire-plugin:test,
             org.apache.maven.plugins:maven-nar-plugin:nar-test</test>
+          <prepare-package>org.apache.maven.plugins:maven-nar-plugin:nar-prepare-package</prepare-package>
           <package>org.apache.maven.plugins:maven-nar-plugin:nar-package,
             org.apache.maven.plugins:maven-jar-plugin:jar</package>
           <pre-integration-test></pre-integration-test>

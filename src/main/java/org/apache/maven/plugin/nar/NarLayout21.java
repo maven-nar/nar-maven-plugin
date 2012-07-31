@@ -2,6 +2,7 @@ package org.apache.maven.plugin.nar;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -109,16 +110,91 @@ public class NarLayout21
      * @see org.apache.maven.plugin.nar.NarLayout#attachNars(java.io.File, org.apache.maven.project.MavenProjectHelper,
      * org.apache.maven.project.MavenProject, org.apache.maven.plugin.nar.NarInfo)
      */
+    public final void prepareNarInfo( File baseDir, MavenProject project, NarInfo narInfo, AbstractCompileMojo mojo )
+        throws MojoExecutionException
+    {
+        if ( getNoArchDirectory( baseDir, project.getArtifactId(), project.getVersion() ).exists() )
+        {
+            narInfo.setNar( null, NarConstants.NAR_NO_ARCH, project.getGroupId() + ":" + project.getArtifactId() + ":"
+                + NarConstants.NAR_TYPE + ":" + NarConstants.NAR_NO_ARCH );
+        }
+
+        String artifactIdVersion = project.getArtifactId() + "-" + project.getVersion();
+        // list all directories in basedir, scan them for classifiers
+        String[] subDirs = baseDir.list();
+        ArrayList<String> classifiers = new ArrayList<String>();
+        for ( int i = 0; ( subDirs != null ) && ( i < subDirs.length ); i++ )
+        {
+            // skip entries not belonging to this project
+            if ( !subDirs[i].startsWith( artifactIdVersion ) )
+                continue;
+
+            String classifier = subDirs[i].substring( artifactIdVersion.length() + 1 );
+
+            // skip noarch here
+            if ( classifier.equals( NarConstants.NAR_NO_ARCH ) )
+                continue;
+            
+            classifiers.add(classifier);
+        }
+        
+        if( !classifiers.isEmpty() ){
+	
+        	for(String classifier : classifiers ){
+	            int lastDash = classifier.lastIndexOf( '-' );
+	            String type = classifier.substring( lastDash + 1 );
+	            AOL aol = new AOL( classifier.substring( 0, lastDash ) );
+
+	            if ( ( narInfo.getOutput( aol, null ) == null ) )
+	            {
+	                narInfo.setOutput( aol, mojo.getOutput(! aol.getOS().contains( OS.WINDOWS ) && ! type.equals( Library.EXECUTABLE ) ) );
+	            }
+
+            	// We prefer shared to jni/executable/static/none, 
+	            if ( type.equals( Library.SHARED ) )  // overwrite whatever we had
+	            {
+	                narInfo.setBinding( aol, type );
+	                narInfo.setBinding( null, type );
+	            }
+	            else
+	            {
+	            	// if the binding is already set, then don't write it for jni/executable/static/none.
+	                if ( ( narInfo.getBinding( aol, null ) == null ) )
+	                {
+	                    narInfo.setBinding( aol, type );
+	                }
+	                if ( ( narInfo.getBinding( null, null ) == null ) )
+	                {
+	                    narInfo.setBinding( null, type );
+	                }
+	            }
+	
+	            narInfo.setNar( null, type, project.getGroupId() + ":" + project.getArtifactId() + ":"
+	                + NarConstants.NAR_TYPE + ":" + "${aol}" + "-" + type );
+	            
+	        }
+
+        	// setting this first stops the per type config because getOutput check for aol defaults to this generic one...
+            if ( mojo!= null && ( narInfo.getOutput( null, null ) == null ) )
+            {
+                narInfo.setOutput( null, mojo.getOutput(true) );
+            }
+        }
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.apache.maven.plugin.nar.NarLayout#attachNars(java.io.File, org.apache.maven.project.MavenProjectHelper,
+     * org.apache.maven.project.MavenProject, org.apache.maven.plugin.nar.NarInfo)
+     */
     public final void attachNars( File baseDir, ArchiverManager archiverManager, MavenProjectHelper projectHelper,
-                                  MavenProject project, NarInfo narInfo )
+                                  MavenProject project )
         throws MojoExecutionException
     {
         if ( getNoArchDirectory( baseDir, project.getArtifactId(), project.getVersion() ).exists() )
         {
             attachNar( archiverManager, projectHelper, project, NarConstants.NAR_NO_ARCH,
                        getNoArchDirectory( baseDir, project.getArtifactId(), project.getVersion() ), "*/**" );
-            narInfo.setNar( null, NarConstants.NAR_NO_ARCH, project.getGroupId() + ":" + project.getArtifactId() + ":"
-                + NarConstants.NAR_TYPE + ":" + NarConstants.NAR_NO_ARCH );
         }
 
         // list all directories in basedir, scan them for classifiers
@@ -139,38 +215,6 @@ public class NarLayout21
 
             File dir = new File( baseDir, subDirs[i] );
             attachNar( archiverManager, projectHelper, project, classifier, dir, "*/**" );
-
-            int lastDash = classifier.lastIndexOf( '-' );
-            String type = classifier.substring( lastDash + 1 );
-            AOL aol = new AOL( classifier.substring( 0, lastDash ) );
-
-            if ( type.equals( Library.EXECUTABLE ) )
-            {
-                if ( narInfo.getBinding( aol, null ) == null )
-                {
-                    narInfo.setBinding( aol, Library.EXECUTABLE );
-                }
-                if ( narInfo.getBinding( null, null ) == null )
-                {
-                    narInfo.setBinding( null, Library.EXECUTABLE );
-                }
-            }
-            else
-            {
-                // and not set or override if SHARED
-                if ( ( narInfo.getBinding( aol, null ) == null ) || !type.equals( Library.SHARED ) )
-                {
-                    narInfo.setBinding( aol, type );
-                }
-                // and not set or override if SHARED
-                if ( ( narInfo.getBinding( null, null ) == null ) || !type.equals( Library.SHARED ) )
-                {
-                    narInfo.setBinding( null, type );
-                }
-            }
-
-            narInfo.setNar( null, type, project.getGroupId() + ":" + project.getArtifactId() + ":"
-                + NarConstants.NAR_TYPE + ":" + "${aol}" + "-" + type );
         }
     }
 

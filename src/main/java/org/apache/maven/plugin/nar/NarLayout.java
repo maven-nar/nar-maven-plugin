@@ -68,11 +68,16 @@ public interface NarLayout
         throws MojoExecutionException, MojoFailureException;
 
     /**
-     * Called to attach nars to main nar/jar file. This method needs to produce all the attached nar files and set NarInfo
-     * accordingly.
+     * Called to attach nars to main nar/jar file. This method needs to set NarInfo accordingly so it can be included in the nar archive.
+     */
+    void prepareNarInfo( File baseDir, MavenProject project, NarInfo narInfo, AbstractCompileMojo libraryName )
+        throws MojoExecutionException;
+
+    /**
+     * Called to attach nars to main nar/jar file. This method needs to produce all the attached nar archive files.
      */
     void attachNars( File baseDir, ArchiverManager archiverManager, MavenProjectHelper projectHelper,
-                     MavenProject project, NarInfo narInfo )
+                     MavenProject project)
         throws MojoExecutionException, MojoFailureException;
 
     /**
@@ -82,7 +87,7 @@ public interface NarLayout
      */
     void unpackNar( File baseDir, ArchiverManager archiverManager, File file, String os, String linkerName, AOL defaultAOL )
         throws MojoExecutionException, MojoFailureException;
-    
+
     /**
      * Returns the unpack directory of a specific nar file.
      */

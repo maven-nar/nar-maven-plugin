@@ -31,36 +31,46 @@ import org.codehaus.plexus.archiver.manager.ArchiverManager;
 /**
  * Jars up the NAR files.
  * 
- * @goal nar-package
- * @phase package
+ * @goal nar-prepare-package
+ * @phase prepare-package
  * @requiresProject
- * @author Mark Donszelmann
+ * @author GDomjan
  */
-public class NarPackageMojo
+public class NarPreparePackageMojo
     extends AbstractCompileMojo
 {    
+
     /**
-     * To look up Archiver/UnArchiver implementations
-     * 
-     * @component role="org.codehaus.plexus.archiver.manager.ArchiverManager"
-     * @required
+     * @parameter expression="${project.build.directory}/classes"
+     * @readonly
      */
-    private ArchiverManager archiverManager;
+    private File outputDirectory;
     
-    /**
-     * Used for attaching the artifact in the project
-     * 
-     * @component
-     */
-    private MavenProjectHelper projectHelper;
-
-
     // TODO: this is working of what is present rather than what was requested to be built, POM ~/= artifacts!
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        // let the layout decide which nars to attach
-        getLayout().attachNars( getTargetDirectory(), archiverManager, projectHelper, getMavenProject() );
-     
+        // let the layout decide which (additional) nars to attach
+        getLayout().prepareNarInfo( getTargetDirectory(), getMavenProject(), getNarInfo(), this );
+
+        try
+        {
+        	// TODO: this structure seems overly deep it already gets unpacked to own folder - classes/
+            File propertiesDir =
+                new File( outputDirectory, "META-INF/nar/" + getMavenProject().getGroupId() + "/"
+                    + getMavenProject().getArtifactId() );
+            if ( !propertiesDir.exists() )
+            {
+                propertiesDir.mkdirs();
+            }
+            File propertiesFile = new File( propertiesDir, NarInfo.NAR_PROPERTIES );
+            getNarInfo().writeToFile( propertiesFile );
+        }
+        catch ( IOException ioe )
+        {
+            throw new MojoExecutionException( "Cannot write nar properties file", ioe );
+        }
+        
     }
+
 }

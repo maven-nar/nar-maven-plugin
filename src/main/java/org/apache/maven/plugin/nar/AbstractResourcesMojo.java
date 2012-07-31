@@ -119,6 +119,8 @@ public abstract class AbstractResourcesMojo
         File libDir = new File( srcDir, resourceLibDir );
         if ( libDir.exists() )
         {
+			if( getLibraries().isEmpty() )
+				getLog().warn("Appear to have library resources, but not Libraries are defined");
             // create all types of libs
             for ( Iterator i = getLibraries().iterator(); i.hasNext(); )
             {
