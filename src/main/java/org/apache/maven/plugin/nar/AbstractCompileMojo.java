@@ -55,6 +55,14 @@ public abstract class AbstractCompileMojo
     private Fortran fortran;
 
     /**
+     * By default NAR compile will attempt to compile using all known compilers against files in the directories specified by convention.
+     * This allows configuration to a reduced set, you will have to specify each compiler to use in the configuration. 
+     * 
+     * @parameter expression="false"
+     */
+    private boolean onlySpecifiedCompilers;
+    
+    /**
      * Maximum number of Cores/CPU's to use. 0 means unlimited.
      * 
      * @parameter expression=""
@@ -164,16 +172,28 @@ public abstract class AbstractCompileMojo
 
     protected final C getC()
     {
+    	if ( onlySpecifiedCompilers && c == null )
+    	{
+    		setC( new C() );
+    	}
         return c;
     }
 
     protected final Cpp getCpp()
     {
+    	if ( onlySpecifiedCompilers && cpp == null )
+    	{
+    		setCpp( new Cpp() );
+    	}
         return cpp;
     }
 
     protected final Fortran getFortran()
     {
+    	if ( onlySpecifiedCompilers && fortran == null )
+    	{
+    		setFortran( new Fortran() );
+    	}
         return fortran;
     }
 
