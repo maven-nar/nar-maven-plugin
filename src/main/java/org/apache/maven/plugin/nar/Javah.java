@@ -124,15 +124,15 @@ public class Javah
      */
     private File timestampFile;
 
-    private AbstractCompileMojo mojo;
+    private AbstractNarMojo mojo;
 
     public Javah()
     {
     }
 
-    public final void setAbstractCompileMojo( AbstractCompileMojo mojo )
+    public final void setAbstractCompileMojo( AbstractNarMojo abstractNarMojo )
     {
-        this.mojo = mojo;
+        this.mojo = abstractNarMojo;
     }
 
     protected final List getClassPaths()

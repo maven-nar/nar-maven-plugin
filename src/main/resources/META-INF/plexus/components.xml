@@ -26,9 +26,9 @@
         <phases>
           <validate>org.apache.maven.plugins:maven-nar-plugin:nar-validate</validate>
           <initialize></initialize>
-          <generate-sources>org.apache.maven.plugins:maven-nar-plugin:nar-download
+          <generate-sources>
           </generate-sources>
-          <process-sources>org.apache.maven.plugins:maven-nar-plugin:nar-unpack,
+          <process-sources>
             org.apache.maven.plugins:maven-nar-plugin:nar-gnu-configure
           </process-sources>
           <generate-resources>org.apache.maven.plugins:maven-nar-plugin:nar-system-generate
@@ -45,8 +45,8 @@
           </compile>
           <process-classes>org.apache.maven.plugins:maven-nar-plugin:nar-gnu-process
           </process-classes>
-          <generate-test-sources>org.apache.maven.plugins:maven-nar-plugin:nar-testDownload</generate-test-sources>
-          <process-test-sources>org.apache.maven.plugins:maven-nar-plugin:nar-testUnpack</process-test-sources>
+          <generate-test-sources></generate-test-sources>
+          <process-test-sources></process-test-sources>
           <generate-test-resources></generate-test-resources>
           <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:testResources
           </process-test-resources>

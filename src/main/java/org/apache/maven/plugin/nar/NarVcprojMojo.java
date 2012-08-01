@@ -38,6 +38,11 @@ import org.apache.tools.ant.Project;
  */
 public class NarVcprojMojo extends AbstractCompileMojo {
 
+	@Override
+	protected List/*<Artifact>*/ getArtifacts() {
+		return getMavenProject().getCompileArtifacts();  // Artifact.SCOPE_COMPILE 
+	}
+
 	public void narExecute() throws MojoExecutionException,
 			MojoFailureException {
 
@@ -74,6 +79,8 @@ public class NarVcprojMojo extends AbstractCompileMojo {
 							"NAR: Skipping vcproj generation.  No libraries to be built.");
 			return;
 		}
+
+//		super.narExecute();
 
 		// arbitrarily grab the first library -- we're going to make treat it as
 		// an exe anyway, whatever type it's supposed to be.
@@ -153,9 +160,9 @@ public class NarVcprojMojo extends AbstractCompileMojo {
 		// add java include paths
 		getJava().addIncludePaths(task, Library.EXECUTABLE);
 		
+		List<NarArtifact> dependencies = getNarArtifacts();
 		// add dependency include paths
-		for (Iterator i = getNarManager().getNarDependencies("compile")
-				.iterator(); i.hasNext();) {
+		for (Iterator i = dependencies.iterator(); i.hasNext();) {
 			// FIXME, handle multiple includes from one NAR
 			NarArtifact narDependency = (NarArtifact) i.next();
 			String binding = narDependency.getNarInfo().getBinding(getAOL(),
@@ -190,7 +197,7 @@ public class NarVcprojMojo extends AbstractCompileMojo {
 				|| type.equals(Library.EXECUTABLE)) {
 
 			List depLibOrder = getDependencyLibOrder();
-			List depLibs = getNarManager().getNarDependencies("compile");
+			List depLibs = dependencies;
 
 			// reorder the libraries that come from the nar dependencies
 			// to comply with the order specified by the user

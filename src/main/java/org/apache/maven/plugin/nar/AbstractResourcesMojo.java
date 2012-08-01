@@ -38,7 +38,7 @@ import org.codehaus.plexus.util.FileUtils;
  * @author Mark Donszelmann
  */
 public abstract class AbstractResourcesMojo
-    extends AbstractCompileMojo
+    extends AbstractNarMojo
 {
     /**
      * Binary directory
@@ -119,6 +119,7 @@ public abstract class AbstractResourcesMojo
         File libDir = new File( srcDir, resourceLibDir );
         if ( libDir.exists() )
         {
+        	// TODO:  copyLibraries is used on more than just this artifact - this check needs to be placed elsewhere
 			if( getLibraries().isEmpty() )
 				getLog().warn("Appear to have library resources, but not Libraries are defined");
             // create all types of libs

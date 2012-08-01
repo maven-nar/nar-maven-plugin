@@ -19,7 +19,6 @@ package org.apache.maven.plugin.nar;
  * under the License.
  */
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
@@ -29,30 +28,24 @@ import org.apache.maven.plugin.MojoFailureException;
  * Downloads any dependent NAR files. This includes the noarch and aol type NAR files.
  * 
  * @goal nar-download
- * @phase generate-sources
+ * @phase process-sources
  * @requiresProject
- * @requiresDependencyResolution
+ * @requiresDependencyResolution compile
  * @author Mark Donszelmann
  */
 public class NarDownloadMojo
-    extends AbstractDownloadMojo
+    extends AbstractDependencyMojo
 {
+	/**
+	 * @parameter 
+	 */
+	List artifactItems;
+	
+	@Override
+	protected List getArtifacts() {
+		//dependencies.addAll( getAttachedNarArtifacts(narArtifacts, classifiers ) );
+		return null;
+	}
 
-    public final void narExecute()
-        throws MojoExecutionException, MojoFailureException
-    {
-        List narArtifacts = getNarManager().getNarDependencies( "compile" );
-        if ( classifiers == null )
-        {
-            getNarManager().downloadAttachedNars( narArtifacts, remoteArtifactRepositories, artifactResolver, null );
-        }
-        else
-        {
-            for ( Iterator j = classifiers.iterator(); j.hasNext(); )
-            {
-                getNarManager().downloadAttachedNars( narArtifacts, remoteArtifactRepositories, artifactResolver,
-                                                      (String) j.next() );
-            }
-        }
-    }
+	
 }

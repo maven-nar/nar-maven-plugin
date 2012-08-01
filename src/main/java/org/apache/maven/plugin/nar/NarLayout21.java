@@ -110,7 +110,7 @@ public class NarLayout21
      * @see org.apache.maven.plugin.nar.NarLayout#attachNars(java.io.File, org.apache.maven.project.MavenProjectHelper,
      * org.apache.maven.project.MavenProject, org.apache.maven.plugin.nar.NarInfo)
      */
-    public final void prepareNarInfo( File baseDir, MavenProject project, NarInfo narInfo, AbstractCompileMojo mojo )
+    public final void prepareNarInfo( File baseDir, MavenProject project, NarInfo narInfo, AbstractNarMojo mojo )
         throws MojoExecutionException
     {
         if ( getNoArchDirectory( baseDir, project.getArtifactId(), project.getVersion() ).exists() )

@@ -19,10 +19,6 @@ package org.apache.maven.plugin.nar;
  * under the License.
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProjectHelper;
@@ -37,7 +33,7 @@ import org.codehaus.plexus.archiver.manager.ArchiverManager;
  * @author Mark Donszelmann
  */
 public class NarPackageMojo
-    extends AbstractCompileMojo
+    extends AbstractNarMojo
 {    
     /**
      * To look up Archiver/UnArchiver implementations

@@ -37,7 +37,7 @@ import org.codehaus.plexus.archiver.manager.ArchiverManager;
  * @author GDomjan
  */
 public class NarPreparePackageMojo
-    extends AbstractCompileMojo
+    extends AbstractNarMojo
 {    
 
     /**

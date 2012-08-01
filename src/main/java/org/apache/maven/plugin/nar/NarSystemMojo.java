@@ -39,7 +39,7 @@ import org.apache.maven.plugin.MojoFailureException;
  * @author Mark Donszelmann
  */
 public class NarSystemMojo
-    extends AbstractCompileMojo
+    extends AbstractNarMojo
 {
 
     public final void narExecute()

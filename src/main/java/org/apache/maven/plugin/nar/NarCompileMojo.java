@@ -68,9 +68,15 @@ public class NarCompileMojo
      */
     protected MavenSession session;
 
+	@Override
+	protected List/*<Artifact>*/ getArtifacts() {
+		return getMavenProject().getCompileArtifacts();  // Artifact.SCOPE_COMPILE 
+	}
+
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
+    	super.narExecute();
 
         // make sure destination is there
         getTargetDirectory().mkdirs();
@@ -246,8 +252,9 @@ public class NarCompileMojo
         // add java include paths
         getJava().addIncludePaths(task, type);
 
+        List<NarArtifact> dependencies = getNarArtifacts(); 
         // add dependency include paths
-        for ( Iterator i = getNarManager().getNarDependencies( "compile" ).iterator(); i.hasNext(); )
+        for ( Iterator i = dependencies.iterator(); i.hasNext(); )
         {
             // FIXME, handle multiple includes from one NAR
             NarArtifact narDependency = (NarArtifact) i.next();
@@ -282,7 +289,7 @@ public class NarCompileMojo
         {
 
             List depLibOrder = getDependencyLibOrder();
-            List depLibs = getNarManager().getNarDependencies("compile");
+            List depLibs = dependencies;
 
             // reorder the libraries that come from the nar dependencies
             // to comply with the order specified by the user

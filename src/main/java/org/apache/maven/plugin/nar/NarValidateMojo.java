@@ -25,6 +25,7 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Validates the configuration of the NAR project (aol and pom)
@@ -44,9 +45,16 @@ public class NarValidateMojo
      */
     private File gnuSourceDirectory;
     
+	@Override
+	protected List/*<Artifact>*/ getArtifacts() {
+		return null;//getMavenProject().getCompileArtifacts();  // Artifact.SCOPE_COMPILE 
+	}
+
 	public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
+//    	super.narExecute();
+
     	// check aol
         AOL aol = getAOL();
         getLog().info( "Using AOL: " + aol );
