@@ -109,10 +109,11 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
             String[] libs = set.getLibs();
             if (libdir != null) {
                     String relPath = libdir.getAbsolutePath();
-                    File outputFile = task.getOutfile();
-                    if (outputFile != null && outputFile.getParentFile() != null) {
+                    //File outputFile = task.getOutfile();
+                    File currentDir = new File(".");
+                    if (currentDir != null && currentDir.getParentFile() != null) {
                         relPath = CUtil.getRelativePath(
-                            outputFile.getParentFile().getAbsolutePath(), libdir);
+                        		currentDir.getParentFile().getAbsolutePath(), libdir);
                     }
                     if (set.getType() != null &&
                                     "framework".equals(set.getType().getValue()) &&
