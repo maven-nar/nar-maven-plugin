@@ -9,7 +9,7 @@
   <description>
     Library to call native compilers and linkers.
   </description>
-  <url>http://github.com/duns/cpptasks-parallel</url>
+  <url>http://github.com/richardkerr/cpptasks-parallel</url>
 
   <inceptionYear>2001</inceptionYear>
   <licenses>
@@ -21,9 +21,9 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:git://github.com/duns/cpptasks-parallel.git</connection>
-    <developerConnection>scm:git:git://github.com/duns/cpptasks-parallel.git</developerConnection>
-    <url>http://github.com/duns/cpptasks-parallel</url>
+    <connection>scm:git:git://github.com/richardkerr/cpptasks-parallel.git</connection>
+    <developerConnection>scm:git:git://github.com/richardkerr/cpptasks-parallel.git</developerConnection>
+    <url>http://github.com/richardkerr/cpptasks-parallel</url>
   </scm>
   
   <properties>
