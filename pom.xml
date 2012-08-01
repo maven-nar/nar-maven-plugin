@@ -30,23 +30,28 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-<!-- to avoid MDEPLOY-50 and to deploy to duns' github repository -->
 <distributionManagement>
   <repository>
-    <id>duns-maven-releases</id>
-    <name>Duns' Maven Releases</name>
-    <url>file:///Users/duns/sonatype/git/maven-releases</url>
+    <id>imagej.releases</id>
+    <name>ImageJ Releases Repository</name>
+    <url>dav:http://maven.imagej.net/content/repositories/thirdparty</url>
   </repository>
   <snapshotRepository>
-    <uniqueVersion>false</uniqueVersion>
-    <id>duns-maven-snapshots</id>
-    <name>Duns' Maven Snapshots</name>
-    <url>file:///Users/duns/sonatype/git/maven-snapshots</url>
+    <id>imagej.snapshots</id>
+    <name>ImageJ Snapshots Repository</name>
+    <url>dav:http://maven.imagej.net/content/repositories/snapshots</url>
   </snapshotRepository>
 </distributionManagement>
 
   <build>
     <defaultGoal>install</defaultGoal>
+    <extensions>
+      <extension>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-webdav-jackrabbit</artifactId>
+      <version>1.0</version>
+      </extension>
+    </extensions>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
