@@ -67,6 +67,15 @@ public class NarCompileMojo
      * @readonly
      */
     protected MavenSession session;
+    
+    /**
+     * The current build session instance.
+     * 
+     * @parameter expression="${nar.lib.outdir}"
+     * @required
+     * @readonly
+     */
+    private File outDir;
 
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
@@ -170,7 +179,7 @@ public class NarCompileMojo
         task.setLinkFortranMain( library.linkFortranMain() );
 
         // outDir
-        File outDir;
+        
         if ( type.equals( Library.EXECUTABLE ) )
         {
             outDir =
