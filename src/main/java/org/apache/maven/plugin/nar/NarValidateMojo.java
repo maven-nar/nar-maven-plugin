@@ -44,10 +44,10 @@ public class NarValidateMojo
      */
     private File gnuSourceDirectory;
     
-    public final void narExecute()
+	public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        // check aol
+    	// check aol
         AOL aol = getAOL();
         getLog().info( "Using AOL: " + aol );
 
@@ -56,44 +56,46 @@ public class NarValidateMojo
         getLog().debug( "Using linker version: " + linker.getVersion() );
 
         // check compilers
-        int noOfCompilers = 0;        
-        if ( getCpp() != null && getCpp().getName() != null )
-        {
-            noOfCompilers++;
-            // need includes
-            if ( getCpp().getIncludes( Compiler.MAIN ).isEmpty() )
-            {
-                throw new MojoExecutionException( "No includes defined for compiler " + getCpp().getName() );
-            }
-        }
-        
-        if ( getC() != null && getC().getName() != null )
-        {
-            noOfCompilers++;
-            // need includes
-            if ( getC().getIncludes( Compiler.MAIN ).isEmpty() )
-            {
-                throw new MojoExecutionException( "No includes defined for compiler " + getC().getName() );
-            }
-        }        
-        
-        if ( getFortran() != null && getFortran().getName() != null )
-        {
-            noOfCompilers++;
-            // need includes
-            if ( getFortran().getIncludes( Compiler.MAIN ).isEmpty() )
-            {
-                throw new MojoExecutionException( "No includes defined for compiler " + getFortran().getName() );
-            }
-        }
-
-        // at least one compiler has to be defined
-        // OR
-        // a <gnuSourceDirectory> is configured.
-        if ( noOfCompilers == 0 && ( gnuSourceDirectory == null || !gnuSourceDirectory.exists() ) )
-        {
-            throw new MojoExecutionException( "No compilers defined for linker " + linker.getName() + ", and no" +
-                    " <gnuSourceDirectory> is defined.  Either define a compiler or a linker." );     
-        }
+        int noOfCompilers = 0;
+        if( onlySpecifiedCompilers ) {
+	        if ( getCpp() != null && getCpp().getName() != null )
+	        {
+	            noOfCompilers++;
+	            // need includes
+	            if ( getCpp().getIncludes( Compiler.MAIN ).isEmpty() )
+	            {
+	                throw new MojoExecutionException( "No includes defined for compiler " + getCpp().getName() );
+	            }
+	        }
+	        
+	        if ( getC() != null && getC().getName() != null )
+	        {
+	            noOfCompilers++;
+	            // need includes
+	            if ( getC().getIncludes( Compiler.MAIN ).isEmpty() )
+	            {
+	                throw new MojoExecutionException( "No includes defined for compiler " + getC().getName() );
+	            }
+	        }        
+	        
+	        if ( getFortran() != null && getFortran().getName() != null )
+	        {
+	            noOfCompilers++;
+	            // need includes
+	            if ( getFortran().getIncludes( Compiler.MAIN ).isEmpty() )
+	            {
+	                throw new MojoExecutionException( "No includes defined for compiler " + getFortran().getName() );
+	            }
+	        }
+	        
+	        // at least one compiler has to be defined
+	        // OR
+	        // a <gnuSourceDirectory> is configured.
+	        if ( noOfCompilers == 0 && ( gnuSourceDirectory == null || !gnuSourceDirectory.exists() ) )
+	        {
+	            throw new MojoExecutionException( "No compilers defined for linker " + linker.getName() + ", and no" +
+	                    " <gnuSourceDirectory> is defined.  Either define a compiler or a linker." );     
+	        }
+        } 
     }
 }

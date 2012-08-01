@@ -60,7 +60,7 @@ public abstract class AbstractCompileMojo
      * 
      * @parameter expression="false"
      */
-    private boolean onlySpecifiedCompilers;
+    protected boolean onlySpecifiedCompilers;
     
     /**
      * Maximum number of Cores/CPU's to use. 0 means unlimited.
@@ -172,7 +172,7 @@ public abstract class AbstractCompileMojo
 
     protected final C getC()
     {
-    	if ( onlySpecifiedCompilers && c == null )
+    	if ( !onlySpecifiedCompilers && c == null )
     	{
     		setC( new C() );
     	}
@@ -181,7 +181,7 @@ public abstract class AbstractCompileMojo
 
     protected final Cpp getCpp()
     {
-    	if ( onlySpecifiedCompilers && cpp == null )
+    	if ( !onlySpecifiedCompilers && cpp == null )
     	{
     		setCpp( new Cpp() );
     	}
@@ -190,7 +190,7 @@ public abstract class AbstractCompileMojo
 
     protected final Fortran getFortran()
     {
-    	if ( onlySpecifiedCompilers && fortran == null )
+    	if ( !onlySpecifiedCompilers && fortran == null )
     	{
     		setFortran( new Fortran() );
     	}
@@ -224,7 +224,7 @@ public abstract class AbstractCompileMojo
     protected final String getOutput( AOL aol, String type )
         throws MojoExecutionException
     {
-        return getNarInfo().getOutput( aol, getOutput( ! aol.getOS().equals( OS.WINDOWS ) && !  Library.EXECUTABLE.equals( type ) ) );
+        return getNarInfo().getOutput( aol, getOutput( ! ( OS.WINDOWS.equals( aol.getOS() ) && Library.EXECUTABLE.equals( type ) )) );
     }
 
     protected final File getJavaHome( AOL aol )
