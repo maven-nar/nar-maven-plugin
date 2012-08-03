@@ -68,7 +68,6 @@ public class NarCompileMojo
      */
     protected MavenSession session;
  
-    /**
 	@Override
 	protected List/*<Artifact>*/ getArtifacts() {
 		return getMavenProject().getCompileArtifacts();  // Artifact.SCOPE_COMPILE 
@@ -179,7 +178,7 @@ public class NarCompileMojo
         task.setLinkFortranMain( library.linkFortranMain() );
 
         // outDir
-        
+        File outDir;
         if ( type.equals( Library.EXECUTABLE ) )
         {
             outDir =
