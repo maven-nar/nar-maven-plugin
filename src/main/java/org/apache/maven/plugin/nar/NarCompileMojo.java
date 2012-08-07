@@ -84,7 +84,7 @@ public class NarCompileMojo
         if ( noOfSources > 0 )
         {
             getLog().info( "Compiling " + noOfSources + " native files" );
-            for ( Iterator i = getLibraries().iterator(); i.hasNext(); )
+            for ( Iterator<Library> i = getLibraries().iterator(); i.hasNext(); )
             {
                 createLibrary(getAntProject(), (Library) i.next());
             }

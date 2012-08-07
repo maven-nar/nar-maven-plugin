@@ -114,7 +114,7 @@ public abstract class AbstractCompileMojo
      * 
      * @parameter expression=""
      */
-    private List libraries;
+    private List<Library> libraries;
 
     /**
      * List of tests to create
@@ -234,11 +234,11 @@ public abstract class AbstractCompileMojo
         return getNarInfo().getProperty( aol, "javaHome", NarUtil.getJavaHome( javaHome, getOS() ) );
     }
 
-    protected final List getLibraries()
+    protected final List<Library> getLibraries()
     {
         if ( libraries == null )
         {
-            libraries = Collections.EMPTY_LIST;
+            libraries = Collections.emptyList();
         }
         return libraries;
     }
