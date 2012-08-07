@@ -100,6 +100,9 @@ public abstract class AbstractCompileMojo
      */
     private boolean libtool;
 
+
+    private List<Library> libraries;
+
     /**
      * List of tests to create
      * 
