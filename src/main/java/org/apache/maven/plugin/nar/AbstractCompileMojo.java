@@ -19,6 +19,7 @@ package org.apache.maven.plugin.nar;
  * under the License.
  */
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
@@ -60,6 +61,7 @@ public abstract class AbstractCompileMojo
      * @parameter expression="false"
      */
     protected boolean onlySpecifiedCompilers;
+    private boolean onlySpecifiedCompilers;
     
     /**
      * Maximum number of Cores/CPU's to use. 0 means unlimited.
@@ -104,11 +106,33 @@ public abstract class AbstractCompileMojo
     private List<Library> libraries;
 
     /**
+     * The home of the Java system. Defaults to a derived value from ${java.home} which is OS specific.
+     * 
+     * @parameter expression=""
+     * @readonly
+     */
+    private File javaHome;
+
+    /**
+     * List of libraries to create
+     * 
+     * @parameter expression=""
+     */
+    private List<Library> libraries;
+
+    /**
      * List of tests to create
      * 
      * @parameter expression=""
      */
     private List tests;
+
+    /**
+     * Javah info
+     * 
+     * @parameter expression=""
+     */
+    private Javah javah;
 
     /**
      * Java info for includes and linking
@@ -123,6 +147,8 @@ public abstract class AbstractCompileMojo
      * @parameter expression=""
      */
     protected boolean decorateLinkerOptions;
+
+    private NarInfo narInfo;
 
     private List/* <String> */dependencyLibOrder;
 
@@ -157,7 +183,7 @@ public abstract class AbstractCompileMojo
 
     protected final C getC()
     {
-    	if ( !onlySpecifiedCompilers && c == null )
+    	if ( onlySpecifiedCompilers && c == null )
     	{
     		setC( new C() );
     	}
@@ -166,7 +192,7 @@ public abstract class AbstractCompileMojo
 
     protected final Cpp getCpp()
     {
-    	if ( !onlySpecifiedCompilers && cpp == null )
+    	if ( onlySpecifiedCompilers && cpp == null )
     	{
     		setCpp( new Cpp() );
     	}
@@ -175,7 +201,7 @@ public abstract class AbstractCompileMojo
 
     protected final Fortran getFortran()
     {
-    	if ( !onlySpecifiedCompilers && fortran == null )
+    	if ( onlySpecifiedCompilers && fortran == null )
     	{
     		setFortran( new Fortran() );
     	}
@@ -209,7 +235,23 @@ public abstract class AbstractCompileMojo
     protected final String getOutput( AOL aol, String type )
         throws MojoExecutionException
     {
-        return getNarInfo().getOutput( aol, getOutput( ! ( OS.WINDOWS.equals( aol.getOS() ) && Library.EXECUTABLE.equals( type ) )) );
+        return getNarInfo().getOutput( aol, getOutput( ! aol.getOS().equals( OS.WINDOWS ) && !  Library.EXECUTABLE.equals( type ) ) );
+    }
+
+    protected final File getJavaHome( AOL aol )
+        throws MojoExecutionException
+    {
+        // FIXME should be easier by specifying default...
+        return getNarInfo().getProperty( aol, "javaHome", NarUtil.getJavaHome( javaHome, getOS() ) );
+    }
+
+    protected final List<Library> getLibraries()
+    {
+        if ( libraries == null )
+        {
+            libraries = Collections.emptyList();
+        }
+        return libraries;
     }
 
     protected final List getTests()
@@ -219,6 +261,16 @@ public abstract class AbstractCompileMojo
             tests = Collections.EMPTY_LIST;
         }
         return tests;
+    }
+
+    protected final Javah getJavah()
+    {
+        if ( javah == null )
+        {
+            javah = new Javah();
+        }
+        javah.setAbstractCompileMojo( this );
+        return javah;
     }
 
     protected final Java getJava()
@@ -239,5 +291,25 @@ public abstract class AbstractCompileMojo
     protected final List/* <String> */getDependencyLibOrder()
     {
         return dependencyLibOrder;
+    }
+
+    protected final NarInfo getNarInfo()
+        throws MojoExecutionException
+    {
+        if ( narInfo == null )
+        {
+        	String groupId = getMavenProject().getGroupId();
+        	String artifactId = getMavenProject().getArtifactId();
+        	
+            File propertiesDir = new File( getMavenProject().getBasedir(), "src/main/resources/META-INF/nar/" + groupId + "/" + artifactId );
+            File propertiesFile = new File( propertiesDir, NarInfo.NAR_PROPERTIES );
+
+            narInfo = new NarInfo( 
+                groupId, artifactId,
+                getMavenProject().getVersion(), 
+                getLog(),
+                propertiesFile );
+        }
+        return narInfo;
     }
 }
