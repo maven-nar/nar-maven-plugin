@@ -3,6 +3,8 @@ package org.apache.maven.plugin.nar;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
@@ -48,8 +50,9 @@ public class NarProcessLibraries extends AbstractCompileMojo {
 			getMavenProject().getVersion(), getAOL().toString(), type);
 		outFile = new File(outDir, getOutput(true));
 	    }
+
 	    // Then run the commands that are applicable for this library type
-	    for (ProcessLibraryCommand command : commands) {
+	    for (ProcessLibraryCommand command :commands == null ? new ArrayList<ProcessLibraryCommand>(): commands  ) {
 		if (command.getType().equalsIgnoreCase(type))
 		    runCommand(command, outFile);
 	    }
