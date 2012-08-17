@@ -257,7 +257,7 @@ public abstract class Compiler
         return getSourceDirectories( "dummy" );
     }
 
-    private List/* <File> */getSourceDirectories( String type )
+    private List<File> getSourceDirectories( String type )
     {
         List sourceDirectories = new ArrayList();
         File baseDir = mojo.getMavenProject().getBasedir();
@@ -313,12 +313,12 @@ public abstract class Compiler
         return sourceDirectories;
     }
 
-    protected final List/* <String> */getIncludePaths( String type )
+    protected final List<String> getIncludePaths( String type )
     {
         return createIncludePaths( type, type.equals( TEST ) ? testIncludePaths : includePaths );
     }
 
-    private List/* <String> */createIncludePaths( String type, List paths )
+    private List<String> createIncludePaths( String type, List paths )
     {
         List includeList = paths;
         if ( includeList == null || ( paths.size() == 0 ) )
