@@ -132,6 +132,7 @@ public class TestTargetHistoryTable extends TestXMLConsumer {
             //   valid we should have a history file.
             //
             table.commit();
+            historyFile = table.getHistoryFile();
             assertTrue("History file was not created", historyFile.exists());
             assertTrue("History file was empty", historyFile.length() > 10);
         } finally {

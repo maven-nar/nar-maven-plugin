@@ -170,6 +170,10 @@ public final class TargetHistoryTable {
     private/* final */ File outputDir;
     private String outputDirPath;
 
+    public File getHistoryFile() {
+        return historyFile;
+    }
+
     /**
      * Creates a target history table from history.xml in the output directory,
      * if it exists. Otherwise, initializes the history table empty.
