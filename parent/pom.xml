@@ -36,34 +36,9 @@ Customise the location of local install of nar-plugin
   </description>
   <url>http://duns.github.com/maven-nar-plugin/</url>
 
-  <!-- deploy to duns' github repository -->
-  <distributionManagement>
-    <repository>
-      <id>duns-maven-releases</id>
-      <name>Duns' Maven Releases</name>
-        <url>file:///Users/duns/sonatype/git/maven-releases</url>
-      </repository>
-    <snapshotRepository>
-      <uniqueVersion>false</uniqueVersion>
-      <id>duns-maven-snapshots</id>
-      <name>Duns' Maven Snapshots</name>
-      <url>file:///Users/duns/sonatype/git/maven-snapshots</url>
-    </snapshotRepository>
-  <!-- temporarily until we have a fixed site -->
-    <site>
-      <id>local</id>
-      <url>file:///Users/duns/sonatype/git/maven-nar-plugin-site</url>
-    </site>
-  </distributionManagement>
-
   <scm>
-    <connection>scm:git:git://github.com/duns/maven-nar-plugin.git</connection>
-    <developerConnection>scm:git:git://github.com/duns/maven-nar-plugin.git</developerConnection>
-    <url>http://github.com/duns/maven-nar-plugin</url>
+    <connection>scm:git:git://github.com/richardkerr/maven-nar-plugin.git</connection>
+    <developerConnection>scm:git:git://github.com/richardkerr/maven-nar-plugin.git</developerConnection>
+    <url>http://github.com/richardkerr/maven-nar-plugin</url>
   </scm>
-  <issueManagement>
-    <system>jira</system>
-    <url>http://issues.sonatype.org/browse/NAR</url>
-  </issueManagement>
-
 </project>

@@ -117,6 +117,13 @@ public abstract class AbstractCompileMojo
      */
     private Java java;
 
+    /**
+     * Flag to cpptasks to indicate whether linker options should be decorated or not
+     *
+     * @parameter expression=""
+     */
+    protected boolean decorateLinkerOptions;
+
     private List/* <String> */dependencyLibOrder;
 
     private Project antProject;
