@@ -149,6 +149,8 @@ public class NarCompileMojo
         CCTask task = new CCTask();
         task.setProject(antProject);
 
+        task.setDecorateLinkerOptions(decorateLinkerOptions);
+
         // subsystem
         SubsystemEnum subSystem = new SubsystemEnum();
         subSystem.setValue( library.getSubSystem() );
