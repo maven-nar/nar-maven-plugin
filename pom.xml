@@ -3,7 +3,7 @@
 
   <groupId>net.sf.antcontrib</groupId>
   <artifactId>cpptasks-parallel</artifactId>
-  <version>1.0-beta-5-parallel-1-SNAPSHOT</version>
+  <version>1.0</version>
 
   <name>CPPTasks (parallel)</name>
   <description>
@@ -24,6 +24,7 @@
     <connection>scm:git:git@github.com:richardkerr/cpptasks-parallel.git</connection>
     <developerConnection>scm:git:git@github.com:richardkerr/cpptasks-parallel.git</developerConnection>
     <url>http://github.com/richardkerr/cpptasks-parallel</url>
+    <tag>cpptasks-parallel-1.0</tag>
   </scm>
   
   <properties>
