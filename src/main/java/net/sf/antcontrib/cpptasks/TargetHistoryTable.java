@@ -15,6 +15,7 @@
  *  limitations under the License.
  */
 package net.sf.antcontrib.cpptasks;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,6 +37,7 @@ import org.apache.tools.ant.BuildException;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
 /**
  * A history of the compiler and linker settings used to build the files in the
  * same directory as the history.
@@ -54,13 +56,11 @@ public final class TargetHistoryTable {
         private String output;
         private long outputLastModified;
         private final Vector sources = new Vector();
+
         /**
          * Constructor
          *
-         * @param history
-         *            hashtable of TargetHistory keyed by output name
-         * @param outputFiles
-         *            existing files in output directory
+         * @param history     hashtable of TargetHistory keyed by output name
          */
         private TargetHistoryTableHandler(Hashtable history, File baseDir) {
             this.history = history;
@@ -68,8 +68,9 @@ public final class TargetHistoryTable {
             output = null;
             this.baseDir = baseDir;
         }
+
         public void endElement(String namespaceURI, String localName,
-                String qName) throws SAXException {
+                               String qName) throws SAXException {
             //
             //   if </target> then
             //       create TargetHistory object and add to hashtable
@@ -92,7 +93,7 @@ public final class TargetHistoryTable {
                         //      a second
                         long existingLastModified = existingFile.lastModified();
                         if (!CUtil.isSignificantlyBefore(existingLastModified, outputLastModified)
-                        		&& !CUtil.isSignificantlyAfter(existingLastModified, outputLastModified)) {
+                                && !CUtil.isSignificantlyAfter(existingLastModified, outputLastModified)) {
                             SourceHistory[] sourcesArray = new SourceHistory[sources
                                     .size()];
                             sources.copyInto(sourcesArray);
@@ -115,11 +116,12 @@ public final class TargetHistoryTable {
                 }
             }
         }
+
         /**
          * startElement handler
          */
         public void startElement(String namespaceURI, String localName,
-                String qName, Attributes atts) throws SAXException {
+                                 String qName, Attributes atts) throws SAXException {
             //
             //   if sourceElement
             //
@@ -152,27 +154,32 @@ public final class TargetHistoryTable {
             }
         }
     }
-    /** Flag indicating whether the cache should be written back to file. */
+
+    /**
+     * Flag indicating whether the cache should be written back to file.
+     */
     private boolean dirty;
     /**
      * a hashtable of TargetHistory's keyed by output file name
      */
     private final Hashtable history = new Hashtable();
-    /** The file the cache was loaded from. */
-    private/* final */File historyFile;
-    private/* final */File outputDir;
+    /**
+     * The file the cache was loaded from.
+     */
+    private/* final */ File historyFile;
+    private/* final */ File outputDir;
     private String outputDirPath;
+
     /**
      * Creates a target history table from history.xml in the output directory,
      * if it exists. Otherwise, initializes the history table empty.
      *
-     * @param task
-     *            task used for logging history load errors
-     * @param outputDir
-     *            output directory for task
+     * @param task      task used for logging history load errors
+     * @param outputDir output directory for task
      */
-    public TargetHistoryTable(CCTask task, File outputDir)
-            throws BuildException {
+    public TargetHistoryTable(CCTask task, File outputDir) throws BuildException
+
+    {
         if (outputDir == null) {
             throw new NullPointerException("outputDir");
         }
@@ -194,6 +201,8 @@ public final class TargetHistoryTable {
         //       file does not exist, is zero-length or
         //          last modified dates differ
         historyFile = new File(outputDir, "history.xml");
+
+
         if (historyFile.exists()) {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setValidating(false);
@@ -214,8 +223,11 @@ public final class TargetHistoryTable {
             //   timestamp comperation (to compare with
             //   System.currentTimeMillis() don't work on Unix, because it
             //   maesure timestamps only in seconds).
-            //
+            //      try {
+
+
             try {
+                historyFile = File.createTempFile("history.xml", Long.toString(System.nanoTime()), outputDir);
                 FileOutputStream outputStream = new FileOutputStream(
                         historyFile);
                 byte[] historyElement = new byte[]{0x3C, 0x68, 0x69, 0x73,
@@ -227,6 +239,7 @@ public final class TargetHistoryTable {
             }
         }
     }
+
     public void commit() throws IOException {
         //
         //   if not dirty, no need to update file
@@ -310,6 +323,7 @@ public final class TargetHistoryTable {
             dirty = false;
         }
     }
+
     public TargetHistory get(String configId, String outputName) {
         TargetHistory targetHistory = (TargetHistory) history.get(outputName);
         if (targetHistory != null) {
@@ -319,13 +333,15 @@ public final class TargetHistoryTable {
         }
         return targetHistory;
     }
+
     public void markForRebuild(Map targetInfos) {
         Iterator targetInfoEnum = targetInfos.values().iterator();
         while (targetInfoEnum.hasNext()) {
             markForRebuild((TargetInfo) targetInfoEnum.next());
         }
     }
- // FREEHEP added synchronized    
+
+    // FREEHEP added synchronized
     public synchronized void markForRebuild(TargetInfo targetInfo) {
         //
         //     if it must already be rebuilt, no need to check further
@@ -343,11 +359,11 @@ public final class TargetHistoryTable {
                 } else {
                     Hashtable sourceMap = new Hashtable(sources.length);
                     for (int i = 0; i < sources.length; i++) {
-                      try {
-                        sourceMap.put(sources[i].getCanonicalPath(), sources[i]);
-                      } catch(IOException ex) {
-                        sourceMap.put(sources[i].getAbsolutePath(), sources[i]);
-                      }
+                        try {
+                            sourceMap.put(sources[i].getCanonicalPath(), sources[i]);
+                        } catch (IOException ex) {
+                            sourceMap.put(sources[i].getAbsolutePath(), sources[i]);
+                        }
                     }
                     for (int i = 0; i < sourceHistories.length; i++) {
                         //
@@ -357,22 +373,23 @@ public final class TargetHistoryTable {
                         String absPath = sourceHistories[i].getAbsolutePath(outputDir);
                         File match = (File) sourceMap.get(absPath);
                         if (match != null) {
-                          try {
-                            match = (File) sourceMap.get(new File(absPath).getCanonicalPath());
-                          } catch(IOException ex) {
-                            targetInfo.mustRebuild();
-                            break;
-                          }
+                            try {
+                                match = (File) sourceMap.get(new File(absPath).getCanonicalPath());
+                            } catch (IOException ex) {
+                                targetInfo.mustRebuild();
+                                break;
+                            }
                         }
                         if (match == null || match.lastModified() != sourceHistories[i].getLastModified()) {
-                          targetInfo.mustRebuild();
-                          break;
+                            targetInfo.mustRebuild();
+                            break;
                         }
                     }
                 }
             }
         }
     }
+
     public void update(ProcessorConfiguration config, String[] sources, VersionInfo versionInfo) {
         String configId = config.getIdentifier();
         String[] onesource = new String[1];
@@ -381,11 +398,12 @@ public final class TargetHistoryTable {
             onesource[0] = sources[i];
             outputNames = config.getOutputFileNames(sources[i], versionInfo);
             for (int j = 0; j < outputNames.length; j++) {
-            	update(configId, outputNames[j], onesource);
+                update(configId, outputNames[j], onesource);
             }
         }
     }
-// FREEHEP added synchronized
+
+    // FREEHEP added synchronized
     private synchronized void update(String configId, String outputName, String[] sources) {
         File outputFile = new File(outputDir, outputName);
         //
@@ -394,7 +412,7 @@ public final class TargetHistoryTable {
         //        do not write add a history entry
         //
         if (outputFile.exists() &&
-        		!CUtil.isSignificantlyBefore(outputFile.lastModified(), historyFile.lastModified())) {
+                !CUtil.isSignificantlyBefore(outputFile.lastModified(), historyFile.lastModified())) {
             dirty = true;
             history.remove(outputName);
             SourceHistory[] sourceHistories = new SourceHistory[sources.length];
@@ -411,7 +429,8 @@ public final class TargetHistoryTable {
             history.put(outputName, newHistory);
         }
     }
- // FREEHEP added synchronized
+
+    // FREEHEP added synchronized
     public synchronized void update(TargetInfo linkTarget) {
         File outputFile = linkTarget.getOutput();
         String outputName = outputFile.getName();
@@ -421,7 +440,7 @@ public final class TargetHistoryTable {
         //        do not write add a history entry
         //
         if (outputFile.exists()
-                && !CUtil.isSignificantlyBefore(outputFile.lastModified(),historyFile.lastModified())) {
+                && !CUtil.isSignificantlyBefore(outputFile.lastModified(), historyFile.lastModified())) {
             dirty = true;
             history.remove(outputName);
             SourceHistory[] sourceHistories = linkTarget

@@ -38,10 +38,12 @@ public abstract class TestXMLConsumer extends TestCase {
      */
     public static final void copyResourceToTmpDir(String resourceName,
             String tmpFile) throws IOException {
-        String tmpDir;// = System.getProperty("java.io.tmpdir");
-        File tempdir = File.createTempFile(resourceName, Long.toString(System.nanoTime()));
-        tempdir.deleteOnExit();
+        String tmpDir = System.getProperty("java.io.tmpdir");
+
+        File tempdir = File.createTempFile(tmpFile, Long.toString(System.nanoTime()), new File(tmpDir));
+        tempdir.delete();
         tempdir.mkdir();
+        tempdir.deleteOnExit();
         tmpDir = tempdir.getAbsolutePath();
         //
         //  attempt to get resource from jar
