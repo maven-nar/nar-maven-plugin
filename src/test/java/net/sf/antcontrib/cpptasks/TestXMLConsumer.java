@@ -38,7 +38,11 @@ public abstract class TestXMLConsumer extends TestCase {
      */
     public static final void copyResourceToTmpDir(String resourceName,
             String tmpFile) throws IOException {
-        String tmpDir = System.getProperty("java.io.tmpdir");
+        String tmpDir;// = System.getProperty("java.io.tmpdir");
+        File tempdir = File.createTempFile(resourceName, Long.toString(System.nanoTime()));
+        tempdir.deleteOnExit();
+        tempdir.mkdir();
+        tmpDir = tempdir.getAbsolutePath();
         //
         //  attempt to get resource from jar
         //      (should succeed unless testing in IDE)
@@ -57,6 +61,7 @@ public abstract class TestXMLConsumer extends TestCase {
         assertNotNull("Could not locate resource " + resourceName, src);
         try {
             File destFile = new File(tmpDir, tmpFile);
+            destFile.deleteOnExit();
             FileOutputStream dest = new FileOutputStream(destFile);
             try {
                 int bytesRead = 0;

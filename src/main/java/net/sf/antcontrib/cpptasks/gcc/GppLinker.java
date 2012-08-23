@@ -30,32 +30,33 @@ import net.sf.antcontrib.cpptasks.types.LibrarySet;
  * @author Stephen M. Webb <stephen.webb@bregmasoft.com>
  */
 public class GppLinker extends AbstractLdLinker {
+    public static final String GPP_COMMAND = "g++";
+
     protected static final String[] discardFiles = new String[0];
     protected static final String[] objFiles = new String[]{".o", ".a", ".lib",
             ".dll", ".so", ".sl"};
-    // FREEHEP refactored dllLinker into soLinker
-    private static final GppLinker soLinker = new GppLinker("gcc", objFiles,
-            discardFiles, "lib", ".so", false, new GppLinker("gcc", objFiles,
-                    discardFiles, "lib", ".so", true, null));
     private final static String libPrefix = "libraries: =";
     protected static final String[] libtoolObjFiles = new String[]{".fo", ".a",
             ".lib", ".dll", ".so", ".sl"};
     private static String[] linkerOptions = new String[]{"-bundle", "-dylib",
             "-dynamic", "-dynamiclib", "-nostartfiles", "-nostdlib",
             "-prebind", "-s", "-static", "-shared", "-symbolic", "-Xlinker",
-    // FREEHEP
-    "-static-libgcc", "-shared-libgcc" };
-    private static final GppLinker instance = new GppLinker("gcc", objFiles,
+            "-static-libgcc", "-shared-libgcc"};
+    // FREEHEP refactored dllLinker into soLinker
+    private static final GppLinker soLinker = new GppLinker(GPP_COMMAND, objFiles,
+            discardFiles, "lib", ".so", false, new GppLinker(GPP_COMMAND, objFiles,
+            discardFiles, "lib", ".so", true, null));
+    private static final GppLinker instance = new GppLinker(GPP_COMMAND, objFiles,
             discardFiles, "", "", false, null);
-    private static final GppLinker machDllLinker = new GppLinker("gcc",
+    private static final GppLinker machDllLinker = new GppLinker(GPP_COMMAND,
             objFiles, discardFiles, "lib", ".dylib", false, null);
-    private static final GppLinker machPluginLinker = new GppLinker("gcc",
+    private static final GppLinker machPluginLinker = new GppLinker(GPP_COMMAND,
             objFiles, discardFiles, "lib", ".bundle", false, null);
     // FREEHEP
-    private static final GppLinker machJNILinker = new GppLinker("gcc",
+    private static final GppLinker machJNILinker = new GppLinker(GPP_COMMAND,
             objFiles, discardFiles, "lib", ".jnilib", false, null);
     // FREEHEP added dllLinker for windows
-    private static final GppLinker dllLinker = new GppLinker("gcc", objFiles,
+    private static final GppLinker dllLinker = new GppLinker(GPP_COMMAND, objFiles,
             discardFiles, "", ".dll", false, null);
     public static GppLinker getInstance() {
         return instance;
@@ -192,6 +193,7 @@ public class GppLinker extends AbstractLdLinker {
                 case 'l' :
                 case 'L' :
                 case 'u' :
+                case 'B' :
                     break;
                 default :
                     boolean known = false;

@@ -97,12 +97,14 @@ public class TestTargetHistoryTable extends TestXMLConsumer {
      */
     public void testUpdateTimeResolution() throws IOException {
         File compiledFile = null;
+        
         try {
             //
             //  delete any history file that might exist
             //   in the test output directory
             String tempDir = System.getProperty("java.io.tmpdir");
             File historyFile = new File(tempDir, "history.xml");
+            historyFile.deleteOnExit();
             if (historyFile.exists()) {
                 historyFile.delete();
             }
@@ -136,6 +138,7 @@ public class TestTargetHistoryTable extends TestXMLConsumer {
             if (compiledFile != null && compiledFile.exists()) {
                 compiledFile.delete();
             }
+            
         }
     }
 }
