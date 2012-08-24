@@ -23,7 +23,7 @@
   <scm>
     <connection>scm:git:git@github.com:richardkerr/cpptasks-parallel.git</connection>
     <developerConnection>scm:git:git@github.com:richardkerr/cpptasks-parallel.git</developerConnection>
-    <url>http://github.com/richardkerr/cpptasks-parallel</url>
+    <url>scm:git:git@github.com:richardkerr/cpptasks-parallel.git</url>
     <tag>HEAD</tag>
   </scm>
   
