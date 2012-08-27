@@ -1,6 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
-
-  <!--
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
     Licensed to the Apache Software Foundation (ASF) under one or more
     contributor license agreements. See the NOTICE file distributed with
     this work for additional information regarding copyright ownership.
@@ -15,27 +14,21 @@
     License for the specific language governing permissions and
     limitations under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
-  <parent>
-    <artifactId>maven-nar-plugin-local</artifactId>
-    <groupId>org.apache.maven.plugins</groupId>
-    <version>1</version>
-	<relativePath>./parent/pom.xml</relativePath>
-  </parent>
-
   <groupId>org.apache.maven.plugins</groupId>
   <artifactId>maven-nar-plugin</artifactId>
-  <version>2.2-SNAPSHOT</version>
+  <version>2.2.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
-
   <name>Maven NAR Plugin</name>
   <description>
     This plugin compiles native code and publishes native artifacts in the for of nar files.
   </description>
-
+  <scm>
+    <connection>scm:git:git://github.com/richardkerr/maven-nar-plugin.git</connection>
+    <developerConnection>scm:git:git://github.com/richardkerr/maven-nar-plugin.git</developerConnection>
+    <url>http://github.com/richardkerr/maven-nar-plugin</url>
+  </scm>
   <properties>
     <mavenVersion>2.0.9</mavenVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -43,93 +36,90 @@
   <prerequisites>
     <maven>2.0.9</maven>
   </prerequisites>
-
   <dependencies>
-  	<dependency>
-  		<groupId>org.apache.maven</groupId>
-  		<artifactId>maven-plugin-api</artifactId>
-  		<version>${mavenVersion}</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.apache.maven</groupId>
-  		<artifactId>maven-project</artifactId>
-  		<version>${mavenVersion}</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.apache.maven</groupId>
-  		<artifactId>maven-artifact</artifactId>
-  		<version>${mavenVersion}</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.apache.maven</groupId>
-  		<artifactId>maven-model</artifactId>
-  		<version>${mavenVersion}</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.apache.maven.surefire</groupId>
-  		<artifactId>surefire-booter</artifactId>
-  		<version>2.6</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.apache.maven</groupId>
-  		<artifactId>maven-toolchain</artifactId>
-  		<version>2.2.1</version>
-  	</dependency>
-  	<dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <version>${mavenVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <version>${mavenVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-artifact</artifactId>
+      <version>${mavenVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-model</artifactId>
+      <version>${mavenVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.surefire</groupId>
+      <artifactId>surefire-booter</artifactId>
+      <version>2.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-toolchain</artifactId>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
       <version>2.2.1</version>
     </dependency>
-    
     <dependency>
-  		<groupId>org.codehaus.plexus</groupId>
-  		<artifactId>plexus-container-default</artifactId>
-  		<version>1.5.4</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.codehaus.plexus</groupId>
-  		<artifactId>plexus-compiler-api</artifactId>
-  		<version>1.8</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.codehaus.plexus</groupId>
-  		<artifactId>plexus-utils</artifactId>
-  		<version>2.0.5</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.codehaus.plexus</groupId>
-  		<artifactId>plexus-archiver</artifactId>
-  		<version>1.0</version>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-container-default</artifactId>
+      <version>1.5.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-compiler-api</artifactId>
+      <version>1.8</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>2.0.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-archiver</artifactId>
+      <version>1.0</version>
       <exclusions>
-        <exclusion>  
-          <groupId>org.codehaus.plexus</groupId> 
+        <exclusion>
+          <groupId>org.codehaus.plexus</groupId>
           <artifactId>plexus-component-api</artifactId>
         </exclusion>
-      </exclusions> 
-  	</dependency>
-  	<dependency>
-  		<groupId>net.sf.antcontrib</groupId>
-  		<artifactId>cpptasks-parallel</artifactId>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.antcontrib</groupId>
+      <artifactId>cpptasks-parallel</artifactId>
   		<version>1.0.3-SNAPSHOT</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.apache.bcel</groupId>
-  		<artifactId>bcel</artifactId>
-  		<version>5.2</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.apache.ant</groupId>
-  		<artifactId>ant</artifactId>
-  		<version>1.8.1</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>junit</groupId>
-  		<artifactId>junit</artifactId>
-  		<version>4.8.1</version>
-  		<scope>test</scope>
-  	</dependency>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.bcel</groupId>
+      <artifactId>bcel</artifactId>
+      <version>5.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.ant</groupId>
+      <artifactId>ant</artifactId>
+      <version>1.8.1</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.1</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
-
   <build>
     <defaultGoal>install</defaultGoal>
     <pluginManagement>
@@ -145,7 +135,7 @@
           <version>2.3.2</version>
         </plugin>
       </plugins>
-    </pluginManagement>  
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -157,7 +147,6 @@
       </plugin>
     </plugins>
   </build>
-
   <reporting>
     <plugins>
       <plugin>
@@ -171,12 +160,10 @@
         <version>2.2</version>
       </plugin>
     </plugins>
-  </reporting>  
-
+  </reporting>
   <profiles>
     <profile>
       <id>check</id>
-
       <build>
         <plugins>
           <plugin>
@@ -194,14 +181,11 @@
         </plugins>
       </build>
     </profile>
-
     <profile>
       <id>run-its</id>
-
       <properties>
         <localRepositoryUrl>${project.build.directory}/it-repo</localRepositoryUrl>
       </properties>
-
       <build>
         <plugins>
           <plugin>
@@ -214,7 +198,7 @@
               <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
                -->
               <setupIncludes>
-<!-- special for mvn 3 (see below) -->
+                <!-- special for mvn 3 (see below) -->
                 <setupInclude>it-parent/pom.xml</setupInclude>
                 <setupInclude>it0003-jni/pom.xml</setupInclude>
                 <setupInclude>it0007-lib-shared/pom.xml</setupInclude>
@@ -222,10 +206,10 @@
                 <setupInclude>it0020-lib-3rdparty/pom.xml</setupInclude>
               </setupIncludes>
               <pomIncludes>
-              	<pomInclude>*/pom.xml</pomInclude>
+                <pomInclude>*/pom.xml</pomInclude>
               </pomIncludes>
               <pomExcludes>
-<!-- Include to handle mvn 3 problem not finding parent for a dependency
+                <!-- Include to handle mvn 3 problem not finding parent for a dependency
                 <pomExclude>it-parent/**</pomExclude>
 -->
                 <pomExclude>it0021-*/**</pomExclude>
@@ -246,7 +230,7 @@
                   <goal>run</goal>
                 </goals>
               </execution>
-			</executions>
+            </executions>
           </plugin>
         </plugins>
       </build>
