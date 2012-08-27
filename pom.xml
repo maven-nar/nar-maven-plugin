@@ -30,11 +30,6 @@
   <version>2.2.2-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
   <name>Maven NAR Plugin</name>
-  <parent>
-    <artifactId>maven-plugins</artifactId>
-    <groupId>org.apache.maven.plugins</groupId>
-    <version>18</version>
-  </parent>
   <description>
     This plugin compiles native code and publishes native artifacts in the for of nar files.
   </description>
