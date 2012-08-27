@@ -27,7 +27,7 @@
   <scm>
     <connection>scm:git:git://github.com/richardkerr/maven-nar-plugin.git</connection>
     <developerConnection>scm:git:git://github.com/richardkerr/maven-nar-plugin.git</developerConnection>
-    <url>http://github.com/richardkerr/maven-nar-plugin</url>
+    <url>scm:git:git://github.com/richardkerr/maven-nar-plugin.git</url>
   </scm>
   <properties>
     <mavenVersion>2.0.9</mavenVersion>
