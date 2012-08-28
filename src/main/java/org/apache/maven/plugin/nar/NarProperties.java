@@ -2,6 +2,7 @@ package org.apache.maven.plugin.nar;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
@@ -69,6 +70,17 @@ public class NarProperties {
 			instance = new NarProperties(project);
 		}
 		return instance;
+	}
+	
+	/**
+	 * Programmatically inject properties (and possibly overwrite existing properties)
+	 * @param project the current maven project
+	 * @param properties the properties from input stream
+	 */
+	public static void inject(MavenProject project, InputStream properties) throws MojoFailureException {
+		final Properties defaults = PropertyUtils.loadProperties( properties );
+		final NarProperties nar = getInstance(project);
+		nar.properties.putAll(defaults);
 	}
 	
 	public String getProperty(String key) {
