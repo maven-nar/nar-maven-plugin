@@ -21,12 +21,7 @@ package org.apache.maven.plugin.nar;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.jar.JarFile;
 
 import org.apache.maven.artifact.Artifact;
@@ -335,15 +330,13 @@ public class NarManager
 
     private List getDependencies( String scope )
     {
-        if ( scope.equals( Artifact.SCOPE_TEST ) )
-        {
-			return project.getTestArtifacts();
+        Set<Artifact> artifacts = project.getArtifacts();
+        List<Artifact> returnArtifact = new ArrayList<Artifact>();
+        for(Artifact a : artifacts) {
+            if(scope.equals(a.getScope()))
+                returnArtifact.add(a);
         }
-        else if ( scope.equals( Artifact.SCOPE_RUNTIME ) )
-        {
-			return project.getRuntimeArtifacts();
-		}
-		return project.getCompileArtifacts();
+        return returnArtifact;
 	}
 
     public final void downloadAttachedNars( List/* <NarArtifacts> */narArtifacts, List remoteRepositories,
