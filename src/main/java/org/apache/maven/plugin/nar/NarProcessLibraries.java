@@ -33,6 +33,12 @@ public class NarProcessLibraries extends AbstractCompileMojo {
     private Log log = getLog();
 
     @Override
+    protected List getArtifacts() {
+        //TODO: Added to get code compiling after rebasing.  Should implement this method is a more correct way.
+        return null;
+    }
+
+    @Override
     public void narExecute() throws MojoFailureException, MojoExecutionException {
 	log.info("Running process libraries");
 	// For each of the libraries defined for this build

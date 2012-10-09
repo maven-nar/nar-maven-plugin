@@ -354,7 +354,7 @@ public abstract class AbstractNarMojo
     public abstract void narExecute()
         throws MojoFailureException, MojoExecutionException;
 
-	protected final NarInfo getNarInfo() throws MojoExecutionException {
+	protected NarInfo getNarInfo() throws MojoExecutionException {
 	    if ( narInfo == null )
 	    {
 	    	String groupId = getMavenProject().getGroupId();
@@ -372,7 +372,7 @@ public abstract class AbstractNarMojo
 	    return narInfo;
 	}
 
-	protected final List getLibraries() {
+	protected final List<Library> getLibraries() {
 	    if ( libraries == null )
 	    {
 	        libraries = Collections.EMPTY_LIST;

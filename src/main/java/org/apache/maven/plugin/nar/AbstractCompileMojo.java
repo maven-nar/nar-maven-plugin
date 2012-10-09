@@ -61,8 +61,7 @@ public abstract class AbstractCompileMojo
      * @parameter expression="false"
      */
     protected boolean onlySpecifiedCompilers;
-    private boolean onlySpecifiedCompilers;
-    
+
     /**
      * Maximum number of Cores/CPU's to use. 0 means unlimited.
      * 
@@ -104,7 +103,7 @@ public abstract class AbstractCompileMojo
 
     /**
      * The home of the Java system. Defaults to a derived value from ${java.home} which is OS specific.
-     * 
+     *
      * @parameter expression=""
      * @readonly
      */
@@ -112,7 +111,7 @@ public abstract class AbstractCompileMojo
 
     /**
      * List of libraries to create
-     * 
+     *
      * @parameter expression=""
      */
     private List<Library> libraries;
@@ -126,7 +125,7 @@ public abstract class AbstractCompileMojo
 
     /**
      * Javah info
-     * 
+     *
      * @parameter expression=""
      */
     private Javah javah;
@@ -235,22 +234,6 @@ public abstract class AbstractCompileMojo
         return getNarInfo().getOutput( aol, getOutput( ! aol.getOS().equals( OS.WINDOWS ) && !  Library.EXECUTABLE.equals( type ) ) );
     }
 
-    protected final File getJavaHome( AOL aol )
-        throws MojoExecutionException
-    {
-        // FIXME should be easier by specifying default...
-        return getNarInfo().getProperty( aol, "javaHome", NarUtil.getJavaHome( javaHome, getOS() ) );
-    }
-
-    protected final List<Library> getLibraries()
-    {
-        if ( libraries == null )
-        {
-            libraries = Collections.emptyList();
-        }
-        return libraries;
-    }
-
     protected final List getTests()
     {
         if ( tests == null )
@@ -258,16 +241,6 @@ public abstract class AbstractCompileMojo
             tests = Collections.EMPTY_LIST;
         }
         return tests;
-    }
-
-    protected final Javah getJavah()
-    {
-        if ( javah == null )
-        {
-            javah = new Javah();
-        }
-        javah.setAbstractCompileMojo( this );
-        return javah;
     }
 
     protected final Java getJava()
