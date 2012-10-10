@@ -175,7 +175,7 @@ public abstract class AbstractNarMojo
 	 * 
 	 * @parameter expression=""
 	 */
-	private List libraries;
+	private List<Library> libraries;
 
 	/**
 	 * Javah info
