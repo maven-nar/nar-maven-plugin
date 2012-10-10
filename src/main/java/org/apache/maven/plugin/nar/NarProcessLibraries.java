@@ -14,12 +14,13 @@ import org.apache.maven.plugin.logging.Log;
 /**
  * Adds the ability to run arbitrary command line tools to post-process the
  * compiled output (ie: ranlib/ar/etc)
- *
+ * 
  * @author Richard Kerr
  * @goal nar-process-libraries
  * @phase process-classes
  * @requiresSession
  * @requiresProject
+ * @author Richard Kerr
  */
 public class NarProcessLibraries extends AbstractCompileMojo {
 

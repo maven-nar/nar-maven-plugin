@@ -61,7 +61,7 @@ public abstract class AbstractCompileMojo
      * @parameter expression="false"
      */
     protected boolean onlySpecifiedCompilers;
-
+    
     /**
      * Maximum number of Cores/CPU's to use. 0 means unlimited.
      * 
