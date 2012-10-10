@@ -101,9 +101,6 @@ public abstract class AbstractCompileMojo
      */
     private boolean libtool;
 
-
-    private List<Library> libraries;
-
     /**
      * The home of the Java system. Defaults to a derived value from ${java.home} which is OS specific.
      *
