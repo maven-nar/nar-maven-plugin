@@ -21,9 +21,11 @@ package org.apache.maven.plugin.nar;
 
 import java.util.Iterator;
 import java.util.List;
+import org.apache.maven.artifact.resolver.ArtifactResolver;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.codehaus.plexus.archiver.manager.ArchiverManager;
 
 /**
  * Unpacks NAR files. Unpacking happens in the local repository, and also sets flags on binaries and corrects static
@@ -39,19 +41,52 @@ public class NarUnpackMojo
     extends AbstractUnpackMojo
 {
 
+    /**
+     * List of classifiers which you want unpack. Example ppc-MacOSX-g++, x86-Windows-msvc, i386-Linux-g++.
+     * 
+     * @parameter expression=""
+     */
+    private List classifiers;
+
+    /**
+     * To look up Archiver/UnArchiver implementations
+     * 
+     * @component role="org.codehaus.plexus.archiver.manager.ArchiverManager"
+     * @required
+     */
+    private ArchiverManager archiverManager;
+
+    /**
+     * Artifact resolver, needed to download the attached nar files.
+     *
+     * @component role="org.apache.maven.artifact.resolver.ArtifactResolver"
+     * @required
+     * @readonly
+     */
+    private ArtifactResolver artifactResolver;
+
+    /**
+     * Remote repositories which will be searched for nar attachments.
+     *
+     * @parameter expression="${project.remoteArtifactRepositories}"
+     * @required
+     * @readonly
+     */
+    private List remoteArtifactRepositories;
+
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        List narArtifacts = getNarManager().getNarDependencies( "compile" );
+        List narArtifacts = getNarManager().getNarDependencies( "compile", remoteArtifactRepositories, artifactResolver );
         if ( classifiers == null )
         {
-            getNarManager().unpackAttachedNars( narArtifacts, archiverManager, null, getOS(), getLayout(), getUnpackDirectory() );
+            getNarManager().unpackAttachedNars( narArtifacts, archiverManager, null, getOS(), getLayout(), getUnpackDirectory(), remoteArtifactRepositories, artifactResolver );
         }
         else
         {
             for ( Iterator j = classifiers.iterator(); j.hasNext(); )
             {
-                getNarManager().unpackAttachedNars( narArtifacts, archiverManager, (String) j.next(), getOS(), getLayout(), getUnpackDirectory() );
+                getNarManager().unpackAttachedNars( narArtifacts, archiverManager, (String) j.next(), getOS(), getLayout(), getUnpackDirectory(), remoteArtifactRepositories, artifactResolver );
             }
         }
     }

@@ -29,6 +29,7 @@ import net.sf.antcontrib.cpptasks.types.LibrarySet;
 import net.sf.antcontrib.cpptasks.types.LibraryTypeEnum;
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.tools.ant.Project;
@@ -72,17 +73,19 @@ public class Lib
 	 */
 	private List/* <Lib> */libs;
 
-    public final void addLibSet( AbstractDependencyMojo mojo, LinkerDef linker, Project antProject )
+    public final void addLibSet( AbstractDependencyMojo mojo, LinkerDef linker, Project antProject, List remoteRepositories,
+			ArtifactResolver resolver )
         throws MojoFailureException, MojoExecutionException
     {
         if ( name == null )
         {
             throw new MojoFailureException( "NAR: Please specify <Name> as part of <Lib> for library \"" + name + "\"");
         }
-        addLibSet( mojo, linker, antProject, name, directory );
+        addLibSet( mojo, linker, antProject, name, directory, remoteRepositories, resolver );
     }
 
-    private void addLibSet( AbstractDependencyMojo mojo, LinkerDef linker, Project antProject, String name, File dir )
+    private void addLibSet( AbstractDependencyMojo mojo, LinkerDef linker, Project antProject, String name, File dir, List remoteRepositories,
+			ArtifactResolver resolver )
         throws MojoFailureException, MojoExecutionException
     {
         if ( libs == null )
@@ -91,7 +94,7 @@ public class Lib
         }
         else
         {
-            addMultipleLibSets( mojo, linker, antProject, name );
+            addMultipleLibSets( mojo, linker, antProject, name, remoteRepositories, resolver );
         }
     }
 
@@ -112,10 +115,11 @@ public class Lib
 		linker.addLibset(libSet);
 	}
 
-    private void addMultipleLibSets( AbstractDependencyMojo mojo, LinkerDef linker, Project antProject, String name )
+    private void addMultipleLibSets( AbstractDependencyMojo mojo, LinkerDef linker, Project antProject, String name, List remoteRepositories,
+			ArtifactResolver resolver )
         throws MojoFailureException, MojoExecutionException
     {
-		List dependencies = mojo.getNarManager().getNarDependencies("compile");
+	List dependencies = mojo.getNarManager().getNarDependencies("compile", remoteRepositories, resolver);
         for ( Iterator i = libs.iterator(); i.hasNext(); )
         {
 			Lib lib = (Lib) i.next();
@@ -135,7 +139,7 @@ public class Lib
                         new File( dependency.getFile().getParentFile(), "nar/lib/"
 									+ mojo.getAOL() + "/" + lib.type);
                     String narName = dependency.getArtifactId() + "-" + lib.name + "-" + dependency.getVersion();
-					lib.addLibSet(mojo, linker, antProject, narName, narDir);
+					lib.addLibSet(mojo, linker, antProject, narName, narDir, remoteRepositories, resolver);
 				}
 			}
 		}

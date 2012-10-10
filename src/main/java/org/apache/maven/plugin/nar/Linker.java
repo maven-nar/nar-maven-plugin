@@ -404,7 +404,7 @@ public class Linker
                 {
 
                     Lib lib = (Lib) i.next();
-                    lib.addLibSet( mojo, linker, antProject );
+                    lib.addLibSet( mojo, linker, antProject, mojo.remoteArtifactRepositories, mojo.artifactResolver );
                 }
             }
 

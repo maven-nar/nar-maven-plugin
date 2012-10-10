@@ -43,16 +43,16 @@ public class NarTestUnpackMojo
         throws MojoExecutionException, MojoFailureException
     {
         NarManager mgr = getNarManager();
-        List narArtifacts = mgr.getNarDependencies( "test" );
+        List narArtifacts = mgr.getNarDependencies( "test", remoteArtifactRepositories, artifactResolver );
         if ( classifiers == null )
         {
-            mgr.unpackAttachedNars( narArtifacts, archiverManager, null, getOS(), getLayout(), getTestUnpackDirectory() );
+            mgr.unpackAttachedNars( narArtifacts, archiverManager, null, getOS(), getLayout(), getTestUnpackDirectory() , remoteArtifactRepositories, artifactResolver);
         }
         else
         {
             for ( Iterator j = classifiers.iterator(); j.hasNext(); )
             {
-                mgr.unpackAttachedNars( narArtifacts, archiverManager, (String) j.next(), getOS(), getLayout(), getTestUnpackDirectory() );
+                mgr.unpackAttachedNars( narArtifacts, archiverManager, (String) j.next(), getOS(), getLayout(), getTestUnpackDirectory(), remoteArtifactRepositories, artifactResolver);
             }
         }
     }

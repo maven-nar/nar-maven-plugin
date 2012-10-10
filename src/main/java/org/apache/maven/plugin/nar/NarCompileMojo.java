@@ -38,11 +38,14 @@ import net.sf.antcontrib.cpptasks.types.LibrarySet;
 import net.sf.antcontrib.cpptasks.types.LinkerArgument;
 import net.sf.antcontrib.cpptasks.types.SystemLibrarySet;
 
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
+import org.codehaus.plexus.archiver.manager.ArchiverManager;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -67,6 +70,24 @@ public class NarCompileMojo
      * @readonly
      */
     protected MavenSession session;
+
+    /**
+     * Artifact resolver, needed to download the attached nar files.
+     *
+     * @component role="org.apache.maven.artifact.resolver.ArtifactResolver"
+     * @required
+     * @readonly
+     */
+    private ArtifactResolver artifactResolver;
+
+    /**
+     * Remote repositories which will be searched for nar attachments.
+     *
+     * @parameter expression="${project.remoteArtifactRepositories}"
+     * @required
+     * @readonly
+     */
+    private List remoteArtifactRepositories;
 
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
@@ -242,7 +263,7 @@ public class NarCompileMojo
         getJava().addIncludePaths(task, type);
 
         // add dependency include paths
-        for ( Iterator i = getNarManager().getNarDependencies( "compile" ).iterator(); i.hasNext(); )
+        for ( Iterator i = getNarManager().getNarDependencies( "compile", remoteArtifactRepositories, artifactResolver ).iterator(); i.hasNext(); )
         {
             // FIXME, handle multiple includes from one NAR
             NarArtifact narDependency = (NarArtifact) i.next();
@@ -277,7 +298,7 @@ public class NarCompileMojo
         {
 
             List depLibOrder = getDependencyLibOrder();
-            List depLibs = getNarManager().getNarDependencies("compile");
+            List depLibs = getNarManager().getNarDependencies("compile", remoteArtifactRepositories, artifactResolver);
 
             // reorder the libraries that come from the nar dependencies
             // to comply with the order specified by the user

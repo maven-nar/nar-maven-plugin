@@ -20,11 +20,13 @@ import net.sf.antcontrib.cpptasks.types.DefineSet;
 import net.sf.antcontrib.cpptasks.types.LibrarySet;
 import net.sf.antcontrib.cpptasks.types.LinkerArgument;
 import net.sf.antcontrib.cpptasks.types.SystemLibrarySet;
+import org.apache.maven.artifact.resolver.ArtifactResolver;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
+import org.codehaus.plexus.archiver.manager.ArchiverManager;
 
 /**
  * Generates a Visual Studio 2005 project file (vcproj) Heavily inspired by
@@ -37,8 +39,25 @@ import org.apache.tools.ant.Project;
  * 
  */
 public class NarVcprojMojo extends AbstractCompileMojo {
+/**
+     * Artifact resolver, needed to download the attached nar files.
+     *
+     * @component role="org.apache.maven.artifact.resolver.ArtifactResolver"
+     * @required
+     * @readonly
+     */
+    private ArtifactResolver artifactResolver;
 
-	public void narExecute() throws MojoExecutionException,
+    /**
+     * Remote repositories which will be searched for nar attachments.
+     *
+     * @parameter expression="${project.remoteArtifactRepositories}"
+     * @required
+     * @readonly
+     */
+    private List remoteArtifactRepositories;
+
+    public void narExecute() throws MojoExecutionException,
 			MojoFailureException {
 
 		// Only do this if MSVC++ compiler is being used.
@@ -154,7 +173,7 @@ public class NarVcprojMojo extends AbstractCompileMojo {
 		getJava().addIncludePaths(task, Library.EXECUTABLE);
 		
 		// add dependency include paths
-		for (Iterator i = getNarManager().getNarDependencies("compile")
+		for (Iterator i = getNarManager().getNarDependencies("compile", remoteArtifactRepositories, artifactResolver)
 				.iterator(); i.hasNext();) {
 			// FIXME, handle multiple includes from one NAR
 			NarArtifact narDependency = (NarArtifact) i.next();
@@ -190,7 +209,7 @@ public class NarVcprojMojo extends AbstractCompileMojo {
 				|| type.equals(Library.EXECUTABLE)) {
 
 			List depLibOrder = getDependencyLibOrder();
-			List depLibs = getNarManager().getNarDependencies("compile");
+			List depLibs = getNarManager().getNarDependencies("compile", remoteArtifactRepositories, artifactResolver);
 
 			// reorder the libraries that come from the nar dependencies
 			// to comply with the order specified by the user
