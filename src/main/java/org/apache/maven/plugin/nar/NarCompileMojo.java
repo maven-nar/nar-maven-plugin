@@ -68,6 +68,7 @@ public class NarCompileMojo
      */
     protected MavenSession session;
  
+
 	@Override
 	protected List/*<Artifact>*/ getArtifacts() {
 		return getMavenProject().getCompileArtifacts();  // Artifact.SCOPE_COMPILE 
@@ -153,6 +154,8 @@ public class NarCompileMojo
         // configure task
         CCTask task = new CCTask();
         task.setProject(antProject);
+
+        task.setDecorateLinkerOptions(decorateLinkerOptions);
 
         task.setDecorateLinkerOptions(decorateLinkerOptions);
 

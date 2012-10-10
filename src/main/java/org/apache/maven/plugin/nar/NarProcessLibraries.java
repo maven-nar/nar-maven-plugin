@@ -20,6 +20,7 @@ import org.apache.maven.plugin.logging.Log;
  * @phase process-classes
  * @requiresSession
  * @requiresProject
+ * @author Richard Kerr
  */
 public class NarProcessLibraries extends AbstractCompileMojo {
 
