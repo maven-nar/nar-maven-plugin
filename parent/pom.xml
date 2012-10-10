@@ -23,6 +23,7 @@
     <artifactId>maven-plugins</artifactId>
     <groupId>org.apache.maven.plugins</groupId>
     <version>18</version>
+    <relativePath />
   </parent>
 
   <groupId>org.apache.maven.plugins</groupId>
