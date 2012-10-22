@@ -42,10 +42,8 @@
 					<process-classes>org.apache.maven.plugins:maven-nar-plugin:nar-gnu-process,
 						org.apache.maven.plugins:maven-nar-plugin:nar-process-libraries
 					</process-classes>
-					<generate-test-sources>org.apache.maven.plugins:maven-nar-plugin:nar-testDownload
-					</generate-test-sources>
-					<process-test-sources>org.apache.maven.plugins:maven-nar-plugin:nar-testUnpack
-					</process-test-sources>
+					<generate-test-sources></generate-test-sources>
+					<process-test-sources></process-test-sources>
 					<generate-test-resources></generate-test-resources>
 					<process-test-resources>org.apache.maven.plugins:maven-resources-plugin:testResources
 					</process-test-resources>

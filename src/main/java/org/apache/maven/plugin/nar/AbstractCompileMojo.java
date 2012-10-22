@@ -69,12 +69,6 @@ public abstract class AbstractCompileMojo
      */
     private int maxCores = 0;
 
-    /**
-     * Name of the output
-     * 
-     * @parameter expression="${project.artifactId}-${project.version}"
-     */
-    private String output;
 
     /**
      * Fail on compilation/linking error.
@@ -102,33 +96,11 @@ public abstract class AbstractCompileMojo
     private boolean libtool;
 
     /**
-     * The home of the Java system. Defaults to a derived value from ${java.home} which is OS specific.
-     *
-     * @parameter expression=""
-     * @readonly
-     */
-    private File javaHome;
-
-    /**
-     * List of libraries to create
-     *
-     * @parameter expression=""
-     */
-    private List<Library> libraries;
-
-    /**
      * List of tests to create
      * 
      * @parameter expression=""
      */
     private List tests;
-
-    /**
-     * Javah info
-     *
-     * @parameter expression=""
-     */
-    private Javah javah;
 
     /**
      * Java info for includes and linking

@@ -41,9 +41,8 @@ public class NarUnpackMojo
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-//        for ( Iterator j = classifiers.iterator(); j.hasNext(); )
-//        {
-//            unpackAttachedNars( narArtifacts, archiverManager, (String) j.next(), getOS(), getLayout(), getUnpackDirectory() );
-//        }
+
+            unpackAttachedNars( getAllAttachedNarArtifacts(getNarArtifacts()));
+
     }
 }

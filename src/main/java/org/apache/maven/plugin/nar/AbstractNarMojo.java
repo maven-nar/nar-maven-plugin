@@ -150,6 +150,13 @@ public abstract class AbstractNarMojo
     protected List<String> classifiers;
 
     /**
+     * List of libraries to create
+     *
+     * @parameter expression=""
+     */
+    protected List<Library> libraries;
+
+    /**
      * Layout to be used for building and unpacking artifacts
      * 
      * @parameter expression="${nar.layout}" default-value="org.apache.maven.plugin.nar.NarLayout21"
@@ -169,13 +176,6 @@ public abstract class AbstractNarMojo
     private AOL aolId;
 
 	private NarInfo narInfo;
-
-	/**
-	 * List of libraries to create
-	 * 
-	 * @parameter expression=""
-	 */
-	private List<Library> libraries;
 
 	/**
 	 * Javah info
