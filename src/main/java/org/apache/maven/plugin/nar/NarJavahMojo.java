@@ -34,7 +34,7 @@ import org.apache.maven.toolchain.ToolchainManager;
  * @author Mark Donszelmann
  */
 public class NarJavahMojo
-    extends AbstractCompileMojo
+    extends AbstractNarMojo
 {
     /**
      * @component

@@ -60,9 +60,20 @@ public class NarTestCompileMojo
      */
     protected boolean skipNar;
 
+	@Override
+	protected List/*<Artifact>*/ getArtifacts() {
+		return getMavenProject().getTestArtifacts();  // Artifact.SCOPE_TEST 
+	}
+
+    protected File getUnpackDirectory()
+    {
+        return getTestUnpackDirectory() == null ? super.getUnpackDirectory() : getTestUnpackDirectory();
+    }
+
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
+    	super.narExecute();
         // make sure destination is there
         getTestTargetDirectory().mkdirs();
 
@@ -140,8 +151,9 @@ public class NarTestCompileMojo
         // add java include paths
         getJava().addIncludePaths( task, type );
 
+        List depLibs = getNarArtifacts();
         // add dependency include paths
-        for ( Iterator i = getNarManager().getNarDependencies( "test" ).iterator(); i.hasNext(); )
+        for ( Iterator i = depLibs.iterator(); i.hasNext(); )
         {
             Artifact artifact = (Artifact) i.next();
             
@@ -215,7 +227,6 @@ public class NarTestCompileMojo
 
         // add dependency libraries
         List depLibOrder = getDependencyLibOrder();
-        List depLibs = getNarManager().getNarDependencies( "test" );
 
         // reorder the libraries that come from the nar dependencies
         // to comply with the order specified by the user

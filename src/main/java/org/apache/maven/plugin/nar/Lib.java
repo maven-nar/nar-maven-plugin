@@ -115,7 +115,7 @@ public class Lib
     private void addMultipleLibSets( AbstractDependencyMojo mojo, LinkerDef linker, Project antProject, String name )
         throws MojoFailureException, MojoExecutionException
     {
-		List dependencies = mojo.getNarManager().getNarDependencies("compile");
+		List dependencies = mojo.getNarArtifacts();
         for ( Iterator i = libs.iterator(); i.hasNext(); )
         {
 			Lib lib = (Lib) i.next();

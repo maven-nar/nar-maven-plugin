@@ -38,6 +38,11 @@ import org.apache.tools.ant.Project;
  */
 public class NarVcprojMojo extends AbstractCompileMojo {
 
+	@Override
+	protected List/*<Artifact>*/ getArtifacts() {
+		return getMavenProject().getCompileArtifacts();  // Artifact.SCOPE_COMPILE 
+	}
+
 	public void narExecute() throws MojoExecutionException,
 			MojoFailureException {
 
@@ -75,6 +80,8 @@ public class NarVcprojMojo extends AbstractCompileMojo {
 			return;
 		}
 
+//		super.narExecute();
+
 		// arbitrarily grab the first library -- we're going to make treat it as
 		// an exe anyway, whatever type it's supposed to be.
 		createVcProjFile(getAntProject(), (Library) getLibraries().get(0));
@@ -103,13 +110,14 @@ public class NarVcprojMojo extends AbstractCompileMojo {
 		// stdc++
 		task.setLinkCPP(library.linkCPP());
 
+		// TODO: this should match the standard NAR location defined by layout similar to Nar Compile
 		// outDir
 		File outDir = new File(getTargetDirectory(), "bin");
 		outDir = new File(outDir, getAOL().toString());
 		outDir.mkdirs();
 
 		// outFile
-		File outFile = new File(outDir, getMavenProject().getArtifactId());
+		File outFile = new File(outDir, getOutput(getAOL(), type) );
 
 		getLog().debug("NAR - output: '" + outFile + "'");
 		task.setOutfile(outFile);
@@ -130,8 +138,7 @@ public class NarVcprojMojo extends AbstractCompileMojo {
 		task.setRuntime(runtimeType);
 
 		// add C++ compiler
-		CompilerDef cpp = getCpp().getCompiler(Compiler.MAIN,
-				getOutput(getAOL()));
+		CompilerDef cpp = getCpp().getCompiler(Compiler.MAIN,null);
 		if (cpp != null) {
 			task.addConfiguredCompiler(cpp);
 		}
@@ -153,9 +160,9 @@ public class NarVcprojMojo extends AbstractCompileMojo {
 		// add java include paths
 		getJava().addIncludePaths(task, Library.EXECUTABLE);
 		
+		List<NarArtifact> dependencies = getNarArtifacts();
 		// add dependency include paths
-		for (Iterator i = getNarManager().getNarDependencies("compile")
-				.iterator(); i.hasNext();) {
+		for (Iterator i = dependencies.iterator(); i.hasNext();) {
 			// FIXME, handle multiple includes from one NAR
 			NarArtifact narDependency = (NarArtifact) i.next();
 			String binding = narDependency.getNarInfo().getBinding(getAOL(),
@@ -190,7 +197,7 @@ public class NarVcprojMojo extends AbstractCompileMojo {
 				|| type.equals(Library.EXECUTABLE)) {
 
 			List depLibOrder = getDependencyLibOrder();
-			List depLibs = getNarManager().getNarDependencies("compile");
+			List depLibs = dependencies;
 
 			// reorder the libraries that come from the nar dependencies
 			// to comply with the order specified by the user

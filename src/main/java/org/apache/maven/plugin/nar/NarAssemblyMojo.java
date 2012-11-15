@@ -35,20 +35,16 @@ import org.codehaus.plexus.util.FileUtils;
  * @goal nar-assembly
  * @phase process-resources
  * @requiresProject
- * @requiresDependencyResolution
+ * @requiresDependencyResolution compile
  * @author Mark Donszelmann
  */
 public class NarAssemblyMojo
     extends AbstractDependencyMojo
 {
-
-    /**
-     * List of classifiers which you want to assemble. Example ppc-MacOSX-g++-static, x86-Windows-msvc-shared,
-     * i386-Linux-g++-executable, .... not setting means all.
-     * 
-     * @parameter
-     */
-    private String[] classifiers = null;
+	@Override
+	protected List/*<Artifact>*/ getArtifacts() {
+		return getMavenProject().getCompileArtifacts();  // Artifact.SCOPE_COMPILE 
+	}
 
     /**
      * Copies the unpacked nar libraries and files into the projects target area
@@ -56,9 +52,13 @@ public class NarAssemblyMojo
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        List narArtifacts = getNarManager().getNarDependencies( "compile" );
+//TODO: old allowed for classifiers
+    	List<NarArtifact> narArtifacts = getNarArtifacts( );
+		List<AttachedNarArtifact> dependencies = getAllAttachedNarArtifacts( narArtifacts/*, library*/ );
+		downloadAttachedNars( dependencies );
+		unpackAttachedNars( dependencies );
 
-        List dependencies = getNarManager().getAttachedNarDependencies( narArtifacts, classifiers );
+//        List dependencies = getNarManager().getAttachedNarDependencies( narArtifacts, classifiers.toArray(new String[0] ) );
 
         // this may make some extra copies...
         for ( Iterator d = dependencies.iterator(); d.hasNext(); )

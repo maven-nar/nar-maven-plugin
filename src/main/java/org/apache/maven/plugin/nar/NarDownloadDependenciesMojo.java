@@ -21,37 +21,23 @@ package org.apache.maven.plugin.nar;
 
 import java.util.List;
 
-import org.apache.maven.artifact.resolver.ArtifactResolver;
-
 /**
  * Downloads any dependent NAR files. This includes the noarch and aol type NAR files.
+ * 
+ * @goal nar-download-dependencies
+ * @phase process-sources
+ * @requiresProject
+ * @requiresDependencyResolution test
+ * @author Mark Donszelmann
  */
-public abstract class AbstractDownloadMojo
+public class NarDownloadDependenciesMojo
     extends AbstractDependencyMojo
 {
+    
+	// excludeTransitive 
+	@Override
+	protected List/*<Artifact>*/ getArtifacts() {
+		return getMavenProject().getTestArtifacts();  // Artifact.SCOPE_TEST 
+	}	
 
-    /**
-     * Artifact resolver, needed to download the attached nar files.
-     * 
-     * @component role="org.apache.maven.artifact.resolver.ArtifactResolver"
-     * @required
-     * @readonly
-     */
-    protected ArtifactResolver artifactResolver;
-
-    /**
-     * Remote repositories which will be searched for nar attachments.
-     * 
-     * @parameter expression="${project.remoteArtifactRepositories}"
-     * @required
-     * @readonly
-     */
-    protected List remoteArtifactRepositories;
-
-    /**
-     * List of classifiers which you want download. Example ppc-MacOSX-g++, x86-Windows-msvc, i386-Linux-g++.
-     * 
-     * @parameter expression=""
-     */
-    protected List classifiers;
 }

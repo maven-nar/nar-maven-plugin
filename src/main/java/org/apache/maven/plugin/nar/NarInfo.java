@@ -133,6 +133,16 @@ public class NarInfo
         setProperty( aol, "libs.binding", value );
     }
 
+    public final String getOutput( AOL aol, String defaultOutput )
+    {
+    	return getProperty( aol, "output", defaultOutput );
+    }
+
+    public final void setOutput( AOL aol, String value )
+    {
+        setProperty( aol, "output", value );
+    }
+
     // FIXME replace with list of AttachedNarArtifacts
     public final String[] getAttachedNars( AOL aol, String type )
     {

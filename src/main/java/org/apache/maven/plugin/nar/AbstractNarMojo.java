@@ -20,6 +20,8 @@ package org.apache.maven.plugin.nar;
  */
 
 import java.io.File;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.model.Model;
@@ -88,6 +90,17 @@ public abstract class AbstractNarMojo
     private File outputDirectory;
 
     /**
+     * Name of the output
+     *  - for jni default to expression="${project.artifactId}-${project.version}"
+     *  - for libs default to expression="${project.artifactId}-${project.version}"
+     *  - for exe default to expression="${project.artifactId}"
+     *  -- for tests default to expression="${test.name}"
+     * 
+     * @parameter 
+     */
+    private String output;
+
+    /**
      * @parameter expression="${project.basedir}"
      * @readonly
      */
@@ -128,6 +141,15 @@ public abstract class AbstractNarMojo
     private File testUnpackDirectory;
 
     /**
+     * List of classifiers which you want download/unpack/assemble 
+     * Example ppc-MacOSX-g++, x86-Windows-msvc, i386-Linux-g++.
+     * Not setting means all.
+     * 
+     * @parameter expression=""
+     */
+    protected List<String> classifiers;
+
+    /**
      * Layout to be used for building and unpacking artifacts
      * 
      * @parameter expression="${nar.layout}" default-value="org.apache.maven.plugin.nar.NarLayout21"
@@ -145,6 +167,30 @@ public abstract class AbstractNarMojo
     private MavenProject mavenProject;
 
     private AOL aolId;
+
+	private NarInfo narInfo;
+
+	/**
+	 * List of libraries to create
+	 * 
+	 * @parameter expression=""
+	 */
+	private List libraries;
+
+	/**
+	 * Javah info
+	 * 
+	 * @parameter expression=""
+	 */
+	private Javah javah;
+
+	/**
+	 * The home of the Java system. Defaults to a derived value from ${java.home} which is OS specific.
+	 * 
+	 * @parameter expression=""
+	 * @readonly
+	 */
+	private File javaHome;
 
     protected final void validate()
         throws MojoFailureException, MojoExecutionException
@@ -183,6 +229,19 @@ public abstract class AbstractNarMojo
         }
     }
 
+    protected final String getOutput( boolean versioned )
+    	    throws MojoExecutionException
+	{
+	    if( output != null && !output.trim().isEmpty()){
+	    	return output; 
+	    } else {
+	    	if( versioned )
+	    		return getMavenProject().getArtifactId() + "-" + getMavenProject().getVersion();
+	    	else 
+	    		return getMavenProject().getArtifactId();
+	    }
+	}
+    
     protected final String getArchitecture()
     {
         return architecture;
@@ -228,10 +287,11 @@ public abstract class AbstractNarMojo
         return testTargetDirectory;
     }
 
-    protected final File getUnpackDirectory()
+    protected File getUnpackDirectory()
     {
         return unpackDirectory;
     }
+
     protected final File getTestUnpackDirectory()
     {
         return testUnpackDirectory;
@@ -293,4 +353,45 @@ public abstract class AbstractNarMojo
 
     public abstract void narExecute()
         throws MojoFailureException, MojoExecutionException;
+
+	protected final NarInfo getNarInfo() throws MojoExecutionException {
+	    if ( narInfo == null )
+	    {
+	    	String groupId = getMavenProject().getGroupId();
+	    	String artifactId = getMavenProject().getArtifactId();
+	    	
+	        File propertiesDir = new File( getMavenProject().getBasedir(), "src/main/resources/META-INF/nar/" + groupId + "/" + artifactId );
+	        File propertiesFile = new File( propertiesDir, NarInfo.NAR_PROPERTIES );
+	
+	        narInfo = new NarInfo( 
+	            groupId, artifactId,
+	            getMavenProject().getVersion(), 
+	            getLog(),
+	            propertiesFile );
+	    }
+	    return narInfo;
+	}
+
+	protected final List getLibraries() {
+	    if ( libraries == null )
+	    {
+	        libraries = Collections.EMPTY_LIST;
+	    }
+	    return libraries;
+	}
+
+	protected final Javah getJavah() {
+	    if ( javah == null )
+	    {
+	        javah = new Javah();
+	    }
+	    javah.setAbstractCompileMojo( this );
+	    return javah;
+	}
+
+	protected final File getJavaHome(AOL aol)
+			throws MojoExecutionException {
+			    // FIXME should be easier by specifying default...
+			    return getNarInfo().getProperty( aol, "javaHome", NarUtil.getJavaHome( javaHome, getOS() ) );
+			}
 }
