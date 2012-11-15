@@ -40,12 +40,7 @@ public class NarDownloadMojo
 	 * @parameter 
 	 */
 	List artifactItems;
-	
-	@Override
-	protected List getArtifacts() {
-		//dependencies.addAll( getAttachedNarArtifacts(narArtifacts, classifiers ) );
-		return null;
-	}
+
 
 	
 }

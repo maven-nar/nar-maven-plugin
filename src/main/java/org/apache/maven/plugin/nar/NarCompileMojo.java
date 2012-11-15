@@ -67,6 +67,7 @@ public class NarCompileMojo
      * @readonly
      */
     protected MavenSession session;
+ 
 
 	@Override
 	protected List/*<Artifact>*/ getArtifacts() {
@@ -89,7 +90,7 @@ public class NarCompileMojo
         if ( noOfSources > 0 )
         {
             getLog().info( "Compiling " + noOfSources + " native files" );
-            for ( Iterator i = getLibraries().iterator(); i.hasNext(); )
+            for ( Iterator<Library> i = getLibraries().iterator(); i.hasNext(); )
             {
                 createLibrary(getAntProject(), (Library) i.next());
             }
@@ -153,6 +154,10 @@ public class NarCompileMojo
         // configure task
         CCTask task = new CCTask();
         task.setProject(antProject);
+
+        task.setDecorateLinkerOptions(decorateLinkerOptions);
+
+        task.setDecorateLinkerOptions(decorateLinkerOptions);
 
         // subsystem
         SubsystemEnum subSystem = new SubsystemEnum();

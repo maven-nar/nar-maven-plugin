@@ -150,6 +150,13 @@ public abstract class AbstractNarMojo
     protected List<String> classifiers;
 
     /**
+     * List of libraries to create
+     *
+     * @parameter expression=""
+     */
+    protected List<Library> libraries;
+
+    /**
      * Layout to be used for building and unpacking artifacts
      * 
      * @parameter expression="${nar.layout}" default-value="org.apache.maven.plugin.nar.NarLayout21"
@@ -169,13 +176,6 @@ public abstract class AbstractNarMojo
     private AOL aolId;
 
 	private NarInfo narInfo;
-
-	/**
-	 * List of libraries to create
-	 * 
-	 * @parameter expression=""
-	 */
-	private List libraries;
 
 	/**
 	 * Javah info
@@ -354,7 +354,7 @@ public abstract class AbstractNarMojo
     public abstract void narExecute()
         throws MojoFailureException, MojoExecutionException;
 
-	protected final NarInfo getNarInfo() throws MojoExecutionException {
+	protected NarInfo getNarInfo() throws MojoExecutionException {
 	    if ( narInfo == null )
 	    {
 	    	String groupId = getMavenProject().getGroupId();
@@ -372,7 +372,7 @@ public abstract class AbstractNarMojo
 	    return narInfo;
 	}
 
-	protected final List getLibraries() {
+	protected final List<Library> getLibraries() {
 	    if ( libraries == null )
 	    {
 	        libraries = Collections.EMPTY_LIST;

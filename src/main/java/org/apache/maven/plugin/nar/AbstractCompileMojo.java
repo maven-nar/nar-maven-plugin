@@ -19,6 +19,7 @@ package org.apache.maven.plugin.nar;
  * under the License.
  */
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
@@ -60,7 +61,7 @@ public abstract class AbstractCompileMojo
      * @parameter expression="false"
      */
     protected boolean onlySpecifiedCompilers;
-    
+
     /**
      * Maximum number of Cores/CPU's to use. 0 means unlimited.
      * 
@@ -68,12 +69,6 @@ public abstract class AbstractCompileMojo
      */
     private int maxCores = 0;
 
-    /**
-     * Name of the output
-     * 
-     * @parameter expression="${project.artifactId}-${project.version}"
-     */
-    private String output;
 
     /**
      * Fail on compilation/linking error.
@@ -114,6 +109,15 @@ public abstract class AbstractCompileMojo
      */
     private Java java;
 
+    /**
+     * Flag to cpptasks to indicate whether linker options should be decorated or not
+     *
+     * @parameter expression=""
+     */
+    protected boolean decorateLinkerOptions;
+
+    private NarInfo narInfo;
+
     private List/* <String> */dependencyLibOrder;
 
     private Project antProject;
@@ -147,7 +151,7 @@ public abstract class AbstractCompileMojo
 
     protected final C getC()
     {
-    	if ( !onlySpecifiedCompilers && c == null )
+    	if ( onlySpecifiedCompilers && c == null )
     	{
     		setC( new C() );
     	}
@@ -156,7 +160,7 @@ public abstract class AbstractCompileMojo
 
     protected final Cpp getCpp()
     {
-    	if ( !onlySpecifiedCompilers && cpp == null )
+    	if ( onlySpecifiedCompilers && cpp == null )
     	{
     		setCpp( new Cpp() );
     	}
@@ -165,7 +169,7 @@ public abstract class AbstractCompileMojo
 
     protected final Fortran getFortran()
     {
-    	if ( !onlySpecifiedCompilers && fortran == null )
+    	if ( onlySpecifiedCompilers && fortran == null )
     	{
     		setFortran( new Fortran() );
     	}
@@ -199,7 +203,7 @@ public abstract class AbstractCompileMojo
     protected final String getOutput( AOL aol, String type )
         throws MojoExecutionException
     {
-        return getNarInfo().getOutput( aol, getOutput( ! ( OS.WINDOWS.equals( aol.getOS() ) && Library.EXECUTABLE.equals( type ) )) );
+        return getNarInfo().getOutput( aol, getOutput( ! aol.getOS().equals( OS.WINDOWS ) && !  Library.EXECUTABLE.equals( type ) ) );
     }
 
     protected final List getTests()
@@ -229,5 +233,25 @@ public abstract class AbstractCompileMojo
     protected final List/* <String> */getDependencyLibOrder()
     {
         return dependencyLibOrder;
+    }
+
+    protected final NarInfo getNarInfo()
+        throws MojoExecutionException
+    {
+        if ( narInfo == null )
+        {
+        	String groupId = getMavenProject().getGroupId();
+        	String artifactId = getMavenProject().getArtifactId();
+        	
+            File propertiesDir = new File( getMavenProject().getBasedir(), "src/main/resources/META-INF/nar/" + groupId + "/" + artifactId );
+            File propertiesFile = new File( propertiesDir, NarInfo.NAR_PROPERTIES );
+
+            narInfo = new NarInfo( 
+                groupId, artifactId,
+                getMavenProject().getVersion(), 
+                getLog(),
+                propertiesFile );
+        }
+        return narInfo;
     }
 }

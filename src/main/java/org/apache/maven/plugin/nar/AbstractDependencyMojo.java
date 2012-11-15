@@ -21,10 +21,7 @@ package org.apache.maven.plugin.nar;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.jar.JarFile;
 
 import org.apache.maven.artifact.Artifact;
@@ -101,7 +98,16 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
 				getMavenProject(), getArchitecture(), getOS(), getLinker());
 	}
 
-	protected abstract List getArtifacts();
+    protected List<Artifact> getArtifacts() {
+        try {
+            return getNarManager().getNarDependencies(Artifact.SCOPE_COMPILE);
+        } catch (MojoExecutionException e) {
+            e.printStackTrace();
+        } catch (MojoFailureException e) {
+            e.printStackTrace();
+        }
+        return Collections.EMPTY_LIST;
+    }
 
 	/**
 	 * Returns dependencies which are dependent on NAR files (i.e. contain
