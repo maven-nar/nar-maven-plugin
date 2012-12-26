@@ -453,7 +453,8 @@ public final class NarUtil
             if ( file.isFile() )
             {
                 // destination = destination.getParentFile();
-                FileUtils.copyFile( file, destination );
+                // use FileUtils from commons-io, because it preserves timestamps
+                org.apache.commons.io.FileUtils.copyFile( file, destination );
                 copied++;
 
                 // copy executable bit
