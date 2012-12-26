@@ -128,24 +128,36 @@ public class NarTestCompileMojo
         task.setRuntime( runtimeType );
 
         // add C++ compiler
-        CompilerDef cpp = getCpp().getCompiler( type, test.getName() );
+        Cpp cpp = getCpp();
         if ( cpp != null )
         {
-            task.addConfiguredCompiler( cpp );
+            CompilerDef cppCompiler = getCpp().getCompiler( type, test.getName() );
+            if ( cppCompiler != null )
+            {
+                task.addConfiguredCompiler( cppCompiler );
+            }
         }
 
         // add C compiler
-        CompilerDef c = getC().getCompiler( type, test.getName() );
+        C c = getC();
         if ( c != null )
         {
-            task.addConfiguredCompiler( c );
+            CompilerDef cCompiler = c.getCompiler( type, test.getName() );
+            if ( cCompiler != null )
+            {
+                task.addConfiguredCompiler( cCompiler );
+            }
         }
 
         // add Fortran compiler
-        CompilerDef fortran = getFortran().getCompiler( type, test.getName() );
+        Fortran fortran = getFortran();
         if ( fortran != null )
         {
-            task.addConfiguredCompiler( fortran );
+            CompilerDef fortranCompiler = getFortran().getCompiler( type, test.getName() );
+            if ( fortranCompiler != null )
+            {
+                task.addConfiguredCompiler( fortranCompiler );
+            }
         }
 
         // add java include paths
