@@ -139,9 +139,9 @@
       </exclusions> 
     </dependency>
     <dependency>
-      <groupId>net.sf.antcontrib</groupId>
+      <groupId>org.codeswarm</groupId>
       <artifactId>cpptasks-parallel</artifactId>
-      <version>1.0-beta-5-parallel-1-SNAPSHOT</version>
+      <version>20121119</version>
     </dependency>
     <dependency>
       <groupId>org.apache.bcel</groupId>
