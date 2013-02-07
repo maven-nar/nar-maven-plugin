@@ -103,6 +103,13 @@ public class Javah
     private Set excludes = new HashSet();
 
     /**
+     * A list of class names e.g. from java.sql.* that are also passed to javah.
+     *
+     * @parameter
+     */
+    private Set extraClasses = new HashSet();
+
+    /**
      * The granularity in milliseconds of the last modification date for testing whether a source needs recompilation
      * 
      * @parameter default-value="0"
@@ -291,6 +298,14 @@ public class Javah
         if ( classes != null )
         {
             for ( Iterator i = classes.iterator(); i.hasNext(); )
+            {
+                args.add( i.next() );
+            }
+        }
+
+        if (extraClasses != null)
+        {
+            for ( Iterator i = extraClasses.iterator(); i.hasNext(); )
             {
                 args.add( i.next() );
             }

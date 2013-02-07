@@ -4,9 +4,9 @@ Maven NAR Plugin
 	---
 Mark Donszelmann
 	---
-	
+
 Introduction
- 
+
 	NOTE: <<bold>> print is <<NOT implemented yet>>.
 
 	This plugin for Maven 2 allows you to compile native code (c++, c and fortran) on
@@ -16,86 +16,86 @@ The output produced is wrapped up in Native ARchive files (.nar) some of which
 are machine independent (-noarch), while others are machine specific and thus depend
 on a combination of machine architecture(A), operating-system(O) and linker(L) identified
 as AOL.
-These nar files can be installed in the local maven repository and deployed to a 
+These nar files can be installed in the local maven repository and deployed to a
 standard maven (web) server, using the standard maven-install-plugin and maven-deploy-plugin.
 
 	Other maven projects may specify dependencies on these nar files using the standard
-maven dependency declaration. Nar files get downloaded, unpacked and 
+maven dependency declaration. Nar files get downloaded, unpacked and
 installed in the local maven repository, just like jar files are (apart from the
 unpacking).
-    
-	The NAR plugin executes the following goals, in the order below, to create and deploy nar files. 
+
+	The NAR plugin executes the following goals, in the order below, to create and deploy nar files.
 The goals are part of the
 <<<nar>>> packaging/{{{lifecycle.html}lifecycle}}, which inserts the nar goals into the standard lifecyle. Using nar packaging
 allows you to build a jar file as well as nar files. The list below shows the sequence of the NAR goals:
 
     [[1]] {{{#nar-validate}nar-validate}}
-    
+
     [[2]] {{{#nar-download}nar-download}}
-    
+
     [[3]] {{{#nar-unpack}nar-unpack}}
-    
+
     [[4]] {{{#nar-gnu-configure}nar-gnu-configure}}
-    
+
     [[5]] {{{#nar-system-generate}nar-system-generate}}
-    
+
     [[6]] {{{#nar-resources}nar-resources}}
-    
+
     [[7]] {{{#nar-gnu-resources}nar-gnu-resources}}
-    
+
     [[8]] {{{#nar-javah}nar-javah}}
-    
+
     [[9]] {{{#nar-gnu-make}nar-gnu-make}}
 
     [[10]] {{{#nar-compile}nar-compile}}
-    
+
     [[11]] {{{#nar-gnu-process}nar-gnu-process}}
-    
+
     [[12]] {{{#nar-testCompile}nar-testCompile}}
-   
+
     [[13]] {{{#nar-test}nar-test}}
-    
+
     [[14]] {{{#nar-package}nar-package}}
-    
+
     [[15]] {{{#nar-integration-test}nar-integration-test}}
-    
+
     [[16]] {{{#install}install (standard maven goal)}}
-    
+
     [[17]] {{{#deploy}deploy (standard maven goal)}}
 
 	[]
-	
+
 * Initialization
 
 	The NAR Plugin starts off by setting and deducing all kinds of property values for usage
-in the goals below. The configuration section of the NAR plugin allows one to override 
-most of the default settings. The default settings come from the AOL properties file 
+in the goals below. The configuration section of the NAR plugin allows one to override
+most of the default settings. The default settings come from the AOL properties file
 which allows us to specify different defaults depending on the architecture-os-linker
 combination, see {{{aol.html}AOL Properties}}.
-               
+
 	The NAR Plugin tries to deduce the "Operating System"
 and the "Architecture" of the machine. Both can be overridden by setting <<<os>>>
 and <<<arch>>> in the {{{configuration.html}configuration}}.
-                
+
 	The name of the linker is looked up in a architecture-os specific way, but can be overridden
 by setting <<<linker.name>>> (this means the subtag \<name\> of the \<linker\> tag in the
 configuration section). Now that the linker name is known
 all other properties are looked up with a prefix of <<<[arch.[os.[linker.]]]>>> from the AOL Properties
 file, but can be overridden in the configuration section (which can be made AOL specific by
 putting it inside a profile.
- 
+
 * {nar-validate}
-                
+
     The NAR plugin makes sure the linker name can be found and that at least one compiler exists
 for this linker. It further check the version number of the linker to see if the linker is actually
-found on the path.               
-   
+found on the path.
+
 * {nar-download}
 
-	Your NAR artifact(s) may be dependent on other nar artifacts. The standard maven dependency 
+	Your NAR artifact(s) may be dependent on other nar artifacts. The standard maven dependency
 declaration in the POM is used to describe such dependencies of type "nar", see {{{nar-dependencies.html}
-nar-dependencies}}. By the time this goal is running maven will have already downloaded 
-all dependent jar and nar files some of which may include a nar.properties file. 
+nar-dependencies}}. By the time this goal is running maven will have already downloaded
+all dependent jar and nar files some of which may include a nar.properties file.
 This property file contains information on what other machine dependent and machine independent nar files to download.
 This goal will download any further necessary nar files into the local repository.
 
@@ -103,14 +103,14 @@ This goal will download any further necessary nar files into the local repositor
 
 	Since a nar file is of no use to any native compilation process the nar-unpack goal unpacks the nar into
 the "nar/dependencies" subdirectory of the target directory.
-        
-* {nar-gnu-configure} 
+
+* {nar-gnu-configure}
 
     If you store files in the gnuSourceDirectory (src/gnu) the NAR plugin will try to run autogen and configure
-over them with a target set to gnuTargetDirectory. This process can be inhibited by setting gnuAutogenSkip and or 
+over them with a target set to gnuTargetDirectory. This process can be inhibited by setting gnuAutogenSkip and or
 gnuConfigureSkip and normally does not take place on Windows, unless gnuUseOnWindows is set. The generated and configured
-files are all stored in gnuTargetDirectory and will be handled in subsequent NAR goals.    
-        
+files are all stored in gnuTargetDirectory and will be handled in subsequent NAR goals.
+
 * {nar-system-generate}
 
     This goal generates a NarSystem class if necessary. This class contains helper methods for your
@@ -118,36 +118,37 @@ code to handle things at run-time. The static method "loadLibrary()" is currentl
 generated and will load your JNI library with name "artifactId-version". This goals only executed
 if you produce a JNI library and you specify a <packageName> as subtag of <library>. The NarSystem
 class will then end up in this package.
-                                            
+
 * {nar-resources}
 
 	This is an optional goal. It will take any resources in src/nar/resources and copy them into
-specific areas under target/nar. Resources may include pre-compiled/linked libraries and other 
+specific areas under target/nar. Resources may include pre-compiled/linked libraries and other
 shareable items. This goal can be used to create a nar library from a distribution that comes
 with compiled shareable libraries.
-  
+
 * {nar-gnu-resources}
 
     Copies the resourceIncludeDir (include) from the gunSourceDirectory (src/gnu) into the noarch area inside target.
-                
+
 * {nar-javah}
-                
+
 	This goal will run the javah tool on any class file in the <<<javah.classDirectory>>> directory
 that has native methods in it. The actual class files are inspected (rather than their sources).
 The javah tool is picked up from the java installation and is run with a classpath of the
-<<<javah.classDirectory>>> and all depencies' classpaths, unless you specify a list in <<<javah.classPaths>>>. 
-You can also set a boot classpath using <<<javah.bootClassPaths>>>.
+<<<javah.classDirectory>>> and all depencies' classpaths, unless you specify a list in <<<javah.classPaths>>>.
+Additional classnames like java.sql.Types, which have no actual *.class file in the classDirectory, can be added
+using the <<<javah.extraClasses>>> list. You can also set a boot classpath using <<<javah.bootClassPaths>>>.
 
 	This goal has no effect if there are no java sources, or if none of the java classes contain a native
 method.
-                
-* {nar-gnu-make}  
 
-    runs "make" followed by "make install" to put the final files in position for copying to the NAR target areas by the 
+* {nar-gnu-make}
+
+    runs "make" followed by "make install" to put the final files in position for copying to the NAR target areas by the
 nar-gnu-process goal.
-                
+
 * {nar-compile}
-                
+
 	This goal will compile the native source code (c, c++ or fortran) and archive it into a shared library.
 You can also produce a jni or a static library by setting <<<library.type>>>.
 To handle the variety of compilers and linkers, the NAR plugin uses the cpptasks from the ant-contrib
@@ -160,7 +161,7 @@ src/main. The standard way to separate your sources for different languages woul
 and src/main/fortran, but any file under src/main is searched for.
 
 	The nar plugin will automatically select the correct compiler (c, c++ or fortran) based on the type of
-source, as specified in the patterns in <<<AOL.c.includes>>>, 
+source, as specified in the patterns in <<<AOL.c.includes>>>,
 <<<AOL.cpp.includes>>> and <<<AOL.fortran.includes>>>, where AOL is a dotted qualifier of the architecture,
 os and linker (x86.Windows.msvc for example).
 
@@ -172,16 +173,16 @@ os and linker (x86.Windows.msvc for example).
 
     * only if <<<java.include>>> is true or if <<<javah.jniDirectory>>>
     exists we add one of the following, relative to the java home directory:
-    
+
     	* <<<java.includePaths>>> if set,
-    	
+
     	* otherwise the <<<AOL.java.include>>> property from the AOL properties.
-    	
+
     	[]
-    
-    
+
+
     * the header files of any of the nar type dependencies, unless it is a jni library.
-    
+
     * any system directories set in <<<COMPILER.sysincludepath>>>, where COMPILER is c, cpp or fortran.
 
 	[]
@@ -189,9 +190,9 @@ os and linker (x86.Windows.msvc for example).
 	The static or dynamic library is linked against:
 
     * the list of libraries set in <<<linker.libs>>>. Using nar dependencies is preferred though.
-    
+
     * the libraries of any of the nar type dependencies.
-    
+
     * the java virtual machine if you set
     <<<java.link>>> to true. The location of the runtime can be overridden in <<<java.runtimeDirectory>>>.
 
@@ -200,14 +201,14 @@ os and linker (x86.Windows.msvc for example).
 	All include files from <<<COMPILER.includePaths>>> are copied to be included
 in the noarch nar file.
 
-	<< TBD If you set maven.nar.includefilesonly to true the compilation step will be 
+	<< TBD If you set maven.nar.includefilesonly to true the compilation step will be
 skipped. This flag can be used if you want to distribute a library that only contains pure
 abstract classes in include files.>>
-                
-* {nar-gnu-process}  
 
-    Copies the gnu "install"-ed area into the NAR target area for testing and packing. 
-                
+* {nar-gnu-process}
+
+    Copies the gnu "install"-ed area into the NAR target area for testing and packing.
+
 * {nar-testCompile}
 
 	This goal will compile the native test source code (c, c++ or fortran) and create executables from it.
@@ -221,56 +222,56 @@ src/test. The standard way to separate your sources for different languages woul
 and src/test/fortran, but any file under src/test is searched for.
 
 	The compiler will automatically select the correct compiler (c, c++ or fortran) based on the type of
-sources, as specified in the patterns in <<<AOL.c.includes>>>, 
+sources, as specified in the patterns in <<<AOL.c.includes>>>,
 <<<AOL.nar.src.includes>>> and <<<AOL.fortran.includes>>>, where AOL is a dotted qualifier of the architecture,
 os and linker (x86.Windows.msvc for example).
-                
-	<<TBD If you set maven.nar.includefilesonly to true the compile-tests goal will be 
+
+	<<TBD If you set maven.nar.includefilesonly to true the compile-tests goal will be
 skipped.>>
 
 
 * {nar-test}
-           
+
 	Runs any native tests as well as any executables that have been produced.
-                
-* {nar-package}                
-   
+
+* {nar-package}
+
 	This goal creates the artifact jar/nar file(s). The jar file is created by the standard package goal.
 The following jar and nar files are created:
 
-    * \<Artifact\>-\<version\>.jar, containing a property file describing the behaviour of the 
+    * \<Artifact\>-\<version\>.jar, containing a property file describing the behaviour of the
     library and other nar files available. For a description see {{{nar-dependencies.html}
     nar-dependencies}}. This jar file is renamed to nar when installed or deployed.
-    
+
     * \<Artifact\>-\<version\>-noarch.nar, a compressed jar file containing non machine
     specific parts of the distribution, such as the include directories.
-    
+
     * \<Artifact\>-\<version\>-\<aol\>-\<type\>.nar, a compressed jar file containing machine
     specific parts of the distribution, such as the libraries. This file is specific to a particular
     Architecture-OS-Linker (AOL) combination <<TBD and is not generated if maven.nar.includefilesonly
     is set>>. Type specifies if this nar is either of type shared, static or jni.
-    
+
     []
 
 * {nar-integration-test}
-               
+
     This goal runs tests against the packaged jar and nar files. Currently this is useful only to
 test a jni library. The jni library is added to the java.library.path and the tests are forked to
 pick up this path.
 
-	To use this goal you need to put the test sources in the regular test directories but disable 
+	To use this goal you need to put the test sources in the regular test directories but disable
 the running of the tests by the maven-surefire-plugin.
-               
-	<<TBD integration tests for other types of libraries than jni>>
-                
-* {install}                
 
-	This goal installs the produced artifacts in your local repository. The unpacking is done in the 
+	<<TBD integration tests for other types of libraries than jni>>
+
+* {install}
+
+	This goal installs the produced artifacts in your local repository. The unpacking is done in the
 unpack goal of a dependent artifact upon first usage.
 
 
 * {deploy}
-                
+
 	This goal deploys the produced artifacts on a maven (web) server. The jar and nar files only consists
-in their full form on the server and are never unpacked on the server.	
+in their full form on the server and are never unpacked on the server.
 
