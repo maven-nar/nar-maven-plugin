@@ -20,6 +20,7 @@ package org.apache.maven.plugin.nar;
  */
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -51,6 +52,14 @@ public class NarTestMojo
      * @readonly
      */
     private List classpathElements;
+
+    /**
+     * Directory for test resources. Defaults to src/test/resources
+     * 
+     * @parameter expression="${basedir}/src/test/resources"
+     * @required
+     */
+    private File testResourceDirectory;
 
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
@@ -86,6 +95,22 @@ public class NarTestMojo
             
             File workingDir = new File( getTestTargetDirectory(), "test-reports" );
             workingDir.mkdirs();
+            
+            // Copy test resources
+            try
+            {
+                int copied = 0;
+                if ( testResourceDirectory.exists() )
+                {
+                    copied += NarUtil.copyDirectoryStructure( testResourceDirectory, workingDir, null, NarUtil.DEFAULT_EXCLUDES );
+                }
+                getLog().info( "Copied " + copied + " test resources" );
+            }
+            catch ( IOException e )
+            {
+                throw new MojoExecutionException( "NAR: Could not copy test resources", e );
+            }
+
             getLog().info( "Running test " + name + " in " + workingDir );
 
             List args = test.getArgs();
