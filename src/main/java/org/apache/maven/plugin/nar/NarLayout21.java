@@ -142,7 +142,7 @@ public class NarLayout21
 
             int lastDash = classifier.lastIndexOf( '-' );
             String type = classifier.substring( lastDash + 1 );
-            AOL aol = new AOL( classifier.substring( 0, lastDash - 1 ) );
+            AOL aol = new AOL( classifier.substring( 0, lastDash ) );
 
             if ( type.equals( Library.EXECUTABLE ) )
             {
