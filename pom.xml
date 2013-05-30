@@ -3,13 +3,13 @@
 
   <groupId>net.sf.antcontrib</groupId>
   <artifactId>cpptasks-parallel</artifactId>
-  <version>1.0-beta-5-parallel-1-SNAPSHOT</version>
+  <version>1.1.1-SNAPSHOT</version>
 
   <name>CPPTasks (parallel)</name>
   <description>
     Library to call native compilers and linkers.
   </description>
-  <url>http://github.com/duns/cpptasks-parallel</url>
+  <url>http://github.com/richardkerr/cpptasks-parallel</url>
 
   <inceptionYear>2001</inceptionYear>
   <licenses>
@@ -21,33 +21,31 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:git://github.com/duns/cpptasks-parallel.git</connection>
-    <developerConnection>scm:git:git://github.com/duns/cpptasks-parallel.git</developerConnection>
-    <url>http://github.com/duns/cpptasks-parallel</url>
+    <connection>scm:git:git@github.com:maven-nar/cpptasks-parallel.git</connection>
+    <developerConnection>scm:git:git@github.com:maven-nar/cpptasks-parallel.git</developerConnection>
+    <url>http://github.com/maven-nar/cpptasks-parallel</url>
+    <tag>HEAD</tag>
   </scm>
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-<!-- to avoid MDEPLOY-50 and to deploy to duns' github repository -->
-<distributionManagement>
-  <repository>
-    <id>duns-maven-releases</id>
-    <name>Duns' Maven Releases</name>
-    <url>file:///Users/duns/sonatype/git/maven-releases</url>
-  </repository>
-  <snapshotRepository>
-    <uniqueVersion>false</uniqueVersion>
-    <id>duns-maven-snapshots</id>
-    <name>Duns' Maven Snapshots</name>
-    <url>file:///Users/duns/sonatype/git/maven-snapshots</url>
-  </snapshotRepository>
-</distributionManagement>
-
   <build>
     <defaultGoal>install</defaultGoal>
+    <extensions>
+      <extension>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-webdav-jackrabbit</artifactId>
+      <version>1.0</version>
+      </extension>
+    </extensions>
     <plugins>
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>2.3.2</version>
+      </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.3.2</version>

@@ -322,9 +322,12 @@ public abstract class CommandLineLinker extends AbstractLinker
         }
         allArgs[index++] = this.getCommand();
         StringBuffer buf = new StringBuffer();
+
+
         for (int i = 0; i < preargs.length; i++) {
-          allArgs[index++] = decorateLinkerOption(buf, preargs[i]);
+            allArgs[index++] = task.isDecorateLinkerOptions() ? decorateLinkerOption(buf, preargs[i]): preargs[i];
         }
+
         for (int i = 0; i < outputSwitch.length; i++) {
           allArgs[index++] = outputSwitch[i];
         }
@@ -332,8 +335,9 @@ public abstract class CommandLineLinker extends AbstractLinker
           allArgs[index++] = prepareFilename(buf,outputDir,sourceFiles[i]);
         }
         for (int i = 0; i < endargs.length; i++) {
-          allArgs[index++] = decorateLinkerOption(buf, endargs[i]);
+            allArgs[index++] = task.isDecorateLinkerOptions() ? decorateLinkerOption(buf, endargs[i]): endargs[i];
         }
+
         return allArgs;
     }
 

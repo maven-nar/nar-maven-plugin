@@ -31,7 +31,7 @@ import net.sf.antcontrib.cpptasks.VersionInfo;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Environment;
-import net.sf.antcontrib.cpptasks.OptimizationEnum;;
+import net.sf.antcontrib.cpptasks.OptimizationEnum;
 /**
  * An abstract Compiler implementation which uses an external program to
  * perform the compile.

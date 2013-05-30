@@ -217,6 +217,16 @@ public class CCTask extends Task {
     private final Vector projects = new Vector();
     private boolean projectsOnly = false;
 
+    private boolean decorateLinkerOptions = true;
+
+    public boolean isDecorateLinkerOptions() {
+        return decorateLinkerOptions;
+    }
+
+    public void setDecorateLinkerOptions(boolean decorateLinkerOptions) {
+        this.decorateLinkerOptions = decorateLinkerOptions;
+    }
+
     
     /**
      * If true, stop build on compile failure.
