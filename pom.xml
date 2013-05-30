@@ -18,10 +18,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <artifactId>maven-nar-plugin-local</artifactId>
+    <artifactId>maven-plugins</artifactId>
     <groupId>org.apache.maven.plugins</groupId>
-    <version>1</version>
-	<relativePath>./parent/pom.xml</relativePath>
+    <version>18</version>
+    <relativePath/>
   </parent>
 
   <groupId>org.apache.maven.plugins</groupId>
