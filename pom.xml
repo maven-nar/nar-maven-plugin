@@ -9,7 +9,7 @@
   <description>
     Library to call native compilers and linkers.
   </description>
-  <url>http://github.com/richardkerr/cpptasks-parallel</url>
+  <url>https://github.com/maven-nar/cpptasks-parallel</url>
 
   <inceptionYear>2001</inceptionYear>
   <licenses>
