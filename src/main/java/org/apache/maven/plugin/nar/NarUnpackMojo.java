@@ -32,27 +32,17 @@ import org.apache.maven.plugin.MojoFailureException;
  * @goal nar-unpack
  * @phase process-sources
  * @requiresProject
- * @requiresDependencyResolution
  * @author Mark Donszelmann
  */
 public class NarUnpackMojo
-    extends AbstractUnpackMojo
+    extends NarDownloadMojo
 {
 
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        List narArtifacts = getNarManager().getNarDependencies( "compile" );
-        if ( classifiers == null )
-        {
-            getNarManager().unpackAttachedNars( narArtifacts, archiverManager, null, getOS(), getLayout(), getUnpackDirectory() );
-        }
-        else
-        {
-            for ( Iterator j = classifiers.iterator(); j.hasNext(); )
-            {
-                getNarManager().unpackAttachedNars( narArtifacts, archiverManager, (String) j.next(), getOS(), getLayout(), getUnpackDirectory() );
-            }
-        }
+
+            unpackAttachedNars( getAllAttachedNarArtifacts(getNarArtifacts()));
+
     }
 }

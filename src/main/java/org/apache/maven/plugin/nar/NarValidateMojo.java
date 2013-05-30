@@ -21,6 +21,11 @@ package org.apache.maven.plugin.nar;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * Validates the configuration of the NAR project (aol and pom)
@@ -32,10 +37,25 @@ import org.apache.maven.plugin.MojoFailureException;
 public class NarValidateMojo
     extends AbstractCompileMojo
 {
-    public final void narExecute()
+    /**
+     * Source directory for GNU style project
+     * 
+     * @parameter expression="${basedir}/src/gnu"
+     * @required
+     */
+    private File gnuSourceDirectory;
+    
+	@Override
+	protected List/*<Artifact>*/ getArtifacts() {
+		return null;//getMavenProject().getCompileArtifacts();  // Artifact.SCOPE_COMPILE 
+	}
+
+	public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        // check aol
+//    	super.narExecute();
+
+    	// check aol
         AOL aol = getAOL();
         getLog().info( "Using AOL: " + aol );
 
@@ -45,41 +65,45 @@ public class NarValidateMojo
 
         // check compilers
         int noOfCompilers = 0;
-        Compiler cpp = getCpp();
-        if ( cpp.getName() != null )
-        {
-            noOfCompilers++;
-            // need includes
-            if ( cpp.getIncludes( Compiler.MAIN ).isEmpty() )
-            {
-                throw new MojoExecutionException( "No includes defined for compiler " + cpp.getName() );
-            }
-        }
-        Compiler c = getC();
-        if ( c.getName() != null )
-        {
-            noOfCompilers++;
-            // need includes
-            if ( c.getIncludes( Compiler.MAIN ).isEmpty() )
-            {
-                throw new MojoExecutionException( "No includes defined for compiler " + c.getName() );
-            }
-        }
-        Compiler fortran = getFortran();
-        if ( fortran.getName() != null )
-        {
-            noOfCompilers++;
-            // need includes
-            if ( fortran.getIncludes( Compiler.MAIN ).isEmpty() )
-            {
-                throw new MojoExecutionException( "No includes defined for compiler " + fortran.getName() );
-            }
-        }
-
-        // at least one compiler has to be defined
-        if ( noOfCompilers == 0 )
-        {
-            throw new MojoExecutionException( "No compilers defined for linker " + linker.getName() );
-        }
+        if( onlySpecifiedCompilers ) {
+	        if ( getCpp() != null && getCpp().getName() != null )
+	        {
+	            noOfCompilers++;
+	            // need includes
+	            if ( getCpp().getIncludes( Compiler.MAIN ).isEmpty() )
+	            {
+	                throw new MojoExecutionException( "No includes defined for compiler " + getCpp().getName() );
+	            }
+	        }
+	        
+	        if ( getC() != null && getC().getName() != null )
+	        {
+	            noOfCompilers++;
+	            // need includes
+	            if ( getC().getIncludes( Compiler.MAIN ).isEmpty() )
+	            {
+	                throw new MojoExecutionException( "No includes defined for compiler " + getC().getName() );
+	            }
+	        }        
+	        
+	        if ( getFortran() != null && getFortran().getName() != null )
+	        {
+	            noOfCompilers++;
+	            // need includes
+	            if ( getFortran().getIncludes( Compiler.MAIN ).isEmpty() )
+	            {
+	                throw new MojoExecutionException( "No includes defined for compiler " + getFortran().getName() );
+	            }
+	        }
+	        
+	        // at least one compiler has to be defined
+	        // OR
+	        // a <gnuSourceDirectory> is configured.
+	        if ( noOfCompilers == 0 && ( gnuSourceDirectory == null || !gnuSourceDirectory.exists() ) )
+	        {
+	            throw new MojoExecutionException( "No compilers defined for linker " + linker.getName() + ", and no" +
+	                    " <gnuSourceDirectory> is defined.  Either define a compiler or a linker." );     
+	        }
+        } 
     }
 }

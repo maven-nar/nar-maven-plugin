@@ -1,7 +1,7 @@
 #ifndef HelloWorldLib_H
 #define HelloWorldLib_H
 
-#ifdef WIN32
+#ifdef LOCAL_AOL
 __declspec(dllexport) 
 #endif
 extern char* HelloWorldLib_sayHello();

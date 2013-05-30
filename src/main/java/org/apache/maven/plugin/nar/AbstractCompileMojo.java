@@ -55,18 +55,20 @@ public abstract class AbstractCompileMojo
     private Fortran fortran;
 
     /**
+     * By default NAR compile will attempt to compile using all known compilers against files in the directories specified by convention.
+     * This allows configuration to a reduced set, you will have to specify each compiler to use in the configuration. 
+     * 
+     * @parameter expression="false"
+     */
+    protected boolean onlySpecifiedCompilers;
+
+    /**
      * Maximum number of Cores/CPU's to use. 0 means unlimited.
      * 
      * @parameter expression=""
      */
     private int maxCores = 0;
 
-    /**
-     * Name of the output
-     * 
-     * @parameter expression="${project.artifactId}-${project.version}"
-     */
-    private String output;
 
     /**
      * Fail on compilation/linking error.
@@ -94,21 +96,6 @@ public abstract class AbstractCompileMojo
     private boolean libtool;
 
     /**
-     * The home of the Java system. Defaults to a derived value from ${java.home} which is OS specific.
-     * 
-     * @parameter expression=""
-     * @readonly
-     */
-    private File javaHome;
-
-    /**
-     * List of libraries to create
-     * 
-     * @parameter expression=""
-     */
-    private List libraries;
-
-    /**
      * List of tests to create
      * 
      * @parameter expression=""
@@ -116,18 +103,18 @@ public abstract class AbstractCompileMojo
     private List tests;
 
     /**
-     * Javah info
-     * 
-     * @parameter expression=""
-     */
-    private Javah javah;
-
-    /**
      * Java info for includes and linking
      * 
      * @parameter expression=""
      */
     private Java java;
+
+    /**
+     * Flag to cpptasks to indicate whether linker options should be decorated or not
+     *
+     * @parameter expression=""
+     */
+    protected boolean decorateLinkerOptions;
 
     private NarInfo narInfo;
 
@@ -147,33 +134,45 @@ public abstract class AbstractCompileMojo
         return antProject;
     }
 
+    public void setCpp(Cpp cpp) {
+        this.cpp = cpp;
+        cpp.setAbstractCompileMojo( this );
+    }
+
+    public void setC(C c) {
+        this.c = c;
+        c.setAbstractCompileMojo( this );
+    }
+
+    public void setFortran(Fortran fortran) {
+        this.fortran = fortran;
+        fortran.setAbstractCompileMojo( this );
+    }
+
     protected final C getC()
     {
-        if ( c == null )
-        {
-            c = new C();
-        }
-        c.setAbstractCompileMojo( this );
+    	if ( onlySpecifiedCompilers && c == null )
+    	{
+    		setC( new C() );
+    	}
         return c;
     }
 
     protected final Cpp getCpp()
     {
-        if ( cpp == null )
-        {
-            cpp = new Cpp();
-        }
-        cpp.setAbstractCompileMojo( this );
+    	if ( onlySpecifiedCompilers && cpp == null )
+    	{
+    		setCpp( new Cpp() );
+    	}
         return cpp;
     }
 
     protected final Fortran getFortran()
     {
-        if ( fortran == null )
-        {
-            fortran = new Fortran();
-        }
-        fortran.setAbstractCompileMojo( this );
+    	if ( onlySpecifiedCompilers && fortran == null )
+    	{
+    		setFortran( new Fortran() );
+    	}
         return fortran;
     }
 
@@ -201,26 +200,10 @@ public abstract class AbstractCompileMojo
         return getNarInfo().getProperty( aol, "runtime", runtime );
     }
 
-    protected final String getOutput( AOL aol )
+    protected final String getOutput( AOL aol, String type )
         throws MojoExecutionException
     {
-        return getNarInfo().getProperty( aol, "output", output );
-    }
-
-    protected final File getJavaHome( AOL aol )
-        throws MojoExecutionException
-    {
-        // FIXME should be easier by specifying default...
-        return getNarInfo().getProperty( aol, "javaHome", NarUtil.getJavaHome( javaHome, getOS() ) );
-    }
-
-    protected final List getLibraries()
-    {
-        if ( libraries == null )
-        {
-            libraries = Collections.EMPTY_LIST;
-        }
-        return libraries;
+        return getNarInfo().getOutput( aol, getOutput( ! aol.getOS().equals( OS.WINDOWS ) && !  Library.EXECUTABLE.equals( type ) ) );
     }
 
     protected final List getTests()
@@ -230,16 +213,6 @@ public abstract class AbstractCompileMojo
             tests = Collections.EMPTY_LIST;
         }
         return tests;
-    }
-
-    protected final Javah getJavah()
-    {
-        if ( javah == null )
-        {
-            javah = new Javah();
-        }
-        javah.setAbstractCompileMojo( this );
-        return javah;
     }
 
     protected final Java getJava()

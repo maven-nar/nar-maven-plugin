@@ -38,6 +38,7 @@ import org.codehaus.plexus.util.StringUtils;
  * @goal nar-test
  * @phase test
  * @requiresProject
+ * @requiresDependencyResolution test
  * @author Mark Donszelmann
  */
 public class NarTestMojo
@@ -52,9 +53,20 @@ public class NarTestMojo
      */
     private List classpathElements;
 
+	@Override
+	protected List/*<Artifact>*/ getArtifacts() {
+		return getMavenProject().getTestArtifacts();  // Artifact.SCOPE_TEST 
+	}
+
+    protected File getUnpackDirectory()
+    {
+        return getTestUnpackDirectory() == null ? super.getUnpackDirectory() : getTestUnpackDirectory();
+    }
+
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
+    	super.narExecute();
         // run all tests
         for ( Iterator i = getTests().iterator(); i.hasNext(); )
         {
@@ -153,7 +165,7 @@ public class NarTestMojo
 
         // add dependent shared libraries
         String classifier = getAOL() + "-shared";
-        List narArtifacts = getNarManager().getNarDependencies( "compile" );
+        List narArtifacts = getNarArtifacts();
         List dependencies = getNarManager().getAttachedNarDependencies( narArtifacts, classifier );
         for ( Iterator d = dependencies.iterator(); d.hasNext(); )
         {

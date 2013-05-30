@@ -105,22 +105,18 @@ public class NarLayout20
      * @see org.apache.maven.plugin.nar.NarLayout#attachNars(java.io.File, org.apache.maven.project.MavenProjectHelper,
      * org.apache.maven.project.MavenProject, org.apache.maven.plugin.nar.NarInfo)
      */
-    public final void attachNars( File baseDir, ArchiverManager archiverManager, MavenProjectHelper projectHelper,
-                                  MavenProject project, NarInfo narInfo )
+    public final void prepareNarInfo( File baseDir, MavenProject project, NarInfo narInfo, AbstractNarMojo mojo )
         throws MojoExecutionException
     {
         if ( getIncludeDirectory( baseDir, project.getArtifactId(), project.getVersion() ).exists() )
         {
-            attachNar( archiverManager, projectHelper, project, "noarch", baseDir, "include/**" );
             narInfo.setNar( null, "noarch", project.getGroupId() + ":" + project.getArtifactId() + ":"
                 + NarConstants.NAR_TYPE + ":" + "noarch" );
         }
 
         String[] binAOL = new File( baseDir, "bin" ).list();
         for ( int i = 0; ( binAOL != null ) && ( i < binAOL.length ); i++ )
-        {
-            attachNar( archiverManager, projectHelper, project, binAOL[i] + "-" + Library.EXECUTABLE, baseDir, "bin/"
-                + binAOL[i] + "/**" );
+        {// TODO: chose not to apply new file naming for outfile in case of backwards compatability,  may need to reconsider
             narInfo.setNar( null, Library.EXECUTABLE, project.getGroupId() + ":" + project.getArtifactId() + ":"
                 + NarConstants.NAR_TYPE + ":" + "${aol}" + "-" + Library.EXECUTABLE );
             narInfo.setBinding( new AOL( binAOL[i] ), Library.EXECUTABLE );
@@ -135,8 +131,6 @@ public class NarLayout20
             String[] libType = new File( libDir, libAOL[i] ).list();
             for ( int j = 0; ( libType != null ) && ( j < libType.length ); j++ )
             {
-                attachNar( archiverManager, projectHelper, project, libAOL[i] + "-" + libType[j], baseDir, "lib/"
-                    + libAOL[i] + "/" + libType[j] + "/**" );
                 narInfo.setNar( null, libType[j], project.getGroupId() + ":" + project.getArtifactId() + ":"
                     + NarConstants.NAR_TYPE + ":" + "${aol}" + "-" + libType[j] );
 
@@ -156,6 +150,42 @@ public class NarLayout20
             {
                 narInfo.setBinding( null, bindingType != null ? bindingType : Library.NONE );
             }
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.apache.maven.plugin.nar.NarLayout#attachNars(java.io.File, org.apache.maven.project.MavenProjectHelper,
+     * org.apache.maven.project.MavenProject, org.apache.maven.plugin.nar.NarInfo)
+     */
+    public final void attachNars( File baseDir, ArchiverManager archiverManager, MavenProjectHelper projectHelper,
+                                  MavenProject project )
+        throws MojoExecutionException
+    {
+        if ( getIncludeDirectory( baseDir, project.getArtifactId(), project.getVersion() ).exists() )
+        {
+            attachNar( archiverManager, projectHelper, project, "noarch", baseDir, "include/**" );
+        }
+
+        String[] binAOL = new File( baseDir, "bin" ).list();
+        for ( int i = 0; ( binAOL != null ) && ( i < binAOL.length ); i++ )
+        {
+            attachNar( archiverManager, projectHelper, project, binAOL[i] + "-" + Library.EXECUTABLE, baseDir, "bin/"
+                + binAOL[i] + "/**" );
+        }
+
+        File libDir = new File( baseDir, "lib" );
+        String[] libAOL = libDir.list();
+        for ( int i = 0; ( libAOL != null ) && ( i < libAOL.length ); i++ )
+        {
+            String bindingType = null;
+            String[] libType = new File( libDir, libAOL[i] ).list();
+            for ( int j = 0; ( libType != null ) && ( j < libType.length ); j++ )
+            {
+                attachNar( archiverManager, projectHelper, project, libAOL[i] + "-" + libType[j], baseDir, "lib/"
+                    + libAOL[i] + "/" + libType[j] + "/**" );
+            }
+
         }
     }
 

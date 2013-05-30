@@ -67,10 +67,17 @@ public class NarCompileMojo
      * @readonly
      */
     protected MavenSession session;
+ 
+
+	@Override
+	protected List/*<Artifact>*/ getArtifacts() {
+		return getMavenProject().getCompileArtifacts();  // Artifact.SCOPE_COMPILE 
+	}
 
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
+    	super.narExecute();
 
         // make sure destination is there
         getTargetDirectory().mkdirs();
@@ -83,7 +90,7 @@ public class NarCompileMojo
         if ( noOfSources > 0 )
         {
             getLog().info( "Compiling " + noOfSources + " native files" );
-            for ( Iterator i = getLibraries().iterator(); i.hasNext(); )
+            for ( Iterator<Library> i = getLibraries().iterator(); i.hasNext(); )
             {
                 createLibrary(getAntProject(), (Library) i.next());
             }
@@ -96,11 +103,14 @@ public class NarCompileMojo
         try
         {
             // FIXME, should the include paths be defined at a higher level ?
-            getCpp().copyIncludeFiles(
-                                       getMavenProject(),
-                                       getLayout().getIncludeDirectory( getTargetDirectory(),
-                                                                        getMavenProject().getArtifactId(),
-                                                                        getMavenProject().getVersion() ) );
+            if ( getCpp() != null )
+            {
+                getCpp().copyIncludeFiles(
+                                           getMavenProject(),
+                                           getLayout().getIncludeDirectory( getTargetDirectory(),
+                                                                            getMavenProject().getArtifactId(),
+                                                                            getMavenProject().getVersion() ) );
+            }
         }
         catch ( IOException e )
         {
@@ -111,6 +121,11 @@ public class NarCompileMojo
     private List getSourcesFor( Compiler compiler )
         throws MojoFailureException, MojoExecutionException
     {
+        if ( compiler == null )
+        {
+            return Collections.EMPTY_LIST;
+        }
+        
         try
         {
             List files = new ArrayList();
@@ -139,6 +154,10 @@ public class NarCompileMojo
         // configure task
         CCTask task = new CCTask();
         task.setProject(antProject);
+
+        task.setDecorateLinkerOptions(decorateLinkerOptions);
+
+        task.setDecorateLinkerOptions(decorateLinkerOptions);
 
         // subsystem
         SubsystemEnum subSystem = new SubsystemEnum();
@@ -179,16 +198,7 @@ public class NarCompileMojo
 
         // outFile
         // FIXME NAR-90 we could get the final name from layout
-        File outFile;
-        if ( type.equals( Library.EXECUTABLE ) )
-        {
-            // executable has no version number
-            outFile = new File(outDir, getMavenProject().getArtifactId());
-        }
-        else
-        {
-            outFile = new File(outDir, getOutput(getAOL()));
-        }
+        File outFile = new File(outDir, getOutput(getAOL(), type) );
         getLog().debug("NAR - output: '" + outFile + "'");
         task.setOutfile(outFile);
 
@@ -210,24 +220,30 @@ public class NarCompileMojo
         // Darren Sargent Feb 11 2010: Use Compiler.MAIN for "type"...appears the wrong "type" variable was being used
         // since getCompiler() expects "main" or "test", whereas the "type" variable here is "executable", "shared" etc.
         // add C++ compiler
-        CompilerDef cpp = getCpp().getCompiler( Compiler.MAIN, getOutput( getAOL() ) );
-        if ( cpp != null )
-        {
-            task.addConfiguredCompiler( cpp );
+        if (getCpp() != null) {
+            CompilerDef cpp = getCpp().getCompiler( Compiler.MAIN, null );
+            if ( cpp != null )
+            {
+                task.addConfiguredCompiler( cpp );
+            }
         }
 
         // add C compiler
-        CompilerDef c = getC().getCompiler( Compiler.MAIN, getOutput( getAOL() ) );
-        if ( c != null )
-        {
-            task.addConfiguredCompiler( c );
+        if (getC() != null) {
+            CompilerDef c = getC().getCompiler( Compiler.MAIN, null );
+            if ( c != null )
+            {
+                task.addConfiguredCompiler( c );
+            }
         }
 
         // add Fortran compiler
-        CompilerDef fortran = getFortran().getCompiler( Compiler.MAIN, getOutput( getAOL() ) );
-        if ( fortran != null )
-        {
-            task.addConfiguredCompiler( fortran );
+        if (getFortran() != null) {
+            CompilerDef fortran = getFortran().getCompiler( Compiler.MAIN, null );
+            if ( fortran != null )
+            {
+                task.addConfiguredCompiler( fortran );
+            }
         }
         // end Darren
 
@@ -241,8 +257,9 @@ public class NarCompileMojo
         // add java include paths
         getJava().addIncludePaths(task, type);
 
+        List<NarArtifact> dependencies = getNarArtifacts(); 
         // add dependency include paths
-        for ( Iterator i = getNarManager().getNarDependencies( "compile" ).iterator(); i.hasNext(); )
+        for ( Iterator i = dependencies.iterator(); i.hasNext(); )
         {
             // FIXME, handle multiple includes from one NAR
             NarArtifact narDependency = (NarArtifact) i.next();
@@ -277,7 +294,7 @@ public class NarCompileMojo
         {
 
             List depLibOrder = getDependencyLibOrder();
-            List depLibs = getNarManager().getNarDependencies("compile");
+            List depLibs = dependencies;
 
             // reorder the libraries that come from the nar dependencies
             // to comply with the order specified by the user

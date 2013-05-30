@@ -95,7 +95,7 @@ public class AttachedNarArtifact
 
         public boolean isAddedToClasspath()
         {
-            return false;
+            return true;
         }
     }
 }

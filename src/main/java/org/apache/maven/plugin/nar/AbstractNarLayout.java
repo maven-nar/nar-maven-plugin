@@ -139,14 +139,19 @@ public abstract class AbstractNarLayout
                                    log );
             }
         }
-        if ( NarUtil.getOS( os ).equals( OS.MACOSX ) )
-        {
-            File[] dylibDirs = new File[2];
-            dylibDirs[0] = new File( narLocation, "lib/" + defaultAOL + "/" + Library.SHARED );
-            dylibDirs[1] = new File( narLocation, "lib/" + defaultAOL + "/" + Library.JNI );
-
-            NarUtil.runInstallNameTool( dylibDirs, log );
-        }
+        // TODO: Find replacement action to install name tool
+        // install name tool adjusts the internal lookup directory for the libraries, 
+        // this isn't really appropriate, removing signatures for one.
+        // however don't have a replacement action currently... having commented this, 
+        // may break some usage, perhaps if don't find solution make configurable.
+//        if ( NarUtil.getOS( os ).equals( OS.MACOSX ) )
+//        {
+//            File[] dylibDirs = new File[2];
+//            dylibDirs[0] = new File( narLocation, "lib/" + defaultAOL + "/" + Library.SHARED );
+//            dylibDirs[1] = new File( narLocation, "lib/" + defaultAOL + "/" + Library.JNI );
+//
+//            NarUtil.runInstallNameTool( dylibDirs, log );
+//        }
     }
 
     /**

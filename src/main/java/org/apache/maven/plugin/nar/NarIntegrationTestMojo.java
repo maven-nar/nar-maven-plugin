@@ -88,8 +88,18 @@ import org.codehaus.plexus.util.StringUtils;
  */
 // DUNS, changed class name, inheritance, goal and phase
 public class NarIntegrationTestMojo
-    extends AbstractCompileMojo
+    extends AbstractDependencyMojo
 {
+	@Override
+	protected List/*<Artifact>*/ getArtifacts() {
+		return getMavenProject().getTestArtifacts();  // Artifact.SCOPE_TEST 
+	}
+
+    protected File getUnpackDirectory()
+    {
+        return getTestUnpackDirectory() == null ? super.getUnpackDirectory() : getTestUnpackDirectory();
+    }
+
     // DUNS added test for JNI module
     private boolean testJNIModule()
     {
@@ -469,26 +479,11 @@ public class NarIntegrationTestMojo
     private boolean trimStackTrace;
 
     /**
-     * Resolves the artifacts needed.
-     * 
-     * @component
-     */
-    private ArtifactResolver artifactResolver;
-
-    /**
      * Creates the artifact
      * 
      * @component
      */
     private ArtifactFactory artifactFactory;
-
-    /**
-     * The plugin remote repositories declared in the pom.
-     * 
-     * @parameter expression="${project.pluginArtifactRepositories}"
-     * @since 2.2
-     */
-    private List remoteRepositories;
 
     /**
      * For retrieval of artifact's metadata.
@@ -557,11 +552,13 @@ public class NarIntegrationTestMojo
     {
         if ( verifyParameters() )
         {
+        	super.narExecute();
+
             SurefireBooter surefireBooter = constructSurefireBooter();
 
             getLog().info( "Surefire report directory: " + reportsDirectory );
 
-            int result;
+        	int result;
             try
             {
                 result = surefireBooter.run();
@@ -913,7 +910,7 @@ public class NarIntegrationTestMojo
         ForkConfiguration fork = new ForkConfiguration();
 
         // DUNS
-        if ( project.getPackaging().equals( "nar" ) || ( getNarManager().getNarDependencies( "test" ).size() > 0 ) )
+        if ( project.getPackaging().equals( "nar" ) || ( getNarArtifacts().size() > 0 ) )
         {
             forkMode = "pertest";
         }
@@ -1004,7 +1001,7 @@ public class NarIntegrationTestMojo
                 surefireBooter.addClassPathUrl( narFile );
             }
 
-            List dependencies = getNarManager().getNarDependencies( "test" );
+            List dependencies = getNarArtifacts(); // TODO: get seems heavy, not sure if we can push this up to before the fork to use it multiple times.
             for ( Iterator i = dependencies.iterator(); i.hasNext(); )
             {
                 NarArtifact dependency = (NarArtifact) i.next();
@@ -1137,7 +1134,7 @@ public class NarIntegrationTestMojo
 
         // DUNS, use access method rather than "localRepository" field.
         return artifactResolver.resolveTransitively( Collections.singleton( providerArtifact ), originatingArtifact,
-                                                     getLocalRepository(), remoteRepositories, metadataSource, filter );
+                                                     getLocalRepository(), getRemoteRepositories(), metadataSource, filter );
     }
 
     private void addArtifact( SurefireBooter surefireBooter, Artifact surefireArtifact )
