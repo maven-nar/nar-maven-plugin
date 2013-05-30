@@ -33,9 +33,9 @@
     This plugin compiles native code and publishes native artifacts in the for of nar files.
   </description>
   <scm>
-    <connection>scm:git:git@github.com:richardkerr/maven-nar-plugin.git</connection>
-    <developerConnection>scm:git:git@github.com:richardkerr/maven-nar-plugin.git</developerConnection>
-    <url>scm:git:git@github.com:richardkerr/maven-nar-plugin.git</url>
+    <connection>scm:git:git://github.com/maven-nar/maven-nar-plugin</connection>
+    <developerConnection>scm:git:git@github.com:maven-nar/maven-nar-plugin</developerConnection>
+    <url>https://github.com/maven-nar/maven-nar-plugin</url>
   </scm>
   <properties>
     <mavenVersion>2.0.9</mavenVersion>

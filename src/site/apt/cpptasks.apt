@@ -83,6 +83,6 @@ with some minor extensions:
 	You can find the latest of our mods in our git repository:
 
 +--
-git clone git://github.com/duns/cpptasks-parallel.git
+git clone git://github.com/maven-nar/cpptasks-parallel
 +--
 
