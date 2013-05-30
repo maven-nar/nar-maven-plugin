@@ -30,7 +30,7 @@
   <packaging>maven-plugin</packaging>
   <name>Maven NAR Plugin</name>
   <description>
-    This plugin compiles native code and publishes native artifacts in the for of nar files.
+    This plugin compiles native code and publishes native artifacts in the form of nar files.
   </description>
   <scm>
     <connection>scm:git:git://github.com/maven-nar/maven-nar-plugin</connection>
