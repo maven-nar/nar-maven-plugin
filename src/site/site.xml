@@ -50,7 +50,7 @@ under the License.
    
     <menu name="Developer Info">
       <item name="NAR Dependencies" href="narDependencies.html"/>
-      <item name="Bug Reports" href="https://issues.sonatype.org/browse/NAR"/>
+      <item name="Bug Reports" href="https://github.com/maven-nar/maven-nar-plugin/issues"/>
       <item name="Forum" href="https://groups.google.com/forum/?fromgroups#!forum/maven-nar"/>
       <item name="APIDocs" href="apidocs/index.html"/>
       <item name="NAR Library" href="narLibrary.html"/>
