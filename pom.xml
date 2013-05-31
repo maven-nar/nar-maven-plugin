@@ -21,9 +21,9 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:git@github.com:maven-nar/cpptasks-parallel.git</connection>
-    <developerConnection>scm:git:git@github.com:maven-nar/cpptasks-parallel.git</developerConnection>
-    <url>http://github.com/maven-nar/cpptasks-parallel</url>
+    <connection>scm:git:git://github.com/maven-nar/cpptasks-parallel</connection>
+    <developerConnection>scm:git:git@github.com:maven-nar/cpptasks-parallel</developerConnection>
+    <url>https://github.com/maven-nar/cpptasks-parallel</url>
     <tag>HEAD</tag>
   </scm>
   
