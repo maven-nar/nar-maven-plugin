@@ -23,7 +23,7 @@ under the License.
         <src>http://maven.apache.org/images/apache-maven-project-2.png</src>
         <href>http://maven-nar.github.com/maven-nar-plugin/</href>
     </bannerLeft>
-      
+
   <body>
     <links>
         <item name="NAR Plugin for Maven1" href="http://java.freehep.org/maven1.x/freehep-nar-plugin"/>
@@ -35,7 +35,7 @@ under the License.
       <item name="Philosophy" href="philosophy.html"/>
       <item name="Presentation (ppt)" href="NARPlugin.ppt"/>
     </menu>
-    
+
     <menu name="User Info">
       <item name="Goals" href="plugin-info.html"/>
       <item name="Usage" href="usage.html"/>
@@ -47,7 +47,7 @@ under the License.
       <item name="Archetypes" href="archetypes.html"/>
       <item name="Compatibility" href="compatibility.html"/>
     </menu>
-   
+
     <menu name="Developer Info">
       <item name="NAR Dependencies" href="narDependencies.html"/>
       <item name="Bug Reports" href="https://github.com/maven-nar/maven-nar-plugin/issues"/>
@@ -57,7 +57,7 @@ under the License.
       <item name="CPPTasks" href="cpptasks.html"/>
       <item name="Git Browse nar-plugin" href="https://github.com/maven-nar/maven-nar-plugin"/>
       <item name="Git Browse cpptasks" href="https://github.com/maven-nar/cpptasks-parallel"/>
-      <item name="Git Repository" href="source-repository.html"/>      
+      <item name="Git Repository" href="source-repository.html"/>
     </menu>
 
     <menu name="Other Information">
@@ -65,6 +65,6 @@ under the License.
     </menu>
 
     ${reports}
-    
+
   </body>
 </project>
