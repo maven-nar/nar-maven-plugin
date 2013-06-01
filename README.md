@@ -19,7 +19,7 @@ Links
 
 Old
 ---
-* http://github.com/duns/maven-nar-plugin
+* https://github.com/duns/maven-nar-plugin
 * http://duns.github.com/maven-snapshots
 * http://java.freehep.org/freehep-nar-plugin/intro.html
-* http://github.com/duns/freehep-nar-plugin
+* https://github.com/duns/freehep-nar-plugin
