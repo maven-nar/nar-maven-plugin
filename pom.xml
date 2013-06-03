@@ -32,6 +32,15 @@
   <description>
     This plugin compiles native code and publishes native artifacts in the form of nar files.
   </description>
+  <mailingLists>
+    <mailingList>
+      <name>Maven NAR plugin</name>
+      <subscribe>https://groups.google.com/forum/?fromgroups#!forum/maven-nar</subscribe>
+      <unsubscribe>https://groups.google.com/forum/?fromgroups#!forum/maven-nar</unsubscribe>
+      <post>maven-nar@googlegroups.com</post>
+      <archive>https://groups.google.com/forum/?fromgroups#!forum/maven-nar</archive>
+    </mailingList>
+  </mailingLists>
   <scm>
     <connection>scm:git:git://github.com/maven-nar/maven-nar-plugin</connection>
     <developerConnection>scm:git:git@github.com:maven-nar/maven-nar-plugin</developerConnection>
