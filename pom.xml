@@ -20,7 +20,7 @@
   <parent>
     <artifactId>maven-plugins</artifactId>
     <groupId>org.apache.maven.plugins</groupId>
-    <version>18</version>
+    <version>23</version>
     <relativePath />
   </parent>
 
