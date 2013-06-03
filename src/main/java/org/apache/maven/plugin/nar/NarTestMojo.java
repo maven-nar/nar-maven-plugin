@@ -62,10 +62,10 @@ public class NarTestMojo
      */
     private File testResourceDirectory;
 
-	@Override
-	protected List/*<Artifact>*/ getArtifacts() {
-		return getMavenProject().getTestArtifacts();  // Artifact.SCOPE_TEST 
-	}
+    @Override
+    protected List/*<Artifact>*/ getArtifacts() {
+        return getMavenProject().getTestArtifacts();  // Artifact.SCOPE_TEST
+    }
 
     protected File getUnpackDirectory()
     {
@@ -75,7 +75,7 @@ public class NarTestMojo
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-    	super.narExecute();
+        super.narExecute();
         // run all tests
         for ( Iterator i = getTests().iterator(); i.hasNext(); )
         {
@@ -104,7 +104,7 @@ public class NarTestMojo
                 getLog().warn( "Skipping non-existing test " + path );
                 return;
             }
-            
+
             File workingDir = new File( getTestTargetDirectory(), "test-reports" );
             workingDir.mkdirs();
 
