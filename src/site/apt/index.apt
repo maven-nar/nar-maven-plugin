@@ -136,7 +136,8 @@ with compiled shareable libraries.
 that has native methods in it. The actual class files are inspected (rather than their sources).
 The javah tool is picked up from the java installation and is run with a classpath of the
 <<<javah.classDirectory>>> and all depencies' classpaths, unless you specify a list in <<<javah.classPaths>>>. 
-You can also set a boot classpath using <<<javah.bootClassPaths>>>.
+Additional classnames like java.sql.Types, which have no actual *.class file in the classDirectory, can be added
+using the <<<javah.extraClasses>>> list. You can also set a boot classpath using <<<javah.bootClassPaths>>>.
 
 	This goal has no effect if there are no java sources, or if none of the java classes contain a native
 method.
