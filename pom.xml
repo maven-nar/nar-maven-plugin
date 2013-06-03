@@ -35,10 +35,10 @@
   <mailingLists>
     <mailingList>
       <name>Maven NAR plugin</name>
-      <subscribe>https://groups.google.com/forum/?fromgroups#!forum/maven-nar</subscribe>
-      <unsubscribe>https://groups.google.com/forum/?fromgroups#!forum/maven-nar</unsubscribe>
+      <subscribe>https://groups.google.com/group/maven-nar</subscribe>
+      <unsubscribe>https://groups.google.com/group/maven-nar</unsubscribe>
       <post>maven-nar@googlegroups.com</post>
-      <archive>https://groups.google.com/forum/?fromgroups#!forum/maven-nar</archive>
+      <archive>https://groups.google.com/group/maven-nar</archive>
     </mailingList>
   </mailingLists>
   <scm>
