@@ -20,6 +20,7 @@ package org.apache.maven.plugin.nar;
  */
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -53,10 +54,18 @@ public class NarTestMojo
      */
     private List classpathElements;
 
-	@Override
-	protected List/*<Artifact>*/ getArtifacts() {
-		return getMavenProject().getTestArtifacts();  // Artifact.SCOPE_TEST 
-	}
+    /**
+     * Directory for test resources. Defaults to src/test/resources
+     * 
+     * @parameter expression="${basedir}/src/test/resources"
+     * @required
+     */
+    private File testResourceDirectory;
+
+    @Override
+    protected List/*<Artifact>*/ getArtifacts() {
+        return getMavenProject().getTestArtifacts();  // Artifact.SCOPE_TEST
+    }
 
     protected File getUnpackDirectory()
     {
@@ -66,7 +75,7 @@ public class NarTestMojo
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-    	super.narExecute();
+        super.narExecute();
         // run all tests
         for ( Iterator i = getTests().iterator(); i.hasNext(); )
         {
@@ -95,9 +104,25 @@ public class NarTestMojo
                 getLog().warn( "Skipping non-existing test " + path );
                 return;
             }
-            
+
             File workingDir = new File( getTestTargetDirectory(), "test-reports" );
             workingDir.mkdirs();
+
+            // Copy test resources
+            try
+            {
+                int copied = 0;
+                if ( testResourceDirectory.exists() )
+                {
+                    copied += NarUtil.copyDirectoryStructure( testResourceDirectory, workingDir, null, NarUtil.DEFAULT_EXCLUDES );
+                }
+                getLog().info( "Copied " + copied + " test resources" );
+            }
+            catch ( IOException e )
+            {
+                throw new MojoExecutionException( "NAR: Could not copy test resources", e );
+            }
+
             getLog().info( "Running test " + name + " in " + workingDir );
 
             List args = test.getArgs();

@@ -91,6 +91,22 @@ public abstract class Compiler
     private Set excludes = new HashSet();
 
     /**
+     * Include patterns for test sources
+     * 
+     * @parameter expression=""
+     * @required
+     */
+    private Set testIncludes = new HashSet();
+
+    /**
+     * Exclude patterns for test sources
+     * 
+     * @parameter expression=""
+     * @required
+     */
+    private Set testExcludes = new HashSet();
+
+    /**
      * Compile with debug information.
      * 
      * @parameter expression="" default-value="false"
@@ -350,6 +366,10 @@ public abstract class Compiler
         {
             result.addAll( includes );
         }
+        else if ( type.equals( TEST ) && !testIncludes.isEmpty() )
+        {
+            result.addAll( testIncludes );
+        }
         else
         {
             String defaultIncludes = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "includes" );
@@ -365,13 +385,25 @@ public abstract class Compiler
         return result;
     }
 
-    protected final Set getExcludes()
+    public final Set getExcludes()
+        throws MojoFailureException, MojoExecutionException
+    {
+        return getExcludes( "main" );
+    }
+
+    protected final Set getExcludes( String type )
         throws MojoFailureException, MojoExecutionException
     {
         Set result = new HashSet();
-
-        // add all excludes
-        if ( excludes.isEmpty() )
+        if ( type.equals( TEST ) && !testExcludes.isEmpty() )
+        {
+            result.addAll( testExcludes );
+        }
+        else if ( !excludes.isEmpty() )
+        {
+            result.addAll( excludes );
+        }
+        else
         {
             String defaultExcludes = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "excludes" );
             if ( defaultExcludes != null )
@@ -382,10 +414,6 @@ public abstract class Compiler
                     result.add( exclude[i].trim() );
                 }
             }
-        }
-        else
-        {
-            result.addAll( excludes );
         }
 
         return result;
@@ -578,8 +606,8 @@ public abstract class Compiler
 
         // Add default fileset (if exists)
         List srcDirs = getSourceDirectories( type );
-        Set includeSet = getIncludes();
-        Set excludeSet = getExcludes();
+        Set includeSet = getIncludes( type );
+        Set excludeSet = getExcludes( type );
 
         // now add all but the current test to the excludes
         for ( Iterator i = mojo.getTests().iterator(); i.hasNext(); )
