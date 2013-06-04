@@ -43,7 +43,7 @@ public abstract class AbstractResourcesMojo
     /**
      * Binary directory
      * 
-     * @parameter expression="bin"
+     * @parameter default-value="bin"
      * @required
      */
     private String resourceBinDir;
@@ -51,7 +51,7 @@ public abstract class AbstractResourcesMojo
     /**
      * Include directory
      * 
-     * @parameter expression="include"
+     * @parameter default-value="include"
      * @required
      */
     private String resourceIncludeDir;
@@ -59,7 +59,7 @@ public abstract class AbstractResourcesMojo
     /**
      * Library directory
      * 
-     * @parameter expression="lib"
+     * @parameter default-value="lib"
      * @required
      */
     private String resourceLibDir;
