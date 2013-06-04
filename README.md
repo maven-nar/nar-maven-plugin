@@ -1,4 +1,4 @@
-The maven-nar-plugin allows you to compile native code (C++, C and
+The nar-maven-plugin allows you to compile native code (C++, C and
 Fortran) on a number of different architectures (Linux, Windows, MacOSX,
 Solaris, ...) and with a number of different compilers/linkers (g++,
 Microsoft Visual C++, CC, ...) The output produced is wrapped up in

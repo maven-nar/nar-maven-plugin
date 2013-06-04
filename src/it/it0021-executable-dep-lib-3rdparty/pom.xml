@@ -46,7 +46,7 @@ under the License.
     <defaultGoal>integration-test</defaultGoal>
     <plugins>
       <plugin>
-        <artifactId>maven-nar-plugin</artifactId>
+        <artifactId>nar-maven-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>
           <libraries>

@@ -95,7 +95,7 @@ public class NarSystemMojo
             p.println( "/**" );
             p.println( " * Generated class to load the correct version of the jni library" );            
             p.println( " *" );            
-            p.println( " * @author maven-nar-plugin" );            
+            p.println( " * @author nar-maven-plugin" );
             p.println( " */" );            
             p.println( "public final class NarSystem" );
             p.println( "{" );
@@ -107,7 +107,7 @@ public class NarSystemMojo
             p.println( "   /**" );
             p.println( "    * Load jni library: "+ output );            
             p.println( "    *" );            
-            p.println( "    * @author maven-nar-plugin" );            
+            p.println( "    * @author nar-maven-plugin" );
             p.println( "    */" );            
             p.println( "    public static void loadLibrary()" );
             p.println( "    {" );

@@ -81,6 +81,6 @@ directory.
 	
 	[] 
 
-	These examples are now all run as integration tests by running maven on the maven-nar-plugin from its top-level directory with the profile "run-its".
+	These examples are now all run as integration tests by running maven on the nar-maven-plugin from its top-level directory with the profile "run-its".
 
 

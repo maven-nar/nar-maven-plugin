@@ -51,7 +51,7 @@
         <defaultGoal>install</defaultGoal>
         <plugins>
           <plugin>
-            <artifactId>maven-nar-plugin</artifactId>
+            <artifactId>nar-maven-plugin</artifactId>
             <extensions>true</extensions>
             <configuration>
               <runtime>static</runtime>
@@ -96,7 +96,7 @@
             </configuration>
           </plugin>
           <plugin>
-            <artifactId>maven-nar-plugin</artifactId>
+            <artifactId>nar-maven-plugin</artifactId>
             <extensions>true</extensions>
             <configuration>
               <skip>true</skip>

@@ -67,7 +67,7 @@ under the License.
         </configuration>
       </plugin>
       <plugin>
-        <artifactId>maven-nar-plugin</artifactId>
+        <artifactId>nar-maven-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>
           <cpp>

@@ -19,28 +19,28 @@
 			</implementation>
 			<configuration>
 				<phases>
-					<validate>org.apache.maven.plugins:maven-nar-plugin:nar-validate
+					<validate>org.apache.maven.plugins:nar-maven-plugin:nar-validate
 					</validate>
 					<initialize></initialize>
-					<generate-sources>org.apache.maven.plugins:maven-nar-plugin:nar-download
+					<generate-sources>org.apache.maven.plugins:nar-maven-plugin:nar-download
 					</generate-sources>
-					<process-sources>org.apache.maven.plugins:maven-nar-plugin:nar-unpack,
-						org.apache.maven.plugins:maven-nar-plugin:nar-gnu-configure
+					<process-sources>org.apache.maven.plugins:nar-maven-plugin:nar-unpack,
+						org.apache.maven.plugins:nar-maven-plugin:nar-gnu-configure
 					</process-sources>
-					<generate-resources>org.apache.maven.plugins:maven-nar-plugin:nar-system-generate
+					<generate-resources>org.apache.maven.plugins:nar-maven-plugin:nar-system-generate
 					</generate-resources>
 					<process-resources>org.apache.maven.plugins:maven-resources-plugin:resources,
-						org.apache.maven.plugins:maven-nar-plugin:nar-resources,
-						org.apache.maven.plugins:maven-nar-plugin:nar-gnu-resources,
-						org.apache.maven.plugins:maven-nar-plugin:nar-vcproj
+						org.apache.maven.plugins:nar-maven-plugin:nar-resources,
+						org.apache.maven.plugins:nar-maven-plugin:nar-gnu-resources,
+						org.apache.maven.plugins:nar-maven-plugin:nar-vcproj
 					</process-resources>
 					<compile>org.apache.maven.plugins:maven-compiler-plugin:compile,
-						org.apache.maven.plugins:maven-nar-plugin:nar-javah,
-						org.apache.maven.plugins:maven-nar-plugin:nar-gnu-make,
-						org.apache.maven.plugins:maven-nar-plugin:nar-compile
+						org.apache.maven.plugins:nar-maven-plugin:nar-javah,
+						org.apache.maven.plugins:nar-maven-plugin:nar-gnu-make,
+						org.apache.maven.plugins:nar-maven-plugin:nar-compile
 					</compile>
-					<process-classes>org.apache.maven.plugins:maven-nar-plugin:nar-gnu-process,
-						org.apache.maven.plugins:maven-nar-plugin:nar-process-libraries
+					<process-classes>org.apache.maven.plugins:nar-maven-plugin:nar-gnu-process,
+						org.apache.maven.plugins:nar-maven-plugin:nar-process-libraries
 					</process-classes>
 					<generate-test-sources></generate-test-sources>
 					<process-test-sources></process-test-sources>
@@ -49,18 +49,18 @@
 					</process-test-resources>
 					<test-compile>org.apache.maven.plugins:maven-compiler-plugin:testCompile
 					</test-compile>
-					<process-test-classes>org.apache.maven.plugins:maven-nar-plugin:nar-testCompile
+					<process-test-classes>org.apache.maven.plugins:nar-maven-plugin:nar-testCompile
 					</process-test-classes>
 					<test>org.apache.maven.plugins:maven-surefire-plugin:test,
-						org.apache.maven.plugins:maven-nar-plugin:nar-test
+						org.apache.maven.plugins:nar-maven-plugin:nar-test
 					</test>
-					<prepare-package>org.apache.maven.plugins:maven-nar-plugin:nar-prepare-package
+					<prepare-package>org.apache.maven.plugins:nar-maven-plugin:nar-prepare-package
 					</prepare-package>
-					<package>org.apache.maven.plugins:maven-nar-plugin:nar-package,
+					<package>org.apache.maven.plugins:nar-maven-plugin:nar-package,
 						org.apache.maven.plugins:maven-jar-plugin:jar
 					</package>
 					<pre-integration-test></pre-integration-test>
-					<integration-test>org.apache.maven.plugins:maven-nar-plugin:nar-integration-test
+					<integration-test>org.apache.maven.plugins:nar-maven-plugin:nar-integration-test
 					</integration-test>
 					<post-integration-test></post-integration-test>
 					<verify></verify>

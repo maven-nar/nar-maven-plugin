@@ -129,7 +129,7 @@ platform the NAR Plugin is running on. An example is below:
 +--
 ...
 <plugin>
-  <artifactId>maven-nar-plugin</artifactId>
+  <artifactId>nar-maven-plugin</artifactId>
   <configuration>
     <cpp>
       <exceptions>false</exceptions>
@@ -175,7 +175,7 @@ shared library, which depends on a native math library (nmath).
   <build>
     <plugins>
       <plugin>
-        <artifactId>maven-nar-plugin</artifactId>
+        <artifactId>nar-maven-plugin</artifactId>
         <version>nar-version-number</version>
         <extensions>true</extensions>
       </plugin>

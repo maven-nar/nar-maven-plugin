@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<project name="maven-nar-plugin">
+<project name="nar-maven-plugin">
     <bannerLeft>
         <name>Maven NAR Plugin</name>
         <src>http://maven.apache.org/images/apache-maven-project-2.png</src>
