@@ -74,6 +74,19 @@ public class NarCompileMojo
 		return getMavenProject().getCompileArtifacts();  // Artifact.SCOPE_COMPILE 
 	}
 
+    private void copyInclude( Compiler c )
+        throws IOException, MojoExecutionException, MojoFailureException
+    {
+			  if (c == null )
+				{
+					  return;
+				}
+        c.copyIncludeFiles( getMavenProject(),
+                            getLayout().getIncludeDirectory( getTargetDirectory(),
+                                                             getMavenProject().getArtifactId(),
+                                                             getMavenProject().getVersion() ) );
+    }
+
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
@@ -103,14 +116,9 @@ public class NarCompileMojo
         try
         {
             // FIXME, should the include paths be defined at a higher level ?
-            if ( getCpp() != null )
-            {
-                getCpp().copyIncludeFiles(
-                                           getMavenProject(),
-                                           getLayout().getIncludeDirectory( getTargetDirectory(),
-                                                                            getMavenProject().getArtifactId(),
-                                                                            getMavenProject().getVersion() ) );
-            }
+            copyInclude(getCpp());
+            copyInclude(getC());
+            copyInclude(getFortran());
         }
         catch ( IOException e )
         {
