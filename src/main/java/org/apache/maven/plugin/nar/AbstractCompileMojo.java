@@ -56,7 +56,7 @@ public abstract class AbstractCompileMojo
 
     /**
      * By default NAR compile will attempt to compile using all known compilers against files in the directories specified by convention.
-     * This allows configuration to a reduced set, you will have to specify each compiler to use in the configuration. 
+     * This allows configuration to a reduced set, you will have to specify each compiler to use in the configuration.
      * 
      * @parameter expression="false"
      */
@@ -151,28 +151,28 @@ public abstract class AbstractCompileMojo
 
     protected final C getC()
     {
-    	if ( onlySpecifiedCompilers && c == null )
-    	{
-    		setC( new C() );
-    	}
+        if ( onlySpecifiedCompilers && c == null )
+        {
+            setC( new C() );
+        }
         return c;
     }
 
     protected final Cpp getCpp()
     {
-    	if ( onlySpecifiedCompilers && cpp == null )
-    	{
-    		setCpp( new Cpp() );
-    	}
+        if ( onlySpecifiedCompilers && cpp == null )
+        {
+            setCpp( new Cpp() );
+        }
         return cpp;
     }
 
     protected final Fortran getFortran()
     {
-    	if ( onlySpecifiedCompilers && fortran == null )
-    	{
-    		setFortran( new Fortran() );
-    	}
+        if ( onlySpecifiedCompilers && fortran == null )
+        {
+            setFortran( new Fortran() );
+        }
         return fortran;
     }
 
@@ -240,15 +240,15 @@ public abstract class AbstractCompileMojo
     {
         if ( narInfo == null )
         {
-        	String groupId = getMavenProject().getGroupId();
-        	String artifactId = getMavenProject().getArtifactId();
-        	
+            String groupId = getMavenProject().getGroupId();
+            String artifactId = getMavenProject().getArtifactId();
+
             File propertiesDir = new File( getMavenProject().getBasedir(), "src/main/resources/META-INF/nar/" + groupId + "/" + artifactId );
             File propertiesFile = new File( propertiesDir, NarInfo.NAR_PROPERTIES );
 
-            narInfo = new NarInfo( 
+            narInfo = new NarInfo(
                 groupId, artifactId,
-                getMavenProject().getVersion(), 
+                getMavenProject().getVersion(),
                 getLog(),
                 propertiesFile );
         }
