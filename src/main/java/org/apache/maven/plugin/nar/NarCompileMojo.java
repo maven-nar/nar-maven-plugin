@@ -67,20 +67,19 @@ public class NarCompileMojo
      * @readonly
      */
     protected MavenSession session;
- 
 
-	@Override
-	protected List/*<Artifact>*/ getArtifacts() {
-		return getMavenProject().getCompileArtifacts();  // Artifact.SCOPE_COMPILE 
-	}
+    @Override
+    protected List/*<Artifact>*/ getArtifacts() {
+        return getMavenProject().getCompileArtifacts();  // Artifact.SCOPE_COMPILE
+    }
 
     private void copyInclude( Compiler c )
         throws IOException, MojoExecutionException, MojoFailureException
     {
-			  if (c == null )
-				{
-					  return;
-				}
+        if ( c == null )
+        {
+            return;
+        }
         c.copyIncludeFiles( getMavenProject(),
                             getLayout().getIncludeDirectory( getTargetDirectory(),
                                                              getMavenProject().getArtifactId(),
@@ -90,7 +89,7 @@ public class NarCompileMojo
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-    	super.narExecute();
+        super.narExecute();
 
         // make sure destination is there
         getTargetDirectory().mkdirs();
@@ -133,7 +132,7 @@ public class NarCompileMojo
         {
             return Collections.EMPTY_LIST;
         }
-        
+
         try
         {
             List files = new ArrayList();
@@ -156,7 +155,7 @@ public class NarCompileMojo
     }
 
     private void createLibrary(Project antProject, Library library)
-        throws MojoExecutionException, MojoFailureException 
+        throws MojoExecutionException, MojoFailureException
     {
         getLog().debug( "Creating Library " + library );
         // configure task
@@ -265,7 +264,7 @@ public class NarCompileMojo
         // add java include paths
         getJava().addIncludePaths(task, type);
 
-        List<NarArtifact> dependencies = getNarArtifacts(); 
+        List<NarArtifact> dependencies = getNarArtifacts();
         // add dependency include paths
         for ( Iterator i = dependencies.iterator(); i.hasNext(); )
         {
@@ -319,7 +318,7 @@ public class NarCompileMojo
                         NarArtifact dep = (NarArtifact) j.next();
                         String depName = dep.getGroupId() + ":" + dep.getArtifactId();
 
-                        if (depName.equals(depToOrderName)) 
+                        if (depName.equals(depToOrderName))
                         {
                             tmp.add(dep);
                             j.remove();
