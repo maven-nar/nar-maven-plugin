@@ -62,8 +62,8 @@ public class NarManager
 		this.log = log;
 		this.repository = repository;
 		this.project = project;
-		this.defaultAOL = NarUtil.getAOL(project, architecture, os, linker, null);
-		this.linkerName = NarUtil.getLinkerName(project, architecture, os, linker);
+		this.defaultAOL = NarUtil.getAOL(project, architecture, os, linker, null, log );
+		this.linkerName = NarUtil.getLinkerName(project, architecture, os, linker, log );
 	}
 
 	/**
