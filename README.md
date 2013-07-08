@@ -91,12 +91,10 @@ Although we have not yet deployed a stable 3.0.0 release to Central, the
 [SciJava fork](https://github.com/scijava/maven-nar-plugin) publishes
 *UNOFFICIAL* releases to its Maven repository:
 
-    <repositories>
-        <repository>
-            <id>imagej.releases</id>
-            <url>http://maven.imagej.net/content/repositories/releases</url>
-        </repository>
-    </repositories>
+    <pluginRepository>
+        <id>imagej.releases</id>
+        <url>http://maven.imagej.net/content/repositories/releases</url>
+    </pluginRepository>
 
 As of this writing, the newest such release is:
 
