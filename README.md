@@ -137,11 +137,11 @@ How can I test the latest SNAPSHOTs?
 To use the latest code on the master branch and/or topic branches: clone the
 code from GitHub, and build it using `mvn install`. This installs the JAR into
 your local Maven repository cache (typically at
-`~/.m2/repository/org/apache/maven/plugins/nar-maven-plugin/3.0.0-SNAPSHOT`).
+`~/.m2/repository/com/github/maven-nar/nar-maven-plugin/3.0.0-SNAPSHOT`).
 Then add a reference to the plugin within your project's POM:
 
     <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
+        <groupId>com.github.maven-nar</groupId>
         <artifactId>nar-maven-plugin</artifactId>
         <version>3.0.0-SNAPSHOT</version>
     </plugin>
