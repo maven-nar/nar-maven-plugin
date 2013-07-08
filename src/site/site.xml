@@ -21,7 +21,7 @@ under the License.
     <bannerLeft>
         <name>Maven NAR Plugin</name>
         <src>http://maven.apache.org/images/apache-maven-project-2.png</src>
-        <href>http://maven-nar.github.com/maven-nar-plugin/</href>
+        <href>http://maven-nar.github.com/nar-maven-plugin/</href>
     </bannerLeft>
 
   <body>
@@ -50,12 +50,12 @@ under the License.
 
     <menu name="Developer Info">
       <item name="NAR Dependencies" href="narDependencies.html"/>
-      <item name="Bug Reports" href="https://github.com/maven-nar/maven-nar-plugin/issues"/>
+      <item name="Bug Reports" href="https://github.com/maven-nar/nar-maven-plugin/issues"/>
       <item name="Forum" href="https://groups.google.com/forum/?fromgroups#!forum/maven-nar"/>
       <item name="APIDocs" href="apidocs/index.html"/>
       <item name="NAR Library" href="narLibrary.html"/>
       <item name="CPPTasks" href="cpptasks.html"/>
-      <item name="Git Browse nar-plugin" href="https://github.com/maven-nar/maven-nar-plugin"/>
+      <item name="Git Browse nar-plugin" href="https://github.com/maven-nar/nar-maven-plugin"/>
       <item name="Git Browse cpptasks" href="https://github.com/maven-nar/cpptasks-parallel"/>
       <item name="Git Repository" href="source-repository.html"/>
     </menu>

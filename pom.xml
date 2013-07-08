@@ -42,9 +42,9 @@
     </mailingList>
   </mailingLists>
   <scm>
-    <connection>scm:git:git://github.com/maven-nar/maven-nar-plugin</connection>
-    <developerConnection>scm:git:git@github.com:maven-nar/maven-nar-plugin</developerConnection>
-    <url>https://github.com/maven-nar/maven-nar-plugin</url>
+    <connection>scm:git:git://github.com/maven-nar/nar-maven-plugin</connection>
+    <developerConnection>scm:git:git@github.com:maven-nar/nar-maven-plugin</developerConnection>
+    <url>https://github.com/maven-nar/nar-maven-plugin</url>
   </scm>
   <properties>
     <mavenVersion>2.0.9</mavenVersion>

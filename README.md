@@ -11,16 +11,16 @@ using the standard `maven-install-plugin` and `maven-deploy-plugin`.
 
 Links
 -----
-* [Documentation](https://maven-nar.github.com/maven-nar-plugin)
+* [Documentation](https://maven-nar.github.com/nar-maven-plugin)
 * [Mailing list](https://groups.google.com/group/maven-nar)
-* [Issues](https://github.com/maven-nar/maven-nar-plugin/issues)
+* [Issues](https://github.com/maven-nar/nar-maven-plugin/issues)
 * [SCM](https://github.com/maven-nar)
 * Maven Repository coming soon
 
 FAQ
 ---
 **Q:**
-Is this repository (https://github.com/maven-nar/maven-nar-plugin) the official
+Is this repository (https://github.com/maven-nar/nar-maven-plugin) the official
 home of the NAR plugin?
 
 **A:**
@@ -66,7 +66,7 @@ The [maven-nar Google group](https://groups.google.com/group/maven-nar).
 Where is the official issue tracker?
 
 **A:**
-[GitHub Issues](https://github.com/maven-nar/maven-nar-plugin/issues). There
+[GitHub Issues](https://github.com/maven-nar/nar-maven-plugin/issues). There
 was a [category for NAR in the Sonatype
 JIRA](https://issues.sonatype.org/browse/NAR), which was active until May 2013,
 but it has apparently been deleted, so we unfortunately cannot migrate those
