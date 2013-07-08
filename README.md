@@ -82,3 +82,65 @@ If it is something you need urgently, please write to the list about it. All of
 the current NAR maintainers have day jobs, and so have limited time to spend on
 NAR. So this project is largely driven by A) submitted pull requests; B) the
 needs of the maintainers; and C) community complaints. ;-)
+
+**Q:**
+Is there a public Maven repository with release builds?
+
+**A:**
+Although we have not yet deployed a stable 3.0.0 release to Central, the
+[SciJava fork](https://github.com/scijava/maven-nar-plugin) publishes
+*UNOFFICIAL* releases to its Maven repository:
+
+    <repositories>
+        <repository>
+            <id>imagej.releases</id>
+            <url>http://maven.imagej.net/content/repositories/releases</url>
+        </repository>
+    </repositories>
+
+As of this writing, the newest such release is:
+
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>nar-maven-plugin</artifactId>
+        <version>3.0.0-scijava-2</version>
+    </plugin>
+
+The corresponding source is [tagged on
+GitHub](https://github.com/scijava/maven-nar-plugin/tree/nar-maven-plugin-3.0.0-scijava-2).
+
+**Q:**
+Where can I find a working example of how to configure the NAR plugin?
+
+**A:**
+The ImageJ project has a [native launcher
+component](https://github.com/imagej/imagej-launcher) which uses NAR. Search
+the `pom.xml` for "nar" to find the relevant blocks. It is not a simple "hello
+world" example (e.g., it uses OS-specific profiles), but it is a working
+real-world use case which successfully builds on a [Jenkins server
+farm](http://jenkins.imagej.net/job/ImageJ-launcher/) including Windows, OS X
+and Linux nodes.
+
+We would gladly welcome any other working examples of the NAR plugin in use!
+
+**Q:**
+How can I test the latest SNAPSHOTs?
+
+**A:**
+To use the latest code on the master branch and/or topic branches: clone the
+code from GitHub, and build it using `mvn install`. This installs the JAR into
+your local Maven repository cache (typically at
+`~/.m2/repository/org/apache/maven/plugins/nar-maven-plugin/3.0.0-SNAPSHOT`).
+Then add a reference to the plugin within your project's POM:
+
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>nar-maven-plugin</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+    </plugin>
+
+It will resolve the plugin from your local cache.
+
+Note that this approach is recommended only for testing, not for production
+code, because anyone else building your code will then also need to build
+`nar-maven-plugin` beforehand as well.
