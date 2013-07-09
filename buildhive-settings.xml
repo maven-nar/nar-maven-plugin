@@ -1,0 +1,27 @@
+<!--
+	This file contains settings to let the BuildHive Job
+	https://buildhive.cloudbees.com/job/maven-nar/job/maven-nar-plugin/
+	find the cpptasks-parallel dependency (until we get it into
+	Maven Central or Codehaus).
+-->
+<settings>
+	<profiles>
+		<profile>
+			<id>imagej-repositories</id>
+			<repositories>
+				<repository>
+					<id>imagej.releases</id>
+					<url>http://maven.imagej.net/content/repositories/releases</url>
+				</repository>
+				<repository>
+					<id>imagej.snapshots</id>
+					<url>http://maven.imagej.net/content/repositories/snapshots</url>
+				</repository>
+			</repositories>
+		</profile>
+	</profiles>
+
+	<activeProfiles>
+		<activeProfile>imagej-repositories</activeProfile>
+	</activeProfiles>
+</settings>
