@@ -214,7 +214,7 @@ public class Linker
         else if ( name.equals( "msvc" ) )
         {
             NarUtil.runCommand( "link", new String[] { "/?" }, null, null, out, err, dbg, log );
-            Pattern p = Pattern.compile( "\\d+\\.\\d+\\.\\d+" );
+            Pattern p = Pattern.compile( "\\d+\\.\\d+\\.\\d+(\\.\\d+)?" );
             Matcher m = p.matcher( out.toString() );
             if ( m.find() )
             {
