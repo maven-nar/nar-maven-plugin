@@ -195,11 +195,11 @@ public abstract class AbstractNarMojo
     protected final void validate()
         throws MojoFailureException, MojoExecutionException
     {
-        linker = NarUtil.getLinker( linker );
+        linker = NarUtil.getLinker( linker, getLog() );
 
         architecture = NarUtil.getArchitecture( architecture );
         os = NarUtil.getOS( os );
-        aolId = NarUtil.getAOL(mavenProject, architecture, os, linker, aol );
+        aolId = NarUtil.getAOL(mavenProject, architecture, os, linker, aol, getLog() );
         
         Model model = mavenProject.getModel();
         Properties properties = model.getProperties();
