@@ -42,6 +42,8 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.tools.ant.Project;
 import org.codehaus.plexus.util.FileUtils;
 
+import org.apache.maven.plugin.logging.Log;
+
 /**
  * Linker tag
  * 
@@ -140,9 +142,17 @@ public class Linker
      */
     private String narDependencyLibOrder;
 
+    private final Log log;
+
     public Linker()
     {
         // default constructor for use as TAG
+        this( null );
+    }
+
+    public Linker( final Log log )
+    {
+        this.log = log;
     }
 
     /**
@@ -150,9 +160,10 @@ public class Linker
      * 
      * @param name
      */
-    public Linker( String name )
+    public Linker( String name, final Log log )
     {
         this.name = name;
+        this.log = log;
     }
 
     public final String getName()
@@ -192,7 +203,7 @@ public class Linker
 
         if ( name.equals( "g++" ) || name.equals( "gcc" ) )
         {
-            NarUtil.runCommand( "gcc", new String[] { "--version" }, null, null, out, err, dbg );
+            NarUtil.runCommand( "gcc", new String[] { "--version" }, null, null, out, err, dbg, log );
             Pattern p = Pattern.compile( "\\d+\\.\\d+\\.\\d+" );
             Matcher m = p.matcher( out.toString() );
             if ( m.find() )
@@ -202,7 +213,7 @@ public class Linker
         }
         else if ( name.equals( "msvc" ) )
         {
-            NarUtil.runCommand( "link", new String[] { "/version" }, null, null, out, err, dbg );
+            NarUtil.runCommand( "link", new String[] { "/version" }, null, null, out, err, dbg, log );
             Pattern p = Pattern.compile( "\\d+\\.\\d+\\.\\d+" );
             Matcher m = p.matcher( out.toString() );
             if ( m.find() )
@@ -212,7 +223,7 @@ public class Linker
         }
         else if ( name.equals( "icc" ) || name.equals( "icpc" ) )
         {
-            NarUtil.runCommand( "icc", new String[] { "--version" }, null, null, out, err, dbg );
+            NarUtil.runCommand( "icc", new String[] { "--version" }, null, null, out, err, dbg, log );
             Pattern p = Pattern.compile( "\\d+\\.\\d+" );
             Matcher m = p.matcher( out.toString() );
             if ( m.find() )
@@ -222,7 +233,7 @@ public class Linker
         }
         else if ( name.equals( "icl" ) )
         {
-            NarUtil.runCommand( "icl", new String[] { "/QV" }, null, null, out, err, dbg );
+            NarUtil.runCommand( "icl", new String[] { "/QV" }, null, null, out, err, dbg, log );
             Pattern p = Pattern.compile( "\\d+\\.\\d+" );
             Matcher m = p.matcher( err.toString() );
             if ( m.find() )
@@ -232,7 +243,7 @@ public class Linker
         }
         else if ( name.equals( "CC" ) )
         {
-        	NarUtil.runCommand( "CC", new String[] { "-V" }, null, null, out, err, dbg );
+        	NarUtil.runCommand( "CC", new String[] { "-V" }, null, null, out, err, dbg, log );
         	Pattern p = Pattern.compile( "\\d+\\.d+" );
         	Matcher m = p.matcher( err.toString() );
         	if ( m.find() )

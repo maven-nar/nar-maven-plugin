@@ -81,28 +81,28 @@ public final class NarUtil
         return architecture;
     }
 
-    public static Linker getLinker( Linker linker )
+    public static Linker getLinker( Linker linker, final Log log )
     {
         Linker link = linker;
         if ( link == null )
         {
-            link = new Linker();
+            link = new Linker( log );
         }
         return link;
     }
 
-    public static String getLinkerName(MavenProject project, String architecture, String os, Linker linker )
+    public static String getLinkerName(MavenProject project, String architecture, String os, Linker linker, final Log log )
         throws MojoFailureException, MojoExecutionException
     {
-        return getLinker( linker ).getName( NarProperties.getInstance(project), getArchitecture( architecture ) + "." + getOS( os ) + "." );
+        return getLinker( linker, log ).getName( NarProperties.getInstance(project), getArchitecture( architecture ) + "." + getOS( os ) + "." );
     }
 
-    public static AOL getAOL(MavenProject project, String architecture, String os, Linker linker, String aol )
+    public static AOL getAOL(MavenProject project, String architecture, String os, Linker linker, String aol, final Log log )
         throws MojoFailureException, MojoExecutionException
     {
         // adjust aol
         return aol == null ? new AOL( getArchitecture( architecture ), getOS( os ), getLinkerName( project, architecture, os,
-                                                                                                   linker ) )
+                                                                                                   linker, log ) )
                         : new AOL( aol );
     }
 
@@ -600,11 +600,11 @@ public final class NarUtil
             {
                 log.debug( text );
             }
-        } );
+        } , log );
     }
 
     public static int runCommand( String cmd, String[] args, File workingDirectory, String[] env, TextStream out,
-                                  TextStream err, TextStream dbg )
+                                  TextStream err, TextStream dbg, final Log log )
         throws MojoExecutionException, MojoFailureException
     {
         Commandline cmdLine = new Commandline();
@@ -649,11 +649,18 @@ public final class NarUtil
             errorGobbler.start();
             outputGobbler.start();
             process.waitFor();
-            dbg.println( "ExitValue: " + process.exitValue() );
+            int exitValue = process.exitValue();
+            dbg.println( "ExitValue: " + exitValue );
             final int timeout = 5000;
             errorGobbler.join( timeout );
             outputGobbler.join( timeout );
-            return process.exitValue();
+            if ( exitValue != 0 )
+            {
+                 log.warn(err.toString());
+                 log.warn(out.toString());
+                 log.warn(dbg.toString());
+            }
+            return exitValue;
         }
         catch ( Exception e )
         {
