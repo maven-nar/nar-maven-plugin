@@ -44,7 +44,7 @@ public class TestLinkerVersion
     {
         super.setUp();
         String architecture = System.getProperty( "os.arch" );
-        linker = new Linker( null );
+        linker = new Linker();
 //        String name =
             linker.getName( NarProperties.getInstance(null), NarUtil.getArchitecture( architecture ) + "." + NarUtil.getOS( null )
                 + "." );
