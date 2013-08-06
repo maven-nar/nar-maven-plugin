@@ -28,13 +28,13 @@
   <artifactId>nar-maven-plugin</artifactId>
   <version>3.0.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
-  <name>Maven NAR Plugin</name>
+  <name>Native ARchive plugin for Maven</name>
   <description>
     This plugin compiles native code and publishes native artifacts in the form of nar files.
   </description>
   <mailingLists>
     <mailingList>
-      <name>Maven NAR plugin</name>
+      <name>NAR plugin</name>
       <subscribe>https://groups.google.com/group/maven-nar</subscribe>
       <unsubscribe>https://groups.google.com/group/maven-nar</unsubscribe>
       <post>maven-nar@googlegroups.com</post>
