@@ -92,8 +92,8 @@ Although we have not yet deployed a stable 3.0.0 release to Central, the
 *UNOFFICIAL* releases to its Maven repository:
 
     <pluginRepository>
-        <id>imagej.releases</id>
-        <url>http://maven.imagej.net/content/repositories/releases</url>
+        <id>imagej.thirdparty</id>
+        <url>http://maven.imagej.net/content/repositories/thirdparty</url>
     </pluginRepository>
 
 As of this writing, the newest such release is:
