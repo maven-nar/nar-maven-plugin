@@ -151,7 +151,7 @@ public abstract class AbstractCompileMojo
 
     protected final C getC()
     {
-        if ( onlySpecifiedCompilers && c == null )
+        if ( !onlySpecifiedCompilers && c == null )
         {
             setC( new C() );
         }
@@ -160,7 +160,7 @@ public abstract class AbstractCompileMojo
 
     protected final Cpp getCpp()
     {
-        if ( onlySpecifiedCompilers && cpp == null )
+        if ( !onlySpecifiedCompilers && cpp == null )
         {
             setCpp( new Cpp() );
         }
@@ -169,7 +169,7 @@ public abstract class AbstractCompileMojo
 
     protected final Fortran getFortran()
     {
-        if ( onlySpecifiedCompilers && fortran == null )
+        if ( !onlySpecifiedCompilers && fortran == null )
         {
             setFortran( new Fortran() );
         }
