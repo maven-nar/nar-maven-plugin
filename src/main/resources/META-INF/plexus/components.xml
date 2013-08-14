@@ -88,7 +88,7 @@
 				<language>java</language>
 				<addedToClasspath>true</addedToClasspath>
 				<includesDependencies>false</includesDependencies>
-				<classifier />
+				<!-- NAR-193 (#35) <classifier /> -->
 			</configuration>
 		</component>
 
