@@ -185,13 +185,28 @@ public final class TestCompilerDef
   /**
    * Gets the command line arguments that precede filenames.
    *
+   * This method filters out <i>-m</i> options because they are
+   * platform-specific options of the GNU compiler suite.
+   *
    * @param processor
    *            processor under test
    * @return command line arguments
    */
   protected String[] getPreArguments(final ProcessorDef processor) {
-    return ((CommandLineCompilerConfiguration) getConfiguration(processor))
-        .getPreArguments();
+    final String[] result =
+      ((CommandLineCompilerConfiguration) getConfiguration(processor))
+      .getPreArguments();
+
+    // filter out -m (i.e. platform-specific) options
+    int j = -1;
+    for (int i = 0; i < result.length; i++) {
+      if (result[i].startsWith("-m")) continue;
+      if (i != ++j) result[j] = result[i];
+    }
+    if (++j == result.length) return result;
+    final String[] filtered = new String[j];
+    System.arraycopy(result, 0, filtered, 0, j);
+    return filtered;
   }
 
   /**
