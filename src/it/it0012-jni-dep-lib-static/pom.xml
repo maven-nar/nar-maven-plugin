@@ -32,7 +32,7 @@ under the License.
   <artifactId>it0012-jni-dep-lib-static</artifactId>
   <packaging>nar</packaging>
 
-  <name>Maven NAR JNI</name>
+  <name>NAR JNI</name>
   <version>1.0-SNAPSHOT</version>
   <description>
     JNI

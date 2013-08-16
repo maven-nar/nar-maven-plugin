@@ -32,7 +32,7 @@ under the License.
   <artifactId>it0004-java-dep-jni</artifactId>
   <packaging>nar</packaging>
   
-  <name>Maven NAR Java Class Depends on JNI</name>
+  <name>NAR Java Class Depends on JNI</name>
   <description>
     Java class which depends on a separate JNI library
   </description>

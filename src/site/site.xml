@@ -19,7 +19,7 @@ under the License.
 
 <project name="nar-maven-plugin">
     <bannerLeft>
-        <name>Maven NAR Plugin</name>
+        <name>NAR Plugin</name>
         <src>http://maven.apache.org/images/apache-maven-project-2.png</src>
         <href>http://maven-nar.github.com/nar-maven-plugin/</href>
     </bannerLeft>

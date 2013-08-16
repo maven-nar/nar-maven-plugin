@@ -6,7 +6,7 @@ x86-Windows-msvc: vc 8 WindowsXP 2.3 GHz
 
 8-core to local disk.
 
-Compile Times Maven NAR
+Compile Times NAR
 
 Geant4 Full Size
 

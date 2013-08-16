@@ -32,7 +32,7 @@ under the License.
   <artifactId>it0010-lib-static</artifactId>
   <packaging>nar</packaging>
   
-  <name>Maven NAR Static Library</name>
+  <name>NAR Static Library</name>
   <version>1.0-SNAPSHOT</version>
   <description>
     Simple static library and test file

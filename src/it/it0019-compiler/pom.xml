@@ -32,7 +32,7 @@ under the License.
   <artifactId>it0019-compiler</artifactId>
   <packaging>nar</packaging>
   
-  <name>Maven NAR Compiler Test</name>
+  <name>NAR Compiler Test</name>
   <version>1.0-SNAPSHOT</version>
   <description>
     Compiler Configuration Test
