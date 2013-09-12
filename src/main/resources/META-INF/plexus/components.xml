@@ -95,7 +95,7 @@
 		<component>
 			<role>org.codehaus.plexus.archiver.Archiver</role>
 			<role-hint>nar</role-hint>
-			<implementation>org.apache.maven.plugin.nar.NarArchiver
+			<implementation>com.github.maven_nar.NarArchiver
 			</implementation>
 			<instantiation-strategy>per-lookup</instantiation-strategy>
 		</component>
@@ -103,7 +103,7 @@
 		<component>
 			<role>org.codehaus.plexus.archiver.UnArchiver</role>
 			<role-hint>nar</role-hint>
-			<implementation>org.apache.maven.plugin.nar.NarUnArchiver
+			<implementation>com.github.maven_nar.NarUnArchiver
 			</implementation>
 			<instantiation-strategy>per-lookup</instantiation-strategy>
 		</component>
