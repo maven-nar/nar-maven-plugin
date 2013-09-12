@@ -88,8 +88,8 @@ Is there a public Maven repository with release builds?
 
 **A:**
 Although we have not yet deployed a stable 3.0.0 release to Central, the
-[SciJava fork](https://github.com/scijava/maven-nar-plugin) publishes
-*UNOFFICIAL* releases to its Maven repository:
+[SciJava project](https://scijava.org/) publishes *UNOFFICIAL* releases to its
+Maven repository:
 
     <pluginRepository>
         <id>imagej.thirdparty</id>
