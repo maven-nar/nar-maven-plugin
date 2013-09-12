@@ -23,7 +23,7 @@ under the License.
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.apache.maven.its.nar</groupId>
+    <groupId>com.github.maven-nar.its.nar</groupId>
     <artifactId>it-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
     <relativePath>../it-parent/pom.xml</relativePath>
@@ -62,7 +62,7 @@ under the License.
   
   <dependencies>
     <dependency>
-      <groupId>org.apache.maven.its.nar</groupId>
+      <groupId>com.github.maven-nar.its.nar</groupId>
       <artifactId>it0010-lib-static</artifactId>
       <version>1.0-SNAPSHOT</version>
       <type>nar</type>
