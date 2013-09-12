@@ -111,13 +111,19 @@ GitHub](https://github.com/scijava/maven-nar-plugin/tree/nar-maven-plugin-3.0.0-
 Where can I find a working example of how to configure the NAR plugin?
 
 **A:**
-The ImageJ project has a [native launcher
-component](https://github.com/imagej/imagej-launcher) which uses NAR. Search
-the `pom.xml` for "nar" to find the relevant blocks. It is not a simple "hello
-world" example (e.g., it uses OS-specific profiles), but it is a working
-real-world use case which successfully builds on a [Jenkins server
-farm](http://jenkins.imagej.net/job/ImageJ-launcher/) including Windows, OS X
-and Linux nodes.
+Several open source projects make use of the NAR plugin:
+
+1. [DevZendo Cross-Platform FileSystem
+   Access](https://code.google.com/p/devzendo-org-xpfsa/source/browse) uses
+   NAR. The POM is straightforward and may be a good first project to study for
+   learning about NAR.</li>
+2. [ImageJ](http://developer.imagej.net/) has a [native launcher
+   component](https://github.com/imagej/imagej-launcher) which uses NAR. Search
+   the `pom.xml` for "nar" to find the relevant blocks. It is not a simple
+   "hello world" example (e.g., it uses OS-specific profiles), but it is a
+   working real-world use case which successfully builds on a [Jenkins server
+   farm](http://jenkins.imagej.net/job/ImageJ-launcher/) including Windows, OS
+   X and Linux nodes.
 
 We would gladly welcome any other working examples of the NAR plugin in use!
 
