@@ -116,7 +116,7 @@ Several open source projects make use of the NAR plugin:
 1. [DevZendo Cross-Platform FileSystem
    Access](https://code.google.com/p/devzendo-org-xpfsa/source/browse) uses
    NAR. The POM is straightforward and may be a good first project to study for
-   learning about NAR.</li>
+   learning about NAR.
 2. [ImageJ](http://developer.imagej.net/) has a [native launcher
    component](https://github.com/imagej/imagej-launcher) which uses NAR. Search
    the `pom.xml` for "nar" to find the relevant blocks. It is not a simple
