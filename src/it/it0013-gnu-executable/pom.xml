@@ -23,7 +23,7 @@ under the License.
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.apache.maven.its.nar</groupId>
+    <groupId>com.github.maven-nar.its.nar</groupId>
     <artifactId>it-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
     <relativePath>../it-parent/pom.xml</relativePath>
@@ -32,7 +32,7 @@ under the License.
   <artifactId>it0013-gnu-executable</artifactId>
   <packaging>nar</packaging>
   
-  <name>Maven NAR GNU Test</name>
+  <name>NAR GNU Test</name>
   <version>1.0-SNAPSHOT</version>
   <description>
     Simple test for GNU package

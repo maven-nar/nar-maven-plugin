@@ -24,17 +24,17 @@
     <relativePath />
   </parent>
 
-  <groupId>org.apache.maven.plugins</groupId>
+  <groupId>com.github.maven-nar</groupId>
   <artifactId>nar-maven-plugin</artifactId>
   <version>3.0.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
-  <name>Maven NAR Plugin</name>
+  <name>Native ARchive plugin for Maven</name>
   <description>
     This plugin compiles native code and publishes native artifacts in the form of nar files.
   </description>
   <mailingLists>
     <mailingList>
-      <name>Maven NAR plugin</name>
+      <name>NAR plugin</name>
       <subscribe>https://groups.google.com/group/maven-nar</subscribe>
       <unsubscribe>https://groups.google.com/group/maven-nar</unsubscribe>
       <post>maven-nar@googlegroups.com</post>
@@ -42,9 +42,9 @@
     </mailingList>
   </mailingLists>
   <scm>
-    <connection>scm:git:git://github.com/maven-nar/maven-nar-plugin</connection>
-    <developerConnection>scm:git:git@github.com:maven-nar/maven-nar-plugin</developerConnection>
-    <url>https://github.com/maven-nar/maven-nar-plugin</url>
+    <connection>scm:git:git://github.com/maven-nar/nar-maven-plugin</connection>
+    <developerConnection>scm:git:git@github.com:maven-nar/nar-maven-plugin</developerConnection>
+    <url>https://github.com/maven-nar/nar-maven-plugin</url>
   </scm>
   <properties>
     <mavenVersion>2.0.9</mavenVersion>

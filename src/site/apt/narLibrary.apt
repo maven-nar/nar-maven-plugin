@@ -1,5 +1,5 @@
 	---
-Maven NAR Plugin
+NAR Plugin
 	---
 	---
 Mark Donszelmann
@@ -35,14 +35,14 @@ following to your POM file:
 	and use the code with the following snippet:
 
 +--
+import com.github.maven_nar.Linker;
+import com.github.maven_nar.NarManager;
+import com.github.maven_nar.NarUtil;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.plugin.nar.Linker;
-import org.apache.maven.plugin.nar.NarManager;
-import org.apache.maven.plugin.nar.NarUtil;
 
 /**
  * Description...
