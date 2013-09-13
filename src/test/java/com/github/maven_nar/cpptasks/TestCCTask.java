@@ -125,7 +125,7 @@ public final class TestCCTask
    */
   public void testAntlibXmlPresent() throws IOException {
     InputStream stream = TestCCTask.class.getClassLoader()
-        .getResourceAsStream("net/sf/antcontrib/cpptasks/antlib.xml");
+        .getResourceAsStream("com/github/maven_nar/cpptasks/antlib.xml");
     if (stream != null) {
       stream.close();
     }

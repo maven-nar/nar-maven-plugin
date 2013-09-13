@@ -80,7 +80,7 @@ Licensed to the Ant-Contrib Project under one or more
 <td>Comma-separated list of library names without leading prefixes, such as
  "lib", or extensions, such as ".so" or ".a".</td>
 <td>
-<a href="../apidocs/net/sf/antcontrib/cpptasks/CUtil/StringArrayBuilder.html">StringArrayBuilder</a>
+<a href="../apidocs/com/github/maven_nar/cpptasks/CUtil/StringArrayBuilder.html">StringArrayBuilder</a>
 </td>
 </tr>
 <tr>
@@ -93,7 +93,7 @@ Licensed to the Ant-Contrib Project under one or more
 <td>Sets the preferred library type. Supported values "shared", "static", and
  "framework".  "framework" is equivalent to "shared" on non-Darwin platforms.</td>
 <td>
-<a href="../apidocs/net/sf/antcontrib/cpptasks/types/LibraryTypeEnum.html">LibraryTypeEnum</a>
+<a href="../apidocs/com/github/maven_nar/cpptasks/types/LibraryTypeEnum.html">LibraryTypeEnum</a>
 </td>
 </tr>
 <tr>

@@ -53,10 +53,10 @@ function windowTitle()
 
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-&nbsp;<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineFortranCompiler.html" title="class in com.github.maven_nar.cpptasks.compiler"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinkerConfiguration.html" title="class in com.github.maven_nar.cpptasks.compiler"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineFortranCompiler.html" title="class in com.github.maven_nar.cpptasks.compiler"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinkerConfiguration.html" title="class in com.github.maven_nar.cpptasks.compiler"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-  <A HREF="../../../../../index.html?net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+  <A HREF="../../../../../index.html?com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="CommandLineLinker.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
 &nbsp;<SCRIPT type="text/javascript">
   <!--
@@ -91,19 +91,19 @@ com.github.maven_nar.cpptasks.compiler</FONT>
 Class CommandLineLinker</H2>
 <PRE>
 java.lang.Object
-  <IMG SRC="../../../../../resources/inherit.gif" ALT="extended by "><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html" title="class in com.github.maven_nar.cpptasks.compiler">com.github.maven_nar.cpptasks.compiler.AbstractProcessor</A>
-      <IMG SRC="../../../../../resources/inherit.gif" ALT="extended by "><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractLinker.html" title="class in com.github.maven_nar.cpptasks.compiler">com.github.maven_nar.cpptasks.compiler.AbstractLinker</A>
+  <IMG SRC="../../../../../resources/inherit.gif" ALT="extended by "><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractProcessor.html" title="class in com.github.maven_nar.cpptasks.compiler">com.github.maven_nar.cpptasks.compiler.AbstractProcessor</A>
+      <IMG SRC="../../../../../resources/inherit.gif" ALT="extended by "><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractLinker.html" title="class in com.github.maven_nar.cpptasks.compiler">com.github.maven_nar.cpptasks.compiler.AbstractLinker</A>
           <IMG SRC="../../../../../resources/inherit.gif" ALT="extended by "><B>com.github.maven_nar.cpptasks.compiler.CommandLineLinker</B>
 </PRE>
 <DL>
-<DT><B>All Implemented Interfaces:</B> <DD>java.lang.Cloneable, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Linker.html" title="interface in com.github.maven_nar.cpptasks.compiler">Linker</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html" title="interface in com.github.maven_nar.cpptasks.compiler">Processor</A></DD>
+<DT><B>All Implemented Interfaces:</B> <DD>java.lang.Cloneable, <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/Linker.html" title="interface in com.github.maven_nar.cpptasks.compiler">Linker</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/Processor.html" title="interface in com.github.maven_nar.cpptasks.compiler">Processor</A></DD>
 </DL>
 <DL>
-<DT><B>Direct Known Subclasses:</B> <DD><A HREF="../../../../../net/sf/antcontrib/cpptasks/gcc/AbstractArLibrarian.html" title="class in com.github.maven_nar.cpptasks.gcc">AbstractArLibrarian</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/gcc/AbstractLdLinker.html" title="class in com.github.maven_nar.cpptasks.gcc">AbstractLdLinker</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/arm/ADSLibrarian.html" title="class in com.github.maven_nar.cpptasks.arm">ADSLibrarian</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/arm/ADSLinker.html" title="class in com.github.maven_nar.cpptasks.arm">ADSLinker</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/borland/BorlandLibrarian.html" title="class in com.github.maven_nar.cpptasks.borland">BorlandLibrarian</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/borland/BorlandLinker.html" title="class in com.github.maven_nar.cpptasks.borland">BorlandLinker</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/sun/C89Linker.html" title="class in com.github.maven_nar.cpptasks.sun">C89Linker</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/ti/ClxxLibrarian.html" title="class in com.github.maven_nar.cpptasks.ti">ClxxLibrarian</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/ti/ClxxLinker.html" title="class in com.github.maven_nar.cpptasks.ti">ClxxLinker</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compaq/CompaqVisualFortranLibrarian.html" title="class in com.github.maven_nar.cpptasks.compaq">CompaqVisualFortranLibrarian</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/devstudio/DevStudioCompatibleLibrarian.html" title="class in com.github.maven_nar.cpptasks.devstudio">DevStudioCompatibleLibrarian</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/devstudio/DevStudioCompatibleLinker.html" title="class in com.github.maven_nar.cpptasks.devstudio">DevStudioCompatibleLinker</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/os400/IccLinker.html" title="class in com.github.maven_nar.cpptasks.os400">IccLinker</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/openwatcom/OpenWatcomLibrarian.html" title="class in com.github.maven_nar.cpptasks.openwatcom">OpenWatcomLibrarian</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/openwatcom/OpenWatcomLinker.html" title="class in com.github.maven_nar.cpptasks.openwatcom">OpenWatcomLinker</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/os390/OS390Linker.html" title="class in com.github.maven_nar.cpptasks.os390">OS390Linker</A></DD>
+<DT><B>Direct Known Subclasses:</B> <DD><A HREF="../../../../../com/github/maven_nar/cpptasks/gcc/AbstractArLibrarian.html" title="class in com.github.maven_nar.cpptasks.gcc">AbstractArLibrarian</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/gcc/AbstractLdLinker.html" title="class in com.github.maven_nar.cpptasks.gcc">AbstractLdLinker</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/arm/ADSLibrarian.html" title="class in com.github.maven_nar.cpptasks.arm">ADSLibrarian</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/arm/ADSLinker.html" title="class in com.github.maven_nar.cpptasks.arm">ADSLinker</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/borland/BorlandLibrarian.html" title="class in com.github.maven_nar.cpptasks.borland">BorlandLibrarian</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/borland/BorlandLinker.html" title="class in com.github.maven_nar.cpptasks.borland">BorlandLinker</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/sun/C89Linker.html" title="class in com.github.maven_nar.cpptasks.sun">C89Linker</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/ti/ClxxLibrarian.html" title="class in com.github.maven_nar.cpptasks.ti">ClxxLibrarian</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/ti/ClxxLinker.html" title="class in com.github.maven_nar.cpptasks.ti">ClxxLinker</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/compaq/CompaqVisualFortranLibrarian.html" title="class in com.github.maven_nar.cpptasks.compaq">CompaqVisualFortranLibrarian</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/devstudio/DevStudioCompatibleLibrarian.html" title="class in com.github.maven_nar.cpptasks.devstudio">DevStudioCompatibleLibrarian</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/devstudio/DevStudioCompatibleLinker.html" title="class in com.github.maven_nar.cpptasks.devstudio">DevStudioCompatibleLinker</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/os400/IccLinker.html" title="class in com.github.maven_nar.cpptasks.os400">IccLinker</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/openwatcom/OpenWatcomLibrarian.html" title="class in com.github.maven_nar.cpptasks.openwatcom">OpenWatcomLibrarian</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/openwatcom/OpenWatcomLinker.html" title="class in com.github.maven_nar.cpptasks.openwatcom">OpenWatcomLinker</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/os390/OS390Linker.html" title="class in com.github.maven_nar.cpptasks.os390">OS390Linker</A></DD>
 </DL>
 <HR>
 <DL>
-<DT><PRE>public abstract class <B>CommandLineLinker</B><DT>extends <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractLinker.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractLinker</A></DL>
+<DT><PRE>public abstract class <B>CommandLineLinker</B><DT>extends <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractLinker.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractLinker</A></DL>
 </PRE>
 
 <P>
@@ -131,10 +131,10 @@ An abstract Linker implementation that performs the link via an external
 &nbsp;<A NAME="fields_inherited_from_class_net.sf.antcontrib.cpptasks.compiler.AbstractProcessor"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
 <TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
-<TH ALIGN="left"><B>Fields inherited from class com.github.maven_nar.cpptasks.compiler.<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractProcessor</A></B></TH>
+<TH ALIGN="left"><B>Fields inherited from class com.github.maven_nar.cpptasks.compiler.<A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractProcessor.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractProcessor</A></B></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#DEFAULT_DISCARD_BID">DEFAULT_DISCARD_BID</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#DEFAULT_PROCESS_BID">DEFAULT_PROCESS_BID</A></CODE></TD>
+<TD><CODE><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractProcessor.html#DEFAULT_DISCARD_BID">DEFAULT_DISCARD_BID</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractProcessor.html#DEFAULT_PROCESS_BID">DEFAULT_PROCESS_BID</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;
@@ -147,13 +147,13 @@ An abstract Linker implementation that performs the link via an external
 <B>Constructor Summary</B></FONT></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#CommandLineLinker(java.lang.String, java.lang.String, java.lang.String[], java.lang.String[], java.lang.String, boolean, com.github.maven_nar.cpptasks.compiler.CommandLineLinker)">CommandLineLinker</A></B>(java.lang.String&nbsp;command,
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#CommandLineLinker(java.lang.String, java.lang.String, java.lang.String[], java.lang.String[], java.lang.String, boolean, com.github.maven_nar.cpptasks.compiler.CommandLineLinker)">CommandLineLinker</A></B>(java.lang.String&nbsp;command,
                   java.lang.String&nbsp;identifierArg,
                   java.lang.String[]&nbsp;extensions,
                   java.lang.String[]&nbsp;ignoredExtensions,
                   java.lang.String&nbsp;outputSuffix,
                   boolean&nbsp;isLibtool,
-                  <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineLinker</A>&nbsp;libtoolLinker)</CODE>
+                  <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineLinker</A>&nbsp;libtoolLinker)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Creates a comand line linker invocation</TD>
@@ -171,7 +171,7 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected abstract &nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#addBase(long, java.util.Vector)">addBase</A></B>(long&nbsp;base,
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#addBase(long, java.util.Vector)">addBase</A></B>(long&nbsp;base,
         java.util.Vector&nbsp;args)</CODE>
 
 <BR>
@@ -180,7 +180,7 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected abstract &nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#addEntry(java.lang.String, java.util.Vector)">addEntry</A></B>(java.lang.String&nbsp;entry,
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#addEntry(java.lang.String, java.util.Vector)">addEntry</A></B>(java.lang.String&nbsp;entry,
          java.util.Vector&nbsp;args)</CODE>
 
 <BR>
@@ -189,7 +189,7 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected abstract &nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#addFixed(java.lang.Boolean, java.util.Vector)">addFixed</A></B>(java.lang.Boolean&nbsp;fixed,
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#addFixed(java.lang.Boolean, java.util.Vector)">addFixed</A></B>(java.lang.Boolean&nbsp;fixed,
          java.util.Vector&nbsp;args)</CODE>
 
 <BR>
@@ -198,8 +198,8 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected abstract &nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#addImpliedArgs(boolean, com.github.maven_nar.cpptasks.compiler.LinkType, java.util.Vector)">addImpliedArgs</A></B>(boolean&nbsp;debug,
-               <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/LinkType.html" title="class in com.github.maven_nar.cpptasks.compiler">LinkType</A>&nbsp;linkType,
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#addImpliedArgs(boolean, com.github.maven_nar.cpptasks.compiler.LinkType, java.util.Vector)">addImpliedArgs</A></B>(boolean&nbsp;debug,
+               <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/LinkType.html" title="class in com.github.maven_nar.cpptasks.compiler">LinkType</A>&nbsp;linkType,
                java.util.Vector&nbsp;args)</CODE>
 
 <BR>
@@ -208,7 +208,7 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected abstract &nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#addIncremental(boolean, java.util.Vector)">addIncremental</A></B>(boolean&nbsp;incremental,
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#addIncremental(boolean, java.util.Vector)">addIncremental</A></B>(boolean&nbsp;incremental,
                java.util.Vector&nbsp;args)</CODE>
 
 <BR>
@@ -217,8 +217,8 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;java.lang.String[]</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#addLibrarySets(com.github.maven_nar.cpptasks.CCTask, com.github.maven_nar.cpptasks.types.LibrarySet[], java.util.Vector, java.util.Vector, java.util.Vector)">addLibrarySets</A></B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
-               <A HREF="../../../../../net/sf/antcontrib/cpptasks/types/LibrarySet.html" title="class in com.github.maven_nar.cpptasks.types">LibrarySet</A>[]&nbsp;libsets,
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#addLibrarySets(com.github.maven_nar.cpptasks.CCTask, com.github.maven_nar.cpptasks.types.LibrarySet[], java.util.Vector, java.util.Vector, java.util.Vector)">addLibrarySets</A></B>(<A HREF="../../../../../com/github/maven_nar/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
+               <A HREF="../../../../../com/github/maven_nar/cpptasks/types/LibrarySet.html" title="class in com.github.maven_nar.cpptasks.types">LibrarySet</A>[]&nbsp;libsets,
                java.util.Vector&nbsp;preargs,
                java.util.Vector&nbsp;midargs,
                java.util.Vector&nbsp;endargs)</CODE>
@@ -229,7 +229,7 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected abstract &nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#addMap(boolean, java.util.Vector)">addMap</A></B>(boolean&nbsp;map,
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#addMap(boolean, java.util.Vector)">addMap</A></B>(boolean&nbsp;map,
        java.util.Vector&nbsp;args)</CODE>
 
 <BR>
@@ -238,7 +238,7 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected abstract &nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#addStack(int, java.util.Vector)">addStack</A></B>(int&nbsp;stack,
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#addStack(int, java.util.Vector)">addStack</A></B>(int&nbsp;stack,
          java.util.Vector&nbsp;args)</CODE>
 
 <BR>
@@ -246,13 +246,13 @@ An abstract Linker implementation that performs the link via an external
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/LinkerConfiguration.html" title="interface in com.github.maven_nar.cpptasks.compiler">LinkerConfiguration</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#createConfiguration(com.github.maven_nar.cpptasks.CCTask, com.github.maven_nar.cpptasks.compiler.LinkType, com.github.maven_nar.cpptasks.ProcessorDef[], com.github.maven_nar.cpptasks.LinkerDef, com.github.maven_nar.cpptasks.TargetDef, com.github.maven_nar.cpptasks.VersionInfo)">createConfiguration</A></B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
-                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/LinkType.html" title="class in com.github.maven_nar.cpptasks.compiler">LinkType</A>&nbsp;linkType,
-                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/ProcessorDef.html" title="class in com.github.maven_nar.cpptasks">ProcessorDef</A>[]&nbsp;baseDefs,
-                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/LinkerDef.html" title="class in com.github.maven_nar.cpptasks">LinkerDef</A>&nbsp;specificDef,
-                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/TargetDef.html" title="class in com.github.maven_nar.cpptasks">TargetDef</A>&nbsp;targetPlatform,
-                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/VersionInfo.html" title="class in com.github.maven_nar.cpptasks">VersionInfo</A>&nbsp;versionInfo)</CODE>
+<CODE>protected &nbsp;<A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/LinkerConfiguration.html" title="interface in com.github.maven_nar.cpptasks.compiler">LinkerConfiguration</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#createConfiguration(com.github.maven_nar.cpptasks.CCTask, com.github.maven_nar.cpptasks.compiler.LinkType, com.github.maven_nar.cpptasks.ProcessorDef[], com.github.maven_nar.cpptasks.LinkerDef, com.github.maven_nar.cpptasks.TargetDef, com.github.maven_nar.cpptasks.VersionInfo)">createConfiguration</A></B>(<A HREF="../../../../../com/github/maven_nar/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
+                    <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/LinkType.html" title="class in com.github.maven_nar.cpptasks.compiler">LinkType</A>&nbsp;linkType,
+                    <A HREF="../../../../../com/github/maven_nar/cpptasks/ProcessorDef.html" title="class in com.github.maven_nar.cpptasks">ProcessorDef</A>[]&nbsp;baseDefs,
+                    <A HREF="../../../../../com/github/maven_nar/cpptasks/LinkerDef.html" title="class in com.github.maven_nar.cpptasks">LinkerDef</A>&nbsp;specificDef,
+                    <A HREF="../../../../../com/github/maven_nar/cpptasks/TargetDef.html" title="class in com.github.maven_nar.cpptasks">TargetDef</A>&nbsp;targetPlatform,
+                    <A HREF="../../../../../com/github/maven_nar/cpptasks/VersionInfo.html" title="class in com.github.maven_nar.cpptasks">VersionInfo</A>&nbsp;versionInfo)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -260,7 +260,7 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;java.lang.String</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#decorateLinkerOption(java.lang.StringBuffer, java.lang.String)">decorateLinkerOption</A></B>(java.lang.StringBuffer&nbsp;buf,
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#decorateLinkerOption(java.lang.StringBuffer, java.lang.String)">decorateLinkerOption</A></B>(java.lang.StringBuffer&nbsp;buf,
                      java.lang.String&nbsp;arg)</CODE>
 
 <BR>
@@ -269,7 +269,7 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;java.lang.String</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#getCommand()">getCommand</A></B>()</CODE>
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#getCommand()">getCommand</A></B>()</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -277,7 +277,7 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected abstract &nbsp;java.lang.String</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#getCommandFileSwitch(java.lang.String)">getCommandFileSwitch</A></B>(java.lang.String&nbsp;commandFile)</CODE>
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#getCommandFileSwitch(java.lang.String)">getCommandFileSwitch</A></B>(java.lang.String&nbsp;commandFile)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -285,7 +285,7 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;java.lang.String</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#getIdentifier()">getIdentifier</A></B>()</CODE>
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#getIdentifier()">getIdentifier</A></B>()</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Retrieve an identifier that identifies the specific version of the
@@ -293,8 +293,8 @@ An abstract Linker implementation that performs the link via an external
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineLinker</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#getLibtoolLinker()">getLibtoolLinker</A></B>()</CODE>
+<CODE>&nbsp;<A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineLinker</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#getLibtoolLinker()">getLibtoolLinker</A></B>()</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -302,7 +302,7 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected abstract &nbsp;int</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#getMaximumCommandLength()">getMaximumCommandLength</A></B>()</CODE>
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#getMaximumCommandLength()">getMaximumCommandLength</A></B>()</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -310,8 +310,8 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;java.lang.String[]</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#getOutputFileNames(java.lang.String, com.github.maven_nar.cpptasks.VersionInfo)">getOutputFileNames</A></B>(java.lang.String&nbsp;baseName,
-                   <A HREF="../../../../../net/sf/antcontrib/cpptasks/VersionInfo.html" title="class in com.github.maven_nar.cpptasks">VersionInfo</A>&nbsp;versionInfo)</CODE>
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#getOutputFileNames(java.lang.String, com.github.maven_nar.cpptasks.VersionInfo)">getOutputFileNames</A></B>(java.lang.String&nbsp;baseName,
+                   <A HREF="../../../../../com/github/maven_nar/cpptasks/VersionInfo.html" title="class in com.github.maven_nar.cpptasks">VersionInfo</A>&nbsp;versionInfo)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Output file name (no path components) corresponding to source file</TD>
@@ -319,7 +319,7 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;java.lang.String[]</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#getOutputFileSwitch(com.github.maven_nar.cpptasks.CCTask, java.lang.String)">getOutputFileSwitch</A></B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#getOutputFileSwitch(com.github.maven_nar.cpptasks.CCTask, java.lang.String)">getOutputFileSwitch</A></B>(<A HREF="../../../../../com/github/maven_nar/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
                     java.lang.String&nbsp;outputFile)</CODE>
 
 <BR>
@@ -328,7 +328,7 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected abstract &nbsp;java.lang.String[]</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#getOutputFileSwitch(java.lang.String)">getOutputFileSwitch</A></B>(java.lang.String&nbsp;outputFile)</CODE>
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#getOutputFileSwitch(java.lang.String)">getOutputFileSwitch</A></B>(java.lang.String&nbsp;outputFile)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -336,7 +336,7 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;java.lang.String</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#getStartupObject(com.github.maven_nar.cpptasks.compiler.LinkType)">getStartupObject</A></B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/LinkType.html" title="class in com.github.maven_nar.cpptasks.compiler">LinkType</A>&nbsp;linkType)</CODE>
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#getStartupObject(com.github.maven_nar.cpptasks.compiler.LinkType)">getStartupObject</A></B>(<A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/LinkType.html" title="class in com.github.maven_nar.cpptasks.compiler">LinkType</A>&nbsp;linkType)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -344,10 +344,10 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#link(com.github.maven_nar.cpptasks.CCTask, java.io.File, java.lang.String[], com.github.maven_nar.cpptasks.compiler.CommandLineLinkerConfiguration)">link</A></B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#link(com.github.maven_nar.cpptasks.CCTask, java.io.File, java.lang.String[], com.github.maven_nar.cpptasks.compiler.CommandLineLinkerConfiguration)">link</A></B>(<A HREF="../../../../../com/github/maven_nar/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
      java.io.File&nbsp;outputFile,
      java.lang.String[]&nbsp;sourceFiles,
-     <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinkerConfiguration.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineLinkerConfiguration</A>&nbsp;config)</CODE>
+     <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinkerConfiguration.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineLinkerConfiguration</A>&nbsp;config)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Performs a link using a command line linker</TD>
@@ -355,11 +355,11 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;java.lang.String[]</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#prepareArguments(com.github.maven_nar.cpptasks.CCTask, java.lang.String, java.lang.String, java.lang.String[], com.github.maven_nar.cpptasks.compiler.CommandLineLinkerConfiguration)">prepareArguments</A></B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#prepareArguments(com.github.maven_nar.cpptasks.CCTask, java.lang.String, java.lang.String, java.lang.String[], com.github.maven_nar.cpptasks.compiler.CommandLineLinkerConfiguration)">prepareArguments</A></B>(<A HREF="../../../../../com/github/maven_nar/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
                  java.lang.String&nbsp;outputDir,
                  java.lang.String&nbsp;outputFile,
                  java.lang.String[]&nbsp;sourceFiles,
-                 <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinkerConfiguration.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineLinkerConfiguration</A>&nbsp;config)</CODE>
+                 <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinkerConfiguration.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineLinkerConfiguration</A>&nbsp;config)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prepares argument list for exec command.</TD>
@@ -367,7 +367,7 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;java.lang.String</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#prepareFilename(java.lang.StringBuffer, java.lang.String, java.lang.String)">prepareFilename</A></B>(java.lang.StringBuffer&nbsp;buf,
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#prepareFilename(java.lang.StringBuffer, java.lang.String, java.lang.String)">prepareFilename</A></B>(java.lang.StringBuffer&nbsp;buf,
                 java.lang.String&nbsp;outputDir,
                 java.lang.String&nbsp;sourceFile)</CODE>
 
@@ -377,7 +377,7 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;java.lang.String[]</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#prepareResponseFile(java.io.File, java.lang.String[])">prepareResponseFile</A></B>(java.io.File&nbsp;outputFile,
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#prepareResponseFile(java.io.File, java.lang.String[])">prepareResponseFile</A></B>(java.io.File&nbsp;outputFile,
                     java.lang.String[]&nbsp;args)</CODE>
 
 <BR>
@@ -387,7 +387,7 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;java.lang.String</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#quoteFilename(java.lang.StringBuffer, java.lang.String)">quoteFilename</A></B>(java.lang.StringBuffer&nbsp;buf,
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#quoteFilename(java.lang.StringBuffer, java.lang.String)">quoteFilename</A></B>(java.lang.StringBuffer&nbsp;buf,
               java.lang.String&nbsp;filename)</CODE>
 
 <BR>
@@ -396,7 +396,7 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;int</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#runCommand(com.github.maven_nar.cpptasks.CCTask, java.io.File, java.lang.String[])">runCommand</A></B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#runCommand(com.github.maven_nar.cpptasks.CCTask, java.io.File, java.lang.String[])">runCommand</A></B>(<A HREF="../../../../../com/github/maven_nar/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
            java.io.File&nbsp;workingDir,
            java.lang.String[]&nbsp;cmdline)</CODE>
 
@@ -408,7 +408,7 @@ An abstract Linker implementation that performs the link via an external
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html#setCommand(java.lang.String)">setCommand</A></B>(java.lang.String&nbsp;command)</CODE>
+<TD><CODE><B><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html#setCommand(java.lang.String)">setCommand</A></B>(java.lang.String&nbsp;command)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -417,19 +417,19 @@ An abstract Linker implementation that performs the link via an external
 &nbsp;<A NAME="methods_inherited_from_class_net.sf.antcontrib.cpptasks.compiler.AbstractLinker"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
 <TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
-<TH ALIGN="left"><B>Methods inherited from class com.github.maven_nar.cpptasks.compiler.<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractLinker.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractLinker</A></B></TH>
+<TH ALIGN="left"><B>Methods inherited from class com.github.maven_nar.cpptasks.compiler.<A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractLinker.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractLinker</A></B></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractLinker.html#addVersionFiles(com.github.maven_nar.cpptasks.VersionInfo, com.github.maven_nar.cpptasks.compiler.LinkType, java.io.File, boolean, java.io.File, com.github.maven_nar.cpptasks.TargetMatcher)">addVersionFiles</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractLinker.html#bid(java.lang.String)">bid</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractLinker.html#changeEnvironment(boolean, org.apache.tools.ant.types.Environment)">changeEnvironment</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractLinker.html#createConfiguration(com.github.maven_nar.cpptasks.CCTask, com.github.maven_nar.cpptasks.compiler.LinkType, com.github.maven_nar.cpptasks.ProcessorDef[], com.github.maven_nar.cpptasks.ProcessorDef, com.github.maven_nar.cpptasks.TargetDef, com.github.maven_nar.cpptasks.VersionInfo)">createConfiguration</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractLinker.html#getLibraryKey(java.io.File)">getLibraryKey</A></CODE></TD>
+<TD><CODE><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractLinker.html#addVersionFiles(com.github.maven_nar.cpptasks.VersionInfo, com.github.maven_nar.cpptasks.compiler.LinkType, java.io.File, boolean, java.io.File, com.github.maven_nar.cpptasks.TargetMatcher)">addVersionFiles</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractLinker.html#bid(java.lang.String)">bid</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractLinker.html#changeEnvironment(boolean, org.apache.tools.ant.types.Environment)">changeEnvironment</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractLinker.html#createConfiguration(com.github.maven_nar.cpptasks.CCTask, com.github.maven_nar.cpptasks.compiler.LinkType, com.github.maven_nar.cpptasks.ProcessorDef[], com.github.maven_nar.cpptasks.ProcessorDef, com.github.maven_nar.cpptasks.TargetDef, com.github.maven_nar.cpptasks.VersionInfo)">createConfiguration</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractLinker.html#getLibraryKey(java.io.File)">getLibraryKey</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_net.sf.antcontrib.cpptasks.compiler.AbstractProcessor"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
 <TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
-<TH ALIGN="left"><B>Methods inherited from class com.github.maven_nar.cpptasks.compiler.<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractProcessor</A></B></TH>
+<TH ALIGN="left"><B>Methods inherited from class com.github.maven_nar.cpptasks.compiler.<A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractProcessor.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractProcessor</A></B></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#clone()">clone</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#getHeaderExtensions()">getHeaderExtensions</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#getIdentifier(java.lang.String[], java.lang.String)">getIdentifier</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#getOSArch()">getOSArch</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#getOSName()">getOSName</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#getSourceExtensions()">getSourceExtensions</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#isDarwin()">isDarwin</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#toString()">toString</A></CODE></TD>
+<TD><CODE><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractProcessor.html#clone()">clone</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractProcessor.html#getHeaderExtensions()">getHeaderExtensions</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractProcessor.html#getIdentifier(java.lang.String[], java.lang.String)">getIdentifier</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractProcessor.html#getOSArch()">getOSArch</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractProcessor.html#getOSName()">getOSName</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractProcessor.html#getSourceExtensions()">getSourceExtensions</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractProcessor.html#isDarwin()">isDarwin</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractProcessor.html#toString()">toString</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
@@ -444,10 +444,10 @@ An abstract Linker implementation that performs the link via an external
 &nbsp;<A NAME="methods_inherited_from_class_net.sf.antcontrib.cpptasks.compiler.Linker"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
 <TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
-<TH ALIGN="left"><B>Methods inherited from interface com.github.maven_nar.cpptasks.compiler.<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Linker.html" title="interface in com.github.maven_nar.cpptasks.compiler">Linker</A></B></TH>
+<TH ALIGN="left"><B>Methods inherited from interface com.github.maven_nar.cpptasks.compiler.<A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/Linker.html" title="interface in com.github.maven_nar.cpptasks.compiler">Linker</A></B></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Linker.html#getLibraryPath()">getLibraryPath</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Linker.html#getLibraryPatterns(java.lang.String[], com.github.maven_nar.cpptasks.types.LibraryTypeEnum)">getLibraryPatterns</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Linker.html#getLinker(com.github.maven_nar.cpptasks.compiler.LinkType)">getLinker</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Linker.html#isCaseSensitive()">isCaseSensitive</A></CODE></TD>
+<TD><CODE><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/Linker.html#getLibraryPath()">getLibraryPath</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/Linker.html#getLibraryPatterns(java.lang.String[], com.github.maven_nar.cpptasks.types.LibraryTypeEnum)">getLibraryPatterns</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/Linker.html#getLinker(com.github.maven_nar.cpptasks.compiler.LinkType)">getLinker</A>, <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/Linker.html#isCaseSensitive()">isCaseSensitive</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;
@@ -472,7 +472,7 @@ public <B>CommandLineLinker</B>(java.lang.String&nbsp;command,
                          java.lang.String[]&nbsp;ignoredExtensions,
                          java.lang.String&nbsp;outputSuffix,
                          boolean&nbsp;isLibtool,
-                         <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineLinker</A>&nbsp;libtoolLinker)</PRE>
+                         <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineLinker</A>&nbsp;libtoolLinker)</PRE>
 <DL>
 <DD>Creates a comand line linker invocation
 <P>
@@ -516,7 +516,7 @@ protected abstract void <B>addFixed</B>(java.lang.Boolean&nbsp;fixed,
 addImpliedArgs</H3>
 <PRE>
 protected abstract void <B>addImpliedArgs</B>(boolean&nbsp;debug,
-                                       <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/LinkType.html" title="class in com.github.maven_nar.cpptasks.compiler">LinkType</A>&nbsp;linkType,
+                                       <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/LinkType.html" title="class in com.github.maven_nar.cpptasks.compiler">LinkType</A>&nbsp;linkType,
                                        java.util.Vector&nbsp;args)</PRE>
 <DL>
 <DD><DL>
@@ -540,8 +540,8 @@ protected abstract void <B>addIncremental</B>(boolean&nbsp;incremental,
 <A NAME="addLibrarySets(com.github.maven_nar.cpptasks.CCTask, com.github.maven_nar.cpptasks.types.LibrarySet[], java.util.Vector, java.util.Vector, java.util.Vector)"><!-- --></A><H3>
 addLibrarySets</H3>
 <PRE>
-protected java.lang.String[] <B>addLibrarySets</B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
-                                            <A HREF="../../../../../net/sf/antcontrib/cpptasks/types/LibrarySet.html" title="class in com.github.maven_nar.cpptasks.types">LibrarySet</A>[]&nbsp;libsets,
+protected java.lang.String[] <B>addLibrarySets</B>(<A HREF="../../../../../com/github/maven_nar/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
+                                            <A HREF="../../../../../com/github/maven_nar/cpptasks/types/LibrarySet.html" title="class in com.github.maven_nar.cpptasks.types">LibrarySet</A>[]&nbsp;libsets,
                                             java.util.Vector&nbsp;preargs,
                                             java.util.Vector&nbsp;midargs,
                                             java.util.Vector&nbsp;endargs)</PRE>
@@ -591,15 +591,15 @@ protected abstract void <B>addEntry</B>(java.lang.String&nbsp;entry,
 <A NAME="createConfiguration(com.github.maven_nar.cpptasks.CCTask, com.github.maven_nar.cpptasks.compiler.LinkType, com.github.maven_nar.cpptasks.ProcessorDef[], com.github.maven_nar.cpptasks.LinkerDef, com.github.maven_nar.cpptasks.TargetDef, com.github.maven_nar.cpptasks.VersionInfo)"><!-- --></A><H3>
 createConfiguration</H3>
 <PRE>
-protected <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/LinkerConfiguration.html" title="interface in com.github.maven_nar.cpptasks.compiler">LinkerConfiguration</A> <B>createConfiguration</B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
-                                                  <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/LinkType.html" title="class in com.github.maven_nar.cpptasks.compiler">LinkType</A>&nbsp;linkType,
-                                                  <A HREF="../../../../../net/sf/antcontrib/cpptasks/ProcessorDef.html" title="class in com.github.maven_nar.cpptasks">ProcessorDef</A>[]&nbsp;baseDefs,
-                                                  <A HREF="../../../../../net/sf/antcontrib/cpptasks/LinkerDef.html" title="class in com.github.maven_nar.cpptasks">LinkerDef</A>&nbsp;specificDef,
-                                                  <A HREF="../../../../../net/sf/antcontrib/cpptasks/TargetDef.html" title="class in com.github.maven_nar.cpptasks">TargetDef</A>&nbsp;targetPlatform,
-                                                  <A HREF="../../../../../net/sf/antcontrib/cpptasks/VersionInfo.html" title="class in com.github.maven_nar.cpptasks">VersionInfo</A>&nbsp;versionInfo)</PRE>
+protected <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/LinkerConfiguration.html" title="interface in com.github.maven_nar.cpptasks.compiler">LinkerConfiguration</A> <B>createConfiguration</B>(<A HREF="../../../../../com/github/maven_nar/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
+                                                  <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/LinkType.html" title="class in com.github.maven_nar.cpptasks.compiler">LinkType</A>&nbsp;linkType,
+                                                  <A HREF="../../../../../com/github/maven_nar/cpptasks/ProcessorDef.html" title="class in com.github.maven_nar.cpptasks">ProcessorDef</A>[]&nbsp;baseDefs,
+                                                  <A HREF="../../../../../com/github/maven_nar/cpptasks/LinkerDef.html" title="class in com.github.maven_nar.cpptasks">LinkerDef</A>&nbsp;specificDef,
+                                                  <A HREF="../../../../../com/github/maven_nar/cpptasks/TargetDef.html" title="class in com.github.maven_nar.cpptasks">TargetDef</A>&nbsp;targetPlatform,
+                                                  <A HREF="../../../../../com/github/maven_nar/cpptasks/VersionInfo.html" title="class in com.github.maven_nar.cpptasks">VersionInfo</A>&nbsp;versionInfo)</PRE>
 <DL>
 <DD><DL>
-<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractLinker.html#createConfiguration(com.github.maven_nar.cpptasks.CCTask, com.github.maven_nar.cpptasks.compiler.LinkType, com.github.maven_nar.cpptasks.ProcessorDef[], com.github.maven_nar.cpptasks.LinkerDef, com.github.maven_nar.cpptasks.TargetDef, com.github.maven_nar.cpptasks.VersionInfo)">createConfiguration</A></CODE> in class <CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractLinker.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractLinker</A></CODE></DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractLinker.html#createConfiguration(com.github.maven_nar.cpptasks.CCTask, com.github.maven_nar.cpptasks.compiler.LinkType, com.github.maven_nar.cpptasks.ProcessorDef[], com.github.maven_nar.cpptasks.LinkerDef, com.github.maven_nar.cpptasks.TargetDef, com.github.maven_nar.cpptasks.VersionInfo)">createConfiguration</A></CODE> in class <CODE><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractLinker.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractLinker</A></CODE></DL>
 </DD>
 <DD><DL>
 </DL>
@@ -651,13 +651,13 @@ getIdentifier</H3>
 <PRE>
 public java.lang.String <B>getIdentifier</B>()</PRE>
 <DL>
-<DD><B>Description copied from interface: <CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html#getIdentifier()">Processor</A></CODE></B></DD>
+<DD><B>Description copied from interface: <CODE><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/Processor.html#getIdentifier()">Processor</A></CODE></B></DD>
 <DD>Retrieve an identifier that identifies the specific version of the
  compiler. Compilers with the same identifier should produce the same
  output files for the same input files and command line switches.
 <P>
 <DD><DL>
-<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html#getIdentifier()">getIdentifier</A></CODE> in interface <CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html" title="interface in com.github.maven_nar.cpptasks.compiler">Processor</A></CODE><DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#getIdentifier()">getIdentifier</A></CODE> in class <CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractProcessor</A></CODE></DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/Processor.html#getIdentifier()">getIdentifier</A></CODE> in interface <CODE><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/Processor.html" title="interface in com.github.maven_nar.cpptasks.compiler">Processor</A></CODE><DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractProcessor.html#getIdentifier()">getIdentifier</A></CODE> in class <CODE><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractProcessor.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractProcessor</A></CODE></DL>
 </DD>
 <DD><DL>
 </DL>
@@ -668,7 +668,7 @@ public java.lang.String <B>getIdentifier</B>()</PRE>
 <A NAME="getLibtoolLinker()"><!-- --></A><H3>
 getLibtoolLinker</H3>
 <PRE>
-public final <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineLinker</A> <B>getLibtoolLinker</B>()</PRE>
+public final <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineLinker</A> <B>getLibtoolLinker</B>()</PRE>
 <DL>
 <DD><DL>
 </DL>
@@ -691,13 +691,13 @@ protected abstract int <B>getMaximumCommandLength</B>()</PRE>
 getOutputFileNames</H3>
 <PRE>
 public java.lang.String[] <B>getOutputFileNames</B>(java.lang.String&nbsp;baseName,
-                                             <A HREF="../../../../../net/sf/antcontrib/cpptasks/VersionInfo.html" title="class in com.github.maven_nar.cpptasks">VersionInfo</A>&nbsp;versionInfo)</PRE>
+                                             <A HREF="../../../../../com/github/maven_nar/cpptasks/VersionInfo.html" title="class in com.github.maven_nar.cpptasks">VersionInfo</A>&nbsp;versionInfo)</PRE>
 <DL>
-<DD><B>Description copied from interface: <CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html#getOutputFileNames(java.lang.String, com.github.maven_nar.cpptasks.VersionInfo)">Processor</A></CODE></B></DD>
+<DD><B>Description copied from interface: <CODE><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/Processor.html#getOutputFileNames(java.lang.String, com.github.maven_nar.cpptasks.VersionInfo)">Processor</A></CODE></B></DD>
 <DD>Output file name (no path components) corresponding to source file
 <P>
 <DD><DL>
-<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html#getOutputFileNames(java.lang.String, com.github.maven_nar.cpptasks.VersionInfo)">getOutputFileNames</A></CODE> in interface <CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html" title="interface in com.github.maven_nar.cpptasks.compiler">Processor</A></CODE><DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractLinker.html#getOutputFileNames(java.lang.String, com.github.maven_nar.cpptasks.VersionInfo)">getOutputFileNames</A></CODE> in class <CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractLinker.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractLinker</A></CODE></DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/Processor.html#getOutputFileNames(java.lang.String, com.github.maven_nar.cpptasks.VersionInfo)">getOutputFileNames</A></CODE> in interface <CODE><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/Processor.html" title="interface in com.github.maven_nar.cpptasks.compiler">Processor</A></CODE><DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractLinker.html#getOutputFileNames(java.lang.String, com.github.maven_nar.cpptasks.VersionInfo)">getOutputFileNames</A></CODE> in class <CODE><A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/AbstractLinker.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractLinker</A></CODE></DL>
 </DD>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>baseName</CODE> - input file
@@ -710,7 +710,7 @@ public java.lang.String[] <B>getOutputFileNames</B>(java.lang.String&nbsp;baseNa
 <A NAME="getOutputFileSwitch(com.github.maven_nar.cpptasks.CCTask, java.lang.String)"><!-- --></A><H3>
 getOutputFileSwitch</H3>
 <PRE>
-protected java.lang.String[] <B>getOutputFileSwitch</B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
+protected java.lang.String[] <B>getOutputFileSwitch</B>(<A HREF="../../../../../com/github/maven_nar/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
                                                  java.lang.String&nbsp;outputFile)</PRE>
 <DL>
 <DD><DL>
@@ -733,7 +733,7 @@ protected abstract java.lang.String[] <B>getOutputFileSwitch</B>(java.lang.Strin
 <A NAME="getStartupObject(com.github.maven_nar.cpptasks.compiler.LinkType)"><!-- --></A><H3>
 getStartupObject</H3>
 <PRE>
-protected java.lang.String <B>getStartupObject</B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/LinkType.html" title="class in com.github.maven_nar.cpptasks.compiler">LinkType</A>&nbsp;linkType)</PRE>
+protected java.lang.String <B>getStartupObject</B>(<A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/LinkType.html" title="class in com.github.maven_nar.cpptasks.compiler">LinkType</A>&nbsp;linkType)</PRE>
 <DL>
 <DD><DL>
 </DL>
@@ -744,10 +744,10 @@ protected java.lang.String <B>getStartupObject</B>(<A HREF="../../../../../net/s
 <A NAME="link(com.github.maven_nar.cpptasks.CCTask, java.io.File, java.lang.String[], com.github.maven_nar.cpptasks.compiler.CommandLineLinkerConfiguration)"><!-- --></A><H3>
 link</H3>
 <PRE>
-public void <B>link</B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
+public void <B>link</B>(<A HREF="../../../../../com/github/maven_nar/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
                  java.io.File&nbsp;outputFile,
                  java.lang.String[]&nbsp;sourceFiles,
-                 <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinkerConfiguration.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineLinkerConfiguration</A>&nbsp;config)
+                 <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinkerConfiguration.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineLinkerConfiguration</A>&nbsp;config)
           throws org.apache.tools.ant.BuildException</PRE>
 <DL>
 <DD>Performs a link using a command line linker
@@ -763,11 +763,11 @@ public void <B>link</B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTas
 <A NAME="prepareArguments(com.github.maven_nar.cpptasks.CCTask, java.lang.String, java.lang.String, java.lang.String[], com.github.maven_nar.cpptasks.compiler.CommandLineLinkerConfiguration)"><!-- --></A><H3>
 prepareArguments</H3>
 <PRE>
-protected java.lang.String[] <B>prepareArguments</B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
+protected java.lang.String[] <B>prepareArguments</B>(<A HREF="../../../../../com/github/maven_nar/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
                                               java.lang.String&nbsp;outputDir,
                                               java.lang.String&nbsp;outputFile,
                                               java.lang.String[]&nbsp;sourceFiles,
-                                              <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinkerConfiguration.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineLinkerConfiguration</A>&nbsp;config)</PRE>
+                                              <A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinkerConfiguration.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineLinkerConfiguration</A>&nbsp;config)</PRE>
 <DL>
 <DD>Prepares argument list for exec command.  Will return null
  if command line would exceed allowable command line buffer.
@@ -828,7 +828,7 @@ protected java.lang.String <B>quoteFilename</B>(java.lang.StringBuffer&nbsp;buf,
 <A NAME="runCommand(com.github.maven_nar.cpptasks.CCTask, java.io.File, java.lang.String[])"><!-- --></A><H3>
 runCommand</H3>
 <PRE>
-protected int <B>runCommand</B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
+protected int <B>runCommand</B>(<A HREF="../../../../../com/github/maven_nar/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
                          java.io.File&nbsp;workingDir,
                          java.lang.String[]&nbsp;cmdline)
                   throws org.apache.tools.ant.BuildException</PRE>
@@ -885,10 +885,10 @@ protected final void <B>setCommand</B>(java.lang.String&nbsp;command)</PRE>
 
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-&nbsp;<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineFortranCompiler.html" title="class in com.github.maven_nar.cpptasks.compiler"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineLinkerConfiguration.html" title="class in com.github.maven_nar.cpptasks.compiler"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineFortranCompiler.html" title="class in com.github.maven_nar.cpptasks.compiler"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../../com/github/maven_nar/cpptasks/compiler/CommandLineLinkerConfiguration.html" title="class in com.github.maven_nar.cpptasks.compiler"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-  <A HREF="../../../../../index.html?net/sf/antcontrib/cpptasks/compiler/CommandLineLinker.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+  <A HREF="../../../../../index.html?com/github/maven_nar/cpptasks/compiler/CommandLineLinker.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="CommandLineLinker.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
 &nbsp;<SCRIPT type="text/javascript">
   <!--

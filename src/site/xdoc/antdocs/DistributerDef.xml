@@ -67,7 +67,7 @@ Licensed to the Ant-Contrib Project under one or more
 <td>protocol</td>
 <td>Sets protocol.</td>
 <td>
-<a href="../apidocs/net/sf/antcontrib/cpptasks/DistributerProtocolEnum.html">DistributerProtocolEnum</a>
+<a href="../apidocs/com/github/maven_nar/cpptasks/DistributerProtocolEnum.html">DistributerProtocolEnum</a>
 </td>
 </tr>
 <tr>

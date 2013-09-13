@@ -208,7 +208,7 @@ Licensed to the Ant-Contrib Project under one or more
  </table>
 </td>
 <td>
-<a href="../apidocs/net/sf/antcontrib/cpptasks/CompilerEnum.html">CompilerEnum</a>
+<a href="../apidocs/com/github/maven_nar/cpptasks/CompilerEnum.html">CompilerEnum</a>
 </td>
 </tr>
 <tr>
@@ -221,7 +221,7 @@ Licensed to the Ant-Contrib Project under one or more
 <td>optimize</td>
 <td>Sets optimization level.</td>
 <td>
-<a href="../apidocs/net/sf/antcontrib/cpptasks/OptimizationEnum.html">OptimizationEnum</a>
+<a href="../apidocs/com/github/maven_nar/cpptasks/OptimizationEnum.html">OptimizationEnum</a>
 </td>
 </tr>
 <tr>
@@ -258,7 +258,7 @@ Licensed to the Ant-Contrib Project under one or more
 <td>Enumerated attribute with the values "none", "severe", "default",
  "production", "diagnostic", and "aserror".</td>
 <td>
-<a href="../apidocs/net/sf/antcontrib/cpptasks/WarningLevelEnum.html">WarningLevelEnum</a>
+<a href="../apidocs/com/github/maven_nar/cpptasks/WarningLevelEnum.html">WarningLevelEnum</a>
 </td>
 </tr>
 </table>

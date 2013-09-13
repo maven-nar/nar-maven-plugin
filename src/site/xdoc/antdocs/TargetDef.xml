@@ -42,14 +42,14 @@ Licensed to the Ant-Contrib Project under one or more
 <td>arch</td>
 <td>Sets cpu architecture, compiler may use cpu specific instructions.</td>
 <td>
-<a href="../apidocs/net/sf/antcontrib/cpptasks/ArchEnum.html">ArchEnum</a>
+<a href="../apidocs/com/github/maven_nar/cpptasks/ArchEnum.html">ArchEnum</a>
 </td>
 </tr>
 <tr>
 <td>cpu</td>
 <td>Sets preferred cpu, but does not use cpu specific instructions.</td>
 <td>
-<a href="../apidocs/net/sf/antcontrib/cpptasks/CPUEnum.html">CPUEnum</a>
+<a href="../apidocs/com/github/maven_nar/cpptasks/CPUEnum.html">CPUEnum</a>
 </td>
 </tr>
 <tr>
@@ -77,7 +77,7 @@ Licensed to the Ant-Contrib Project under one or more
 <td>osfamily</td>
 <td>Sets operating system family.</td>
 <td>
-<a href="../apidocs/net/sf/antcontrib/cpptasks/OSFamilyEnum.html">OSFamilyEnum</a>
+<a href="../apidocs/com/github/maven_nar/cpptasks/OSFamilyEnum.html">OSFamilyEnum</a>
 </td>
 </tr>
 <tr>

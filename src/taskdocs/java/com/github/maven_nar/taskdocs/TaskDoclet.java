@@ -15,7 +15,7 @@ Licensed to the Ant-Contrib Project under one or more
  limitations under the License.
 
 */
-package net.sf.antcontrib.taskdocs;
+package com.github.maven_nar.taskdocs;
 
 import com.sun.javadoc.*;
 import org.xml.sax.*;
@@ -51,7 +51,7 @@ public final class TaskDoclet {
      */
     public static boolean start(RootDoc root) throws Exception {
         SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
-        Source typeStyle = new StreamSource(new File("src/taskdocs/resources/net/sf/antcontrib/taskdocs/element.xslt"));
+        Source typeStyle = new StreamSource(new File("src/taskdocs/resources/com/github/maven_nar/taskdocs/element.xslt"));
         //
         //  replace with tf.newTransformerHandler() if you want to see raw generated XML.
         TransformerHandler typeHandler = tf.newTransformerHandler(typeStyle);
