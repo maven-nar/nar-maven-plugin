@@ -26,7 +26,7 @@ Modified version of ant contrib cpptasks, used by
 
 * cpptasks-1.0-beta-4-parallel-3
   - [[net/sf/antcontrib/cpptasks/intel/IntelLinuxFortranCompiler.java](src/main/java/net/sf/antcontrib/cpptasks/intel/IntelLinuxFortranCompiler.java)] added ifort
-  - [src/net/sf/antcontrib/cpptasks/CompilerEnum.java](src/main/java/net/sf/antcontrib/cpptasks/CompilerEnum.java) added ifort
+  - [[net/sf/antcontrib/cpptasks/CompilerEnum.java](src/main/java/net/sf/antcontrib/cpptasks/CompilerEnum.java)] added ifort
 
 * cpptasks-1.0-beta-4-parallel-2
   - [[net/sf/antcontrib/cpptasks/gcc/GppLinker.java](src/main/java/net/sf/antcontrib/cpptasks/gcc/GppLinker.java)] g++ handles gfortran static linking
