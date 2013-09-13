@@ -656,9 +656,18 @@ public final class NarUtil
             outputGobbler.join( timeout );
             if ( exitValue != 0 )
             {
-                 log.warn(err.toString());
-                 log.warn(out.toString());
-                 log.warn(dbg.toString());
+                 if ( log == null )
+                 {
+                      System.err.println(err.toString());
+                      System.err.println(out.toString());
+                      System.err.println(dbg.toString());
+                 }
+                 else
+                 {
+                      log.warn(err.toString());
+                      log.warn(out.toString());
+                      log.warn(dbg.toString());
+                 }
             }
             return exitValue;
         }
