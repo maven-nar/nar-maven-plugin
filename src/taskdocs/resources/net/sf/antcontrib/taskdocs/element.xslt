@@ -163,7 +163,7 @@ Licensed to the Ant-Contrib Project under one or more
 
     <xsl:template name="attribute-type">
         <xsl:choose>
-            <xsl:when test="starts-with(@qualifiedTypeName, 'net.sf.antcontrib.cpptasks.')">
+            <xsl:when test="starts-with(@qualifiedTypeName, 'com.github.maven_nar.cpptasks.')">
                 <a href="../apidocs/{translate(@qualifiedTypeName, '.', '/')}.html">
                     <xsl:value-of select="@name"/>
                 </a>
@@ -179,7 +179,7 @@ Licensed to the Ant-Contrib Project under one or more
         <xsl:element name="a">
             <xsl:attribute name="href">
                 <xsl:choose>
-                    <xsl:when test="starts-with(@qualifiedTypeName, 'net.sf.antcontrib.cpptasks')"><xsl:value-of select="@name"/>.html</xsl:when>
+                    <xsl:when test="starts-with(@qualifiedTypeName, 'com.github.maven_nar.cpptasks')"><xsl:value-of select="@name"/>.html</xsl:when>
                     <xsl:when test="starts-with(@qualifiedTypeName, 'org.apache.tools.ant.types.PatternSet')">http://ant.apache.org/manual/CoreTypes/patternset.html</xsl:when>
                     <xsl:when test="starts-with(@qualifiedTypeName, 'org.apache.tools.ant.types.Path')">http://ant.apache.org/manual/using.html#path</xsl:when>
                     <xsl:when test="starts-with(@qualifiedTypeName, 'org.apache.tools.ant.types.Commandline')">http://ant.apache.org/manual/CoreTasks/exec.html</xsl:when>

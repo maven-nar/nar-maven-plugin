@@ -57,7 +57,7 @@ cpptasks for Apache Ant
    Trivial Sample using antlib (compatible with Ant 1.6 or later):
    
 +--
-<project name="hello" default="compile" xmlns:cpptasks="antlib:net.sf.antcontrib.cpptasks">
+<project name="hello" default="compile" xmlns:cpptasks="antlib:com.github.maven_nar.cpptasks">
     <target name="compile">
         <mkdir dir="target/main/obj"/>
         <cpptasks:cc outtype="executable" subsystem="console" outfile="target/hello" objdir="target/main/obj">

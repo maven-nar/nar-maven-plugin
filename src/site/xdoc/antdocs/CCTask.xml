@@ -64,7 +64,7 @@ Licensed to the Ant-Contrib Project under one or more
  <li>
  Ant 1.6 or later:
  <ul>
- <li>Add xmlns:cpptasks="antlib:net.sf.antcontrib.cpptasks" to 
+ <li>Add xmlns:cpptasks="antlib:com.github.maven_nar.cpptasks" to 
  &lt;project&gt; element.
  </li>
  <li>

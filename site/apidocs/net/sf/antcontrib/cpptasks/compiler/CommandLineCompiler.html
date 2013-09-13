@@ -8,7 +8,7 @@
 CommandLineCompiler (cpptasks 1.0b5 API)
 </TITLE>
 
-<META NAME="keywords" CONTENT="net.sf.antcontrib.cpptasks.compiler.CommandLineCompiler class">
+<META NAME="keywords" CONTENT="com.github.maven_nar.cpptasks.compiler.CommandLineCompiler class">
 
 <LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../../stylesheet.css" TITLE="Style">
 
@@ -53,8 +53,8 @@ function windowTitle()
 
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-&nbsp;<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCCompiler.html" title="class in net.sf.antcontrib.cpptasks.compiler"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompilerConfiguration.html" title="class in net.sf.antcontrib.cpptasks.compiler"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCCompiler.html" title="class in com.github.maven_nar.cpptasks.compiler"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompilerConfiguration.html" title="class in com.github.maven_nar.cpptasks.compiler"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../../../../index.html?net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="CommandLineCompiler.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
@@ -86,24 +86,24 @@ DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&n
 <!-- ======== START OF CLASS DATA ======== -->
 <H2>
 <FONT SIZE="-1">
-net.sf.antcontrib.cpptasks.compiler</FONT>
+com.github.maven_nar.cpptasks.compiler</FONT>
 <BR>
 Class CommandLineCompiler</H2>
 <PRE>
 java.lang.Object
-  <IMG SRC="../../../../../resources/inherit.gif" ALT="extended by "><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html" title="class in net.sf.antcontrib.cpptasks.compiler">net.sf.antcontrib.cpptasks.compiler.AbstractProcessor</A>
-      <IMG SRC="../../../../../resources/inherit.gif" ALT="extended by "><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html" title="class in net.sf.antcontrib.cpptasks.compiler">net.sf.antcontrib.cpptasks.compiler.AbstractCompiler</A>
-          <IMG SRC="../../../../../resources/inherit.gif" ALT="extended by "><B>net.sf.antcontrib.cpptasks.compiler.CommandLineCompiler</B>
+  <IMG SRC="../../../../../resources/inherit.gif" ALT="extended by "><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html" title="class in com.github.maven_nar.cpptasks.compiler">com.github.maven_nar.cpptasks.compiler.AbstractProcessor</A>
+      <IMG SRC="../../../../../resources/inherit.gif" ALT="extended by "><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html" title="class in com.github.maven_nar.cpptasks.compiler">com.github.maven_nar.cpptasks.compiler.AbstractCompiler</A>
+          <IMG SRC="../../../../../resources/inherit.gif" ALT="extended by "><B>com.github.maven_nar.cpptasks.compiler.CommandLineCompiler</B>
 </PRE>
 <DL>
-<DT><B>All Implemented Interfaces:</B> <DD>java.lang.Cloneable, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Compiler.html" title="interface in net.sf.antcontrib.cpptasks.compiler">Compiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html" title="interface in net.sf.antcontrib.cpptasks.compiler">Processor</A></DD>
+<DT><B>All Implemented Interfaces:</B> <DD>java.lang.Cloneable, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Compiler.html" title="interface in com.github.maven_nar.cpptasks.compiler">Compiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html" title="interface in com.github.maven_nar.cpptasks.compiler">Processor</A></DD>
 </DL>
 <DL>
-<DT><B>Direct Known Subclasses:</B> <DD><A HREF="../../../../../net/sf/antcontrib/cpptasks/borland/BorlandResourceCompiler.html" title="class in net.sf.antcontrib.cpptasks.borland">BorlandResourceCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCCompiler.html" title="class in net.sf.antcontrib.cpptasks.compiler">CommandLineCCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineFortranCompiler.html" title="class in net.sf.antcontrib.cpptasks.compiler">CommandLineFortranCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/devstudio/DevStudioMIDLCompiler.html" title="class in net.sf.antcontrib.cpptasks.devstudio">DevStudioMIDLCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/devstudio/DevStudioResourceCompiler.html" title="class in net.sf.antcontrib.cpptasks.devstudio">DevStudioResourceCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/trolltech/MetaObjectCompiler.html" title="class in net.sf.antcontrib.cpptasks.trolltech">MetaObjectCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/openwatcom/OpenWatcomCompiler.html" title="class in net.sf.antcontrib.cpptasks.openwatcom">OpenWatcomCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/PrecompilingCommandLineCompiler.html" title="class in net.sf.antcontrib.cpptasks.compiler">PrecompilingCommandLineCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/trolltech/UserInterfaceCompiler.html" title="class in net.sf.antcontrib.cpptasks.trolltech">UserInterfaceCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/gcc/WindresResourceCompiler.html" title="class in net.sf.antcontrib.cpptasks.gcc">WindresResourceCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/mozilla/XpidlCompiler.html" title="class in net.sf.antcontrib.cpptasks.mozilla">XpidlCompiler</A></DD>
+<DT><B>Direct Known Subclasses:</B> <DD><A HREF="../../../../../net/sf/antcontrib/cpptasks/borland/BorlandResourceCompiler.html" title="class in com.github.maven_nar.cpptasks.borland">BorlandResourceCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCCompiler.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineCCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineFortranCompiler.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineFortranCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/devstudio/DevStudioMIDLCompiler.html" title="class in com.github.maven_nar.cpptasks.devstudio">DevStudioMIDLCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/devstudio/DevStudioResourceCompiler.html" title="class in com.github.maven_nar.cpptasks.devstudio">DevStudioResourceCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/trolltech/MetaObjectCompiler.html" title="class in com.github.maven_nar.cpptasks.trolltech">MetaObjectCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/openwatcom/OpenWatcomCompiler.html" title="class in com.github.maven_nar.cpptasks.openwatcom">OpenWatcomCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/PrecompilingCommandLineCompiler.html" title="class in com.github.maven_nar.cpptasks.compiler">PrecompilingCommandLineCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/trolltech/UserInterfaceCompiler.html" title="class in com.github.maven_nar.cpptasks.trolltech">UserInterfaceCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/gcc/WindresResourceCompiler.html" title="class in com.github.maven_nar.cpptasks.gcc">WindresResourceCompiler</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/mozilla/XpidlCompiler.html" title="class in com.github.maven_nar.cpptasks.mozilla">XpidlCompiler</A></DD>
 </DL>
 <HR>
 <DL>
-<DT><PRE>public abstract class <B>CommandLineCompiler</B><DT>extends <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html" title="class in net.sf.antcontrib.cpptasks.compiler">AbstractCompiler</A></DL>
+<DT><PRE>public abstract class <B>CommandLineCompiler</B><DT>extends <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractCompiler</A></DL>
 </PRE>
 
 <P>
@@ -131,7 +131,7 @@ An abstract Compiler implementation which uses an external program to
 &nbsp;<A NAME="fields_inherited_from_class_net.sf.antcontrib.cpptasks.compiler.AbstractProcessor"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
 <TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
-<TH ALIGN="left"><B>Fields inherited from class net.sf.antcontrib.cpptasks.compiler.<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html" title="class in net.sf.antcontrib.cpptasks.compiler">AbstractProcessor</A></B></TH>
+<TH ALIGN="left"><B>Fields inherited from class com.github.maven_nar.cpptasks.compiler.<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractProcessor</A></B></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#DEFAULT_DISCARD_BID">DEFAULT_DISCARD_BID</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#DEFAULT_PROCESS_BID">DEFAULT_PROCESS_BID</A></CODE></TD>
@@ -149,13 +149,13 @@ An abstract Compiler implementation which uses an external program to
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected </CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html#CommandLineCompiler(java.lang.String, java.lang.String, java.lang.String[], java.lang.String[], java.lang.String, boolean, net.sf.antcontrib.cpptasks.compiler.CommandLineCompiler, boolean, org.apache.tools.ant.types.Environment)">CommandLineCompiler</A></B>(java.lang.String&nbsp;command,
+<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html#CommandLineCompiler(java.lang.String, java.lang.String, java.lang.String[], java.lang.String[], java.lang.String, boolean, com.github.maven_nar.cpptasks.compiler.CommandLineCompiler, boolean, org.apache.tools.ant.types.Environment)">CommandLineCompiler</A></B>(java.lang.String&nbsp;command,
                     java.lang.String&nbsp;identifierArg,
                     java.lang.String[]&nbsp;sourceExtensions,
                     java.lang.String[]&nbsp;headerExtensions,
                     java.lang.String&nbsp;outputSuffix,
                     boolean&nbsp;libtool,
-                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html" title="class in net.sf.antcontrib.cpptasks.compiler">CommandLineCompiler</A>&nbsp;libtoolCompiler,
+                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineCompiler</A>&nbsp;libtoolCompiler,
                     boolean&nbsp;newEnvironment,
                     org.apache.tools.ant.types.Environment&nbsp;env)</CODE>
 
@@ -175,13 +175,13 @@ An abstract Compiler implementation which uses an external program to
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected abstract &nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html#addImpliedArgs(java.util.Vector, boolean, boolean, boolean, net.sf.antcontrib.cpptasks.compiler.LinkType, java.lang.Boolean, net.sf.antcontrib.cpptasks.OptimizationEnum)">addImpliedArgs</A></B>(java.util.Vector&nbsp;args,
+<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html#addImpliedArgs(java.util.Vector, boolean, boolean, boolean, com.github.maven_nar.cpptasks.compiler.LinkType, java.lang.Boolean, com.github.maven_nar.cpptasks.OptimizationEnum)">addImpliedArgs</A></B>(java.util.Vector&nbsp;args,
                boolean&nbsp;debug,
                boolean&nbsp;multithreaded,
                boolean&nbsp;exceptions,
-               <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/LinkType.html" title="class in net.sf.antcontrib.cpptasks.compiler">LinkType</A>&nbsp;linkType,
+               <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/LinkType.html" title="class in com.github.maven_nar.cpptasks.compiler">LinkType</A>&nbsp;linkType,
                java.lang.Boolean&nbsp;rtti,
-               <A HREF="../../../../../net/sf/antcontrib/cpptasks/OptimizationEnum.html" title="class in net.sf.antcontrib.cpptasks">OptimizationEnum</A>&nbsp;optimization)</CODE>
+               <A HREF="../../../../../net/sf/antcontrib/cpptasks/OptimizationEnum.html" title="class in com.github.maven_nar.cpptasks">OptimizationEnum</A>&nbsp;optimization)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -210,7 +210,7 @@ An abstract Compiler implementation which uses an external program to
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html#buildDefineArguments(net.sf.antcontrib.cpptasks.CompilerDef[], java.util.Vector)">buildDefineArguments</A></B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CompilerDef.html" title="class in net.sf.antcontrib.cpptasks">CompilerDef</A>[]&nbsp;defs,
+<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html#buildDefineArguments(com.github.maven_nar.cpptasks.CompilerDef[], java.util.Vector)">buildDefineArguments</A></B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CompilerDef.html" title="class in com.github.maven_nar.cpptasks">CompilerDef</A>[]&nbsp;defs,
                      java.util.Vector&nbsp;args)</CODE>
 
 <BR>
@@ -219,27 +219,27 @@ An abstract Compiler implementation which uses an external program to
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html#compile(net.sf.antcontrib.cpptasks.CCTask, java.io.File, java.lang.String[], java.lang.String[], java.lang.String[], boolean, net.sf.antcontrib.cpptasks.compiler.CommandLineCompilerConfiguration, net.sf.antcontrib.cpptasks.compiler.ProgressMonitor)">compile</A></B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in net.sf.antcontrib.cpptasks">CCTask</A>&nbsp;task,
+<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html#compile(com.github.maven_nar.cpptasks.CCTask, java.io.File, java.lang.String[], java.lang.String[], java.lang.String[], boolean, com.github.maven_nar.cpptasks.compiler.CommandLineCompilerConfiguration, com.github.maven_nar.cpptasks.compiler.ProgressMonitor)">compile</A></B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
         java.io.File&nbsp;outputDir,
         java.lang.String[]&nbsp;sourceFiles,
         java.lang.String[]&nbsp;args,
         java.lang.String[]&nbsp;endArgs,
         boolean&nbsp;relentless,
-        <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompilerConfiguration.html" title="class in net.sf.antcontrib.cpptasks.compiler">CommandLineCompilerConfiguration</A>&nbsp;config,
-        <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/ProgressMonitor.html" title="interface in net.sf.antcontrib.cpptasks.compiler">ProgressMonitor</A>&nbsp;monitor)</CODE>
+        <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompilerConfiguration.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineCompilerConfiguration</A>&nbsp;config,
+        <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/ProgressMonitor.html" title="interface in com.github.maven_nar.cpptasks.compiler">ProgressMonitor</A>&nbsp;monitor)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Compiles a source file.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CompilerConfiguration.html" title="interface in net.sf.antcontrib.cpptasks.compiler">CompilerConfiguration</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html#createConfiguration(net.sf.antcontrib.cpptasks.CCTask, net.sf.antcontrib.cpptasks.compiler.LinkType, net.sf.antcontrib.cpptasks.ProcessorDef[], net.sf.antcontrib.cpptasks.CompilerDef, net.sf.antcontrib.cpptasks.TargetDef, net.sf.antcontrib.cpptasks.VersionInfo)">createConfiguration</A></B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in net.sf.antcontrib.cpptasks">CCTask</A>&nbsp;task,
-                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/LinkType.html" title="class in net.sf.antcontrib.cpptasks.compiler">LinkType</A>&nbsp;linkType,
-                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/ProcessorDef.html" title="class in net.sf.antcontrib.cpptasks">ProcessorDef</A>[]&nbsp;baseDefs,
-                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/CompilerDef.html" title="class in net.sf.antcontrib.cpptasks">CompilerDef</A>&nbsp;specificDef,
-                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/TargetDef.html" title="class in net.sf.antcontrib.cpptasks">TargetDef</A>&nbsp;targetPlatform,
-                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/VersionInfo.html" title="class in net.sf.antcontrib.cpptasks">VersionInfo</A>&nbsp;versionInfo)</CODE>
+<CODE>protected &nbsp;<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CompilerConfiguration.html" title="interface in com.github.maven_nar.cpptasks.compiler">CompilerConfiguration</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html#createConfiguration(com.github.maven_nar.cpptasks.CCTask, com.github.maven_nar.cpptasks.compiler.LinkType, com.github.maven_nar.cpptasks.ProcessorDef[], com.github.maven_nar.cpptasks.CompilerDef, com.github.maven_nar.cpptasks.TargetDef, com.github.maven_nar.cpptasks.VersionInfo)">createConfiguration</A></B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
+                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/LinkType.html" title="class in com.github.maven_nar.cpptasks.compiler">LinkType</A>&nbsp;linkType,
+                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/ProcessorDef.html" title="class in com.github.maven_nar.cpptasks">ProcessorDef</A>[]&nbsp;baseDefs,
+                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/CompilerDef.html" title="class in com.github.maven_nar.cpptasks">CompilerDef</A>&nbsp;specificDef,
+                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/TargetDef.html" title="class in com.github.maven_nar.cpptasks">TargetDef</A>&nbsp;targetPlatform,
+                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/VersionInfo.html" title="class in com.github.maven_nar.cpptasks">VersionInfo</A>&nbsp;versionInfo)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -315,7 +315,7 @@ An abstract Compiler implementation which uses an external program to
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html" title="class in net.sf.antcontrib.cpptasks.compiler">CommandLineCompiler</A></CODE></FONT></TD>
+<CODE>&nbsp;<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineCompiler</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html#getLibtoolCompiler()">getLibtoolCompiler</A></B>()</CODE>
 
 <BR>
@@ -360,7 +360,7 @@ An abstract Compiler implementation which uses an external program to
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;int</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html#runCommand(net.sf.antcontrib.cpptasks.CCTask, java.io.File, java.lang.String[])">runCommand</A></B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in net.sf.antcontrib.cpptasks">CCTask</A>&nbsp;task,
+<TD><CODE><B><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html#runCommand(com.github.maven_nar.cpptasks.CCTask, java.io.File, java.lang.String[])">runCommand</A></B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
            java.io.File&nbsp;workingDir,
            java.lang.String[]&nbsp;cmdline)</CODE>
 
@@ -380,16 +380,16 @@ An abstract Compiler implementation which uses an external program to
 &nbsp;<A NAME="methods_inherited_from_class_net.sf.antcontrib.cpptasks.compiler.AbstractCompiler"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
 <TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
-<TH ALIGN="left"><B>Methods inherited from class net.sf.antcontrib.cpptasks.compiler.<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html" title="class in net.sf.antcontrib.cpptasks.compiler">AbstractCompiler</A></B></TH>
+<TH ALIGN="left"><B>Methods inherited from class com.github.maven_nar.cpptasks.compiler.<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractCompiler</A></B></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html#canParse(java.io.File)">canParse</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html#createConfiguration(net.sf.antcontrib.cpptasks.CCTask, net.sf.antcontrib.cpptasks.compiler.LinkType, net.sf.antcontrib.cpptasks.ProcessorDef[], net.sf.antcontrib.cpptasks.ProcessorDef, net.sf.antcontrib.cpptasks.TargetDef, net.sf.antcontrib.cpptasks.VersionInfo)">createConfiguration</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html#createParser(java.io.File)">createParser</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html#getBaseOutputName(java.lang.String)">getBaseOutputName</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html#getOutputFileNames(java.lang.String, net.sf.antcontrib.cpptasks.VersionInfo)">getOutputFileNames</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html#parseIncludes(net.sf.antcontrib.cpptasks.CCTask, java.io.File, java.io.File[], java.io.File[], java.io.File[], java.io.File, java.lang.String)">parseIncludes</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html#resolveInclude(java.lang.String, java.io.File[], java.util.Vector)">resolveInclude</A></CODE></TD>
+<TD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html#canParse(java.io.File)">canParse</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html#createConfiguration(com.github.maven_nar.cpptasks.CCTask, com.github.maven_nar.cpptasks.compiler.LinkType, com.github.maven_nar.cpptasks.ProcessorDef[], com.github.maven_nar.cpptasks.ProcessorDef, com.github.maven_nar.cpptasks.TargetDef, com.github.maven_nar.cpptasks.VersionInfo)">createConfiguration</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html#createParser(java.io.File)">createParser</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html#getBaseOutputName(java.lang.String)">getBaseOutputName</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html#getOutputFileNames(java.lang.String, com.github.maven_nar.cpptasks.VersionInfo)">getOutputFileNames</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html#parseIncludes(com.github.maven_nar.cpptasks.CCTask, java.io.File, java.io.File[], java.io.File[], java.io.File[], java.io.File, java.lang.String)">parseIncludes</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html#resolveInclude(java.lang.String, java.io.File[], java.util.Vector)">resolveInclude</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_net.sf.antcontrib.cpptasks.compiler.AbstractProcessor"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
 <TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
-<TH ALIGN="left"><B>Methods inherited from class net.sf.antcontrib.cpptasks.compiler.<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html" title="class in net.sf.antcontrib.cpptasks.compiler">AbstractProcessor</A></B></TH>
+<TH ALIGN="left"><B>Methods inherited from class com.github.maven_nar.cpptasks.compiler.<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractProcessor</A></B></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#bid(java.lang.String)">bid</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#changeEnvironment(boolean, org.apache.tools.ant.types.Environment)">changeEnvironment</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#clone()">clone</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#getHeaderExtensions()">getHeaderExtensions</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#getIdentifier(java.lang.String[], java.lang.String)">getIdentifier</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#getOSArch()">getOSArch</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#getOSName()">getOSName</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#getSourceExtensions()">getSourceExtensions</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#isDarwin()">isDarwin</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#toString()">toString</A></CODE></TD>
@@ -407,10 +407,10 @@ An abstract Compiler implementation which uses an external program to
 &nbsp;<A NAME="methods_inherited_from_class_net.sf.antcontrib.cpptasks.compiler.Processor"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
 <TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
-<TH ALIGN="left"><B>Methods inherited from interface net.sf.antcontrib.cpptasks.compiler.<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html" title="interface in net.sf.antcontrib.cpptasks.compiler">Processor</A></B></TH>
+<TH ALIGN="left"><B>Methods inherited from interface com.github.maven_nar.cpptasks.compiler.<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html" title="interface in com.github.maven_nar.cpptasks.compiler">Processor</A></B></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html#bid(java.lang.String)">bid</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html#changeEnvironment(boolean, org.apache.tools.ant.types.Environment)">changeEnvironment</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html#getLinker(net.sf.antcontrib.cpptasks.compiler.LinkType)">getLinker</A></CODE></TD>
+<TD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html#bid(java.lang.String)">bid</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html#changeEnvironment(boolean, org.apache.tools.ant.types.Environment)">changeEnvironment</A>, <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html#getLinker(com.github.maven_nar.cpptasks.compiler.LinkType)">getLinker</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;
@@ -426,7 +426,7 @@ An abstract Compiler implementation which uses an external program to
 </TR>
 </TABLE>
 
-<A NAME="CommandLineCompiler(java.lang.String, java.lang.String, java.lang.String[], java.lang.String[], java.lang.String, boolean, net.sf.antcontrib.cpptasks.compiler.CommandLineCompiler, boolean, org.apache.tools.ant.types.Environment)"><!-- --></A><H3>
+<A NAME="CommandLineCompiler(java.lang.String, java.lang.String, java.lang.String[], java.lang.String[], java.lang.String, boolean, com.github.maven_nar.cpptasks.compiler.CommandLineCompiler, boolean, org.apache.tools.ant.types.Environment)"><!-- --></A><H3>
 CommandLineCompiler</H3>
 <PRE>
 protected <B>CommandLineCompiler</B>(java.lang.String&nbsp;command,
@@ -435,7 +435,7 @@ protected <B>CommandLineCompiler</B>(java.lang.String&nbsp;command,
                               java.lang.String[]&nbsp;headerExtensions,
                               java.lang.String&nbsp;outputSuffix,
                               boolean&nbsp;libtool,
-                              <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html" title="class in net.sf.antcontrib.cpptasks.compiler">CommandLineCompiler</A>&nbsp;libtoolCompiler,
+                              <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineCompiler</A>&nbsp;libtoolCompiler,
                               boolean&nbsp;newEnvironment,
                               org.apache.tools.ant.types.Environment&nbsp;env)</PRE>
 <DL>
@@ -451,16 +451,16 @@ protected <B>CommandLineCompiler</B>(java.lang.String&nbsp;command,
 </TR>
 </TABLE>
 
-<A NAME="addImpliedArgs(java.util.Vector, boolean, boolean, boolean, net.sf.antcontrib.cpptasks.compiler.LinkType, java.lang.Boolean, net.sf.antcontrib.cpptasks.OptimizationEnum)"><!-- --></A><H3>
+<A NAME="addImpliedArgs(java.util.Vector, boolean, boolean, boolean, com.github.maven_nar.cpptasks.compiler.LinkType, java.lang.Boolean, com.github.maven_nar.cpptasks.OptimizationEnum)"><!-- --></A><H3>
 addImpliedArgs</H3>
 <PRE>
 protected abstract void <B>addImpliedArgs</B>(java.util.Vector&nbsp;args,
                                        boolean&nbsp;debug,
                                        boolean&nbsp;multithreaded,
                                        boolean&nbsp;exceptions,
-                                       <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/LinkType.html" title="class in net.sf.antcontrib.cpptasks.compiler">LinkType</A>&nbsp;linkType,
+                                       <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/LinkType.html" title="class in com.github.maven_nar.cpptasks.compiler">LinkType</A>&nbsp;linkType,
                                        java.lang.Boolean&nbsp;rtti,
-                                       <A HREF="../../../../../net/sf/antcontrib/cpptasks/OptimizationEnum.html" title="class in net.sf.antcontrib.cpptasks">OptimizationEnum</A>&nbsp;optimization)</PRE>
+                                       <A HREF="../../../../../net/sf/antcontrib/cpptasks/OptimizationEnum.html" title="class in com.github.maven_nar.cpptasks">OptimizationEnum</A>&nbsp;optimization)</PRE>
 <DL>
 <DD><DL>
 </DL>
@@ -502,10 +502,10 @@ protected abstract void <B>addWarningSwitch</B>(java.util.Vector&nbsp;args,
 </DL>
 <HR>
 
-<A NAME="buildDefineArguments(net.sf.antcontrib.cpptasks.CompilerDef[], java.util.Vector)"><!-- --></A><H3>
+<A NAME="buildDefineArguments(com.github.maven_nar.cpptasks.CompilerDef[], java.util.Vector)"><!-- --></A><H3>
 buildDefineArguments</H3>
 <PRE>
-protected void <B>buildDefineArguments</B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CompilerDef.html" title="class in net.sf.antcontrib.cpptasks">CompilerDef</A>[]&nbsp;defs,
+protected void <B>buildDefineArguments</B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CompilerDef.html" title="class in com.github.maven_nar.cpptasks">CompilerDef</A>[]&nbsp;defs,
                                     java.util.Vector&nbsp;args)</PRE>
 <DL>
 <DD><DL>
@@ -514,17 +514,17 @@ protected void <B>buildDefineArguments</B>(<A HREF="../../../../../net/sf/antcon
 </DL>
 <HR>
 
-<A NAME="compile(net.sf.antcontrib.cpptasks.CCTask, java.io.File, java.lang.String[], java.lang.String[], java.lang.String[], boolean, net.sf.antcontrib.cpptasks.compiler.CommandLineCompilerConfiguration, net.sf.antcontrib.cpptasks.compiler.ProgressMonitor)"><!-- --></A><H3>
+<A NAME="compile(com.github.maven_nar.cpptasks.CCTask, java.io.File, java.lang.String[], java.lang.String[], java.lang.String[], boolean, com.github.maven_nar.cpptasks.compiler.CommandLineCompilerConfiguration, com.github.maven_nar.cpptasks.compiler.ProgressMonitor)"><!-- --></A><H3>
 compile</H3>
 <PRE>
-public void <B>compile</B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in net.sf.antcontrib.cpptasks">CCTask</A>&nbsp;task,
+public void <B>compile</B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
                     java.io.File&nbsp;outputDir,
                     java.lang.String[]&nbsp;sourceFiles,
                     java.lang.String[]&nbsp;args,
                     java.lang.String[]&nbsp;endArgs,
                     boolean&nbsp;relentless,
-                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompilerConfiguration.html" title="class in net.sf.antcontrib.cpptasks.compiler">CommandLineCompilerConfiguration</A>&nbsp;config,
-                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/ProgressMonitor.html" title="interface in net.sf.antcontrib.cpptasks.compiler">ProgressMonitor</A>&nbsp;monitor)
+                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompilerConfiguration.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineCompilerConfiguration</A>&nbsp;config,
+                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/ProgressMonitor.html" title="interface in com.github.maven_nar.cpptasks.compiler">ProgressMonitor</A>&nbsp;monitor)
              throws org.apache.tools.ant.BuildException</PRE>
 <DL>
 <DD>Compiles a source file.
@@ -537,18 +537,18 @@ public void <B>compile</B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CC
 </DL>
 <HR>
 
-<A NAME="createConfiguration(net.sf.antcontrib.cpptasks.CCTask, net.sf.antcontrib.cpptasks.compiler.LinkType, net.sf.antcontrib.cpptasks.ProcessorDef[], net.sf.antcontrib.cpptasks.CompilerDef, net.sf.antcontrib.cpptasks.TargetDef, net.sf.antcontrib.cpptasks.VersionInfo)"><!-- --></A><H3>
+<A NAME="createConfiguration(com.github.maven_nar.cpptasks.CCTask, com.github.maven_nar.cpptasks.compiler.LinkType, com.github.maven_nar.cpptasks.ProcessorDef[], com.github.maven_nar.cpptasks.CompilerDef, com.github.maven_nar.cpptasks.TargetDef, com.github.maven_nar.cpptasks.VersionInfo)"><!-- --></A><H3>
 createConfiguration</H3>
 <PRE>
-protected <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CompilerConfiguration.html" title="interface in net.sf.antcontrib.cpptasks.compiler">CompilerConfiguration</A> <B>createConfiguration</B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in net.sf.antcontrib.cpptasks">CCTask</A>&nbsp;task,
-                                                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/LinkType.html" title="class in net.sf.antcontrib.cpptasks.compiler">LinkType</A>&nbsp;linkType,
-                                                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/ProcessorDef.html" title="class in net.sf.antcontrib.cpptasks">ProcessorDef</A>[]&nbsp;baseDefs,
-                                                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/CompilerDef.html" title="class in net.sf.antcontrib.cpptasks">CompilerDef</A>&nbsp;specificDef,
-                                                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/TargetDef.html" title="class in net.sf.antcontrib.cpptasks">TargetDef</A>&nbsp;targetPlatform,
-                                                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/VersionInfo.html" title="class in net.sf.antcontrib.cpptasks">VersionInfo</A>&nbsp;versionInfo)</PRE>
+protected <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CompilerConfiguration.html" title="interface in com.github.maven_nar.cpptasks.compiler">CompilerConfiguration</A> <B>createConfiguration</B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
+                                                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/LinkType.html" title="class in com.github.maven_nar.cpptasks.compiler">LinkType</A>&nbsp;linkType,
+                                                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/ProcessorDef.html" title="class in com.github.maven_nar.cpptasks">ProcessorDef</A>[]&nbsp;baseDefs,
+                                                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/CompilerDef.html" title="class in com.github.maven_nar.cpptasks">CompilerDef</A>&nbsp;specificDef,
+                                                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/TargetDef.html" title="class in com.github.maven_nar.cpptasks">TargetDef</A>&nbsp;targetPlatform,
+                                                    <A HREF="../../../../../net/sf/antcontrib/cpptasks/VersionInfo.html" title="class in com.github.maven_nar.cpptasks">VersionInfo</A>&nbsp;versionInfo)</PRE>
 <DL>
 <DD><DL>
-<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html#createConfiguration(net.sf.antcontrib.cpptasks.CCTask, net.sf.antcontrib.cpptasks.compiler.LinkType, net.sf.antcontrib.cpptasks.ProcessorDef[], net.sf.antcontrib.cpptasks.CompilerDef, net.sf.antcontrib.cpptasks.TargetDef, net.sf.antcontrib.cpptasks.VersionInfo)">createConfiguration</A></CODE> in class <CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html" title="class in net.sf.antcontrib.cpptasks.compiler">AbstractCompiler</A></CODE></DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html#createConfiguration(com.github.maven_nar.cpptasks.CCTask, com.github.maven_nar.cpptasks.compiler.LinkType, com.github.maven_nar.cpptasks.ProcessorDef[], com.github.maven_nar.cpptasks.CompilerDef, com.github.maven_nar.cpptasks.TargetDef, com.github.maven_nar.cpptasks.VersionInfo)">createConfiguration</A></CODE> in class <CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractCompiler.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractCompiler</A></CODE></DL>
 </DD>
 <DD><DL>
 </DL>
@@ -613,7 +613,7 @@ public java.lang.String <B>getIdentifier</B>()</PRE>
  output files for the same input files and command line switches.
 <P>
 <DD><DL>
-<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html#getIdentifier()">getIdentifier</A></CODE> in interface <CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html" title="interface in net.sf.antcontrib.cpptasks.compiler">Processor</A></CODE><DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#getIdentifier()">getIdentifier</A></CODE> in class <CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html" title="class in net.sf.antcontrib.cpptasks.compiler">AbstractProcessor</A></CODE></DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html#getIdentifier()">getIdentifier</A></CODE> in interface <CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/Processor.html" title="interface in com.github.maven_nar.cpptasks.compiler">Processor</A></CODE><DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html#getIdentifier()">getIdentifier</A></CODE> in class <CODE><A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/AbstractProcessor.html" title="class in com.github.maven_nar.cpptasks.compiler">AbstractProcessor</A></CODE></DL>
 </DD>
 <DD><DL>
 </DL>
@@ -659,7 +659,7 @@ protected final boolean <B>getLibtool</B>()</PRE>
 <A NAME="getLibtoolCompiler()"><!-- --></A><H3>
 getLibtoolCompiler</H3>
 <PRE>
-public final <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html" title="class in net.sf.antcontrib.cpptasks.compiler">CommandLineCompiler</A> <B>getLibtoolCompiler</B>()</PRE>
+public final <A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html" title="class in com.github.maven_nar.cpptasks.compiler">CommandLineCompiler</A> <B>getLibtoolCompiler</B>()</PRE>
 <DL>
 <DD>Obtains the same compiler, but with libtool set
  
@@ -717,10 +717,10 @@ protected abstract void <B>getUndefineSwitch</B>(java.lang.StringBuffer&nbsp;buf
 </DL>
 <HR>
 
-<A NAME="runCommand(net.sf.antcontrib.cpptasks.CCTask, java.io.File, java.lang.String[])"><!-- --></A><H3>
+<A NAME="runCommand(com.github.maven_nar.cpptasks.CCTask, java.io.File, java.lang.String[])"><!-- --></A><H3>
 runCommand</H3>
 <PRE>
-protected int <B>runCommand</B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in net.sf.antcontrib.cpptasks">CCTask</A>&nbsp;task,
+protected int <B>runCommand</B>(<A HREF="../../../../../net/sf/antcontrib/cpptasks/CCTask.html" title="class in com.github.maven_nar.cpptasks">CCTask</A>&nbsp;task,
                          java.io.File&nbsp;workingDir,
                          java.lang.String[]&nbsp;cmdline)
                   throws org.apache.tools.ant.BuildException</PRE>
@@ -776,8 +776,8 @@ protected final void <B>setCommand</B>(java.lang.String&nbsp;command)</PRE>
 
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-&nbsp;<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCCompiler.html" title="class in net.sf.antcontrib.cpptasks.compiler"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompilerConfiguration.html" title="class in net.sf.antcontrib.cpptasks.compiler"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCCompiler.html" title="class in com.github.maven_nar.cpptasks.compiler"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../../net/sf/antcontrib/cpptasks/compiler/CommandLineCompilerConfiguration.html" title="class in com.github.maven_nar.cpptasks.compiler"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../../../../index.html?net/sf/antcontrib/cpptasks/compiler/CommandLineCompiler.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="CommandLineCompiler.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
@@ -806,6 +806,6 @@ DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&n
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
 
 <HR>
-Copyright © 2001-2008 <a href="http://ant-contrib.sourceforge.net">Ant-Contrib Project</a>. All Rights Reserved.
+Copyright ï¿½ 2001-2008 <a href="http://ant-contrib.sourceforge.net">Ant-Contrib Project</a>. All Rights Reserved.
 </BODY>
 </HTML>
