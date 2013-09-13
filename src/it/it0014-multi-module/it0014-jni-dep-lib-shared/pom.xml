@@ -23,7 +23,7 @@ under the License.
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.apache.maven.its.nar</groupId>
+    <groupId>com.github.maven-nar.its.nar</groupId>
     <artifactId>it0014-pom</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
@@ -31,7 +31,7 @@ under the License.
   <artifactId>it0014-jni-dep-lib-shared</artifactId>
   <packaging>nar</packaging>
   
-  <name>Maven NAR JNI and Shared Library</name>
+  <name>NAR JNI and Shared Library</name>
   <version>1.0-SNAPSHOT</version>
   <description>
     JNI depending on a shared library.
@@ -61,7 +61,7 @@ under the License.
   
   <dependencies>
     <dependency>
-      <groupId>org.apache.maven.its.nar</groupId>
+      <groupId>com.github.maven-nar.its.nar</groupId>
       <artifactId>it0014-lib-shared</artifactId>
       <version>1.0-SNAPSHOT</version>
       <type>nar</type>
