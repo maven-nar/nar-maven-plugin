@@ -4,6 +4,7 @@
   <groupId>com.github.maven-nar</groupId>
   <artifactId>cpptasks-parallel</artifactId>
   <version>1.1.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
   <name>CPPTasks (parallel)</name>
   <description>
@@ -26,6 +27,35 @@
     <url>https://github.com/maven-nar/cpptasks-parallel</url>
     <tag>HEAD</tag>
   </scm>
+
+  <developers>
+    <developer>
+      <id>ctrueden</id>
+      <name>Curtis Rueden</name>
+      <email>ctrueden@wisc.edu</email>
+      <url>http://loci.wisc.edu/people/curtis-rueden</url>
+      <organization>UW-Madison LOCI</organization>
+      <organizationUrl>http://loci.wisc.edu/</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>-6</timezone>
+    </developer>
+    <developer>
+      <id>dscho</id>
+      <name>Johannes Schindelin</name>
+      <email>johannes.schindelin@gmx.de</email>
+      <url>http://loci.wisc.edu/people/johannes-schindelin</url>
+      <organization>UW-Madison LOCI</organization>
+      <organizationUrl>http://loci.wisc.edu/</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>-6</timezone>
+    </developer>
+  </developers>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
