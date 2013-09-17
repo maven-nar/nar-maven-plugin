@@ -23,10 +23,10 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.antcontrib.cpptasks.CUtil;
-import net.sf.antcontrib.cpptasks.LinkerDef;
-import net.sf.antcontrib.cpptasks.types.LibrarySet;
-import net.sf.antcontrib.cpptasks.types.LibraryTypeEnum;
+import com.github.maven_nar.cpptasks.CUtil;
+import com.github.maven_nar.cpptasks.LinkerDef;
+import com.github.maven_nar.cpptasks.types.LibrarySet;
+import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;

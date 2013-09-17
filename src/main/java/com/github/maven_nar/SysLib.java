@@ -19,9 +19,9 @@ package com.github.maven_nar;
  * under the License.
  */
 
-import net.sf.antcontrib.cpptasks.CUtil;
-import net.sf.antcontrib.cpptasks.types.LibraryTypeEnum;
-import net.sf.antcontrib.cpptasks.types.SystemLibrarySet;
+import com.github.maven_nar.cpptasks.CUtil;
+import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
+import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.tools.ant.Project;

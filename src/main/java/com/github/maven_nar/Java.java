@@ -23,11 +23,11 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.antcontrib.cpptasks.CCTask;
-import net.sf.antcontrib.cpptasks.CUtil;
-import net.sf.antcontrib.cpptasks.types.CommandLineArgument;
-import net.sf.antcontrib.cpptasks.types.LibrarySet;
-import net.sf.antcontrib.cpptasks.types.LinkerArgument;
+import com.github.maven_nar.cpptasks.CCTask;
+import com.github.maven_nar.cpptasks.CUtil;
+import com.github.maven_nar.cpptasks.types.CommandLineArgument;
+import com.github.maven_nar.cpptasks.types.LibrarySet;
+import com.github.maven_nar.cpptasks.types.LinkerArgument;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;

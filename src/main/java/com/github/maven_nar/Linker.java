@@ -29,13 +29,13 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.sf.antcontrib.cpptasks.CUtil;
-import net.sf.antcontrib.cpptasks.LinkerDef;
-import net.sf.antcontrib.cpptasks.LinkerEnum;
-import net.sf.antcontrib.cpptasks.types.LibrarySet;
-import net.sf.antcontrib.cpptasks.types.LibraryTypeEnum;
-import net.sf.antcontrib.cpptasks.types.LinkerArgument;
-import net.sf.antcontrib.cpptasks.types.SystemLibrarySet;
+import com.github.maven_nar.cpptasks.CUtil;
+import com.github.maven_nar.cpptasks.LinkerDef;
+import com.github.maven_nar.cpptasks.LinkerEnum;
+import com.github.maven_nar.cpptasks.types.LibrarySet;
+import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
+import com.github.maven_nar.cpptasks.types.LinkerArgument;
+import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;

@@ -24,17 +24,17 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.sf.antcontrib.cpptasks.CCTask;
-import net.sf.antcontrib.cpptasks.CUtil;
-import net.sf.antcontrib.cpptasks.CompilerDef;
-import net.sf.antcontrib.cpptasks.LinkerDef;
-import net.sf.antcontrib.cpptasks.OutputTypeEnum;
-import net.sf.antcontrib.cpptasks.RuntimeType;
-import net.sf.antcontrib.cpptasks.SubsystemEnum;
-import net.sf.antcontrib.cpptasks.types.LibrarySet;
-import net.sf.antcontrib.cpptasks.types.LibraryTypeEnum;
-import net.sf.antcontrib.cpptasks.types.LinkerArgument;
-import net.sf.antcontrib.cpptasks.types.SystemLibrarySet;
+import com.github.maven_nar.cpptasks.CCTask;
+import com.github.maven_nar.cpptasks.CUtil;
+import com.github.maven_nar.cpptasks.CompilerDef;
+import com.github.maven_nar.cpptasks.LinkerDef;
+import com.github.maven_nar.cpptasks.OutputTypeEnum;
+import com.github.maven_nar.cpptasks.RuntimeType;
+import com.github.maven_nar.cpptasks.SubsystemEnum;
+import com.github.maven_nar.cpptasks.types.LibrarySet;
+import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
+import com.github.maven_nar.cpptasks.types.LinkerArgument;
+import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;

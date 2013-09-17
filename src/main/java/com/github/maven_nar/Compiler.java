@@ -28,14 +28,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import net.sf.antcontrib.cpptasks.CUtil;
-import net.sf.antcontrib.cpptasks.CompilerDef;
-import net.sf.antcontrib.cpptasks.CompilerEnum;
-import net.sf.antcontrib.cpptasks.OptimizationEnum;
-import net.sf.antcontrib.cpptasks.types.CompilerArgument;
-import net.sf.antcontrib.cpptasks.types.ConditionalFileSet;
-import net.sf.antcontrib.cpptasks.types.DefineArgument;
-import net.sf.antcontrib.cpptasks.types.DefineSet;
+import com.github.maven_nar.cpptasks.CUtil;
+import com.github.maven_nar.cpptasks.CompilerDef;
+import com.github.maven_nar.cpptasks.CompilerEnum;
+import com.github.maven_nar.cpptasks.OptimizationEnum;
+import com.github.maven_nar.cpptasks.types.CompilerArgument;
+import com.github.maven_nar.cpptasks.types.ConditionalFileSet;
+import com.github.maven_nar.cpptasks.types.DefineArgument;
+import com.github.maven_nar.cpptasks.types.DefineSet;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
