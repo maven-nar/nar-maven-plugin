@@ -43,7 +43,7 @@ Licensed to the Ant-Contrib Project under one or more
 <td>base</td>
 <td>Sets the base address. May be specified in either decimal or hex.</td>
 <td>
-<a href="../apidocs/net/sf/antcontrib/cpptasks/types/FlexLong.html">FlexLong</a>
+<a href="../apidocs/com/github/maven_nar/cpptasks/types/FlexLong.html">FlexLong</a>
 </td>
 </tr>
 <tr>
@@ -208,7 +208,7 @@ Licensed to the Ant-Contrib Project under one or more
  </table>
 </td>
 <td>
-<a href="../apidocs/net/sf/antcontrib/cpptasks/LinkerEnum.html">LinkerEnum</a>
+<a href="../apidocs/com/github/maven_nar/cpptasks/LinkerEnum.html">LinkerEnum</a>
 </td>
 </tr>
 <tr>

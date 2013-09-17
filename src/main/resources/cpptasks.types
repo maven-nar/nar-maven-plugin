@@ -1,8 +1,8 @@
-defineset=net.sf.antcontrib.cpptasks.types.DefineSet
-compiler=net.sf.antcontrib.cpptasks.CompilerDef
-linker=net.sf.antcontrib.cpptasks.LinkerDef
-targetplatform=net.sf.antcontrib.cpptasks.TargetDef
-versioninfo=net.sf.antcontrib.cpptasks.VersionInfo
-distributer=net.sf.antcontrib.cpptasks.DistributerDef
-syslibset=net.sf.antcontrib.cpptasks.types.SystemLibrarySet
-libset=net.sf.antcontrib.cpptasks.types.LibrarySet
+defineset=com.github.maven_nar.cpptasks.types.DefineSet
+compiler=com.github.maven_nar.cpptasks.CompilerDef
+linker=com.github.maven_nar.cpptasks.LinkerDef
+targetplatform=com.github.maven_nar.cpptasks.TargetDef
+versioninfo=com.github.maven_nar.cpptasks.VersionInfo
+distributer=com.github.maven_nar.cpptasks.DistributerDef
+syslibset=com.github.maven_nar.cpptasks.types.SystemLibrarySet
+libset=com.github.maven_nar.cpptasks.types.LibrarySet

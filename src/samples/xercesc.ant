@@ -64,9 +64,9 @@ Copyright 2001-2004 The Ant-Contrib project
   <taskdef resource="cpptasks.tasks"/>
   <typedef resource="cpptasks.types"/>
   -->
-  <taskdef name="cc" classname="net.sf.antcontrib.cpptasks.CCTask"/>
-  <typedef name="linker" classname="net.sf.antcontrib.cpptasks.LinkerDef"/>
-  <typedef name="compiler" classname="net.sf.antcontrib.cpptasks.CompilerDef"/>
+  <taskdef name="cc" classname="com.github.maven_nar.cpptasks.CCTask"/>
+  <typedef name="linker" classname="com.github.maven_nar.cpptasks.LinkerDef"/>
+  <typedef name="compiler" classname="com.github.maven_nar.cpptasks.CompilerDef"/>
 
 
   <target name="pre-init">

@@ -55,7 +55,7 @@ Licensed to the Ant-Contrib Project under one or more
  all "start" arguments but before filenames, "end" will place argument
  after filenames.</td>
 <td>
-<a href="../apidocs/net/sf/antcontrib/cpptasks/types/CommandLineArgument/LocationEnum.html">LocationEnum</a>
+<a href="../apidocs/com/github/maven_nar/cpptasks/types/CommandLineArgument/LocationEnum.html">LocationEnum</a>
 </td>
 </tr>
 <tr>

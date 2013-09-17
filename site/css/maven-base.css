@@ -35,11 +35,9 @@ div.clear hr{
 }
 .xleft, #bannerLeft img {
   float:left;
-  text-shadow: #7CFC00 1px 1px 1px;
 }
 .xright, #bannerRight {
   float:right;
-  text-shadow: #7CFC00 1px 1px 1px;
 }
 #banner {
   padding: 0px;
@@ -142,4 +140,12 @@ div.clear hr{
 .source pre {
   margin: 0px;
   padding: 0px;
+}
+#navcolumn img.imageLink, .imageLink {
+  padding-left: 0px;
+  padding-bottom: 0px;
+  padding-top: 0px;
+  padding-right: 2px;
+  border: 0px;
+  margin: 0px;
 }

@@ -1,1 +1,1 @@
-cc=net.sf.antcontrib.cpptasks.CCTask
+cc=com.github.maven_nar.cpptasks.CCTask

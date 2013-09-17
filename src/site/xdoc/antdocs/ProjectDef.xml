@@ -133,7 +133,7 @@ Licensed to the Ant-Contrib Project under one or more
  </table>
 </td>
 <td>
-<a href="../apidocs/net/sf/antcontrib/cpptasks/ide/ProjectWriterEnum.html">ProjectWriterEnum</a>
+<a href="../apidocs/com/github/maven_nar/cpptasks/ide/ProjectWriterEnum.html">ProjectWriterEnum</a>
 </td>
 </tr>
 <tr>
