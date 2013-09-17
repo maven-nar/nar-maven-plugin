@@ -26,7 +26,7 @@
     <url>https://github.com/maven-nar/cpptasks-parallel</url>
     <tag>HEAD</tag>
   </scm>
-  
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -81,7 +81,7 @@
           <excludes>
               <exclude>**/TestInstalledDevStudioLinker.java</exclude>
               <exclude>**/TestMetaObjectCompiler.java</exclude>
-              <exclude>**/TestAbstract*.java</exclude> 
+              <exclude>**/TestAbstract*.java</exclude>
           </excludes>
         </configuration>
       </plugin>
