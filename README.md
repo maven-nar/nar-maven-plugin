@@ -105,7 +105,7 @@ As of this writing, the newest such release is:
     </plugin>
 
 The corresponding source is [tagged on
-GitHub](https://github.com/scijava/maven-nar-plugin/tree/nar-maven-plugin-3.0.0-scijava-2).
+GitHub](https://github.com/scijava/nar-maven-plugin/tree/nar-maven-plugin-3.0.0-scijava-2).
 
 **Q:**
 Where can I find a working example of how to configure the NAR plugin?
