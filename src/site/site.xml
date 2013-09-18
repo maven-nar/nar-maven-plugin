@@ -26,7 +26,7 @@ under the License.
 
   <body>
     <links>
-        <item name="NAR Plugin for Maven1" href="http://java.freehep.org/maven1.x/freehep-nar-plugin"/>
+        <item name="NAR Plugin for Maven" href="http://maven-nar.github.io/nar-maven-plugin"/>
         <item name="Maven" href="http://maven.apache.org/"/>
     </links>
 
