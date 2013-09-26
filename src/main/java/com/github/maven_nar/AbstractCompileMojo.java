@@ -33,6 +33,8 @@ public abstract class AbstractCompileMojo
     extends AbstractDependencyMojo
 {
 
+	
+	
     /**
      * C++ Compiler
      * 
@@ -61,6 +63,14 @@ public abstract class AbstractCompileMojo
      * @parameter expression="false"
      */
     protected boolean onlySpecifiedCompilers;
+
+    /**
+     * Do we log commands that is executed to produce the end-result?
+     * Conception was to allow eclipse to sniff out include-paths from compile.
+     *
+     * @parameter expression=""
+     */
+    protected int commandLogLevel=Project.MSG_VERBOSE;
 
     /**
      * Maximum number of Cores/CPU's to use. 0 means unlimited.
