@@ -341,7 +341,7 @@ public class CUtil {
             String[] cmdline, boolean newEnvironment, Environment env)
             throws BuildException {
         try {
-            task.log(Commandline.toString(cmdline), Project.MSG_VERBOSE);
+            task.log(Commandline.toString(cmdline), task.getCommandLogLevel() );
             Execute exe = new Execute(new LogStreamHandler(task,
                     Project.MSG_INFO, Project.MSG_ERR));
             if (System.getProperty("os.name").equals("OS/390"))
