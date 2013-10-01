@@ -154,6 +154,13 @@ public abstract class ProcessorDef extends DataType {
         env.addVariable(var);
     }
     /**
+     * Because linkers have multiples and none of them share the environment settings here is a hack to give direct access to copy it just before running
+     * @return
+     */
+    public Environment getEnv() {
+        return env;
+    }
+    /**
      * Adds a source file set.
      * 
      * Files in these set will be processed by this configuration and will not

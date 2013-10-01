@@ -48,10 +48,19 @@ public final class CommandLineCompilerConfiguration
     private/* final */ProcessorParam[] params;
     private/* final */boolean rebuild;
     private/* final */File[] sysIncludePath;
+    private/* final */String commandPath;
+
     public CommandLineCompilerConfiguration(CommandLineCompiler compiler,
             String identifier, File[] includePath, File[] sysIncludePath,
             File[] envIncludePath, String includePathIdentifier, String[] args,
             ProcessorParam[] params, boolean rebuild, String[] endArgs) {
+        this(compiler, identifier, includePath, sysIncludePath, envIncludePath,
+            includePathIdentifier, args, params, rebuild, endArgs, null);
+    }
+    public CommandLineCompilerConfiguration(CommandLineCompiler compiler,
+            String identifier, File[] includePath, File[] sysIncludePath,
+            File[] envIncludePath, String includePathIdentifier, String[] args,
+            ProcessorParam[] params, boolean rebuild, String[] endArgs,String commandPath) {
         if (compiler == null) {
             throw new NullPointerException("compiler");
         }
@@ -89,6 +98,7 @@ public final class CommandLineCompilerConfiguration
         this.endArgs = (String[]) endArgs.clone();
         exceptFiles = null;
         isPrecompiledHeaderGeneration = false;
+        this.commandPath = commandPath;
     }
     public CommandLineCompilerConfiguration(
             CommandLineCompilerConfiguration base, String[] additionalArgs,
@@ -113,6 +123,7 @@ public final class CommandLineCompilerConfiguration
         for (int i = 0; i < additionalArgs.length; i++) {
             args[index++] = additionalArgs[i];
         }
+        this.commandPath = base.commandPath;
     }
     public int bid(String inputFile) {
         int compilerBid = compiler.bid(inputFile);
@@ -222,6 +233,12 @@ public final class CommandLineCompilerConfiguration
     	return compiler;
     }
     public String getCommand() {
-    	return compiler.getCommand();
+        return compiler.getCommand();
+    }
+    public final void setCommandPath(String commandPath) {
+        this.commandPath = commandPath;
+    }
+    public final String getCommandPath() {
+        return this.commandPath;
     }
 }

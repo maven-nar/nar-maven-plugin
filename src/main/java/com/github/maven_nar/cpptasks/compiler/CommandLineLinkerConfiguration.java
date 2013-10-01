@@ -38,12 +38,22 @@ public final class CommandLineLinkerConfiguration
     private/* final */boolean map;
     private/* final */ProcessorParam[] params;
     private/* final */boolean rebuild;
+    private/* final */String commandPath;
     private boolean debug;
     private String startupObject;
+
     public CommandLineLinkerConfiguration(CommandLineLinker linker,
             String identifier, String[][] args, ProcessorParam[] params,
             boolean rebuild, boolean map, boolean debug, String[] libraryNames,
             String startupObject) {
+        this(linker, identifier, args, params, rebuild, map, debug,
+            libraryNames, startupObject, null);
+    }
+
+    public CommandLineLinkerConfiguration(CommandLineLinker linker,
+            String identifier, String[][] args, ProcessorParam[] params,
+            boolean rebuild, boolean map, boolean debug, String[] libraryNames,
+            String startupObject, String commandPath) {
         if (linker == null) {
             throw new NullPointerException("linker");
         }
@@ -64,6 +74,7 @@ public final class CommandLineLinkerConfiguration
             this.libraryNames = (String[]) libraryNames.clone();
         }
         this.startupObject = startupObject;
+        this.commandPath = commandPath;
     }
     public int bid(String filename) {
         return linker.bid(filename);
@@ -125,5 +136,13 @@ public final class CommandLineLinkerConfiguration
     }
     public boolean isDebug() {
     	return debug;
+    }
+
+    public final void setCommandPath(String commandPath) {
+        this.commandPath = commandPath;
+    }
+
+    public final String getCommandPath() {
+        return this.commandPath;
     }
 }

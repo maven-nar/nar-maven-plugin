@@ -174,14 +174,18 @@ public abstract class CommandLineLinker extends AbstractLinker
       }
       args[2].copyInto(options[1]);
 
+      // if this linker doesn't have an env, and there is a more generically definition for environment, use it.
+      if( null != specificDef.getEnv() && null == this.env )
+          this.env = specificDef.getEnv();
 
       boolean rebuild = specificDef.getRebuild(baseDefs,0);
       boolean map = specificDef.getMap(defaultProviders,1);
+      String toolPath = specificDef.getToolPath();
 
       //task.log("libnames:"+libnames.length, Project.MSG_VERBOSE);
       return new CommandLineLinkerConfiguration(this,configId,options,
               paramArray,
-              rebuild,map, debug,libnames, startupObject);
+              rebuild,map, debug,libnames, startupObject, toolPath);
     }
 
     /**
@@ -202,6 +206,21 @@ public abstract class CommandLineLinker extends AbstractLinker
     }
     protected abstract String getCommandFileSwitch(String commandFile);
 
+    public String getCommandWithPath(CommandLineLinkerConfiguration config) {
+        if( config.getCommandPath() != null ) {
+            File command = new File( config.getCommandPath(), this.getCommand() );
+            try {
+                return command.getCanonicalPath();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return command.getAbsolutePath();
+            }
+        }
+        else
+        {
+            return this.getCommand();
+        }
+    }
 
      public String getIdentifier() {
       if(identifier == null) {
@@ -285,7 +304,7 @@ public abstract class CommandLineLinker extends AbstractLinker
           //
           //   construct the exception
           //
-          throw new BuildException(this.getCommand() + " failed with return code " + retval, task.getLocation());
+          throw new BuildException(getCommandWithPath(config) + " failed with return code " + retval, task.getLocation());
         }
         
     }
@@ -321,7 +340,7 @@ public abstract class CommandLineLinker extends AbstractLinker
         if (isLibtool) {
           allArgs[index++] = "libtool";
         }
-        allArgs[index++] = this.getCommand();
+        allArgs[index++] = getCommandWithPath(config);
         StringBuffer buf = new StringBuffer();
 
 
