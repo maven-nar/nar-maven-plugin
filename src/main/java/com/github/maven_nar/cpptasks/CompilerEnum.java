@@ -27,6 +27,7 @@ import com.github.maven_nar.cpptasks.devstudio.DevStudio2005CCompiler;
 import com.github.maven_nar.cpptasks.devstudio.DevStudioCCompiler;
 import com.github.maven_nar.cpptasks.devstudio.DevStudioMIDLCompiler;
 import com.github.maven_nar.cpptasks.devstudio.DevStudioResourceCompiler;
+import com.github.maven_nar.cpptasks.devstudio.DevStudioMessageCompiler;
 import com.github.maven_nar.cpptasks.gcc.GccCCompiler;
 import com.github.maven_nar.cpptasks.gcc.WindresResourceCompiler;
 import com.github.maven_nar.cpptasks.hp.aCCCompiler;
@@ -208,6 +209,7 @@ public class CompilerEnum extends EnumeratedAttribute {
             new ProcessorEnumValue("bcc", BorlandCCompiler.getInstance()),
             new ProcessorEnumValue("msrc", DevStudioResourceCompiler
                     .getInstance()),
+            new ProcessorEnumValue("msmc", DevStudioMessageCompiler.getInstance()),
             new ProcessorEnumValue("brc", BorlandResourceCompiler.getInstance()),
             new ProcessorEnumValue("df", CompaqVisualFortranCompiler
                     .getInstance()),
