@@ -1141,11 +1141,14 @@ public class CCTask extends Task {
         	// Order according to "order" List followed by alphabetical order
             public int compare( Object arg0, Object arg1 ) {
                 String f0 = (String)arg0;
-                f0 = f0.lastIndexOf('.') < 0 ? f0 : f0.substring(0, f0.lastIndexOf('.'));
                 String f1 = (String)arg1;
-                f1 = f1.lastIndexOf('.') < 0 ? f1 : f1.substring(0, f1.lastIndexOf('.'));
-                                                
                 if (order.isEmpty()) return f0.compareTo(f1);
+
+                // Not sure why DUNS is trimming the trailing file extension - but this breaks multi compilers like resource/midl if same basename as c/cpp
+                // so moved the comparison to above to avoid trimming the extension if there is no order, which half fixes the issue.
+
+                f0 = f0.lastIndexOf('.') < 0 ? f0 : f0.substring(0, f0.lastIndexOf('.'));
+                f1 = f1.lastIndexOf('.') < 0 ? f1 : f1.substring(0, f1.lastIndexOf('.'));
 
                 // make sure we use only one core
                 ordered = true;
