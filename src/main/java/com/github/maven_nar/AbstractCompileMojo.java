@@ -33,8 +33,6 @@ public abstract class AbstractCompileMojo
     extends AbstractDependencyMojo
 {
 
-	
-	
     /**
      * C++ Compiler
      * 
