@@ -270,6 +270,12 @@ public class CCTask extends Task {
      * files as possible before throwing a BuildException
      */
     private boolean relentless;
+
+    /**
+     * At which log-level do we log command-lines in the build?
+     */
+    private int  commandLogLevel = Project.MSG_VERBOSE;
+
     public CCTask() {
     }
     /**
@@ -1752,4 +1758,25 @@ public class CCTask extends Task {
         newVersionInfo.setProject(this.getProject());
         versionInfos.addElement(newVersionInfo);
     }
+
+    /** 
+     * Set commandLogLevel
+     * 
+     * ( CUtil.runCommand() will honor this... )
+     * 
+     * @parameter commandLogLevel  The log-level for command-logs, default is MSG_VERBOSE.
+     */
+    public void setCommandLogLevel( int commandLogLevel ) {
+	this.commandLogLevel = commandLogLevel;
+    }
+
+    /**
+     *  Get the commandLogLevel
+     * 
+     * @return The current commandLogLevel 
+     */
+    public int getCommandLogLevel() {
+	return commandLogLevel;
+    } 
+
 }
