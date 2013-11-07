@@ -87,6 +87,9 @@ public class NarLogger
                 log.warn( msg );
                 break;
             case Project.MSG_INFO:
+                log.info( msg );
+		/** This looks completely wrong/counterintuitive
+                 *   It also prevents the commandLogLevel feature to have any effect...
                 if ( ( msg.indexOf( "files were compiled" ) >= 0 ) || ( msg.indexOf( "Linking..." ) >= 0 ) )
                 {
                     log.info( msg );
@@ -103,6 +106,7 @@ public class NarLogger
                 {
                     log.debug( msg );
                 }
+		*/
                 break;
             case Project.MSG_VERBOSE:
                 log.debug( msg );

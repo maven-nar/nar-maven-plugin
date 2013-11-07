@@ -160,6 +160,7 @@ public class NarCompileMojo
         getLog().debug( "Creating Library " + library );
         // configure task
         CCTask task = new CCTask();
+        task.setCommandLogLevel( commandLogLevel );
         task.setProject(antProject);
 
         task.setDecorateLinkerOptions(decorateLinkerOptions);
