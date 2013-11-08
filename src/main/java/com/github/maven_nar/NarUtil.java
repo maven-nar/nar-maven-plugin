@@ -604,7 +604,14 @@ public final class NarUtil
     }
 
     public static int runCommand( String cmd, String[] args, File workingDirectory, String[] env, TextStream out,
-                                  TextStream err, TextStream dbg, final Log log )
+           TextStream err, TextStream dbg, final Log log )
+        throws MojoExecutionException, MojoFailureException
+    {
+        return runCommand( cmd, args, workingDirectory, env, out, err, dbg, log, false );
+    }
+
+    public static int runCommand( String cmd, String[] args, File workingDirectory, String[] env, TextStream out,
+           TextStream err, TextStream dbg, final Log log, boolean expectFailure )
         throws MojoExecutionException, MojoFailureException
     {
         Commandline cmdLine = new Commandline();
@@ -654,7 +661,7 @@ public final class NarUtil
             final int timeout = 5000;
             errorGobbler.join( timeout );
             outputGobbler.join( timeout );
-            if ( exitValue != 0 )
+            if ( exitValue != 0 ^ expectFailure )
             {
                  if ( log == null )
                  {
@@ -668,8 +675,13 @@ public final class NarUtil
                       log.warn(out.toString());
                       log.warn(dbg.toString());
                  }
+                 throw new MojoExecutionException( "exit code: " + exitValue );
             }
             return exitValue;
+        }
+        catch ( MojoExecutionException e )
+        {
+            throw e;
         }
         catch ( Exception e )
         {
