@@ -1759,7 +1759,7 @@ public class CCTask extends Task {
         versionInfos.addElement(newVersionInfo);
     }
 
-    /** 
+    /**
      * Set commandLogLevel
      * 
      * ( CUtil.runCommand() will honor this... )
@@ -1773,10 +1773,10 @@ public class CCTask extends Task {
     /**
      *  Get the commandLogLevel
      * 
-     * @return The current commandLogLevel 
+     * @return The current commandLogLevel
      */
     public int getCommandLogLevel() {
 	return commandLogLevel;
-    } 
+    }
 
 }

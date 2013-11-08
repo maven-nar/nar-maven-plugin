@@ -31,7 +31,7 @@ import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
 public abstract class DevStudioCompatibleLibrarian extends CommandLineLinker {
     public DevStudioCompatibleLibrarian(String command, String identifierArg) {
         super(command, identifierArg, new String[]{".obj"},
-        		new String[]{".map", ".pdb", ".lnk", ".dll", ".tlb", ".rc", ".h"},
+			new String[]{".map", ".pdb", ".lnk", ".dll", ".tlb", ".rc", ".h"},
                 ".lib", false, null);
     }
     protected void addBase(long base, Vector args) {
