@@ -55,6 +55,27 @@ public abstract class AbstractCompileMojo
     private Fortran fortran;
 
     /**
+     * Resource Compiler
+     * 
+     * @parameter expression=""
+     */
+    private Resource resource;
+
+    /**
+     * IDL Compiler
+     * 
+     * @parameter expression=""
+     */
+    private IDL idl;
+
+    /**
+     * Message Compiler
+     * 
+     * @parameter expression=""
+     */
+    private Message message;
+
+    /**
      * By default NAR compile will attempt to compile using all known compilers against files in the directories specified by convention.
      * This allows configuration to a reduced set, you will have to specify each compiler to use in the configuration.
      * 
@@ -157,9 +178,24 @@ public abstract class AbstractCompileMojo
         fortran.setAbstractCompileMojo( this );
     }
 
+    public void setResource(Resource resource) {
+        this.resource = resource;
+        resource.setAbstractCompileMojo( this );
+    }
+
+    public void setIdl(IDL idl) {
+        this.idl = idl;
+        idl.setAbstractCompileMojo( this );
+    }
+    
+    public void setMessage(Message message) {
+        this.message = message;
+        message.setAbstractCompileMojo( this );
+    }
+    
     protected final C getC()
     {
-        if ( !onlySpecifiedCompilers && c == null )
+        if ( c == null && !onlySpecifiedCompilers )
         {
             setC( new C() );
         }
@@ -168,7 +204,7 @@ public abstract class AbstractCompileMojo
 
     protected final Cpp getCpp()
     {
-        if ( !onlySpecifiedCompilers && cpp == null )
+        if ( cpp == null && !onlySpecifiedCompilers )
         {
             setCpp( new Cpp() );
         }
@@ -177,11 +213,38 @@ public abstract class AbstractCompileMojo
 
     protected final Fortran getFortran()
     {
-        if ( !onlySpecifiedCompilers && fortran == null )
+        if ( fortran == null && !onlySpecifiedCompilers )
         {
             setFortran( new Fortran() );
         }
         return fortran;
+    }
+
+    protected final Resource getResource( )
+    {
+		if ( resource == null && !onlySpecifiedCompilers )
+        {
+			resource = new Resource();
+        }
+        return resource;
+    }
+    
+    protected final IDL getIdl( )
+    {
+		if ( idl == null && !onlySpecifiedCompilers )
+        {
+            idl = new IDL();
+        }
+        return idl;
+    }
+    
+    protected final Message getMessage( )
+    {
+		if ( message == null && !onlySpecifiedCompilers )
+        {
+			message = new Message();
+        }
+        return message;
     }
 
     protected final int getMaxCores( AOL aol )
