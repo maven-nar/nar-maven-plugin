@@ -141,7 +141,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
         //
         //   determine length of executable name and args
         //
-        String command = getCommand();
+        String command = getCommandWithPath(config);
         int baseLength = command.length() + args.length + endArgs.length;
         if (libtool) {
             baseLength += 8;
@@ -216,7 +216,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
                 //
                 //   construct the exception
                 //
-                exc = new BuildException(this.getCommand()
+                exc = new BuildException(getCommandWithPath(config)
                         + " failed with return code " + retval, task
                         .getLocation());
 
@@ -369,15 +369,31 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
         args.copyInto(argArray);
         boolean rebuild = specificDef.getRebuild(baseDefs, 0);
         File[] envIncludePath = getEnvironmentIncludePath();
+        String path = specificDef.getToolPath();
         return new CommandLineCompilerConfiguration(this, configId, incPath,
                 sysIncPath, envIncludePath, includePathIdentifier.toString(),
-                argArray, paramArray, rebuild, endArgs);
+                argArray, paramArray, rebuild, endArgs, path);
     }
     protected int getArgumentCountPerInputFile() {
         return 1;
     }
     protected final String getCommand() {
         return command;
+    }
+    public String getCommandWithPath(CommandLineCompilerConfiguration config) {
+        if( config.getCommandPath() != null ) {
+            File command = new File( config.getCommandPath(), this.getCommand() );
+            try {
+                return command.getCanonicalPath();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return command.getAbsolutePath();
+            }
+        }
+        else
+        {
+            return this.getCommand();
+        }
     }
     abstract protected void getDefineSwitch(StringBuffer buffer, String define,
             String value);
