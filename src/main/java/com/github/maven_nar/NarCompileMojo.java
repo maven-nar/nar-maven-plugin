@@ -225,6 +225,31 @@ public class NarCompileMojo
         runtimeType.setValue(getRuntime(getAOL()));
         task.setRuntime(runtimeType);
 
+        // IDL, MC, RC compilations should probably be 'generate source' type actions, seperate from main build.
+        // Needs resolution of handling for generate sources.
+        // Order is somewhat important here, IDL and MC generate outputs that are (often) included in the RC compilation
+        if (getIdl() != null) {
+            CompilerDef idl = getIdl().getCompiler( Compiler.MAIN, null );
+            if ( idl != null )
+            {
+                task.addConfiguredCompiler( idl );
+            }
+        }
+        if (getMessage() != null) {
+            CompilerDef mc = getMessage().getCompiler( Compiler.MAIN, null );
+            if ( mc != null )
+            {
+                task.addConfiguredCompiler( mc );
+            }
+        }
+        if (getResource() != null) {
+            CompilerDef res = getResource().getCompiler( Compiler.MAIN, null );
+            if ( res != null )
+            {
+                task.addConfiguredCompiler( res );
+            }
+        }
+        
         // Darren Sargent Feb 11 2010: Use Compiler.MAIN for "type"...appears the wrong "type" variable was being used
         // since getCompiler() expects "main" or "test", whereas the "type" variable here is "executable", "shared" etc.
         // add C++ compiler
