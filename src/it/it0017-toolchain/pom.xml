@@ -67,6 +67,7 @@ under the License.
         </configuration>
       </plugin>
       <plugin>
+        <groupId>@project.groupId@</groupId>
         <artifactId>nar-maven-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>

@@ -51,6 +51,7 @@
         <defaultGoal>install</defaultGoal>
         <plugins>
           <plugin>
+            <groupId>@project.groupId@</groupId>
             <artifactId>nar-maven-plugin</artifactId>
             <extensions>true</extensions>
             <configuration>
