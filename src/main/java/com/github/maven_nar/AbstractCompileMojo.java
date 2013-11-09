@@ -224,7 +224,7 @@ public abstract class AbstractCompileMojo
     {
 		if ( resource == null && !onlySpecifiedCompilers )
         {
-			resource = new Resource();
+			setResource( new Resource() );
         }
         return resource;
     }
@@ -233,7 +233,7 @@ public abstract class AbstractCompileMojo
     {
 		if ( idl == null && !onlySpecifiedCompilers )
         {
-            idl = new IDL();
+            setIdl( new IDL() );
         }
         return idl;
     }
@@ -242,7 +242,7 @@ public abstract class AbstractCompileMojo
     {
 		if ( message == null && !onlySpecifiedCompilers )
         {
-			message = new Message();
+			setMessage( new Message() );
         }
         return message;
     }
