@@ -20,8 +20,9 @@ and link native code.
   <build>
     <plugins>
       <plugin>
+        <groupId>${project.groupId}</groupId>
         <artifactId>nar-maven-plugin</artifactId>
-        <version>nar-version-number</version>
+        <version>${project.version}</version>
         <extensions>true</extensions>
       </plugin>
     </plugins>
@@ -39,7 +40,9 @@ and link native code.
   <build>
     <plugins>
       <plugin>
+        <groupId>${project.groupId}</groupId>
         <artifactId>nar-maven-plugin</artifactId>
+        <version>${project.version}</version>
         <extensions>true</extensions>
         <configuration>
           <libraries>
@@ -70,7 +73,9 @@ to disable exceptions and not link with C++.
   <build>
     <plugins>
       <plugin>
+        <groupId>${project.groupId}</groupId>
         <artifactId>nar-maven-plugin</artifactId>
+        <version>${project.version}</version>
         <extensions>true</extensions>
         <configuration>
           <cpp>
@@ -122,7 +127,9 @@ The example also shows how to configure the
       </plugin>
       ...
       <plugin>
+        <groupId>${project.groupId}</groupId>
         <artifactId>nar-maven-plugin</artifactId>
+        <version>${project.version}</version>
         <extensions>true</extensions>
         <!-- STRICTLY NO CONFIGURATION, maven-swig-plugin will configure -->
       </plugin>    
@@ -166,7 +173,9 @@ In other cases the classifiers must be adapted accordingly.
       </plugin>
 	  ...    
       <plugin>
+        <groupId>${project.groupId}</groupId>
         <artifactId>nar-maven-plugin</artifactId>
+        <version>${project.version}</version>
         <configuration>
           <classifiers>
             <classifier>x86-Windows-msvc-jni</classifier>
