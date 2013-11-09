@@ -14,8 +14,8 @@ This library allows to specify compilers and linkers from ant (and thus from mav
 and unifies most common options for those compilers and linkers.
 
 	The NAR Plugin uses
-{{{https://github.com/maven-nar/cpptasks-parallel}cpptasks-parallel} based on
-{{{http://sourceforge.net/project/showfiles.php?group_id=36177}cpptasks}. You
+{{{https://github.com/maven-nar/cpptasks-parallel}cpptasks-parallel}} based on
+{{{http://sourceforge.net/project/showfiles.php?group_id=36177}cpptasks}}. You
 can find the latest of our mods in our git repository:
 
 +--
