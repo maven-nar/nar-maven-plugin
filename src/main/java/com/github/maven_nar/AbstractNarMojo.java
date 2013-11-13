@@ -56,8 +56,7 @@ public abstract class AbstractNarMojo
      * The Architecture for the nar, Some choices are: "x86", "i386", "amd64", "ppc", "sparc", ... Defaults to a derived
      * value from ${os.arch}
      * 
-     * @parameter expression="${os.arch}"
-     * @required
+     * @parameter expression="${nar.arch}"
      */
     private String architecture;
 
@@ -65,7 +64,7 @@ public abstract class AbstractNarMojo
      * The Operating System for the nar. Some choices are: "Windows", "Linux", "MacOSX", "SunOS", ... Defaults to a
      * derived value from ${os.name} FIXME table missing
      * 
-     * @parameter expression=""
+     * @parameter expression="${nar.os}"
      */
     private String os;
 
