@@ -37,7 +37,7 @@ public class NarProperties {
         		    // Try and read from the system property in case it's specified there
         		    customPropertyLocation = System.getProperties().getProperty(CUSTOM_AOL_PROPERTY_KEY);
         		}
-        		fis = new FileInputStream(customPropertyLocation == null ? 
+        		fis = new FileInputStream(customPropertyLocation != null ?
         		                          customPropertyLocation : project.getBasedir()+File.separator+AOL_PROPERTIES);
         		properties.load( fis );
         	}
