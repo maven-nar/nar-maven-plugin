@@ -50,6 +50,7 @@
     <mavenVersion>2.0.9</mavenVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <skip.fortran.it>it0018-fortran/**</skip.fortran.it>
+    <skip.toolchain.it>it0017-toolchain/**</skip.toolchain.it>
   </properties>
   <prerequisites>
     <maven>2.0.9</maven>
@@ -247,6 +248,7 @@
                 <pomExclude>it0021-*/**</pomExclude>
                 <pomExclude>it0022-*/**</pomExclude>
                 <pomExclude>${skip.fortran.it}</pomExclude>
+                <pomExclude>${skip.toolchain.it}</pomExclude>
               </pomExcludes>
               <localRepositoryPath>${project.build.directory}/it-repo</localRepositoryPath>
               <settingsFile>src/it/settings.xml</settingsFile>
@@ -277,6 +279,17 @@
       </activation>
       <properties>
         <skip.fortran.it>dummy</skip.fortran.it>
+      </properties>
+    </profile>
+    <profile>
+      <id>has-toolchain</id>
+      <activation>
+        <file>
+          <exists>${user.home}/.m2/toolchains.xml</exists>
+        </file>
+      </activation>
+      <properties>
+        <skip.toolchain.it>dummy</skip.toolchain.it>
       </properties>
     </profile>
   </profiles>
