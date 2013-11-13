@@ -48,6 +48,7 @@
   </scm>
   <properties>
     <invoker.debug>false</invoker.debug>
+    <its.to.skip>dummy</its.to.skip>
     <mavenVersion>2.0.9</mavenVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <skip.fortran.it>it0018-fortran/**</skip.fortran.it>
@@ -248,6 +249,7 @@
 -->
                 <pomExclude>it0021-*/**</pomExclude>
                 <pomExclude>it0022-*/**</pomExclude>
+                <pomExclude>${its.to.skip}</pomExclude>
                 <pomExclude>${skip.fortran.it}</pomExclude>
                 <pomExclude>${skip.toolchain.it}</pomExclude>
               </pomExcludes>
