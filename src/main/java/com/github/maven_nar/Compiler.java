@@ -59,6 +59,13 @@ public abstract class Compiler
     private String name;
 
     /**
+     * Path location of the compile tool
+     *
+     * @parameter expression=""
+     */
+    private String toolPath;
+
+    /**
      * Source directory for native files
      * 
      * @parameter expression="${basedir}/src/main"
@@ -436,6 +443,12 @@ public abstract class Compiler
         CompilerEnum compilerName = new CompilerEnum();
         compilerName.setValue( name );
         compiler.setName( compilerName );
+
+        // tool path
+        if ( toolPath != null )
+        {
+            compiler.setToolPath( toolPath );
+        }
 
         // debug, exceptions, rtti, multiThreaded
         compiler.setDebug( debug );
