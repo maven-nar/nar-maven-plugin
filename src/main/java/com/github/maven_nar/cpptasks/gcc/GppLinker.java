@@ -49,6 +49,8 @@ public class GppLinker extends AbstractLdLinker {
             discardFiles, "lib", ".so", true, null));
     private static final GppLinker instance = new GppLinker(GPP_COMMAND, objFiles,
             discardFiles, "", "", false, null);
+    private static final GppLinker clangInstance = new GppLinker("clang", objFiles,
+            discardFiles, "", "", false, null);
     private static final GppLinker machDllLinker = new GppLinker(GPP_COMMAND,
             objFiles, discardFiles, "lib", ".dylib", false, null);
     private static final GppLinker machPluginLinker = new GppLinker(GPP_COMMAND,
@@ -61,6 +63,9 @@ public class GppLinker extends AbstractLdLinker {
             discardFiles, "", ".dll", false, null);
     public static GppLinker getInstance() {
         return instance;
+    }
+    public static GppLinker getCLangInstance() {
+        return clangInstance;
     }
     private File[] libDirs;
     private String runtimeLibrary;

@@ -74,6 +74,14 @@ public final class GccCCompiler extends GccCompatibleCCompiler {
             sourceExtensions, headerExtensions, false,
             new GccCCompiler("gcc", sourceExtensions, headerExtensions, true,
                     null, false, null), false, null);
+    private static final GccCCompiler clangInstance = new GccCCompiler("clang",
+            sourceExtensions, headerExtensions, false,
+            new GccCCompiler("clang", sourceExtensions, headerExtensions, true,
+                    null, false, null), false, null);
+    private static final GccCCompiler cpplangInstance = new GccCCompiler("clang++",
+            sourceExtensions, headerExtensions, false,
+            new GccCCompiler("clang++", sourceExtensions, headerExtensions, true,
+                    null, false, null), false, null);
     /**
      * Gets c++ adapter
      */
@@ -105,6 +113,18 @@ public final class GccCCompiler extends GccCompatibleCCompiler {
      */
     public static GccCCompiler getInstance() {
         return instance;
+    }
+    /**
+     * Gets clang adapter
+     */
+    public static GccCCompiler getCLangInstance() {
+        return clangInstance;
+    }
+    /**
+     * Gets clang++ adapter
+     */
+    public static GccCCompiler getCLangppInstance() {
+        return cpplangInstance;
     }
     private String identifier;
     private File[] includePath;

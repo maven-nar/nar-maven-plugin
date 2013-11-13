@@ -68,6 +68,15 @@ import com.github.maven_nar.cpptasks.trolltech.UserInterfaceCompiler;
  * <td>GCC C++ compiler</td>
  * </tr>
  * <tr>
+ * <td>clang</td>
+ * <td>clang / llvm C compiler</td>
+ * </tr>
+ * <tr>
+ * <td>clang++</td>
+ * <td>clang++ / llvm C++ compiler</td>
+ * </tr>
+ * <tr>
+ * <tr>
  * <td>g77</td>
  * <td>GNU FORTRAN compiler</td>
  * </tr>
@@ -200,6 +209,8 @@ public class CompilerEnum extends EnumeratedAttribute {
     private final static ProcessorEnumValue[] compilers = new ProcessorEnumValue[]{
             new ProcessorEnumValue("gcc", GccCCompiler.getInstance()),
             new ProcessorEnumValue("g++", GccCCompiler.getGppInstance()),
+            new ProcessorEnumValue("clang", GccCCompiler.getCLangInstance()),
+            new ProcessorEnumValue("clang++", GccCCompiler.getCLangppInstance()),
             new ProcessorEnumValue("c++", GccCCompiler.getCppInstance()),
             new ProcessorEnumValue("g77", GccCCompiler.getG77Instance()),
 // FREEHEP
