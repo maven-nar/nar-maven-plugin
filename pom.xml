@@ -49,6 +49,7 @@
   <properties>
     <mavenVersion>2.0.9</mavenVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <skip.fortran.it>it0018-fortran/**</skip.fortran.it>
   </properties>
   <prerequisites>
     <maven>2.0.9</maven>
@@ -245,6 +246,7 @@
 -->
                 <pomExclude>it0021-*/**</pomExclude>
                 <pomExclude>it0022-*/**</pomExclude>
+                <pomExclude>${skip.fortran.it}</pomExclude>
               </pomExcludes>
               <localRepositoryPath>${project.build.directory}/it-repo</localRepositoryPath>
               <settingsFile>src/it/settings.xml</settingsFile>
@@ -265,6 +267,17 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+      <id>has-fortran</id>
+      <activation>
+        <file>
+          <exists>/usr/bin/gfortran</exists>
+        </file>
+      </activation>
+      <properties>
+        <skip.fortran.it>dummy</skip.fortran.it>
+      </properties>
     </profile>
   </profiles>
 </project>
