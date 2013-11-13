@@ -64,6 +64,7 @@ NAR Configuration
 
   <linker>
     <name/>
+    <toolPath/>
     <incremental/>
     <map/>
     <options>
@@ -87,6 +88,7 @@ NAR Configuration
 
   <cpp>
     <name/>
+    <toolPath/>
     <sourceDirectory/>
     <includes>
       <include>
@@ -278,6 +280,10 @@ the command line for compatible compilers/linkers. Default is false.
 	The Linker. Some choices are: "msvc", "g++", "CC", "icpc", ...
     Default is Architecture OS specific.
 
+** {linker toolPath}
+
+	The path that the linker is located within.  Default is to use the system's environment.
+
 ** {linker incremental}
 
 	Enables incremental linking. Default is false.
@@ -327,6 +333,10 @@ the command line for compatible compilers/linkers. Default is false.
 	The name of the compiler. Some choices are: "msvc", "g++", "gcc", "CC", "cc", "icc", "icpc", ...
     Default is AOL specific.
     
+** {cpp toolPath}
+
+	The path that the compiler is located within.  Default is to use the system's environment.
+
 ** {cpp sourceDirectory}
     
     Source directory for native files

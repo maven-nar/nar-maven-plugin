@@ -61,6 +61,13 @@ public class Linker
     private String name;
 
     /**
+     * Path location of the linker tool
+     *
+     * @parameter expression=""
+     */
+    private String toolPath;
+
+    /**
      * Enables or disables incremental linking.
      * 
      * @parameter expression="" default-value="false"
@@ -276,6 +283,12 @@ public class Linker
         LinkerEnum linkerEnum = new LinkerEnum();
         linkerEnum.setValue( name );
         linker.setName( linkerEnum );
+
+        // tool path
+        if ( toolPath != null )
+        {
+            linker.setToolPath( toolPath );
+        }
 
         // incremental, map
         linker.setIncremental( incremental );
