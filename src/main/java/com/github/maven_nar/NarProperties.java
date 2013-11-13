@@ -14,7 +14,7 @@ import org.codehaus.plexus.util.PropertyUtils;
 public class NarProperties {
 	
 	private final static String AOL_PROPERTIES = "aol.properties";
-    private final static String CUSTOM_AOL_PROPERTY_KEY = "nar.aolProperties";
+	private final static String CUSTOM_AOL_PROPERTY_KEY = "nar.aolProperties";
 	private Properties properties;
 	private static NarProperties instance;
 	
@@ -31,7 +31,7 @@ public class NarProperties {
         String customPropertyLocation = null;
         try 
         {
-        	if (project != null) {
+            if (project != null) {
                 customPropertyLocation = project.getProperties().getProperty(CUSTOM_AOL_PROPERTY_KEY);
                 if (customPropertyLocation == null) {
                     // Try and read from the system property in case it's specified there
@@ -42,18 +42,18 @@ public class NarProperties {
                 } else {
                     fis = new FileInputStream(project.getBasedir()+File.separator+AOL_PROPERTIES);
                 }
-        		properties.load( fis );
-        	}
+                properties.load( fis );
+            }
 		} 
         catch (FileNotFoundException e) 
         {
 			// ignore (FIXME)
-            if (customPropertyLocation != null) {
-                // We tried loading from a custom location - so throw the exception
-                throw new MojoFailureException( "NAR: Could not load custom properties file: '"+
-                                                customPropertyLocation+
-                                                "'." );
-            }
+			if (customPropertyLocation != null) {
+				// We tried loading from a custom location - so throw the exception
+				throw new MojoFailureException( "NAR: Could not load custom properties file: '"+
+												customPropertyLocation+
+												"'." );
+			}
 		} 
         catch (IOException e) 
         {
