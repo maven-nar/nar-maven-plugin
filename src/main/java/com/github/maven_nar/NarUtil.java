@@ -78,6 +78,9 @@ public final class NarUtil
 
     public static String getArchitecture( String architecture )
     {
+        if (architecture == null) {
+            return System.getProperty( "os.arch" );
+        }
         return architecture;
     }
 
