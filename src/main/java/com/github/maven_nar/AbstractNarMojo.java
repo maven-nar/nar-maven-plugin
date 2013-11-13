@@ -65,7 +65,7 @@ public abstract class AbstractNarMojo
      * The Operating System for the nar. Some choices are: "Windows", "Linux", "MacOSX", "SunOS", ... Defaults to a
      * derived value from ${os.name} FIXME table missing
      * 
-     * @parameter expression=""
+     * @parameter expression="${os}"
      */
     private String os;
 
