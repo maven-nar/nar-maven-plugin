@@ -176,6 +176,8 @@ public abstract class AbstractNarMojo
 
 	private NarInfo narInfo;
 
+    private boolean crossCompile;
+
 	/**
 	 * Javah info
 	 * 
@@ -197,6 +199,7 @@ public abstract class AbstractNarMojo
         linker = NarUtil.getLinker( linker, getLog() );
 
         architecture = NarUtil.getArchitecture( architecture );
+        crossCompile = !(architecture.equalsIgnoreCase(System.getProperty("os.arch")));
         os = NarUtil.getOS( os );
         aolId = NarUtil.getAOL(mavenProject, architecture, os, linker, aol, getLog() );
         
@@ -310,6 +313,10 @@ public abstract class AbstractNarMojo
     protected final MavenProject getMavenProject()
     {
         return mavenProject;
+    }
+
+    protected boolean isCrossCompile() {
+        return crossCompile;
     }
 
     public final void execute()

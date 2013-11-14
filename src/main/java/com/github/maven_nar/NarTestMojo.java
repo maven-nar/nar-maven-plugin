@@ -46,6 +46,13 @@ public class NarTestMojo
     extends AbstractCompileMojo
 {
     /**
+     * Skip running of NAR test plugins.
+     *
+     * @parameter expression="${skipNar}" default-value="false"
+     */
+    protected boolean skipNar;
+
+    /**
      * The classpath elements of the project being tested.
      * 
      * @parameter expression="${project.testClasspathElements}"
@@ -75,16 +82,22 @@ public class NarTestMojo
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        super.narExecute();
-        // run all tests
-        for ( Iterator i = getTests().iterator(); i.hasNext(); )
-        {
-            runTest( (Test) i.next() );
-        }
+        if ( skipNar ) {
+            getLog().info( "Nar test execution is skipped." );
+        } else if ( isCrossCompile() ) {
+            getLog().info( "Not executing cross-compiled nar tests." );
+        } else {
+            super.narExecute();
+            // run all tests
+            for ( Iterator i = getTests().iterator(); i.hasNext(); )
+            {
+                runTest( (Test) i.next() );
+            }
 
-        for ( Iterator i = getLibraries().iterator(); i.hasNext(); )
-        {
-            runExecutable( (Library) i.next() );
+            for ( Iterator i = getLibraries().iterator(); i.hasNext(); )
+            {
+                runExecutable( (Library) i.next() );
+            }
         }
     }
 
