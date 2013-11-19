@@ -174,7 +174,10 @@ public class NarInfo
 
     public final String getLibs( AOL aol )
     {
-        return getProperty( aol, "libs.names", artifactId + "-" + version );
+    	// TODO: resolve output Vs libs.names
+    	// nothing is available to set libs.names within the build.
+    	// if there is an existing nar.properties that was hand crafter with libs.names then this would work - undocumented feature?
+        return getProperty( aol, "libs.names", getOutput( aol, artifactId + "-" + version ) );
     }
 
     public final String getSysLibs( AOL aol )
