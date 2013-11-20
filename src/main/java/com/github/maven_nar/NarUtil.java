@@ -585,6 +585,22 @@ public final class NarUtil
     public static int runCommand( String cmd, String[] args, File workingDirectory, String[] env, final Log log )
         throws MojoExecutionException, MojoFailureException
     {
+        if ( log.isInfoEnabled() )
+        {
+            final StringBuilder argLine = new StringBuilder();
+            if ( args != null )
+            {
+                for ( final String arg : args )
+                {
+                    argLine.append( " " + arg );
+                }
+            }
+            if ( workingDirectory != null )
+            {
+                log.info( "+ cd " + workingDirectory.getAbsolutePath() );
+            }
+            log.info( "+ " + cmd + argLine );
+        }
         return runCommand( cmd, args, workingDirectory, env, new TextStream()
         {
             public void println( String text )
