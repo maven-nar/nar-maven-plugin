@@ -281,7 +281,7 @@
         </file>
       </activation>
       <properties>
-        <skip.fortran.it>dummy</skip.fortran.it>
+        <skip.fortran.it>false</skip.fortran.it>
       </properties>
     </profile>
     <profile>
@@ -292,7 +292,7 @@
         </file>
       </activation>
       <properties>
-        <skip.toolchain.it>dummy</skip.toolchain.it>
+        <skip.toolchain.it>false</skip.toolchain.it>
       </properties>
     </profile>
   </profiles>
