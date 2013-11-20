@@ -51,6 +51,7 @@
     <its.to.skip>dummy</its.to.skip>
     <mavenVersion>2.0.9</mavenVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <skip.autoconf.it>it0013-gnu-executable/**</skip.autoconf.it>
     <skip.fortran.it>it0018-fortran/**</skip.fortran.it>
     <skip.toolchain.it>it0017-toolchain/**</skip.toolchain.it>
   </properties>
@@ -250,6 +251,7 @@
                 <pomExclude>it0021-*/**</pomExclude>
                 <pomExclude>it0022-*/**</pomExclude>
                 <pomExclude>${its.to.skip}</pomExclude>
+                <pomExclude>${skip.autoconf.it}</pomExclude>
                 <pomExclude>${skip.fortran.it}</pomExclude>
                 <pomExclude>${skip.toolchain.it}</pomExclude>
               </pomExcludes>
@@ -272,6 +274,17 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+      <id>has-autoconf</id>
+      <activation>
+        <file>
+          <exists>/usr/bin/autoreconf</exists>
+        </file>
+      </activation>
+      <properties>
+        <skip.autoconf.it>false</skip.autoconf.it>
+      </properties>
     </profile>
     <profile>
       <id>has-fortran</id>
