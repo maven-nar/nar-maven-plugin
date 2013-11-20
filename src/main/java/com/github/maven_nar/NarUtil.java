@@ -133,9 +133,10 @@ public final class NarUtil
         if ( home == null )
         {
             home = new File( System.getProperty( "java.home" ) );
-            if ( !getOS( os ).equals( OS.MACOSX ) )
+            if ( home.getName().equals("jre") )
             {
-                home = new File( home, ".." );
+                // we want the JDK base directory, not the JRE subfolder
+                home = home.getParentFile();
             }
         }
         return home;
