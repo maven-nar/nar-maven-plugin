@@ -208,7 +208,7 @@ public final class NarUtil
             File subjectFile = ( File )i.next();
             String subjectName = subjectFile.getName();
             String subjectPath = subjectFile.getPath();
-            
+
             int idResult = runCommand(
                     "install_name_tool",
                     new String[] { "-id", subjectPath, subjectPath },
@@ -233,7 +233,7 @@ public final class NarUtil
                  String dependentPath = dependentFile.getPath();
 
                  if (dependentPath == subjectPath) continue;
-                 
+
                  int changeResult = runCommand(
                         "install_name_tool",
                          new String[] { "-change", subjectName, subjectPath, dependentPath },
@@ -731,22 +731,22 @@ public final class NarUtil
     }
 
 
-	/**
-	 * (Darren) this code lifted from mvn help:active-profiles plugin Recurses
-	 * into the project's parent poms to find the active profiles of the
-	 * specified project and all its parents.
-	 * 
-	 * @param project
-	 *            The project to start with
-	 * @return A list of active profiles
-	 */
-	static List collectActiveProfiles(MavenProject project) {
-		List profiles = project.getActiveProfiles();
+    /**
+     * (Darren) this code lifted from mvn help:active-profiles plugin Recurses
+     * into the project's parent poms to find the active profiles of the
+     * specified project and all its parents.
+     * 
+     * @param project
+     *            The project to start with
+     * @return A list of active profiles
+     */
+    static List collectActiveProfiles(MavenProject project) {
+        List profiles = project.getActiveProfiles();
 
-		if (project.hasParent()) {
-			profiles.addAll(collectActiveProfiles(project.getParent()));
-		}
+        if (project.hasParent()) {
+            profiles.addAll(collectActiveProfiles(project.getParent()));
+        }
 
-		return profiles;
-	}
+        return profiles;
+    }
 }
