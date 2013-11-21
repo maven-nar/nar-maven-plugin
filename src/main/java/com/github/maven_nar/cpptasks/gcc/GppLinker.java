@@ -126,7 +126,9 @@ public class GppLinker extends AbstractLdLinker {
         if (linkType.linkCPP()) {
             if (linkType.isStaticRuntime()) {
                 if (isDarwin()) {
-                    runtimeLibrary = "-lstdc++-static";
+                    if (!isClang()) {
+                        runtimeLibrary = "-lstdc++-static";
+                    }
                 } else {
                     String[] cmdin = new String[] { "g++",
                             "-print-file-name=libstdc++.a" };
@@ -142,13 +144,17 @@ public class GppLinker extends AbstractLdLinker {
 
         gccLibrary = null;
         if (linkType.isStaticRuntime()) {
-            gccLibrary = "-static-libgcc";
+            if (!isClang()) {
+                gccLibrary = "-static-libgcc";
+            }
         } else {
             if (linkType.linkCPP()) {
                 // NOTE: added -fexceptions here for MacOS X
                 gccLibrary = "-fexceptions";
             } else {
-                gccLibrary = "-shared-libgcc";
+                if (!isClang()) {
+                    gccLibrary = "-shared-libgcc";
+                }
             }
         }
         // ENDFREEHEP
@@ -284,5 +290,24 @@ public class GppLinker extends AbstractLdLinker {
         }
         // ENDFREEHEP
         return instance;
+    }
+    /**
+     * Checks whether the compiler is actually clang masquerading as gcc
+     * (e.g., the situation on OS X 10.9 Mavericks).
+     */
+    private boolean isClang() {
+        final String command = getCommand();
+        if (command == null) {
+            return false;
+        }
+        if (command.startsWith("clang")) {
+            return true;
+        }
+        if (!GPP_COMMAND.equals(command)) {
+            return false;
+        }
+        final String[] cmd = {command, "--version"};
+        final String[] cmdout = CaptureStreamHandler.execute(cmd).getStdout();
+        return cmdout.length > 0 && cmdout[0].contains("(clang-");
     }
 }
