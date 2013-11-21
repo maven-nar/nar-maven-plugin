@@ -43,8 +43,28 @@ public class CaptureStreamHandler implements ExecuteStreamHandler {
 	 * @param cmdline
 	 *            command line arguments
 	 * @return output of process
+	 * @see CaptureStreamHandler#getOutput()
 	 */
 	public static String[] run(String[] cmdline) {
+		CaptureStreamHandler handler = execute(cmdline);
+		return handler.getOutput() != null ? handler.getOutput() : new String[0];
+	}
+
+	/**
+	 * Executes the given command, capturing the output using a newly allocated
+	 * {@link CaptureStreamHandler}, which is then returned.
+	 * <p>
+	 * In contrast to {@link #run(String[])}, this method allows both the
+	 * standard error and standard output streams to be inspected after execution
+	 * (via the {@link #getStderr()} and {@link #getStdout()} methods,
+	 * respectively).
+	 * </p>
+	 * 
+	 * @param cmdline
+	 *            command line arguments
+	 * @return The {@link CaptureStreamHandler} used to capture the output.
+	 */
+	public static CaptureStreamHandler execute(String[] cmdline) {
 		CaptureStreamHandler handler = new CaptureStreamHandler();
 		Execute exec = new Execute(handler);
 		exec.setCommandline(cmdline);
@@ -52,7 +72,7 @@ public class CaptureStreamHandler implements ExecuteStreamHandler {
 			int status = exec.execute();
 		} catch (IOException ex) {
 		}
-		return handler.getOutput() != null ? handler.getOutput() : new String[0];
+		return handler;
 	}
 
 	private InputStream processErrorStream;
