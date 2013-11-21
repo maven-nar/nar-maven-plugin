@@ -76,18 +76,18 @@ public class CaptureStreamHandler implements ExecuteStreamHandler {
 		}
 
 		public void run() {
-    		try {
-    			BufferedReader reader = new BufferedReader( new InputStreamReader(is) );
-    			while ( true ) {
-    				String line = reader.readLine();
-    				if ( line == null )
-    					break;
-    				lines.addElement( line );
-    			}
+			try {
+				BufferedReader reader = new BufferedReader( new InputStreamReader(is) );
+				while ( true ) {
+					String line = reader.readLine();
+					if ( line == null )
+						break;
+					lines.addElement( line );
+				}
 			} catch (IOException e) {
 				// Ignore
 			}
-    	}
+		}
 
 		public Vector getLines() {
 			return lines;
