@@ -44,7 +44,7 @@ public class Lib
 	/**
      * Name of the library, or a dependency groupId:artifactId if this library contains sublibraries
 	 * 
-	 * @parameter expression=""
+	 * @parameter default-value=""
 	 * @required
 	 */
 	private String name;
@@ -52,7 +52,7 @@ public class Lib
 	/**
 	 * Type of linking for this library
 	 * 
-	 * @parameter expression="" default-value="shared"
+	 * @parameter default-value="shared"
 	 * @required
 	 */
 	private String type = Library.SHARED;
@@ -60,7 +60,7 @@ public class Lib
 	/**
 	 * Location for this library
 	 * 
-	 * @parameter expression=""
+	 * @parameter default-value=""
 	 * @required
 	 */
 	private File directory;
@@ -68,7 +68,7 @@ public class Lib
 	/**
 	 * Sub libraries for this library
 	 * 
-	 * @parameter expression=""
+	 * @parameter default-value=""
 	 */
 	private List/* <Lib> */libs;
 

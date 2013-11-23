@@ -38,21 +38,21 @@ public class NarGnuMakeMojo
     /**
      * Space delimited list of arguments to pass to make
      *
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String gnuMakeArgs;
 
     /**
      * Comma delimited list of environment variables to setup before running make
      *
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String gnuMakeEnv;
 
     /**
      * Boolean to control if we should skip 'make install' after the make
      *
-     * @parameter expression="" default-value="false"
+     * @parameter default-value="false"
      */
     private boolean gnuMakeInstallSkip;
 

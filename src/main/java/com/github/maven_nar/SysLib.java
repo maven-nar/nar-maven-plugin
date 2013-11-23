@@ -36,7 +36,7 @@ public class SysLib
     /**
      * Name of the system library
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      * @required
      */
     private String name;
@@ -44,7 +44,7 @@ public class SysLib
     /**
      * Type of linking for this system library
      * 
-     * @parameter expression="" default-value="shared"
+     * @parameter default-value="shared"
      * @required
      */
     private String type = Library.SHARED;

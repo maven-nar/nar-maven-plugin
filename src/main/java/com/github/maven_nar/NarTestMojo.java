@@ -48,7 +48,7 @@ public class NarTestMojo
     /**
      * The classpath elements of the project being tested.
      * 
-     * @parameter expression="${project.testClasspathElements}"
+     * @parameter default-value="${project.testClasspathElements}"
      * @required
      * @readonly
      */
@@ -57,7 +57,7 @@ public class NarTestMojo
     /**
      * Directory for test resources. Defaults to src/test/resources
      * 
-     * @parameter expression="${basedir}/src/test/resources"
+     * @parameter default-value="${basedir}/src/test/resources"
      * @required
      */
     private File testResourceDirectory;

@@ -43,7 +43,7 @@ public abstract class AbstractGnuMojo
     /**
      * Source directory for GNU style project
      * 
-     * @parameter expression="${basedir}/src/gnu"
+     * @parameter default-value="${basedir}/src/gnu"
      * @required
      */
     private File gnuSourceDirectory;
@@ -51,7 +51,7 @@ public abstract class AbstractGnuMojo
     /**
      * Directory in which gnu sources are copied and "configured"
      * 
-     * @parameter expression="${project.build.directory}/nar/gnu"
+     * @parameter default-value="${project.build.directory}/nar/gnu"
      * @required
      */
     private File gnuTargetDirectory;

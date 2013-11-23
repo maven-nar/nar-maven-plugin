@@ -40,7 +40,7 @@ public class NarValidateMojo
     /**
      * Source directory for GNU style project
      * 
-     * @parameter expression="${basedir}/src/gnu"
+     * @parameter default-value="${basedir}/src/gnu"
      * @required
      */
     private File gnuSourceDirectory;

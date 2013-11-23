@@ -39,28 +39,28 @@ public class NarGnuConfigureMojo extends AbstractGnuMojo {
 	/**
 	 * Skip running of autogen.sh (aka buildconf).
 	 * 
-	 * @parameter expression="${nar.gnu.autogen.skip}" default-value="false"
+	 * @parameter property="nar.gnu.autogen.skip" default-value="false"
 	 */
 	private boolean gnuAutogenSkip;
 
 	/**
 	 * Skip running of configure and therefore also autogen.sh
 	 * 
-	 * @parameter expression="${nar.gnu.configure.skip}" default-value="false"
+	 * @parameter property="nar.gnu.configure.skip" default-value="false"
 	 */
 	private boolean gnuConfigureSkip;
 
 	/**
 	 * Arguments to pass to GNU configure.
 	 * 
-	 * @parameter expression="${nar.gnu.configure.args}" default-value=""
+	 * @parameter property="nar.gnu.configure.args" default-value=""
 	 */
 	private String gnuConfigureArgs;
 
 	/**
 	 * Arguments to pass to GNU buildconf.
 	 * 
-	 * @parameter expression="${nar.gnu.buildconf.args}" default-value=""
+	 * @parameter property="nar.gnu.buildconf.args" default-value=""
 	 */
 	private String gnuBuildconfArgs;
 

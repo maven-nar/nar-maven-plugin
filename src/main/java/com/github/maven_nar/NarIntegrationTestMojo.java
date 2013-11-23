@@ -118,7 +118,7 @@ public class NarIntegrationTestMojo
     /**
      * Skip running of NAR integration test plugin
      * 
-     * @parameter expression="${skipNar}" default-value="false"
+     * @parameter property="skipNar" default-value="false"
      */
     private boolean skipNar;
 
@@ -127,7 +127,7 @@ public class NarIntegrationTestMojo
      * Set this to 'true' to skip running tests, but still compile them. Its use is NOT RECOMMENDED, but quite
      * convenient on occasion.
      * 
-     * @parameter expression="${skipNarTests}"
+     * @parameter property="skipNarTests"
      * @since 2.4
      */
     private boolean skipNarTests;
@@ -138,7 +138,7 @@ public class NarIntegrationTestMojo
      * -DskipTests instead; it's shorter.
      * 
      * @deprecated
-     * @parameter expression="${nar.test.skip.exec}"
+     * @parameter property="nar.test.skip.exec"
      * @since 2.3
      */
     private boolean skipNarExec;
@@ -148,7 +148,7 @@ public class NarIntegrationTestMojo
      * Set this to true to ignore a failure during testing. Its use is NOT RECOMMENDED, but quite convenient on
      * occasion.
      * 
-     * @parameter expression="${nar.test.failure.ignore}"
+     * @parameter property="nar.test.failure.ignore"
      */
     private boolean testFailureIgnore;
 
@@ -156,7 +156,7 @@ public class NarIntegrationTestMojo
      * The base directory of the project being tested. This can be obtained in your unit test by
      * System.getProperty("basedir").
      * 
-     * @parameter expression="${basedir}"
+     * @parameter property="basedir"
      * @required
      */
     private File basedir;
@@ -164,7 +164,7 @@ public class NarIntegrationTestMojo
     /**
      * The directory containing generated test classes of the project being tested.
      * 
-     * @parameter expression="${project.build.testOutputDirectory}"
+     * @parameter property="project.build.testOutputDirectory"
      * @required
      */
     private File testClassesDirectory;
@@ -172,7 +172,7 @@ public class NarIntegrationTestMojo
     /**
      * The directory containing generated classes of the project being tested.
      * 
-     * @parameter expression="${project.build.outputDirectory}"
+     * @parameter property="project.build.outputDirectory"
      * @required
      */
     private File classesDirectory;
@@ -180,7 +180,7 @@ public class NarIntegrationTestMojo
     /**
      * The Maven Project Object
      * 
-     * @parameter expression="${project}"
+     * @parameter property="project"
      * @required
      * @readonly
      */
@@ -190,7 +190,7 @@ public class NarIntegrationTestMojo
     /**
      * The classpath elements of the project being tested.
      * 
-     * @parameter expression="${project.testClasspathElements}"
+     * @parameter property="project.testClasspathElements"
      * @required
      * @readonly
      */
@@ -207,14 +207,14 @@ public class NarIntegrationTestMojo
     /**
      * Base directory where all reports are written to.
      * 
-     * @parameter expression="${project.build.directory}/surefire-reports"
+     * @parameter default-value="${project.build.directory}/surefire-reports"
      */
     private File reportsDirectory;
 
     /**
      * The test source directory containing test class sources.
      * 
-     * @parameter expression="${project.build.testSourceDirectory}"
+     * @parameter property="project.build.testSourceDirectory"
      * @required
      * @since 2.2
      */
@@ -226,7 +226,7 @@ public class NarIntegrationTestMojo
      * <code>**&#47;${test}.java</code>, so you can just type "-Dtest=MyTest" to run a single test called
      * "foo/MyTest.java". This parameter will override the TestNG suiteXmlFiles parameter.
      * 
-     * @parameter expression="${test}"
+     * @parameter property="test"
      */
     private String test;
 
@@ -254,7 +254,7 @@ public class NarIntegrationTestMojo
      * ArtifactRepository of the localRepository. To obtain the directory of localRepository in unit tests use
      * System.setProperty( "localRepository").
      * 
-     * @parameter expression="${localRepository}"
+     * @parameter property="localRepository"
      * @required
      * @readonly
      */
@@ -280,7 +280,7 @@ public class NarIntegrationTestMojo
     /**
      * Map of of plugin artifacts.
      * 
-     * @parameter expression="${plugin.artifactMap}"
+     * @parameter property="plugin.artifactMap"
      * @required
      * @readonly
      */
@@ -289,7 +289,7 @@ public class NarIntegrationTestMojo
     /**
      * Map of of project artifacts.
      * 
-     * @parameter expression="${project.artifactMap}"
+     * @parameter property="project.artifactMap"
      * @required
      * @readonly
      */
@@ -298,21 +298,21 @@ public class NarIntegrationTestMojo
     /**
      * Option to print summary of test suites or just print the test cases that has errors.
      * 
-     * @parameter expression="${surefire.printSummary}" default-value="true"
+     * @parameter property="surefire.printSummary" default-value="true"
      */
     private boolean printSummary;
 
     /**
      * Selects the formatting for the test report to be generated. Can be set as brief or plain.
      * 
-     * @parameter expression="${surefire.reportFormat}" default-value="brief"
+     * @parameter property="surefire.reportFormat" default-value="brief"
      */
     private String reportFormat;
 
     /**
      * Option to generate a file test report or just output the test report to the console.
      * 
-     * @parameter expression="${surefire.useFile}" default-value="true"
+     * @parameter property="surefire.useFile" default-value="true"
      */
     private boolean useFile;
 
@@ -321,7 +321,7 @@ public class NarIntegrationTestMojo
      * When forking, set this to true to redirect the unit test standard output to a file (found in
      * reportsDirectory/testName-output.txt).
      * 
-     * @parameter expression="${nar.test.redirectTestOutputToFile}" default-value="false"
+     * @parameter property="nar.test.redirectTestOutputToFile" default-value="false"
      * @since 2.3
      */
     private boolean redirectTestOutputToFile;
@@ -329,7 +329,7 @@ public class NarIntegrationTestMojo
     /**
      * Set this to "true" to cause a failure if there are no tests to run. Defaults to false.
      * 
-     * @parameter expression="${failIfNoTests}"
+     * @parameter property="failIfNoTests"
      * @since 2.4
      */
     private Boolean failIfNoTests;
@@ -338,7 +338,7 @@ public class NarIntegrationTestMojo
      * Option to specify the forking mode. Can be "never", "once" or "always". "none" and "pertest" are also accepted
      * for backwards compatibility.
      * 
-     * @parameter expression="${forkMode}" default-value="once"
+     * @parameter property="forkMode" default-value="once"
      * @since 2.1
      */
     private String forkMode;
@@ -347,7 +347,7 @@ public class NarIntegrationTestMojo
      * Option to specify the jvm (or path to the java executable) to use with the forking options. For the default, the
      * jvm will be the same as the one used to run Maven.
      * 
-     * @parameter expression="${jvm}"
+     * @parameter property="jvm"
      * @since 2.1
      */
     private String jvm;
@@ -355,7 +355,7 @@ public class NarIntegrationTestMojo
     /**
      * Arbitrary JVM options to set on the command line.
      * 
-     * @parameter expression="${argLine}"
+     * @parameter property="argLine"
      * @since 2.1
      */
     private String argLine;
@@ -365,7 +365,7 @@ public class NarIntegrationTestMojo
      * on port 5005. If set to some other string, that string will be appended to the argLine, allowing you to configure
      * arbitrary debuggability options (without overwriting the other options specified in the argLine).
      * 
-     * @parameter expression="${maven.surefire.debug}"
+     * @parameter property="maven.surefire.debug"
      * @since 2.4
      */
     private String debugForkedProcess;
@@ -374,7 +374,7 @@ public class NarIntegrationTestMojo
      * Kill the forked test process after a certain number of seconds. If set to 0, wait forever for the process, never
      * timing out.
      * 
-     * @parameter expression="${surefire.timeout}"
+     * @parameter property="surefire.timeout"
      * @since 2.4
      */
     private int forkedProcessTimeoutInSeconds;
@@ -390,7 +390,7 @@ public class NarIntegrationTestMojo
     /**
      * Command line working directory.
      * 
-     * @parameter expression="${basedir}"
+     * @parameter property="basedir"
      * @since 2.1.3
      */
     private File workingDirectory;
@@ -401,7 +401,7 @@ public class NarIntegrationTestMojo
      * Setting it to false helps with some problems caused by conflicts between xml parsers in the classpath and the
      * Java 5 provider parser.
      * 
-     * @parameter expression="${childDelegation}" default-value="false"
+     * @parameter property="childDelegation" default-value="false"
      * @since 2.1
      */
     private boolean childDelegation;
@@ -410,7 +410,7 @@ public class NarIntegrationTestMojo
      * (TestNG only) Groups for this test. Only classes/methods/etc decorated with one of the groups specified here will
      * be included in test run, if specified. This parameter is overridden if suiteXmlFiles are specified.
      * 
-     * @parameter expression="${groups}"
+     * @parameter property="groups"
      * @since 2.2
      */
     private String groups;
@@ -419,7 +419,7 @@ public class NarIntegrationTestMojo
      * (TestNG only) Excluded groups. Any methods/classes/etc with one of the groups specified in this list will
      * specifically not be run. This parameter is overridden if suiteXmlFiles are specified.
      * 
-     * @parameter expression="${excludedGroups}"
+     * @parameter property="excludedGroups"
      * @since 2.2
      */
     private String excludedGroups;
@@ -437,7 +437,7 @@ public class NarIntegrationTestMojo
     /**
      * Allows you to specify the name of the JUnit artifact. If not set, <code>junit:junit</code> will be used.
      * 
-     * @parameter expression="${junitArtifactName}" default-value="junit:junit"
+     * @parameter property="junitArtifactName" default-value="junit:junit"
      * @since 2.3.1
      */
     private String junitArtifactName;
@@ -445,7 +445,7 @@ public class NarIntegrationTestMojo
     /**
      * Allows you to specify the name of the TestNG artifact. If not set, <code>org.testng:testng</code> will be used.
      * 
-     * @parameter expression="${testNGArtifactName}" default-value="org.testng:testng"
+     * @parameter property="testNGArtifactName" default-value="org.testng:testng"
      * @since 2.3.1
      */
     private String testNGArtifactName;
@@ -454,7 +454,7 @@ public class NarIntegrationTestMojo
      * (TestNG only) The attribute thread-count allows you to specify how many threads should be allocated for this
      * execution. Only makes sense to use in conjunction with parallel.
      * 
-     * @parameter expression="${threadCount}"
+     * @parameter property="threadCount"
      * @since 2.2
      */
     private int threadCount;
@@ -464,7 +464,7 @@ public class NarIntegrationTestMojo
      * threads, except for methods that depend on each other, which will be run in the same thread in order to respect
      * their order of execution.
      * 
-     * @parameter expression="${parallel}"
+     * @parameter property="parallel"
      * @todo test how this works with forking, and console/file output parallelism
      * @since 2.2
      */
@@ -473,7 +473,7 @@ public class NarIntegrationTestMojo
     /**
      * Whether to trim the stack trace in the reports to just the lines within the test, or show the full trace.
      * 
-     * @parameter expression="${trimStackTrace}" default-value="true"
+     * @parameter property="trimStackTrace" default-value="true"
      * @since 2.2
      */
     private boolean trimStackTrace;
@@ -501,7 +501,7 @@ public class NarIntegrationTestMojo
     /**
      * Flag to disable the generation of report files in xml format.
      * 
-     * @parameter expression="${disableXmlReport}" default-value="false"
+     * @parameter property="disableXmlReport" default-value="false"
      * @since 2.2
      */
     private boolean disableXmlReport;
@@ -511,7 +511,7 @@ public class NarIntegrationTestMojo
      * Prevents problems with JDKs which implement the service provider lookup mechanism by using the system's
      * classloader. Default value is "true".
      * 
-     * @parameter expression="${surefire.useSystemClassLoader}"
+     * @parameter property="surefire.useSystemClassLoader"
      * @since 2.3
      */
     private Boolean useSystemClassLoader;
@@ -523,7 +523,7 @@ public class NarIntegrationTestMojo
      * of manifest-only jars and their benefits.) Default value is "true". Beware, setting this to "false" may cause
      * your tests to fail on Windows if your classpath is too long.
      * 
-     * @parameter expression="${surefire.useManifestOnlyJar}" default-value="true"
+     * @parameter property="surefire.useManifestOnlyJar" default-value="true"
      * @since 2.4.3
      */
     private boolean useManifestOnlyJar;
@@ -532,7 +532,7 @@ public class NarIntegrationTestMojo
      * By default, Surefire enables JVM assertions for the execution of your test cases. To disable the assertions, set
      * this flag to <code>false</code>.
      * 
-     * @parameter expression="${enableAssertions}" default-value="true"
+     * @parameter property="enableAssertions" default-value="true"
      * @since 2.3.1
      */
     private boolean enableAssertions;
@@ -540,7 +540,7 @@ public class NarIntegrationTestMojo
     /**
      * The current build session instance.
      * 
-     * @parameter expression="${session}"
+     * @parameter property="session"
      * @required
      * @readonly
      */

@@ -41,7 +41,7 @@ public class NarPreparePackageMojo
 {    
 
     /**
-     * @parameter expression="${project.build.directory}/classes"
+     * @parameter default-value="${project.build.directory}/classes"
      * @readonly
      */
     private File outputDirectory;

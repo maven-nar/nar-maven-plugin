@@ -75,7 +75,7 @@ public class Javah
     /**
      * The target directory into which to generate the output.
      * 
-     * @parameter expression="${project.build.directory}/nar/javah-include"
+     * @parameter default-value="${project.build.directory}/nar/javah-include"
      * @required
      */
     private File jniDirectory;
@@ -83,7 +83,7 @@ public class Javah
     /**
      * The class directory to scan for class files with native interfaces.
      * 
-     * @parameter expression="${project.build.directory}/classes"
+     * @parameter default-value="${project.build.directory}/classes"
      * @required
      */
     private File classDirectory;

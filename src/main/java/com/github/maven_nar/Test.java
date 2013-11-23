@@ -37,14 +37,14 @@ public class Test
      * Name of the test to create
      * 
      * @required
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String name = null;
 
     /**
      * Type of linking used for this test Possible choices are: "shared" or "static". Defaults to "shared".
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String link = Library.SHARED;
 
@@ -58,7 +58,7 @@ public class Test
     /**
      * Arguments to be used for running this test. Defaults to empty list. This option is only used if run=true.
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private List/* <String> */args = new ArrayList();
 

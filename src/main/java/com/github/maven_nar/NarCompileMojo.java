@@ -62,7 +62,7 @@ public class NarCompileMojo
     /**
      * The current build session instance.
      * 
-     * @parameter expression="${session}"
+     * @parameter default-value="${session}"
      * @required
      * @readonly
      */

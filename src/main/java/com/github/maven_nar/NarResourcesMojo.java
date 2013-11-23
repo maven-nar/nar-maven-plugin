@@ -42,7 +42,7 @@ public class NarResourcesMojo
     /**
      * Use given AOL only. If false, copy for all available AOLs.
      * 
-     * @parameter expression="${nar.resources.copy.aol}" default-value="true"
+     * @parameter property="nar.resources.copy.aol" default-value="true"
      * @required
      */
     private boolean resourcesCopyAOL;
@@ -50,7 +50,7 @@ public class NarResourcesMojo
     /**
      * Directory for nar resources. Defaults to src/nar/resources
      * 
-     * @parameter expression="${basedir}/src/nar/resources"
+     * @parameter default-value="${basedir}/src/nar/resources"
      * @required
      */
     private File resourceDirectory;

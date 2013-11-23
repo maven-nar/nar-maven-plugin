@@ -36,42 +36,42 @@ public abstract class AbstractCompileMojo
     /**
      * C++ Compiler
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private Cpp cpp;
 
     /**
      * C Compiler
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private C c;
 
     /**
      * Fortran Compiler
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private Fortran fortran;
 
     /**
      * Resource Compiler
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private Resource resource;
 
     /**
      * IDL Compiler
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private IDL idl;
 
     /**
      * Message Compiler
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private Message message;
 
@@ -79,7 +79,7 @@ public abstract class AbstractCompileMojo
      * By default NAR compile will attempt to compile using all known compilers against files in the directories specified by convention.
      * This allows configuration to a reduced set, you will have to specify each compiler to use in the configuration.
      * 
-     * @parameter expression="false"
+     * @parameter default-value="false"
      */
     protected boolean onlySpecifiedCompilers;
 
@@ -87,14 +87,14 @@ public abstract class AbstractCompileMojo
      * Do we log commands that is executed to produce the end-result?
      * Conception was to allow eclipse to sniff out include-paths from compile.
      *
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     protected int commandLogLevel=Project.MSG_VERBOSE;
 
     /**
      * Maximum number of Cores/CPU's to use. 0 means unlimited.
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private int maxCores = 0;
 
@@ -102,7 +102,7 @@ public abstract class AbstractCompileMojo
     /**
      * Fail on compilation/linking error.
      * 
-     * @parameter expression="" default-value="true"
+     * @parameter default-value="true"
      * @required
      */
     private boolean failOnError;
@@ -110,7 +110,7 @@ public abstract class AbstractCompileMojo
     /**
      * Sets the type of runtime library, possible values "dynamic", "static".
      * 
-     * @parameter expression="" default-value="dynamic"
+     * @parameter default-value="dynamic"
      * @required
      */
     private String runtime;
@@ -119,7 +119,7 @@ public abstract class AbstractCompileMojo
      * Set use of libtool. If set to true, the "libtool " will be prepended to the command line for compatible
      * processors.
      * 
-     * @parameter expression="" default-value="false"
+     * @parameter default-value="false"
      * @required
      */
     private boolean libtool;
@@ -127,21 +127,21 @@ public abstract class AbstractCompileMojo
     /**
      * List of tests to create
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private List tests;
 
     /**
      * Java info for includes and linking
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private Java java;
 
     /**
      * Flag to cpptasks to indicate whether linker options should be decorated or not
      *
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     protected boolean decorateLinkerOptions;
 

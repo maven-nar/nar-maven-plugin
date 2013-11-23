@@ -43,7 +43,7 @@ public class Java
     /**
      * Add Java includes to includepath
      * 
-     * @parameter expression="" default-value="false"
+     * @parameter default-value="false"
      * @required
      */
     private boolean include = false;
@@ -52,14 +52,14 @@ public class Java
      * Java Include Paths, relative to a derived ${java.home}. Defaults to: "${java.home}/include" and
      * "${java.home}/include/<i>os-specific</i>".
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private List includePaths;
 
     /**
      * Add Java Runtime to linker
      * 
-     * @parameter expression="" default-value="false"
+     * @parameter default-value="false"
      * @required
      */
     private boolean link = false;
@@ -68,14 +68,14 @@ public class Java
      * Relative path from derived ${java.home} to the java runtime to link with Defaults to Architecture-OS-Linker
      * specific value. FIXME table missing
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String runtimeDirectory;
 
     /**
      * Name of the runtime
      * 
-     * @parameter expression="" default-value="jvm"
+     * @parameter default-value="jvm"
      */
     private String runtime = "jvm";
 

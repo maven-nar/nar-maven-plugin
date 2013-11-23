@@ -41,14 +41,14 @@ public abstract class AbstractNarMojo
     /**
      * Skip running of NAR plugins (any) altogether.
      * 
-     * @parameter expression="${nar.skip}" default-value="false"
+     * @parameter property="nar.skip" default-value="false"
      */
     private boolean skip;
 
     /**
      * Ignore errors and failures.
      * 
-     * @parameter expression="${nar.ignore}" default-value="false"
+     * @parameter property="nar.ignore" default-value="false"
      */
     private boolean ignore;
 
@@ -56,7 +56,7 @@ public abstract class AbstractNarMojo
      * The Architecture for the nar, Some choices are: "x86", "i386", "amd64", "ppc", "sparc", ... Defaults to a derived
      * value from ${os.arch}
      * 
-     * @parameter expression="${nar.arch}"
+     * @parameter property="nar.arch"
      */
     private String architecture;
 
@@ -64,49 +64,49 @@ public abstract class AbstractNarMojo
      * The Operating System for the nar. Some choices are: "Windows", "Linux", "MacOSX", "SunOS", ... Defaults to a
      * derived value from ${os.name} FIXME table missing
      * 
-     * @parameter expression="${nar.os}"
+     * @parameter property="nar.os"
      */
     private String os;
 
     /**
      * Architecture-OS-Linker name. Defaults to: arch-os-linker.
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String aol;
 
     /**
      * Linker
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private Linker linker;
 
     /**
-     * @parameter expression="${project.build.directory}"
+     * @parameter property="project.build.directory"
      * @readonly
      */
     private File outputDirectory;
 
     /**
      * Name of the output
-     *  - for jni default to expression="${project.artifactId}-${project.version}"
-     *  - for libs default to expression="${project.artifactId}-${project.version}"
-     *  - for exe default to expression="${project.artifactId}"
-     *  -- for tests default to expression="${test.name}"
+     *  - for jni default-value="${project.artifactId}-${project.version}"
+     *  - for libs default-value="${project.artifactId}-${project.version}"
+     *  - for exe default-value="${project.artifactId}"
+     *  -- for tests default-value="${test.name}"
      * 
      * @parameter 
      */
     private String output;
 
     /**
-     * @parameter expression="${project.basedir}"
+     * @parameter property="project.basedir"
      * @readonly
      */
     private File baseDir;
 
     /**
-     * @parameter expression="${project.build.finalName}"
+     * @parameter property="project.build.finalName"
      * @readonly
      */
     private String finalName;
@@ -114,28 +114,28 @@ public abstract class AbstractNarMojo
     /**
      * Target directory for Nar file construction. Defaults to "${project.build.directory}/nar" for "nar-compile" goal
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private File targetDirectory;
 
     /**
      * Target directory for Nar test construction. Defaults to "${project.build.directory}/test-nar" for "nar-testCompile" goal
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private File testTargetDirectory;
 
     /**
      * Target directory for Nar file unpacking. Defaults to "${targetDirectory}"
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private File unpackDirectory;
 
     /**
      * Target directory for Nar test unpacking. Defaults to "${testTargetDirectory}"
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private File testUnpackDirectory;
 
@@ -144,21 +144,21 @@ public abstract class AbstractNarMojo
      * Example ppc-MacOSX-g++, x86-Windows-msvc, i386-Linux-g++.
      * Not setting means all.
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     protected List<String> classifiers;
 
     /**
      * List of libraries to create
      *
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     protected List<Library> libraries;
 
     /**
      * Layout to be used for building and unpacking artifacts
      * 
-     * @parameter expression="${nar.layout}" default-value="com.github.maven_nar.NarLayout21"
+     * @parameter property="nar.layout" default-value="com.github.maven_nar.NarLayout21"
      * @required
      */
     private String layout;
@@ -166,7 +166,7 @@ public abstract class AbstractNarMojo
     private NarLayout narLayout;
 
     /**
-     * @parameter expression="${project}"
+     * @parameter property="project"
      * @readonly
      * @required
      */
@@ -179,14 +179,14 @@ public abstract class AbstractNarMojo
 	/**
 	 * Javah info
 	 * 
-	 * @parameter expression=""
+	 * @parameter default-value=""
 	 */
 	private Javah javah;
 
 	/**
 	 * The home of the Java system. Defaults to a derived value from ${java.home} which is OS specific.
 	 * 
-	 * @parameter expression=""
+	 * @parameter default-value=""
 	 * @readonly
 	 */
 	private File javaHome;

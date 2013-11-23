@@ -54,21 +54,21 @@ public abstract class Compiler
      * The name of the compiler. Some choices are: "msvc", "g++", "gcc", "CC", "cc", "icc", "icpc", ... Default is
      * Architecture-OS-Linker specific: FIXME: table missing
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String name;
 
     /**
      * Path location of the compile tool
      *
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String toolPath;
 
     /**
      * Source directory for native files
      * 
-     * @parameter expression="${basedir}/src/main"
+     * @parameter default-value="${basedir}/src/main"
      * @required
      */
     private File sourceDirectory;
@@ -76,7 +76,7 @@ public abstract class Compiler
     /**
      * Source directory for native test files
      * 
-     * @parameter expression="${basedir}/src/test"
+     * @parameter default-value="${basedir}/src/test"
      * @required
      */
     private File testSourceDirectory;
@@ -84,7 +84,7 @@ public abstract class Compiler
     /**
      * Include patterns for sources
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      * @required
      */
     private Set includes = new HashSet();
@@ -92,7 +92,7 @@ public abstract class Compiler
     /**
      * Exclude patterns for sources
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      * @required
      */
     private Set excludes = new HashSet();
@@ -100,7 +100,7 @@ public abstract class Compiler
     /**
      * Include patterns for test sources
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      * @required
      */
     private Set testIncludes = new HashSet();
@@ -108,7 +108,7 @@ public abstract class Compiler
     /**
      * Exclude patterns for test sources
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      * @required
      */
     private Set testExcludes = new HashSet();
@@ -116,7 +116,7 @@ public abstract class Compiler
     /**
      * Compile with debug information.
      * 
-     * @parameter expression="" default-value="false"
+     * @parameter default-value="false"
      * @required
      */
     private boolean debug = false;
@@ -124,7 +124,7 @@ public abstract class Compiler
     /**
      * Enables generation of exception handling code.
      * 
-     * @parameter expression="" default-value="true"
+     * @parameter default-value="true"
      * @required
      */
     private boolean exceptions = true;
@@ -132,7 +132,7 @@ public abstract class Compiler
     /**
      * Enables run-time type information.
      * 
-     * @parameter expression="" default-value="true"
+     * @parameter default-value="true"
      * @required
      */
     private boolean rtti = true;
@@ -141,7 +141,7 @@ public abstract class Compiler
      * Sets optimization. Possible choices are: "none", "size", "minimal", "speed", "full", "aggressive", "extreme",
      * "unsafe".
      * 
-     * @parameter expression="" default-value="none"
+     * @parameter default-value="none"
      * @required
      */
     private String optimize = "none";
@@ -149,7 +149,7 @@ public abstract class Compiler
     /**
      * Enables or disables generation of multi-threaded code. Default value: false, except on Windows.
      * 
-     * @parameter expression="" default-value="false"
+     * @parameter default-value="false"
      * @required
      */
     private boolean multiThreaded = false;
@@ -157,7 +157,7 @@ public abstract class Compiler
     /**
      * Defines
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private List defines;
 
@@ -165,14 +165,14 @@ public abstract class Compiler
      * Defines for the compiler as a comma separated list of name[=value] pairs, where the value is optional. Will work
      * in combination with &lt;defines&gt;.
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String defineSet;
 
     /**
      * Clears default defines
      * 
-     * @parameter expression="" default-value="false"
+     * @parameter default-value="false"
      * @required
      */
     private boolean clearDefaultDefines;
@@ -180,7 +180,7 @@ public abstract class Compiler
     /**
      * Undefines
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private List undefines;
 
@@ -188,14 +188,14 @@ public abstract class Compiler
      * Undefines for the compiler as a comma separated list of name[=value] pairs where the value is optional. Will work
      * in combination with &lt;undefines&gt;.
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String undefineSet;
 
     /**
      * Clears default undefines
      * 
-     * @parameter expression="" default-value="false"
+     * @parameter default-value="false"
      * @required
      */
     private boolean clearDefaultUndefines;
@@ -203,42 +203,42 @@ public abstract class Compiler
     /**
      * Include Paths. Defaults to "${sourceDirectory}/include"
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private List includePaths;
 
     /**
      * Test Include Paths. Defaults to "${testSourceDirectory}/include"
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private List testIncludePaths;
 
     /**
      * System Include Paths, which are added at the end of all include paths
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private List systemIncludePaths;
 
     /**
      * Additional options for the C++ compiler Defaults to Architecture-OS-Linker specific values. FIXME table missing
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private List options;
 
     /**
      * Options for the compiler as a whitespace separated list. Will work in combination with &lt;options&gt;.
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String optionSet;
 
     /**
      * Clears default options
      * 
-     * @parameter expression="" default-value="false"
+     * @parameter default-value="false"
      * @required
      */
     private boolean clearDefaultOptions;
@@ -246,7 +246,7 @@ public abstract class Compiler
     /**
      * Comma separated list of filenames to compile in order
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String compileOrder;
 

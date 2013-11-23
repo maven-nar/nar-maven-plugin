@@ -27,7 +27,7 @@ public class NarProcessLibraries extends AbstractCompileMojo {
     /**
      * List of commands to execute
      *
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private List<ProcessLibraryCommand> commands;
 

@@ -56,21 +56,21 @@ public class Linker
      * The Linker Some choices are: "msvc", "g++", "CC", "icpc", ... Default is Architecture-OS-Linker specific: FIXME:
      * table missing
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String name;
 
     /**
      * Path location of the linker tool
      *
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String toolPath;
 
     /**
      * Enables or disables incremental linking.
      * 
-     * @parameter expression="" default-value="false"
+     * @parameter default-value="false"
      * @required
      */
     private boolean incremental = false;
@@ -78,7 +78,7 @@ public class Linker
     /**
      * Enables or disables the production of a map file.
      * 
-     * @parameter expression="" default-value="false"
+     * @parameter default-value="false"
      * @required
      */
     private boolean map = false;
@@ -86,7 +86,7 @@ public class Linker
     /**
      * Options for the linker Defaults to Architecture-OS-Linker specific values. FIXME table missing
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private List options;
 
@@ -94,14 +94,14 @@ public class Linker
      * Options for the linker as a whitespace separated list. Defaults to Architecture-OS-Linker specific values. Will
      * work in combination with &lt;options&gt;.
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String optionSet;
 
     /**
      * Clears default options
      * 
-     * @parameter expression="" default-value="false"
+     * @parameter default-value="false"
      * @required
      */
     private boolean clearDefaultOptions;
@@ -109,7 +109,7 @@ public class Linker
     /**
      * Adds libraries to the linker.
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private List/* <Lib> */libs;
 
@@ -117,14 +117,14 @@ public class Linker
      * Adds libraries to the linker. Will work in combination with &lt;libs&gt;. The format is comma separated,
      * colon-delimited values (name:type:dir), like "myLib:shared:/home/me/libs/, otherLib:static:/some/path".
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String libSet;
 
     /**
      * Adds system libraries to the linker.
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private List/* <SysLib> */sysLibs;
 
@@ -132,7 +132,7 @@ public class Linker
      * Adds system libraries to the linker. Will work in combination with &lt;sysLibs&gt;. The format is comma
      * separated, colon-delimited values (name:type), like "dl:shared, pthread:shared".
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String sysLibSet;
 
@@ -145,7 +145,7 @@ public class Linker
      * Example: &lt;narDependencyLibOrder&gt;someGroup:myProduct, other.group:productB&lt;narDependencyLibOrder&gt;
      * </p>
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String narDependencyLibOrder;
 

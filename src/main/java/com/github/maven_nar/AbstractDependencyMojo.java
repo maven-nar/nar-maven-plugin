@@ -40,7 +40,7 @@ import org.codehaus.plexus.archiver.manager.ArchiverManager;
 public abstract class AbstractDependencyMojo extends AbstractNarMojo {
 
 	/**
-	 * @parameter expression="${localRepository}"
+	 * @parameter default-value="${localRepository}"
 	 * @required
 	 * @readonly
 	 */
@@ -58,7 +58,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
 	/**
 	 * Remote repositories which will be searched for nar attachments.
 	 * 
-	 * @parameter expression="${project.remoteArtifactRepositories}"
+	 * @parameter default-value="${project.remoteArtifactRepositories}"
 	 * @required
 	 * @readonly
 	 */
@@ -75,7 +75,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
 	/**
      * The plugin remote repositories declared in the pom.
      * 
-     * @parameter expression="${project.pluginArtifactRepositories}"
+     * @parameter default-value="${project.pluginArtifactRepositories}"
      * @since 2.2
      */
     // private List remotePluginRepositories;

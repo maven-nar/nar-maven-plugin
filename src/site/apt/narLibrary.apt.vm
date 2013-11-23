@@ -57,19 +57,19 @@ public class YourMojo extends AbstractMojo {
     /**
      * Level of logging messages, 0 is minimum.
      * 
-     * @parameter expression="${logLevel}" default-value="0"
+     * @parameter property="logLevel" default-value="0"
      */
     private int logLevel;
 
     /**
-     * @parameter expression="${localRepository}"
+     * @parameter property="localRepository"
      * @required
      * @readonly
      */
     private ArtifactRepository localRepository;
 
     /**
-     * @parameter expression="${project}"
+     * @parameter property="project"
      * @required
      * @readonly
      */
@@ -79,7 +79,7 @@ public class YourMojo extends AbstractMojo {
      * The Architecture for picking up swig, Some choices are: "x86", "i386",
      * "amd64", "ppc", "sparc", ... Defaults to ${os.arch}
      * 
-     * @parameter expression="${os.arch}"
+     * @parameter property="os.arch"
      * @required
      */
     private String architecture;
@@ -89,7 +89,7 @@ public class YourMojo extends AbstractMojo {
      * "Linux", "MacOSX", "SunOS", ... Defaults to a derived value from
      * ${os.name}
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String os;
 

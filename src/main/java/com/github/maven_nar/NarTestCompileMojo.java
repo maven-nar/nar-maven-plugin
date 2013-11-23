@@ -56,7 +56,7 @@ public class NarTestCompileMojo
     /**
      * Skip running of NAR integration test plugins.
      * 
-     * @parameter expression="${skipNar}" default-value="false"
+     * @parameter property="skipNar" default-value="false"
      */
     protected boolean skipNar;
 

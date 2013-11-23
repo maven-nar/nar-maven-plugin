@@ -8,21 +8,21 @@ public class ProcessLibraryCommand {
     /**
      * The executable to run
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String executable;
     
     /**
      * The library type that this command is valid for
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private String libraryType;
     
     /**
      * Any additional arguments to pass into the executable
      * 
-     * @parameter expression=""
+     * @parameter default-value=""
      */
     private List<String> arguments;
     
