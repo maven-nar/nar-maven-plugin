@@ -54,7 +54,7 @@ public class NarTestCompileMojo
     extends AbstractCompileMojo
 {
     /**
-     * Skip running of NAR integration test plugins.
+     * Skip running of NAR test plugins.
      * 
      * @parameter property="skipNar" default-value="false"
      */
@@ -73,13 +73,19 @@ public class NarTestCompileMojo
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-    	super.narExecute();
-        // make sure destination is there
-        getTestTargetDirectory().mkdirs();
+        if ( skipNar ) {
+            getLog().info( "Nar test compilation is skipped." );
+        } else if ( isCrossCompile() ) {
+            getLog().info( "Not compiling cross-compiled nar tests." );
+        } else {
+            super.narExecute();
+            // make sure destination is there
+            getTestTargetDirectory().mkdirs();
 
-        for ( Iterator i = getTests().iterator(); i.hasNext(); )
-        {
-            createTest( getAntProject(), (Test) i.next() );
+            for ( Iterator i = getTests().iterator(); i.hasNext(); )
+            {
+                createTest( getAntProject(), (Test) i.next() );
+            }
         }
     }
 
