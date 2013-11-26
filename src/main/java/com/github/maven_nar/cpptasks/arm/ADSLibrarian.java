@@ -16,14 +16,12 @@
  */
 package com.github.maven_nar.cpptasks.arm;
 
-import java.io.File;
-import java.util.Vector;
-
 import com.github.maven_nar.cpptasks.compiler.CommandLineLinker;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
 import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
 
+import java.io.File;
 
 /**
  * Adapter for ARM Librarian
@@ -42,43 +40,6 @@ public class ADSLibrarian extends CommandLineLinker {
     {
         super("armar",null,
           new String[] { ".o" }, new String[0], ".lib", false, null);
-    }
-
-    protected void addBase(long base, Vector args) {
-        // TODO Auto-generated method stub
-
-    }
-
-    protected void addFixed(Boolean fixed, Vector args) {
-        // TODO Auto-generated method stub
-
-    }
-
-    protected void addImpliedArgs(
-        boolean debug,
-        LinkType linkType,
-        Vector args) {
-        // TODO Auto-generated method stub
-
-    }
-
-    protected void addIncremental(boolean incremental, Vector args) {
-        // TODO Auto-generated method stub
-
-    }
-
-    protected void addMap(boolean map, Vector args) {
-        // TODO Auto-generated method stub
-
-    }
-
-    protected void addStack(int stack, Vector args) {
-        // TODO Auto-generated method stub
-
-    }
-    protected void addEntry(String entry, Vector args) {
-        // TODO Auto-generated method stub
-
     }
 
     protected String getCommandFileSwitch(String commandFile) {

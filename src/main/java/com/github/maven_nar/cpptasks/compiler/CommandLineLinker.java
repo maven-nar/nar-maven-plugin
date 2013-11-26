@@ -73,24 +73,35 @@ public abstract class CommandLineLinker extends AbstractLinker
         this.isLibtool = isLibtool;
         this.libtoolLinker = libtoolLinker;
     }
-    protected abstract void addBase(long base, Vector args);
 
-    protected abstract void addFixed(Boolean fixed, Vector args);
-
-    abstract protected void addImpliedArgs(boolean debug,
-      LinkType linkType, Vector args);
-    protected abstract void addIncremental(boolean incremental, Vector args);
-
-      //
-      //  Windows processors handle these through file list
-      //
+    protected void addBase(CCTask task, long base, Vector args) {
+      // NB: Do nothing by default.
+    }
+    protected void addFixed(CCTask task, Boolean fixed, Vector args) {
+      // NB: Do nothing by default.
+    }
+    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector args) {
+      // NB: Do nothing by default.
+    }
+    protected void addIncremental(CCTask task, boolean incremental, Vector args) {
+      // NB: Do nothing by default.
+    }
+    //
+    //  Windows processors handle these through file list
+    //
     protected String[] addLibrarySets(CCTask task, LibrarySet[] libsets, Vector preargs,
         Vector midargs, Vector endargs) {
         return null;
     }
-    protected abstract void addMap(boolean map, Vector args);
-    protected abstract void addStack(int stack, Vector args);
-    protected abstract void addEntry(String entry, Vector args);
+    protected void addMap(CCTask task, boolean map, Vector args) {
+      // NB: Do nothing by default.
+    }
+    protected void addStack(CCTask task, int stack, Vector args) {
+      // NB: Do nothing by default.
+    }
+    protected void addEntry(CCTask task, String entry, Vector args) {
+      // NB: Do nothing by default.
+    }
     
     protected LinkerConfiguration createConfiguration(
       CCTask task,
@@ -139,13 +150,13 @@ public abstract class CommandLineLinker extends AbstractLinker
 
       String startupObject = getStartupObject(linkType);
 
-      addImpliedArgs(debug, linkType, preargs);
-      addIncremental(specificDef.getIncremental(defaultProviders,1), preargs);
-      addFixed(specificDef.getFixed(defaultProviders,1), preargs);
-      addMap(specificDef.getMap(defaultProviders,1), preargs);
-      addBase(specificDef.getBase(defaultProviders,1), preargs);
-      addStack(specificDef.getStack(defaultProviders,1), preargs);
-      addEntry(specificDef.getEntry(defaultProviders, 1), preargs);
+      addImpliedArgs(task, debug, linkType, preargs);
+      addIncremental(task, specificDef.getIncremental(defaultProviders,1), preargs);
+      addFixed(task, specificDef.getFixed(defaultProviders,1), preargs);
+      addMap(task, specificDef.getMap(defaultProviders,1), preargs);
+      addBase(task, specificDef.getBase(defaultProviders,1), preargs);
+      addStack(task, specificDef.getStack(defaultProviders,1), preargs);
+      addEntry(task, specificDef.getEntry(defaultProviders, 1), preargs);
 
       String[] libnames = null;
       LibrarySet[] libsets = specificDef.getActiveLibrarySets(defaultProviders,1);

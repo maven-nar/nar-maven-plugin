@@ -18,6 +18,7 @@ package com.github.maven_nar.cpptasks.gcc;
 import java.io.File;
 import java.util.Vector;
 
+import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.CUtil;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
@@ -64,8 +65,8 @@ public class GccLinker extends AbstractLdLinker {
         super(command, "-dumpversion", extensions, ignoredExtensions,
                 outputPrefix, outputSuffix, isLibtool, libtoolLinker);
     }
-    protected void addImpliedArgs(boolean debug, LinkType linkType, Vector args) {
-        super.addImpliedArgs(debug, linkType, args);
+    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector args) {
+        super.addImpliedArgs(task, debug, linkType, args);
         if (getIdentifier().indexOf("mingw") >= 0) {
             if (linkType.isSubsystemConsole()) {
                 args.addElement("-mconsole");

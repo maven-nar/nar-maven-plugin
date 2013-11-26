@@ -15,9 +15,7 @@
  *  limitations under the License.
  */
 package com.github.maven_nar.cpptasks.compaq;
-import java.io.File;
-import java.util.Vector;
-
+import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.compiler.CommandLineLinker;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
@@ -25,6 +23,8 @@ import com.github.maven_nar.cpptasks.devstudio.DevStudioLibrarian;
 import com.github.maven_nar.cpptasks.devstudio.DevStudioProcessor;
 import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
 
+import java.io.File;
+import java.util.Vector;
 
 /**
  * Adapter for the Compaq(r) Visual Fortran Librarian
@@ -40,22 +40,10 @@ public class CompaqVisualFortranLibrarian extends CommandLineLinker {
         super("lib", "/bogus", new String[]{".obj"}, new String[0], ".lib",
                 false, null);
     }
-    protected void addBase(long base, Vector args) {
-    }
-    protected void addFixed(Boolean fixed, Vector args) {
-    }
-    protected void addImpliedArgs(boolean debug, LinkType linkType, Vector args) {
+
+    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector args) {
         args.addElement("/nologo");
     }
-    protected void addIncremental(boolean incremental, Vector args) {
-    }
-    protected void addMap(boolean map, Vector args) {
-    }
-    protected void addStack(int stack, Vector args) {
-    }
-    protected void addEntry(String entry, Vector args) {
-    }
-    
     protected String getCommandFileSwitch(String commandFile) {
         return DevStudioProcessor.getCommandFileSwitch(commandFile);
     }

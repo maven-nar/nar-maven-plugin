@@ -73,8 +73,9 @@ public class GppLinker extends AbstractLdLinker {
         super(command, "-dumpversion", extensions, ignoredExtensions,
                 outputPrefix, outputSuffix, isLibtool, libtoolLinker);
     }
-    protected void addImpliedArgs(boolean debug, LinkType linkType, Vector args) {
-        super.addImpliedArgs(debug, linkType, args);
+
+    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector args) {
+        super.addImpliedArgs(task, debug, linkType, args);
         if (getIdentifier().indexOf("mingw") >= 0) {
             if (linkType.isSubsystemConsole()) {
                 args.addElement("-mconsole");
@@ -147,7 +148,7 @@ public class GppLinker extends AbstractLdLinker {
         }
         // ENDFREEHEP
     }
-    public String[] addLibrarySets(CCTask task, LibrarySet[] libsets,
+    protected String[] addLibrarySets(CCTask task, LibrarySet[] libsets,
             Vector preargs, Vector midargs, Vector endargs) {
         String[] rs = super.addLibrarySets(task, libsets, preargs, midargs,
                 endargs);
@@ -167,6 +168,7 @@ public class GppLinker extends AbstractLdLinker {
         }
         return rs;
     }
+
     /**
      * Allows drived linker to decorate linker option. Override by GppLinker to
      * prepend a "-Wl," to pass option to through gcc to linker.

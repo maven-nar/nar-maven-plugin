@@ -58,7 +58,7 @@ public class TestAbstractLdLinker extends TestCase {
         OutputTypeEnum pluginOutType = new OutputTypeEnum();
         pluginOutType.setValue("plugin");
         pluginType.setOutputType(pluginOutType);
-        linker.addImpliedArgs(false, pluginType, args);
+        linker.addImpliedArgs(null, false, pluginType, args);
         assertEquals(1, args.size());
         assertEquals("-bundle", args.elementAt(0));
     }
@@ -75,7 +75,7 @@ public class TestAbstractLdLinker extends TestCase {
         OutputTypeEnum pluginOutType = new OutputTypeEnum();
         pluginOutType.setValue("shared");
         pluginType.setOutputType(pluginOutType);
-        linker.addImpliedArgs(false, pluginType, args);
+        linker.addImpliedArgs(null, false, pluginType, args);
         // FIXME NAR-103
         // BEGINFREEHEP
         assertEquals(1, args.size());
@@ -95,7 +95,7 @@ public class TestAbstractLdLinker extends TestCase {
         OutputTypeEnum pluginOutType = new OutputTypeEnum();
         pluginOutType.setValue("plugin");
         pluginType.setOutputType(pluginOutType);
-        linker.addImpliedArgs(false, pluginType, args);
+        linker.addImpliedArgs(null, false, pluginType, args);
         assertEquals(1, args.size());
         assertEquals("-shared", args.elementAt(0));
     }
@@ -112,7 +112,7 @@ public class TestAbstractLdLinker extends TestCase {
         OutputTypeEnum pluginOutType = new OutputTypeEnum();
         pluginOutType.setValue("shared");
         pluginType.setOutputType(pluginOutType);
-        linker.addImpliedArgs(false, pluginType, args);
+        linker.addImpliedArgs(null, false, pluginType, args);
         assertEquals(1, args.size());
         assertEquals("-shared", args.elementAt(0));
     }
