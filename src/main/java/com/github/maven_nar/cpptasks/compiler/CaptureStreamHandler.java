@@ -34,7 +34,8 @@ import org.apache.tools.ant.taskdefs.ExecuteStreamHandler;
  */
 public class CaptureStreamHandler implements ExecuteStreamHandler {
 
-	String[] output;
+	private String[] stderr;
+	private String[] stdout;
 
 	/**
 	 * Runs an executable and captures the output in a String array
@@ -42,8 +43,28 @@ public class CaptureStreamHandler implements ExecuteStreamHandler {
 	 * @param cmdline
 	 *            command line arguments
 	 * @return output of process
+	 * @see CaptureStreamHandler#getOutput()
 	 */
 	public static String[] run(String[] cmdline) {
+		CaptureStreamHandler handler = execute(cmdline);
+		return handler.getOutput() != null ? handler.getOutput() : new String[0];
+	}
+
+	/**
+	 * Executes the given command, capturing the output using a newly allocated
+	 * {@link CaptureStreamHandler}, which is then returned.
+	 * <p>
+	 * In contrast to {@link #run(String[])}, this method allows both the
+	 * standard error and standard output streams to be inspected after execution
+	 * (via the {@link #getStderr()} and {@link #getStdout()} methods,
+	 * respectively).
+	 * </p>
+	 * 
+	 * @param cmdline
+	 *            command line arguments
+	 * @return The {@link CaptureStreamHandler} used to capture the output.
+	 */
+	public static CaptureStreamHandler execute(String[] cmdline) {
 		CaptureStreamHandler handler = new CaptureStreamHandler();
 		Execute exec = new Execute(handler);
 		exec.setCommandline(cmdline);
@@ -51,7 +72,7 @@ public class CaptureStreamHandler implements ExecuteStreamHandler {
 			int status = exec.execute();
 		} catch (IOException ex) {
 		}
-		return handler.getOutput() != null ? handler.getOutput() : new String[0];
+		return handler;
 	}
 
 	private InputStream processErrorStream;
@@ -61,8 +82,22 @@ public class CaptureStreamHandler implements ExecuteStreamHandler {
 	public CaptureStreamHandler() {
 	}
 
+	/**
+	 * Gets the output of the execution. If standard error is not empty,
+	 * it is returned; otherwise, standard output is returned.
+	 */
 	public String[] getOutput() {
-		return output;
+		return stderr.length > 0 ? stderr : stdout;
+	}
+
+	/** Gets the output of the execution's standard error stream. */
+	public String[] getStderr() {
+		return stderr;
+	}
+
+	/** Gets the output of the execution's standard output stream. */
+	public String[] getStdout() {
+		return stdout;
 	}
 
 	static class Copier extends Thread {
@@ -76,18 +111,18 @@ public class CaptureStreamHandler implements ExecuteStreamHandler {
 		}
 
 		public void run() {
-    		try {
-    			BufferedReader reader = new BufferedReader( new InputStreamReader(is) );
-    			while ( true ) {
-    				String line = reader.readLine();
-    				if ( line == null )
-    					break;
-    				lines.addElement( line );
-    			}
+			try {
+				BufferedReader reader = new BufferedReader( new InputStreamReader(is) );
+				while ( true ) {
+					String line = reader.readLine();
+					if ( line == null )
+						break;
+					lines.addElement( line );
+				}
 			} catch (IOException e) {
 				// Ignore
 			}
-    	}
+		}
 
 		public Vector getLines() {
 			return lines;
@@ -96,9 +131,9 @@ public class CaptureStreamHandler implements ExecuteStreamHandler {
 
 	/**
 	 * Reads concurrently both the process standard output and standard error.
-	 * The standard error - if not empty - is copied to the output string array field. Otherwise
-	 * the standard output is copied to the output field. The output field is set to an empty array 
-	 * in case of any error. 
+	 * The standard error is copied to the stderr string array field.
+	 * The standard output is copied to the stdout string array field.
+	 * Both fields are set to an empty array in case of any error.
 	 */
 	public void gatherOutput() {
 		try {
@@ -108,15 +143,12 @@ public class CaptureStreamHandler implements ExecuteStreamHandler {
 			outputCopier.start();
 			errorCopier.join();
 			outputCopier.join();
-			if (errorCopier.getLines().size() > 0) {
-				output = new String[errorCopier.getLines().size()];
-				errorCopier.getLines().copyInto(output);
-			} else {
-				output = new String[outputCopier.getLines().size()];
-				outputCopier.getLines().copyInto(output);
-			}
+			stderr = new String[errorCopier.getLines().size()];
+			errorCopier.getLines().copyInto(stderr);
+			stdout = new String[outputCopier.getLines().size()];
+			outputCopier.getLines().copyInto(stdout);
 		} catch (Exception e) {
-			output = new String[0];
+			stderr = stdout = new String[0];
 		}
 	}
 

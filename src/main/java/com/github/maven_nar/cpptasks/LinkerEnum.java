@@ -52,6 +52,8 @@ public class LinkerEnum extends EnumeratedAttribute {
     private final static ProcessorEnumValue[] linkers = new ProcessorEnumValue[]{
             new ProcessorEnumValue("gcc", GccLinker.getInstance()),
             new ProcessorEnumValue("g++", GppLinker.getInstance()),
+            new ProcessorEnumValue("clang", GccLinker.getCLangInstance()),
+            new ProcessorEnumValue("clang++", GppLinker.getCLangInstance()),
             new ProcessorEnumValue("ld", LdLinker.getInstance()),
             new ProcessorEnumValue("ar", GccLibrarian.getInstance()),
             new ProcessorEnumValue("msvc", DevStudioLinker.getInstance()),

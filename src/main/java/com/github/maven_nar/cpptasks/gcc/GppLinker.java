@@ -49,6 +49,8 @@ public class GppLinker extends AbstractLdLinker {
             discardFiles, "lib", ".so", true, null));
     private static final GppLinker instance = new GppLinker(GPP_COMMAND, objFiles,
             discardFiles, "", "", false, null);
+    private static final GppLinker clangInstance = new GppLinker("clang", objFiles,
+            discardFiles, "", "", false, null);
     private static final GppLinker machDllLinker = new GppLinker(GPP_COMMAND,
             objFiles, discardFiles, "lib", ".dylib", false, null);
     private static final GppLinker machPluginLinker = new GppLinker(GPP_COMMAND,
@@ -61,6 +63,9 @@ public class GppLinker extends AbstractLdLinker {
             discardFiles, "", ".dll", false, null);
     public static GppLinker getInstance() {
         return instance;
+    }
+    public static GppLinker getCLangInstance() {
+        return clangInstance;
     }
     private File[] libDirs;
     private String runtimeLibrary;
@@ -121,7 +126,11 @@ public class GppLinker extends AbstractLdLinker {
         if (linkType.linkCPP()) {
             if (linkType.isStaticRuntime()) {
                 if (isDarwin()) {
-                    runtimeLibrary = "-lstdc++-static";
+                    if (isClang()) {
+                        task.log("Warning: clang cannot statically link to C++");
+                    } else {
+                        runtimeLibrary = "-lstdc++-static";
+                    }
                 } else {
                     String[] cmdin = new String[] { "g++",
                             "-print-file-name=libstdc++.a" };
@@ -137,13 +146,21 @@ public class GppLinker extends AbstractLdLinker {
 
         gccLibrary = null;
         if (linkType.isStaticRuntime()) {
-            gccLibrary = "-static-libgcc";
+            if (isClang()) {
+                task.log("Warning: clang cannot statically link libgcc");
+            } else {
+                gccLibrary = "-static-libgcc";
+            }
         } else {
             if (linkType.linkCPP()) {
                 // NOTE: added -fexceptions here for MacOS X
                 gccLibrary = "-fexceptions";
             } else {
-                gccLibrary = "-shared-libgcc";
+                if (isClang()) {
+                    task.log("Warning: clang cannot dynamically link libgcc");
+                } else {
+                    gccLibrary = "-shared-libgcc";
+                }
             }
         }
         // ENDFREEHEP
@@ -279,5 +296,24 @@ public class GppLinker extends AbstractLdLinker {
         }
         // ENDFREEHEP
         return instance;
+    }
+    /**
+     * Checks whether the compiler is actually clang masquerading as gcc
+     * (e.g., the situation on OS X 10.9 Mavericks).
+     */
+    private boolean isClang() {
+        final String command = getCommand();
+        if (command == null) {
+            return false;
+        }
+        if (command.startsWith("clang")) {
+            return true;
+        }
+        if (!GPP_COMMAND.equals(command)) {
+            return false;
+        }
+        final String[] cmd = {command, "--version"};
+        final String[] cmdout = CaptureStreamHandler.execute(cmd).getStdout();
+        return cmdout.length > 0 && cmdout[0].contains("(clang-");
     }
 }
