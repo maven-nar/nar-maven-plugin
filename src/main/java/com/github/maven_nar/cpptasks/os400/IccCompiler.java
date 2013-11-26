@@ -84,9 +84,6 @@ public class IccCompiler extends CommandLineCCompiler {
         }
         return this;
     }
-    /*
-     * @see CommandLineCompiler#getDefineSwitch(StringBuffer, String, String)
-     */
     protected void getDefineSwitch(StringBuffer buffer, String define,
             String value) {
         buffer.append("-q");
@@ -113,9 +110,6 @@ public class IccCompiler extends CommandLineCCompiler {
         return 1;
         //return Integer.MAX_VALUE;
     }
-    /*
-     * @see CommandLineCompiler#getUndefineSwitch(StringBuffer, String)
-     */
     protected void getUndefineSwitch(StringBuffer buffer, String define) {
         /*
          * buffer.addElement("-q"); buf.append(define);

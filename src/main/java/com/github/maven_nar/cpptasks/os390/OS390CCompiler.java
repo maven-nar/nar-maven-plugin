@@ -127,9 +127,6 @@ public class OS390CCompiler extends CommandLineCCompiler {
         }
         return this;
     }
-    /*
-     * @see CommandLineCompiler#getDefineSwitch(StringBuffer, String, String)
-     */
     protected void getDefineSwitch(StringBuffer buffer, String define,
             String value) {
     }
@@ -149,9 +146,6 @@ public class OS390CCompiler extends CommandLineCCompiler {
     protected int getMaximumInputFilesPerCommand() {
         return Integer.MAX_VALUE;
     }
-    /*
-     * @see CommandLineCompiler#getUndefineSwitch(StringBuffer, String)
-     */
     protected void getUndefineSwitch(StringBuffer buffer, String define) {
     }
 }

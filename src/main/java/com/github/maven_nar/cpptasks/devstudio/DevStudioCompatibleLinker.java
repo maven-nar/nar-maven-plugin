@@ -91,9 +91,6 @@ public abstract class DevStudioCompatibleLinker extends CommandLineLinker {
             args.addElement("/STACK:0x" + stackStr);
         }
     }
-    /* (non-Javadoc)
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineLinker#addEntry(int, java.util.Vector)
-     */
     protected void addEntry(String entry, Vector args) {
     	if (entry != null) {
     		args.addElement("/ENTRY:" + entry);

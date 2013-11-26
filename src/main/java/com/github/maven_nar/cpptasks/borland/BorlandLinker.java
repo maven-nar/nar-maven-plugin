@@ -85,9 +85,6 @@ public final class BorlandLinker extends CommandLineLinker {
             args.addElement("-S:" + stackStr);
         }
     }
-    /* (non-Javadoc)
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineLinker#addEntry(int, java.util.Vector)
-     */
     protected void addEntry(String entry, Vector args) {
     }
 

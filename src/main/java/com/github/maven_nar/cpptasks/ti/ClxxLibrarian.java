@@ -43,119 +43,45 @@ public class ClxxLibrarian extends CommandLineLinker {
         super(command, null, new String[]{".o"}, new String[0], ".lib", false,
                 null);
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineLinker#addBase(long,
-     *      java.util.Vector)
-     */
     protected void addBase(long base, Vector args) {
         // TODO Auto-generated method stub
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineLinker#addFixed(java.lang.Boolean,
-     *      java.util.Vector)
-     */
     protected void addFixed(Boolean fixed, Vector args) {
         // TODO Auto-generated method stub
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineLinker#addImpliedArgs(boolean,
-     *      com.github.maven_nar.cpptasks.compiler.LinkType, java.util.Vector)
-     */
     protected void addImpliedArgs(boolean debug, LinkType linkType, Vector args) {
         // TODO Auto-generated method stub
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineLinker#addIncremental(boolean,
-     *      java.util.Vector)
-     */
     protected void addIncremental(boolean incremental, Vector args) {
         // TODO Auto-generated method stub
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineLinker#addMap(boolean,
-     *      java.util.Vector)
-     */
     protected void addMap(boolean map, Vector args) {
         // TODO Auto-generated method stub
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineLinker#addStack(int,
-     *      java.util.Vector)
-     */
     protected void addStack(int stack, Vector args) {
         // TODO Auto-generated method stub
     }
-    /* (non-Javadoc)
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineLinker#addEntry(int, java.util.Vector)
-     */
     protected void addEntry(String entry, Vector args) {
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineLinker#getCommandFileSwitch(java.lang.String)
-     */
     protected String getCommandFileSwitch(String commandFile) {
         return "@" + commandFile;
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.Linker#getLibraryPath()
-     */
     public File[] getLibraryPath() {
         return new File[0];
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.Linker#getLibraryPatterns(java.lang.String[])
-     */
     public String[] getLibraryPatterns(String[] libnames, LibraryTypeEnum libType) {
         return new String[0];
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.Processor#getLinker(com.github.maven_nar.cpptasks.compiler.LinkType)
-     */
     public Linker getLinker(LinkType linkType) {
         return null;
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineLinker#getMaximumCommandLength()
-     */
     protected int getMaximumCommandLength() {
         return 1024;
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineLinker#getOutputFileSwitch(java.lang.String)
-     */
     protected String[] getOutputFileSwitch(String outputFile) {
         return new String[]{"-o", outputFile};
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.Linker#isCaseSensitive()
-     */
     public boolean isCaseSensitive() {
         // TODO Auto-generated method stub
         return false;

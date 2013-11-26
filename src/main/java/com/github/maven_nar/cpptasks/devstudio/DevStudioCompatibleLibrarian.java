@@ -47,9 +47,6 @@ public abstract class DevStudioCompatibleLibrarian extends CommandLineLinker {
     }
     protected void addStack(int stack, Vector args) {
     }
-    /* (non-Javadoc)
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineLinker#addEntry(int, java.util.Vector)
-     */
     protected void addEntry(String entry, Vector args) {
     }
     

@@ -192,9 +192,6 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
                     args.addElement(Integer.toString(stack));
             }
     }
-    /* (non-Javadoc)
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineLinker#addEntry(int, java.util.Vector)
-     */
     protected void addEntry(String entry, Vector args) {
             if (entry != null) {
                     args.addElement("-e");

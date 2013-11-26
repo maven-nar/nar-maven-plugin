@@ -73,10 +73,6 @@ public final class IccLinker extends CommandLineLinker {
     }
     protected void addIncremental(boolean incremental, Vector args) {
     }
-    /*
-     * @see CommandLineLinker#addLibrarySets(LibrarySet[], Vector, Vector,
-     *      Vector)
-     */
     protected String[] addLibrarySets(CCTask task, LibrarySet[] libsets,
             Vector preargs, Vector midargs, Vector endargs) {
         // If yo want to link against a library sitting in a dataset and
@@ -107,9 +103,6 @@ public final class IccLinker extends CommandLineLinker {
     }
     protected void addStack(int stack, Vector args) {
     }
-    /* (non-Javadoc)
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineLinker#addEntry(int, java.util.Vector)
-     */
     protected void addEntry(String entry, Vector args) {
     }
     
@@ -164,10 +157,6 @@ public final class IccLinker extends CommandLineLinker {
     public boolean isCaseSensitive() {
         return IccProcessor.isCaseSensitive();
     }
-    /*
-     * @see CommandLineLinker#link(Task, File, String[],
-     *      CommandLineLinkerConfiguration)
-     */
     public void link(CCTask task, File outputFile, String[] sourceFiles,
             CommandLineLinkerConfiguration config) throws BuildException {
         this.task = task;
@@ -181,9 +170,6 @@ public final class IccLinker extends CommandLineLinker {
         }
         super.link(task, outputFile, sourceFiles, config);
     }
-    /*
-     * @see CommandLineLinker#runCommand(Task, File, String[])
-     */
     protected int runCommand(CCTask task, File workingDir, String[] cmdline)
             throws BuildException {
         int rc = super.runCommand(task, workingDir, cmdline);
