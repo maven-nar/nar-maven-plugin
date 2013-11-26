@@ -126,7 +126,9 @@ public class GppLinker extends AbstractLdLinker {
         if (linkType.linkCPP()) {
             if (linkType.isStaticRuntime()) {
                 if (isDarwin()) {
-                    if (!isClang()) {
+                    if (isClang()) {
+                        task.log("Warning: clang cannot statically link to C++");
+                    } else {
                         runtimeLibrary = "-lstdc++-static";
                     }
                 } else {
@@ -144,7 +146,9 @@ public class GppLinker extends AbstractLdLinker {
 
         gccLibrary = null;
         if (linkType.isStaticRuntime()) {
-            if (!isClang()) {
+            if (isClang()) {
+                task.log("Warning: clang cannot statically link libgcc");
+            } else {
                 gccLibrary = "-static-libgcc";
             }
         } else {
@@ -152,7 +156,9 @@ public class GppLinker extends AbstractLdLinker {
                 // NOTE: added -fexceptions here for MacOS X
                 gccLibrary = "-fexceptions";
             } else {
-                if (!isClang()) {
+                if (isClang()) {
+                    task.log("Warning: clang cannot dynamically link libgcc");
+                } else {
                     gccLibrary = "-shared-libgcc";
                 }
             }
