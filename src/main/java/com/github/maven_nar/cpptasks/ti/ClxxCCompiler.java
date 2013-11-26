@@ -74,13 +74,6 @@ public class ClxxCCompiler extends CommandLineCCompiler {
         super(command, "-h", sourceExtensions, headerExtensions, ".o", false,
                 null, newEnvironment, env);
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineCompiler#addImpliedArgs(java.util.Vector,
-     *      boolean, boolean, boolean,
-     *      com.github.maven_nar.cpptasks.compiler.LinkType)
-     */
     protected void addImpliedArgs(
     		final Vector args, 
 			final boolean debug,
@@ -93,21 +86,9 @@ public class ClxxCCompiler extends CommandLineCCompiler {
             args.addElement("-gw");
         }
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineCompiler#addWarningSwitch(java.util.Vector,
-     *      int)
-     */
     protected void addWarningSwitch(Vector args, int warnings) {
         // TODO Auto-generated method stub
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineCompiler#getDefineSwitch(java.lang.StringBuffer,
-     *      java.lang.String, java.lang.String)
-     */
     protected void getDefineSwitch(StringBuffer buffer, String define,
             String value) {
         buffer.append("-d");
@@ -117,11 +98,6 @@ public class ClxxCCompiler extends CommandLineCCompiler {
             buffer.append(value);
         }
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineCompiler#getEnvironmentIncludePath()
-     */
     protected File[] getEnvironmentIncludePath() {
         File[] c_dir = CUtil.getPathFromEnvironment("C_DIR", ";");
         File[] cx_dir = CUtil.getPathFromEnvironment("C6X_C_DIR", ";");
@@ -140,19 +116,9 @@ public class ClxxCCompiler extends CommandLineCCompiler {
         }
         return combo;
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineCompiler#getIncludeDirSwitch(java.lang.String)
-     */
     protected String getIncludeDirSwitch(String source) {
         return "-I" + source;
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.Processor#getLinker(com.github.maven_nar.cpptasks.compiler.LinkType)
-     */
     public Linker getLinker(LinkType type) {
         if (type.isStaticLibrary()) {
             if (this == cl6x) {
@@ -171,20 +137,9 @@ public class ClxxCCompiler extends CommandLineCCompiler {
         }
         return ClxxLinker.getCl55Instance();
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineCompiler#getMaximumCommandLength()
-     */
     public int getMaximumCommandLength() {
         return 1024;
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineCompiler#getUndefineSwitch(java.lang.StringBuffer,
-     *      java.lang.String)
-     */
     protected void getUndefineSwitch(StringBuffer buffer, String define) {
         buffer.append("-u");
         buffer.append(define);

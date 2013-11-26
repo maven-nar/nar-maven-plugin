@@ -15,10 +15,8 @@
  *  limitations under the License.
  */
 package com.github.maven_nar.cpptasks.devstudio;
-import java.io.File;
-import java.io.IOException;
-import java.util.Vector;
 
+import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.CUtil;
 import com.github.maven_nar.cpptasks.TargetMatcher;
 import com.github.maven_nar.cpptasks.VersionInfo;
@@ -27,6 +25,9 @@ import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.platforms.WindowsPlatform;
 import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Vector;
 
 /**
  * Abstract base class for linkers that try to mimic the command line arguments
@@ -41,13 +42,13 @@ public abstract class DevStudioCompatibleLinker extends CommandLineLinker {
                 new String[]{".map", ".pdb", ".lnk", ".dll", ".tlb", ".rc", ".h"}, outputSuffix,
                 false, null);
     }
-    protected void addBase(long base, Vector args) {
+    protected void addBase(CCTask task, long base, Vector args) {
         if (base >= 0) {
             String baseAddr = Long.toHexString(base);
             args.addElement("/BASE:0x" + baseAddr);
         }
     }
-    protected void addFixed(Boolean fixed, Vector args) {
+    protected void addFixed(CCTask task, Boolean fixed, Vector args) {
         if (fixed != null) {
             if (fixed.booleanValue()) {
                 args.addElement("/FIXED");
@@ -56,7 +57,7 @@ public abstract class DevStudioCompatibleLinker extends CommandLineLinker {
             }
         }
     }
-    protected void addImpliedArgs(boolean debug, LinkType linkType, Vector args) {
+    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector args) {
         args.addElement("/NOLOGO");
         if (debug) {
             args.addElement("/DEBUG");
@@ -73,28 +74,25 @@ public abstract class DevStudioCompatibleLinker extends CommandLineLinker {
          if(linkType.isSubsystemConsole()) {
            args.addElement("/SUBSYSTEM:CONSOLE"); } }
     }
-    protected void addIncremental(boolean incremental, Vector args) {
+    protected void addIncremental(CCTask task, boolean incremental, Vector args) {
         if (incremental) {
             args.addElement("/INCREMENTAL:YES");
         } else {
             args.addElement("/INCREMENTAL:NO");
         }
     }
-    protected void addMap(boolean map, Vector args) {
+    protected void addMap(CCTask task, boolean map, Vector args) {
         if (map) {
             args.addElement("/MAP");
         }
     }
-    protected void addStack(int stack, Vector args) {
+    protected void addStack(CCTask task, int stack, Vector args) {
         if (stack >= 0) {
             String stackStr = Integer.toHexString(stack);
             args.addElement("/STACK:0x" + stackStr);
         }
     }
-    /* (non-Javadoc)
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineLinker#addEntry(int, java.util.Vector)
-     */
-    protected void addEntry(String entry, Vector args) {
+    protected void addEntry(CCTask task, String entry, Vector args) {
     	if (entry != null) {
     		args.addElement("/ENTRY:" + entry);
     	}

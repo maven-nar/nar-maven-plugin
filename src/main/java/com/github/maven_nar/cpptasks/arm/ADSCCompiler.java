@@ -176,11 +176,6 @@ public class ADSCCompiler extends CommandLineCCompiler {
         quoteFile(buf, source);
         return buf.toString();
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.Processor#getLinker(com.github.maven_nar.cpptasks.compiler.LinkType)
-     */
     public Linker getLinker(LinkType type) {
         if (type.isStaticLibrary()) {
             return ADSLibrarian.getInstance();
@@ -198,12 +193,7 @@ public class ADSCCompiler extends CommandLineCCompiler {
     public int getMaximumCommandLength() {
         return 1000;
     }
-    /*
-     * Adds command to undefine preprocessor macro
-     * 
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineCompiler#getUndefineSwitch(java.lang.StringBuffer,
-     *      java.lang.String)
-     */
+    /** Adds command to undefine preprocessor macro. */
     protected void getUndefineSwitch(StringBuffer buffer, String define) {
         buffer.append("-U");
         buffer.append(define);

@@ -15,12 +15,13 @@
  *  limitations under the License.
  */
 package com.github.maven_nar.cpptasks.devstudio;
-import java.io.File;
-import java.util.Vector;
-
+import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.compiler.CommandLineLinker;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
+
+import java.io.File;
+import java.util.Vector;
 
 /**
  * Abstract base adapter for librarians with command line options compatible
@@ -34,23 +35,9 @@ public abstract class DevStudioCompatibleLibrarian extends CommandLineLinker {
 			new String[]{".map", ".pdb", ".lnk", ".dll", ".tlb", ".rc", ".h"},
                 ".lib", false, null);
     }
-    protected void addBase(long base, Vector args) {
-    }
-    protected void addFixed(Boolean fixed, Vector args) {
-    }
-    protected void addImpliedArgs(boolean debug, LinkType linkType, Vector args) {
+
+    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector args) {
         args.addElement("/nologo");
-    }
-    protected void addIncremental(boolean incremental, Vector args) {
-    }
-    protected void addMap(boolean map, Vector args) {
-    }
-    protected void addStack(int stack, Vector args) {
-    }
-    /* (non-Javadoc)
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineLinker#addEntry(int, java.util.Vector)
-     */
-    protected void addEntry(String entry, Vector args) {
     }
     
     protected String getCommandFileSwitch(String cmdFile) {

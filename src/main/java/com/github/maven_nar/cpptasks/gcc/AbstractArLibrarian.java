@@ -15,18 +15,16 @@
  *  limitations under the License.
  */
 package com.github.maven_nar.cpptasks.gcc;
-import java.io.File;
-import java.util.Vector;
-
-
-import org.apache.tools.ant.BuildException;
 
 import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.VersionInfo;
 import com.github.maven_nar.cpptasks.compiler.CommandLineLinker;
 import com.github.maven_nar.cpptasks.compiler.CommandLineLinkerConfiguration;
-import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
+
+import java.io.File;
+
+import org.apache.tools.ant.BuildException;
 /**
  * Adapter for the "ar" tool
  * 
@@ -44,24 +42,7 @@ public abstract class AbstractArLibrarian extends CommandLineLinker {
                 outputExtension, isLibtool, libtoolLibrarian);
         this.outputPrefix = outputPrefix;
     }
-    public void addBase(long base, Vector args) {
-    }
-    public void addFixed(Boolean fixed, Vector args) {
-    }
-    public void addImpliedArgs(boolean debug, LinkType linkType, Vector args) {
-    }
-    public void addIncremental(boolean incremental, Vector args) {
-    }
-    public void addMap(boolean map, Vector args) {
-    }
-    public void addStack(int stack, Vector args) {
-    }
-    /* (non-Javadoc)
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineLinker#addEntry(int, java.util.Vector)
-     */
-    protected void addEntry(String entry, Vector args) {
-    }
-    
+
     public String getCommandFileSwitch(String commandFile) {
         return null;
     }

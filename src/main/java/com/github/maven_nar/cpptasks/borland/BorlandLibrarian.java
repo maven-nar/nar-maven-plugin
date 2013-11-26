@@ -15,10 +15,6 @@
  *  limitations under the License.
  */
 package com.github.maven_nar.cpptasks.borland;
-import java.io.File;
-import java.io.IOException;
-import java.util.Vector;
-import org.apache.tools.ant.BuildException;
 
 import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.CUtil;
@@ -28,6 +24,11 @@ import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
 import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Vector;
+
+import org.apache.tools.ant.BuildException;
 
 /**
  * Adapter for the Borland(r) tlib Librarian
@@ -43,24 +44,6 @@ public class BorlandLibrarian extends CommandLineLinker {
         super("tlib", "--version", new String[]{".obj"}, new String[0], ".lib", false,
                 null);
     }
-    protected void addBase(long base, Vector args) {
-    }
-    protected void addFixed(Boolean fixed, Vector args) {
-    }
-    protected void addImpliedArgs(boolean debug, LinkType linkType, Vector args) {
-    }
-    protected void addIncremental(boolean incremental, Vector args) {
-    }
-    protected void addMap(boolean map, Vector args) {
-    }
-    protected void addStack(int stack, Vector args) {
-    }
-    /* (non-Javadoc)
-     * @see com.github.maven_nar.cpptasks.compiler.CommandLineLinker#addEntry(int, java.util.Vector)
-     */
-    protected void addEntry(String entry, Vector args) {
-    }
-    
     protected String getCommandFileSwitch(String cmdFile) {
         //
         //  tlib requires quotes around paths containing -
