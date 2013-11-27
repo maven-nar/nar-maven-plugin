@@ -1,0 +1,911 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dependencies>
+   <includePath signature="/Isrc/include /I${env.XSBHOME}/include">
+      <source file="../../../../src/db/mm/MetamodellDb.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/db/mm/Metamodell.h"/>
+         <include file="../../../../src/include/ShoreStoreIntern.h"/>
+         <include file="../../../../src/db/mm/DocTypeDb.h"/>
+         <include file="../../../../src/db/mm/ObjTypeDb.h"/>
+         <include file="../../../../src/db/mm/RelTypeDb.h"/>
+      </source>
+      <source file="../../../../src/include/Transaction.h" lastModified="f14b43d130">
+         <include file="../../../../src/db/store/Transaction.h"/>
+      </source>
+      <source file="../../../../src/misc/librefpp/librefpp.h" lastModified="f6cdeca1c0">
+         <include file="../../../../src/misc/librefpp/CountedRef.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/RangeIteratorMem.h" lastModified="f706b6aff0">
+         <include file="../../../../src/include/ShoreStore.h"/>
+      </source>
+      <source file="../../../../src/db/store/DbMap.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/db/store/Container.h"/>
+         <include file="../../../../src/db/store/DbUnordered.h"/>
+         <include file="../../../../src/include/DbOId.h"/>
+      </source>
+      <source file="../../../../src/db/mm/SearchableDocsFilter.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/include/Filter.h"/>
+         <include file="../../../../src/db/mm/DocumentDb.h"/>
+      </source>
+      <source file="../../../../src/misc/os/ProcessLink.h" lastModified="f6cdeca1c1">
+         <include file="../../../../src/include/librefpp.h"/>
+         <include file="../../../../src/misc/os/AsyncIOStream.h"/>
+      </source>
+      <source file="../../../../src/db/mm/ObjTypeDb.h" lastModified="f6cdec9dda">
+         <include file="../../../../src/db/mm/ObjType.h"/>
+         <include file="../../../../src/db/mm/ResTypeDb.h"/>
+         <include file="../../../../src/include/ShoreStoreIntern.h"/>
+         <include file="../../../../src/db/mm/ObjectDb.h"/>
+         <include file="../../../../src/db/mm/DocTypeDb.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeOS/RangeIteratorOS.h" lastModified="f6cedcba9a">
+         <include file="../../../../src/include/ShoreStore.h"/>
+      </source>
+      <source file="../../../../src/db/mm/Modell.h" lastModified="f6cdec9dda">
+         <include file="../../../../src/include/ShoreStore.h"/>
+         <include file="../../../../src/db/mm/Document.h"/>
+         <include file="../../../../src/db/mm/Object.h"/>
+         <include file="../../../../src/db/mm/Relation.h"/>
+      </source>
+      <source file="../../../../src/include/DbRoot.h" lastModified="f14b43cd48">
+         <include file="../../../../src/db/store/DbRoot.h"/>
+      </source>
+      <source file="../../../../src/include/IteratorAdapter.h" lastModified="f14b43cd48">
+         <include file="../../../../src/db/store/IteratorAdapter.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/DbSetMemOrdered.h" lastModified="f706b6aff1">
+         <include file="../../../../src/db/store/storeMem/DbOId.h"/>
+         <include file="../../../../src/include/DbSet.h"/>
+         <include file="../../../../src/include/DbUnordered.h"/>
+         <include file="../../../../src/db/store/storeMem/ShoreStoreMem.h"/>
+         <include file="../../../../src/db/store/storeMem/KeyCmp.h"/>
+         <include file="../../../../src/include/Errors.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/KeyCmp.h" lastModified="f7168d7762">
+         <include file="../../../../src/db/store/storeMem/DbOId.h"/>
+         <include file="../../../../src/include/Utf8Ranker.h"/>
+      </source>
+      <source file="../../../../src/db/mm/ObjectDb.h" lastModified="f6cdec9dd9">
+         <include file="../../../../src/db/mm/Object.h"/>
+         <include file="../../../../src/db/mm/ResourceDb.h"/>
+         <include file="../../../../src/include/ShoreStoreIntern.h"/>
+         <include file="../../../../src/db/mm/ObjTypeDb.h"/>
+         <include file="../../../../src/db/mm/DocumentDb.h"/>
+      </source>
+      <source file="../../../../src/db/mm/SearchableDocTypesFilter.cpp" lastModified="f6cdec9dd8">
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/SearchableDocTypesFilter.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/DbOIdAny.h" lastModified="f6b509d010">
+      </source>
+      <source file="../../../../src/include/TraceExLog.h" lastModified="f14b43d130">
+         <include file="../../../../src/misc/trace/TraceExLog.h"/>
+      </source>
+      <source file="../../../../src/misc/trace/TraceExStack.h" lastModified="f6cdeca1c1">
+         <include file="../../../../src/misc/trace/TraceDynInfo.h"/>
+      </source>
+      <source file="../../../../src/db/mm/AbstractObjsIterator.cpp" lastModified="f6cdec9dd8">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/db/mm/Metamodell.h"/>
+         <include file="../../../../src/db/mm/AbstractObjsIterator.h"/>
+      </source>
+      <source file="../../../../src/db/mm/UndefDocsIterator.cpp" lastModified="f14b4a5528">
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/UndefDocsIterator.h"/>
+      </source>
+      <source file="../../../../src/include/DbMap.h" lastModified="f14b43cd48">
+         <include file="../../../../src/db/store/DbMap.h"/>
+      </source>
+      <source file="../../../../src/db/mm/Cardinality.h" lastModified="f6cdec9dd9">
+      </source>
+      <source file="../../../../src/db/store/storeMem/IteratorMemSetFiltered.h" lastModified="f706b6aff0">
+         <include file="../../../../src/include/ShoreStore.h"/>
+         <include file="../../../../src/db/store/storeMem/KeyCmp.h"/>
+      </source>
+      <source file="../../../../src/misc/error/ExRuntime.h" lastModified="f6cdeca1c0">
+         <include file="../../../../src/misc/error/ExceptionImpl.h"/>
+         <sysinclude file="../../../../../../../../usr/include/gcc/darwin/3.1/stdarg.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/DbOId.h" lastModified="f6e3bf7069">
+         <include file="../../../../src/db/store/DbRef.h"/>
+         <include file="../../../../src/db/store/storeMem/DbOIdAny.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeOS/ContainerFactoryOS.h" lastModified="f6cedcba99">
+         <include file="../../../../src/include/ContainerFactory.h"/>
+         <include file="../../../../src/db/store/storeOS/DbOId.h"/>
+         <include file="../../../../src/db/store/storeOS/DbSetOS.h"/>
+         <include file="../../../../src/db/store/storeOS/DbSetOSOrdered.h"/>
+         <include file="../../../../src/db/store/storeOS/DbMapOS.h"/>
+         <include file="../../../../src/include/DbUnordered.h"/>
+         <include file="../../../../src/db/store/storeOS/DbMultiMapOS.h"/>
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/include/DbType2Name.h"/>
+      </source>
+      <source file="../../../../src/db/store/ShoreStoreIntern.h" lastModified="f6d3c83461">
+         <include file="../../../../src/db/store/ShoreStore.h"/>
+         <include file="../../../../src/include/DbOIdAny.h"/>
+         <include file="../../../../src/include/DbOId.h"/>
+         <include file="../../../../src/db/store/Container.h"/>
+         <include file="../../../../src/db/store/DbMap.h"/>
+         <include file="../../../../src/db/store/DbMapOId.h"/>
+         <include file="../../../../src/db/store/DbMultiMap.h"/>
+         <include file="../../../../src/db/store/DbMultiMapOId.h"/>
+         <include file="../../../../src/db/store/DbSet.h"/>
+         <include file="../../../../src/db/store/DbSetOId.h"/>
+      </source>
+      <source file="../../../../src/db/store/DbType2Name.h" lastModified="f6cdec9dd8">
+      </source>
+      <source file="../../../../src/db/mm/ObjType.h" lastModified="f6cdec9dd9">
+         <include file="../../../../src/db/mm/ResType.h"/>
+         <include file="../../../../src/include/ShoreStore.h"/>
+         <include file="../../../../src/db/mm/Object.h"/>
+         <include file="../../../../src/db/mm/DocType.h"/>
+      </source>
+      <source file="../../../../src/db/mm/ResourceDb.cpp" lastModified="f14b4a5528">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/include/Utf8Ranker.h"/>
+         <include file="../../../../src/include/IteratorAdapter.h"/>
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/ResourceDb.h"/>
+         <include file="../../../../src/db/mm/RelationFilter.h"/>
+      </source>
+      <source file="../../../../src/db/store/DbSet.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/include/DbOId.h"/>
+         <include file="../../../../src/db/store/DbUnordered.h"/>
+         <include file="../../../../src/db/store/Container.h"/>
+      </source>
+      <source file="../../../../src/db/mm/AbstractDocsIterator.h" lastModified="f6cdec9dd9">
+         <include file="../../../../src/include/Iterator.h"/>
+         <include file="../../../../src/db/mm/Document.h"/>
+         <include file="../../../../src/db/mm/DocType.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeOS/DbOId.h" lastModified="f6cedcba9a">
+         <include file="../../../../src/include/DbRef.h"/>
+         <include file="../../../../src/db/store/storeOS/DbOIdAny.h"/>
+         <include file="../../../../src/include/ShoreStoreIntern.h"/>
+      </source>
+      <source file="../../../../src/misc/os/IOManager.h" lastModified="f2339cb692">
+         <include file="../../../../src/misc/os/AsyncIOManager.h"/>
+         <include file="../../../../src/misc/os/AsyncIOStream.h"/>
+         <include file="../../../../src/misc/os/ProcessLink.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/DbOIdCross.h" lastModified="f6b509d010">
+         <include file="../../../../src/db/store/storeMem/DbOIdAny.h"/>
+         <include file="../../../../src/include/ShoreStore.h"/>
+      </source>
+      <source file="../../../../src/misc/error/ExIOFile.h" lastModified="f6cdeca1c0">
+         <include file="../../../../src/misc/error/ExIO.h"/>
+         <sysinclude file="../../../../../../../../usr/include/gcc/darwin/3.1/stdarg.h"/>
+      </source>
+      <source file="../../../../src/include/Iterator.h" lastModified="f14b43cd48">
+         <include file="../../../../src/db/store/Iterator.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeOS/DbOIdAny.h" lastModified="f6d3c69a38">
+      </source>
+      <source file="../../../../src/db/store/storeOS/KeyOSDict.h" lastModified="f6cedcba99">
+         <include file="../../../../src/db/store/storeOS/KeyOSShared.h"/>
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/db/store/storeOS/RankerOS.h"/>
+      </source>
+      <source file="../../../../src/db/store/TransactionHandle.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/db/store/Transaction.h"/>
+         <include file="../../../../src/db/store/ShoreStore.h"/>
+      </source>
+      <source file="../../../../src/include/IOManager.h" lastModified="f14b43cd48">
+         <include file="../../../../src/misc/os/IOManager.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeOS/IteratorOSFiltered1.h" lastModified="f6cedcba9a">
+         <include file="../../../../src/include/ShoreStore.h"/>
+         <include file="../../../../src/db/store/storeOS/KeyOS.h"/>
+      </source>
+      <source file="../../../../src/include/DbSet.h" lastModified="f14b43cd48">
+         <include file="../../../../src/db/store/DbSet.h"/>
+      </source>
+      <source file="../../../../src/include/DbUnordered.h" lastModified="f14b43cd48">
+         <include file="../../../../src/db/store/DbUnordered.h"/>
+      </source>
+      <source file="../../../../src/misc/trace/TraceParInfoUnion.h" lastModified="f6cdeca1c1">
+         <include file="../../../../src/misc/trace/TraceParInfo.h"/>
+      </source>
+      <source file="../../../../src/misc/os/AsyncIOManager.h" lastModified="f667da4e79">
+         <include file="../../../../src/misc/os/AsyncIOStream.h"/>
+         <include file="../../../../src/misc/os/AsyncIOHandle.h"/>
+      </source>
+      <source file="../../../../src/db/store/ContainerFactory.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/include/DbOId.h"/>
+         <include file="../../../../src/db/store/DbSet.h"/>
+         <include file="../../../../src/db/store/DbMap.h"/>
+         <include file="../../../../src/db/store/DbMultiMap.h"/>
+         <include file="../../../../src/db/store/DbUnordered.h"/>
+      </source>
+      <source file="../../../../src/misc/error/ErrClass.h" lastModified="f6cdeca1c2">
+      </source>
+      <source file="../../../../src/misc/librefpp/CountedRef.h" lastModified="f6c999d200">
+         <include file="../../../../src/misc/librefpp/CountedBody.h"/>
+      </source>
+      <source file="../../../../src/db/mm/RelTypeDb.h" lastModified="f6cdec9dda">
+         <include file="../../../../src/db/mm/RelType.h"/>
+         <include file="../../../../src/db/mm/TypeDb.h"/>
+         <include file="../../../../src/db/mm/Cardinality.h"/>
+         <include file="../../../../src/include/ShoreStoreIntern.h"/>
+         <include file="../../../../src/db/mm/RelationDb.h"/>
+         <include file="../../../../src/db/mm/ResTypeDb.h"/>
+         <include file="../../../../src/db/mm/DocTypeDb.h"/>
+      </source>
+      <source file="../../../../src/db/mm/RelTypeDb.cpp" lastModified="f6d9bc4488">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/include/Utf8Ranker.h"/>
+         <include file="../../../../src/include/IteratorAdapter.h"/>
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/RelTypeDb.h"/>
+         <include file="../../../../src/db/mm/DocTypeDb.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/DbMultiMapMem.h" lastModified="f706b6aff3">
+         <include file="../../../../src/include/Iterator.h"/>
+         <include file="../../../../src/include/Filter.h"/>
+         <include file="../../../../src/include/DbMultiMap.h"/>
+         <include file="../../../../src/db/store/storeMem/IteratorMemMultiMapFiltered.h"/>
+         <include file="../../../../src/db/store/storeMem/KeyIteratorMultiMapMem.h"/>
+         <include file="../../../../src/include/DbUnordered.h"/>
+         <include file="../../../../src/db/store/storeMem/KeyCmp.h"/>
+         <include file="../../../../src/include/Errors.h"/>
+         <include file="../../../../src/db/store/storeMem/IteratorMemMultiMap.h"/>
+         <include file="../../../../src/db/store/storeMem/IteratorMemMapFiltered.h"/>
+         <include file="../../../../src/db/store/storeMem/SoloIteratorMem.h"/>
+         <include file="../../../../src/db/store/storeMem/KeyIteratorMem.h"/>
+         <include file="../../../../src/db/store/storeMem/RangeIteratorMem.h"/>
+      </source>
+      <source file="../../../../src/db/mm/DocTypeDb.h" lastModified="f6cdec9dd9">
+         <include file="../../../../src/db/mm/DocType.h"/>
+         <include file="../../../../src/db/mm/ResTypeDb.h"/>
+         <include file="../../../../src/include/ShoreStoreIntern.h"/>
+         <include file="../../../../src/db/mm/DocumentDb.h"/>
+      </source>
+      <source file="../../../../src/include/ShoreGlobals.h" lastModified="f14b43cd48">
+         <include file="../../../../src/misc/trace/ShoreGlobals.h"/>
+      </source>
+      <source file="../../../../src/db/mm/Resource.h" lastModified="f6cdec9dd9">
+         <include file="../../../../src/db/mm/Base.h"/>
+         <include file="../../../../src/db/mm/Relation.h"/>
+         <include file="../../../../src/db/mm/ResType.h"/>
+      </source>
+      <source file="../../../../src/db/mm/ModellDb.cpp" lastModified="f6cdec9dd8">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/db/mm/ModellDb.h"/>
+         <include file="../../../../src/include/IteratorAdapter.h"/>
+         <include file="../../../../src/include/DbRoot.h"/>
+         <include file="../../../../src/include/IOManager.h"/>
+         <include file="../../../../src/db/mm/mmDb.h"/>
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/RelationFilter.h"/>
+         <include file="../../../../src/db/mm/UndefDocsIterator.h"/>
+         <include file="../../../../src/db/mm/UndefObjsIterator.h"/>
+         <include file="../../../../src/db/mm/AbstractDocsIterator.h"/>
+         <include file="../../../../src/db/mm/AbstractObjsIterator.h"/>
+         <include file="../../../../src/db/mm/DocumentFilter.h"/>
+         <include file="../../../../src/db/mm/RelationIterator.h"/>
+         <include file="../../../../src/db/mm/DocumentDb.h"/>
+      </source>
+      <source file="../../../../src/db/mm/DocTypeDb.cpp" lastModified="f6d9bc4489">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/include/Utf8Ranker.h"/>
+         <include file="../../../../src/include/IteratorAdapter.h"/>
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/DocTypeDb.h"/>
+      </source>
+      <source file="../../../../src/db/mm/DocumentDb.cpp" lastModified="f14b4a5528">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/include/IOManager.h"/>
+         <include file="../../../../src/include/Utf8Ranker.h"/>
+         <include file="../../../../src/include/IteratorAdapter.h"/>
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/DocumentDb.h"/>
+         <include file="../../../../src/db/mm/ObjectDb.h"/>
+         <include file="../../../../src/db/mm/ModellDb.h"/>
+      </source>
+      <source file="../../../../src/db/mm/SearchableDocTypesFilter.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/include/Filter.h"/>
+         <include file="../../../../src/db/mm/DocTypeDb.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeOS/IteratorOS.h" lastModified="f6cedcba9a">
+         <include file="../../../../src/include/ShoreStore.h"/>
+      </source>
+      <source file="../../../../src/db/store/Transaction.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/include/ErrCode.h"/>
+      </source>
+      <source file="../../../../src/db/store/DbRoot.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/db/store/ShoreStoreIntern.h"/>
+         <include file="../../../../src/include/DbOIdCross.h"/>
+         <include file="../../../../src/include/DbOId.h"/>
+         <include file="../../../../src/db/store/TransactionHandle.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeOS/IteratorOS1.h" lastModified="f6cedcba9a">
+         <include file="../../../../src/include/ShoreStore.h"/>
+         <include file="../../../../src/db/store/storeOS/KeyOS.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeOS/KeyOSShared.h" lastModified="f6cedcba9a">
+         <include file="../../../../src/db/store/storeOS/KeyOS.h"/>
+         <include file="../../../../src/db/store/storeOS/DbOIdCross.h"/>
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/include/Utf8Ranker.h"/>
+         <include file="../../../../src/include/DbType2Name.h"/>
+         <include file="../../../../src/include/ShoreStoreIntern.h"/>
+      </source>
+      <source file="../../../../src/misc/os/AsyncIOHandle.h" lastModified="f6cdeca1c1">
+         <include file="../../../../src/misc/os/AsyncIOStream.h"/>
+      </source>
+      <source file="../../../../src/include/DbOIdCross.h" lastModified="f6d3cbc288">
+         <include file="../../../../src/db/store/storeMem/DbOIdCross.h"/>
+         <include file="../../../../src/db/store/storeOS/DbOIdCross.h"/>
+      </source>
+      <source file="../../../../src/db/store/DbSetOId.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/include/DbOId.h"/>
+         <include file="../../../../src/db/store/DbSet.h"/>
+         <include file="../../../../src/db/store/ContainerFactory.h"/>
+      </source>
+      <source file="../../../../src/misc/trace/TraceDynInfo.h" lastModified="f6cdeca1c1">
+         <include file="../../../../src/misc/trace/TraceExStack.h"/>
+         <include file="../../../../src/misc/trace/TraceStaticInfo.h"/>
+         <include file="../../../../src/misc/trace/TraceParInfoUnion.h"/>
+         <sysinclude file="../../../../../../../../usr/include/sys/timeb.h"/>
+      </source>
+      <source file="../../../../src/db/mm/UndefObjsIterator.h" lastModified="f6cdec9dd9">
+         <include file="../../../../src/include/Iterator.h"/>
+         <include file="../../../../src/db/mm/Object.h"/>
+         <include file="../../../../src/db/mm/ObjTypeDb.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeOS/SoloIteratorOS.h" lastModified="f6cedcba98">
+         <include file="../../../../src/include/ShoreStore.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeOS/DbMultiMapOS.h" lastModified="f6cedcba9c">
+         <include file="../../../../src/include/Iterator.h"/>
+         <include file="../../../../src/include/Filter.h"/>
+         <include file="../../../../src/include/DbMultiMap.h"/>
+         <include file="../../../../src/db/store/storeOS/KeyOSDict.h"/>
+         <include file="../../../../src/include/DbUnordered.h"/>
+         <include file="../../../../src/include/Errors.h"/>
+         <include file="../../../../src/db/store/storeOS/ShoreStoreOS.h"/>
+         <include file="../../../../src/db/store/storeOS/IteratorOS.h"/>
+         <include file="../../../../src/db/store/storeOS/RangeIteratorOS.h"/>
+         <include file="../../../../src/db/store/storeOS/IteratorOSFiltered.h"/>
+         <include file="../../../../src/db/store/storeOS/SoloIteratorOS.h"/>
+         <include file="../../../../src/db/store/storeOS/KeyIteratorOS.h"/>
+      </source>
+      <source file="../../../../src/include/Errors.h" lastModified="f14b43cd48">
+         <include file="../../../../src/db/store/Errors.h"/>
+      </source>
+      <source file="../../../../src/include/ShoreStoreIntern.h" lastModified="f14b43cd48">
+         <include file="../../../../src/db/store/ShoreStoreIntern.h"/>
+      </source>
+      <source file="../../../../src/db/mm/TypeDb.cpp" lastModified="f14b4a5529">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/TypeDb.h"/>
+      </source>
+      <source file="../../../../src/include/librefpp.h" lastModified="f14b43d130">
+         <include file="../../../../src/misc/librefpp/librefpp.h"/>
+      </source>
+      <source file="../../../../src/db/mm/BaseDb.h" lastModified="f6cdec9dd9">
+         <include file="../../../../src/db/mm/Base.h"/>
+         <include file="../../../../src/include/ShoreStoreIntern.h"/>
+      </source>
+      <source file="../../../../src/db/mm/SearchableDocsFilter.cpp" lastModified="f6cdec9dd8">
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/SearchableDocsFilter.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/IteratorMemMapFiltered.h" lastModified="f7168d7761">
+         <include file="../../../../src/include/ShoreStore.h"/>
+      </source>
+      <source file="../../../../src/db/mm/DocumentFilter.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/include/Filter.h"/>
+         <include file="../../../../src/db/mm/DocumentDb.h"/>
+      </source>
+      <source file="../../../../src/db/mm/UndefObjsIterator.cpp" lastModified="f14b4a5528">
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/UndefObjsIterator.h"/>
+      </source>
+      <source file="../../../../src/include/DbOId.h" lastModified="f6cee42508">
+         <include file="../../../../src/db/store/storeMem/DbOId.h"/>
+         <include file="../../../../src/db/store/storeOS/DbOId.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/MemDB.h" lastModified="f6b509d012">
+         <include file="../../../../src/db/store/storeMem/DbOIdAny.h"/>
+      </source>
+      <source file="../../../../src/db/store/DbUnordered.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+      </source>
+      <source file="../../../../src/db/mm/MetamodellDb.cpp" lastModified="f6d9bc4489">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/include/IteratorAdapter.h"/>
+         <include file="../../../../src/include/DbRoot.h"/>
+         <include file="../../../../src/include/IOManager.h"/>
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/ObjTypeDb.h"/>
+         <include file="../../../../src/db/mm/RelTypeDb.h"/>
+         <include file="../../../../src/db/mm/DocTypeDb.h"/>
+         <include file="../../../../src/db/mm/SearchableDocTypesFilter.h"/>
+         <include file="../../../../src/db/mm/TopoSort.h"/>
+         <include file="../../../../src/db/mm/ModellDb.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeOS/ShoreStoreOS.h" lastModified="f6cedcba9a">
+         <include file="../../../../src/include/ShoreStore.h"/>
+         <include file="../../../../src/db/store/storeOS/TransactionOS.h"/>
+      </source>
+      <source file="../../../../src/db/mm/RelationIterator.cpp" lastModified="f14b4a5528">
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/RelationIterator.h"/>
+      </source>
+      <source file="../../../../src/include/ContainerFactory.h" lastModified="f14b43cd48">
+         <include file="../../../../src/db/store/ContainerFactory.h"/>
+      </source>
+      <source file="../../../../src/db/mm/mmDb.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/include/TraceEx.h"/>
+      </source>
+      <source file="../../../../src/db/mm/Object.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/db/mm/Resource.h"/>
+         <include file="../../../../src/include/ShoreStore.h"/>
+         <include file="../../../../src/db/mm/Document.h"/>
+         <include file="../../../../src/db/mm/ObjType.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeOS/DbOIdCross.h" lastModified="f6d3c69a39">
+         <include file="../../../../src/db/store/storeOS/DbOIdAny.h"/>
+         <include file="../../../../src/include/ShoreStore.h"/>
+      </source>
+      <source file="../../../../src/misc/error/ExIO.h" lastModified="f6cdeca1c0">
+         <include file="../../../../src/misc/error/ExRuntime.h"/>
+         <sysinclude file="../../../../../../../../usr/include/gcc/darwin/3.1/stdarg.h"/>
+      </source>
+      <source file="../../../../src/db/mm/Document.h" lastModified="f6cdec9dd9">
+         <include file="../../../../src/db/mm/Resource.h"/>
+         <include file="../../../../src/include/ShoreStore.h"/>
+         <include file="../../../../src/db/mm/Object.h"/>
+         <include file="../../../../src/db/mm/Relation.h"/>
+         <include file="../../../../src/db/mm/DocType.h"/>
+      </source>
+      <source file="../../../../src/misc/os/AsyncIOStream.h" lastModified="f6cdeca1c2">
+         <include file="../../../../src/misc/os/AsyncIOHandle.h"/>
+         <include file="../../../../src/include/librefpp.h"/>
+         <sysinclude file="../../../../../../../../usr/include/sys/types.h"/>
+      </source>
+      <source file="../../../../src/misc/error/ErrCode.h" lastModified="f6cdeca1c0">
+         <include file="../../../../src/misc/error/ErrClass.h"/>
+      </source>
+      <source file="../../../../src/db/mm/Base.h" lastModified="f6cdec9dd9">
+         <include file="../../../../src/db/mm/Type.h"/>
+         <include file="../../../../src/include/Iterator.h"/>
+      </source>
+      <source file="../../../../src/include/DbOIdAny.h" lastModified="f6d3cbc288">
+         <include file="../../../../src/db/store/storeMem/DbOIdAny.h"/>
+         <include file="../../../../src/db/store/storeOS/DbOIdAny.h"/>
+      </source>
+      <source file="../../../../src/db/mm/TopoSort.h" lastModified="f6dee5965a">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/include/ShoreStore.h"/>
+         <include file="../../../../src/include/ShoreStoreIntern.h"/>
+      </source>
+      <source file="../../../../src/db/mm/TypeDb.h" lastModified="f6cdec9dd9">
+         <include file="../../../../src/db/mm/Type.h"/>
+         <include file="../../../../src/include/ShoreStoreIntern.h"/>
+      </source>
+      <source file="../../../../src/misc/trace/TraceEx.h" lastModified="f6cdeca1c2">
+         <include file="../../../../src/misc/trace/TraceParInfo.h"/>
+         <include file="../../../../src/misc/trace/TraceParInfoUnion.h"/>
+         <include file="../../../../src/misc/trace/TraceExLog.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/DbSetMem.h" lastModified="f7168d7762">
+         <include file="../../../../src/db/store/storeMem/DbOId.h"/>
+         <include file="../../../../src/db/store/storeMem/IteratorMemSet.h"/>
+         <include file="../../../../src/db/store/storeMem/IteratorMemSetFiltered.h"/>
+         <include file="../../../../src/include/DbSet.h"/>
+         <include file="../../../../src/db/store/storeMem/ShoreStoreMem.h"/>
+         <include file="../../../../src/include/DbUnordered.h"/>
+         <include file="../../../../src/db/store/storeMem/KeyCmp.h"/>
+         <include file="../../../../src/include/Errors.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeOS/IteratorOSFiltered.h" lastModified="f6cedcba9a">
+         <include file="../../../../src/include/ShoreStore.h"/>
+      </source>
+      <source file="../../../../src/misc/error/AllExceptions.h" lastModified="f6cdeca1c0">
+         <include file="../../../../src/misc/error/ExIOFile.h"/>
+         <include file="../../../../src/misc/error/ExIODb.h"/>
+         <include file="../../../../src/misc/error/ExInvalidResource.h"/>
+         <include file="../../../../src/misc/error/ExOS.h"/>
+         <include file="../../../../src/misc/error/ExSHORE.h"/>
+      </source>
+      <source file="../../../../src/db/mm/Cardinality.cpp" lastModified="f14b4a5528">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/db/mm/Cardinality.h"/>
+      </source>
+      <source file="../../../../src/include/AllExceptions.h" lastModified="f14b43cd48">
+         <include file="../../../../src/misc/error/AllExceptions.h"/>
+      </source>
+      <source file="../../../../src/db/mm/ResTypeDb.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/db/mm/ResType.h"/>
+         <include file="../../../../src/db/mm/TypeDb.h"/>
+      </source>
+      <source file="../../../../src/misc/error/ExceptionImpl.h" lastModified="f6cdeca1c3">
+         <include file="../../../../src/include/Exception.h"/>
+         <include file="../../../../src/include/TraceExLog.h"/>
+         <include file="../../../../src/misc/error/ErrCode.h"/>
+      </source>
+      <source file="../../../../src/misc/trace/TraceStaticInfo.h" lastModified="f6cdeca1c2">
+         <include file="../../../../src/misc/trace/TraceDynInfo.h"/>
+      </source>
+      <source file="../../../../src/db/store/DbRef.h" lastModified="f6cdec9dd9">
+         <include file="../../../../src/db/store/DbRefAny.h"/>
+         <include file="../../../../src/db/store/Errors.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/KeyIteratorMultiMapMem.h" lastModified="f706b6aff0">
+         <include file="../../../../src/include/Iterator.h"/>
+      </source>
+      <source file="../../../../src/db/mm/ResourceDb.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/db/mm/Resource.h"/>
+         <include file="../../../../src/db/mm/BaseDb.h"/>
+         <include file="../../../../src/include/DbLess.h"/>
+         <include file="../../../../src/include/ShoreStoreIntern.h"/>
+         <include file="../../../../src/db/mm/RelationDb.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/SoloIteratorMem.h" lastModified="f706b6aff1">
+         <include file="../../../../src/include/ShoreStore.h"/>
+      </source>
+      <source file="../../../../src/db/mm/BaseDb.cpp" lastModified="f14b4a5528">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/BaseDb.h"/>
+      </source>
+      <source file="../../../../src/db/store/ShoreStore.h" lastModified="f667da4e79">
+         <include file="../../../../src/db/store/DbRef.h"/>
+         <include file="../../../../src/db/store/Iterator.h"/>
+         <include file="../../../../src/db/store/Transaction.h"/>
+         <include file="../../../../src/db/store/Errors.h"/>
+      </source>
+      <source file="../../../../src/include/Filter.h" lastModified="f14b43cd48">
+         <include file="../../../../src/db/store/Filter.h"/>
+      </source>
+      <source file="../../../../src/db/mm/Metamodell.h" lastModified="f6cdec9ddb">
+         <include file="../../../../src/include/ShoreStore.h"/>
+         <include file="../../../../src/db/mm/Cardinality.h"/>
+         <include file="../../../../src/db/mm/Type.h"/>
+         <include file="../../../../src/db/mm/ObjType.h"/>
+         <include file="../../../../src/db/mm/DocType.h"/>
+         <include file="../../../../src/db/mm/RelType.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/IteratorMemMultiMap.h" lastModified="f706b6aff1">
+         <include file="../../../../src/include/ShoreStore.h"/>
+         <include file="../../../../src/db/store/storeMem/DbOIdAny.h"/>
+         <include file="../../../../src/db/store/storeMem/KeyCmp.h"/>
+      </source>
+      <source file="../../../../src/db/mm/DocType.h" lastModified="f6cdec9dd9">
+         <include file="../../../../src/db/mm/ResType.h"/>
+         <include file="../../../../src/include/ShoreStore.h"/>
+         <include file="../../../../src/db/mm/Document.h"/>
+      </source>
+      <source file="../../../../src/db/store/Iterator.h" lastModified="f6dee59658">
+         <include file="../../../../src/db/store/DbRef.h"/>
+         <include file="../../../../src/db/store/Errors.h"/>
+      </source>
+      <source file="../../../../src/db/store/Errors.h" lastModified="f6cdec9dd9">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/db/store/ShoreStore.h"/>
+      </source>
+      <source file="../../../../src/include/ShoreStore.h" lastModified="f14b43cd48">
+         <include file="../../../../src/db/store/ShoreStore.h"/>
+      </source>
+      <source file="../../../../src/db/store/DbMapOId.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/include/DbOId.h"/>
+         <include file="../../../../src/db/store/DbMap.h"/>
+         <include file="../../../../src/db/store/ContainerFactory.h"/>
+      </source>
+      <source file="../../../../src/include/DbRef.h" lastModified="f14b43cd48">
+         <include file="../../../../src/db/store/DbRef.h"/>
+      </source>
+      <source file="../../../../src/db/mm/Type.h" lastModified="f6cdec9dd9">
+      </source>
+      <source file="../../../../src/include/DbMultiMap.h" lastModified="f14b43cd48">
+         <include file="../../../../src/db/store/DbMultiMap.h"/>
+      </source>
+      <source file="../../../../src/db/mm/DocumentFilter.cpp" lastModified="f6cdec9dd8">
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/DocumentFilter.h"/>
+      </source>
+      <source file="../../../../src/include/DbLess.h" lastModified="f14b43cd48">
+         <include file="../../../../src/db/store/DbLess.h"/>
+      </source>
+      <source file="../../../../src/db/mm/AbstractDocsIterator.cpp" lastModified="f6cdec9dd8">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/db/mm/Metamodell.h"/>
+         <include file="../../../../src/db/mm/AbstractDocsIterator.h"/>
+      </source>
+      <source file="../../../../src/db/mm/AbstractObjsIterator.h" lastModified="f6cdec9dd9">
+         <include file="../../../../src/include/Iterator.h"/>
+         <include file="../../../../src/db/mm/Object.h"/>
+         <include file="../../../../src/db/mm/ObjType.h"/>
+      </source>
+      <source file="../../../../src/include/Utf8Ranker.h" lastModified="f14b43d130">
+         <include file="../../../../src/misc/unicode/Utf8Ranker.h"/>
+      </source>
+      <source file="../../../../src/misc/librefpp/CountedBody.h" lastModified="f6cdeca1c0">
+         <include file="../../../../src/include/TraceEx.h"/>
+      </source>
+      <source file="../../../../src/db/store/DbMultiMap.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/db/store/Container.h"/>
+         <include file="../../../../src/db/store/DbUnordered.h"/>
+         <include file="../../../../src/include/DbOId.h"/>
+      </source>
+      <source file="../../../../src/db/mm/DocumentDb.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/db/mm/Document.h"/>
+         <include file="../../../../src/db/mm/ResourceDb.h"/>
+         <include file="../../../../src/include/ShoreStoreIntern.h"/>
+         <include file="../../../../src/db/mm/DocTypeDb.h"/>
+         <include file="../../../../src/db/mm/ObjectDb.h"/>
+         <include file="../../../../src/db/mm/RelationDb.h"/>
+         <include file="../../../../src/db/mm/RelTypeDb.h"/>
+      </source>
+      <source file="../../../../src/db/mm/RelationDb.cpp" lastModified="f6cdec9dd8">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/RelationDb.h"/>
+         <include file="../../../../src/db/mm/ModellDb.h"/>
+      </source>
+      <source file="../../../../src/misc/unicode/Utf8Ranker.h" lastModified="f6cdeca1c0">
+      </source>
+      <source file="../../../../src/misc/error/ExSHORE.h" lastModified="f6cdeca1c0">
+         <include file="../../../../src/misc/error/ExceptionImpl.h"/>
+         <sysinclude file="../../../../../../../../usr/include/gcc/darwin/3.1/stdarg.h"/>
+      </source>
+      <source file="../../../../src/misc/trace/Exception.h" lastModified="f6cdeca1c1">
+      </source>
+      <source file="../../../../src/db/store/DbRefAny.h" lastModified="f6cdec9dd9">
+      </source>
+      <source file="../../../../src/misc/error/ExIODb.h" lastModified="f6cdeca1c0">
+         <include file="../../../../src/misc/error/ExIO.h"/>
+         <sysinclude file="../../../../../../../../usr/include/gcc/darwin/3.1/stdarg.h"/>
+      </source>
+      <source file="../../../../src/include/TraceEx.h" lastModified="f14b43d130">
+         <include file="../../../../src/misc/trace/TraceEx.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeOS/TransactionOS.h" lastModified="f6cedcba99">
+         <include file="../../../../src/include/Transaction.h"/>
+         <include file="../../../../src/include/ShoreStore.h"/>
+      </source>
+      <source file="../../../../src/db/mm/Relation.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/db/mm/Base.h"/>
+         <include file="../../../../src/include/ShoreStore.h"/>
+         <include file="../../../../src/db/mm/RelType.h"/>
+         <include file="../../../../src/db/mm/Resource.h"/>
+         <include file="../../../../src/db/mm/ResType.h"/>
+         <include file="../../../../src/db/mm/Document.h"/>
+         <include file="../../../../src/db/mm/Object.h"/>
+      </source>
+      <source file="../../../../src/db/mm/UndefDocsIterator.h" lastModified="f6cdec9dd9">
+         <include file="../../../../src/include/Iterator.h"/>
+         <include file="../../../../src/db/mm/Document.h"/>
+         <include file="../../../../src/db/mm/DocType.h"/>
+      </source>
+      <source file="../../../../src/misc/error/ExOS.h" lastModified="f6cdeca1c0">
+         <include file="../../../../src/misc/error/ExRuntime.h"/>
+         <sysinclude file="../../../../../../../../usr/include/gcc/darwin/3.1/stdarg.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/IteratorMemMap.h" lastModified="f706b6aff1">
+         <include file="../../../../src/include/ShoreStore.h"/>
+         <include file="../../../../src/db/store/storeMem/DbOIdAny.h"/>
+         <include file="../../../../src/db/store/storeMem/KeyCmp.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/IteratorMemMultiMapFiltered.h" lastModified="f706b6aff1">
+         <include file="../../../../src/include/ShoreStore.h"/>
+      </source>
+      <source file="../../../../src/db/store/Container.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/db/store/Iterator.h"/>
+         <include file="../../../../src/db/store/Filter.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeOS/DbSetOS.h" lastModified="f6cedcba9a">
+         <include file="../../../../src/db/store/storeOS/DbOId.h"/>
+         <include file="../../../../src/db/store/storeOS/IteratorOS.h"/>
+         <include file="../../../../src/db/store/storeOS/IteratorOSFiltered.h"/>
+         <include file="../../../../src/include/DbSet.h"/>
+         <include file="../../../../src/db/store/storeOS/ShoreStoreOS.h"/>
+         <include file="../../../../src/include/DbUnordered.h"/>
+         <include file="../../../../src/db/store/storeOS/KeyOSDict.h"/>
+         <include file="../../../../src/include/Errors.h"/>
+      </source>
+      <source file="../../../../src/include/Exception.h" lastModified="f14b43cd48">
+         <include file="../../../../src/misc/trace/Exception.h"/>
+      </source>
+      <source file="../../../../src/db/mm/RelationDb.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/db/mm/Relation.h"/>
+         <include file="../../../../src/db/mm/BaseDb.h"/>
+         <include file="../../../../src/include/ShoreStoreIntern.h"/>
+         <include file="../../../../src/db/mm/RelTypeDb.h"/>
+         <include file="../../../../src/db/mm/ResourceDb.h"/>
+         <include file="../../../../src/db/mm/DocumentDb.h"/>
+      </source>
+      <source file="../../../../src/db/mm/ResType.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/db/mm/Type.h"/>
+         <include file="../../../../src/include/Iterator.h"/>
+         <include file="../../../../src/db/mm/Resource.h"/>
+      </source>
+      <source file="../../../../src/db/store/DbMultiMapOId.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/include/DbOId.h"/>
+         <include file="../../../../src/db/store/DbMultiMap.h"/>
+         <include file="../../../../src/db/store/ContainerFactory.h"/>
+      </source>
+      <source file="../../../../src/db/mm/ObjectDb.cpp" lastModified="f14b4a5528">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/ObjectDb.h"/>
+         <include file="../../../../src/db/mm/ObjType.h"/>
+         <include file="../../../../src/db/mm/ModellDb.h"/>
+      </source>
+      <source file="../../../../src/db/mm/ResTypeDb.cpp" lastModified="f6cdec9dd8">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/include/Utf8Ranker.h"/>
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/ObjTypeDb.h"/>
+         <include file="../../../../src/db/mm/DocTypeDb.h"/>
+         <include file="../../../../src/db/mm/ResTypeDb.h"/>
+      </source>
+      <source file="../../../../src/include/ErrCode.h" lastModified="f14b43cd48">
+         <include file="../../../../src/misc/error/ErrCode.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/TransactionMem.h" lastModified="f6b509d010">
+         <include file="../../../../src/include/Transaction.h"/>
+         <include file="../../../../src/include/ShoreStore.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/DbMapMem.h" lastModified="f7168d7764">
+         <include file="../../../../src/db/store/DbMap.h"/>
+         <include file="../../../../src/db/store/Iterator.h"/>
+         <include file="../../../../src/db/store/Filter.h"/>
+         <include file="../../../../src/include/DbUnordered.h"/>
+         <include file="../../../../src/include/DbLess.h"/>
+         <include file="../../../../src/db/store/storeMem/KeyCmp.h"/>
+         <include file="../../../../src/db/store/storeMem/IteratorMemMap.h"/>
+         <include file="../../../../src/db/store/storeMem/IteratorMemMapFiltered.h"/>
+         <include file="../../../../src/include/Errors.h"/>
+         <include file="../../../../src/include/Iterator.h"/>
+         <include file="../../../../src/db/store/storeMem/IteratorMemMap.h"/>
+         <include file="../../../../src/db/store/storeMem/IteratorMemMapFiltered.h"/>
+         <include file="../../../../src/db/store/storeMem/SoloIteratorMem.h"/>
+         <include file="../../../../src/db/store/storeMem/KeyIteratorMem.h"/>
+      </source>
+      <source file="../../../../src/db/store/IteratorAdapter.h" lastModified="f6dee59658">
+         <include file="../../../../src/db/store/Iterator.h"/>
+         <include file="../../../../src/include/DbOId.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeOS/DbSetOSOrdered.h" lastModified="f6cedcba9a">
+         <include file="../../../../src/db/store/storeOS/DbOId.h"/>
+         <include file="../../../../src/db/store/storeOS/IteratorOS1.h"/>
+         <include file="../../../../src/db/store/storeOS/IteratorOSFiltered1.h"/>
+         <include file="../../../../src/include/DbSet.h"/>
+         <include file="../../../../src/include/DbUnordered.h"/>
+         <include file="../../../../src/db/store/storeOS/ShoreStoreOS.h"/>
+         <include file="../../../../src/include/Errors.h"/>
+      </source>
+      <source file="../../../../src/include/DbType2Name.h" lastModified="f14b43cd48">
+         <include file="../../../../src/db/store/DbType2Name.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/ShoreStoreMem.h" lastModified="f6b509d011">
+         <include file="../../../../src/db/store/ShoreStore.h"/>
+         <include file="../../../../src/db/store/storeMem/TransactionMem.h"/>
+         <include file="../../../../src/db/store/storeMem/MemDB.h"/>
+      </source>
+      <source file="../../../../src/db/store/Filter.h" lastModified="f6cdec9dd8">
+      </source>
+      <source file="../../../../src/db/store/storeOS/RankerOS.h" lastModified="f6cedcba9a">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/include/DbType2Name.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/ContainerFactoryMem.h" lastModified="f706b6ac09">
+         <include file="../../../../src/db/store/ContainerFactory.h"/>
+         <include file="../../../../src/include/ShoreStoreIntern.h"/>
+         <include file="../../../../src/db/store/storeMem/DbOId.h"/>
+         <include file="../../../../src/db/store/storeMem/DbSetMem.h"/>
+         <include file="../../../../src/db/store/storeMem/DbMapMem.h"/>
+         <include file="../../../../src/db/store/storeMem/DbMultiMapMem.h"/>
+         <include file="../../../../src/db/store/storeMem/DbSetMemOrdered.h"/>
+         <include file="../../../../src/db/store/DbUnordered.h"/>
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/include/DbType2Name.h"/>
+      </source>
+      <source file="../../../../src/db/mm/RelationFilter.cpp" lastModified="f14b4a5528">
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/RelationFilter.h"/>
+         <include file="../../../../src/db/mm/DocTypeDb.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeOS/KeyOS.h" lastModified="f6cedcba98">
+         <include file="../../../../src/db/store/storeOS/DbOId.h"/>
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/include/DbType2Name.h"/>
+         <include file="../../../../src/db/store/storeOS/RankerOS.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/IteratorMemSet.h" lastModified="f70515310a">
+         <include file="../../../../src/include/ShoreStore.h"/>
+         <include file="../../../../src/db/store/storeMem/DbOIdAny.h"/>
+         <include file="../../../../src/db/store/storeMem/KeyCmp.h"/>
+      </source>
+      <source file="../../../../src/db/mm/ModellDb.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/db/mm/Modell.h"/>
+         <include file="../../../../src/include/ShoreStoreIntern.h"/>
+         <include file="../../../../src/db/mm/DocumentDb.h"/>
+         <include file="../../../../src/db/mm/RelationDb.h"/>
+         <include file="../../../../src/db/mm/ObjectDb.h"/>
+      </source>
+      <source file="../../../../src/db/mm/RelationIterator.h" lastModified="f6d9bc4489">
+         <include file="../../../../src/db/mm/Relation.h"/>
+         <include file="../../../../src/include/Iterator.h"/>
+         <include file="../../../../src/db/mm/Resource.h"/>
+      </source>
+      <source file="../../../../src/misc/trace/TraceExLog.h" lastModified="f6cdeca1c1">
+         <include file="../../../../src/misc/trace/TraceDynInfo.h"/>
+         <include file="../../../../src/misc/trace/Exception.h"/>
+         <sysinclude file="../../../../../../../../usr/include/sys/timeb.h"/>
+      </source>
+      <source file="../../../../src/db/mm/mm-container.cpp" lastModified="f6dee5965a">
+         <include file="../../../../src/include/DbType2Name.h"/>
+         <include file="../../../../src/include/DbLess.h"/>
+         <include file="../../../../src/include/DbUnordered.h"/>
+         <include file="../../../../src/db/store/storeMem/ContainerFactoryMem.h"/>
+         <include file="../../../../src/db/store/storeOS/KeyOS.h"/>
+         <include file="../../../../src/db/store/storeOS/ContainerFactoryOS.h"/>
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/TypeDb.h"/>
+         <include file="../../../../src/db/mm/DocTypeDb.h"/>
+         <include file="../../../../src/db/mm/ObjTypeDb.h"/>
+         <include file="../../../../src/db/mm/RelTypeDb.h"/>
+         <include file="../../../../src/db/mm/DocumentDb.h"/>
+         <include file="../../../../src/db/mm/ObjectDb.h"/>
+         <include file="../../../../src/db/mm/RelationDb.h"/>
+      </source>
+      <source file="../../../../src/db/store/DbLess.h" lastModified="f6cdec9dd8">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+      </source>
+      <source file="../../../../src/misc/trace/TraceParInfo.h" lastModified="f6cdeca1c1">
+      </source>
+      <source file="../../../../src/db/mm/RelType.h" lastModified="f6cdec9dd9">
+         <include file="../../../../src/db/mm/Type.h"/>
+         <include file="../../../../src/include/ShoreStore.h"/>
+         <include file="../../../../src/db/mm/Relation.h"/>
+         <include file="../../../../src/db/mm/DocType.h"/>
+         <include file="../../../../src/db/mm/ResType.h"/>
+      </source>
+      <source file="../../../../src/misc/trace/ShoreGlobals.h" lastModified="f6cdeca1c0">
+         <include file="../../../../src/misc/trace/TraceEx.h"/>
+         <include file="../../../../src/include/AllExceptions.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeOS/KeyIteratorOS.h" lastModified="f6cedcba9c">
+         <include file="../../../../src/include/Iterator.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeOS/DbMapOS.h" lastModified="f6cedcba9d">
+         <include file="../../../../src/include/DbMap.h"/>
+         <include file="../../../../src/include/Iterator.h"/>
+         <include file="../../../../src/include/Filter.h"/>
+         <include file="../../../../src/db/store/storeOS/KeyOSDict.h"/>
+         <include file="../../../../src/include/DbUnordered.h"/>
+         <include file="../../../../src/include/Errors.h"/>
+         <include file="../../../../src/db/store/storeOS/IteratorOS.h"/>
+         <include file="../../../../src/db/store/storeOS/IteratorOSFiltered.h"/>
+         <include file="../../../../src/db/store/storeOS/SoloIteratorOS.h"/>
+         <include file="../../../../src/db/store/storeOS/KeyIteratorOS.h"/>
+         <include file="../../../../src/db/store/storeOS/ShoreStoreOS.h"/>
+         <include file="../../../../src/db/store/storeOS/KeyOS.h"/>
+      </source>
+      <source file="../../../../src/misc/error/ExInvalidResource.h" lastModified="f6cdeca1c0">
+         <include file="../../../../src/misc/error/ExRuntime.h"/>
+         <sysinclude file="../../../../../../../../usr/include/gcc/darwin/3.1/stdarg.h"/>
+      </source>
+      <source file="../../../../src/db/store/storeMem/KeyIteratorMem.h" lastModified="f706b6aff0">
+         <include file="../../../../src/include/Iterator.h"/>
+         <include file="../../../../src/db/store/storeMem/KeyCmp.h"/>
+      </source>
+      <source file="../../../../src/db/mm/RelationFilter.h" lastModified="f6d9bc4488">
+         <include file="../../../../src/db/mm/RelationDb.h"/>
+         <include file="../../../../src/include/Filter.h"/>
+      </source>
+      <source file="../../../../src/db/mm/ObjTypeDb.cpp" lastModified="f705153108">
+         <include file="../../../../src/include/ShoreGlobals.h"/>
+         <include file="../../../../src/include/Utf8Ranker.h"/>
+         <include file="../../../../src/include/IteratorAdapter.h"/>
+         <include file="../../../../src/db/mm/MetamodellDb.h"/>
+         <include file="../../../../src/db/mm/ObjTypeDb.h"/>
+         <include file="../../../../src/db/mm/ObjectDb.h"/>
+      </source>
+   </includePath>
+</dependencies>

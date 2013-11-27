@@ -1,0 +1,636 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="gcc  2.95.3 i486-suse-linux-c -g -fPIC -DPROJ_SAX2 -DPROJ_XMLPARSER -DPROJ_XMLUTIL -DPROJ_PARSERS -DPROJ_SAX4C -DPROJ_DOM -DPROJ_VALIDATORS -DXML_SINGLEDLL -DLINUX -D_REENTRANT -DXML_USE_INMEM_MESSAGELOADER -DXML_USE_PTHREADS -DXML_USE_NETACCESSOR_SOCKET -D_GNU_SOURCE -D__USE_GNU -I..">
+      <target file="LinuxPlatformUtils.o" lastModified="f75e50ed20">
+         <source file="../../src/xercesc/util/Platforms/Linux/LinuxPlatformUtils.cpp" lastModified="f52d1d1460"/>
+      </target>
+   </processor>
+   <processor signature="gcc  2.95.3 i486-suse-linux-c -g -fPIC -DPROJ_SAX2 -DPROJ_XMLPARSER -DPROJ_XMLUTIL -DPROJ_PARSERS -DPROJ_SAX4C -DPROJ_DOM -DPROJ_VALIDATORS -DXML_SINGLEDLL -DLINUX -D_REENTRANT -DXML_USE_INMEM_MESSAGELOADER -DXML_USE_PTHREADS -DXML_USE_NETACCESSOR_SOCKET -I..">
+      <target file="DayDatatypeValidator.o" lastModified="f75e4feb50">
+         <source file="../../src/xercesc/validators/datatype/DayDatatypeValidator.cpp" lastModified="f6fe655e78"/>
+      </target>
+      <target file="DOMBuilderImpl.o" lastModified="f75e4cce70">
+         <source file="../../src/xercesc/parsers/DOMBuilderImpl.cpp" lastModified="f7211e8778"/>
+      </target>
+      <target file="StringPool.o" lastModified="f75e50ba58">
+         <source file="../../src/xercesc/util/StringPool.cpp" lastModified="f53b93bb48"/>
+      </target>
+      <target file="IGXMLScanner2.o" lastModified="f75e4fe380">
+         <source file="../../src/xercesc/internal/IGXMLScanner2.cpp" lastModified="f6fe622a28"/>
+      </target>
+      <target file="QNameDatatypeValidator.o" lastModified="f75e4d18a8">
+         <source file="../../src/xercesc/validators/datatype/QNameDatatypeValidator.cpp" lastModified="f52d2b6858"/>
+      </target>
+      <target file="IC_Selector.o" lastModified="f75e4d3018">
+         <source file="../../src/xercesc/validators/schema/identity/IC_Selector.cpp" lastModified="f52d3101f0"/>
+      </target>
+      <target file="DateTimeValidator.o" lastModified="f75e4ef538">
+         <source file="../../src/xercesc/validators/datatype/DateTimeValidator.cpp" lastModified="f6fe655e78"/>
+      </target>
+      <target file="DatatypeValidator.o" lastModified="f75e50b670">
+         <source file="../../src/xercesc/validators/datatype/DatatypeValidator.cpp" lastModified="f52d2b6470"/>
+      </target>
+      <target file="InputSource.o" lastModified="f75e4fe768">
+         <source file="../../src/xercesc/sax/InputSource.cpp" lastModified="f532e77c78"/>
+      </target>
+      <target file="ListDatatypeValidator.o" lastModified="f75e4e0308">
+         <source file="../../src/xercesc/validators/datatype/ListDatatypeValidator.cpp" lastModified="f52f8f7008"/>
+      </target>
+      <target file="DateDatatypeValidator.o" lastModified="f75e4cbed0">
+         <source file="../../src/xercesc/validators/datatype/DateDatatypeValidator.cpp" lastModified="f6fe655e78"/>
+      </target>
+      <target file="RangeTokenMap.o" lastModified="f75e4e6c80">
+         <source file="../../src/xercesc/util/regx/RangeTokenMap.cpp" lastModified="f53b93bf30"/>
+      </target>
+      <target file="HashXMLCh.o" lastModified="f75e4c8ff0">
+         <source file="../../src/xercesc/util/HashXMLCh.cpp" lastModified="f52d3599b8"/>
+      </target>
+      <target file="XercesElementWildcard.o" lastModified="f75e4cbae8">
+         <source file="../../src/xercesc/validators/schema/XercesElementWildcard.cpp" lastModified="f14f873f70"/>
+      </target>
+      <target file="DFAContentModel.o" lastModified="f75e4fa8e8">
+         <source file="../../src/xercesc/validators/common/DFAContentModel.cpp" lastModified="f53b93bf30"/>
+      </target>
+      <target file="DateTimeDatatypeValidator.o" lastModified="f75e509730">
+         <source file="../../src/xercesc/validators/datatype/DateTimeDatatypeValidator.cpp" lastModified="f6fe655e78"/>
+      </target>
+      <target file="VecAttrListImpl.o" lastModified="f75e4cda28">
+         <source file="../../src/xercesc/internal/VecAttrListImpl.cpp" lastModified="f52d12b808"/>
+      </target>
+      <target file="IDREFDatatypeValidator.o" lastModified="f75e5054c8">
+         <source file="../../src/xercesc/validators/datatype/IDREFDatatypeValidator.cpp" lastModified="f532ed50a8"/>
+      </target>
+      <target file="VecAttributesImpl.o" lastModified="f75e501e18">
+         <source file="../../src/xercesc/internal/VecAttributesImpl.cpp" lastModified="f532e774a8"/>
+      </target>
+      <target file="XMLAttDef.o" lastModified="f75e4d43a0">
+         <source file="../../src/xercesc/framework/XMLAttDef.cpp" lastModified="f532e76cd8"/>
+      </target>
+      <target file="XMLMsgLoader.o" lastModified="f75e4f4358">
+         <source file="../../src/xercesc/util/XMLMsgLoader.cpp" lastModified="f52d3883d0"/>
+      </target>
+      <target file="IC_KeyRef.o" lastModified="f75e4dff20">
+         <source file="../../src/xercesc/validators/schema/identity/IC_KeyRef.cpp" lastModified="f52d3101f0"/>
+      </target>
+      <target file="ConditionToken.o" lastModified="f75e4fb4a0">
+         <source file="../../src/xercesc/util/regx/ConditionToken.cpp" lastModified="f14fa03de0"/>
+      </target>
+      <target file="UnionToken.o" lastModified="f75e4da160">
+         <source file="../../src/xercesc/util/regx/UnionToken.cpp" lastModified="f53b93bf30"/>
+      </target>
+      <target file="InMemMsgLoader.o" lastModified="f75e506080">
+         <source file="../../src/xercesc/util/MsgLoaders/InMemory/InMemMsgLoader.cpp" lastModified="f52d15c548"/>
+      </target>
+      <target file="ENTITYDatatypeValidator.o" lastModified="f75e5025e8">
+         <source file="../../src/xercesc/validators/datatype/ENTITYDatatypeValidator.cpp" lastModified="f52d2b6470"/>
+      </target>
+      <target file="XMLEntityDecl.o" lastModified="f75e4fbc70">
+         <source file="../../src/xercesc/framework/XMLEntityDecl.cpp" lastModified="f54da203f8"/>
+      </target>
+      <target file="EncodingValidator.o" lastModified="f75e4cbae8">
+         <source file="../../src/xercesc/util/EncodingValidator.cpp" lastModified="f3badfa580"/>
+      </target>
+      <target file="ContentSpecNode.o" lastModified="f75e4f9948">
+         <source file="../../src/xercesc/validators/common/ContentSpecNode.cpp" lastModified="f53b93bf30"/>
+      </target>
+      <target file="ReaderMgr.o" lastModified="f75e4deb98">
+         <source file="../../src/xercesc/internal/ReaderMgr.cpp" lastModified="f6fe622a28"/>
+      </target>
+      <target file="XMLElementDecl.o" lastModified="f75e4fef38">
+         <source file="../../src/xercesc/framework/XMLElementDecl.cpp" lastModified="f53b93b760"/>
+      </target>
+      <target file="SAX2XMLReaderImpl.o" lastModified="f75e4dc488">
+         <source file="../../src/xercesc/parsers/SAX2XMLReaderImpl.cpp" lastModified="f6fbf9c160"/>
+      </target>
+      <target file="IGXMLScanner.o" lastModified="f75e50b288">
+         <source file="../../src/xercesc/internal/IGXMLScanner.cpp" lastModified="f7438ecc50"/>
+      </target>
+      <target file="IC_Key.o" lastModified="f75e4dad18">
+         <source file="../../src/xercesc/validators/schema/identity/IC_Key.cpp" lastModified="f52d3101f0"/>
+      </target>
+      <target file="RangeFactory.o" lastModified="f75e4caf30">
+         <source file="../../src/xercesc/util/regx/RangeFactory.cpp" lastModified="f14fa03de0"/>
+      </target>
+      <target file="XMLUTF8Transcoder.o" lastModified="f75e502db8">
+         <source file="../../src/xercesc/util/XMLUTF8Transcoder.cpp" lastModified="f40d0c5bf0"/>
+      </target>
+      <target file="SchemaSymbols.o" lastModified="f75e4d0cf0">
+         <source file="../../src/xercesc/validators/schema/SchemaSymbols.cpp" lastModified="f14f873f70"/>
+      </target>
+      <target file="UnicodeRangeFactory.o" lastModified="f75e4d7a50">
+         <source file="../../src/xercesc/util/regx/UnicodeRangeFactory.cpp" lastModified="f14fa041c8"/>
+      </target>
+      <target file="XPathMatcherStack.o" lastModified="f75e4cc6a0">
+         <source file="../../src/xercesc/validators/schema/identity/XPathMatcherStack.cpp" lastModified="f53b93cae8"/>
+      </target>
+      <target file="RangeToken.o" lastModified="f75e4d4b70">
+         <source file="../../src/xercesc/util/regx/RangeToken.cpp" lastModified="f532e78060"/>
+      </target>
+      <target file="ParenToken.o" lastModified="f75e4cc6a0">
+         <source file="../../src/xercesc/util/regx/ParenToken.cpp" lastModified="f14fa03de0"/>
+      </target>
+      <target file="XercesDOMParser.o" lastModified="f75e503d58">
+         <source file="../../src/xercesc/parsers/XercesDOMParser.cpp" lastModified="f71a8f40f0"/>
+      </target>
+      <target file="XMLUTF16Transcoder.o" lastModified="f75e4ce9c8">
+         <source file="../../src/xercesc/util/XMLUTF16Transcoder.cpp" lastModified="f14fa4e548"/>
+      </target>
+      <target file="URLInputSource.o" lastModified="f75e4ce9c8">
+         <source file="../../src/xercesc/framework/URLInputSource.cpp" lastModified="f532e76cd8"/>
+      </target>
+      <target file="PanicHandler.o" lastModified="f75e4c97c0">
+         <source file="../../src/xercesc/util/PanicHandler.cpp" lastModified="f3d3bf3340"/>
+      </target>
+      <target file="XMLBuffer.o" lastModified="f75e4dc870">
+         <source file="../../src/xercesc/framework/XMLBuffer.cpp" lastModified="f52d126218"/>
+      </target>
+      <target file="LocalFileFormatTarget.o" lastModified="f75e50c9f8">
+         <source file="../../src/xercesc/framework/LocalFileFormatTarget.cpp" lastModified="f532e76cd8"/>
+      </target>
+      <target file="BinMemInputStream.o" lastModified="f75e50ba58">
+         <source file="../../src/xercesc/util/BinMemInputStream.cpp" lastModified="f52ef34390"/>
+      </target>
+      <target file="ParserForXMLSchema.o" lastModified="f75e501260">
+         <source file="../../src/xercesc/util/regx/ParserForXMLSchema.cpp" lastModified="f52d21bfb0"/>
+      </target>
+      <target file="XMLScanner.o" lastModified="f75e50d998">
+         <source file="../../src/xercesc/internal/XMLScanner.cpp" lastModified="f6fe622a28"/>
+      </target>
+      <target file="DefaultPanicHandler.o" lastModified="f75e4fc828">
+         <source file="../../src/xercesc/util/DefaultPanicHandler.cpp" lastModified="f3d3bf3340"/>
+      </target>
+      <target file="MixedContentModel.o" lastModified="f75e4e0ec0">
+         <source file="../../src/xercesc/validators/common/MixedContentModel.cpp" lastModified="f53b93bf30"/>
+      </target>
+      <target file="XPathSymbols.o" lastModified="f75e4d9990">
+         <source file="../../src/xercesc/validators/schema/identity/XPathSymbols.cpp" lastModified="f14f8566c8"/>
+      </target>
+      <target file="AbstractStringValidator.o" lastModified="f75e4ed9e0">
+         <source file="../../src/xercesc/validators/datatype/AbstractStringValidator.cpp" lastModified="f52f8f7008"/>
+      </target>
+      <target file="DecimalDatatypeValidator.o" lastModified="f75e508f60">
+         <source file="../../src/xercesc/validators/datatype/DecimalDatatypeValidator.cpp" lastModified="f6fe655e78"/>
+      </target>
+      <target file="CMBinaryOp.o" lastModified="f75e508790">
+         <source file="../../src/xercesc/validators/common/CMBinaryOp.cpp" lastModified="f52d26d478"/>
+      </target>
+      <target file="HexBinaryDatatypeValidator.o" lastModified="f75e4e64b0">
+         <source file="../../src/xercesc/validators/datatype/HexBinaryDatatypeValidator.cpp" lastModified="f52d2b6470"/>
+      </target>
+      <target file="NOTATIONDatatypeValidator.o" lastModified="f75e4c9ba8">
+         <source file="../../src/xercesc/validators/datatype/NOTATIONDatatypeValidator.cpp" lastModified="f52f8f7008"/>
+      </target>
+      <target file="DatatypeValidatorFactory.o" lastModified="f75e503970">
+         <source file="../../src/xercesc/validators/datatype/DatatypeValidatorFactory.cpp" lastModified="f53b93c318"/>
+      </target>
+      <target file="XMLSchemaDescriptionImpl.o" lastModified="f75e4c9f90">
+         <source file="../../src/xercesc/validators/schema/XMLSchemaDescriptionImpl.cpp" lastModified="f6b95a7138"/>
+      </target>
+      <target file="AbstractDOMParser.o" lastModified="f75e4d66c8">
+         <source file="../../src/xercesc/parsers/AbstractDOMParser.cpp" lastModified="f728d1b490"/>
+      </target>
+      <target file="FieldActivator.o" lastModified="f75e4d5b10">
+         <source file="../../src/xercesc/validators/schema/identity/FieldActivator.cpp" lastModified="f54da207e0"/>
+      </target>
+      <target file="XercesGroupInfo.o" lastModified="f75e4d0908">
+         <source file="../../src/xercesc/validators/schema/XercesGroupInfo.cpp" lastModified="f53b93c700"/>
+      </target>
+      <target file="TimeDatatypeValidator.o" lastModified="f75e4f1090">
+         <source file="../../src/xercesc/validators/datatype/TimeDatatypeValidator.cpp" lastModified="f6fe655e78"/>
+      </target>
+      <target file="HexBin.o" lastModified="f75e4f7df0">
+         <source file="../../src/xercesc/util/HexBin.cpp" lastModified="f14fa4dd78"/>
+      </target>
+      <target file="SAXException.o" lastModified="f75e4deb98">
+         <source file="../../src/xercesc/sax/SAXException.cpp" lastModified="f6fbf9c160"/>
+      </target>
+      <target file="Match.o" lastModified="f75e4ff320">
+         <source file="../../src/xercesc/util/regx/Match.cpp" lastModified="f52e46f630"/>
+      </target>
+      <target file="XMLReader.o" lastModified="f75e4ffaf0">
+         <source file="../../src/xercesc/internal/XMLReader.cpp" lastModified="f62396d7b8"/>
+      </target>
+      <target file="DoubleDatatypeValidator.o" lastModified="f75e50e550">
+         <source file="../../src/xercesc/validators/datatype/DoubleDatatypeValidator.cpp" lastModified="f53b93c318"/>
+      </target>
+      <target file="XSDDOMParser.o" lastModified="f75e4f8d90">
+         <source file="../../src/xercesc/validators/schema/XSDDOMParser.cpp" lastModified="f5e6992640"/>
+      </target>
+      <target file="XMemory.o" lastModified="f75e4d9d78">
+         <source file="../../src/xercesc/util/XMemory.cpp" lastModified="f739e11758"/>
+      </target>
+      <target file="XMLGrammarPoolImpl.o" lastModified="f75e4cab48">
+         <source file="../../src/xercesc/internal/XMLGrammarPoolImpl.cpp" lastModified="f6b951d618"/>
+      </target>
+      <target file="DTDGrammar.o" lastModified="f75e5083a8">
+         <source file="../../src/xercesc/validators/DTD/DTDGrammar.cpp" lastModified="f6fe65e730"/>
+      </target>
+      <target file="BMPattern.o" lastModified="f75e4d14c0">
+         <source file="../../src/xercesc/util/regx/BMPattern.cpp" lastModified="f52d21bfb0"/>
+      </target>
+      <target file="GeneralAttributeCheck.o" lastModified="f75e4d89f0">
+         <source file="../../src/xercesc/validators/schema/GeneralAttributeCheck.cpp" lastModified="f52d2f11d8"/>
+      </target>
+      <target file="HeaderDummy.o" lastModified="f75e50b670">
+         <source file="../../src/xercesc/util/HeaderDummy.cpp" lastModified="f14fa4dd78"/>
+      </target>
+      <target file="TokenFactory.o" lastModified="f75e50dd80">
+         <source file="../../src/xercesc/util/regx/TokenFactory.cpp" lastModified="f53b93bf30"/>
+      </target>
+      <target file="XSDLocator.o" lastModified="f75e4cbae8">
+         <source file="../../src/xercesc/validators/schema/XSDLocator.cpp" lastModified="f14f873f70"/>
+      </target>
+      <target file="XML88591Transcoder.o" lastModified="f75e4d2848">
+         <source file="../../src/xercesc/util/XML88591Transcoder.cpp" lastModified="f14fa4e548"/>
+      </target>
+      <target file="XML256TableTranscoder.o" lastModified="f75e4d3400">
+         <source file="../../src/xercesc/util/XML256TableTranscoder.cpp" lastModified="f14fa4e548"/>
+      </target>
+      <target file="ASCIIRangeFactory.o" lastModified="f75e4fc828">
+         <source file="../../src/xercesc/util/regx/ASCIIRangeFactory.cpp" lastModified="f14fa03de0"/>
+      </target>
+      <target file="XercesXPath.o" lastModified="f75e4cb700">
+         <source file="../../src/xercesc/validators/schema/identity/XercesXPath.cpp" lastModified="f53b93cae8"/>
+      </target>
+      <target file="DOMXPathException.o" lastModified="f75e4d5b10">
+         <source file="../../src/xercesc/dom/DOMXPathException.cpp" lastModified="f71f1f8710"/>
+      </target>
+      <target file="DTDElementDecl.o" lastModified="f75e505c98">
+         <source file="../../src/xercesc/validators/DTD/DTDElementDecl.cpp" lastModified="f53b93bf30"/>
+      </target>
+      <target file="ValueStoreCache.o" lastModified="f75e4d3fb8">
+         <source file="../../src/xercesc/validators/schema/identity/ValueStoreCache.cpp" lastModified="f56680bec8"/>
+      </target>
+      <target file="MemBufFormatTarget.o" lastModified="f75e500a90">
+         <source file="../../src/xercesc/framework/MemBufFormatTarget.cpp" lastModified="f532e76cd8"/>
+      </target>
+      <target file="AnySimpleTypeDatatypeValidator.o" lastModified="f75e4dd428">
+         <source file="../../src/xercesc/validators/datatype/AnySimpleTypeDatatypeValidator.cpp" lastModified="f52d2b6470"/>
+      </target>
+      <target file="UnixHTTPURLInputStream.o" lastModified="f75e4f08c0">
+         <source file="../../src/xercesc/util/NetAccessors/Socket/UnixHTTPURLInputStream.cpp" lastModified="f534aecb10"/>
+      </target>
+      <target file="SchemaGrammar.o" lastModified="f75e4d0138">
+         <source file="../../src/xercesc/validators/schema/SchemaGrammar.cpp" lastModified="f6b9585a10"/>
+      </target>
+      <target file="XMLUniCharacter.o" lastModified="f75e4da930">
+         <source file="../../src/xercesc/util/regx/XMLUniCharacter.cpp" lastModified="f251b2a1f8"/>
+      </target>
+      <target file="FloatDatatypeValidator.o" lastModified="f75e50c228">
+         <source file="../../src/xercesc/validators/datatype/FloatDatatypeValidator.cpp" lastModified="f53b93c318"/>
+      </target>
+      <target file="SchemaElementDecl.o" lastModified="f75e4d7668">
+         <source file="../../src/xercesc/validators/schema/SchemaElementDecl.cpp" lastModified="f53b93c700"/>
+      </target>
+      <target file="AllContentModel.o" lastModified="f75e4e5ce0">
+         <source file="../../src/xercesc/validators/common/AllContentModel.cpp" lastModified="f53b93bf30"/>
+      </target>
+      <target file="XMLAbstractDoubleFloat.o" lastModified="f75e4fc058">
+         <source file="../../src/xercesc/util/XMLAbstractDoubleFloat.cpp" lastModified="f52f8f5c80"/>
+      </target>
+      <target file="CMAny.o" lastModified="f75e4d4788">
+         <source file="../../src/xercesc/validators/common/CMAny.cpp" lastModified="f52d26d478"/>
+      </target>
+      <target file="IdentityConstraint.o" lastModified="f75e509348">
+         <source file="../../src/xercesc/validators/schema/identity/IdentityConstraint.cpp" lastModified="f52d3101f0"/>
+      </target>
+      <target file="KVStringPair.o" lastModified="f75e4cda28">
+         <source file="../../src/xercesc/util/KVStringPair.cpp" lastModified="f52f8f5c80"/>
+      </target>
+      <target file="ClosureToken.o" lastModified="f75e4fc058">
+         <source file="../../src/xercesc/util/regx/ClosureToken.cpp" lastModified="f14fa03de0"/>
+      </target>
+      <target file="TransService.o" lastModified="f75e506850">
+         <source file="../../src/xercesc/util/TransService.cpp" lastModified="f52d387fe8"/>
+      </target>
+      <target file="BitSet.o" lastModified="f75e4ce5e0">
+         <source file="../../src/xercesc/util/BitSet.cpp" lastModified="f52d3599b8"/>
+      </target>
+      <target file="XSDErrorReporter.o" lastModified="f75e4e5510">
+         <source file="../../src/xercesc/validators/schema/XSDErrorReporter.cpp" lastModified="f3d3be0e48"/>
+      </target>
+      <target file="IDDatatypeValidator.o" lastModified="f75e4fc828">
+         <source file="../../src/xercesc/validators/datatype/IDDatatypeValidator.cpp" lastModified="f532ed50a8"/>
+      </target>
+      <target file="Wrapper4DOMInputSource.o" lastModified="f75e4caf30">
+         <source file="../../src/xercesc/framework/Wrapper4DOMInputSource.cpp" lastModified="f579d6ba18"/>
+      </target>
+      <target file="NCNameDatatypeValidator.o" lastModified="f75e506c38">
+         <source file="../../src/xercesc/validators/datatype/NCNameDatatypeValidator.cpp" lastModified="f52d2b6470"/>
+      </target>
+      <target file="BinFileInputStream.o" lastModified="f75e5077f0">
+         <source file="../../src/xercesc/util/BinFileInputStream.cpp" lastModified="f52ef34390"/>
+      </target>
+      <target file="XMLRangeFactory.o" lastModified="f75e4ff320">
+         <source file="../../src/xercesc/util/regx/XMLRangeFactory.cpp" lastModified="f53b93bf30"/>
+      </target>
+      <target file="XMLWin1252Transcoder.o" lastModified="f75e4d18a8">
+         <source file="../../src/xercesc/util/XMLWin1252Transcoder.cpp" lastModified="f14fa4e548"/>
+      </target>
+      <target file="DTDScanner.o" lastModified="f75e500a90">
+         <source file="../../src/xercesc/validators/DTD/DTDScanner.cpp" lastModified="f64dc37d20"/>
+      </target>
+      <target file="XMLContentModel.o" lastModified="f75e4fb0b8">
+         <source file="../../src/xercesc/framework/XMLContentModel.cpp" lastModified="f14f90ff88"/>
+      </target>
+      <target file="BooleanDatatypeValidator.o" lastModified="f75e4dad18">
+         <source file="../../src/xercesc/validators/datatype/BooleanDatatypeValidator.cpp" lastModified="f52f8f7008"/>
+      </target>
+      <target file="Token.o" lastModified="f75e4d43a0">
+         <source file="../../src/xercesc/util/regx/Token.cpp" lastModified="f1a719a8b8"/>
+      </target>
+      <target file="XMLUni.o" lastModified="f75e4f9948">
+         <source file="../../src/xercesc/util/XMLUni.cpp" lastModified="f724d6a5a8"/>
+      </target>
+      <target file="RegxParser.o" lastModified="f75e4ee980">
+         <source file="../../src/xercesc/util/regx/RegxParser.cpp" lastModified="f53b93bf30"/>
+      </target>
+      <target file="SAXParser.o" lastModified="f75e4ebe88">
+         <source file="../../src/xercesc/parsers/SAXParser.cpp" lastModified="f6fbf9c160"/>
+      </target>
+      <target file="Wrapper4InputSource.o" lastModified="f75e4cc6a0">
+         <source file="../../src/xercesc/framework/Wrapper4InputSource.cpp" lastModified="f579d6ba18"/>
+      </target>
+      <target file="XMLString.o" lastModified="f75e4ddbf8">
+         <source file="../../src/xercesc/util/XMLString.cpp" lastModified="f53b93bb48"/>
+      </target>
+      <target file="Base64BinaryDatatypeValidator.o" lastModified="f75e4e06f0">
+         <source file="../../src/xercesc/validators/datatype/Base64BinaryDatatypeValidator.cpp" lastModified="f52d2b6470"/>
+      </target>
+      <target file="XMLEBCDICTranscoder.o" lastModified="f75e4d0cf0">
+         <source file="../../src/xercesc/util/XMLEBCDICTranscoder.cpp" lastModified="f14fa4e548"/>
+      </target>
+      <target file="LocalFileInputSource.o" lastModified="f75e4d9990">
+         <source file="../../src/xercesc/framework/LocalFileInputSource.cpp" lastModified="f532e76cd8"/>
+      </target>
+      <target file="YearMonthDatatypeValidator.o" lastModified="f75e4dbcb8">
+         <source file="../../src/xercesc/validators/datatype/YearMonthDatatypeValidator.cpp" lastModified="f6fe655e78"/>
+      </target>
+      <target file="XMLFormatter.o" lastModified="f75e4f81d8">
+         <source file="../../src/xercesc/framework/XMLFormatter.cpp" lastModified="f579d6ba18"/>
+      </target>
+      <target file="XMLNumber.o" lastModified="f75e5058b0">
+         <source file="../../src/xercesc/util/XMLNumber.cpp" lastModified="f14fa4e548"/>
+      </target>
+      <target file="MemBufInputSource.o" lastModified="f75e4cab48">
+         <source file="../../src/xercesc/framework/MemBufInputSource.cpp" lastModified="f532e76cd8"/>
+      </target>
+      <target file="XMLValidator.o" lastModified="f75e4d14c0">
+         <source file="../../src/xercesc/framework/XMLValidator.cpp" lastModified="f52d126218"/>
+      </target>
+      <target file="StdOutFormatTarget.o" lastModified="f75e4d0908">
+         <source file="../../src/xercesc/framework/StdOutFormatTarget.cpp" lastModified="f573a406c8"/>
+      </target>
+      <target file="DurationDatatypeValidator.o" lastModified="f75e4cf580">
+         <source file="../../src/xercesc/validators/datatype/DurationDatatypeValidator.cpp" lastModified="f6fe655e78"/>
+      </target>
+      <target file="SocketNetAccessor.o" lastModified="f75e4d8dd8">
+         <source file="../../src/xercesc/util/NetAccessors/Socket/SocketNetAccessor.cpp" lastModified="f534aecb10"/>
+      </target>
+      <target file="XUtil.o" lastModified="f75e4cc2b8">
+         <source file="../../src/xercesc/validators/schema/XUtil.cpp" lastModified="f14f873f70"/>
+      </target>
+      <target file="XMLBufferMgr.o" lastModified="f75e4d5728">
+         <source file="../../src/xercesc/framework/XMLBufferMgr.cpp" lastModified="f52d126218"/>
+      </target>
+      <target file="SAXParseException.o" lastModified="f75e4e12a8">
+         <source file="../../src/xercesc/sax/SAXParseException.cpp" lastModified="f6fbf9c160"/>
+      </target>
+      <target file="XMLFloat.o" lastModified="f75e50d998">
+         <source file="../../src/xercesc/util/XMLFloat.cpp" lastModified="f52f8f6068"/>
+      </target>
+      <target file="FieldValueMap.o" lastModified="f75e4d2848">
+         <source file="../../src/xercesc/validators/schema/identity/FieldValueMap.cpp" lastModified="f54da207e0"/>
+      </target>
+      <target file="XMLUCSTranscoder.o" lastModified="f75e501648">
+         <source file="../../src/xercesc/util/XMLUCSTranscoder.cpp" lastModified="f14fa4e548"/>
+      </target>
+      <target file="ElemStack.o" lastModified="f75e4f33b8">
+         <source file="../../src/xercesc/internal/ElemStack.cpp" lastModified="f53b93b760"/>
+      </target>
+      <target file="MonthDatatypeValidator.o" lastModified="f75e4e4958">
+         <source file="../../src/xercesc/validators/datatype/MonthDatatypeValidator.cpp" lastModified="f6fe655e78"/>
+      </target>
+      <target file="QName.o" lastModified="f75e4ec270">
+         <source file="../../src/xercesc/util/QName.cpp" lastModified="f52f8f5c80"/>
+      </target>
+      <target file="RegxUtil.o" lastModified="f75e501260">
+         <source file="../../src/xercesc/util/regx/RegxUtil.cpp" lastModified="f52e46f630"/>
+      </target>
+      <target file="SubstitutionGroupComparator.o" lastModified="f75e4dd040">
+         <source file="../../src/xercesc/validators/schema/SubstitutionGroupComparator.cpp" lastModified="f6b95a7138"/>
+      </target>
+      <target file="SchemaAttDefList.o" lastModified="f75e4db4e8">
+         <source file="../../src/xercesc/validators/schema/SchemaAttDefList.cpp" lastModified="f53b93c318"/>
+      </target>
+      <target file="XMLScannerResolver.o" lastModified="f75e4d2460">
+         <source file="../../src/xercesc/internal/XMLScannerResolver.cpp" lastModified="f64dc0ece0"/>
+      </target>
+      <target file="SchemaAttDef.o" lastModified="f75e4f00f0">
+         <source file="../../src/xercesc/validators/schema/SchemaAttDef.cpp" lastModified="f53b93c318"/>
+      </target>
+      <target file="IC_Field.o" lastModified="f75e4ff708">
+         <source file="../../src/xercesc/validators/schema/identity/IC_Field.cpp" lastModified="f52d3101f0"/>
+      </target>
+      <target file="WFXMLScanner.o" lastModified="f75e4d9990">
+         <source file="../../src/xercesc/internal/WFXMLScanner.cpp" lastModified="f6939ac6c8"/>
+      </target>
+      <target file="CharToken.o" lastModified="f75e4c9ba8">
+         <source file="../../src/xercesc/util/regx/CharToken.cpp" lastModified="f14fa03de0"/>
+      </target>
+      <target file="XMLBigDecimal.o" lastModified="f75e50e168">
+         <source file="../../src/xercesc/util/XMLBigDecimal.cpp" lastModified="f6fe62ddd8"/>
+      </target>
+      <target file="BlockRangeFactory.o" lastModified="f75e507bd8">
+         <source file="../../src/xercesc/util/regx/BlockRangeFactory.cpp" lastModified="f377d1b508"/>
+      </target>
+      <target file="BinInputStream.o" lastModified="f75e5025e8">
+         <source file="../../src/xercesc/util/BinInputStream.cpp" lastModified="f14fa4dd78"/>
+      </target>
+      <target file="DTDAttDefList.o" lastModified="f75e4eca40">
+         <source file="../../src/xercesc/validators/DTD/DTDAttDefList.cpp" lastModified="f14f882200"/>
+      </target>
+      <target file="DGXMLScanner.o" lastModified="f75e4f7238">
+         <source file="../../src/xercesc/internal/DGXMLScanner.cpp" lastModified="f6b951d618"/>
+      </target>
+      <target file="XMLNotationDecl.o" lastModified="f75e50c228">
+         <source file="../../src/xercesc/framework/XMLNotationDecl.cpp" lastModified="f532e76cd8"/>
+      </target>
+      <target file="IC_Unique.o" lastModified="f75e4f2be8">
+         <source file="../../src/xercesc/validators/schema/identity/IC_Unique.cpp" lastModified="f52d3101f0"/>
+      </target>
+      <target file="Dummy.o" lastModified="f75e4cd258">
+         <source file="../../src/xercesc/sax/Dummy.cpp" lastModified="f14f8d65a8"/>
+      </target>
+      <target file="PlatformUtils.o" lastModified="f75e4e0ad8">
+         <source file="../../src/xercesc/util/PlatformUtils.cpp" lastModified="f744486020"/>
+      </target>
+      <target file="XMLDateTime.o" lastModified="f75e4d2c30">
+         <source file="../../src/xercesc/util/XMLDateTime.cpp" lastModified="f6fe62ddd8"/>
+      </target>
+      <target file="GCCDefs.o" lastModified="f75e4d18a8">
+         <source file="../../src/xercesc/util/Compilers/GCCDefs.cpp" lastModified="f198df5338"/>
+      </target>
+      <target file="NamespaceScope.o" lastModified="f75e4def80">
+         <source file="../../src/xercesc/validators/schema/NamespaceScope.cpp" lastModified="f53b93c318"/>
+      </target>
+      <target file="Mutexes.o" lastModified="f75e4dfb38">
+         <source file="../../src/xercesc/util/Mutexes.cpp" lastModified="f14fa4e160"/>
+      </target>
+      <target file="RegularExpression.o" lastModified="f75e4d5728">
+         <source file="../../src/xercesc/util/regx/RegularExpression.cpp" lastModified="f6fe62ddd8"/>
+      </target>
+      <target file="SimpleContentModel.o" lastModified="f75e501648">
+         <source file="../../src/xercesc/validators/common/SimpleContentModel.cpp" lastModified="f14f8c11d0"/>
+      </target>
+      <target file="StringDatatypeValidator.o" lastModified="f75e4e7450">
+         <source file="../../src/xercesc/validators/datatype/StringDatatypeValidator.cpp" lastModified="f52d2b6858"/>
+      </target>
+      <target file="XMLIBM1140Transcoder.o" lastModified="f75e4ddfe0">
+         <source file="../../src/xercesc/util/XMLIBM1140Transcoder.cpp" lastModified="f14fa4e548"/>
+      </target>
+      <target file="XMLUri.o" lastModified="f75e4c93d8">
+         <source file="../../src/xercesc/util/XMLUri.cpp" lastModified="f698f48320"/>
+      </target>
+      <target file="SchemaInfo.o" lastModified="f75e50c610">
+         <source file="../../src/xercesc/validators/schema/SchemaInfo.cpp" lastModified="f532ed50a8"/>
+      </target>
+      <target file="XMLDTDDescriptionImpl.o" lastModified="f75e4dfb38">
+         <source file="../../src/xercesc/validators/DTD/XMLDTDDescriptionImpl.cpp" lastModified="f5e6839e88"/>
+      </target>
+      <target file="CMUnaryOp.o" lastModified="f75e4cc2b8">
+         <source file="../../src/xercesc/validators/common/CMUnaryOp.cpp" lastModified="f52d26d478"/>
+      </target>
+      <target file="DOMRangeException.o" lastModified="f75e5025e8">
+         <source file="../../src/xercesc/dom/DOMRangeException.cpp" lastModified="f14f9948a0"/>
+      </target>
+      <target file="DTDValidator.o" lastModified="f75e4cf198">
+         <source file="../../src/xercesc/validators/DTD/DTDValidator.cpp" lastModified="f532ed48d8"/>
+      </target>
+      <target file="ContentLeafNameTypeVector.o" lastModified="f75e4d9d78">
+         <source file="../../src/xercesc/validators/common/ContentLeafNameTypeVector.cpp" lastModified="f52d26d478"/>
+      </target>
+      <target file="MemoryManagerImpl.o" lastModified="f75e4fb4a0">
+         <source file="../../src/xercesc/internal/MemoryManagerImpl.cpp" lastModified="f4b106eba8"/>
+      </target>
+      <target file="AbstractNumericFacetValidator.o" lastModified="f75e4df750">
+         <source file="../../src/xercesc/validators/datatype/AbstractNumericFacetValidator.cpp" lastModified="f52d2b6470"/>
+      </target>
+      <target file="MemoryManagerArrayImpl.o" lastModified="f75e4e4958">
+         <source file="../../src/xercesc/internal/MemoryManagerArrayImpl.cpp" lastModified="f74040aaf0"/>
+      </target>
+      <target file="XMLASCIITranscoder.o" lastModified="f75e4c8050">
+         <source file="../../src/xercesc/util/XMLASCIITranscoder.cpp" lastModified="f14fa4e548"/>
+      </target>
+      <target file="XMLURL.o" lastModified="f75e4f7a08">
+         <source file="../../src/xercesc/util/XMLURL.cpp" lastModified="f6fe62ddd8"/>
+      </target>
+      <target file="UnionDatatypeValidator.o" lastModified="f75e502db8">
+         <source file="../../src/xercesc/validators/datatype/UnionDatatypeValidator.cpp" lastModified="f70c111828"/>
+      </target>
+      <target file="XPathMatcher.o" lastModified="f75e4ce5e0">
+         <source file="../../src/xercesc/validators/schema/identity/XPathMatcher.cpp" lastModified="f53b93cae8"/>
+      </target>
+      <target file="ComplexTypeInfo.o" lastModified="f75e4c8ff0">
+         <source file="../../src/xercesc/validators/schema/ComplexTypeInfo.cpp" lastModified="f53b93c318"/>
+      </target>
+      <target file="SchemaValidator.o" lastModified="f75e5050e0">
+         <source file="../../src/xercesc/validators/schema/SchemaValidator.cpp" lastModified="f6fe662d80"/>
+      </target>
+      <target file="MonthDayDatatypeValidator.o" lastModified="f75e4fb0b8">
+         <source file="../../src/xercesc/validators/datatype/MonthDayDatatypeValidator.cpp" lastModified="f6fe655e78"/>
+      </target>
+      <target file="XMLException.o" lastModified="f75e4d4b70">
+         <source file="../../src/xercesc/util/XMLException.cpp" lastModified="f52d3883d0"/>
+      </target>
+      <target file="HashPtr.o" lastModified="f75e501a30">
+         <source file="../../src/xercesc/util/HashPtr.cpp" lastModified="f52d3599b8"/>
+      </target>
+      <target file="ValueStore.o" lastModified="f75e4f56e0">
+         <source file="../../src/xercesc/validators/schema/identity/ValueStore.cpp" lastModified="f53b93cae8"/>
+      </target>
+      <target file="AbstractNumericValidator.o" lastModified="f75e4d6ab0">
+         <source file="../../src/xercesc/validators/datatype/AbstractNumericValidator.cpp" lastModified="f52d2b6470"/>
+      </target>
+      <target file="XMLChar.o" lastModified="f75e5077f0">
+         <source file="../../src/xercesc/util/XMLChar.cpp" lastModified="f24cc1f810"/>
+      </target>
+      <target file="DTDAttDef.o" lastModified="f75e4c8438">
+         <source file="../../src/xercesc/validators/DTD/DTDAttDef.cpp" lastModified="f532ed48d8"/>
+      </target>
+      <target file="XercesAttGroupInfo.o" lastModified="f75e4cda28">
+         <source file="../../src/xercesc/validators/schema/XercesAttGroupInfo.cpp" lastModified="f52d2f11d8"/>
+      </target>
+      <target file="sax2Dummy.o" lastModified="f75e4f3f70">
+         <source file="../../src/xercesc/sax2/sax2Dummy.cpp" lastModified="f14f8cc968"/>
+      </target>
+      <target file="GrammarResolver.o" lastModified="f75e4f2800">
+         <source file="../../src/xercesc/validators/common/GrammarResolver.cpp" lastModified="f75d3cf898"/>
+      </target>
+      <target file="IconvTransService.o" lastModified="f75e4cd258">
+         <source file="../../src/xercesc/util/Transcoders/Iconv/IconvTransService.cpp" lastModified="f536f6e268"/>
+      </target>
+      <target file="Op.o" lastModified="f75e4d4788">
+         <source file="../../src/xercesc/util/regx/Op.cpp" lastModified="f53b93bf30"/>
+      </target>
+      <target file="DOMException.o" lastModified="f75e4d0908">
+         <source file="../../src/xercesc/dom/DOMException.cpp" lastModified="f14f9948a0"/>
+      </target>
+      <target file="XMLDouble.o" lastModified="f75e4d3400">
+         <source file="../../src/xercesc/util/XMLDouble.cpp" lastModified="f52f8f6068"/>
+      </target>
+      <target file="ModifierToken.o" lastModified="f75e4e5510">
+         <source file="../../src/xercesc/util/regx/ModifierToken.cpp" lastModified="f14fa03de0"/>
+      </target>
+      <target file="XMLChTranscoder.o" lastModified="f75e4da548">
+         <source file="../../src/xercesc/util/XMLChTranscoder.cpp" lastModified="f14fa4e548"/>
+      </target>
+      <target file="NameDatatypeValidator.o" lastModified="f75e4fe768">
+         <source file="../../src/xercesc/validators/datatype/NameDatatypeValidator.cpp" lastModified="f52d2b6858"/>
+      </target>
+      <target file="StdInInputSource.o" lastModified="f75e4f9d30">
+         <source file="../../src/xercesc/framework/StdInInputSource.cpp" lastModified="f52ef362d0"/>
+      </target>
+      <target file="XMLBigInteger.o" lastModified="f75e4dd810">
+         <source file="../../src/xercesc/util/XMLBigInteger.cpp" lastModified="f54da207e0"/>
+      </target>
+      <target file="XMLRecognizer.o" lastModified="f75e4c97c0">
+         <source file="../../src/xercesc/framework/XMLRecognizer.cpp" lastModified="f52d126218"/>
+      </target>
+      <target file="SGXMLScanner.o" lastModified="f75e4eaee8">
+         <source file="../../src/xercesc/internal/SGXMLScanner.cpp" lastModified="f7438ecc50"/>
+      </target>
+      <target file="AnyURIDatatypeValidator.o" lastModified="f75e4fb888">
+         <source file="../../src/xercesc/validators/datatype/AnyURIDatatypeValidator.cpp" lastModified="f53b93c318"/>
+      </target>
+      <target file="ConcatToken.o" lastModified="f75e4d89f0">
+         <source file="../../src/xercesc/util/regx/ConcatToken.cpp" lastModified="f14fa03de0"/>
+      </target>
+      <target file="OpFactory.o" lastModified="f75e4e4d40">
+         <source file="../../src/xercesc/util/regx/OpFactory.cpp" lastModified="f53b93bf30"/>
+      </target>
+      <target file="XMLAttr.o" lastModified="f75e4ddbf8">
+         <source file="../../src/xercesc/framework/XMLAttr.cpp" lastModified="f53b93b760"/>
+      </target>
+      <target file="Base64.o" lastModified="f75e50c610">
+         <source file="../../src/xercesc/util/Base64.cpp" lastModified="f5479f2e90"/>
+      </target>
+      <target file="StringToken.o" lastModified="f75e4caf30">
+         <source file="../../src/xercesc/util/regx/StringToken.cpp" lastModified="f52e46f630"/>
+      </target>
+      <target file="TraverseSchema.o" lastModified="f75e4e4188">
+         <source file="../../src/xercesc/validators/schema/TraverseSchema.cpp" lastModified="f6fd66f978"/>
+      </target>
+      <target file="XMLStringTokenizer.o" lastModified="f75e508790">
+         <source file="../../src/xercesc/util/XMLStringTokenizer.cpp" lastModified="f53b93bb48"/>
+      </target>
+      <target file="YearDatatypeValidator.o" lastModified="f75e4de3c8">
+         <source file="../../src/xercesc/validators/datatype/YearDatatypeValidator.cpp" lastModified="f6fe655e78"/>
+      </target>
+   </processor>
+   <processor signature="gcc  2.95.3 i486-suse-linux-fpic -w -O -c -g -DCONSOLE -DLINUX -D_REENTRANT -I..">
+      <target file="CreateDOMDocument.o" lastModified="f75e513758">
+         <source file="../../samples/CreateDOMDocument/CreateDOMDocument.cpp" lastModified="f6de4942d0"/>
+      </target>
+   </processor>
+</history>
