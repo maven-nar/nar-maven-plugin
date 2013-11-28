@@ -87,7 +87,7 @@ public class CaptureStreamHandler implements ExecuteStreamHandler {
 	 * it is returned; otherwise, standard output is returned.
 	 */
 	public String[] getOutput() {
-		return stderr.length > 0 ? stderr : stdout;
+		return (null != stderr && stderr.length > 0 ) ? stderr : stdout;
 	}
 
 	/** Gets the output of the execution's standard error stream. */
