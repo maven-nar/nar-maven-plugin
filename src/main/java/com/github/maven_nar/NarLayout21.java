@@ -147,7 +147,7 @@ public class NarLayout21
 
 	            if ( ( narInfo.getOutput( aol, null ) == null ) )
 	            {
-	                narInfo.setOutput( aol, mojo.getOutput(! aol.getOS().contains( OS.WINDOWS ) && ! type.equals( Library.EXECUTABLE ) ) );
+	                narInfo.setOutput( aol, mojo.getOutput(! Library.EXECUTABLE.equals( type ) ) );
 	            }
 
             	// We prefer shared to jni/executable/static/none, 
