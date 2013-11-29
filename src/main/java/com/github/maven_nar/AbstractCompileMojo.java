@@ -145,8 +145,6 @@ public abstract class AbstractCompileMojo
      */
     protected boolean decorateLinkerOptions;
 
-    private NarInfo narInfo;
-
     private List/* <String> */dependencyLibOrder;
 
     private Project antProject;
@@ -306,23 +304,4 @@ public abstract class AbstractCompileMojo
         return dependencyLibOrder;
     }
 
-    protected final NarInfo getNarInfo()
-        throws MojoExecutionException
-    {
-        if ( narInfo == null )
-        {
-            String groupId = getMavenProject().getGroupId();
-            String artifactId = getMavenProject().getArtifactId();
-
-            File propertiesDir = new File( getMavenProject().getBasedir(), "src/main/resources/META-INF/nar/" + groupId + "/" + artifactId );
-            File propertiesFile = new File( propertiesDir, NarInfo.NAR_PROPERTIES );
-
-            narInfo = new NarInfo(
-                groupId, artifactId,
-                getMavenProject().getVersion(),
-                getLog(),
-                propertiesFile );
-        }
-        return narInfo;
-    }
 }
