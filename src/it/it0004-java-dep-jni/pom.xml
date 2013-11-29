@@ -48,6 +48,18 @@ under the License.
         <groupId>@project.groupId@</groupId>
         <artifactId>nar-maven-plugin</artifactId>
         <extensions>true</extensions>
+        <configuration>
+          <c>
+            <debug>true</debug>
+          </c>
+          <libraries>
+            <library>
+              <type>jni</type>
+              <narSystemPackage>it0004.test</narSystemPackage>
+              <linkCPP>false</linkCPP>
+            </library>
+          </libraries>
+        </configuration>
       </plugin>
     </plugins>
   </build>
