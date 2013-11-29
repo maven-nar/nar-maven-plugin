@@ -112,12 +112,6 @@ public abstract class AbstractNarMojo
     private File baseDir;
 
     /**
-     * @parameter property="project.build.finalName"
-     * @readonly
-     */
-    private String finalName;
-
-    /**
      * Target directory for Nar file construction. Defaults to "${project.build.directory}/nar" for "nar-compile" goal
      * 
      * @parameter default-value=""
@@ -276,11 +270,6 @@ public abstract class AbstractNarMojo
     protected final File getOutputDirectory()
     {
         return outputDirectory;
-    }
-
-    protected final String getFinalName()
-    {
-        return finalName;
     }
 
     protected final File getTargetDirectory()
