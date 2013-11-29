@@ -24,23 +24,48 @@ under the License.
 
   <parent>
     <groupId>com.github.maven-nar.its.nar</groupId>
-    <artifactId>it-parent</artifactId>
+    <artifactId>it0024-namedout</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <relativePath>../it-parent/pom.xml</relativePath>
   </parent>
 
-  <artifactId>it0024-namedout</artifactId>
-  <packaging>pom</packaging>
-
-  <name>Aggregator of tests for overridden &lt;output&gt;</name>
+  <artifactId>it0024-namedout-dep</artifactId>
+  <packaging>nar</packaging>
+  
+  <name>Executable depending on a Library with named output</name>
   <version>1.0-SNAPSHOT</version>
   <description>
-    Simple shared library and test file
+    Executable depending on a shared library.
   </description>
 
-  <modules>
-    <module>lib</module>
-    <module>dep</module>
-  </modules>
+  <properties>
+    <skipTests>true</skipTests>
+  </properties>
+   
+  <build>
+    <defaultGoal>integration-test</defaultGoal>
+    <plugins>
+      <plugin>
+        <groupId>@project.groupId@</groupId>
+        <artifactId>nar-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <libraries>
+            <library>
+              <type>executable</type>
+              <run>true</run>
+            </library>
+          </libraries>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
+  <dependencies>
+    <dependency>
+      <groupId>com.github.maven-nar.its.nar</groupId>
+      <artifactId>it0024-namedout-lib</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>nar</type>
+    </dependency>
+  </dependencies>
 </project>
