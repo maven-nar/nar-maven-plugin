@@ -86,6 +86,7 @@
     <skip.autoconf.it>it0013-gnu-executable/**</skip.autoconf.it>
     <skip.fortran.it>it0018-fortran/**</skip.fortran.it>
     <skip.toolchain.it>it0017-toolchain/**</skip.toolchain.it>
+    <skip.gpp.it>it*gpp/**</skip.gpp.it>
     <sonatypeOssDistMgmtSnapshotsUrl>https://oss.sonatype.org/content/repositories/snapshots/</sonatypeOssDistMgmtSnapshotsUrl>
   </properties>
 
@@ -385,6 +386,7 @@
                 <setupInclude>it0020-lib-3rdparty/pom.xml</setupInclude>
                 <setupInclude>it0027-lib-shared-namedout/pom.xml</setupInclude>
                 <setupInclude>it0029-lib-static-namedout/pom.xml</setupInclude>
+                <setupInclude>it0040-lib-static-gpp/pom.xml</setupInclude>
               </setupIncludes>
               <pomIncludes>
                 <pomInclude>*/pom.xml</pomInclude>
@@ -399,6 +401,7 @@
                 <pomExclude>${skip.autoconf.it}</pomExclude>
                 <pomExclude>${skip.fortran.it}</pomExclude>
                 <pomExclude>${skip.toolchain.it}</pomExclude>
+                <pomExclude>${skip.gpp.it}</pomExclude>
               </pomExcludes>
               <localRepositoryPath>${project.build.directory}/it-repo</localRepositoryPath>
               <settingsFile>src/it/settings.xml</settingsFile>
@@ -451,6 +454,17 @@
       </activation>
       <properties>
         <skip.toolchain.it>false</skip.toolchain.it>
+      </properties>
+    </profile>
+    <profile>
+      <id>has-gpp</id>
+      <activation>
+        <file> <!-- NAR still assumes you have gcc on the path -->
+          <exists>/mingw/bin/gcc.exe</exists>
+        </file>
+      </activation>
+      <properties>
+        <skip.gpp.it>false</skip.gpp.it>
       </properties>
     </profile>
   </profiles>
