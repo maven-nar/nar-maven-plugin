@@ -42,7 +42,7 @@
 					<process-classes>com.github.maven-nar:nar-maven-plugin:nar-gnu-process,
 						com.github.maven-nar:nar-maven-plugin:nar-process-libraries
 					</process-classes>
-					<generate-test-sources></generate-test-sources>
+					<generate-test-sources>com.github.maven-nar:nar-maven-plugin:nar-prepare-package</generate-test-sources>
 					<process-test-sources></process-test-sources>
 					<generate-test-resources></generate-test-resources>
 					<process-test-resources>org.apache.maven.plugins:maven-resources-plugin:testResources
