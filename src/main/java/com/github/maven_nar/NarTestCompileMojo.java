@@ -195,8 +195,6 @@ public class NarTestCompileMojo
             getLinker().getLinker( this, antProject, getOS(), getAOL().getKey() + ".linker.", type );
         task.addConfiguredLinker( linkerDefinition );
 
-        // FIXME hardcoded values
-        String libName = getFinalName();
         File includeDir =
             getLayout().getIncludeDirectory( getTargetDirectory(), getMavenProject().getArtifactId(),
                                              getMavenProject().getVersion() );
@@ -229,7 +227,8 @@ public class NarTestCompileMojo
         {
             LibrarySet libSet = new LibrarySet();
             libSet.setProject( antProject );
-            libSet.setLibs( new CUtil.StringArrayBuilder( libName ) );
+            getLog().debug( "Searching for parent to link with " +  getNarInfo().getLibs( getAOL() ) );
+            libSet.setLibs( new CUtil.StringArrayBuilder( getNarInfo().getLibs( getAOL() ) ) );
             LibraryTypeEnum libType = new LibraryTypeEnum();
             libType.setValue( test.getLink() );
             libSet.setType( libType );
