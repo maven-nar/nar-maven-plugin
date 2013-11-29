@@ -359,8 +359,15 @@ public abstract class AbstractNarMojo
 	    	String groupId = getMavenProject().getGroupId();
 	    	String artifactId = getMavenProject().getArtifactId();
 	    	
-	        File propertiesDir = new File( getMavenProject().getBasedir(), "src/main/resources/META-INF/nar/" + groupId + "/" + artifactId );
+	    	File propertiesDir = new File( outputDirectory, "classes/META-INF/nar/" + getMavenProject().getGroupId() + "/" + getMavenProject().getArtifactId() );
 	        File propertiesFile = new File( propertiesDir, NarInfo.NAR_PROPERTIES );
+	        // TODO: the following should be unecessary, kept as backup pending some further checking. 
+	        // copy to the target location should have been done during the resource-copy goal / resource-generation phase.
+	        // should not need to try and read from source.
+	    	if( !propertiesFile.exists() ){
+	    		propertiesDir = new File( getMavenProject().getBasedir(), "src/main/resources/META-INF/nar/" + groupId + "/" + artifactId );
+	    		propertiesFile = new File( propertiesDir, NarInfo.NAR_PROPERTIES );
+	    	}
 	
 	        narInfo = new NarInfo( 
 	            groupId, artifactId,
