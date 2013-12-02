@@ -43,7 +43,7 @@ under the License.
   </properties>
 
   <build>
-    <defaultGoal>install</defaultGoal>
+    <defaultGoal>integration-test</defaultGoal>
     <plugins>
       <plugin>
         <groupId>@project.groupId@</groupId>
@@ -54,6 +54,7 @@ under the License.
           <libraries>
             <library>
               <type>shared</type>
+              <narSystemPackage>it0024</narSystemPackage>
             </library>
           </libraries>
           <tests>
