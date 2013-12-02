@@ -162,7 +162,7 @@ public abstract class AbstractNarMojo
      * @required
      */
     private String layout;
-    
+
     private NarLayout narLayout;
 
     /**
@@ -174,22 +174,22 @@ public abstract class AbstractNarMojo
 
     private AOL aolId;
 
-	private NarInfo narInfo;
+    private NarInfo narInfo;
 
-	/**
-	 * Javah info
-	 * 
-	 * @parameter default-value=""
-	 */
-	private Javah javah;
+    /**
+     * Javah info
+     * 
+     * @parameter default-value=""
+     */
+    private Javah javah;
 
-	/**
-	 * The home of the Java system. Defaults to a derived value from ${java.home} which is OS specific.
-	 * 
-	 * @parameter default-value=""
-	 * @readonly
-	 */
-	private File javaHome;
+    /**
+     * The home of the Java system. Defaults to a derived value from ${java.home} which is OS specific.
+     * 
+     * @parameter default-value=""
+     * @readonly
+     */
+    private File javaHome;
 
     protected final void validate()
         throws MojoFailureException, MojoExecutionException
@@ -199,7 +199,7 @@ public abstract class AbstractNarMojo
         architecture = NarUtil.getArchitecture( architecture );
         os = NarUtil.getOS( os );
         aolId = NarUtil.getAOL(mavenProject, architecture, os, linker, aol, getLog() );
-        
+
         Model model = mavenProject.getModel();
         Properties properties = model.getProperties();
         properties.setProperty("nar.arch", getArchitecture());
@@ -229,18 +229,18 @@ public abstract class AbstractNarMojo
     }
 
     protected final String getOutput( boolean versioned )
-    	    throws MojoExecutionException
-	{
-	    if( output != null && !output.trim().isEmpty()){
-	    	return output; 
-	    } else {
-	    	if( versioned )
-	    		return getMavenProject().getArtifactId() + "-" + getMavenProject().getVersion();
-	    	else 
-	    		return getMavenProject().getArtifactId();
-	    }
-	}
-    
+        throws MojoExecutionException
+    {
+        if( output != null && !output.trim().isEmpty()){
+            return output;
+        } else {
+            if( versioned )
+                return getMavenProject().getArtifactId() + "-" + getMavenProject().getVersion();
+            else
+                return getMavenProject().getArtifactId();
+        }
+    }
+
     protected final String getArchitecture()
     {
         return architecture;
@@ -261,10 +261,10 @@ public abstract class AbstractNarMojo
     {
         return linker;
     }
-    
+
     protected final File getBasedir()
     {
-    	return baseDir;
+        return baseDir;
     }
 
     protected final File getOutputDirectory()
@@ -353,44 +353,44 @@ public abstract class AbstractNarMojo
     public abstract void narExecute()
         throws MojoFailureException, MojoExecutionException;
 
-	protected NarInfo getNarInfo() throws MojoExecutionException {
-	    if ( narInfo == null )
-	    {
-	    	String groupId = getMavenProject().getGroupId();
-	    	String artifactId = getMavenProject().getArtifactId();
-	    	
-	        File propertiesDir = new File( getMavenProject().getBasedir(), "src/main/resources/META-INF/nar/" + groupId + "/" + artifactId );
-	        File propertiesFile = new File( propertiesDir, NarInfo.NAR_PROPERTIES );
-	
-	        narInfo = new NarInfo( 
-	            groupId, artifactId,
-	            getMavenProject().getVersion(), 
-	            getLog(),
-	            propertiesFile );
-	    }
-	    return narInfo;
-	}
+    protected NarInfo getNarInfo() throws MojoExecutionException {
+        if ( narInfo == null )
+        {
+            String groupId = getMavenProject().getGroupId();
+            String artifactId = getMavenProject().getArtifactId();
 
-	protected final List<Library> getLibraries() {
-	    if ( libraries == null )
-	    {
-	        libraries = Collections.EMPTY_LIST;
-	    }
-	    return libraries;
-	}
+            File propertiesDir = new File( getMavenProject().getBasedir(), "src/main/resources/META-INF/nar/" + groupId + "/" + artifactId );
+            File propertiesFile = new File( propertiesDir, NarInfo.NAR_PROPERTIES );
 
-	protected final Javah getJavah() {
-	    if ( javah == null )
-	    {
-	        javah = new Javah();
-	    }
-	    javah.setAbstractCompileMojo( this );
-	    return javah;
-	}
+            narInfo = new NarInfo(
+                    groupId, artifactId,
+                    getMavenProject().getVersion(),
+                    getLog(),
+                    propertiesFile );
+        }
+        return narInfo;
+    }
 
-	protected final File getJavaHome(AOL aol)
-			throws MojoExecutionException {
-			    // FIXME should be easier by specifying default...
-			    return getNarInfo().getProperty( aol, "javaHome", NarUtil.getJavaHome( javaHome, getOS() ) );
-			}
+    protected final List<Library> getLibraries() {
+        if ( libraries == null )
+        {
+            libraries = Collections.EMPTY_LIST;
+        }
+        return libraries;
+    }
+
+    protected final Javah getJavah() {
+        if ( javah == null )
+        {
+            javah = new Javah();
+        }
+        javah.setAbstractCompileMojo( this );
+        return javah;
+    }
+
+    protected final File getJavaHome(AOL aol)
+        throws MojoExecutionException {
+        // FIXME should be easier by specifying default...
+        return getNarInfo().getProperty( aol, "javaHome", NarUtil.getJavaHome( javaHome, getOS() ) );
+    }
 }
