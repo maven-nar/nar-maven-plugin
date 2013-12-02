@@ -106,7 +106,8 @@ public class NarIntegrationTestMojo
         for ( Iterator i = getLibraries().iterator(); i.hasNext(); )
         {
             Library lib = (Library) i.next();
-            if ( lib.getType().equals( Library.JNI ) )
+            String type = lib.getType();
+            if ( type.equals( Library.JNI ) || type.equals( Library.SHARED ) )
             {
                 return true;
             }

@@ -39,12 +39,6 @@ import org.codehaus.plexus.archiver.manager.ArchiverManager;
 public class NarPreparePackageMojo
     extends AbstractNarMojo
 {    
-
-    /**
-     * @parameter default-value="${project.build.directory}/classes"
-     * @readonly
-     */
-    private File outputDirectory;
     
     // TODO: this is working of what is present rather than what was requested to be built, POM ~/= artifacts!
     public final void narExecute()
@@ -57,7 +51,7 @@ public class NarPreparePackageMojo
         {
         	// TODO: this structure seems overly deep it already gets unpacked to own folder - classes/
             File propertiesDir =
-                new File( outputDirectory, "META-INF/nar/" + getMavenProject().getGroupId() + "/"
+                new File( classesDirectory, "META-INF/nar/" + getMavenProject().getGroupId() + "/"
                     + getMavenProject().getArtifactId() );
             if ( !propertiesDir.exists() )
             {
