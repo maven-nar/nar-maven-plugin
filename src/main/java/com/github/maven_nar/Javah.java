@@ -22,6 +22,7 @@ package com.github.maven_nar;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -179,6 +180,7 @@ public class Javah
 
     protected final Set getIncludes()
     {
+        NarUtil.removeNulls( includes );
         if ( includes.isEmpty() )
         {
             includes.add( "**/*.class" );
