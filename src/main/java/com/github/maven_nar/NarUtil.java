@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -764,5 +765,14 @@ public final class NarUtil
         }
 
         return profiles;
+    }
+
+    static void removeNulls( Collection<?> collection )
+    {
+        for ( Iterator<?> iter = collection.iterator(); iter.hasNext(); ) {
+            if ( iter.next() == null ) {
+                iter.remove();
+            }
+        }
     }
 }

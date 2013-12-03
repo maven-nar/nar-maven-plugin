@@ -61,6 +61,11 @@ under the License.
               <linkCPP>false</linkCPP>
             </library>
           </libraries>
+          <javah>
+            <includes>
+              <include></include>
+            </includes>
+          </javah>
         </configuration>
       </plugin>
     </plugins>
