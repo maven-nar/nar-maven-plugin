@@ -40,6 +40,12 @@ public class NarPreparePackageMojo
     extends AbstractNarMojo
 {    
     
+    /**
+     * @parameter property="project.build.outputDirectory"
+     * @readonly
+     */
+    protected File classesDirectory;
+
     // TODO: this is working of what is present rather than what was requested to be built, POM ~/= artifacts!
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
