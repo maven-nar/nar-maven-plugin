@@ -50,14 +50,8 @@ public class NarPreparePackageMojo
         try
         {
         	// TODO: this structure seems overly deep it already gets unpacked to own folder - classes/
-            File propertiesDir =
-                new File( classesDirectory, "META-INF/nar/" + getMavenProject().getGroupId() + "/"
-                    + getMavenProject().getArtifactId() );
-            if ( !propertiesDir.exists() )
-            {
-                propertiesDir.mkdirs();
-            }
-            File propertiesFile = new File( propertiesDir, NarInfo.NAR_PROPERTIES );
+            File propertiesFile =
+                new File( classesDirectory, getNarInfo().getNarInfoFileName() );
             getNarInfo().writeToFile( propertiesFile );
         }
         catch ( IOException ioe )
