@@ -135,7 +135,7 @@ public class NarInfo
 
     public final String getOutput( AOL aol, String defaultOutput )
     {
-    	return getProperty( aol, "output", defaultOutput );
+        return getExactProperty( aol, "output", defaultOutput );
     }
 
     public final void setOutput( AOL aol, String value )
@@ -218,6 +218,17 @@ public class NarInfo
         String value = info.getProperty( key, defaultValue );
         value = aol == null ? value : info.getProperty( aol.toString() + "." + key, value );
         log.debug( "getProperty(" + aol + ", " + key + ", " + defaultValue + ") = " + value );
+        return value;
+    }
+
+    public final String getExactProperty( AOL aol, String key, String defaultValue )
+    {
+        if ( key == null )
+        {
+            throw new NullPointerException();
+        }
+        String value = info.getProperty( ( aol == null ? "" : aol.toString() + "." ) + key, defaultValue );
+        log.debug( "getExactProperty(" + aol + ", " + key + ", " + defaultValue + ") = " + value );
         return value;
     }
 
