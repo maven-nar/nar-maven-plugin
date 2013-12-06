@@ -1,0 +1,32 @@
+<lifecycleMappingMetadata>
+	<pluginExecutions>
+		<pluginExecution>
+			<pluginExecutionFilter>
+				<goals>
+					<goal>nar-validate</goal>
+					<goal>nar-download</goal>
+					<goal>nar-unpack</goal>
+					<goal>nar-gnu-configure</goal>
+					<goal>nar-system-generate</goal>
+					<goal>nar-resources</goal>
+					<goal>nar-gnu-resources</goal>
+					<goal>nar-vcproj</goal>
+					<goal>nar-javah</goal>
+					<goal>nar-gnu-make</goal>
+					<goal>nar-compile</goal>
+					<goal>nar-gnu-process</goal>
+					<goal>nar-process-libraries</goal>
+					<goal>nar-prepare-package</goal>
+					<goal>nar-testCompile</goal>
+					<goal>nar-test</goal>
+					<goal>nar-prepare-package</goal>
+					<goal>nar-package</goal>
+					<goal>nar-integration-test</goal>
+				</goals>
+			</pluginExecutionFilter>
+			<action>
+				<ignore />
+			</action>
+		</pluginExecution>
+	</pluginExecutions>
+</lifecycleMappingMetadata>
