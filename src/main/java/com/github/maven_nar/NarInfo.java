@@ -64,6 +64,8 @@ public class NarInfo
         {
             try
             {
+		if( propertiesFile.isDirectory() )
+			propertiesFile = new File( propertiesFile, getNarInfoFileName() );
                 info.load( new FileInputStream( propertiesFile ) );
             }
             catch ( FileNotFoundException e )
@@ -114,8 +116,12 @@ public class NarInfo
 
     private JarEntry getNarPropertiesEntry( JarFile jar )
     {
-        return jar.getJarEntry( "META-INF/nar/" + groupId + "/" + artifactId + "/" + NAR_PROPERTIES );
+        return jar.getJarEntry( getNarInfoFileName() );
     }
+
+	public String getNarInfoFileName() {
+		return "META-INF/nar/" + groupId + "/" + artifactId + "/" + NAR_PROPERTIES;
+	}
 
     /**
      * No binding means default binding.
@@ -185,9 +191,27 @@ public class NarInfo
         return getProperty( aol, "syslibs.names" );
     }
 
+    public final void writeToDirectory( File directory )
+            throws MojoExecutionException
+    {
+        try
+        {
+            writeToFile( new File( directory, getNarInfoFileName() ) );
+        }
+        catch ( IOException ioe )
+        {
+            throw new MojoExecutionException( "Cannot write nar properties file to " + directory, ioe );
+        }
+    }
+
     public final void writeToFile( File file )
         throws IOException
     {
+        File parent = file.getParentFile();
+        if ( parent != null )
+        {
+            parent.mkdirs();
+        }
         info.store( new FileOutputStream( ( file ) ), "NAR Properties for " + groupId + "." + artifactId + "-"
             + version );
     }

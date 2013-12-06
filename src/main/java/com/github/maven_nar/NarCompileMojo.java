@@ -123,6 +123,8 @@ public class NarCompileMojo
         {
             throw new MojoExecutionException( "NAR: could not copy include files", e );
         }
+
+        getNarInfo().writeToDirectory( classesDirectory );
     }
 
     private List getSourcesFor( Compiler compiler )

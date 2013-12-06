@@ -19,14 +19,8 @@ package com.github.maven_nar;
  * under the License.
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProjectHelper;
-import org.codehaus.plexus.archiver.manager.ArchiverManager;
 
 /**
  * Jars up the NAR files.
@@ -47,24 +41,7 @@ public class NarPreparePackageMojo
         // let the layout decide which (additional) nars to attach
         getLayout().prepareNarInfo( getTargetDirectory(), getMavenProject(), getNarInfo(), this );
 
-        try
-        {
-        	// TODO: this structure seems overly deep it already gets unpacked to own folder - classes/
-            File propertiesDir =
-                new File( classesDirectory, "META-INF/nar/" + getMavenProject().getGroupId() + "/"
-                    + getMavenProject().getArtifactId() );
-            if ( !propertiesDir.exists() )
-            {
-                propertiesDir.mkdirs();
-            }
-            File propertiesFile = new File( propertiesDir, NarInfo.NAR_PROPERTIES );
-            getNarInfo().writeToFile( propertiesFile );
-        }
-        catch ( IOException ioe )
-        {
-            throw new MojoExecutionException( "Cannot write nar properties file", ioe );
-        }
-        
+        getNarInfo().writeToDirectory( classesDirectory );
     }
 
 }

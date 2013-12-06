@@ -138,6 +138,13 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
 		// of getBaseVersion, called in pathOf.
 		dependency.isSnapshot();
 
+        if (dependency.getFile().isDirectory()) {
+            getLog().debug("Dependency is not packaged: " + dependency.getFile());
+
+            return new NarInfo(dependency.getGroupId(), dependency.getArtifactId(), dependency.getBaseVersion(),
+                    getLog(), dependency.getFile());
+        }
+
 		File file = new File(getLocalRepository().getBasedir(),
 				getLocalRepository().pathOf(dependency));
 		if (!file.exists()) {
