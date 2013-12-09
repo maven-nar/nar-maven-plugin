@@ -15,7 +15,6 @@ Links
 * [Mailing list](https://groups.google.com/group/maven-nar)
 * [Issues](https://github.com/maven-nar/nar-maven-plugin/issues)
 * [SCM](https://github.com/maven-nar)
-* Maven Repository coming soon
 
 What about maven-nar-plugin?
 ----------------------------
