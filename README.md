@@ -11,7 +11,7 @@ using the standard `maven-install-plugin` and `maven-deploy-plugin`.
 
 Links
 -----
-* [Documentation](https://maven-nar.github.com/nar-maven-plugin)
+* [Documentation](http://maven-nar.github.io/nar-maven-plugin/)
 * [Mailing list](https://groups.google.com/group/maven-nar)
 * [Issues](https://github.com/maven-nar/nar-maven-plugin/issues)
 * [SCM](https://github.com/maven-nar)
