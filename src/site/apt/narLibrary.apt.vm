@@ -16,7 +16,7 @@ Plugin itself to call on the NAR Manager.
 the swig native executable uses the NAR Manager to download, unpack and call 
 the executable.
 
-	To use the NAR Manager, see the {{{apidocs/index.html}API Docs}}, add the
+	To use the NAR Manager, see the {{{./apidocs/index.html}API Docs}}, add the
 following to your POM file:
 
 +--

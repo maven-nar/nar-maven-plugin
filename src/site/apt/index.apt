@@ -26,7 +26,7 @@ unpacking).
     
 	The NAR plugin executes the following goals, in the order below, to create and deploy nar files. 
 The goals are part of the
-<<<nar>>> packaging/{{{lifecycle.html}lifecycle}}, which inserts the nar goals into the standard lifecyle. Using nar packaging
+<<<nar>>> packaging/{{{./lifecycle.html}lifecycle}}, which inserts the nar goals into the standard lifecyle. Using nar packaging
 allows you to build a jar file as well as nar files. The list below shows the sequence of the NAR goals:
 
     [[1]] {{{nar-validate}nar-validate}}
@@ -71,11 +71,11 @@ allows you to build a jar file as well as nar files. The list below shows the se
 in the goals below. The configuration section of the NAR plugin allows one to override 
 most of the default settings. The default settings come from the AOL properties file 
 which allows us to specify different defaults depending on the architecture-os-linker
-combination, see {{{aol.html}AOL Properties}}.
+combination, see {{{./aol.html}AOL Properties}}.
                
 	The NAR Plugin tries to deduce the "Operating System"
 and the "Architecture" of the machine. Both can be overridden by setting <<<os>>>
-and <<<arch>>> in the {{{configuration.html}configuration}}.
+and <<<arch>>> in the {{{./configuration.html}configuration}}.
                 
 	The name of the linker is looked up in a architecture-os specific way, but can be overridden
 by setting <<<linker.name>>> (this means the subtag \<name\> of the \<linker\> tag in the
@@ -93,7 +93,7 @@ found on the path.
 * {nar-download}
 
 	Your NAR artifact(s) may be dependent on other nar artifacts. The standard maven dependency 
-declaration in the POM is used to describe such dependencies of type "nar", see {{{nar-dependencies.html}
+declaration in the POM is used to describe such dependencies of type "nar", see {{{./nar-dependencies.html}
 nar-dependencies}}. By the time this goal is running maven will have already downloaded 
 all dependent jar and nar files some of which may include a nar.properties file. 
 This property file contains information on what other machine dependent and machine independent nar files to download.
@@ -153,7 +153,7 @@ nar-gnu-process goal.
 You can also produce a jni or a static library by setting <<<library.type>>>.
 To handle the variety of compilers and linkers, the NAR plugin uses a derivative of the cpptasks from the ant-contrib
 project, with some minor improvements and additions of compilers. Most of the settings for cpptasks, such as compiler,
-linker, options and include dirs are available through the NAR plugin, see {{{configuration.html}configuration}}.
+linker, options and include dirs are available through the NAR plugin, see {{{./configuration.html}configuration}}.
 
 	The NAR plugin searches the directory structure under COMPILER.sourceDirectory, which defaults to
 src/main. The standard way to separate your sources for different languages would be src/main/c, src/main/c++
@@ -213,7 +213,7 @@ abstract classes in include files.>>
 	This goal will compile the native test source code (c, c++ or fortran) and create executables from it.
 To handle the variety of compilers and linkers, the NAR plugin uses a derivative of the cpptasks from the ant-contrib
 project, with some minor improvements and additions of compilers.  Most of the settings for cpptasks, such as compiler,
-linker, options and include dirs are available through the NAR plugin, see {{{configuration.html}configuration}}.
+linker, options and include dirs are available through the NAR plugin, see {{{./configuration.html}configuration}}.
 
 	The NAR plugin searches the directory structure under COMPILER.sourceDirectory, which defaults to
 src/test. The standard way to separate your sources for different languages would be src/test/c, src/test/c++
@@ -238,7 +238,7 @@ skipped.>>
 The following jar and nar files are created:
 
     * \<Artifact\>-\<version\>.jar, containing a property file describing the behaviour of the 
-    library and other nar files available. For a description see {{{nar-dependencies.html}
+    library and other nar files available. For a description see {{{./nar-dependencies.html}
     nar-dependencies}}. This jar file is renamed to nar when installed or deployed.
     
     * \<Artifact\>-\<version\>-noarch.nar, a compressed jar file containing non machine

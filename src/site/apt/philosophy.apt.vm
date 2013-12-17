@@ -203,7 +203,7 @@ call the NAR Plugin goals as specified in the lifecycle.
 org.freehep nmath library version 4.5.1, for the platform you are running on.
 
 	Maven's Super POM is used for most of the default behaviour
-and the NAR Plugin's {{{aol.html}AOL Properties}} are used for native defaults.
+and the NAR Plugin's {{{./aol.html}AOL Properties}} are used for native defaults.
 
 
 ** NAR's build lifecycle
