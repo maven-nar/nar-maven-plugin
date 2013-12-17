@@ -7,18 +7,11 @@ Mark Donszelmann
 	
 CppTasks
 
-	To handle the variety of architectures, compilers and linkers, the NAR Plugin uses 
-the {{{http://ant-contrib.sourceforge.net/cc.html}cpptasks}} library available 
-from {{{http://ant-contrib.sourceforge.net/}ant-contrib}}.
-This library allows to specify compilers and linkers from ant (and thus from maven)
-and unifies most common options for those compilers and linkers.
+	To handle the variety of architectures, compilers and linkers, the NAR Plugin uses
+a derivative of the {{{http://ant-contrib.sourceforge.net/cc.html}cpptasks}} library
+available from {{{http://ant-contrib.sourceforge.net/}ant-contrib}}.  This library
+allows to specify compilers and linkers from ant (and thus from maven) and unifies
+most common options for those compilers and linkers.
 
-	The NAR Plugin uses
-{{{https://github.com/maven-nar/cpptasks-parallel}cpptasks-parallel}} based on
-{{{http://sourceforge.net/project/showfiles.php?group_id=36177}cpptasks}}. You
-can find the latest of our mods in our git repository:
-
-+--
-git clone git://github.com/maven-nar/cpptasks-parallel
-+--
-
+	As of revision 3c3807743 the {{{./source-repository.html}source code repository}}
+of the NAR Plugin includes the complete history of <<<cpptasks-parallel>>>.

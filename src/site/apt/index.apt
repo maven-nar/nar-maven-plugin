@@ -151,10 +151,9 @@ nar-gnu-process goal.
                 
 	This goal will compile the native source code (c, c++ or fortran) and archive it into a shared library.
 You can also produce a jni or a static library by setting <<<library.type>>>.
-To handle the variety of compilers and linkers, the NAR plugin uses the cpptasks from the ant-contrib
-project, with some minor improvements and additions of compilers, see {{{cpptasks.html}cpptasks}}.
-Most of the settings for cpptasks, such as compiler, linker, options and include dirs are available
-through the NAR plugin, see {{{configuration.html}configuration}}.
+To handle the variety of compilers and linkers, the NAR plugin uses a derivative of the cpptasks from the ant-contrib
+project, with some minor improvements and additions of compilers. Most of the settings for cpptasks, such as compiler,
+linker, options and include dirs are available through the NAR plugin, see {{{configuration.html}configuration}}.
 
 	The NAR plugin searches the directory structure under COMPILER.sourceDirectory, which defaults to
 src/main. The standard way to separate your sources for different languages would be src/main/c, src/main/c++
@@ -212,10 +211,9 @@ abstract classes in include files.>>
 * {nar-testCompile}
 
 	This goal will compile the native test source code (c, c++ or fortran) and create executables from it.
-To handle the variety of compilers and linkers, the NAR plugin uses the cpptasks from the ant-contrib
-project, with some minor improvements and additions of compilers, see {{{cpptasks.html}cpptasks}}.
-Most of the settings for cpptasks, such as compiler, linker, options and include dirs are available
-through the NAR plugin, see {{{configuration.html}configuration}}.
+To handle the variety of compilers and linkers, the NAR plugin uses a derivative of the cpptasks from the ant-contrib
+project, with some minor improvements and additions of compilers.  Most of the settings for cpptasks, such as compiler,
+linker, options and include dirs are available through the NAR plugin, see {{{configuration.html}configuration}}.
 
 	The NAR plugin searches the directory structure under COMPILER.sourceDirectory, which defaults to
 src/test. The standard way to separate your sources for different languages would be src/test/c, src/test/c++

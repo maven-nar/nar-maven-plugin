@@ -56,7 +56,6 @@ under the License.
       <item name="NAR Library" href="narLibrary.html"/>
       <item name="CPPTasks" href="cpptasks.html"/>
       <item name="Git Browse nar-plugin" href="https://github.com/maven-nar/nar-maven-plugin"/>
-      <item name="Git Browse cpptasks" href="https://github.com/maven-nar/cpptasks-parallel"/>
       <item name="Git Repository" href="source-repository.html"/>
     </menu>
 
