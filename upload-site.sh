@@ -2,7 +2,17 @@
 
 URL=github.com:maven-nar/maven-nar.github.com &&
 git fetch "$URL" master &&
-mvn site &&
+for d in /usr/lib/jvm/java-7-openjdk-amd64/
+do
+	if test -d "$d"
+	then
+		echo "Using Java 7 for prettier javadocs" &&
+		export JAVA_HOME="$d" &&
+		export PATH="$JAVA_HOME/bin:$PATH" &&
+		break
+	fi
+done &&
+mvn clean site &&
 export GIT_INDEX_FILE=.git/tmp-index &&
     rm -f $GIT_INDEX_FILE &&
 git add -f target/site &&
