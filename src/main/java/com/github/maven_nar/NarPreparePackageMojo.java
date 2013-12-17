@@ -23,7 +23,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**
- * Jars up the NAR files.
+ * Create the nar.properties file.
  * 
  * @goal nar-prepare-package
  * @phase prepare-package

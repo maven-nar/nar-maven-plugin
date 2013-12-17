@@ -25,7 +25,7 @@ import org.apache.maven.project.MavenProjectHelper;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
 
 /**
- * Jars up the NAR files.
+ * Jar up the NAR files and attach them to the projects main artifact (for installation and deployment).
  * 
  * @goal nar-package
  * @phase package

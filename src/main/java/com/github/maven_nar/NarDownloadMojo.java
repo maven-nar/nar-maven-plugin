@@ -19,13 +19,9 @@ package com.github.maven_nar;
  * under the License.
  */
 
-import java.util.List;
-
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 
 /**
- * Downloads any dependent NAR files. This includes the noarch and aol type NAR files.
+ * Downloads and unpacks any dependent NAR files. This includes the noarch and aol type NAR files.
  * 
  * @goal nar-download
  * @phase process-sources
@@ -36,11 +32,5 @@ import org.apache.maven.plugin.MojoFailureException;
 public class NarDownloadMojo
     extends AbstractDependencyMojo
 {
-	/**
-	 * @parameter 
-	 */
-	List artifactItems;
-
-
 	
 }

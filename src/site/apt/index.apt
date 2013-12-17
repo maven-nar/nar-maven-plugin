@@ -29,39 +29,39 @@ The goals are part of the
 <<<nar>>> packaging/{{{lifecycle.html}lifecycle}}, which inserts the nar goals into the standard lifecyle. Using nar packaging
 allows you to build a jar file as well as nar files. The list below shows the sequence of the NAR goals:
 
-    [[1]] {{{#nar-validate}nar-validate}}
+    [[1]] {{{nar-validate}nar-validate}}
     
-    [[2]] {{{#nar-download}nar-download}}
+    [[2]] {{{nar-download}nar-download}}
     
-    [[3]] {{{#nar-unpack}nar-unpack}}
+    [[3]] {{{nar-unpack}nar-unpack}}
     
-    [[4]] {{{#nar-gnu-configure}nar-gnu-configure}}
+    [[4]] {{{nar-gnu-configure}nar-gnu-configure}}
     
-    [[5]] {{{#nar-system-generate}nar-system-generate}}
+    [[5]] {{{nar-system-generate}nar-system-generate}}
     
-    [[6]] {{{#nar-resources}nar-resources}}
+    [[6]] {{{nar-resources}nar-resources}}
     
-    [[7]] {{{#nar-gnu-resources}nar-gnu-resources}}
+    [[7]] {{{nar-gnu-resources}nar-gnu-resources}}
     
-    [[8]] {{{#nar-javah}nar-javah}}
+    [[8]] {{{nar-javah}nar-javah}}
     
-    [[9]] {{{#nar-gnu-make}nar-gnu-make}}
+    [[9]] {{{nar-gnu-make}nar-gnu-make}}
 
-    [[10]] {{{#nar-compile}nar-compile}}
+    [[10]] {{{nar-compile}nar-compile}}
     
-    [[11]] {{{#nar-gnu-process}nar-gnu-process}}
+    [[11]] {{{nar-gnu-process}nar-gnu-process}}
     
-    [[12]] {{{#nar-testCompile}nar-testCompile}}
+    [[12]] {{{nar-testCompile}nar-testCompile}}
    
-    [[13]] {{{#nar-test}nar-test}}
+    [[13]] {{{nar-test}nar-test}}
     
-    [[14]] {{{#nar-package}nar-package}}
+    [[14]] {{{nar-package}nar-package}}
     
-    [[15]] {{{#nar-integration-test}nar-integration-test}}
+    [[15]] {{{nar-integration-test}nar-integration-test}}
     
-    [[16]] {{{#install}install (standard maven goal)}}
+    [[16]] {{{install}install (standard maven goal)}}
     
-    [[17]] {{{#deploy}deploy (standard maven goal)}}
+    [[17]] {{{deploy}deploy (standard maven goal)}}
 
 	[]
 	
