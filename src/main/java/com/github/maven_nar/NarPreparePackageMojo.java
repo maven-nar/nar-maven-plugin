@@ -29,7 +29,7 @@ import org.apache.maven.project.MavenProjectHelper;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
 
 /**
- * Jars up the NAR files.
+ * Create the nar.properties file.
  * 
  * @goal nar-prepare-package
  * @phase prepare-package
