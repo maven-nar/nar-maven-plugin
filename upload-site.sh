@@ -15,6 +15,24 @@ done &&
 mvn clean site &&
 export GIT_INDEX_FILE=.git/tmp-index &&
     rm -f $GIT_INDEX_FILE &&
+for d in nar-maven-plugin maven-nar-plugin
+do
+	mkdir -p target/site/$d &&
+	cat > target/site/$d/index.html << EOF
+<!DOCTYPE html>
+<html>
+        <head>
+                <title>Redirecting to the homepage of the NAR plugin for Maven</title>
+                <meta http-equiv=refresh content="1;url=../index.html"/>
+        </head>
+        <body>
+                <h1>Redirecting to the homepage of the NAR plugin for Maven</h1>
+
+                If you are not redirected automatically, please click <a href=../index.html>here</a>.
+        </body>
+</html>
+EOF
+done &&
 git add -f target/site &&
     TREE=$(git write-tree) &&
 unset GIT_INDEX_FILE &&
