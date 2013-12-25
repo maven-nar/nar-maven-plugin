@@ -69,6 +69,10 @@ public final class NarUtil
             {
                 os = OS.LINUX;
             }
+            if ( name.startsWith( "freebsd" ) )
+            {
+                os = OS.FREEBSD;
+            }
             if ( name.equals( "mac os x" ) )
             {
                 os = OS.MACOSX;
