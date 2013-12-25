@@ -32,4 +32,6 @@ public interface OS
     String LINUX = "Linux";
 
     String SUNOS = "SunOS";
+
+    String FREEBSD = "FreeBSD";
 }

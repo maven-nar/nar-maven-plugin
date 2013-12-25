@@ -1,6 +1,6 @@
 The NAR plugin for Maven allows you to compile native code (C++, C and
 Fortran) on a number of different architectures (Linux, Windows, MacOSX,
-Solaris, ...) and with a number of different compilers/linkers (g++,
+Solaris, FreeBSD, ...) and with a number of different compilers/linkers (g++,
 Microsoft Visual C++, CC, ...) The output produced is wrapped up in
 Native ARchive files (.nar) some of which are machine independent
 (-noarch), while others are machine specific and thus depend on a
