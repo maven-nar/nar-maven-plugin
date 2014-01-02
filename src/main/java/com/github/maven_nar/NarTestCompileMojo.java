@@ -171,12 +171,12 @@ public class NarTestCompileMojo
             
             // check if it exists in the normal unpack directory
             File include = 
-                getLayout().getIncludeDirectory( getUnpackDirectory(), artifact.getArtifactId(), artifact.getVersion() );
+                getLayout().getIncludeDirectory( getUnpackDirectory(), artifact.getArtifactId(), artifact.getBaseVersion() );
             if ( !include.exists() )
             {
                 // otherwise try the test unpack directory
                 include = 
-                    getLayout().getIncludeDirectory( getTestUnpackDirectory(), artifact.getArtifactId(), artifact.getVersion() );
+                    getLayout().getIncludeDirectory( getTestUnpackDirectory(), artifact.getArtifactId(), artifact.getBaseVersion() );
             }
             if ( include.exists() )
             {                
@@ -289,7 +289,7 @@ public class NarTestCompileMojo
                 // check if it exists in the normal unpack directory 
                 File dir =
                     getLayout().getLibDirectory( getUnpackDirectory(), dependency.getArtifactId(),
-                                                  dependency.getVersion(), aol.toString(), binding );
+                                                  dependency.getBaseVersion(), aol.toString(), binding );
                 getLog().debug( "Looking for Library Directory: " + dir );
                 if ( !dir.exists() )
                 {
@@ -297,7 +297,7 @@ public class NarTestCompileMojo
 
                     // otherwise try the test unpack directory
                     dir = getLayout().getLibDirectory( getTestUnpackDirectory(), dependency.getArtifactId(),
-                                                        dependency.getVersion(), aol.toString(), binding );
+                                                        dependency.getBaseVersion(), aol.toString(), binding );
                     getLog().debug( "Looking for Library Directory: " + dir );
                 }
                 if ( dir.exists() )

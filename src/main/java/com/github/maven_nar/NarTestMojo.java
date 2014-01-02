@@ -203,7 +203,7 @@ public class NarTestMojo
             dependency.isSnapshot();
 
             File libDirectory =
-                getLayout().getLibDirectory( getUnpackDirectory(), dependency.getArtifactId(), dependency.getVersion(),
+                getLayout().getLibDirectory( getUnpackDirectory(), dependency.getArtifactId(), dependency.getBaseVersion(),
                                              getAOL().toString(), Library.SHARED );
             sharedPaths.add( libDirectory );
         }

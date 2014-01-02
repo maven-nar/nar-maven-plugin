@@ -174,7 +174,7 @@ public class NarVcprojMojo extends AbstractCompileMojo {
                 File unpackDirectory = getUnpackDirectory();
                 File include =
                     getLayout().getIncludeDirectory( unpackDirectory, narDependency.getArtifactId(),
-                                                     narDependency.getVersion() );
+                                                     narDependency.getBaseVersion() );
                 getLog().debug("Looking for directory: " + include);
 				if (include.exists()) {
 					task.createIncludePath().setPath(include.getPath());
@@ -246,7 +246,7 @@ public class NarVcprojMojo extends AbstractCompileMojo {
                     File unpackDirectory = getUnpackDirectory();
                     File dir =
                         getLayout().getLibDirectory( unpackDirectory, dependency.getArtifactId(),
-                                                     dependency.getVersion(), aol.toString(), binding );
+                                                     dependency.getBaseVersion(), aol.toString(), binding );
 					getLog().debug("Looking for Library Directory: " + dir);
 					if (dir.exists()) {
 						LibrarySet libSet = new LibrarySet();
