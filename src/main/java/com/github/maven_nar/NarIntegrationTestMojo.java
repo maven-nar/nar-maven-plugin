@@ -761,7 +761,7 @@ public class NarIntegrationTestMojo
 
             // TODO: properties should be passed in here too
             surefireBooter.addTestSuite( "org.apache.maven.surefire.testng.TestNGXmlTestSuite", new Object[] {
-                suiteXmlFiles, testSourceDirectory.getAbsolutePath(), testNgArtifact.getVersion(),
+                suiteXmlFiles, testSourceDirectory.getAbsolutePath(), testNgArtifact.getBaseVersion(),
                 testNgArtifact.getClassifier(), properties, reportsDirectory } );
         }
         else
@@ -823,7 +823,7 @@ public class NarIntegrationTestMojo
             {
                 surefireBooter.addTestSuite( "org.apache.maven.surefire.testng.TestNGDirectoryTestSuite", new Object[] {
                     testClassesDirectory, includeList, excludeList, testSourceDirectory.getAbsolutePath(),
-                    testNgArtifact.getVersion(), testNgArtifact.getClassifier(), properties, reportsDirectory } );
+                    testNgArtifact.getBaseVersion(), testNgArtifact.getClassifier(), properties, reportsDirectory } );
             }
             else
             {

@@ -46,6 +46,6 @@ public class NarArtifact
     }
     
     public String getBaseFilename() {
-        return getArtifactId()+"-"+getVersion()+"-"+getClassifier();
+        return getArtifactId()+"-"+getBaseVersion()+"-"+getClassifier();
     }
 }

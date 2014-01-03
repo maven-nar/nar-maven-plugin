@@ -305,7 +305,7 @@ public class NarCompileMojo
                 File unpackDirectory = getUnpackDirectory();
                 File include =
                     getLayout().getIncludeDirectory( unpackDirectory, narDependency.getArtifactId(),
-                                                     narDependency.getVersion() );
+                                                     narDependency.getBaseVersion() );
                 getLog().debug( "Looking for include directory: " + include );
                 if ( include.exists() )
                 {
@@ -377,7 +377,7 @@ public class NarCompileMojo
 
                     File dir =
                         getLayout().getLibDirectory( unpackDirectory, dependency.getArtifactId(),
-                                                     dependency.getVersion(), aol.toString(), binding );
+                                                     dependency.getBaseVersion(), aol.toString(), binding );
 
                     getLog().debug("Looking for Library Directory: " + dir);
                     if ( dir.exists() )

@@ -134,7 +134,7 @@ public class Lib
                     File narDir =
                         new File( dependency.getFile().getParentFile(), "nar/lib/"
 									+ mojo.getAOL() + "/" + lib.type);
-                    String narName = dependency.getArtifactId() + "-" + lib.name + "-" + dependency.getVersion();
+                    String narName = dependency.getArtifactId() + "-" + lib.name + "-" + dependency.getBaseVersion();
 					lib.addLibSet(mojo, linker, antProject, narName, narDir);
 				}
 			}
