@@ -57,6 +57,18 @@ public abstract class AbstractGnuMojo
     private File gnuTargetDirectory;
 
     /**
+     * Prefix path argument to pass to GNU configure.
+     * The system generated prefix path is used if you don't specify this.
+     *
+     * @parameter property="nar.gnu.configure.prefix" default-value=""
+     */
+    private String gnuConfigureInstallPrefix;
+    /*
+     * NOTE: gnuConfigureInstallPrefix is not only used in NarGnuConfigureMojo
+     * but also in NarGnuMakeMojo. So this parameter is here.
+     */
+
+    /**
      * @return
      * @throws MojoFailureException
      * @throws MojoExecutionException 
@@ -92,7 +104,11 @@ public abstract class AbstractGnuMojo
     {
         return new File( gnuTargetDirectory, getAOL().toString() );
     }
-    
+
+    protected final String getGnuConfigureInstallPrefix() {
+        return gnuConfigureInstallPrefix == null ? "" : gnuConfigureInstallPrefix.trim();
+    }
+
     /**
      * Returns true if we do not want to use GNU on Windows
      * 
