@@ -1,0 +1,26 @@
+/*
+ * Check if warning log is shown.
+ */
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;;
+
+String build_log_file = "build.log";
+
+boolean isDetectedWarning = false;
+String expected = "[WARNING] '--prefix' detected in gnuConfigureArgs. You should use the pramater gnuConfigureInstallPrefix instead.";
+
+File file = new File(basedir, build_log_file);
+BufferedReader br = new BufferedReader(new FileReader(file));
+
+String line;
+while((line = br.readLine()) != null){
+  if (line.equals(expected)) {
+    isDetectedWarning = true;
+    break;
+  }
+}
+
+if (isDetectedWarning == false) {
+  throw new RuntimeException("There is no expected warning in " + build_log_file + ".");
+}
