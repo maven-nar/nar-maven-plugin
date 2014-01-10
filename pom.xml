@@ -402,6 +402,7 @@
                 <pomExclude>${skip.toolchain.it}</pomExclude>
               </pomExcludes>
               <localRepositoryPath>${project.build.directory}/it-repo</localRepositoryPath>
+              <postBuildHookScript>postbuild</postBuildHookScript>
               <settingsFile>src/it/settings.xml</settingsFile>
               <goals>
                 <goal>clean</goal>
