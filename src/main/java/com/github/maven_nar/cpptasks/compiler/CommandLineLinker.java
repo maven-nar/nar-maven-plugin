@@ -229,6 +229,16 @@ public abstract class CommandLineLinker extends AbstractLinker
         }
         else
         {
+            // Try to find the executable in the $PATH
+            String paths = System.getenv("PATH");
+
+            for ( String path : paths.split(":") ) {
+                File command = new File( path, this.getCommand() );
+
+                if ( command.exists() ) {
+                    return command.getAbsolutePath();
+                }
+            }
             return this.getCommand();
         }
     }
