@@ -295,7 +295,7 @@ public class Linker
         linker.setMap( map );
 
         // Add definitions (Window only)
-        if ( os.equals( OS.WINDOWS ) && ( type.equals( Library.SHARED ) || type.equals( Library.JNI ) ) )
+        if ( os.equals( OS.WINDOWS ) && getName( null, null ).equals( "msvc" ) && ( type.equals( Library.SHARED ) || type.equals( Library.JNI ) ) )
         {
             Set defs = new HashSet();
             try
