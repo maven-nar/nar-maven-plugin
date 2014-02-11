@@ -53,6 +53,12 @@ public class TestLinkerVersion
     public void testVersion()
         throws Exception
     {
+        if ( "Windows".equals( NarUtil.getOS( null ) ) &&
+	    null == System.getenv( "DevEnvDir" ) )
+	  {
+	    // Skip testing the MSVC linker on Win if vsvars32.bat has not run
+	    return;
+	  }
         String version = linker.getVersion();
         Assert.assertNotNull( version );
     }
