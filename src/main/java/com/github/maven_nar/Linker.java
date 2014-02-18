@@ -91,6 +91,13 @@ public class Linker
     private List options;
 
     /**
+     * Additional options for the linker when running in the nar-testCompile phase.
+     * 
+     * @parameter default-value=""
+     */
+    private List testOptions;
+
+    /**
      * Options for the linker as a whitespace separated list. Defaults to Architecture-OS-Linker specific values. Will
      * work in combination with &lt;options&gt;.
      * 
@@ -267,6 +274,26 @@ public class Linker
         	throw new MojoFailureException( "Cannot deduce version number from: " + out.toString() );
         }
         return version;
+    }
+
+    /**
+     * @return The standard Linker configuration with 'testOptions' added to the argument list.
+     */
+    public final LinkerDef getTestLinker( AbstractCompileMojo mojo, Project antProject, String os, String prefix,
+                                          String type )
+        throws MojoFailureException, MojoExecutionException
+    {
+        LinkerDef linker = getLinker(mojo, antProject, os, prefix, type);
+        if ( testOptions != null )
+        {
+            for ( Iterator i = testOptions.iterator(); i.hasNext(); )
+            {
+                LinkerArgument arg = new LinkerArgument();
+                arg.setValue( (String) i.next() );
+                linker.addConfiguredLinkerArg( arg );
+            }
+        }
+        return linker;
     }
 
     public final LinkerDef getLinker( AbstractCompileMojo mojo, Project antProject, String os, String prefix,
