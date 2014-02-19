@@ -229,6 +229,13 @@ public abstract class Compiler
     private List options;
 
     /**
+     * Additional options for the compiler when running in the nar-testCompile phase.
+     * 
+     * @parameter default-value=""
+     */
+    private List testOptions;
+
+    /**
      * Options for the compiler as a whitespace separated list. Will work in combination with &lt;options&gt;.
      * 
      * @parameter default-value=""
@@ -430,6 +437,25 @@ public abstract class Compiler
         throws MojoFailureException, MojoExecutionException
     {
         return mojo.getAOL().getKey() + "." + getLanguage() + ".";
+    }
+
+    /**
+     * @return The standard Compiler configuration with 'testOptions' added to the argument list.
+     */
+    public final CompilerDef getTestCompiler( String type, String output )
+        throws MojoFailureException, MojoExecutionException
+    {
+        CompilerDef compiler = getCompiler(type, output);
+        if ( testOptions != null )
+        {
+            for ( Iterator i = testOptions.iterator(); i.hasNext(); )
+            {
+                CompilerArgument arg = new CompilerArgument();
+                arg.setValue( (String) i.next() );
+                compiler.addConfiguredCompilerArg( arg );
+            }
+        }
+        return compiler;
     }
 
     public final CompilerDef getCompiler( String type, String output )
