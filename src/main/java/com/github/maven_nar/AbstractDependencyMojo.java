@@ -245,7 +245,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
 									aolString.toString(), classifier);
 						}
 						String version = nar.length >= 5 ? nar[4].trim()
-								: dependency.getVersion();
+								: dependency.getBaseVersion();
 						artifactList.add(new AttachedNarArtifact(groupId,
 								artifactId, version, dependency.getScope(),
 								ext, classifier, dependency.isOptional(),
