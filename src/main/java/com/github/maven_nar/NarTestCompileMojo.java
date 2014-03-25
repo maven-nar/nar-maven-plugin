@@ -73,7 +73,10 @@ public class NarTestCompileMojo
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-    	super.narExecute();
+        super.narExecute();
+        // Explicitly unpack the NarArtifacts when fresh artifacts object.
+        // This will unpack SNAPSHOT artifacts with nar expected version name
+        unpackAttachedNars( getAllAttachedNarArtifacts(getNarArtifacts()) );
         // make sure destination is there
         getTestTargetDirectory().mkdirs();
 
