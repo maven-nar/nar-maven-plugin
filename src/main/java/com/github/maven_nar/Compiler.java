@@ -487,14 +487,34 @@ public abstract class Compiler
         optimization.setValue( optimize );
         compiler.setOptimize( optimization );
 
-        // add options
-        if ( options != null )
+        String rpmOptions = System.getenv( "RPM_OPT_FLAGS" );
+
+        if ( rpmOptions != null )
         {
-            for ( Iterator i = options.iterator(); i.hasNext(); )
+                // Make sure we won't add the default options later
+                // We want to use the options provided by RPM_OPT_FLAGS env variable
+                // *only*!
+                clearDefaultOptions = true;
+
+                String[] option = rpmOptions.replaceAll( "\\s+", " " ).split( " " );
+                for ( int i = 0; i < option.length; i++ )
+                {
+                    CompilerArgument arg = new CompilerArgument();
+                    arg.setValue( option[i] );
+                    compiler.addConfiguredCompilerArg( arg );
+                }
+        }
+        else
+        {
+            // add options
+            if ( options != null )
             {
-                CompilerArgument arg = new CompilerArgument();
-                arg.setValue( (String) i.next() );
-                compiler.addConfiguredCompilerArg( arg );
+                for ( Iterator i = options.iterator(); i.hasNext(); )
+                {
+                    CompilerArgument arg = new CompilerArgument();
+                    arg.setValue( (String) i.next() );
+                    compiler.addConfiguredCompilerArg( arg );
+                }
             }
         }
 
