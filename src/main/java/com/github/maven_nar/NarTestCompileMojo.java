@@ -73,13 +73,20 @@ public class NarTestCompileMojo
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-    	super.narExecute();
-        // make sure destination is there
-        getTestTargetDirectory().mkdirs();
-
-        for ( Iterator i = getTests().iterator(); i.hasNext(); )
+        if ( skipTests )
         {
-            createTest( getAntProject(), (Test) i.next() );
+            getLog().info( "Not compiling test sources" );
+        }
+        else
+        {
+            super.narExecute();
+            // make sure destination is there
+            getTestTargetDirectory().mkdirs();
+
+            for ( Iterator i = getTests().iterator(); i.hasNext(); )
+            {
+                createTest( getAntProject(), (Test) i.next() );
+            }
         }
     }
 

@@ -75,16 +75,23 @@ public class NarTestMojo
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        super.narExecute();
-        // run all tests
-        for ( Iterator i = getTests().iterator(); i.hasNext(); )
+        if ( skipTests )
         {
-            runTest( (Test) i.next() );
+            getLog().info( "Tests are skipped" );
         }
-
-        for ( Iterator i = getLibraries().iterator(); i.hasNext(); )
+        else
         {
-            runExecutable( (Library) i.next() );
+            super.narExecute();
+            // run all tests
+            for ( Iterator i = getTests().iterator(); i.hasNext(); )
+            {
+                runTest( (Test) i.next() );
+            }
+
+            for ( Iterator i = getLibraries().iterator(); i.hasNext(); )
+            {
+                runExecutable( (Library) i.next() );
+            }
         }
     }
 

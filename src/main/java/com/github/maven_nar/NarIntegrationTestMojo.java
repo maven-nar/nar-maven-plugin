@@ -551,15 +551,19 @@ public class NarIntegrationTestMojo
     public void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        if ( verifyParameters() )
+        if ( skipTests )
         {
-        	super.narExecute();
+            getLog().info( "Tests are skipped" );
+        }
+        else if ( verifyParameters() )
+        {
+            super.narExecute();
 
             SurefireBooter surefireBooter = constructSurefireBooter();
 
             getLog().info( "Surefire report directory: " + reportsDirectory );
 
-        	int result;
+            int result;
             try
             {
                 result = surefireBooter.run();
