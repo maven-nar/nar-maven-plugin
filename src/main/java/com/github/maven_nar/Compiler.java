@@ -513,6 +513,7 @@ public abstract class Compiler
             }
         }
 
+        compiler.setClearDefaultOptions(clearDefaultOptions);
         if ( !clearDefaultOptions )
         {
             String optionsProperty = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "options" );

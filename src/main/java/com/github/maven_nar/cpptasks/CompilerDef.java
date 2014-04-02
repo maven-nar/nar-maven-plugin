@@ -54,8 +54,20 @@ public final class CompilerDef extends ProcessorDef {
 	private List order;
     private String toolPath;
 
+    private boolean clearDefaultOptions;
+
+
     public CompilerDef() {
     }
+
+    public boolean isClearDefaultOptions() {
+        return clearDefaultOptions;
+    }
+
+    public void setClearDefaultOptions(boolean clearDefaultOptions) {
+        this.clearDefaultOptions = clearDefaultOptions;
+    }
+
     /**
      * Adds a compiler command-line arg.
      */
