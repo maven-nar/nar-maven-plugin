@@ -83,7 +83,7 @@
     <its.to.skip>dummy</its.to.skip>
     <mavenVersion>2.0.9</mavenVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <skip.autoconf.it>it0013-gnu-executable/**</skip.autoconf.it>
+    <skip.autoconf.it>it*-gnu-executable*/**</skip.autoconf.it>
     <skip.fortran.it>it0018-fortran/**</skip.fortran.it>
     <skip.toolchain.it>it0017-toolchain/**</skip.toolchain.it>
     <sonatypeOssDistMgmtSnapshotsUrl>https://oss.sonatype.org/content/repositories/snapshots/</sonatypeOssDistMgmtSnapshotsUrl>

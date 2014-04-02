@@ -20,6 +20,8 @@ package com.github.maven_nar;
  */
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -67,12 +69,17 @@ public class NarGnuMakeMojo
         File srcDir = getGnuAOLSourceDirectory();
         if ( srcDir.exists() )
         {
-            String[] args= null;
+            ArrayList<String> args= new ArrayList<String>();
             String[] env= null;
+
+            String prefix = getGnuConfigureInstallPrefix();
+            if (!prefix.equals("")) {
+                 args.add("DESTDIR='" + getGnuAOLTargetDirectory().getAbsolutePath() + "'");
+            }
 
             if ( gnuMakeArgs != null )
             {
-               args= gnuMakeArgs.split( " " );
+               args.addAll(Arrays.asList(gnuMakeArgs.split( " " )));
             }
             if ( gnuMakeEnv != null )
             {
@@ -80,7 +87,7 @@ public class NarGnuMakeMojo
             }
 
             getLog().info( "Running GNU make" );
-            int result = NarUtil.runCommand( "make", args, srcDir, env, getLog() );
+            int result = NarUtil.runCommand( "make", args.toArray(new String[args.size()]), srcDir, env, getLog() );
             if ( result != 0 )
             {
                 throw new MojoExecutionException( "'make' errorcode: " + result );
@@ -89,16 +96,8 @@ public class NarGnuMakeMojo
             if ( !gnuMakeInstallSkip )
             {
                getLog().info( "Running make install" );
-               if ( args != null )
-               {
-                  gnuMakeArgs= gnuMakeArgs + " install";
-                  args= gnuMakeArgs.split( " " );
-               }
-               else
-               {
-                  args= new String[] { "install" };
-               }
-               result = NarUtil.runCommand( "make", args, srcDir, null, getLog() );
+               args.add("install");
+               result = NarUtil.runCommand( "make", args.toArray(new String[args.size()]), srcDir, null, getLog() );
                if ( result != 0 )
                {
                    throw new MojoExecutionException( "'make install' errorcode: " + result );

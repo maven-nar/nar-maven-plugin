@@ -119,6 +119,10 @@ public class NarGnuConfigureMojo extends AbstractGnuMojo {
 					args = new String[a.length + 2];
 
 					for (int i = 0; i < a.length; i++) {
+						if (a[i].startsWith("--prefix")) {
+							getLog().warn("'--prefix' detected in gnuConfigureArgs." +
+								 " You should use the pramater gnuConfigureInstallPrefix instead.");
+						}
 						args[i + 2] = a[i];
 					}
 				} else {
@@ -126,9 +130,11 @@ public class NarGnuConfigureMojo extends AbstractGnuMojo {
 				}
 
 				// first 2 args are constant
-				args[0] = "./" + configure.getName();
-				args[1] = "--prefix="
-						+ getGnuAOLTargetDirectory().getAbsolutePath();
+				args[0] = configure.getAbsolutePath();
+				String prefix = getGnuConfigureInstallPrefix();
+				args[1] = "--prefix=" + (prefix.equals("") ?
+							 getGnuAOLTargetDirectory().getAbsolutePath() :
+							 prefix);
 
 				getLog().info("args: " + arraysToString(args));
 				int result = NarUtil.runCommand("sh", args, targetDir, null,
