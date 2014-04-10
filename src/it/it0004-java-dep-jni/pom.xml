@@ -45,6 +45,13 @@ under the License.
     <defaultGoal>integration-test</defaultGoal>
     <plugins>
       <plugin>
+        <artifactId>maven-invoker-plugin</artifactId>
+        <version>1.8</version>
+        <configuration>
+          <preBuildHookScript>setup.bsh</preBuildHookScript>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>@project.groupId@</groupId>
         <artifactId>nar-maven-plugin</artifactId>
         <extensions>true</extensions>
