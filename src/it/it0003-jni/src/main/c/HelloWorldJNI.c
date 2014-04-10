@@ -20,6 +20,10 @@
 #include <stdio.h>
 #include "it0003_HelloWorldJNI.h"
 
+#ifdef TESTOPT
+#error "TESTOPT is set!"
+#endif
+
 JNIEXPORT jstring JNICALL Java_it0003_HelloWorldJNI_sayHello( JNIEnv *env, jobject obj ) {
 	jstring value;           /* the return value */
 

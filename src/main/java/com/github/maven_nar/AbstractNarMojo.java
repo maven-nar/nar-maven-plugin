@@ -46,6 +46,13 @@ public abstract class AbstractNarMojo
     private boolean skip;
 
     /**
+     * Skip the tests. Listens to Maven's general 'maven.skip.test'.
+     * 
+     * @parameter property="maven.test.skip"
+     */
+    boolean skipTests;
+
+    /**
      * Ignore errors and failures.
      * 
      * @parameter property="nar.ignore" default-value="false"

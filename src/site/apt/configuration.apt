@@ -70,6 +70,9 @@ NAR Configuration
     <options>
       <option/>
     </options>
+    <testOptions>
+      <testOption/>
+    </testOptions>
     <clearDefaultOptions/>
     <libs>
       <lib>
@@ -118,6 +121,9 @@ NAR Configuration
     <options>
       <option/>
     </options>
+    <testOptions>
+      <testOption/>
+    </testOptions>
     <clearDefaultOptions/>
     <compileOrder/>
   </cpp>
@@ -297,6 +303,10 @@ the command line for compatible compilers/linkers. Default is false.
 	Additional options for the linker.
     Defaults to AOL specific values.
 
+** {linker testOptions}
+
+	Additional options for the linker during the nar-testCompile phase.
+
 ** {linker clearDefaultOptions}
 
 	Clear options specified in AOL properties.
@@ -401,6 +411,10 @@ the command line for compatible compilers/linkers. Default is false.
 
 	Additional options for the C++ compiler. Some of these options can be set by specific tags (debug, rtti, ...).
     Defaults to AOL specific values.
+
+** {cpp testOptions}
+
+	Additional options for the C++ compiler during the nar-testCompile phase.
       
 ** {cpp clearDefaultOptions}
 

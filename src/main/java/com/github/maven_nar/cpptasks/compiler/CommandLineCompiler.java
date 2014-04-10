@@ -274,16 +274,16 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
                 params.add(paramArray[j]);
             }
         }
-        paramArray = (ProcessorParam[]) (params
-                .toArray(new ProcessorParam[params.size()]));
-        boolean multithreaded = specificDef.getMultithreaded(defaultProviders,
-                1);
-        boolean debug = specificDef.getDebug(baseDefs, 0);
-        boolean exceptions = specificDef.getExceptions(defaultProviders, 1);
-        Boolean rtti = specificDef.getRtti(defaultProviders, 1);
-        OptimizationEnum optimization = specificDef.getOptimization(defaultProviders, 1);
-        this.addImpliedArgs(args, debug, multithreaded, exceptions, linkType, rtti, optimization);
+        paramArray = (ProcessorParam[]) (params.toArray(new ProcessorParam[params.size()]));
 
+        if (specificDef.isClearDefaultOptions() == false) {
+            boolean multithreaded = specificDef.getMultithreaded(defaultProviders, 1);
+            boolean debug = specificDef.getDebug(baseDefs, 0);
+            boolean exceptions = specificDef.getExceptions(defaultProviders, 1);
+            Boolean rtti = specificDef.getRtti(defaultProviders, 1);
+            OptimizationEnum optimization = specificDef.getOptimization(defaultProviders, 1);
+            this.addImpliedArgs(args, debug, multithreaded, exceptions, linkType, rtti, optimization);
+        }
 
         //
         //    add all appropriate defines and undefines

@@ -73,16 +73,23 @@ public class NarTestCompileMojo
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        super.narExecute();
-        // Explicitly unpack the NarArtifacts when fresh artifacts object.
-        // This will unpack SNAPSHOT artifacts with nar expected version name
-        unpackAttachedNars( getAllAttachedNarArtifacts(getNarArtifacts()) );
-        // make sure destination is there
-        getTestTargetDirectory().mkdirs();
-
-        for ( Iterator i = getTests().iterator(); i.hasNext(); )
+        if ( skipTests )
         {
-            createTest( getAntProject(), (Test) i.next() );
+            getLog().info( "Not compiling test sources" );
+        }
+        else
+        {
+            super.narExecute();
+            // Explicitly unpack the NarArtifacts when fresh artifacts object.
+            // This will unpack SNAPSHOT artifacts with nar expected version name
+            unpackAttachedNars( getAllAttachedNarArtifacts(getNarArtifacts()) );
+            // make sure destination is there
+            getTestTargetDirectory().mkdirs();
+
+            for ( Iterator i = getTests().iterator(); i.hasNext(); )
+            {
+                createTest( getAntProject(), (Test) i.next() );
+            }
         }
     }
 
@@ -134,7 +141,7 @@ public class NarTestCompileMojo
         Cpp cpp = getCpp();
         if ( cpp != null )
         {
-            CompilerDef cppCompiler = getCpp().getCompiler( type, test.getName() );
+            CompilerDef cppCompiler = getCpp().getTestCompiler( type, test.getName() );
             if ( cppCompiler != null )
             {
                 task.addConfiguredCompiler( cppCompiler );
@@ -145,7 +152,7 @@ public class NarTestCompileMojo
         C c = getC();
         if ( c != null )
         {
-            CompilerDef cCompiler = c.getCompiler( type, test.getName() );
+            CompilerDef cCompiler = c.getTestCompiler( type, test.getName() );
             if ( cCompiler != null )
             {
                 task.addConfiguredCompiler( cCompiler );
@@ -156,7 +163,7 @@ public class NarTestCompileMojo
         Fortran fortran = getFortran();
         if ( fortran != null )
         {
-            CompilerDef fortranCompiler = getFortran().getCompiler( type, test.getName() );
+            CompilerDef fortranCompiler = getFortran().getTestCompiler( type, test.getName() );
             if ( fortranCompiler != null )
             {
                 task.addConfiguredCompiler( fortranCompiler );
@@ -195,7 +202,7 @@ public class NarTestCompileMojo
 
         // add linker
         LinkerDef linkerDefinition =
-            getLinker().getLinker( this, antProject, getOS(), getAOL().getKey() + ".linker.", type );
+            getLinker().getTestLinker( this, antProject, getOS(), getAOL().getKey() + ".linker.", type );
         task.addConfiguredLinker( linkerDefinition );
 
         File includeDir =
