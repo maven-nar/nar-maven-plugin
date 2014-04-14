@@ -50,5 +50,8 @@ public class ProcessLibraryCommand {
     public String getType() {
 	return libraryType;
     }
+    public void setType(String type) {
+    	libraryType = type;
+    }
 
 }
