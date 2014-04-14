@@ -27,10 +27,12 @@ public class ProcessLibraryCommand {
     private List<String> arguments;
     
     public List<String> getCommandList() {
-	List<String> command = new ArrayList<String>();
-	command.add(executable);
-	command.addAll(arguments);
-	return command;	
+		List<String> command = new ArrayList<String>();
+		command.add(executable);
+		if (arguments != null) {
+			command.addAll(arguments);
+		}
+		return command;	
     }
     
     public String getExecutable() {
@@ -46,8 +48,10 @@ public class ProcessLibraryCommand {
         this.arguments = arguments;
     }
     public String getType() {
-	// TODO Auto-generated method stub
-	return libraryType;
+    	return libraryType;
+    }
+    public void setType(String type) {
+    	libraryType = type;
     }
 
 }
