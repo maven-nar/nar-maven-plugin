@@ -41,7 +41,6 @@ under the License.
 
   <properties>
     <skipTests>true</skipTests>
-    <command.executable>echo</command.executable>
   </properties>
 
   <build>
@@ -92,5 +91,31 @@ under the License.
       </plugin>
     </plugins>
   </build>
+
+  <!-- Setup correct command executable to run based on OS -->
+  <profiles>
+    <profile>
+      <id>linux</id>
+      <activation>
+        <os>
+          <name>Linux</name>
+        </os>
+      </activation>
+      <properties>
+        <command.executable>echo</command.executable>
+      </properties>
+    </profile>
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <properties>
+        <command.executable>win-nar-cmd.bat</command.executable>
+      </properties>
+    </profile>
+  </profiles>
 
 </project>
