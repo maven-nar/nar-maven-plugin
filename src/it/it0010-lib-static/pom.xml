@@ -93,4 +93,19 @@ under the License.
     </plugins>
   </build>
 
+  <!-- Setup correct command executable to run based on OS -->
+  <profiles>
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <properties>
+        <command.executable>echo.bat</command.executable>
+      </properties>
+    </profile>
+  </profiles>
+
 </project>
