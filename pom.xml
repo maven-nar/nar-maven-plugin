@@ -403,6 +403,7 @@
               </pomExcludes>
               <localRepositoryPath>${project.build.directory}/it-repo</localRepositoryPath>
               <postBuildHookScript>postbuild</postBuildHookScript>
+              <preBuildHookScript>setup</preBuildHookScript>
               <settingsFile>src/it/settings.xml</settingsFile>
               <goals>
                 <goal>clean</goal>
