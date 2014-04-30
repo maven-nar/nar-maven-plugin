@@ -113,7 +113,7 @@ under the License.
         </os>
       </activation>
       <properties>
-        <command.executable>win-nar-cmd.bat</command.executable>
+        <command.executable>echo.bat</command.executable>
       </properties>
     </profile>
   </profiles>
