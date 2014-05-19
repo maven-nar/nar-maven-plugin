@@ -84,7 +84,7 @@ public class NarAssemblyMojo
                 getLog().debug( "SrcDir: " + srcDir );
                 if ( srcDir.exists() )
                 {
-                    FileUtils.copyDirectoryStructure( srcDir, dstDir );
+                    FileUtils.copyDirectoryStructureIfModified( srcDir, dstDir );
                 }
             }
             catch ( IOException ioe )
