@@ -294,7 +294,7 @@ public class NarTestCompileMojo
             aol = dependency.getNarInfo().getAOL( getAOL() );
             getLog().debug( "Using Library AOL: " + aol.toString() );
 
-            if ( !binding.equals( Library.JNI ) && !binding.equals( Library.NONE ) )
+            if ( !binding.equals( Library.JNI ) && !binding.equals( Library.NONE ) && !binding.equals( Library.EXECUTABLE) )
             {
                 // check if it exists in the normal unpack directory 
                 File dir =
