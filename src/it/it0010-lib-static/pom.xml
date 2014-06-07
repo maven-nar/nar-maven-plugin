@@ -35,7 +35,7 @@ under the License.
   <name>NAR Static Library</name>
   <version>1.0-SNAPSHOT</version>
   <description>
-    Simple static library and test file
+    Simple static library and test file; test nar-process-libraries commands
   </description>
   <url>http://maven.apache.org/</url>
 
@@ -63,7 +63,59 @@ under the License.
             </test>
           </tests>
         </configuration>
+        <executions>
+          <execution>
+              <id>run-commands</id>
+              <goals>
+                  <goal>nar-process-libraries</goal>
+              </goals>
+              <configuration>
+                  <commands>
+                      <!-- run command with arguments -->
+                      <processLibraryCommand>
+                          <executable>${command.executable}</executable>
+                          <arguments>
+                              <argument>Hello from ${nar.aol}!</argument>
+                          </arguments>
+                          <type>static</type>
+                      </processLibraryCommand>
+                      <!-- run command without arguments -->
+                      <processLibraryCommand>
+                          <executable>${command.executable}</executable>
+                          <type>static</type>
+                      </processLibraryCommand>
+                  </commands>
+              </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
+
+  <!-- Setup correct command executable to run based on OS -->
+  <profiles>
+    <profile>
+      <id>linux</id>
+      <activation>
+        <os>
+          <name>Linux</name>
+        </os>
+      </activation>
+      <properties>
+        <command.executable>echo</command.executable>
+      </properties>
+    </profile>
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <properties>
+        <command.executable>echo.bat</command.executable>
+      </properties>
+    </profile>
+  </profiles>
+
 </project>
