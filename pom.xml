@@ -198,12 +198,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
-          <version>2.1</version>
-          <configuration>
-            <mavenExecutorId>forked-path</mavenExecutorId>
-            <useReleaseProfile>false</useReleaseProfile>
-            <arguments>-Psonatype-oss-release</arguments>
-          </configuration>
+          <version>2.5</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -295,18 +290,38 @@
   <profiles>
     <profile>
       <id>sonatype-oss-release</id>
-      <activation>
-        <property>
-          <name>performRelease</name>
-          <value>true</value>
-        </property>
-      </activation>
       <build>
         <plugins>
           <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>sonatype-nexus-releases</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>true</autoReleaseAfterClose>
+              <stagingProgressTimeoutMinutes>15</stagingProgressTimeoutMinutes>
+              <stagingProgressPauseDurationSeconds>12</stagingProgressPauseDurationSeconds>
+              <!--
+              By having no explicit stagingProfileId, we use
+              Staging V2 in "auto" mode, profile will be
+              matched server side
+              -->
+            </configuration>
+          </plugin>
+          <plugin>
+            <inherited>true</inherited>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-deploy-plugin</artifactId>
+            <configuration>
+              <skip>true</skip>
+            </configuration>
+          </plugin>
+          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.1</version>
+            <version>1.5</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
@@ -318,6 +333,7 @@
             </executions>
             <configuration>
               <useAgent>true</useAgent>
+              <skip>${gpg.skip}</skip>
             </configuration>
           </plugin>
           <plugin>
