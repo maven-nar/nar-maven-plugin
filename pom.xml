@@ -316,9 +316,6 @@
                 </goals>
               </execution>
             </executions>
-            <configuration>
-              <useAgent>true</useAgent>
-            </configuration>
           </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
