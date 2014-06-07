@@ -48,7 +48,6 @@ public class ProcessLibraryCommand {
         this.arguments = arguments;
     }
     public String getType() {
-	// TODO Auto-generated method stub
 	return libraryType;
     }
 
