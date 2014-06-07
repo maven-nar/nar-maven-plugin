@@ -257,7 +257,12 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
             commandArgs = defaultProviders[i].getActiveProcessorArgs();
             for (int j = 0; j < commandArgs.length; j++) {
                 if (commandArgs[j].getLocation() == 0) {
-                    args.addElement(commandArgs[j].getValue());
+                    String arg = commandArgs[j].getValue();
+                    if (isWindows() && arg.matches(".*[ \"].*")) {
+                        // Work around inconsistent quoting by Ant
+                        arg = "\"" + arg.replaceAll("[\\\\\"]", "\\\\$0") + "\"";
+                    }
+                    args.addElement(arg);
                 } else {
                     cmdArgs.addElement(commandArgs[j]);
                 }
