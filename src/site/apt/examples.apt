@@ -7,11 +7,14 @@ Mark Donszelmann
 	
 Examples
 
-	These example contain a simple C method "sayHello". This method can be called from a C program, a Java program, put into
-a static library, put into a shared library, use as a third party library, ...
-There are also some unit test which are run and call the same method. All examples are available in the src/it
-directory. 
-
+	The nar-maven-plugin repository contains a collection of integration tests in the src/it directory.
+    These examples demonstrates different usage scenarios and can be useful to learn how to use NAR.
+    
+    Running the tests standalone require a little hacking, since they are not intended as unit-tests.
+    Still, you can build and run them by replacing <<\<groupId\>@project.groupId@\</groupId\>>> with
+    <<\<groupId\>com.github.maven-nar\</groupId\>>> in the pom.xml files. Then, navigate to each test
+    folder and invoke <<mvn test>>.
+    
 	The following examples are available:
 
   	[it0001-executable] A C routine.
