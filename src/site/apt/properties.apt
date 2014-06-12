@@ -3,12 +3,12 @@ NAR Plugin
 	---
 	---
 	---
-	
+
 Properties
 
     The NAR plugin sets several properties that can be helpful in
     configuring other plugins.
-    
+
   * <<nar.arch>>: The architecture (e.g. x86_64).
 
   * <<nar.os>>: The operating system (e.g. MacOSX).
