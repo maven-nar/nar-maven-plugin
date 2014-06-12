@@ -22,7 +22,7 @@ directory.
 
 	[it0003-jni] A C routine called from Java.
 	
-	[it0004-java-dep-jni] A java project which depends on "jni". 
+	[it0004-java-dep-jni] A NAR JNI project which depends on "jni".
 
 	[it0005-jni-static] A C routine called from Java statically linked with the C-runtime library.
 	
@@ -79,6 +79,8 @@ directory.
 	
 	[it0021-executable-dep-lib-3rdparty] An executable dependent on the 3rd party library. 
 	
+	[it0025-jar-dep-jni] A JAR project which depends on "jni".
+
 	[] 
 
 	These examples are now all run as integration tests by running maven on the nar-maven-plugin from its top-level directory with the profile "run-its".
