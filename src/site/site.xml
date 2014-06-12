@@ -20,14 +20,31 @@ under the License.
 <project name="nar-maven-plugin">
     <bannerLeft>
         <name>NAR Plugin</name>
-        <src>http://maven.apache.org/images/apache-maven-project-2.png</src>
+        <!-- trademark-wise, this plugin shouldn't claim to be part of Apache Maven -->
+        <!-- so we need another logo to replace it -->
+        <src>https://camo.githubusercontent.com/c6286ade715e9bea433b4705870de482a654f78a/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f77686974655f6666666666662e706e67</src>
         <href>http://maven-nar.github.com/nar-maven-plugin/</href>
     </bannerLeft>
 
+    <bannerRight>
+        <name>Apache Maven</name>
+        <!-- trademark-wise, this plugin shouldn't claim to be part of Apache Maven -->
+        <!-- so we need another logo to replace it -->
+        <src>http://maven-nar.github.io/images/maven-logo-2.gif</src>
+        <href>http://maven.apache.org</href>
+    </bannerRight>
+
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.3.0</version>
+    </skin>
+
+
   <body>
-    <links>
+      <links>
         <item name="NAR Plugin for Maven" href="http://maven-nar.github.io/nar-maven-plugin"/>
-        <item name="Maven" href="http://maven.apache.org/"/>
+        <item name="Apache Maven" href="http://maven.apache.org/"/>
     </links>
 
     <menu name="Overview">
