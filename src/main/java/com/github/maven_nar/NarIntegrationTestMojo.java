@@ -92,7 +92,19 @@ public class NarIntegrationTestMojo
 {
     @Override
     protected List/*<Artifact>*/ getArtifacts() {
-        return getMavenProject().getTestArtifacts();  // Artifact.SCOPE_TEST
+        // Exactly the same as the overridden method in AbstractDependencyMojo,
+        // except that artifacts from all scopes are included, since test is the
+        // widest scope, as is done in MavenProject.getTestArtifacts(). However,
+        // that method cannot be used because its classpath check filters out
+        // the NAR artifacts.
+        try {
+            return getNarManager().getNarDependencies(getMavenProject().getArtifacts());
+        } catch (MojoExecutionException e) {
+            e.printStackTrace();
+        } catch (MojoFailureException e) {
+            e.printStackTrace();
+        }
+        return Collections.EMPTY_LIST;
     }
 
     protected File getUnpackDirectory()

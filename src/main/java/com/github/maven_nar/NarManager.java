@@ -72,8 +72,17 @@ public class NarManager
     public final List/* <NarArtifact> */getNarDependencies(String scope)
         throws MojoExecutionException
     {
+        return getNarDependencies(getDependencies(scope));
+    }
+
+    /**
+     * Returns dependencies which are dependent on NAR files (i.e. contain NarInfo)
+     */
+    public final List/* <NarArtifact> */getNarDependencies(Collection/*<Artifact>*/ artifacts)
+            throws MojoExecutionException
+    {
         List narDependencies = new LinkedList();
-        for ( Iterator i = getDependencies( scope ).iterator(); i.hasNext(); )
+        for ( Iterator i = artifacts.iterator(); i.hasNext(); )
         {
             Artifact dependency = (Artifact) i.next();
             log.debug("Examining artifact for NarInfo: " + dependency);
