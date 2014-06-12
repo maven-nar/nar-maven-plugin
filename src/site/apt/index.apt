@@ -116,7 +116,7 @@ files are all stored in gnuTargetDirectory and will be handled in subsequent NAR
     This goal generates a NarSystem class if necessary. This class contains helper methods for your
 code to handle things at run-time. The static method "loadLibrary()" is currently the only method
 generated and will load your JNI library with name "artifactId-version". This goals only executed
-if you produce a JNI library and you specify a <packageName> as subtag of <library>. The NarSystem
+if you produce a JNI library and you specify a <narSystemPackage> as subtag of <library>. The NarSystem
 class will then end up in this package.
                                             
 * {nar-resources}

@@ -24,9 +24,9 @@ would complicate matters.
 The JNI library is strictly connected to the corresponding java code in the
 main artifact (jar file). Since the main artifact has a version number, we decided
 that the JNI library should have the same version number. If you add the subtag
-<packageName> to the <library> tag, the nar-plugin will generate a NarSystem
+<narSystemPackage> to the <library> tag, the nar-plugin will generate a NarSystem
 class for you which will load the library. Assuming you specified com.mycompany.mypackage
-as packageName, then you need to add the following code to the class with the native
+as narSystemPackage, then you need to add the following code to the class with the native
 methods:
 
 +--

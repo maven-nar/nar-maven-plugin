@@ -48,7 +48,7 @@ and link native code.
           <libraries>
             <library>
               <type>jni</type>
-              <packageName>com.mycompany.mypackage</packageName>
+              <narSystemPackage>com.mycompany.mypackage</narSystemPackage>
             </library>
           </libraries>
         </configuration>
@@ -119,7 +119,7 @@ The example also shows how to configure the
             </goals>
             <configuration>
               <cpp>true</cpp>
-              <packageName>org.domain.packagename</packageName>
+              <narSystemPackage>org.domain.packagename</narSystemPackage>
               <source>Module.swg</source>
             </configuration>
           </execution>
