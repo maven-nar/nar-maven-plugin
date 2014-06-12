@@ -19,7 +19,7 @@ Properties
 <<<java.library.path>>>; with a default configuration, this would be
 <<<target/nar/$\{project.artifactId}-$\{project.version}-$\{nar.aol}/lib/$\{nar.aol}/jni>>>
 
-  * <<nar.aol.key>>: The AOL string with the '-' characters replaces by '.'
+  * <<nar.aol.key>>: The AOL string with the '-' characters replaced by '.'
     characters.
 
   []
