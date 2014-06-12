@@ -1022,6 +1022,12 @@ public class NarIntegrationTestMojo
             for ( Iterator i = dependencies.iterator(); i.hasNext(); )
             {
                 NarArtifact dependency = (NarArtifact) i.next();
+
+                // NAR dependencies aren't injected as classpathElements above
+                String narFile = dependency.getFile().getPath();
+                getLog().debug( "Adding to surefire test classpath: " + narFile );
+                surefireBooter.addClassPathUrl( narFile );
+
                 // FIXME this should be overridable
                 // NarInfo info = dependency.getNarInfo();
                 // String binding = info.getBinding(getAOL(), Library.STATIC);
