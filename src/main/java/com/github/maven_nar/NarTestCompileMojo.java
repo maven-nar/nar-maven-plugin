@@ -39,25 +39,26 @@ import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 
 /**
  * Compiles native test source files.
  * 
- * @goal nar-testCompile
- * @phase test-compile
- * @requiresDependencyResolution test
  * @author Mark Donszelmann
  */
+@Mojo(name = "nar-testCompile", defaultPhase = LifecyclePhase.TEST_COMPILE, requiresDependencyResolution = ResolutionScope.TEST)
 public class NarTestCompileMojo
     extends AbstractCompileMojo
 {
     /**
      * Skip running of NAR integration test plugins.
-     * 
-     * @parameter property="skipNar" default-value="false"
      */
+    @Parameter(property = "skipNar")
     protected boolean skipNar;
 
 	@Override

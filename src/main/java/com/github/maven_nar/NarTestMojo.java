@@ -30,36 +30,32 @@ import java.util.Set;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Tests NAR files. Runs Native Tests and executables if produced.
  * 
- * @goal nar-test
- * @phase test
- * @requiresProject
- * @requiresDependencyResolution test
  * @author Mark Donszelmann
  */
+@Mojo(name = "nar-test", defaultPhase = LifecyclePhase.TEST, requiresProject = true, requiresDependencyResolution = ResolutionScope.TEST)
 public class NarTestMojo
     extends AbstractCompileMojo
 {
     /**
      * The classpath elements of the project being tested.
-     * 
-     * @parameter default-value="${project.testClasspathElements}"
-     * @required
-     * @readonly
      */
+    @Parameter(defaultValue = "${project.testClasspathElements}", required = true, readonly = true)
     private List classpathElements;
 
     /**
      * Directory for test resources. Defaults to src/test/resources
-     * 
-     * @parameter default-value="${basedir}/src/test/resources"
-     * @required
      */
+    @Parameter(defaultValue = "${basedir}/src/test/resources", required = true)
     private File testResourceDirectory;
 
     @Override

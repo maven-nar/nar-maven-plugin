@@ -23,15 +23,14 @@ import java.io.IOException;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 
 /**
  * Move the GNU style include/lib to some output directory
- * 
- * @goal nar-gnu-resources
- * @phase process-resources
- * @requiresProject
  * @author Mark Donszelmann
  */
+@Mojo(name = "nar-gnu-resources", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true)
 public class NarGnuResources
     extends AbstractGnuMojo
 {

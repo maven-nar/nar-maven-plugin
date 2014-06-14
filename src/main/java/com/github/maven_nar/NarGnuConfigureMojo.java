@@ -24,17 +24,17 @@ import java.io.IOException;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.util.FileUtils;
 
 /**
  * Copies the GNU style source files to a target area, autogens and configures
  * them.
- * 
- * @goal nar-gnu-configure
- * @phase process-sources
- * @requiresProject
  * @author Mark Donszelmann
  */
+@Mojo(name = "nar-gnu-configure", requiresProject = true, defaultPhase = LifecyclePhase.PROCESS_SOURCES)
 public class NarGnuConfigureMojo extends AbstractGnuMojo {
 
 	/**
@@ -42,37 +42,32 @@ public class NarGnuConfigureMojo extends AbstractGnuMojo {
 	 * source code to the <code>target/</code> directory first (this saves disk space but
 	 * violates Maven's paradigm of keeping generated files inside the  <code>target/</code>
 	 * directory structure.
-	 *
-	 * @parameter property="nar.gnu.configure.in-place" default-value="false"
 	 */
+    @Parameter(property = "nar.gnu.configure.in-place")
 	private boolean gnuConfigureInPlace;
 
 	/**
 	 * Skip running of autogen.sh (aka buildconf).
-	 * 
-	 * @parameter property="nar.gnu.autogen.skip" default-value="false"
 	 */
+    @Parameter(property = "nar.gnu.autogen.skip")
 	private boolean gnuAutogenSkip;
 
 	/**
 	 * Skip running of configure and therefore also autogen.sh
-	 * 
-	 * @parameter property="nar.gnu.configure.skip" default-value="false"
 	 */
+    @Parameter(property = "nar.gnu.configure.skip")
 	private boolean gnuConfigureSkip;
 
 	/**
 	 * Arguments to pass to GNU configure.
-	 * 
-	 * @parameter property="nar.gnu.configure.args" default-value=""
 	 */
+    @Parameter(property = "nar.gnu.configure.args", defaultValue = "")
 	private String gnuConfigureArgs;
 
 	/**
 	 * Arguments to pass to GNU buildconf.
-	 * 
-	 * @parameter property="nar.gnu.buildconf.args" default-value=""
 	 */
+    @Parameter(property = "nar.gnu.buildconf.args", defaultValue = "")
 	private String gnuBuildconfArgs;
 
 	private static final String AUTOGEN = "autogen.sh";
@@ -81,7 +76,10 @@ public class NarGnuConfigureMojo extends AbstractGnuMojo {
 
 	private static final String CONFIGURE = "configure";
 
-	public final void narExecute() throws MojoExecutionException,
+    public NarGnuConfigureMojo() {
+    }
+
+    public final void narExecute() throws MojoExecutionException,
 			MojoFailureException {
 
 		if (!useGnu()) {

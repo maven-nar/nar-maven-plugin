@@ -10,25 +10,24 @@ import java.util.List;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 /**
  * Adds the ability to run arbitrary command line tools to post-process the
  * compiled output (ie: ranlib/ar/etc)
  *
  * @author Richard Kerr
- * @goal nar-process-libraries
- * @phase process-classes
- * @requiresSession
- * @requiresProject
- * @author Richard Kerr
+  * @author Richard Kerr
  */
+@Mojo(name = "nar-process-libraries", defaultPhase = LifecyclePhase.PROCESS_CLASSES, requiresProject = true)
 public class NarProcessLibraries extends AbstractCompileMojo {
 
     /**
      * List of commands to execute
-     *
-     * @parameter default-value=""
      */
+    @Parameter
     private List<ProcessLibraryCommand> commands;
 
     private Log log = getLog();

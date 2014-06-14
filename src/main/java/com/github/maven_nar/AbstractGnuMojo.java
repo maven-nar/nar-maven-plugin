@@ -23,6 +23,7 @@ import java.io.File;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Parameter;
 
 /**
  * Abstract GNU Mojo keeps configuration
@@ -34,26 +35,20 @@ public abstract class AbstractGnuMojo
 {
     /**
      * Use GNU goals on Windows
-     * 
-     * @parameter expresssion="nar.gnu.useonwindows" default-value="false"
-     * @required
      */
+    @Parameter(defaultValue = "nar.gnu.useonwindows", required = true)
     private boolean gnuUseOnWindows;
     
     /**
      * Source directory for GNU style project
-     * 
-     * @parameter default-value="${basedir}/src/gnu"
-     * @required
      */
+    @Parameter(defaultValue = "${basedir}/src/gnu")
     private File gnuSourceDirectory;
 
     /**
      * Directory in which gnu sources are copied and "configured"
-     * 
-     * @parameter default-value="${project.build.directory}/nar/gnu"
-     * @required
      */
+    @Parameter(defaultValue = "${project.build.directory}/nar/gnu")
     private File gnuTargetDirectory;
 
     /**

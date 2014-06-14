@@ -24,16 +24,17 @@ import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 
 /**
  * Unpacks NAR files. Unpacking happens in the local repository, and also sets flags on binaries and corrects static
  * libraries.
  * 
- * @goal nar-unpack
- * @phase process-sources
- * @requiresProject
  * @author Mark Donszelmann
  */
+@Mojo(name = "nar-unpack", defaultPhase = LifecyclePhase.PROCESS_SOURCES, requiresProject = true)
 public class NarUnpackMojo
     extends NarDownloadMojo
 {

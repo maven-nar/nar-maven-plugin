@@ -27,17 +27,16 @@ import java.util.List;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.codehaus.plexus.util.FileUtils;
 
 /**
  * Assemble libraries of NAR files.
- * 
- * @goal nar-assembly
- * @phase process-resources
- * @requiresProject
- * @requiresDependencyResolution compile
  * @author Mark Donszelmann
  */
+@Mojo(name = "nar-assembly", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class NarAssemblyMojo
     extends AbstractDependencyMojo
 {

@@ -24,6 +24,7 @@ import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
 import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.Project;
 
 /**
@@ -35,18 +36,14 @@ public class SysLib
 {
     /**
      * Name of the system library
-     * 
-     * @parameter default-value=""
-     * @required
      */
+    @Parameter(required = true)
     private String name;
 
     /**
      * Type of linking for this system library
-     * 
-     * @parameter default-value="shared"
-     * @required
      */
+    @Parameter(defaultValue = "shared")
     private String type = Library.SHARED;
 
     public final SystemLibrarySet getSysLibSet( Project antProject )

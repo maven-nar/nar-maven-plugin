@@ -28,6 +28,8 @@ import org.apache.maven.model.Model;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 /**
@@ -40,65 +42,54 @@ public abstract class AbstractNarMojo
 
     /**
      * Skip running of NAR plugins (any) altogether.
-     * 
-     * @parameter property="nar.skip" default-value="false"
      */
+    @Parameter(property = "nar.skip", defaultValue = "false")
     private boolean skip;
 
     /**
      * Skip the tests. Listens to Maven's general 'maven.skip.test'.
-     * 
-     * @parameter property="maven.test.skip"
      */
+    @Parameter(property = "maven.test.skip")
     boolean skipTests;
 
     /**
      * Ignore errors and failures.
-     * 
-     * @parameter property="nar.ignore" default-value="false"
      */
+    @Parameter(property = "nar.ignore", defaultValue = "false")
     private boolean ignore;
 
     /**
      * The Architecture for the nar, Some choices are: "x86", "i386", "amd64", "ppc", "sparc", ... Defaults to a derived
      * value from ${os.arch}
-     * 
-     * @parameter property="nar.arch"
      */
+    @Parameter(property = "nar.arch")
     private String architecture;
 
     /**
      * The Operating System for the nar. Some choices are: "Windows", "Linux", "MacOSX", "SunOS", ... Defaults to a
      * derived value from ${os.name} FIXME table missing
-     * 
-     * @parameter property="nar.os"
      */
+    @Parameter(property = "nar.os")
     private String os;
 
     /**
      * Architecture-OS-Linker name. Defaults to: arch-os-linker.
-     * 
-     * @parameter default-value=""
      */
+    @Parameter(defaultValue = "")
     private String aol;
 
     /**
      * Linker
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private Linker linker;
 
-    /**
-     * @parameter property="project.build.directory"
-     * @readonly
-     */
+    // these could be obtained from an injected project model.
+
+    @Parameter(property = "project.build.directory", readonly = true)
     private File outputDirectory;
 
-    /**
-     * @parameter property="project.build.outputDirectory"
-     * @readonly
-     */
+    @Parameter(property = "project.build.outputDirectory", readonly = true)
     protected File classesDirectory;
 
     /**
@@ -108,75 +99,60 @@ public abstract class AbstractNarMojo
      *  - for exe default-value="${project.artifactId}"
      *  -- for tests default-value="${test.name}"
      * 
-     * @parameter 
      */
+    @Parameter
     private String output;
 
-    /**
-     * @parameter property="project.basedir"
-     * @readonly
-     */
+    @Parameter(property = "project.basedir", readonly = true)
     private File baseDir;
 
     /**
      * Target directory for Nar file construction. Defaults to "${project.build.directory}/nar" for "nar-compile" goal
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private File targetDirectory;
 
     /**
      * Target directory for Nar test construction. Defaults to "${project.build.directory}/test-nar" for "nar-testCompile" goal
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private File testTargetDirectory;
 
     /**
      * Target directory for Nar file unpacking. Defaults to "${targetDirectory}"
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private File unpackDirectory;
 
     /**
      * Target directory for Nar test unpacking. Defaults to "${testTargetDirectory}"
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private File testUnpackDirectory;
 
     /**
      * List of classifiers which you want download/unpack/assemble 
      * Example ppc-MacOSX-g++, x86-Windows-msvc, i386-Linux-g++.
      * Not setting means all.
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     protected List<String> classifiers;
 
     /**
      * List of libraries to create
-     *
-     * @parameter default-value=""
      */
+    @Parameter
     protected List<Library> libraries;
 
     /**
      * Layout to be used for building and unpacking artifacts
-     * 
-     * @parameter property="nar.layout" default-value="com.github.maven_nar.NarLayout21"
-     * @required
      */
+    @Parameter(property = "nar.layout", defaultValue = "com.github.maven_nar.NarLayout21", required = true)
     private String layout;
 
     private NarLayout narLayout;
 
-    /**
-     * @parameter property="project"
-     * @readonly
-     * @required
-     */
+   @Component
     private MavenProject mavenProject;
 
     private AOL aolId;
@@ -185,17 +161,14 @@ public abstract class AbstractNarMojo
 
     /**
      * Javah info
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private Javah javah;
 
     /**
      * The home of the Java system. Defaults to a derived value from ${java.home} which is OS specific.
-     * 
-     * @parameter default-value=""
-     * @readonly
      */
+    @Parameter(readonly = true)
     private File javaHome;
 
     protected final void validate()

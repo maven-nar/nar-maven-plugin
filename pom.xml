@@ -88,6 +88,7 @@
     <skip.fortran.it>it0018-fortran/**</skip.fortran.it>
     <skip.toolchain.it>it0017-toolchain/**</skip.toolchain.it>
     <sonatypeOssDistMgmtSnapshotsUrl>https://oss.sonatype.org/content/repositories/snapshots/</sonatypeOssDistMgmtSnapshotsUrl>
+    <mavenPluginPluginVersion>3.2</mavenPluginPluginVersion>
   </properties>
 
   <prerequisites>
@@ -152,6 +153,14 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-component-annotations</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.plugin-tools</groupId>
+      <artifactId>maven-plugin-annotations</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.apache.bcel</groupId>
       <artifactId>bcel</artifactId>
       <version>5.2</version>
@@ -192,6 +201,14 @@
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-plugin-plugin</artifactId>
+          <version>${mavenPluginPluginVersion}</version>
+          <configuration>
+            <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
           <version>2.5</version>
         </plugin>
@@ -207,6 +224,17 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-descriptor</id>
+            <goals>
+              <goal>descriptor</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -518,7 +546,7 @@
                       <pluginExecutionFilter>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-plugin-plugin</artifactId>
-                        <versionRange>3.1</versionRange>
+                        <versionRange>3.2</versionRange>
                         <goals>
                           <goal>descriptor</goal>
                           <goal>helpmojo</goal>

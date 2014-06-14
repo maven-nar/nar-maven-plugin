@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.Project;
 
 /**
@@ -35,114 +36,96 @@ public abstract class AbstractCompileMojo
 
     /**
      * C++ Compiler
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private Cpp cpp;
 
     /**
      * C Compiler
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private C c;
 
     /**
      * Fortran Compiler
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private Fortran fortran;
 
     /**
      * Resource Compiler
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private Resource resource;
 
     /**
      * IDL Compiler
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private IDL idl;
 
     /**
      * Message Compiler
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private Message message;
 
     /**
      * By default NAR compile will attempt to compile using all known compilers against files in the directories specified by convention.
      * This allows configuration to a reduced set, you will have to specify each compiler to use in the configuration.
-     * 
-     * @parameter default-value="false"
      */
+    @Parameter(defaultValue = "false")
     protected boolean onlySpecifiedCompilers;
 
     /**
      * Do we log commands that is executed to produce the end-result?
      * Conception was to allow eclipse to sniff out include-paths from compile.
-     *
-     * @parameter default-value=""
      */
+    @Parameter
     protected int commandLogLevel=Project.MSG_VERBOSE;
 
     /**
      * Maximum number of Cores/CPU's to use. 0 means unlimited.
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private int maxCores = 0;
 
 
     /**
      * Fail on compilation/linking error.
-     * 
-     * @parameter default-value="true"
-     * @required
      */
+    @Parameter(defaultValue = "true", required = true)
     private boolean failOnError;
 
     /**
      * Sets the type of runtime library, possible values "dynamic", "static".
-     * 
-     * @parameter default-value="dynamic"
-     * @required
      */
+    @Parameter(defaultValue = "dynamic", required = true)
     private String runtime;
 
     /**
      * Set use of libtool. If set to true, the "libtool " will be prepended to the command line for compatible
      * processors.
-     * 
-     * @parameter default-value="false"
-     * @required
      */
+    @Parameter(defaultValue = "false", required = true)
     private boolean libtool;
 
     /**
      * List of tests to create
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private List tests;
 
     /**
      * Java info for includes and linking
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private Java java;
 
     /**
      * Flag to cpptasks to indicate whether linker options should be decorated or not
-     *
-     * @parameter default-value=""
      */
+    @Parameter
     protected boolean decorateLinkerOptions;
 
     private List/* <String> */dependencyLibOrder;

@@ -23,6 +23,9 @@ import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 
@@ -30,12 +33,10 @@ import org.apache.tools.ant.Project;
  * Generates a Visual Studio 2005 project file (vcproj) Heavily inspired by
  * NarCompileMojo.
  * 
- * @goal nar-vcproj
- * @phase generate-sources
- * @requiresDependencyResolution compile
  * @author Darren Sargent
  * 
  */
+@Mojo(name = "nar-vcproj", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class NarVcprojMojo extends AbstractCompileMojo {
 
 	@Override

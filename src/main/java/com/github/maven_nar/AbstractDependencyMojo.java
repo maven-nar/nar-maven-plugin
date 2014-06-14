@@ -32,6 +32,8 @@ import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
 
 /**
@@ -39,45 +41,33 @@ import org.codehaus.plexus.archiver.manager.ArchiverManager;
  */
 public abstract class AbstractDependencyMojo extends AbstractNarMojo {
 
-	/**
-	 * @parameter default-value="${localRepository}"
-	 * @required
-	 * @readonly
-	 */
+    @Parameter(defaultValue = "${localRepository}", required = true, readonly = true)
 	private ArtifactRepository localRepository;
 
 	/**
 	 * Artifact resolver, needed to download the attached nar files.
-	 * 
-	 * @component role="org.apache.maven.artifact.resolver.ArtifactResolver"
-	 * @required
-	 * @readonly
 	 */
+    @Component(role = org.apache.maven.artifact.resolver.ArtifactResolver.class)
 	protected ArtifactResolver artifactResolver;
 
 	/**
 	 * Remote repositories which will be searched for nar attachments.
-	 * 
-	 * @parameter default-value="${project.remoteArtifactRepositories}"
-	 * @required
-	 * @readonly
 	 */
+    @Parameter(defaultValue = "${project.remoteArtifactRepositories}", required = true, readonly = true)
 	protected List remoteArtifactRepositories;
 
     /**
      * To look up Archiver/UnArchiver implementations
-     * 
-     * @component role="org.codehaus.plexus.archiver.manager.ArchiverManager"
-     * @required
      */
+    @Component(role = org.codehaus.plexus.archiver.manager.ArchiverManager.class)
     protected ArchiverManager archiverManager;
 
 	/**
      * The plugin remote repositories declared in the pom.
      * 
-     * @parameter default-value="${project.pluginArtifactRepositories}"
      * @since 2.2
      */
+    //@Parameter(defaultValue = "${project.pluginArtifactRepositories}")
     // private List remotePluginRepositories;
 
 	protected final ArtifactRepository getLocalRepository() {

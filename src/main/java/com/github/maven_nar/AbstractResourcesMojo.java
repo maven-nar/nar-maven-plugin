@@ -26,6 +26,8 @@ import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.archiver.UnArchiver;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
@@ -42,34 +44,26 @@ public abstract class AbstractResourcesMojo
 {
     /**
      * Binary directory
-     * 
-     * @parameter default-value="bin"
-     * @required
      */
+    @Parameter(defaultValue = "bin", required = true)
     private String resourceBinDir;
 
     /**
      * Include directory
-     * 
-     * @parameter default-value="include"
-     * @required
      */
+    @Parameter(defaultValue = "include", required = true)
     private String resourceIncludeDir;
 
     /**
      * Library directory
-     * 
-     * @parameter default-value="lib"
-     * @required
      */
+    @Parameter(defaultValue = "lib", required = true)
     private String resourceLibDir;
 
     /**
      * To look up Archiver/UnArchiver implementations
-     * 
-     * @component role="org.codehaus.plexus.archiver.manager.ArchiverManager"
-     * @required
      */
+    @Component(role = org.codehaus.plexus.archiver.manager.ArchiverManager.class)
     private ArchiverManager archiverManager;
 
     protected final int copyIncludes( File srcDir )

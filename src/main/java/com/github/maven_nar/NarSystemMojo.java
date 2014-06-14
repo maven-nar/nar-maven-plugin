@@ -27,17 +27,17 @@ import java.util.Iterator;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 
 /**
  * Generates a NarSystem class with static methods to use inside the java part of the library.
  * Runs in generate-resources rather than generate-sources to allow the maven-swig-plugin (which runs in
  * generate-sources) to configure the nar plugin and to let it generate a proper system file. 
  * 
- * @goal nar-system-generate
- * @phase generate-resources
- * @requiresProject
  * @author Mark Donszelmann
  */
+@Mojo(name = "nar-system-generate", defaultPhase = LifecyclePhase.GENERATE_RESOURCES, requiresProject = true)
 public class NarSystemMojo
     extends AbstractNarMojo
 {

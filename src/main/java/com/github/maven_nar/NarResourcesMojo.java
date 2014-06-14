@@ -25,34 +25,30 @@ import java.util.Iterator;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.SelectorUtils;
 
 /**
  * Copies any resources, including AOL specific distributions, to the target area for packaging
- * 
- * @goal nar-resources
- * @phase process-resources
- * @requiresProject
  * @author Mark Donszelmann
  */
+@Mojo(name = "nar-resources", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true)
 public class NarResourcesMojo
     extends AbstractResourcesMojo
 {
     /**
      * Use given AOL only. If false, copy for all available AOLs.
-     * 
-     * @parameter property="nar.resources.copy.aol" default-value="true"
-     * @required
      */
+    @Parameter(property = "nar.resources.copy.aol", defaultValue = "true", required = true)
     private boolean resourcesCopyAOL;
 
     /**
      * Directory for nar resources. Defaults to src/nar/resources
-     * 
-     * @parameter default-value="${basedir}/src/nar/resources"
-     * @required
      */
+    @Parameter(defaultValue = "${basedir}/src/nar/resources", required = true)
     private File resourceDirectory;
 
     public final void narExecute()
