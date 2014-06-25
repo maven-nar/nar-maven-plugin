@@ -1,18 +1,21 @@
 /*
+ * #%L
+ * Native ARchive plugin for Maven
+ * %%
+ * Copyright (C) 2002 - 2014 NAR Maven Plugin developers.
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright 2001-2008 The Ant-Contrib project
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
  */
 package com.github.maven_nar.cpptasks;
 import java.io.File;
@@ -59,71 +62,6 @@ import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
  * currently available for several C/C++ compilers, FORTRAN, MIDL and Windows
  * Resource files.
  * </p>
- * 
- * <p>
- * Copyright (c) 2001-2008, The Ant-Contrib project.
- * </p>
- * 
- * <p>
- * Licensed under the Apache Software License 2.0,
- * http://www.apache.org/licenses/LICENSE-2.0.
- * </p>
- * 
- * <p>
- * For use with Apache Ant 1.5 or later. This software is not a product of the
- * of the Apache Software Foundation and no endorsement is implied.
- * </p>
- * 
- * <p>
- * THIS SOFTWARE IS PROVIDED 'AS-IS', See 
- * http://www.apache.org/licenses/LICENSE-2.0 for additional disclaimers.
- * </p>
- * 
- * To use:
- * <ol>
- * <li>
- * Place cpptasks.jar into Ant's classpath by placing it in Ant's lib 
- * directory, adding it to the CLASSPATH environment variable or by using the
- * -lib command line option.
- *  </li>
- * <li>
- * Add type and task definitions to the build file:
- * <ul>
- * <li>
- * Ant 1.6 or later:
- * <ul>
- * <li>Add xmlns:cpptasks="antlib:com.github.maven_nar.cpptasks" to 
- * &lt;project&gt; element.
- * </li>
- * <li>
- * Add &lt;cpptasks:cc/&gt;, &lt;cpptasks:compiler/&gt; and 
- * &lt;cpptasks:linker/&gt; elements to the project.
- * </li>
- * </ul>
- * </li>
- * <li>
- * Ant 1.5 or later:
- * <ul>
- * <li>Add &lt;taskdef resource="cpptasks.tasks"/&gt; and 
- * &lt;typedef resource="cpptasks.types"/&gt; to body of &lt;project&gt; 
- * element.
- * </li>
- * <li>
- * Add &lt;cc/&gt;, &lt;compiler/&gt; and &lt;linker/&gt; elements to the
- * project.
- * </li>
- * </ul>
- * </li>
- * </ul>
- * </li>
- * <li>
- * Set the path and environment variables to be able to run compiler from
- * command line.
- * </li>
- * <li>
- * Build the project.
- * </li>
- * </ol>
  * 
  * @author Adam Murdoch
  * @author Curt Arnold
