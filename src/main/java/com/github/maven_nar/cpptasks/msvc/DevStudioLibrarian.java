@@ -25,7 +25,7 @@ import com.github.maven_nar.cpptasks.compiler.Linker;
  * 
  * @author Curt Arnold
  */
-public final class DevStudioLibrarian extends DevStudioCompatibleLibrarian {
+public final class DevStudioLibrarian extends MsvcCompatibleLibrarian {
     private static final DevStudioLibrarian instance = new DevStudioLibrarian();
     public static DevStudioLibrarian getInstance() {
         return instance;
