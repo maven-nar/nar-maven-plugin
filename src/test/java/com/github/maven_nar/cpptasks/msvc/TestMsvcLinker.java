@@ -28,8 +28,8 @@ import com.github.maven_nar.cpptasks.msvc.MsvcLinker;
  * 
  * Override create to test concrete compiler implementions
  */
-public class TestDevStudioLinker extends TestAbstractLinker {
-    public TestDevStudioLinker(String name) {
+public class TestMsvcLinker extends TestAbstractLinker {
+    public TestMsvcLinker(String name) {
         super(name);
     }
     protected AbstractProcessor create() {

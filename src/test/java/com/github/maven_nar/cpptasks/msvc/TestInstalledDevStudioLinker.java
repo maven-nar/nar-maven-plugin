@@ -29,7 +29,7 @@ import com.github.maven_nar.cpptasks.msvc.MsvcLinker;
  *
  * Override create to test concrete compiler implementions
  */
-public class TestInstalledDevStudioLinker extends TestDevStudioLinker
+public class TestInstalledDevStudioLinker extends TestMsvcLinker
 {
      public TestInstalledDevStudioLinker(String name) {
         super(name);
