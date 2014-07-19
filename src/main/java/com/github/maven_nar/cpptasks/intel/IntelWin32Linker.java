@@ -20,7 +20,7 @@
 package com.github.maven_nar.cpptasks.intel;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
-import com.github.maven_nar.cpptasks.devstudio.DevStudioCompatibleLinker;
+import com.github.maven_nar.cpptasks.msvc.DevStudioCompatibleLinker;
 /**
  * Adapter for the Intel (r) linker for 32-bit applications
  * 

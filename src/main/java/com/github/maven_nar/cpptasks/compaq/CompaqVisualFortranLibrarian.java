@@ -22,8 +22,8 @@ import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.compiler.CommandLineLinker;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
-import com.github.maven_nar.cpptasks.devstudio.DevStudioLibrarian;
-import com.github.maven_nar.cpptasks.devstudio.DevStudioProcessor;
+import com.github.maven_nar.cpptasks.msvc.DevStudioLibrarian;
+import com.github.maven_nar.cpptasks.msvc.DevStudioProcessor;
 import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
 
 import java.io.File;

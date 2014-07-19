@@ -17,31 +17,23 @@
  * limitations under the License.
  * #L%
  */
-package com.github.maven_nar.cpptasks.devstudio;
+package com.github.maven_nar.cpptasks.msvc;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
 /**
- * Adapter for the Microsoft (r) Incremental Linker
+ * Adapter for the Microsoft (r) Library Manager
  * 
- * @author Adam Murdoch
  * @author Curt Arnold
  */
-public final class DevStudioLinker extends DevStudioCompatibleLinker {
-    private static final DevStudioLinker dllLinker = new DevStudioLinker(".dll");
-    private static final DevStudioLinker instance = new DevStudioLinker(".exe");
-    public static DevStudioLinker getInstance() {
+public final class DevStudioLibrarian extends DevStudioCompatibleLibrarian {
+    private static final DevStudioLibrarian instance = new DevStudioLibrarian();
+    public static DevStudioLibrarian getInstance() {
         return instance;
     }
-    private DevStudioLinker(String outputSuffix) {
-        super("link", "/DLL", outputSuffix);
+    private DevStudioLibrarian() {
+        super("lib", "/bogus");
     }
     public Linker getLinker(LinkType type) {
-        if (type.isSharedLibrary()) {
-            return dllLinker;
-        }
-        if (type.isStaticLibrary()) {
-            return DevStudioLibrarian.getInstance();
-        }
-        return instance;
+        return DevStudioLinker.getInstance().getLinker(type);
     }
 }

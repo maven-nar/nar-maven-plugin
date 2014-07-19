@@ -31,8 +31,8 @@ import com.github.maven_nar.cpptasks.CUtil;
 import com.github.maven_nar.cpptasks.MockBuildListener;
 import com.github.maven_nar.cpptasks.MockFileCollector;
 import com.github.maven_nar.cpptasks.compiler.Linker;
-import com.github.maven_nar.cpptasks.devstudio.DevStudioLibrarian;
-import com.github.maven_nar.cpptasks.devstudio.DevStudioLinker;
+import com.github.maven_nar.cpptasks.msvc.DevStudioLibrarian;
+import com.github.maven_nar.cpptasks.msvc.DevStudioLinker;
 import com.github.maven_nar.cpptasks.types.LibrarySet;
 
 /**

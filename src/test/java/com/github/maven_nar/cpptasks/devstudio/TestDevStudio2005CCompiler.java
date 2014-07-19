@@ -17,10 +17,10 @@
  * limitations under the License.
  * #L%
  */
-package com.github.maven_nar.cpptasks.devstudio;
+package com.github.maven_nar.cpptasks.msvc;
 import java.util.Vector;
 
-import com.github.maven_nar.cpptasks.devstudio.DevStudio2005CCompiler;
+import com.github.maven_nar.cpptasks.msvc.DevStudio2005CCompiler;
 
 import junit.framework.TestCase;
 /**

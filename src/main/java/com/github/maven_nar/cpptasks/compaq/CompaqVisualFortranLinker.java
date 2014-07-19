@@ -22,7 +22,7 @@ import java.util.Vector;
 
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
-import com.github.maven_nar.cpptasks.devstudio.DevStudioCompatibleLinker;
+import com.github.maven_nar.cpptasks.msvc.DevStudioCompatibleLinker;
 
 /**
  * Adapter for the Compaq(r) Visual Fortran linker.

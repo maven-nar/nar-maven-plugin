@@ -24,7 +24,7 @@ import org.apache.tools.ant.types.Environment;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
 import com.github.maven_nar.cpptasks.compiler.Processor;
-import com.github.maven_nar.cpptasks.devstudio.DevStudioCompatibleCCompiler;
+import com.github.maven_nar.cpptasks.msvc.DevStudioCompatibleCCompiler;
 /**
  * Adapter for the Intel C++ compiler for Itanium(TM) Applications
  * 

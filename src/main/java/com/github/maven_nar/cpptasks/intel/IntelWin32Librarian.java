@@ -20,7 +20,7 @@
 package com.github.maven_nar.cpptasks.intel;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
-import com.github.maven_nar.cpptasks.devstudio.DevStudioCompatibleLibrarian;
+import com.github.maven_nar.cpptasks.msvc.DevStudioCompatibleLibrarian;
 /**
  * Adapter for the xilib from the Intel(r) C++ Compiler for IA-32 or IA-64
  * systems running Microsoft (r) operating systems

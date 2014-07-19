@@ -17,43 +17,31 @@
  * limitations under the License.
  * #L%
  */
-package com.github.maven_nar.cpptasks.devstudio;
-import java.util.Vector;
-
+package com.github.maven_nar.cpptasks.msvc;
 
 import org.apache.tools.ant.types.Environment;
 
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
 import com.github.maven_nar.cpptasks.compiler.Processor;
-
 /**
- * Adapter for the Microsoft(r) C/C++ 8 Optimizing Compiler
+ * Adapter for the Microsoft(r) C/C++ Optimizing Compiler
  * 
- * @author David Haney
+ * @author Adam Murdoch
  */
-public final class DevStudio2005CCompiler extends DevStudioCompatibleCCompiler {
-    private static final DevStudio2005CCompiler instance = new DevStudio2005CCompiler(
+public final class DevStudioCCompiler extends DevStudioCompatibleCCompiler {
+    private static final DevStudioCCompiler instance = new DevStudioCCompiler(
             "cl", false, null);
-    public static DevStudio2005CCompiler getInstance() {
+    public static DevStudioCCompiler getInstance() {
         return instance;
     }
-    private DevStudio2005CCompiler(String command, boolean newEnvironment,
+    private DevStudioCCompiler(String command, boolean newEnvironment,
             Environment env) {
         super(command, "/bogus", newEnvironment, env);
     }
-    /**
-     * Override the default debug flags to use VC 8 compatible versions.
-     */
-    protected void addDebugSwitch(Vector args) {
-        args.addElement("/Zi");
-        args.addElement("/Od");
-        args.addElement("/RTC1");
-        args.addElement("/D_DEBUG");
-    }
     public Processor changeEnvironment(boolean newEnvironment, Environment env) {
         if (newEnvironment || env != null) {
-            return new DevStudio2005CCompiler(getCommand(), newEnvironment, env);
+            return new DevStudioCCompiler(getCommand(), newEnvironment, env);
         }
         return this;
     }
@@ -61,6 +49,7 @@ public final class DevStudio2005CCompiler extends DevStudioCompatibleCCompiler {
         return DevStudioLinker.getInstance().getLinker(type);
     }
     public int getMaximumCommandLength() {
-        return 32767;
+// FREEHEP stay on safe side
+        return 32000; // 32767;
     }
 }

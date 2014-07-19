@@ -17,12 +17,12 @@
  * limitations under the License.
  * #L%
  */
-package com.github.maven_nar.cpptasks.devstudio;
+package com.github.maven_nar.cpptasks.msvc;
 import org.apache.tools.ant.taskdefs.condition.Os;
 
 import com.github.maven_nar.cpptasks.compiler.AbstractProcessor;
 import com.github.maven_nar.cpptasks.compiler.TestAbstractLinker;
-import com.github.maven_nar.cpptasks.devstudio.DevStudioLinker;
+import com.github.maven_nar.cpptasks.msvc.DevStudioLinker;
 /**
  * Test for Microsoft Developer Studio linker
  * 

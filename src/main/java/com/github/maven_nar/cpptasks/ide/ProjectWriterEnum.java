@@ -23,8 +23,8 @@ import org.apache.tools.ant.types.EnumeratedAttribute;
 
 import com.github.maven_nar.cpptasks.apple.XcodeProjectWriter;
 import com.github.maven_nar.cpptasks.borland.CBuilderXProjectWriter;
-import com.github.maven_nar.cpptasks.devstudio.DevStudioProjectWriter;
-import com.github.maven_nar.cpptasks.devstudio.VisualStudioNETProjectWriter;
+import com.github.maven_nar.cpptasks.msvc.DevStudioProjectWriter;
+import com.github.maven_nar.cpptasks.msvc.VisualStudioNETProjectWriter;
 
 /**
  * Enumeration of supported project file generators.
