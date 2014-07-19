@@ -870,7 +870,7 @@ public final class VisualStudioNETProjectWriter
                 CommandLineCompilerConfiguration compilerConfig =
                         (CommandLineCompilerConfiguration) config;
                 if (compilerConfig.getCompiler()
-                        instanceof DevStudioCCompiler) {
+                        instanceof MsvcCCompiler) {
                     return compilerConfig;
                 }
             }

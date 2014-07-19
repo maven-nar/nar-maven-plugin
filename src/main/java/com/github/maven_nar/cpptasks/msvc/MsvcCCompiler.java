@@ -29,19 +29,19 @@ import com.github.maven_nar.cpptasks.compiler.Processor;
  * 
  * @author Adam Murdoch
  */
-public final class DevStudioCCompiler extends DevStudioCompatibleCCompiler {
-    private static final DevStudioCCompiler instance = new DevStudioCCompiler(
+public final class MsvcCCompiler extends DevStudioCompatibleCCompiler {
+    private static final MsvcCCompiler instance = new MsvcCCompiler(
             "cl", false, null);
-    public static DevStudioCCompiler getInstance() {
+    public static MsvcCCompiler getInstance() {
         return instance;
     }
-    private DevStudioCCompiler(String command, boolean newEnvironment,
+    private MsvcCCompiler(String command, boolean newEnvironment,
             Environment env) {
         super(command, "/bogus", newEnvironment, env);
     }
     public Processor changeEnvironment(boolean newEnvironment, Environment env) {
         if (newEnvironment || env != null) {
-            return new DevStudioCCompiler(getCommand(), newEnvironment, env);
+            return new MsvcCCompiler(getCommand(), newEnvironment, env);
         }
         return this;
     }

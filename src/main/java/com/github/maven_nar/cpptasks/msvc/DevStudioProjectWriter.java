@@ -499,7 +499,7 @@ public final class DevStudioProjectWriter
       //
       if (config instanceof CommandLineCompilerConfiguration) {
         compilerConfig = (CommandLineCompilerConfiguration) config;
-        if (compilerConfig.getCompiler() instanceof DevStudioCCompiler) {
+        if (compilerConfig.getCompiler() instanceof MsvcCCompiler) {
           return compilerConfig;
         }
       }
