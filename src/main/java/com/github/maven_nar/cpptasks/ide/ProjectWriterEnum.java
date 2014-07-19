@@ -23,7 +23,7 @@ import org.apache.tools.ant.types.EnumeratedAttribute;
 
 import com.github.maven_nar.cpptasks.apple.XcodeProjectWriter;
 import com.github.maven_nar.cpptasks.borland.CBuilderXProjectWriter;
-import com.github.maven_nar.cpptasks.msvc.DevStudioProjectWriter;
+import com.github.maven_nar.cpptasks.msvc.MsvcProjectWriter;
 import com.github.maven_nar.cpptasks.msvc.VisualStudioNETProjectWriter;
 
 /**
@@ -80,8 +80,8 @@ public final class ProjectWriterEnum
    * Project writers associated with enumeration values.
    */
   private static ProjectWriter[] writers = new ProjectWriter[] {
-      new CBuilderXProjectWriter(), new DevStudioProjectWriter("5.00"),
-      new DevStudioProjectWriter("6.00"),
+      new CBuilderXProjectWriter(), new MsvcProjectWriter("5.00"),
+      new MsvcProjectWriter("6.00"),
       new VisualStudioNETProjectWriter("7.00", "TRUE", "FALSE"),
       new VisualStudioNETProjectWriter("7.10", "TRUE", "FALSE"),
       new VisualStudioNETProjectWriter("8.00", "true", "false"),

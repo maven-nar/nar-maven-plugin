@@ -48,7 +48,7 @@ import java.text.MessageFormat;
  *
  * @author curta
  */
-public final class DevStudioProjectWriter
+public final class MsvcProjectWriter
     implements ProjectWriter {
   /**
    * Visual Studio version.
@@ -59,7 +59,7 @@ public final class DevStudioProjectWriter
    * Constructor.
    * @param versionArg String Visual Studio version.
    */
-  public DevStudioProjectWriter(final String versionArg) {
+  public MsvcProjectWriter(final String versionArg) {
     this.version = versionArg;
   }
 
