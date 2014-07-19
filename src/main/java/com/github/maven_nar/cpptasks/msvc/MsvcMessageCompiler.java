@@ -40,15 +40,15 @@ import org.apache.tools.ant.types.Environment;
  *    [-s path] [-t path] [-w path] [-W path] [-x path] [-z name]
  *    filename [filename]
  */
-public final class DevStudioMessageCompiler extends CommandLineCompiler {
-    private static final DevStudioMessageCompiler instance = new DevStudioMessageCompiler(
+public final class MsvcMessageCompiler extends CommandLineCompiler {
+    private static final MsvcMessageCompiler instance = new MsvcMessageCompiler(
             false, null);
 
-    public static DevStudioMessageCompiler getInstance() {
+    public static MsvcMessageCompiler getInstance() {
         return instance;
     }
 
-    private DevStudioMessageCompiler(boolean newEnvironment, Environment env) {
+    private MsvcMessageCompiler(boolean newEnvironment, Environment env) {
         super("mc", null, new String[]{".mc",".man"}, new String[]{},
             ".rc", false, null, newEnvironment, env);
     }
@@ -67,7 +67,7 @@ public final class DevStudioMessageCompiler extends CommandLineCompiler {
 
     public Processor changeEnvironment(boolean newEnvironment, Environment env) {
         if (newEnvironment || env != null) {
-            return new DevStudioMessageCompiler(newEnvironment, env);
+            return new MsvcMessageCompiler(newEnvironment, env);
         }
         return this;
     }
