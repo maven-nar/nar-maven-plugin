@@ -20,7 +20,7 @@
 package com.github.maven_nar.cpptasks.msvc;
 import java.util.Vector;
 
-import com.github.maven_nar.cpptasks.msvc.DevStudio2005CCompiler;
+import com.github.maven_nar.cpptasks.msvc.Msvc2005CCompiler;
 
 import junit.framework.TestCase;
 /**
@@ -32,7 +32,7 @@ public class TestDevStudio2005CCompiler extends TestCase {
         super(name);
     }
     public void testDebug() {
-        DevStudio2005CCompiler compiler = DevStudio2005CCompiler.getInstance();
+        Msvc2005CCompiler compiler = Msvc2005CCompiler.getInstance();
         Vector args = new Vector();
         compiler.addDebugSwitch(args);
         assertEquals(4, args.size());

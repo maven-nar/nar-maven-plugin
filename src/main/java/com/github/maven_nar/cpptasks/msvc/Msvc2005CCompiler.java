@@ -32,13 +32,13 @@ import com.github.maven_nar.cpptasks.compiler.Processor;
  * 
  * @author David Haney
  */
-public final class DevStudio2005CCompiler extends DevStudioCompatibleCCompiler {
-    private static final DevStudio2005CCompiler instance = new DevStudio2005CCompiler(
+public final class Msvc2005CCompiler extends DevStudioCompatibleCCompiler {
+    private static final Msvc2005CCompiler instance = new Msvc2005CCompiler(
             "cl", false, null);
-    public static DevStudio2005CCompiler getInstance() {
+    public static Msvc2005CCompiler getInstance() {
         return instance;
     }
-    private DevStudio2005CCompiler(String command, boolean newEnvironment,
+    private Msvc2005CCompiler(String command, boolean newEnvironment,
             Environment env) {
         super(command, "/bogus", newEnvironment, env);
     }
@@ -53,7 +53,7 @@ public final class DevStudio2005CCompiler extends DevStudioCompatibleCCompiler {
     }
     public Processor changeEnvironment(boolean newEnvironment, Environment env) {
         if (newEnvironment || env != null) {
-            return new DevStudio2005CCompiler(getCommand(), newEnvironment, env);
+            return new Msvc2005CCompiler(getCommand(), newEnvironment, env);
         }
         return this;
     }
