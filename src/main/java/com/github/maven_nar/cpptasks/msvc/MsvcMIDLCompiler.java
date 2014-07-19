@@ -36,13 +36,13 @@ import com.github.maven_nar.cpptasks.parser.Parser;
  * 
  * @author Curt Arnold
  */
-public final class DevStudioMIDLCompiler extends CommandLineCompiler {
-    private static final DevStudioMIDLCompiler instance = new DevStudioMIDLCompiler(
+public final class MsvcMIDLCompiler extends CommandLineCompiler {
+    private static final MsvcMIDLCompiler instance = new MsvcMIDLCompiler(
             false, null);
-    public static DevStudioMIDLCompiler getInstance() {
+    public static MsvcMIDLCompiler getInstance() {
         return instance;
     }
-    private DevStudioMIDLCompiler(boolean newEnvironment, Environment env) {
+    private MsvcMIDLCompiler(boolean newEnvironment, Environment env) {
         super("midl", null, new String[]{".idl", ".odl"}, new String[]{},
                 ".tlb", false, null, newEnvironment, env);
     }
@@ -59,7 +59,7 @@ public final class DevStudioMIDLCompiler extends CommandLineCompiler {
     }
     public Processor changeEnvironment(boolean newEnvironment, Environment env) {
         if (newEnvironment || env != null) {
-            return new DevStudioMIDLCompiler(newEnvironment, env);
+            return new MsvcMIDLCompiler(newEnvironment, env);
         }
         return this;
     }

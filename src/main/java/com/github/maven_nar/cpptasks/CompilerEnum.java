@@ -28,7 +28,7 @@ import com.github.maven_nar.cpptasks.compaq.CompaqVisualFortranCompiler;
 import com.github.maven_nar.cpptasks.compiler.Compiler;
 import com.github.maven_nar.cpptasks.msvc.Msvc2005CCompiler;
 import com.github.maven_nar.cpptasks.msvc.MsvcCCompiler;
-import com.github.maven_nar.cpptasks.msvc.DevStudioMIDLCompiler;
+import com.github.maven_nar.cpptasks.msvc.MsvcMIDLCompiler;
 import com.github.maven_nar.cpptasks.msvc.DevStudioResourceCompiler;
 import com.github.maven_nar.cpptasks.msvc.MsvcMessageCompiler;
 import com.github.maven_nar.cpptasks.gcc.GccCCompiler;
@@ -227,7 +227,7 @@ public class CompilerEnum extends EnumeratedAttribute {
             new ProcessorEnumValue("brc", BorlandResourceCompiler.getInstance()),
             new ProcessorEnumValue("df", CompaqVisualFortranCompiler
                     .getInstance()),
-            new ProcessorEnumValue("midl", DevStudioMIDLCompiler.getInstance()),
+            new ProcessorEnumValue("midl", MsvcMIDLCompiler.getInstance()),
             new ProcessorEnumValue("icl", IntelWin32CCompiler.getInstance()),
             new ProcessorEnumValue("ecl", IntelWin64CCompiler.getInstance()),
 // BEGINFREEHEP
