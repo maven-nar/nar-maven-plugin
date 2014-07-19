@@ -29,7 +29,7 @@ import com.github.maven_nar.cpptasks.compiler.Processor;
  * 
  * @author Adam Murdoch
  */
-public final class MsvcCCompiler extends DevStudioCompatibleCCompiler {
+public final class MsvcCCompiler extends MsvcCompatibleCCompiler {
     private static final MsvcCCompiler instance = new MsvcCCompiler(
             "cl", false, null);
     public static MsvcCCompiler getInstance() {

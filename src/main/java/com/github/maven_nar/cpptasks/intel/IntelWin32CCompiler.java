@@ -23,7 +23,7 @@ import org.apache.tools.ant.types.Environment;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
 import com.github.maven_nar.cpptasks.compiler.Processor;
-import com.github.maven_nar.cpptasks.msvc.DevStudioCompatibleCCompiler;
+import com.github.maven_nar.cpptasks.msvc.MsvcCompatibleCCompiler;
 /**
  * Adapter for the Intel (r) C++ compiler for 32-bit applications
  * 
@@ -32,7 +32,7 @@ import com.github.maven_nar.cpptasks.msvc.DevStudioCompatibleCCompiler;
  * 
  * @author Curt Arnold
  */
-public final class IntelWin32CCompiler extends DevStudioCompatibleCCompiler {
+public final class IntelWin32CCompiler extends MsvcCompatibleCCompiler {
     private static final IntelWin32CCompiler instance = new IntelWin32CCompiler(
             false, null);
     public static IntelWin32CCompiler getInstance() {

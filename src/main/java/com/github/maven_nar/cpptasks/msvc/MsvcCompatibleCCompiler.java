@@ -36,7 +36,7 @@ import com.github.maven_nar.cpptasks.compiler.PrecompilingCommandLineCCompiler;
  *
  * @author Curt Arnold
  */
-public abstract class DevStudioCompatibleCCompiler
+public abstract class MsvcCompatibleCCompiler
         extends
             PrecompilingCommandLineCCompiler {
     private static String[] mflags = new String[]{
@@ -46,7 +46,7 @@ public abstract class DevStudioCompatibleCCompiler
             //      (runtime=dynamic,debug=true), (..,debug=false), (not supported)
             //    next four are multi-threaded, same sequence
             "/ML", "/MLd", null, null, "/MT", "/MTd", "/MD", "/MDd"};
-    protected DevStudioCompatibleCCompiler(String command,
+    protected MsvcCompatibleCCompiler(String command,
             String identifierArg, boolean newEnvironment, Environment env) {
         super(command, identifierArg, new String[]{".c", ".cc", ".cpp", ".cxx",
                 ".c++"}, new String[]{".h", ".hpp", ".inl"}, ".obj", false,
