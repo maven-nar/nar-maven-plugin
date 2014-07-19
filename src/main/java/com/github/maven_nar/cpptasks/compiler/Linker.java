@@ -45,7 +45,7 @@ public interface Linker extends Processor {
      * Returns a set of filename patterns corresponding to library names.
      * 
      * For example, "advapi32" would be expanded to "advapi32.dll" by
-     * DevStudioLinker and to "libadvapi32.a" and "libadvapi32.so" by
+     * MsvcLinker and to "libadvapi32.a" and "libadvapi32.so" by
      * GccLinker.
      * 
      * @param libnames

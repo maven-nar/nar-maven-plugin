@@ -183,7 +183,7 @@ public final class TestCompilerDef
     CompilerDef compilerDef = (CompilerDef) create();
     try {
       compilerDef
-          .setClassname("com.github.maven_nar.cpptasks.msvc.DevStudioLinker");
+          .setClassname("com.github.maven_nar.cpptasks.msvc.MsvcLinker");
     } catch (BuildException ex) {
       return;
     }

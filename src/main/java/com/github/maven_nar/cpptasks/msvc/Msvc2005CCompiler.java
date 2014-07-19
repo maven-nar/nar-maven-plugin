@@ -58,7 +58,7 @@ public final class Msvc2005CCompiler extends MsvcCompatibleCCompiler {
         return this;
     }
     public Linker getLinker(LinkType type) {
-        return DevStudioLinker.getInstance().getLinker(type);
+        return MsvcLinker.getInstance().getLinker(type);
     }
     public int getMaximumCommandLength() {
         return 32767;

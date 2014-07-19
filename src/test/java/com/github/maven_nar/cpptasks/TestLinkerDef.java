@@ -32,7 +32,7 @@ import com.github.maven_nar.cpptasks.LinkerEnum;
 import com.github.maven_nar.cpptasks.ProcessorDef;
 import com.github.maven_nar.cpptasks.compiler.CommandLineLinkerConfiguration;
 import com.github.maven_nar.cpptasks.compiler.Linker;
-import com.github.maven_nar.cpptasks.msvc.DevStudioLinker;
+import com.github.maven_nar.cpptasks.msvc.MsvcLinker;
 import com.github.maven_nar.cpptasks.gcc.GccLinker;
 import com.github.maven_nar.cpptasks.types.FlexLong;
 import com.github.maven_nar.cpptasks.types.LibrarySet;
@@ -82,10 +82,10 @@ public final class TestLinkerDef
   public void testGetMSVC() {
     LinkerDef linkerDef = (LinkerDef) create();
     linkerDef
-        .setClassname("com.github.maven_nar.cpptasks.msvc.DevStudioLinker");
+        .setClassname("com.github.maven_nar.cpptasks.msvc.MsvcLinker");
     Linker comp = (Linker) linkerDef.getProcessor();
     assertNotNull(comp);
-    assertSame(DevStudioLinker.getInstance(), comp);
+    assertSame(MsvcLinker.getInstance(), comp);
   }
 
   /**
@@ -369,7 +369,7 @@ public final class TestLinkerDef
   public void testExtendsClassname() {
     LinkerDef baseLinker = new LinkerDef();
     baseLinker
-        .setClassname("com.github.maven_nar.cpptasks.msvc.DevStudioLinker");
+        .setClassname("com.github.maven_nar.cpptasks.msvc.MsvcLinker");
     LinkerDef extendedLinker = (LinkerDef) createExtendedProcessorDef(
         baseLinker);
     extendedLinker.setBase(new FlexLong("10000"));

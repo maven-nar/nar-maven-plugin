@@ -114,7 +114,7 @@ public final class DevStudioMessageCompiler extends CommandLineCompiler {
         return filename;
     }
     public Linker getLinker(LinkType type) {
-        return DevStudioLinker.getInstance().getLinker(type);
+        return MsvcLinker.getInstance().getLinker(type);
     }
 
     public int getMaximumCommandLength() {

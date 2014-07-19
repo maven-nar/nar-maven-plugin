@@ -34,6 +34,6 @@ public final class MsvcLibrarian extends MsvcCompatibleLibrarian {
         super("lib", "/bogus");
     }
     public Linker getLinker(LinkType type) {
-        return DevStudioLinker.getInstance().getLinker(type);
+        return MsvcLinker.getInstance().getLinker(type);
     }
 }

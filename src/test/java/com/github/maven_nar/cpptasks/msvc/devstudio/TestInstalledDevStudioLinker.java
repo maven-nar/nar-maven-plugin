@@ -21,7 +21,7 @@ package com.github.maven_nar.cpptasks.msvc;
 
 import java.io.File;
 
-import com.github.maven_nar.cpptasks.msvc.DevStudioLinker;
+import com.github.maven_nar.cpptasks.msvc.MsvcLinker;
 
 
 /**
@@ -36,7 +36,7 @@ public class TestInstalledDevStudioLinker extends TestDevStudioLinker
      }
 
     public void failingtestGetLibraryPath() {
-        File[] libpath = DevStudioLinker.getInstance().getLibraryPath();
+        File[] libpath = MsvcLinker.getInstance().getLibraryPath();
         //
         //  unless you tweak the library path
         //       it should have more thean three entries

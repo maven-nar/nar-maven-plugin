@@ -46,7 +46,7 @@ public final class MsvcCCompiler extends MsvcCompatibleCCompiler {
         return this;
     }
     public Linker getLinker(LinkType type) {
-        return DevStudioLinker.getInstance().getLinker(type);
+        return MsvcLinker.getInstance().getLinker(type);
     }
     public int getMaximumCommandLength() {
 // FREEHEP stay on safe side

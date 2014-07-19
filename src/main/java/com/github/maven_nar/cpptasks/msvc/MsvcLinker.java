@@ -26,13 +26,13 @@ import com.github.maven_nar.cpptasks.compiler.Linker;
  * @author Adam Murdoch
  * @author Curt Arnold
  */
-public final class DevStudioLinker extends MsvcCompatibleLinker {
-    private static final DevStudioLinker dllLinker = new DevStudioLinker(".dll");
-    private static final DevStudioLinker instance = new DevStudioLinker(".exe");
-    public static DevStudioLinker getInstance() {
+public final class MsvcLinker extends MsvcCompatibleLinker {
+    private static final MsvcLinker dllLinker = new MsvcLinker(".dll");
+    private static final MsvcLinker instance = new MsvcLinker(".exe");
+    public static MsvcLinker getInstance() {
         return instance;
     }
-    private DevStudioLinker(String outputSuffix) {
+    private MsvcLinker(String outputSuffix) {
         super("link", "/DLL", outputSuffix);
     }
     public Linker getLinker(LinkType type) {

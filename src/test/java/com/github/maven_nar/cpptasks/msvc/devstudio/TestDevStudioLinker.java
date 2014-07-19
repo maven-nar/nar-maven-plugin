@@ -22,7 +22,7 @@ import org.apache.tools.ant.taskdefs.condition.Os;
 
 import com.github.maven_nar.cpptasks.compiler.AbstractProcessor;
 import com.github.maven_nar.cpptasks.compiler.TestAbstractLinker;
-import com.github.maven_nar.cpptasks.msvc.DevStudioLinker;
+import com.github.maven_nar.cpptasks.msvc.MsvcLinker;
 /**
  * Test for Microsoft Developer Studio linker
  * 
@@ -33,7 +33,7 @@ public class TestDevStudioLinker extends TestAbstractLinker {
         super(name);
     }
     protected AbstractProcessor create() {
-        return DevStudioLinker.getInstance();
+        return MsvcLinker.getInstance();
     }
     public void testGetIdentfier() {
         if (!Os.isFamily("windows")) {
