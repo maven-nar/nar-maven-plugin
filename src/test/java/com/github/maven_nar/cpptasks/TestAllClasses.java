@@ -41,7 +41,7 @@ public class TestAllClasses extends TestSuite {
         addTestSuite(com.github.maven_nar.cpptasks.TestDependencyTable.class);
         addTestSuite(com.github.maven_nar.cpptasks.types.TestDefineArgument.class);
         addTestSuite(com.github.maven_nar.cpptasks.msvc.TestMsvc2005CCompiler.class);
-        addTestSuite(com.github.maven_nar.cpptasks.msvc.TestDevStudioCCompiler.class);
+        addTestSuite(com.github.maven_nar.cpptasks.msvc.TestMsvcCCompiler.class);
         addTestSuite(com.github.maven_nar.cpptasks.msvc.TestDevStudioLinker.class);
         addTestSuite(com.github.maven_nar.cpptasks.TestLinkerDef.class);
         addTestSuite(com.github.maven_nar.cpptasks.TestTargetInfo.class);

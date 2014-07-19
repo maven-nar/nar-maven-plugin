@@ -27,8 +27,8 @@ import junit.framework.TestCase;
  * Test Microsoft C/C++ compiler adapter
  *  
  */
-public class TestDevStudioCCompiler extends TestCase {
-    public TestDevStudioCCompiler(String name) {
+public class TestMsvcCCompiler extends TestCase {
+    public TestMsvcCCompiler(String name) {
         super(name);
     }
     public void testDebug() {
