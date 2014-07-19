@@ -133,7 +133,7 @@ public final class MsvcMessageCompiler extends CommandLineCompiler {
     }
 
     protected void getUndefineSwitch(StringBuffer buffer, String define) {
-        DevStudioProcessor.getUndefineSwitch(buffer, define);
+        MsvcProcessor.getUndefineSwitch(buffer, define);
     }
 
     public String getIdentifier() {

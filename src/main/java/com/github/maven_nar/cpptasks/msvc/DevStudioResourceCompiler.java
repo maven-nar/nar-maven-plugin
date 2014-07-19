@@ -81,13 +81,13 @@ public final class DevStudioResourceCompiler extends CommandLineCompiler {
     }
     protected void getDefineSwitch(StringBuffer buffer, String define,
             String value) {
-        DevStudioProcessor.getDefineSwitch(buffer, define, value);
+        MsvcProcessor.getDefineSwitch(buffer, define, value);
     }
     protected File[] getEnvironmentIncludePath() {
         return CUtil.getPathFromEnvironment("INCLUDE", ";");
     }
     protected String getIncludeDirSwitch(String includeDir) {
-        return DevStudioProcessor.getIncludeDirSwitch(includeDir);
+        return MsvcProcessor.getIncludeDirSwitch(includeDir);
     }
     protected String getInputFileArgument(File outputDir, String filename,
             int index) {
@@ -116,7 +116,7 @@ public final class DevStudioResourceCompiler extends CommandLineCompiler {
         return arg1.length() + arg2.length() + 2;
     }
     protected void getUndefineSwitch(StringBuffer buffer, String define) {
-        DevStudioProcessor.getUndefineSwitch(buffer, define);
+        MsvcProcessor.getUndefineSwitch(buffer, define);
     }
     public String getIdentifier() {
     	return "Microsoft (R) Windows (R) Resource Compiler";

@@ -24,7 +24,7 @@ import java.util.Vector;
  * 
  *  
  */
-public class DevStudioProcessor {
+public class MsvcProcessor {
     public static void addWarningSwitch(Vector args, int level) {
         switch (level) {
             case 0 :
@@ -88,6 +88,6 @@ public class DevStudioProcessor {
     public static boolean isCaseSensitive() {
         return false;
     }
-    private DevStudioProcessor() {
+    private MsvcProcessor() {
     }
 }

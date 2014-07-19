@@ -109,7 +109,7 @@ public abstract class MsvcCompatibleCCompiler
         args.addElement("/D_DEBUG");
     }
     protected void addWarningSwitch(Vector args, int level) {
-        DevStudioProcessor.addWarningSwitch(args, level);
+        MsvcProcessor.addWarningSwitch(args, level);
     }
     protected CompilerConfiguration createPrecompileGeneratingConfig(
             CommandLineCompilerConfiguration baseConfig, File prototype,
@@ -132,15 +132,15 @@ public abstract class MsvcCompatibleCCompiler
     }
     protected void getDefineSwitch(StringBuffer buffer, String define,
             String value) {
-        DevStudioProcessor.getDefineSwitch(buffer, define, value);
+        MsvcProcessor.getDefineSwitch(buffer, define, value);
     }
     protected File[] getEnvironmentIncludePath() {
         return CUtil.getPathFromEnvironment("INCLUDE", ";");
     }
     protected String getIncludeDirSwitch(String includeDir) {
-        return DevStudioProcessor.getIncludeDirSwitch(includeDir);
+        return MsvcProcessor.getIncludeDirSwitch(includeDir);
     }
     protected void getUndefineSwitch(StringBuffer buffer, String define) {
-        DevStudioProcessor.getUndefineSwitch(buffer, define);
+        MsvcProcessor.getUndefineSwitch(buffer, define);
     }
 }

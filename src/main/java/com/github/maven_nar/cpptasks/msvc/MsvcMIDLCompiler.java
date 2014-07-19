@@ -55,7 +55,7 @@ public final class MsvcMIDLCompiler extends CommandLineCompiler {
 			final OptimizationEnum optimization) {
     }
     protected void addWarningSwitch(Vector args, int level) {
-        DevStudioProcessor.addWarningSwitch(args, level);
+        MsvcProcessor.addWarningSwitch(args, level);
     }
     public Processor changeEnvironment(boolean newEnvironment, Environment env) {
         if (newEnvironment || env != null) {
@@ -75,13 +75,13 @@ public final class MsvcMIDLCompiler extends CommandLineCompiler {
     }
     protected void getDefineSwitch(StringBuffer buffer, String define,
             String value) {
-        DevStudioProcessor.getDefineSwitch(buffer, define, value);
+        MsvcProcessor.getDefineSwitch(buffer, define, value);
     }
     protected File[] getEnvironmentIncludePath() {
         return CUtil.getPathFromEnvironment("INCLUDE", ";");
     }
     protected String getIncludeDirSwitch(String includeDir) {
-        return DevStudioProcessor.getIncludeDirSwitch(includeDir);
+        return MsvcProcessor.getIncludeDirSwitch(includeDir);
     }
     protected String getInputFileArgument(File outputDir, String filename,
             int index) {
@@ -112,6 +112,6 @@ public final class MsvcMIDLCompiler extends CommandLineCompiler {
         return arg1.length() + arg2.length() + arg3.length() + 3;
     }
     protected void getUndefineSwitch(StringBuffer buffer, String define) {
-        DevStudioProcessor.getUndefineSwitch(buffer, define);
+        MsvcProcessor.getUndefineSwitch(buffer, define);
     }
 }
