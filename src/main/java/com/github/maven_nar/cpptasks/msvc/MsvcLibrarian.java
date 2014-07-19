@@ -25,12 +25,12 @@ import com.github.maven_nar.cpptasks.compiler.Linker;
  * 
  * @author Curt Arnold
  */
-public final class DevStudioLibrarian extends MsvcCompatibleLibrarian {
-    private static final DevStudioLibrarian instance = new DevStudioLibrarian();
-    public static DevStudioLibrarian getInstance() {
+public final class MsvcLibrarian extends MsvcCompatibleLibrarian {
+    private static final MsvcLibrarian instance = new MsvcLibrarian();
+    public static MsvcLibrarian getInstance() {
         return instance;
     }
-    private DevStudioLibrarian() {
+    private MsvcLibrarian() {
         super("lib", "/bogus");
     }
     public Linker getLinker(LinkType type) {

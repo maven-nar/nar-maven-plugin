@@ -40,7 +40,7 @@ public final class DevStudioLinker extends MsvcCompatibleLinker {
             return dllLinker;
         }
         if (type.isStaticLibrary()) {
-            return DevStudioLibrarian.getInstance();
+            return MsvcLibrarian.getInstance();
         }
         return instance;
     }

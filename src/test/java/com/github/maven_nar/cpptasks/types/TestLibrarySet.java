@@ -31,7 +31,7 @@ import com.github.maven_nar.cpptasks.CUtil;
 import com.github.maven_nar.cpptasks.MockBuildListener;
 import com.github.maven_nar.cpptasks.MockFileCollector;
 import com.github.maven_nar.cpptasks.compiler.Linker;
-import com.github.maven_nar.cpptasks.msvc.DevStudioLibrarian;
+import com.github.maven_nar.cpptasks.msvc.MsvcLibrarian;
 import com.github.maven_nar.cpptasks.msvc.DevStudioLinker;
 import com.github.maven_nar.cpptasks.types.LibrarySet;
 
@@ -301,7 +301,7 @@ public class TestLibrarySet
    * @throws IOException if unable to create or delete temporary file
    */
   public final void testLibrarianVisitFiles() throws IOException {
-    Linker linker = DevStudioLibrarian.getInstance();
+    Linker linker = MsvcLibrarian.getInstance();
     testVisitFiles(linker, 0);
   }
 

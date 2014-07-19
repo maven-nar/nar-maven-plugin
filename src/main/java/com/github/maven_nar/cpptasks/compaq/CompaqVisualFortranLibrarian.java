@@ -22,7 +22,7 @@ import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.compiler.CommandLineLinker;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
-import com.github.maven_nar.cpptasks.msvc.DevStudioLibrarian;
+import com.github.maven_nar.cpptasks.msvc.MsvcLibrarian;
 import com.github.maven_nar.cpptasks.msvc.DevStudioProcessor;
 import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
 
@@ -60,10 +60,10 @@ public class CompaqVisualFortranLibrarian extends CommandLineLinker {
         return CompaqVisualFortranLinker.getInstance().getLinker(type);
     }
     protected int getMaximumCommandLength() {
-        return DevStudioLibrarian.getInstance().getMaximumCommandLength();
+        return MsvcLibrarian.getInstance().getMaximumCommandLength();
     }
     protected String[] getOutputFileSwitch(String outputFile) {
-        return DevStudioLibrarian.getInstance().getOutputFileSwitch(outputFile);
+        return MsvcLibrarian.getInstance().getOutputFileSwitch(outputFile);
     }
     public boolean isCaseSensitive() {
         return false;
