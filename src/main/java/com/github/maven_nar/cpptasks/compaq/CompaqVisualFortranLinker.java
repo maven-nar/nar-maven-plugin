@@ -22,14 +22,14 @@ import java.util.Vector;
 
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
-import com.github.maven_nar.cpptasks.msvc.DevStudioCompatibleLinker;
+import com.github.maven_nar.cpptasks.msvc.MsvcCompatibleLinker;
 
 /**
  * Adapter for the Compaq(r) Visual Fortran linker.
  * 
  * @author Curt Arnold
  */
-public final class CompaqVisualFortranLinker extends DevStudioCompatibleLinker {
+public final class CompaqVisualFortranLinker extends MsvcCompatibleLinker {
     private static final CompaqVisualFortranLinker dllLinker = new CompaqVisualFortranLinker(
             ".dll");
     private static final CompaqVisualFortranLinker instance = new CompaqVisualFortranLinker(

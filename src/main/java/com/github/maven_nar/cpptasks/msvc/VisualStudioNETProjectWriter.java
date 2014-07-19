@@ -626,7 +626,7 @@ public final class VisualStudioNETProjectWriter
         if (config instanceof CommandLineLinkerConfiguration) {
             CommandLineLinkerConfiguration linkerConfig =
                     (CommandLineLinkerConfiguration) config;
-            if (linkerConfig.getLinker() instanceof DevStudioCompatibleLinker) {
+            if (linkerConfig.getLinker() instanceof MsvcCompatibleLinker) {
                 addAttribute(attributes, "LinkIncremental",
                         getLinkIncremental(linkerConfig));
                 if (isDebug) {
