@@ -37,14 +37,14 @@ import com.github.maven_nar.cpptasks.parser.Parser;
  * 
  * @author Curt Arnold
  */
-public final class DevStudioResourceCompiler extends CommandLineCompiler {
-    private static final DevStudioResourceCompiler instance = new DevStudioResourceCompiler(
+public final class MsvcResourceCompiler extends CommandLineCompiler {
+    private static final MsvcResourceCompiler instance = new MsvcResourceCompiler(
             false, null);
-    public static DevStudioResourceCompiler getInstance() {
+    public static MsvcResourceCompiler getInstance() {
         return instance;
     }
     private String identifier;
-    private DevStudioResourceCompiler(boolean newEnvironment, Environment env) {
+    private MsvcResourceCompiler(boolean newEnvironment, Environment env) {
         super("rc", null, new String[]{".rc"}, new String[]{".h", ".hpp",
                 ".inl"}, ".res", false, null, newEnvironment, env);
     }
@@ -65,7 +65,7 @@ public final class DevStudioResourceCompiler extends CommandLineCompiler {
     }
     public Processor changeEnvironment(boolean newEnvironment, Environment env) {
         if (newEnvironment || env != null) {
-            return new DevStudioResourceCompiler(newEnvironment, env);
+            return new MsvcResourceCompiler(newEnvironment, env);
         }
         return this;
     }

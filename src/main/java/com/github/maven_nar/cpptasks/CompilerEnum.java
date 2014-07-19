@@ -29,7 +29,7 @@ import com.github.maven_nar.cpptasks.compiler.Compiler;
 import com.github.maven_nar.cpptasks.msvc.Msvc2005CCompiler;
 import com.github.maven_nar.cpptasks.msvc.MsvcCCompiler;
 import com.github.maven_nar.cpptasks.msvc.MsvcMIDLCompiler;
-import com.github.maven_nar.cpptasks.msvc.DevStudioResourceCompiler;
+import com.github.maven_nar.cpptasks.msvc.MsvcResourceCompiler;
 import com.github.maven_nar.cpptasks.msvc.MsvcMessageCompiler;
 import com.github.maven_nar.cpptasks.gcc.GccCCompiler;
 import com.github.maven_nar.cpptasks.gcc.WindresResourceCompiler;
@@ -221,7 +221,7 @@ public class CompilerEnum extends EnumeratedAttribute {
             new ProcessorEnumValue("msvc", MsvcCCompiler.getInstance()),
             new ProcessorEnumValue("msvc8", Msvc2005CCompiler.getInstance()),
             new ProcessorEnumValue("bcc", BorlandCCompiler.getInstance()),
-            new ProcessorEnumValue("msrc", DevStudioResourceCompiler
+            new ProcessorEnumValue("msrc", MsvcResourceCompiler
                     .getInstance()),
             new ProcessorEnumValue("msmc", MsvcMessageCompiler.getInstance()),
             new ProcessorEnumValue("brc", BorlandResourceCompiler.getInstance()),
