@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.github.maven_nar.cpptasks.devstudio;
+package com.github.maven_nar.cpptasks.msvc;
 
 import org.apache.tools.ant.BuildException;
 
@@ -48,7 +48,7 @@ import java.text.MessageFormat;
  *
  * @author curta
  */
-public final class DevStudioProjectWriter
+public final class MsvcProjectWriter
     implements ProjectWriter {
   /**
    * Visual Studio version.
@@ -59,7 +59,7 @@ public final class DevStudioProjectWriter
    * Constructor.
    * @param versionArg String Visual Studio version.
    */
-  public DevStudioProjectWriter(final String versionArg) {
+  public MsvcProjectWriter(final String versionArg) {
     this.version = versionArg;
   }
 
@@ -499,7 +499,7 @@ public final class DevStudioProjectWriter
       //
       if (config instanceof CommandLineCompilerConfiguration) {
         compilerConfig = (CommandLineCompilerConfiguration) config;
-        if (compilerConfig.getCompiler() instanceof DevStudioCCompiler) {
+        if (compilerConfig.getCompiler() instanceof MsvcCCompiler) {
           return compilerConfig;
         }
       }

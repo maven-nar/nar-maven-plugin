@@ -31,7 +31,7 @@ import com.github.maven_nar.cpptasks.ProcessorDef;
 import com.github.maven_nar.cpptasks.compiler.CommandLineCompilerConfiguration;
 import com.github.maven_nar.cpptasks.compiler.Compiler;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
-import com.github.maven_nar.cpptasks.devstudio.DevStudioCCompiler;
+import com.github.maven_nar.cpptasks.msvc.MsvcCCompiler;
 import com.github.maven_nar.cpptasks.gcc.GccCCompiler;
 import com.github.maven_nar.cpptasks.types.CompilerArgument;
 import com.github.maven_nar.cpptasks.types.ConditionalPath;
@@ -153,10 +153,10 @@ public final class TestCompilerDef
     CompilerDef compilerDef = (CompilerDef) create();
     compilerDef
         .setClassname(
-      "com.github.maven_nar.cpptasks.devstudio.DevStudioCCompiler");
+      "com.github.maven_nar.cpptasks.msvc.MsvcCCompiler");
     Compiler comp = (Compiler) compilerDef.getProcessor();
     assertNotNull(comp);
-    assertSame(DevStudioCCompiler.getInstance(), comp);
+    assertSame(MsvcCCompiler.getInstance(), comp);
   }
 
   /**
@@ -183,7 +183,7 @@ public final class TestCompilerDef
     CompilerDef compilerDef = (CompilerDef) create();
     try {
       compilerDef
-          .setClassname("com.github.maven_nar.cpptasks.devstudio.DevStudioLinker");
+          .setClassname("com.github.maven_nar.cpptasks.msvc.MsvcLinker");
     } catch (BuildException ex) {
       return;
     }
@@ -378,7 +378,7 @@ public final class TestCompilerDef
     CompilerDef baseCompiler = new CompilerDef();
     baseCompiler
         .setClassname(
-      "com.github.maven_nar.cpptasks.devstudio.DevStudioCCompiler");
+      "com.github.maven_nar.cpptasks.msvc.MsvcCCompiler");
     CompilerDef extendedCompiler = (CompilerDef) createExtendedProcessorDef(
         baseCompiler);
     extendedCompiler.setExceptions(true);

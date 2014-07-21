@@ -17,11 +17,11 @@
  * limitations under the License.
  * #L%
  */
-package com.github.maven_nar.cpptasks.devstudio;
+package com.github.maven_nar.cpptasks.msvc;
 
 import java.io.File;
 
-import com.github.maven_nar.cpptasks.devstudio.DevStudioLinker;
+import com.github.maven_nar.cpptasks.msvc.MsvcLinker;
 
 
 /**
@@ -29,14 +29,14 @@ import com.github.maven_nar.cpptasks.devstudio.DevStudioLinker;
  *
  * Override create to test concrete compiler implementions
  */
-public class TestInstalledDevStudioLinker extends TestDevStudioLinker
+public class TestInstalledMsvcLinker extends TestMsvcLinker
 {
-     public TestInstalledDevStudioLinker(String name) {
+     public TestInstalledMsvcLinker(String name) {
         super(name);
      }
 
     public void failingtestGetLibraryPath() {
-        File[] libpath = DevStudioLinker.getInstance().getLibraryPath();
+        File[] libpath = MsvcLinker.getInstance().getLibraryPath();
         //
         //  unless you tweak the library path
         //       it should have more thean three entries

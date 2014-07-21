@@ -24,13 +24,13 @@ import org.apache.tools.ant.types.Environment;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
 import com.github.maven_nar.cpptasks.compiler.Processor;
-import com.github.maven_nar.cpptasks.devstudio.DevStudioCompatibleCCompiler;
+import com.github.maven_nar.cpptasks.msvc.MsvcCompatibleCCompiler;
 /**
  * Adapter for the Intel C++ compiler for Itanium(TM) Applications
  * 
  * @author Curt Arnold
  */
-public final class IntelWin64CCompiler extends DevStudioCompatibleCCompiler {
+public final class IntelWin64CCompiler extends MsvcCompatibleCCompiler {
     private static final IntelWin64CCompiler instance = new IntelWin64CCompiler(
             false, null);
     public static IntelWin64CCompiler getInstance() {

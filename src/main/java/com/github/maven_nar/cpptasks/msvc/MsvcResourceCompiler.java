@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.github.maven_nar.cpptasks.devstudio;
+package com.github.maven_nar.cpptasks.msvc;
 import java.io.File;
 import java.util.Vector;
 
@@ -37,14 +37,14 @@ import com.github.maven_nar.cpptasks.parser.Parser;
  * 
  * @author Curt Arnold
  */
-public final class DevStudioResourceCompiler extends CommandLineCompiler {
-    private static final DevStudioResourceCompiler instance = new DevStudioResourceCompiler(
+public final class MsvcResourceCompiler extends CommandLineCompiler {
+    private static final MsvcResourceCompiler instance = new MsvcResourceCompiler(
             false, null);
-    public static DevStudioResourceCompiler getInstance() {
+    public static MsvcResourceCompiler getInstance() {
         return instance;
     }
     private String identifier;
-    private DevStudioResourceCompiler(boolean newEnvironment, Environment env) {
+    private MsvcResourceCompiler(boolean newEnvironment, Environment env) {
         super("rc", null, new String[]{".rc"}, new String[]{".h", ".hpp",
                 ".inl"}, ".res", false, null, newEnvironment, env);
     }
@@ -65,7 +65,7 @@ public final class DevStudioResourceCompiler extends CommandLineCompiler {
     }
     public Processor changeEnvironment(boolean newEnvironment, Environment env) {
         if (newEnvironment || env != null) {
-            return new DevStudioResourceCompiler(newEnvironment, env);
+            return new MsvcResourceCompiler(newEnvironment, env);
         }
         return this;
     }
@@ -81,13 +81,13 @@ public final class DevStudioResourceCompiler extends CommandLineCompiler {
     }
     protected void getDefineSwitch(StringBuffer buffer, String define,
             String value) {
-        DevStudioProcessor.getDefineSwitch(buffer, define, value);
+        MsvcProcessor.getDefineSwitch(buffer, define, value);
     }
     protected File[] getEnvironmentIncludePath() {
         return CUtil.getPathFromEnvironment("INCLUDE", ";");
     }
     protected String getIncludeDirSwitch(String includeDir) {
-        return DevStudioProcessor.getIncludeDirSwitch(includeDir);
+        return MsvcProcessor.getIncludeDirSwitch(includeDir);
     }
     protected String getInputFileArgument(File outputDir, String filename,
             int index) {
@@ -100,7 +100,7 @@ public final class DevStudioResourceCompiler extends CommandLineCompiler {
         return filename;
     }
     public Linker getLinker(LinkType type) {
-        return DevStudioLinker.getInstance().getLinker(type);
+        return MsvcLinker.getInstance().getLinker(type);
     }
     public int getMaximumCommandLength() {
 // FREEHEP stay on the safe side
@@ -116,7 +116,7 @@ public final class DevStudioResourceCompiler extends CommandLineCompiler {
         return arg1.length() + arg2.length() + 2;
     }
     protected void getUndefineSwitch(StringBuffer buffer, String define) {
-        DevStudioProcessor.getUndefineSwitch(buffer, define);
+        MsvcProcessor.getUndefineSwitch(buffer, define);
     }
     public String getIdentifier() {
     	return "Microsoft (R) Windows (R) Resource Compiler";

@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.github.maven_nar.cpptasks.devstudio;
+package com.github.maven_nar.cpptasks.msvc;
 import java.io.File;
 import java.util.Vector;
 import org.apache.tools.ant.BuildException;
@@ -36,7 +36,7 @@ import com.github.maven_nar.cpptasks.compiler.PrecompilingCommandLineCCompiler;
  *
  * @author Curt Arnold
  */
-public abstract class DevStudioCompatibleCCompiler
+public abstract class MsvcCompatibleCCompiler
         extends
             PrecompilingCommandLineCCompiler {
     private static String[] mflags = new String[]{
@@ -46,7 +46,7 @@ public abstract class DevStudioCompatibleCCompiler
             //      (runtime=dynamic,debug=true), (..,debug=false), (not supported)
             //    next four are multi-threaded, same sequence
             "/ML", "/MLd", null, null, "/MT", "/MTd", "/MD", "/MDd"};
-    protected DevStudioCompatibleCCompiler(String command,
+    protected MsvcCompatibleCCompiler(String command,
             String identifierArg, boolean newEnvironment, Environment env) {
         super(command, identifierArg, new String[]{".c", ".cc", ".cpp", ".cxx",
                 ".c++"}, new String[]{".h", ".hpp", ".inl"}, ".obj", false,
@@ -109,7 +109,7 @@ public abstract class DevStudioCompatibleCCompiler
         args.addElement("/D_DEBUG");
     }
     protected void addWarningSwitch(Vector args, int level) {
-        DevStudioProcessor.addWarningSwitch(args, level);
+        MsvcProcessor.addWarningSwitch(args, level);
     }
     protected CompilerConfiguration createPrecompileGeneratingConfig(
             CommandLineCompilerConfiguration baseConfig, File prototype,
@@ -132,15 +132,15 @@ public abstract class DevStudioCompatibleCCompiler
     }
     protected void getDefineSwitch(StringBuffer buffer, String define,
             String value) {
-        DevStudioProcessor.getDefineSwitch(buffer, define, value);
+        MsvcProcessor.getDefineSwitch(buffer, define, value);
     }
     protected File[] getEnvironmentIncludePath() {
         return CUtil.getPathFromEnvironment("INCLUDE", ";");
     }
     protected String getIncludeDirSwitch(String includeDir) {
-        return DevStudioProcessor.getIncludeDirSwitch(includeDir);
+        return MsvcProcessor.getIncludeDirSwitch(includeDir);
     }
     protected void getUndefineSwitch(StringBuffer buffer, String define) {
-        DevStudioProcessor.getUndefineSwitch(buffer, define);
+        MsvcProcessor.getUndefineSwitch(buffer, define);
     }
 }

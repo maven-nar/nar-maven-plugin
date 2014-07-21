@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.github.maven_nar.cpptasks.devstudio;
+package com.github.maven_nar.cpptasks.msvc;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -626,7 +626,7 @@ public final class VisualStudioNETProjectWriter
         if (config instanceof CommandLineLinkerConfiguration) {
             CommandLineLinkerConfiguration linkerConfig =
                     (CommandLineLinkerConfiguration) config;
-            if (linkerConfig.getLinker() instanceof DevStudioCompatibleLinker) {
+            if (linkerConfig.getLinker() instanceof MsvcCompatibleLinker) {
                 addAttribute(attributes, "LinkIncremental",
                         getLinkIncremental(linkerConfig));
                 if (isDebug) {
@@ -870,7 +870,7 @@ public final class VisualStudioNETProjectWriter
                 CommandLineCompilerConfiguration compilerConfig =
                         (CommandLineCompilerConfiguration) config;
                 if (compilerConfig.getCompiler()
-                        instanceof DevStudioCCompiler) {
+                        instanceof MsvcCCompiler) {
                     return compilerConfig;
                 }
             }

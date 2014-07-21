@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.github.maven_nar.cpptasks.devstudio;
+package com.github.maven_nar.cpptasks.msvc;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
 /**
@@ -25,15 +25,15 @@ import com.github.maven_nar.cpptasks.compiler.Linker;
  * 
  * @author Curt Arnold
  */
-public final class DevStudioLibrarian extends DevStudioCompatibleLibrarian {
-    private static final DevStudioLibrarian instance = new DevStudioLibrarian();
-    public static DevStudioLibrarian getInstance() {
+public final class MsvcLibrarian extends MsvcCompatibleLibrarian {
+    private static final MsvcLibrarian instance = new MsvcLibrarian();
+    public static MsvcLibrarian getInstance() {
         return instance;
     }
-    private DevStudioLibrarian() {
+    private MsvcLibrarian() {
         super("lib", "/bogus");
     }
     public Linker getLinker(LinkType type) {
-        return DevStudioLinker.getInstance().getLinker(type);
+        return MsvcLinker.getInstance().getLinker(type);
     }
 }

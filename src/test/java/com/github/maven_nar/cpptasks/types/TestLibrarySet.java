@@ -31,8 +31,8 @@ import com.github.maven_nar.cpptasks.CUtil;
 import com.github.maven_nar.cpptasks.MockBuildListener;
 import com.github.maven_nar.cpptasks.MockFileCollector;
 import com.github.maven_nar.cpptasks.compiler.Linker;
-import com.github.maven_nar.cpptasks.devstudio.DevStudioLibrarian;
-import com.github.maven_nar.cpptasks.devstudio.DevStudioLinker;
+import com.github.maven_nar.cpptasks.msvc.MsvcLibrarian;
+import com.github.maven_nar.cpptasks.msvc.MsvcLinker;
 import com.github.maven_nar.cpptasks.types.LibrarySet;
 
 /**
@@ -290,7 +290,7 @@ public class TestLibrarySet
    * @throws IOException if unable to create or delete temporary file
    */
   public final void testLinkerVisitFiles() throws IOException {
-    Linker linker = DevStudioLinker.getInstance();
+    Linker linker = MsvcLinker.getInstance();
     testVisitFiles(linker, 1);
   }
 
@@ -301,7 +301,7 @@ public class TestLibrarySet
    * @throws IOException if unable to create or delete temporary file
    */
   public final void testLibrarianVisitFiles() throws IOException {
-    Linker linker = DevStudioLibrarian.getInstance();
+    Linker linker = MsvcLibrarian.getInstance();
     testVisitFiles(linker, 0);
   }
 
@@ -327,7 +327,7 @@ public class TestLibrarySet
       //   collect all files visited
       MockFileCollector collector = new MockFileCollector();
       try {
-        libset.visitLibraries(p, DevStudioLinker.getInstance(), new File[0], collector);
+        libset.visitLibraries(p, MsvcLinker.getInstance(), new File[0], collector);
       } catch(BuildException ex) {
           return;
       }

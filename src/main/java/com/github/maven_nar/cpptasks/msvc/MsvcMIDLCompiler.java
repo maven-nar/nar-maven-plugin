@@ -17,126 +17,101 @@
  * limitations under the License.
  * #L%
  */
-package com.github.maven_nar.cpptasks.devstudio;
+package com.github.maven_nar.cpptasks.msvc;
 import java.io.File;
 import java.util.Vector;
+import org.apache.tools.ant.types.Environment;
 
 import com.github.maven_nar.cpptasks.CUtil;
+import com.github.maven_nar.cpptasks.OptimizationEnum;
 import com.github.maven_nar.cpptasks.compiler.CommandLineCompiler;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
 import com.github.maven_nar.cpptasks.compiler.Processor;
+import com.github.maven_nar.cpptasks.parser.CParser;
 import com.github.maven_nar.cpptasks.parser.Parser;
-import com.github.maven_nar.cpptasks.OptimizationEnum;
 
-import org.apache.tools.ant.types.Environment;
 /**
- * Adapter for the Microsoft (r) Windows 32 Message Compiler
+ * Adapter for the Microsoft (r) MIDL Compiler
  * 
- * @author Greg Domjan
- * 
- * MC [-?aAbcdnouUv] [-co] [-cs namespace] [-css namespace] [-e extension]
- *    [-h path] [-km] [-m length] [-mof] [-p prefix] [-P prefix] [-r path]
- *    [-s path] [-t path] [-w path] [-W path] [-x path] [-z name]
- *    filename [filename]
+ * @author Curt Arnold
  */
-public final class DevStudioMessageCompiler extends CommandLineCompiler {
-    private static final DevStudioMessageCompiler instance = new DevStudioMessageCompiler(
+public final class MsvcMIDLCompiler extends CommandLineCompiler {
+    private static final MsvcMIDLCompiler instance = new MsvcMIDLCompiler(
             false, null);
-
-    public static DevStudioMessageCompiler getInstance() {
+    public static MsvcMIDLCompiler getInstance() {
         return instance;
     }
-
-    private DevStudioMessageCompiler(boolean newEnvironment, Environment env) {
-        super("mc", null, new String[]{".mc",".man"}, new String[]{},
-            ".rc", false, null, newEnvironment, env);
+    private MsvcMIDLCompiler(boolean newEnvironment, Environment env) {
+        super("midl", null, new String[]{".idl", ".odl"}, new String[]{},
+                ".tlb", false, null, newEnvironment, env);
     }
-    protected void addImpliedArgs(final Vector args,
-            final boolean debug,
-            final boolean multithreaded,
-	    final boolean exceptions,
-	    final LinkType linkType,
-	    final Boolean rtti,
-	    final OptimizationEnum optimization) {
-        // no identified configuration compiler arguments implied from these options.
+    protected void addImpliedArgs(final Vector args, 
+    		final boolean debug,
+            final boolean multithreaded, 
+			final boolean exceptions, 
+			final LinkType linkType,
+			final Boolean rtti,
+			final OptimizationEnum optimization) {
     }
-
     protected void addWarningSwitch(Vector args, int level) {
+        MsvcProcessor.addWarningSwitch(args, level);
     }
-
     public Processor changeEnvironment(boolean newEnvironment, Environment env) {
         if (newEnvironment || env != null) {
-            return new DevStudioMessageCompiler(newEnvironment, env);
+            return new MsvcMIDLCompiler(newEnvironment, env);
         }
         return this;
     }
-
-    protected boolean canParse(File sourceFile){ return false; }
-
+    /**
+     * The include parser for C will work just fine, but we didn't want to
+     * inherit from CommandLineCCompiler
+     */
     protected Parser createParser(File source) {
-    	// neither file type has references to other elements that need to be found through parsing.
-        return null;
+        return new CParser();
     }
-
     protected int getArgumentCountPerInputFile() {
         return 3;
     }
-
     protected void getDefineSwitch(StringBuffer buffer, String define,
             String value) {
-        // no define switch
+        MsvcProcessor.getDefineSwitch(buffer, define, value);
     }
-
     protected File[] getEnvironmentIncludePath() {
         return CUtil.getPathFromEnvironment("INCLUDE", ";");
     }
-
-    protected void addIncludes(String baseDirPath, File[] includeDirs,
-            Vector args, Vector relativeArgs, StringBuffer includePathId,
-	    boolean isSystem) {
-    	// no include switch
-    	// for some reason we are still getting args in the output??
-    }
-
     protected String getIncludeDirSwitch(String includeDir) {
-        return null; // no include switch
+        return MsvcProcessor.getIncludeDirSwitch(includeDir);
     }
-
     protected String getInputFileArgument(File outputDir, String filename,
             int index) {
         switch (index) {
-	        case 0 :
-	            return "-r";
-	        case 1 :
-	            return outputDir.getAbsolutePath();
-	    }
+            case 0 :
+                return "/tlb";
+            case 1 :
+                return new File(outputDir, getOutputFileNames(filename, null)[0])
+                        .getAbsolutePath();
+        }
         return filename;
     }
     public Linker getLinker(LinkType type) {
-        return DevStudioLinker.getInstance().getLinker(type);
+        return MsvcLinker.getInstance().getLinker(type);
     }
-
     public int getMaximumCommandLength() {
-        return 32000;
+// FREEHEP stay on the safe side
+        return 32000; // 32767;
     }
-
     protected int getMaximumInputFilesPerCommand() {
         return 1;
     }
-
     protected int getTotalArgumentLengthForInputFile(File outputDir,
             String inputFile) {
         String arg1 = getInputFileArgument(outputDir, inputFile, 0);
         String arg2 = getInputFileArgument(outputDir, inputFile, 1);
-        return arg1.length() + arg2.length() + 2;
+        String arg3 = getInputFileArgument(outputDir, inputFile, 2);
+        return arg1.length() + arg2.length() + arg3.length() + 3;
     }
-
     protected void getUndefineSwitch(StringBuffer buffer, String define) {
-        DevStudioProcessor.getUndefineSwitch(buffer, define);
-    }
-
-    public String getIdentifier() {
-    	return "Microsoft (R) Windows (R) Message Compiler";
+        MsvcProcessor.getUndefineSwitch(buffer, define);
     }
 }

@@ -17,22 +17,22 @@
  * limitations under the License.
  * #L%
  */
-package com.github.maven_nar.cpptasks.devstudio;
+package com.github.maven_nar.cpptasks.msvc;
 import java.util.Vector;
 
-import com.github.maven_nar.cpptasks.devstudio.DevStudioCCompiler;
+import com.github.maven_nar.cpptasks.msvc.MsvcCCompiler;
 
 import junit.framework.TestCase;
 /**
  * Test Microsoft C/C++ compiler adapter
  *  
  */
-public class TestDevStudioCCompiler extends TestCase {
-    public TestDevStudioCCompiler(String name) {
+public class TestMsvcCCompiler extends TestCase {
+    public TestMsvcCCompiler(String name) {
         super(name);
     }
     public void testDebug() {
-        DevStudioCCompiler compiler = DevStudioCCompiler.getInstance();
+        MsvcCCompiler compiler = MsvcCCompiler.getInstance();
         Vector args = new Vector();
         compiler.addDebugSwitch(args);
         assertEquals(4, args.size());

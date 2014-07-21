@@ -20,13 +20,13 @@
 package com.github.maven_nar.cpptasks.intel;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
-import com.github.maven_nar.cpptasks.devstudio.DevStudioCompatibleLinker;
+import com.github.maven_nar.cpptasks.msvc.MsvcCompatibleLinker;
 /**
  * Adapter for the Intel (r) linker for 32-bit applications
  * 
  * @author Curt Arnold
  */
-public final class IntelWin32Linker extends DevStudioCompatibleLinker {
+public final class IntelWin32Linker extends MsvcCompatibleLinker {
     private static final IntelWin32Linker dllLinker = new IntelWin32Linker(
             ".dll");
     private static final IntelWin32Linker instance = new IntelWin32Linker(

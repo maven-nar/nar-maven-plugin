@@ -26,11 +26,11 @@ import com.github.maven_nar.cpptasks.borland.BorlandCCompiler;
 import com.github.maven_nar.cpptasks.borland.BorlandResourceCompiler;
 import com.github.maven_nar.cpptasks.compaq.CompaqVisualFortranCompiler;
 import com.github.maven_nar.cpptasks.compiler.Compiler;
-import com.github.maven_nar.cpptasks.devstudio.DevStudio2005CCompiler;
-import com.github.maven_nar.cpptasks.devstudio.DevStudioCCompiler;
-import com.github.maven_nar.cpptasks.devstudio.DevStudioMIDLCompiler;
-import com.github.maven_nar.cpptasks.devstudio.DevStudioResourceCompiler;
-import com.github.maven_nar.cpptasks.devstudio.DevStudioMessageCompiler;
+import com.github.maven_nar.cpptasks.msvc.Msvc2005CCompiler;
+import com.github.maven_nar.cpptasks.msvc.MsvcCCompiler;
+import com.github.maven_nar.cpptasks.msvc.MsvcMIDLCompiler;
+import com.github.maven_nar.cpptasks.msvc.MsvcResourceCompiler;
+import com.github.maven_nar.cpptasks.msvc.MsvcMessageCompiler;
 import com.github.maven_nar.cpptasks.gcc.GccCCompiler;
 import com.github.maven_nar.cpptasks.gcc.WindresResourceCompiler;
 import com.github.maven_nar.cpptasks.hp.aCCCompiler;
@@ -218,16 +218,16 @@ public class CompilerEnum extends EnumeratedAttribute {
             new ProcessorEnumValue("g77", GccCCompiler.getG77Instance()),
 // FREEHEP
             new ProcessorEnumValue("gfortran", GccCCompiler.getGFortranInstance()),
-            new ProcessorEnumValue("msvc", DevStudioCCompiler.getInstance()),
-            new ProcessorEnumValue("msvc8", DevStudio2005CCompiler.getInstance()),
+            new ProcessorEnumValue("msvc", MsvcCCompiler.getInstance()),
+            new ProcessorEnumValue("msvc8", Msvc2005CCompiler.getInstance()),
             new ProcessorEnumValue("bcc", BorlandCCompiler.getInstance()),
-            new ProcessorEnumValue("msrc", DevStudioResourceCompiler
+            new ProcessorEnumValue("msrc", MsvcResourceCompiler
                     .getInstance()),
-            new ProcessorEnumValue("msmc", DevStudioMessageCompiler.getInstance()),
+            new ProcessorEnumValue("msmc", MsvcMessageCompiler.getInstance()),
             new ProcessorEnumValue("brc", BorlandResourceCompiler.getInstance()),
             new ProcessorEnumValue("df", CompaqVisualFortranCompiler
                     .getInstance()),
-            new ProcessorEnumValue("midl", DevStudioMIDLCompiler.getInstance()),
+            new ProcessorEnumValue("midl", MsvcMIDLCompiler.getInstance()),
             new ProcessorEnumValue("icl", IntelWin32CCompiler.getInstance()),
             new ProcessorEnumValue("ecl", IntelWin64CCompiler.getInstance()),
 // BEGINFREEHEP

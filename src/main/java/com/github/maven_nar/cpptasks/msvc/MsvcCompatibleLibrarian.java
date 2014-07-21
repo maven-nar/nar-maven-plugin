@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.github.maven_nar.cpptasks.devstudio;
+package com.github.maven_nar.cpptasks.msvc;
 import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.compiler.CommandLineLinker;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
@@ -32,8 +32,8 @@ import java.util.Vector;
  * 
  * @author Curt Arnold
  */
-public abstract class DevStudioCompatibleLibrarian extends CommandLineLinker {
-    public DevStudioCompatibleLibrarian(String command, String identifierArg) {
+public abstract class MsvcCompatibleLibrarian extends CommandLineLinker {
+    public MsvcCompatibleLibrarian(String command, String identifierArg) {
         super(command, identifierArg, new String[]{".obj"},
 			new String[]{".map", ".pdb", ".lnk", ".dll", ".tlb", ".rc", ".h"},
                 ".lib", false, null);
