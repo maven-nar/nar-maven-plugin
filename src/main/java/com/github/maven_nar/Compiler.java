@@ -36,6 +36,7 @@ import com.github.maven_nar.cpptasks.types.CompilerArgument;
 import com.github.maven_nar.cpptasks.types.ConditionalFileSet;
 import com.github.maven_nar.cpptasks.types.DefineArgument;
 import com.github.maven_nar.cpptasks.types.DefineSet;
+import com.github.maven_nar.IncludePath;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -205,7 +206,7 @@ public abstract class Compiler
      * 
      * @parameter default-value=""
      */
-    private List includePaths;
+    private List/* IncludePath */includePaths;
 
     /**
      * Test Include Paths. Defaults to "${testSourceDirectory}/include"
@@ -343,24 +344,22 @@ public abstract class Compiler
         return sourceDirectories;
     }
 
-    protected final List<String> getIncludePaths( String type )
+    protected final List<IncludePath> getIncludePaths( String type )
     {
-        return createIncludePaths( type, type.equals( TEST ) ? testIncludePaths : includePaths );
-    }
+        List<IncludePath> includeList = type.equals( TEST ) ? testIncludePaths : includePaths;
 
-    private List<String> createIncludePaths( String type, List paths )
-    {
-        List includeList = paths;
-        if ( includeList == null || ( paths.size() == 0 ) )
+        if ( includeList != null && includeList.size() != 0 )
+            return includeList;
+
+        includeList = new ArrayList();
+        for ( Iterator i = getSourceDirectories( type ).iterator(); i.hasNext(); )
         {
-            includeList = new ArrayList();
-            for ( Iterator i = getSourceDirectories( type ).iterator(); i.hasNext(); )
-            {
-		//VR 20100318 only add include directories that exist - we now fail the build fast if an include directory does not exist 
-                File includePath = new File( (File) i.next(), "include" );
-                if(includePath.isDirectory()) {
-                	includeList.add( includePath.getPath() );
-                }
+            //VR 20100318 only add include directories that exist - we now fail the build fast if an include directory does not exist
+            File file = new File( (File) i.next(), "include" );
+            if ( file.isDirectory() ) {
+                IncludePath includePath = new IncludePath();
+                includePath.setPath( file.getPath() );
+                includeList.add( includePath );
             }
         }
         return includeList;
@@ -626,12 +625,12 @@ public abstract class Compiler
         // add include path
         for ( Iterator i = getIncludePaths( type ).iterator(); i.hasNext(); )
         {
-            String path = (String) i.next();
+            IncludePath includePath = (IncludePath) i.next();
             // Darren Sargent, 30Jan2008 - fail build if invalid include path(s) specified.
-			if ( ! new File(path).exists() ) {
-				throw new MojoFailureException("NAR: Include path not found: " + path);
-			}
-            compiler.createIncludePath().setPath( path );
+                        if ( ! includePath.exists() ) {
+                                throw new MojoFailureException("NAR: Include path not found: " + includePath);
+                        }
+            compiler.createIncludePath().setPath( includePath.getPath() );
         }
 
         // add system include path (at the end)
@@ -689,10 +688,10 @@ public abstract class Compiler
     {
         for ( Iterator i = getIncludePaths( "dummy" ).iterator(); i.hasNext(); )
         {
-            File path = new File( (String) i.next() );
-            if ( path.exists() )
+                IncludePath includePath = (IncludePath) i.next();
+            if ( includePath.exists() )
             {
-                NarUtil.copyDirectoryStructure( path, targetDirectory, null, NarUtil.DEFAULT_EXCLUDES );
+                NarUtil.copyDirectoryStructure( includePath.getFile(), targetDirectory, includePath.getIncludes(), NarUtil.DEFAULT_EXCLUDES );
             }
         }
     }

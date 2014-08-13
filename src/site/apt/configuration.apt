@@ -132,7 +132,12 @@ NAR Configuration
     </undefines>
     <clearDefaultUndefines/>
     <includePaths>
-      <includePath/>
+      <includePath>
+        <path/>
+        <includes>
+          <include/>
+        </includes>
+      </includePath>
     </includePaths>
     <systemIncludePaths>
       <systemIncludePath/>
@@ -419,9 +424,14 @@ the command line for compatible compilers/linkers. Default is false.
 
 ** {cpp includePaths}
 
-	Include Paths, relative to ${baseDir}.
-    Defaults to "${sourceDirectory}/include"
-    
+	List of include paths, relative to ${baseDir}. Defaults to "${sourceDirectory}/include". For each include path you may specify:
+
+	[path] Include path (directory) itself.
+
+	[includes] List of include masks in the Ant format (e.g. **/*.h). 
+
+	[]
+
 ** {cpp systemIncludePaths}
 
 	System Include Paths, which are added at the end of all include paths
