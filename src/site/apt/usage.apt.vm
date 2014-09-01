@@ -218,3 +218,55 @@ In other cases the classifiers must be adapted accordingly.
 </assembly>
 +--
 
+* Strip debug information into an external file
+
++--
+<project>
+    ...
+    <packaging>pom</packaging>
+    ...
+    <build>
+        <plugins>
+            ...
+            <plugin>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>nar-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <configuration>
+                    ...
+                    <processLibraries>
+                        <commands>
+                            <command>
+                                <libraryType>executable</libraryType>
+                                <executable>/usr/bin/objcopy</executable>
+                                <arguments>
+                                    <argument>--only-keep-debug</argument>
+                                    <argument>\${library}</argument>
+                                    <argument>\${library}.debug</argument>
+                                </arguments>
+                            </command>
+                            <command>
+                                <libraryType>executable</libraryType>
+                                <executable>/usr/bin/objcopy</executable>
+                                <arguments>
+                                    <argument>--strip-debug</argument>
+                                    <argument>\${library}</argument>
+                                </arguments>
+                            </command>
+                            <command>
+                                <libraryType>executable</libraryType>
+                                <executable>/usr/bin/objcopy</executable>
+                                <arguments>
+                                    <argument>--add-gnu-debuglink=\${library}.debug</argument>
+                                    <argument>\${library}</argument>
+                                </arguments>
+                            </command>
+                        </commands>
+                    </processLibraries>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
++--
+
