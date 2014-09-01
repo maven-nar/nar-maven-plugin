@@ -44,17 +44,35 @@ import org.apache.maven.plugin.logging.Log;
 public class NarProcessLibraries extends AbstractCompileMojo {
 
     /**
-     * List of commands to execute
+     * Defines a set of commands and their configuration to run on the output libraries
      *
-     * @parameter default-value=""
+     * <pre>
+     * &lt;processLibraries&gt;
+     *     &lt;libraryToken/&gt;
+     *     &lt;commands&gt;
+     *         &lt;command&gt;
+     *             &lt;libraryType/&gt;
+     *             &lt;executable/&gt;
+     *             &lt;arguments&gt;
+     *                 &lt;argument/&gt;
+     *             &lt;/arguments&gt;
+     *         &lt;/command&gt;
+     *     &lt;/commands&gt;
+     * &lt;/processLibraries&gt;
+     * </pre>
+     *
+     * @parameter
      */
-    private List<ProcessLibraryCommand> commands;
+    private NarProcessLibrariesConfiguration processLibraries;
 
     private Log log = getLog();
 
     @Override
     public void narExecute() throws MojoFailureException, MojoExecutionException {
         log.info("Running process libraries");
+        if(processLibraries == null)
+            return;
+        
         // For each of the libraries defined for this build
         for (Library library : getLibraries()) {
             log.info("Processing library " + library);
@@ -71,9 +89,16 @@ public class NarProcessLibraries extends AbstractCompileMojo {
                 outFile = new File(outDir, getOutput(true));
             }
 
+            List<ProcessLibraryCommand> commands = processLibraries.getCommands();
+            log.debug("Commands available: " + commands);
+            log.debug("Token: " + processLibraries.getToken());
+
             // Then run the commands that are applicable for this library type
             for (ProcessLibraryCommand command : commands == null ? new ArrayList<ProcessLibraryCommand>() : commands) {
                 if (command.getType().equalsIgnoreCase(type))
+                    log.debug("Command type: " + command.getType());
+                    log.debug("Command executable: " + command.getExecutable());
+                    log.debug("Command arguments: " + command.getArguments());
                     runCommand(command, outFile);
             }
         }
@@ -82,8 +107,19 @@ public class NarProcessLibraries extends AbstractCompileMojo {
 
     private void runCommand(ProcessLibraryCommand command, File outputFile) throws MojoFailureException,
             MojoExecutionException {
-        ProcessBuilder p = new ProcessBuilder(command.getCommandList());
-        p.command().add(outputFile.toString());
+        ProcessBuilder p = new ProcessBuilder();
+        List<String> commands = command.getCommandList();
+        String token = processLibraries.getToken();
+
+        // Substitute the token for the output file name and add to the process builder
+        for(int i = 0; i < commands.size(); i++) {
+            String val = commands.get(i);
+            if(val.contains(token)) {
+                val = val.replace(token,outputFile.toString());
+            }
+            p.command().add(val);
+        }
+
         p.redirectErrorStream(true);
         log.info("Running command \"" + p.command() + "\"");
         try {
