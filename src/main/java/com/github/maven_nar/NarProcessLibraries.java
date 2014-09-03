@@ -48,7 +48,6 @@ public class NarProcessLibraries extends AbstractCompileMojo {
      *
      * <pre>
      * &lt;processLibraries&gt;
-     *     &lt;libraryToken/&gt;
      *     &lt;commands&gt;
      *         &lt;command&gt;
      *             &lt;libraryType/&gt;
@@ -63,16 +62,13 @@ public class NarProcessLibraries extends AbstractCompileMojo {
      *
      * @parameter
      */
-    private NarProcessLibrariesConfiguration processLibraries;
+    private List<ProcessLibraryCommand> commands;
 
     private Log log = getLog();
 
     @Override
     public void narExecute() throws MojoFailureException, MojoExecutionException {
         log.info("Running process libraries");
-        if(processLibraries == null)
-            return;
-        
         // For each of the libraries defined for this build
         for (Library library : getLibraries()) {
             log.info("Processing library " + library);
@@ -89,9 +85,7 @@ public class NarProcessLibraries extends AbstractCompileMojo {
                 outFile = new File(outDir, getOutput(true));
             }
 
-            List<ProcessLibraryCommand> commands = processLibraries.getCommands();
             log.debug("Commands available: " + commands);
-            log.debug("Token: " + processLibraries.getToken());
 
             // Then run the commands that are applicable for this library type
             for (ProcessLibraryCommand command : commands == null ? new ArrayList<ProcessLibraryCommand>() : commands) {
@@ -107,19 +101,13 @@ public class NarProcessLibraries extends AbstractCompileMojo {
 
     private void runCommand(ProcessLibraryCommand command, File outputFile) throws MojoFailureException,
             MojoExecutionException {
-        ProcessBuilder p = new ProcessBuilder();
-        List<String> commands = command.getCommandList();
-        String token = processLibraries.getToken();
-
-        // Substitute the token for the output file name and add to the process builder
-        for(int i = 0; i < commands.size(); i++) {
-            String val = commands.get(i);
-            if(val.contains(token)) {
-                val = val.replace(token,outputFile.toString());
-            }
-            p.command().add(val);
+        getMavenProject().getModel().getProperties().setProperty("nar.library", outputFile.toString());
+        final List<String> commandList = command.getCommandList();
+        for (int i = 0; i < commandList.size(); i++) {
+            commandList.set(i, commandList.get(i).replaceAll("\\$\\{nar.library\\}", outputFile.getPath()));
         }
-
+        ProcessBuilder p = new ProcessBuilder(commandList);
+        p.command().add(outputFile.toString());
         p.redirectErrorStream(true);
         log.info("Running command \"" + p.command() + "\"");
         try {
