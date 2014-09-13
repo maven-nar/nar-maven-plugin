@@ -68,7 +68,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
         this.newEnvironment = newEnvironment;
         this.env = env;
     }
-    abstract protected void addImpliedArgs(Vector args, boolean debug,
+    abstract protected void addImpliedArgs(Vector<String> args, boolean debug,
             boolean multithreaded, boolean exceptions, LinkType linkType,
 			Boolean rtti, OptimizationEnum optimization);
     /**
@@ -88,8 +88,8 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
      *            configuration identifier
      */
     protected void addIncludes(String baseDirPath, File[] includeDirs,
-			Vector args, Vector relativeArgs, StringBuffer includePathId,
-			boolean isSystem) {
+            Vector<String> args, Vector<String> relativeArgs, StringBuffer includePathId,
+            boolean isSystem) {
         for (int i = 0; i < includeDirs.length; i++) {
             args.addElement(getIncludeDirSwitch(includeDirs[i]
 					.getAbsolutePath(), isSystem));
@@ -108,8 +108,8 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
             }
         }
     }
-    abstract protected void addWarningSwitch(Vector args, int warnings);
-    protected void buildDefineArguments(CompilerDef[] defs, Vector args) {
+    abstract protected void addWarningSwitch(Vector<String> args, int warnings);
+    protected void buildDefineArguments(CompilerDef[] defs, Vector<String> args) {
         //
         //   assume that we aren't inheriting defines from containing <cc>
         //
@@ -245,13 +245,13 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
 			final CompilerDef specificDef,
 			final TargetDef targetPlatform,
 			final VersionInfo versionInfo) {
-        Vector args = new Vector();
+        Vector<String> args = new Vector<String>();
         CompilerDef[] defaultProviders = new CompilerDef[baseDefs.length + 1];
         for (int i = 0; i < baseDefs.length; i++) {
             defaultProviders[i + 1] = (CompilerDef) baseDefs[i];
         }
         defaultProviders[0] = specificDef;
-        Vector cmdArgs = new Vector();
+        Vector<CommandLineArgument> cmdArgs = new Vector<CommandLineArgument>();
         //
         //   add command line arguments inherited from <cc> element
         //     any "extends" and finally the specific CompilerDef
@@ -271,7 +271,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
                 }
             }
         }
-        Vector params = new Vector();
+        Vector<ProcessorParam> params = new Vector<ProcessorParam>();
         //
         //   add command line arguments inherited from <cc> element
         //     any "extends" and finally the specific CompilerDef
@@ -299,11 +299,10 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
         buildDefineArguments(defaultProviders, args);
         int warnings = specificDef.getWarnings(defaultProviders, 0);
         addWarningSwitch(args, warnings);
-        Enumeration argEnum = cmdArgs.elements();
+        Enumeration<CommandLineArgument> argEnum = cmdArgs.elements();
         int endCount = 0;
         while (argEnum.hasMoreElements()) {
-            CommandLineArgument arg = (CommandLineArgument) argEnum
-                    .nextElement();
+            CommandLineArgument arg = argEnum.nextElement();
             switch (arg.getLocation()) {
                 case 1 :
                     args.addElement(arg.getValue());
@@ -328,7 +327,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
         //      path names for includes that are used to build
         //      the configuration identifier
         //
-        Vector relativeArgs = (Vector) args.clone();
+        Vector<String> relativeArgs = (Vector) args.clone();
         //
         //    add all active include and sysincludes
         //
@@ -340,8 +339,8 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
         } catch (IOException ex) {
             baseDirPath = baseDir.toString();
         }
-        Vector includePath = new Vector();
-        Vector sysIncludePath = new Vector();
+        Vector<String> includePath = new Vector<String>();
+        Vector<String> sysIncludePath = new Vector<String>();
         for (int i = defaultProviders.length - 1; i >= 0; i--) {
             String[] incPath = defaultProviders[i].getActiveIncludePaths();
             for (int j = 0; j < incPath.length; j++) {

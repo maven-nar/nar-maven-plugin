@@ -47,7 +47,7 @@ public class CompaqVisualFortranCompiler extends CommandLineFortranCompiler {
                 ".i", ".i90", ".fpp", ".inc", ".bak", ".exe"}, ".obj", false,
                 null, newEnvironment, env);
     }
-    protected void addImpliedArgs(final Vector args, 
+    protected void addImpliedArgs(final Vector<String> args, 
     		final boolean debug,
             final boolean multithreaded, 
 			final boolean exceptions, 
@@ -80,7 +80,7 @@ public class CompaqVisualFortranCompiler extends CommandLineFortranCompiler {
             args.addElement("/define:_DLL");
         }
     }
-    public void addWarningSwitch(Vector args, int level) {
+    public void addWarningSwitch(Vector<String> args, int level) {
         switch (level) {
             case 0 :
                 args.addElement("/nowarn");

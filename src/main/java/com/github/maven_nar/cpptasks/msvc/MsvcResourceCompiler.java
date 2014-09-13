@@ -48,8 +48,8 @@ public final class MsvcResourceCompiler extends CommandLineCompiler {
         super("rc", null, new String[]{".rc"}, new String[]{".h", ".hpp",
                 ".inl"}, ".res", false, null, newEnvironment, env);
     }
-    protected void addImpliedArgs(final Vector args, 
-    		final boolean debug,
+    protected void addImpliedArgs(final Vector<String> args, 
+            final boolean debug,
             final boolean multithreaded, 
 			final boolean exceptions, 
 			final LinkType linkType,
@@ -61,7 +61,7 @@ public final class MsvcResourceCompiler extends CommandLineCompiler {
             args.addElement("/DNDEBUG");
         }
     }
-    protected void addWarningSwitch(Vector args, int level) {
+    protected void addWarningSwitch(Vector<String> args, int level) {
     }
     public Processor changeEnvironment(boolean newEnvironment, Environment env) {
         if (newEnvironment || env != null) {

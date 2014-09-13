@@ -36,7 +36,7 @@ public final class OpenWatcomProcessor {
    * @param args Vector list of options
    * @param level int value of WarningLevelEnum
    */
-  public static void addWarningSwitch(final Vector args, final int level) {
+  public static void addWarningSwitch(final Vector<String> args, final int level) {
     switch (level) {
       case 0:
         args.addElement("/w0");

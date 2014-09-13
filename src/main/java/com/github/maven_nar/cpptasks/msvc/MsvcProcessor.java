@@ -25,7 +25,7 @@ import java.util.Vector;
  *  
  */
 public class MsvcProcessor {
-    public static void addWarningSwitch(Vector args, int level) {
+    public static void addWarningSwitch(Vector<String> args, int level) {
         switch (level) {
             case 0 :
                 args.addElement("/W0");

@@ -46,15 +46,15 @@ public final class MsvcMIDLCompiler extends CommandLineCompiler {
         super("midl", null, new String[]{".idl", ".odl"}, new String[]{},
                 ".tlb", false, null, newEnvironment, env);
     }
-    protected void addImpliedArgs(final Vector args, 
-    		final boolean debug,
+    protected void addImpliedArgs(final Vector<String> args, 
+            final boolean debug,
             final boolean multithreaded, 
 			final boolean exceptions, 
 			final LinkType linkType,
 			final Boolean rtti,
 			final OptimizationEnum optimization) {
     }
-    protected void addWarningSwitch(Vector args, int level) {
+    protected void addWarningSwitch(Vector<String> args, int level) {
         MsvcProcessor.addWarningSwitch(args, level);
     }
     public Processor changeEnvironment(boolean newEnvironment, Environment env) {

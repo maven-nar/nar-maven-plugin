@@ -57,7 +57,7 @@ public abstract class OpenWatcomLinker
    * @param base long base address
    * @param args Vector command options
    */
-  protected final void addBase(final long base, final Vector args) {
+  protected final void addBase(final long base, final Vector<String> args) {
   }
 
   /**
@@ -65,7 +65,7 @@ public abstract class OpenWatcomLinker
    * @param entry entry point name
    * @param args command line parameters
    */
-  protected final void addEntry(final String entry, final Vector args) {
+  protected final void addEntry(final String entry, final Vector<String> args) {
   }
 
   /**
@@ -73,7 +73,7 @@ public abstract class OpenWatcomLinker
    * @param fixed if executable is fixed
    * @param args command line parameters
    */
-  protected final void addFixed(final Boolean fixed, final Vector args) {
+  protected final void addFixed(final Boolean fixed, final Vector<String> args) {
   }
 
    /**
@@ -84,7 +84,7 @@ public abstract class OpenWatcomLinker
    */
   protected final void addImpliedArgs(final boolean debug,
                                 final LinkType linkType,
-                                final Vector args) {
+                                final Vector<String> args) {
     if (linkType.isExecutable()) {
       if (linkType.isSubsystemConsole()) {
         args.addElement("/bc");
@@ -105,7 +105,7 @@ public abstract class OpenWatcomLinker
    * @param args Vector command line arguments
    */
   protected final void addIncremental(final boolean incremental,
-                                      final Vector args) {
+                                      final Vector<String> args) {
   }
 
   /**
@@ -113,7 +113,7 @@ public abstract class OpenWatcomLinker
    * @param map boolean build map
    * @param args Vector command line arguments
    */
-  protected final void addMap(final boolean map, final Vector args) {
+  protected final void addMap(final boolean map, final Vector<String> args) {
     if (map) {
       args.addElement("/fm");
     }
@@ -124,7 +124,7 @@ public abstract class OpenWatcomLinker
    * @param stack int stack size.
    * @param args Vector command line arguments.
    */
-  protected final void addStack(final int stack, final Vector args) {
+  protected final void addStack(final int stack, final Vector<String> args) {
     if (stack >= 0) {
       String stackStr = Integer.toString(stack);
       args.addElement("/k" + stackStr);

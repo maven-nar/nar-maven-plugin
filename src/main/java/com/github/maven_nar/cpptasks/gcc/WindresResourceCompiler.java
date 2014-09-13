@@ -46,8 +46,8 @@ public final class WindresResourceCompiler extends CommandLineCompiler {
         super("windres", null, new String[]{".rc"}, new String[]{".h", ".hpp",
                 ".inl"}, ".o", false, null, newEnvironment, env);
     }
-    protected void addImpliedArgs(final Vector args, 
-    		final boolean debug,
+    protected void addImpliedArgs(final Vector<String> args, 
+            final boolean debug,
             final boolean multithreaded, 
 			final boolean exceptions, 
 			final LinkType linkType,

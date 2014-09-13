@@ -77,32 +77,32 @@ public abstract class CommandLineLinker extends AbstractLinker
         this.libtoolLinker = libtoolLinker;
     }
 
-    protected void addBase(CCTask task, long base, Vector args) {
+    protected void addBase(CCTask task, long base, Vector<String> args) {
       // NB: Do nothing by default.
     }
-    protected void addFixed(CCTask task, Boolean fixed, Vector args) {
+    protected void addFixed(CCTask task, Boolean fixed, Vector<String> args) {
       // NB: Do nothing by default.
     }
-    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector args) {
+    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector<String> args) {
       // NB: Do nothing by default.
     }
-    protected void addIncremental(CCTask task, boolean incremental, Vector args) {
+    protected void addIncremental(CCTask task, boolean incremental, Vector<String> args) {
       // NB: Do nothing by default.
     }
     //
     //  Windows processors handle these through file list
     //
-    protected String[] addLibrarySets(CCTask task, LibrarySet[] libsets, Vector preargs,
-        Vector midargs, Vector endargs) {
+    protected String[] addLibrarySets(CCTask task, LibrarySet[] libsets, Vector<String> preargs,
+        Vector<String> midargs, Vector<String> endargs) {
         return null;
     }
-    protected void addMap(CCTask task, boolean map, Vector args) {
+    protected void addMap(CCTask task, boolean map, Vector<String> args) {
       // NB: Do nothing by default.
     }
-    protected void addStack(CCTask task, int stack, Vector args) {
+    protected void addStack(CCTask task, int stack, Vector<String> args) {
       // NB: Do nothing by default.
     }
-    protected void addEntry(CCTask task, String entry, Vector args) {
+    protected void addEntry(CCTask task, String entry, Vector<String> args) {
       // NB: Do nothing by default.
     }
     
@@ -112,10 +112,10 @@ public abstract class CommandLineLinker extends AbstractLinker
       ProcessorDef[] baseDefs, LinkerDef specificDef, TargetDef targetPlatform,
 	  VersionInfo versionInfo) {
 
-      Vector preargs = new Vector();
-      Vector midargs = new Vector();
-      Vector endargs = new Vector();
-      Vector[] args = new Vector[] { preargs, midargs, endargs };
+      Vector<String> preargs = new Vector<String>();
+      Vector<String> midargs = new Vector<String>();
+      Vector<String> endargs = new Vector<String>();
+      Vector<String>[] args = new Vector[] { preargs, midargs, endargs };
 
       LinkerDef[] defaultProviders = new LinkerDef[baseDefs.length+1];
       defaultProviders[0] = specificDef;
@@ -134,7 +134,7 @@ public abstract class CommandLineLinker extends AbstractLinker
         }
       }
 
-        Vector params = new Vector();
+        Vector<ProcessorParam> params = new Vector<ProcessorParam>();
         //
         //   add command line arguments inherited from <cc> element
         //     any "extends" and finally the specific CompilerDef
@@ -146,7 +146,7 @@ public abstract class CommandLineLinker extends AbstractLinker
             }
         }
 
-        paramArray = (ProcessorParam[])(params.toArray(new ProcessorParam[params.size()]));
+        paramArray = params.toArray(new ProcessorParam[params.size()]);
 
         boolean debug = specificDef.getDebug(baseDefs,0);
 
@@ -170,10 +170,10 @@ public abstract class CommandLineLinker extends AbstractLinker
 
       StringBuffer buf = new StringBuffer(getIdentifier());
       for (int i = 0; i < 3; i++) {
-        Enumeration argenum = args[i].elements();
+        Enumeration<String> argenum = args[i].elements();
         while (argenum.hasMoreElements()) {
            buf.append(' ');
-           buf.append(argenum.nextElement().toString());
+           buf.append(argenum.nextElement());
         }
       }
       String configId = buf.toString();

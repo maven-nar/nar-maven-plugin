@@ -51,7 +51,7 @@ public class UndefineArgument {
             UndefineArgument[] baseClone = (UndefineArgument[]) base.clone();
             return baseClone;
         }
-        Vector unduplicated = new Vector(base.length);
+        Vector<UndefineArgument> unduplicated = new Vector<UndefineArgument>(base.length);
         for (int i = 0; i < base.length; i++) {
             UndefineArgument current = base[i];
             String currentName = current.getName();

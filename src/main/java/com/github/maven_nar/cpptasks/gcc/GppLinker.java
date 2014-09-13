@@ -82,7 +82,7 @@ public class GppLinker extends AbstractLdLinker {
                 outputPrefix, outputSuffix, isLibtool, libtoolLinker);
     }
 
-    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector args) {
+    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector<String> args) {
         super.addImpliedArgs(task, debug, linkType, args);
         if (getIdentifier().indexOf("mingw") >= 0) {
             if (linkType.isSubsystemConsole()) {
@@ -169,7 +169,7 @@ public class GppLinker extends AbstractLdLinker {
         // ENDFREEHEP
     }
     protected String[] addLibrarySets(CCTask task, LibrarySet[] libsets,
-            Vector preargs, Vector midargs, Vector endargs) {
+            Vector<String> preargs, Vector<String> midargs, Vector<String> endargs) {
         String[] rs = super.addLibrarySets(task, libsets, preargs, midargs,
                 endargs);
         // BEGINFREEHEP
@@ -243,7 +243,7 @@ public class GppLinker extends AbstractLdLinker {
      */
     public File[] getLibraryPath() {
         if (libDirs == null) {
-            Vector dirs = new Vector();
+            Vector<String> dirs = new Vector<String>();
             // Ask GCC where it will look for its libraries.
             String[] args = new String[]{"g++", "-print-search-dirs"};
             String[] cmdout = CaptureStreamHandler.run(args);

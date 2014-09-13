@@ -50,7 +50,7 @@ public class BorlandCCompiler extends PrecompilingCommandLineCCompiler {
         super("bcc32", "--version", sourceExtensions, headerExtensions, ".obj", false,
                 null, newEnvironment, env);
     }
-    protected void addImpliedArgs(final Vector args, 
+    protected void addImpliedArgs(final Vector<String> args, 
     		final boolean debug,
             final boolean multithreaded, 
 			final boolean exceptions, 
@@ -92,7 +92,7 @@ public class BorlandCCompiler extends PrecompilingCommandLineCCompiler {
         	args.addElement("-RT-");
         }
     }
-    protected void addWarningSwitch(Vector args, int level) {
+    protected void addWarningSwitch(Vector<String> args, int level) {
         BorlandProcessor.addWarningSwitch(args, level);
     }
     public Processor changeEnvironment(boolean newEnvironment, Environment env) {

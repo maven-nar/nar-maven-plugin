@@ -54,7 +54,7 @@ public final class CompilerDef extends ProcessorDef {
     private final Vector sysIncludePaths = new Vector();
     private OptimizationEnum optimization;
     private int warnings = -1;
-	private List order;
+	private List<String> order;
     private String toolPath;
 
     private boolean clearDefaultOptions;
@@ -525,11 +525,11 @@ public final class CompilerDef extends ProcessorDef {
 	 * List of source filenames without extensions
 	 * @param asList
 	 */
-	public void setOrder(List/*<String>*/ order) {
+	public void setOrder(List<String> order) {
 		this.order = order;
 	}
 	
-	public List getOrder() {
+	public List<String> getOrder() {
 		return order;
 	}
 

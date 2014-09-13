@@ -546,8 +546,8 @@ public final class VisualStudioNETProjectWriter
      * @return value of AdditionalDependencies property.
      */
     private String getAdditionalDependencies(final TargetInfo linkTarget,
-                                             final List projectDependencies,
-                                             final Map targets,
+                                             final List<DependencyDef> projectDependencies,
+                                             final Map<String, TargetInfo> targets,
                                              final String basePath) {
       String dependencies = null;
         File[] linkSources = linkTarget.getAllSources();
@@ -569,8 +569,8 @@ public final class VisualStudioNETProjectWriter
             boolean fromDependency = false;
             if (relPath.indexOf(".") > 0) {
                   String baseName = relPath.substring(0, relPath.indexOf("."));
-                  for(Iterator iter = projectDependencies.iterator(); iter.hasNext(); ) {
-                    DependencyDef depend = (DependencyDef) iter.next();
+                  for(Iterator<DependencyDef> iter = projectDependencies.iterator(); iter.hasNext(); ) {
+                    DependencyDef depend = iter.next();
                     if (baseName.compareToIgnoreCase(depend.getName()) == 0) {
                         fromDependency = true;
                     }
@@ -615,10 +615,10 @@ public final class VisualStudioNETProjectWriter
      */
     private void writeLinkerElement(final ContentHandler content,
                                     final boolean isDebug,
-                                    final List dependencies,
+                                    final List<DependencyDef> dependencies,
                                     final String basePath,
                                     final TargetInfo linkTarget,
-                                    final Map targets) throws SAXException {
+                                    final Map<String, TargetInfo> targets) throws SAXException {
         AttributesImpl attributes = new AttributesImpl();
         addAttribute(attributes, "Name", "VCLinkerTool");
 
@@ -661,8 +661,8 @@ public final class VisualStudioNETProjectWriter
     public void writeProject(final File fileName,
                              final CCTask task,
                              final ProjectDef projectDef,
-                             final List sources,
-                             final Map targets,
+                             final List<File> sources,
+                             final Map<String, TargetInfo> targets,
                              final TargetInfo linkTarget) throws
             IOException,
             SAXException {
@@ -699,8 +699,8 @@ public final class VisualStudioNETProjectWriter
         String basePath = fileName.getParentFile().getAbsolutePath();
         content.startDocument();
         
-        for(Iterator iter = projectDef.getComments().iterator(); iter.hasNext(); ) {
-			String comment = ((CommentDef) iter.next()).getText();
+        for(Iterator<CommentDef> iter = projectDef.getComments().iterator(); iter.hasNext(); ) {
+			String comment = iter.next().getText();
 			serializer.comment(comment);
         }
         
@@ -746,9 +746,9 @@ public final class VisualStudioNETProjectWriter
 
         File[] sortedSources = new File[sources.size()];
         sources.toArray(sortedSources);
-        Arrays.sort(sortedSources, new Comparator() {
-            public int compare(final Object o1, final Object o2) {
-                return ((File) o1).getName().compareTo(((File) o2).getName());
+        Arrays.sort(sortedSources, new Comparator<File>() {
+            public int compare(final File o1, final File o2) {
+                return o1.getName().compareTo(o2.getName());
             }
         });
 
@@ -855,13 +855,13 @@ public final class VisualStudioNETProjectWriter
      * @return representative (hopefully) compiler configuration
      */
     private CommandLineCompilerConfiguration
-            getBaseCompilerConfiguration(final Map targets) {
+            getBaseCompilerConfiguration(final Map<String, TargetInfo> targets) {
         //
         //   get the first target and assume that it is representative
         //
-        Iterator targetIter = targets.values().iterator();
+        Iterator<TargetInfo> targetIter = targets.values().iterator();
         while (targetIter.hasNext()) {
-            TargetInfo targetInfo = (TargetInfo) targetIter.next();
+            TargetInfo targetInfo = targetIter.next();
             ProcessorConfiguration config = targetInfo.getConfiguration();
             //
             //   for the first cl compiler

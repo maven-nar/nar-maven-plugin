@@ -56,17 +56,17 @@ public final class TargetHistoryTable {
     private class TargetHistoryTableHandler extends DefaultHandler {
         private final File baseDir;
         private String config;
-        private final Hashtable history;
+        private final Hashtable<String, TargetHistory> history;
         private String output;
         private long outputLastModified;
-        private final Vector sources = new Vector();
+        private final Vector<SourceHistory> sources = new Vector<SourceHistory>();
 
         /**
          * Constructor
          *
          * @param history     hashtable of TargetHistory keyed by output name
          */
-        private TargetHistoryTableHandler(Hashtable history, File baseDir) {
+        private TargetHistoryTableHandler(Hashtable<String, TargetHistory> history, File baseDir) {
             this.history = history;
             config = null;
             output = null;
@@ -166,7 +166,7 @@ public final class TargetHistoryTable {
     /**
      * a hashtable of TargetHistory's keyed by output file name
      */
-    private final Hashtable history = new Hashtable();
+    private final Hashtable<String, TargetHistory> history = new Hashtable<String, TargetHistory>();
     /**
      * The file the cache was loaded from.
      */
@@ -256,11 +256,10 @@ public final class TargetHistoryTable {
             //
             //   build (small) hashtable of config id's in history
             //
-            Hashtable configs = new Hashtable(20);
-            Enumeration elements = history.elements();
+            Hashtable<String, String> configs = new Hashtable<String, String>(20);
+            Enumeration<TargetHistory> elements = history.elements();
             while (elements.hasMoreElements()) {
-                TargetHistory targetHistory = (TargetHistory) elements
-                        .nextElement();
+                TargetHistory targetHistory = elements.nextElement();
                 String configId = targetHistory.getProcessorConfiguration();
                 if (configs.get(configId) == null) {
                     configs.put(configId, configId);
@@ -285,9 +284,9 @@ public final class TargetHistoryTable {
             writer.write("'?>\n");
             writer.write("<history>\n");
             StringBuffer buf = new StringBuffer(200);
-            Enumeration configEnum = configs.elements();
+            Enumeration<String> configEnum = configs.elements();
             while (configEnum.hasMoreElements()) {
-                String configId = (String) configEnum.nextElement();
+                String configId = configEnum.nextElement();
                 buf.setLength(0);
                 buf.append("   <processor signature=\"");
                 buf.append(CUtil.xmlAttribEncode(configId));
@@ -342,10 +341,10 @@ public final class TargetHistoryTable {
         return targetHistory;
     }
 
-    public void markForRebuild(Map targetInfos) {
-        Iterator targetInfoEnum = targetInfos.values().iterator();
+    public void markForRebuild(Map<String, TargetInfo> targetInfos) {
+        Iterator<TargetInfo> targetInfoEnum = targetInfos.values().iterator();
         while (targetInfoEnum.hasNext()) {
-            markForRebuild((TargetInfo) targetInfoEnum.next());
+            markForRebuild(targetInfoEnum.next());
         }
     }
 
@@ -365,7 +364,7 @@ public final class TargetHistoryTable {
                 if (sourceHistories.length != sources.length) {
                     targetInfo.mustRebuild();
                 } else {
-                    Hashtable sourceMap = new Hashtable(sources.length);
+                    Hashtable<String, File> sourceMap = new Hashtable<String, File>(sources.length);
                     for (int i = 0; i < sources.length; i++) {
                         try {
                             sourceMap.put(sources[i].getCanonicalPath(), sources[i]);

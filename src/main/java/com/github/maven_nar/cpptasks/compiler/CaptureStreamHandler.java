@@ -106,11 +106,11 @@ public class CaptureStreamHandler implements ExecuteStreamHandler {
 	static class Copier extends Thread {
 		InputStream is;
 
-		Vector lines;
+		Vector<String> lines;
 
 		Copier(InputStream is) {
 			this.is = is;
-			lines = new Vector(10);
+			lines = new Vector<String>(10);
 		}
 
 		public void run() {
@@ -127,7 +127,7 @@ public class CaptureStreamHandler implements ExecuteStreamHandler {
 			}
 		}
 
-		public Vector getLines() {
+		public Vector<String> getLines() {
 			return lines;
 		}
 	}

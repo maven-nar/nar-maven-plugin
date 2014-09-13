@@ -104,7 +104,7 @@ public class BorlandLibrarian extends CommandLineLinker {
     	String[] preargs = config.getPreArguments();
         String[] endargs = config.getEndArguments();
         StringBuffer buf = new StringBuffer();
-        Vector execArgs = new Vector(preargs.length + endargs.length + 10
+        Vector<String> execArgs = new Vector<String>(preargs.length + endargs.length + 10
                 + sourceFiles.length);
         
         execArgs.addElement(this.getCommand());

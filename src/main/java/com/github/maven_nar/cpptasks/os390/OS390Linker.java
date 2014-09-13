@@ -66,20 +66,20 @@ public final class OS390Linker extends CommandLineLinker {
         this.outputPrefix = outputPrefix;
         this.isADatasetLinker = false;
     }
-    protected void addBase(long base, Vector args) {
+    protected void addBase(long base, Vector<String> args) {
     }
-    protected void addFixed(Boolean fixed, Vector args) {
+    protected void addFixed(Boolean fixed, Vector<String> args) {
     }
-    protected void addImpliedArgs(boolean debug, LinkType linkType, Vector args) {
+    protected void addImpliedArgs(boolean debug, LinkType linkType, Vector<String> args) {
         if (linkType.isSharedLibrary()) {
             args.addElement("-W");
             args.addElement("l,DLL");
         }
     }
-    protected void addIncremental(boolean incremental, Vector args) {
+    protected void addIncremental(boolean incremental, Vector<String> args) {
     }
     protected String[] addLibrarySets(CCTask task, LibrarySet[] libsets,
-            Vector preargs, Vector midargs, Vector endargs) {
+            Vector<String> preargs, Vector<String> midargs, Vector<String> endargs) {
         // If yo want to link against a library sitting in a dataset and
         // not in the HFS, you can just use the //'dataset' notation
         // to specify it. e.g:
@@ -104,11 +104,11 @@ public final class OS390Linker extends CommandLineLinker {
         }
         return super.addLibrarySets(task, libsets, preargs, midargs, endargs);
     }
-    protected void addMap(boolean map, Vector args) {
+    protected void addMap(boolean map, Vector<String> args) {
     }
-    protected void addStack(int stack, Vector args) {
+    protected void addStack(int stack, Vector<String> args) {
     }
-    protected void addEntry(String entry, Vector args) {
+    protected void addEntry(String entry, Vector<String> args) {
     }
     
     public String getCommandFileSwitch(String commandFile) {

@@ -88,7 +88,7 @@ public abstract class Compiler
      * @parameter default-value=""
      * @required
      */
-    private Set includes = new HashSet();
+    private Set<String> includes = new HashSet<String>();
 
     /**
      * Exclude patterns for sources
@@ -96,7 +96,7 @@ public abstract class Compiler
      * @parameter default-value=""
      * @required
      */
-    private Set excludes = new HashSet();
+    private Set<String> excludes = new HashSet<String>();
 
     /**
      * Include patterns for test sources
@@ -104,7 +104,7 @@ public abstract class Compiler
      * @parameter default-value=""
      * @required
      */
-    private Set testIncludes = new HashSet();
+    private Set<String> testIncludes = new HashSet<String>();
 
     /**
      * Exclude patterns for test sources
@@ -112,7 +112,7 @@ public abstract class Compiler
      * @parameter default-value=""
      * @required
      */
-    private Set testExcludes = new HashSet();
+    private Set<String> testExcludes = new HashSet<String>();
 
     /**
      * Compile with debug information.
@@ -160,7 +160,7 @@ public abstract class Compiler
      * 
      * @parameter default-value=""
      */
-    private List defines;
+    private List<String> defines;
 
     /**
      * Defines for the compiler as a comma separated list of name[=value] pairs, where the value is optional. Will work
@@ -183,7 +183,7 @@ public abstract class Compiler
      * 
      * @parameter default-value=""
      */
-    private List undefines;
+    private List<String> undefines;
 
     /**
      * Undefines for the compiler as a comma separated list of name[=value] pairs where the value is optional. Will work
@@ -206,35 +206,35 @@ public abstract class Compiler
      * 
      * @parameter default-value=""
      */
-    private List/* IncludePath */includePaths;
+    private List<IncludePath> includePaths;
 
     /**
      * Test Include Paths. Defaults to "${testSourceDirectory}/include"
      * 
      * @parameter default-value=""
      */
-    private List testIncludePaths;
+    private List<IncludePath> testIncludePaths;
 
     /**
      * System Include Paths, which are added at the end of all include paths
      * 
      * @parameter default-value=""
      */
-    private List systemIncludePaths;
+    private List<String> systemIncludePaths;
 
     /**
      * Additional options for the C++ compiler Defaults to Architecture-OS-Linker specific values. FIXME table missing
      * 
      * @parameter default-value=""
      */
-    private List options;
+    private List<String> options;
 
     /**
      * Additional options for the compiler when running in the nar-testCompile phase.
      * 
      * @parameter default-value=""
      */
-    private List testOptions;
+    private List<String> testOptions;
 
     /**
      * Options for the compiler as a whitespace separated list. Will work in combination with &lt;options&gt;.
@@ -283,14 +283,14 @@ public abstract class Compiler
         this.mojo = mojo;
     }
 
-    public final List/* <File> */getSourceDirectories()
+    public final List<File> getSourceDirectories()
     {
         return getSourceDirectories( "dummy" );
     }
 
     private List<File> getSourceDirectories( String type )
     {
-        List sourceDirectories = new ArrayList();
+        List<File> sourceDirectories = new ArrayList<File>();
         File baseDir = mojo.getMavenProject().getBasedir();
 
         if ( type.equals( TEST ) )
@@ -336,9 +336,9 @@ public abstract class Compiler
 
         if ( mojo.getLog().isDebugEnabled() )
         {
-            for ( Iterator i = sourceDirectories.iterator(); i.hasNext(); )
+            for ( Iterator<File> i = sourceDirectories.iterator(); i.hasNext(); )
             {
-                mojo.getLog().debug( "Added to sourceDirectory: " + ( (File) i.next() ).getPath() );
+                mojo.getLog().debug( "Added to sourceDirectory: " + i.next().getPath() );
             }
         }
         return sourceDirectories;
@@ -351,8 +351,8 @@ public abstract class Compiler
         if ( includeList != null && includeList.size() != 0 )
             return includeList;
 
-        includeList = new ArrayList();
-        for ( Iterator i = getSourceDirectories( type ).iterator(); i.hasNext(); )
+        includeList = new ArrayList<IncludePath>();
+        for ( Iterator<File> i = getSourceDirectories( type ).iterator(); i.hasNext(); )
         {
             //VR 20100318 only add include directories that exist - we now fail the build fast if an include directory does not exist
             File file = new File( (File) i.next(), "include" );
@@ -365,16 +365,16 @@ public abstract class Compiler
         return includeList;
     }
 
-    public final Set getIncludes()
+    public final Set<String> getIncludes()
         throws MojoFailureException, MojoExecutionException
     {
         return getIncludes( "main" );
     }
 
-    protected final Set getIncludes( String type )
+    protected final Set<String> getIncludes( String type )
         throws MojoFailureException, MojoExecutionException
     {
-        Set result = new HashSet();
+        Set<String> result = new HashSet<String>();
         if ( !type.equals( TEST ) && !includes.isEmpty() )
         {
             result.addAll( includes );
@@ -398,16 +398,16 @@ public abstract class Compiler
         return result;
     }
 
-    public final Set getExcludes()
+    public final Set<String> getExcludes()
         throws MojoFailureException, MojoExecutionException
     {
         return getExcludes( "main" );
     }
 
-    protected final Set getExcludes( String type )
+    protected final Set<String> getExcludes( String type )
         throws MojoFailureException, MojoExecutionException
     {
-        Set result = new HashSet();
+        Set<String> result = new HashSet<String>();
         if ( type.equals( TEST ) && !testExcludes.isEmpty() )
         {
             result.addAll( testExcludes );
@@ -447,10 +447,10 @@ public abstract class Compiler
         CompilerDef compiler = getCompiler(type, output);
         if ( testOptions != null )
         {
-            for ( Iterator i = testOptions.iterator(); i.hasNext(); )
+            for ( Iterator<String> i = testOptions.iterator(); i.hasNext(); )
             {
                 CompilerArgument arg = new CompilerArgument();
-                arg.setValue( (String) i.next() );
+                arg.setValue( i.next() );
                 compiler.addConfiguredCompilerArg( arg );
             }
         }
@@ -489,7 +489,7 @@ public abstract class Compiler
         // add options
         if ( options != null )
         {
-            for ( Iterator i = options.iterator(); i.hasNext(); )
+            for ( Iterator<String> i = options.iterator(); i.hasNext(); )
             {
                 CompilerArgument arg = new CompilerArgument();
                 arg.setValue( (String) i.next() );
@@ -532,10 +532,10 @@ public abstract class Compiler
         if ( defines != null )
         {
             DefineSet ds = new DefineSet();
-            for ( Iterator i = defines.iterator(); i.hasNext(); )
+            for ( Iterator<String> i = defines.iterator(); i.hasNext(); )
             {
                 DefineArgument define = new DefineArgument();
-                String[] pair = ( (String) i.next() ).split( "=", 2 );
+                String[] pair = i.next().split( "=", 2 );
                 define.setName( pair[0] );
                 define.setValue( pair.length > 1 ? pair[1] : null );
                 ds.addDefine( define );
@@ -579,10 +579,10 @@ public abstract class Compiler
         if ( undefines != null )
         {
             DefineSet us = new DefineSet();
-            for ( Iterator i = undefines.iterator(); i.hasNext(); )
+            for ( Iterator<String> i = undefines.iterator(); i.hasNext(); )
             {
                 DefineArgument undefine = new DefineArgument();
-                String[] pair = ( (String) i.next() ).split( "=", 2 );
+                String[] pair = i.next().split( "=", 2 );
                 undefine.setName( pair[0] );
                 undefine.setValue( pair.length > 1 ? pair[1] : null );
                 us.addUndefine( undefine );
@@ -623,9 +623,9 @@ public abstract class Compiler
         }
 
         // add include path
-        for ( Iterator i = getIncludePaths( type ).iterator(); i.hasNext(); )
+        for ( Iterator<IncludePath> i = getIncludePaths( type ).iterator(); i.hasNext(); )
         {
-            IncludePath includePath = (IncludePath) i.next();
+            IncludePath includePath = i.next();
             // Darren Sargent, 30Jan2008 - fail build if invalid include path(s) specified.
                         if ( ! includePath.exists() ) {
                                 throw new MojoFailureException("NAR: Include path not found: " + includePath);
@@ -636,17 +636,17 @@ public abstract class Compiler
         // add system include path (at the end)
         if ( systemIncludePaths != null )
         {
-            for ( Iterator i = systemIncludePaths.iterator(); i.hasNext(); )
+            for ( Iterator<String> i = systemIncludePaths.iterator(); i.hasNext(); )
             {
-                String path = (String) i.next();
+                String path = i.next();
                 compiler.createSysIncludePath().setPath( path );
             }
         }
 
         // Add default fileset (if exists)
-        List srcDirs = getSourceDirectories( type );
-        Set includeSet = getIncludes( type );
-        Set excludeSet = getExcludes( type );
+        List<File> srcDirs = getSourceDirectories( type );
+        Set<String> includeSet = getIncludes( type );
+        Set<String> excludeSet = getExcludes( type );
 
         // now add all but the current test to the excludes
         for ( Iterator i = mojo.getTests().iterator(); i.hasNext(); )
@@ -658,9 +658,9 @@ public abstract class Compiler
             }
         }
 
-        for ( Iterator i = srcDirs.iterator(); i.hasNext(); )
+        for ( Iterator<File> i = srcDirs.iterator(); i.hasNext(); )
         {
-            File srcDir = (File) i.next();
+            File srcDir = i.next();
             mojo.getLog().debug( "Checking for existence of " + getLanguage() + " source directory: " + srcDir );
             if ( srcDir.exists() )
             {
@@ -686,9 +686,9 @@ public abstract class Compiler
     public final void copyIncludeFiles( MavenProject mavenProject, File targetDirectory )
         throws IOException
     {
-        for ( Iterator i = getIncludePaths( "dummy" ).iterator(); i.hasNext(); )
+        for ( Iterator<IncludePath> i = getIncludePaths( "dummy" ).iterator(); i.hasNext(); )
         {
-                IncludePath includePath = (IncludePath) i.next();
+                IncludePath includePath = i.next();
             if ( includePath.exists() )
             {
                 NarUtil.copyDirectoryStructure( includePath.getFile(), targetDirectory, includePath.getIncludes(), NarUtil.DEFAULT_EXCLUDES );

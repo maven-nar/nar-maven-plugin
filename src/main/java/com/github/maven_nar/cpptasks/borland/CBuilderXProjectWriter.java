@@ -79,8 +79,8 @@ public final class CBuilderXProjectWriter
   public void writeProject(final File fileName,
                            final CCTask task,
                            final ProjectDef projectDef,
-						   final List sources,
-                           final Map targets,
+                           final List<File> sources,
+                           final Map<String, TargetInfo> targets,
                            final TargetInfo linkTarget) throws
       IOException,
       SAXException {
@@ -190,9 +190,9 @@ public final class CBuilderXProjectWriter
                                  compilerConfig.getCommand());
     }
 
-    Iterator targetIter = targets.values().iterator();
+    Iterator<TargetInfo> targetIter = targets.values().iterator();
     while (targetIter.hasNext()) {
-      TargetInfo info = (TargetInfo) targetIter.next();
+      TargetInfo info = targetIter.next();
       File[] targetsources = info.getSources();
       for (int i = 0; i < targetsources.length; i++) {
         String relativePath = CUtil.getRelativePath(basePath,
@@ -306,7 +306,7 @@ public final class CBuilderXProjectWriter
    * @return representative (hopefully) compiler configuration
    */
   private CommandLineCompilerConfiguration
-      getBaseCompilerConfiguration(final Map targets) {
+      getBaseCompilerConfiguration(final Map<String, TargetInfo> targets) {
     //
     //   find first target with an gcc or bcc compilation
     //
@@ -314,9 +314,9 @@ public final class CBuilderXProjectWriter
     //
     //   get the first target and assume that it is representative
     //
-    Iterator targetIter = targets.values().iterator();
+    Iterator<TargetInfo> targetIter = targets.values().iterator();
     while (targetIter.hasNext()) {
-      TargetInfo targetInfo = (TargetInfo) targetIter.next();
+      TargetInfo targetInfo = targetIter.next();
       ProcessorConfiguration config = targetInfo.getConfiguration();
       String identifier = config.getIdentifier();
       //

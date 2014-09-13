@@ -94,8 +94,8 @@ public final class MsvcProjectWriter
   public void writeProject(final File fileName,
                            final CCTask task,
                            final ProjectDef projectDef,
-                           final List files,
-                           final Map targets,
+                           final List<File> files,
+                           final Map<String, TargetInfo> targets,
                            final TargetInfo linkTarget) throws IOException {
 
     //
@@ -255,11 +255,11 @@ public final class MsvcProjectWriter
 
   private void writeConfig(final Writer writer,
                            boolean isDebug,
-                           final List dependencies,
+                           final List<DependencyDef> dependencies,
                            final String basePath,
                            CommandLineCompilerConfiguration compilerConfig,
                            TargetInfo linkTarget,
-                           Map targets) throws IOException {
+                           Map<String, TargetInfo> targets) throws IOException {
       writer.write("# PROP BASE Use_MFC 0\r\n");
 
       String configType = "Release";
@@ -306,7 +306,7 @@ public final class MsvcProjectWriter
   private static void writeWorkspaceProject(final Writer writer,
                                      final String projectName,
                                      final String projectFile,
-                                     final List dependsOn) throws IOException {
+                                     final List<String> dependsOn) throws IOException {
       writer.write("############################################");
       writer.write("###################################\r\n\r\n");
       String file = projectFile;
@@ -320,7 +320,7 @@ public final class MsvcProjectWriter
       writer.write("Package=<5>\r\n{{{\r\n}}}\r\n\r\n");
       writer.write("Package=<4>\r\n{{{\r\n");
       if (dependsOn != null) {
-        for(Iterator iter = dependsOn.iterator(); iter.hasNext();) {
+        for(Iterator<String> iter = dependsOn.iterator(); iter.hasNext();) {
             writer.write("    Begin Project Dependency\r\n");
             writer.write("    Project_Dep_Name " + toProjectName(String.valueOf(iter.next())) + "\r\n");
             writer.write("    End Project Dependency\r\n");
@@ -344,11 +344,11 @@ public final class MsvcProjectWriter
 	  writeComments(writer, project.getComments());
 
 
-      List dependencies = project.getDependencies();
-      List projectDeps = new ArrayList();
+      List<DependencyDef> dependencies = project.getDependencies();
+      List<String> projectDeps = new ArrayList<String>();
       String basePath = dspFile.getParent();
-      for(Iterator iter = dependencies.iterator(); iter.hasNext();) {
-          DependencyDef dep = (DependencyDef) iter.next();
+      for(Iterator<DependencyDef> iter = dependencies.iterator(); iter.hasNext();) {
+          DependencyDef dep = iter.next();
           if (dep.getFile() != null) {
             String projName = toProjectName(dep.getName());
             projectDeps.add(projName);
@@ -422,12 +422,12 @@ public final class MsvcProjectWriter
    * @param sourceList list of source files
    * @return File[] source files
    */
-  private File[] getSources(final List sourceList) {
+  private File[] getSources(final List<File> sourceList) {
     File[] sortedSources = new File[sourceList.size()];
     sourceList.toArray(sortedSources);
-    Arrays.sort(sortedSources, new Comparator() {
-      public int compare(final Object o1, final Object o2) {
-        return ((File) o1).getName().compareTo(((File) o2).getName());
+    Arrays.sort(sortedSources, new Comparator<File>() {
+      public int compare(final File o1, final File o2) {
+        return o1.getName().compareTo(o2.getName());
       }
     });
     return sortedSources;
@@ -482,7 +482,7 @@ public final class MsvcProjectWriter
    * @return representative (hopefully) compiler configuration
    */
   private CommandLineCompilerConfiguration
-      getBaseCompilerConfiguration(final Map targets) {
+      getBaseCompilerConfiguration(final Map<String, TargetInfo> targets) {
     //
     //   find first target with an DevStudio C compilation
     //
@@ -490,9 +490,9 @@ public final class MsvcProjectWriter
     //
     //   get the first target and assume that it is representative
     //
-    Iterator targetIter = targets.values().iterator();
+    Iterator<TargetInfo> targetIter = targets.values().iterator();
     while (targetIter.hasNext()) {
-      TargetInfo targetInfo = (TargetInfo) targetIter.next();
+      TargetInfo targetInfo = targetIter.next();
       ProcessorConfiguration config = targetInfo.getConfiguration();
       //
       //   for the first cl compiler
@@ -531,7 +531,7 @@ public final class MsvcProjectWriter
       options.append(CUtil.toWindowsPath(relPath));
       options.append('"');
     }
-    Hashtable optionMap = new Hashtable();
+    Hashtable<String, String> optionMap = new Hashtable<String, String>();
 
     if (isDebug) {
         //
@@ -585,7 +585,7 @@ public final class MsvcProjectWriter
         String option = preArgs[i];
         String key = option.toUpperCase(Locale.US);
         if (optionMap.containsKey(key)) {
-            option = optionMap.get(key).toString();
+            option = optionMap.get(key);
         }
         options.append(" ");
         options.append(option);
@@ -615,10 +615,10 @@ public final class MsvcProjectWriter
    */
   private void writeLinkOptions(final Writer writer,
                                 final boolean isDebug,
-                                final List dependencies,
+                                final List<DependencyDef> dependencies,
                                 final String basePath,
                                 final TargetInfo linkTarget,
-                                final Map targets) throws IOException {
+                                final Map<String, TargetInfo> targets) throws IOException {
 
     StringBuffer baseOptions = new StringBuffer(100);
     StringBuffer options = new StringBuffer(100);
@@ -648,8 +648,8 @@ public final class MsvcProjectWriter
           boolean fromDependency = false;
           if (relPath.indexOf(".") > 0) {
               String baseName = relPath.substring(0, relPath.indexOf("."));
-              for(Iterator iter = dependencies.iterator(); iter.hasNext(); ) {
-                DependencyDef depend = (DependencyDef) iter.next();
+              for(Iterator<DependencyDef> iter = dependencies.iterator(); iter.hasNext(); ) {
+                DependencyDef depend = iter.next();
                 if (baseName.compareToIgnoreCase(depend.getName()) == 0) {
                     fromDependency = true;
                 }
@@ -697,9 +697,9 @@ public final class MsvcProjectWriter
   }
 
   private static void writeComments(final Writer writer,
-                             final List comments) throws IOException {
-		for(Iterator iter = comments.iterator();iter.hasNext();) {
-			String comment = ((CommentDef) iter.next()).getText();
+                             final List<CommentDef> comments) throws IOException {
+		for(Iterator<CommentDef> iter = comments.iterator();iter.hasNext();) {
+			String comment = iter.next().getText();
 			if (comment != null) {
 				int start = 0;
 				for(int end = comment.indexOf('\n'); 

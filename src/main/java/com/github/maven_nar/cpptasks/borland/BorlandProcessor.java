@@ -35,7 +35,7 @@ import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
  *  
  */
 public final class BorlandProcessor {
-    public static void addWarningSwitch(Vector args, int level) {
+    public static void addWarningSwitch(Vector<String> args, int level) {
         switch (level) {
             case 0 :
                 args.addElement("-w-");

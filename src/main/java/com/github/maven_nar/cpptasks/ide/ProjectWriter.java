@@ -51,8 +51,8 @@ public interface ProjectWriter {
   void writeProject(final File baseName,
                     final CCTask task,
                     final ProjectDef projectDef,
-                    final List files,
-                    final Map targets,
+                    final List<File> files,
+                    final Map<String, TargetInfo> targets,
                     final TargetInfo linkTarget)
       throws IOException, SAXException;
 }

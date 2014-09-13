@@ -35,7 +35,7 @@ import com.github.maven_nar.cpptasks.CUtil;
  * @author Adam Murdoch
  */
 public class DefineSet extends DataType {
-    private Vector defineList = new Vector();
+    private Vector<UndefineArgument> defineList = new Vector<UndefineArgument>();
     private String ifCond = null;
     private String unlessCond = null;
     /**

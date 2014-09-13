@@ -49,15 +49,15 @@ public final class BorlandLinker extends CommandLineLinker {
         super("ilink32", "-r", new String[]{".obj", ".lib", ".res"},
                 new String[]{".map", ".pdb", ".lnk"}, outputSuffix, false, null);
     }
-    protected void addBase(long base, Vector args) {
+    protected void addBase(long base, Vector<String> args) {
         if (base >= 0) {
             String baseAddr = Long.toHexString(base);
             args.addElement("-b:" + baseAddr);
         }
     }
-    protected void addFixed(Boolean fixed, Vector args) {
+    protected void addFixed(Boolean fixed, Vector<String> args) {
     }
-    protected void addImpliedArgs(boolean debug, LinkType linkType, Vector args) {
+    protected void addImpliedArgs(boolean debug, LinkType linkType, Vector<String> args) {
         if (linkType.isExecutable()) {
             if (linkType.isSubsystemConsole()) {
                 args.addElement("/ap");
@@ -75,20 +75,20 @@ public final class BorlandLinker extends CommandLineLinker {
           args.addElement("-v");
         }
     }
-    protected void addIncremental(boolean incremental, Vector args) {
+    protected void addIncremental(boolean incremental, Vector<String> args) {
     }
-    protected void addMap(boolean map, Vector args) {
+    protected void addMap(boolean map, Vector<String> args) {
         if (!map) {
             args.addElement("-x");
         }
     }
-    protected void addStack(int stack, Vector args) {
+    protected void addStack(int stack, Vector<String> args) {
         if (stack >= 0) {
             String stackStr = Integer.toHexString(stack);
             args.addElement("-S:" + stackStr);
         }
     }
-    protected void addEntry(String entry, Vector args) {
+    protected void addEntry(String entry, Vector<String> args) {
     }
 
     public String getCommandFileSwitch(String commandFile) {
@@ -153,7 +153,7 @@ public final class BorlandLinker extends CommandLineLinker {
                         CommandLineLinkerConfiguration config) {
         String[] preargs = config.getPreArguments();
         String[] endargs = config.getEndArguments();
-        Vector execArgs = new Vector(preargs.length + endargs.length + 10
+        Vector<String> execArgs = new Vector<String>(preargs.length + endargs.length + 10
                 + sourceFiles.length);
         execArgs.addElement(this.getCommand());
         for (int i = 0; i < preargs.length; i++) {
@@ -181,8 +181,8 @@ public final class BorlandLinker extends CommandLineLinker {
             startup = config.getStartupObject();
         }
         execArgs.addElement(startup);
-        Vector resFiles = new Vector();
-        Vector libFiles = new Vector();
+        Vector<String> resFiles = new Vector<String>();
+        Vector<String> libFiles = new Vector<String>();
         String defFile = null;
         StringBuffer buf = new StringBuffer();
         for (int i = 0; i < sourceFiles.length; i++) {
@@ -222,11 +222,11 @@ public final class BorlandLinker extends CommandLineLinker {
         //
         //   add all the libraries
         //
-        Enumeration libEnum = libFiles.elements();
+        Enumeration<String> libEnum = libFiles.elements();
         boolean hasImport32 = false;
         boolean hasCw32 = false;
         while (libEnum.hasMoreElements()) {
-            String libName = (String) libEnum.nextElement();
+            String libName = libEnum.nextElement();
             if (libName.equalsIgnoreCase("import32.lib")) {
                     hasImport32 = true;
             }
@@ -246,9 +246,9 @@ public final class BorlandLinker extends CommandLineLinker {
         } else {
             execArgs.addElement("," + quoteFilename(buf, defFile) + ",");
         }
-        Enumeration resEnum = resFiles.elements();
+        Enumeration<String> resEnum = resFiles.elements();
         while (resEnum.hasMoreElements()) {
-            String resName = (String) resEnum.nextElement();
+            String resName = resEnum.nextElement();
             execArgs.addElement(quoteFilename(buf, resName));
         }
         String[] execArguments = new String[execArgs.size()];

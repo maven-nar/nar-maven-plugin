@@ -34,7 +34,7 @@ public final class FortranParser
   /**
    * List of included filenames.
    */
-  private final Vector includes = new Vector();
+  private final Vector<String> includes = new Vector<String>();
 
   /**
    * State that starts consuming content at the beginning of a line.

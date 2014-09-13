@@ -48,8 +48,8 @@ public class IccCompiler extends CommandLineCCompiler {
                 ".s"}, new String[]{".h", ".hpp"}, ".o", false, null,
                 newEnvironment, env);
     }
-    protected void addImpliedArgs(final Vector args, 
-    		final boolean debug,
+    protected void addImpliedArgs(final Vector<String> args, 
+            final boolean debug,
             final boolean multithreaded, 
 			final boolean exceptions, 
 			final LinkType linkType,
@@ -78,7 +78,7 @@ public class IccCompiler extends CommandLineCCompiler {
              */
         }
     }
-    protected void addWarningSwitch(Vector args, int level) {
+    protected void addWarningSwitch(Vector<String> args, int level) {
         IccProcessor.addWarningSwitch(args, level);
     }
     public Processor changeEnvironment(boolean newEnvironment, Environment env) {

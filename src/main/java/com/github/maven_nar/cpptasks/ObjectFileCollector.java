@@ -31,9 +31,9 @@ import com.github.maven_nar.cpptasks.compiler.Linker;
  *  
  */
 public final class ObjectFileCollector implements FileVisitor {
-    private final Vector files;
+    private final Vector<File> files;
     private final Linker linker;
-    public ObjectFileCollector(Linker linker, Vector files) {
+    public ObjectFileCollector(Linker linker, Vector<File> files) {
         this.linker = linker;
         this.files = files;
     }
