@@ -51,8 +51,8 @@ public class OS390CCompiler extends CommandLineCCompiler {
                 ".s"}, new String[]{".h", ".hpp"}, ".o", false, null,
                 newEnvironment, env);
     }
-    protected void addImpliedArgs(final Vector args, 
-    		final boolean debug,
+    protected void addImpliedArgs(final Vector<String> args, 
+            final boolean debug,
             final boolean multithreaded, 
 			final boolean exceptions, 
 			final LinkType linkType,
@@ -85,7 +85,7 @@ public class OS390CCompiler extends CommandLineCCompiler {
              */
         }
     }
-    protected void addWarningSwitch(Vector args, int level) {
+    protected void addWarningSwitch(Vector<String> args, int level) {
         OS390Processor.addWarningSwitch(args, level);
     }
     /**
@@ -94,7 +94,7 @@ public class OS390CCompiler extends CommandLineCCompiler {
      * /Ddefinex, 2 args not 1! since we implement this ourslefs, we do not
      * have to implement the getDefineSwitch() and the getUndefineSwitch().
      */
-    protected void buildDefineArguments(CompilerDef[] defs, Vector args) {
+    protected void buildDefineArguments(CompilerDef[] defs, Vector<String> args) {
         //
         //   assume that we aren't inheriting defines from containing <cc>
         //

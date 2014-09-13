@@ -81,7 +81,7 @@ public final class MetaObjectCompiler
    * @param rtti Boolean enable run-time type identification if true
    * @param optimization OptimizationEnum optimization
    */
-  protected void addImpliedArgs(final Vector args,
+  protected void addImpliedArgs(final Vector<String> args,
                                 final boolean debug,
                                 final boolean multithreaded,
                                 final boolean exceptions,
@@ -95,7 +95,7 @@ public final class MetaObjectCompiler
    * @param args Vector command line arguments
    * @param level int warning level value
    */
-  protected void addWarningSwitch(final Vector args, final int level) {
+  protected void addWarningSwitch(final Vector<String> args, final int level) {
   }
 
   /**

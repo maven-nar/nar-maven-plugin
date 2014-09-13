@@ -78,8 +78,8 @@ public class ClxxCCompiler extends CommandLineCCompiler {
                 null, newEnvironment, env);
     }
     protected void addImpliedArgs(
-    		final Vector args, 
-			final boolean debug,
+            final Vector<String> args, 
+            final boolean debug,
             final boolean multithreaded, 
 			final boolean exceptions, 
 			final LinkType linkType,
@@ -89,7 +89,7 @@ public class ClxxCCompiler extends CommandLineCCompiler {
             args.addElement("-gw");
         }
     }
-    protected void addWarningSwitch(Vector args, int warnings) {
+    protected void addWarningSwitch(Vector<String> args, int warnings) {
         // TODO Auto-generated method stub
     }
     protected void getDefineSwitch(StringBuffer buffer, String define,

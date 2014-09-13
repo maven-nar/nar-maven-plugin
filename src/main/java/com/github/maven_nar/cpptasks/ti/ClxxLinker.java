@@ -58,25 +58,25 @@ public class ClxxLinker extends CommandLineLinker {
         super(command, "-h", new String[]{".o", ".lib", ".res"}, new String[]{
                 ".map", ".pdb", ".lnk"}, outputSuffix, false, null);
     }
-    protected void addBase(long base, Vector args) {
+    protected void addBase(long base, Vector<String> args) {
     }
-    protected void addFixed(Boolean fixed, Vector args) {
+    protected void addFixed(Boolean fixed, Vector<String> args) {
     }
-    protected void addImpliedArgs(boolean debug, LinkType linkType, Vector args) {
+    protected void addImpliedArgs(boolean debug, LinkType linkType, Vector<String> args) {
         if (linkType.isSharedLibrary()) {
             args.addElement("-abs");
         }
     }
-    protected void addIncremental(boolean incremental, Vector args) {
+    protected void addIncremental(boolean incremental, Vector<String> args) {
     }
-    protected void addMap(boolean map, Vector args) {
+    protected void addMap(boolean map, Vector<String> args) {
         if (map) {
             args.addElement("-m");
         }
     }
-    protected void addStack(int stack, Vector args) {
+    protected void addStack(int stack, Vector<String> args) {
     }
-    protected void addEntry(String entry, Vector args) {
+    protected void addEntry(String entry, Vector<String> args) {
     }
     
     protected String getCommandFileSwitch(String commandFile) {

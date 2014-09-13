@@ -155,7 +155,7 @@ public class GccProcessor {
                     //
                     BufferedReader reader = new BufferedReader(new FileReader(
                             specsFile));
-                    Vector lines = new Vector(100);
+                    Vector<String> lines = new Vector<String>(100);
                     String line = reader.readLine();
                     while (line != null) {
                         lines.addElement(line);
@@ -234,9 +234,9 @@ public class GccProcessor {
             //   if start of section then start paying attention
             //
             if (specLine.startsWith(specSectionStart)) {
-                Vector[] optionVectors = new Vector[options.length];
+                Vector<String>[] optionVectors = new Vector[options.length];
                 for (int j = 0; j < options.length; j++) {
-                    optionVectors[j] = new Vector(10);
+                    optionVectors[j] = new Vector<String>(10);
                 }
                 //
                 //  go to next line and examine contents

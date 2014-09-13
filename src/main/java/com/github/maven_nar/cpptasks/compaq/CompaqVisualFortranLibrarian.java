@@ -44,7 +44,7 @@ public class CompaqVisualFortranLibrarian extends CommandLineLinker {
                 false, null);
     }
 
-    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector args) {
+    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector<String> args) {
         args.addElement("/nologo");
     }
     protected String getCommandFileSwitch(String commandFile) {

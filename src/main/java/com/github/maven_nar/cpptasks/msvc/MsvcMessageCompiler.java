@@ -52,7 +52,7 @@ public final class MsvcMessageCompiler extends CommandLineCompiler {
         super("mc", null, new String[]{".mc",".man"}, new String[]{},
             ".rc", false, null, newEnvironment, env);
     }
-    protected void addImpliedArgs(final Vector args,
+    protected void addImpliedArgs(final Vector<String> args,
             final boolean debug,
             final boolean multithreaded,
 	    final boolean exceptions,
@@ -62,7 +62,7 @@ public final class MsvcMessageCompiler extends CommandLineCompiler {
         // no identified configuration compiler arguments implied from these options.
     }
 
-    protected void addWarningSwitch(Vector args, int level) {
+    protected void addWarningSwitch(Vector<String> args, int level) {
     }
 
     public Processor changeEnvironment(boolean newEnvironment, Environment env) {
@@ -93,8 +93,8 @@ public final class MsvcMessageCompiler extends CommandLineCompiler {
     }
 
     protected void addIncludes(String baseDirPath, File[] includeDirs,
-            Vector args, Vector relativeArgs, StringBuffer includePathId,
-	    boolean isSystem) {
+            Vector<String> args, Vector<String> relativeArgs, StringBuffer includePathId,
+            boolean isSystem) {
     	// no include switch
     	// for some reason we are still getting args in the output??
     }

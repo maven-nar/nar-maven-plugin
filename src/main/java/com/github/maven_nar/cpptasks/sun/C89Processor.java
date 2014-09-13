@@ -39,7 +39,7 @@ public class C89Processor {
         }
         return offset + libnames.length;
     }
-    public static void addWarningSwitch(Vector args, int level) {
+    public static void addWarningSwitch(Vector<String> args, int level) {
         switch (level) {
         /*
          * case 0: args.addElement("/W0"); break;

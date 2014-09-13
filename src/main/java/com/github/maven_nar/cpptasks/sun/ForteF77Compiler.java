@@ -51,8 +51,8 @@ public final class ForteF77Compiler extends GccCompatibleCCompiler {
     private ForteF77Compiler(String command) {
         super(command, "-V", false, null, false, null);
     }
-    public void addImpliedArgs(final Vector args, 
-    		final boolean debug,
+    public void addImpliedArgs(final Vector<String> args, 
+            final boolean debug,
             final boolean multithreaded, 
 			final boolean exceptions, 
 			final LinkType linkType,
@@ -75,7 +75,7 @@ public final class ForteF77Compiler extends GccCompatibleCCompiler {
         }
         
     }
-    public void addWarningSwitch(Vector args, int level) {
+    public void addWarningSwitch(Vector<String> args, int level) {
         switch (level) {
             case 0 :
                 args.addElement("-w");

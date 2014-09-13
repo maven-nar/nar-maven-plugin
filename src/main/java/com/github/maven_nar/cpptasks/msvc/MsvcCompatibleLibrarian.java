@@ -39,7 +39,7 @@ public abstract class MsvcCompatibleLibrarian extends CommandLineLinker {
                 ".lib", false, null);
     }
 
-    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector args) {
+    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector<String> args) {
         args.addElement("/nologo");
     }
     

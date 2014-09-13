@@ -34,7 +34,7 @@ import com.github.maven_nar.cpptasks.parser.WhitespaceOrLetterState;
  */
 public final class BorlandCfgParser extends AbstractParser {
     private AbstractParserState newLineState;
-    private final Vector path = new Vector();
+    private final Vector<String> path = new Vector<String>();
     /**
      * 
      *  

@@ -34,17 +34,17 @@ import com.github.maven_nar.cpptasks.compiler.ProcessorConfiguration;
  */
 public final class TargetMatcher implements FileVisitor {
     private LinkerConfiguration linker;
-    private Vector objectFiles;
+    private Vector<File> objectFiles;
     private File outputDir;
     private ProcessorConfiguration[] processors;
     private final File sourceFiles[] = new File[1];
-    private Map targets;
+    private Map<String, TargetInfo> targets;
     private VersionInfo versionInfo;
     private CCTask task;
     public TargetMatcher(CCTask task, File outputDir,
             ProcessorConfiguration[] processors, LinkerConfiguration linker,
-            Vector objectFiles, Map targets,
-			VersionInfo versionInfo) {
+            Vector<File> objectFiles, Map<String, TargetInfo> targets,
+            VersionInfo versionInfo) {
         this.task = task;
         this.outputDir = outputDir;
         this.processors = processors;

@@ -52,7 +52,7 @@ public abstract class MsvcCompatibleCCompiler
                 ".c++"}, new String[]{".h", ".hpp", ".inl"}, ".obj", false,
                 null, newEnvironment, env);
     }
-    protected void addImpliedArgs(final Vector args,
+    protected void addImpliedArgs(final Vector<String> args,
                     final boolean debug,
             final boolean multithreaded,
                         final boolean exceptions,
@@ -102,13 +102,13 @@ public abstract class MsvcCompatibleCCompiler
                 args.addElement("/GR-");
         }
     }
-    protected void addDebugSwitch(Vector args) {
+    protected void addDebugSwitch(Vector<String> args) {
         args.addElement("/Zi");
         args.addElement("/Od");
         args.addElement("/RTC1");
         args.addElement("/D_DEBUG");
     }
-    protected void addWarningSwitch(Vector args, int level) {
+    protected void addWarningSwitch(Vector<String> args, int level) {
         MsvcProcessor.addWarningSwitch(args, level);
     }
     protected CompilerConfiguration createPrecompileGeneratingConfig(

@@ -92,12 +92,12 @@ public final class ProjectDef
     /**
      * List of dependency definitions.
      */
-  private List dependencies = new ArrayList();
+  private List<DependencyDef> dependencies = new ArrayList<DependencyDef>();
 
      /**
 	  *   List of comments.
 	  */
-  private List comments = new ArrayList();
+  private List<CommentDef> comments = new ArrayList<CommentDef>();
 
   /**
    * Constructor.
@@ -226,7 +226,7 @@ public final class ProjectDef
   public void setClassname(final String className) {
     Object proc = null;
     try {
-      Class implClass = ProjectDef.class.getClassLoader().loadClass(
+      Class<?> implClass = ProjectDef.class.getClassLoader().loadClass(
           className);
       try {
         Method getInstance = implClass.getMethod("getInstance",
@@ -298,8 +298,8 @@ public final class ProjectDef
    * @param linkTarget link target
    */
   public void execute(final CCTask task,
-                      final List sources,
-                      final Map targets,
+                      final List<File> sources,
+                      final Map<String, TargetInfo> targets,
                       final TargetInfo linkTarget) {
     try {
       projectWriter.writeProject(outFile,
@@ -348,8 +348,8 @@ public final class ProjectDef
 
   }
 
-  public List getDependencies() {
-      return new ArrayList(dependencies);
+  public List<DependencyDef> getDependencies() {
+      return new ArrayList<DependencyDef>(dependencies);
   }
 
 
@@ -362,8 +362,8 @@ public final class ProjectDef
 
   }
 
-  public List getComments() {
-      return new ArrayList(comments);
+  public List<CommentDef> getComments() {
+      return new ArrayList<CommentDef>(comments);
   }
 
   /**

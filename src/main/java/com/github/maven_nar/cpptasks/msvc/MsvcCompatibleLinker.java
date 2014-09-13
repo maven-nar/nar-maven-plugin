@@ -45,13 +45,13 @@ public abstract class MsvcCompatibleLinker extends CommandLineLinker {
                 new String[]{".map", ".pdb", ".lnk", ".dll", ".tlb", ".rc", ".h"}, outputSuffix,
                 false, null);
     }
-    protected void addBase(CCTask task, long base, Vector args) {
+    protected void addBase(CCTask task, long base, Vector<String> args) {
         if (base >= 0) {
             String baseAddr = Long.toHexString(base);
             args.addElement("/BASE:0x" + baseAddr);
         }
     }
-    protected void addFixed(CCTask task, Boolean fixed, Vector args) {
+    protected void addFixed(CCTask task, Boolean fixed, Vector<String> args) {
         if (fixed != null) {
             if (fixed.booleanValue()) {
                 args.addElement("/FIXED");
@@ -60,7 +60,7 @@ public abstract class MsvcCompatibleLinker extends CommandLineLinker {
             }
         }
     }
-    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector args) {
+    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector<String> args) {
         args.addElement("/NOLOGO");
         if (debug) {
             args.addElement("/DEBUG");
@@ -77,25 +77,25 @@ public abstract class MsvcCompatibleLinker extends CommandLineLinker {
          if(linkType.isSubsystemConsole()) {
            args.addElement("/SUBSYSTEM:CONSOLE"); } }
     }
-    protected void addIncremental(CCTask task, boolean incremental, Vector args) {
+    protected void addIncremental(CCTask task, boolean incremental, Vector<String> args) {
         if (incremental) {
             args.addElement("/INCREMENTAL:YES");
         } else {
             args.addElement("/INCREMENTAL:NO");
         }
     }
-    protected void addMap(CCTask task, boolean map, Vector args) {
+    protected void addMap(CCTask task, boolean map, Vector<String> args) {
         if (map) {
             args.addElement("/MAP");
         }
     }
-    protected void addStack(CCTask task, int stack, Vector args) {
+    protected void addStack(CCTask task, int stack, Vector<String> args) {
         if (stack >= 0) {
             String stackStr = Integer.toHexString(stack);
             args.addElement("/STACK:0x" + stackStr);
         }
     }
-    protected void addEntry(CCTask task, String entry, Vector args) {
+    protected void addEntry(CCTask task, String entry, Vector<String> args) {
     	if (entry != null) {
     		args.addElement("/ENTRY:" + entry);
     	}

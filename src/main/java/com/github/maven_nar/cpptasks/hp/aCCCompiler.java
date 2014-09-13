@@ -60,7 +60,7 @@ public final class aCCCompiler extends GccCompatibleCCompiler {
         super(command, "-help", sourceExtensions, headerExtensions, false, 
                 null, newEnvironment, env);
     }
-    public void addImpliedArgs(Vector args, boolean debug,
+    public void addImpliedArgs(Vector<String> args, boolean debug,
             boolean multithreaded, boolean exceptions, LinkType linkType,
 			final Boolean rtti,
 			final OptimizationEnum optimization) {
@@ -79,7 +79,7 @@ public final class aCCCompiler extends GccCompatibleCCompiler {
             args.addElement("+z");
         }
     }
-    public void addWarningSwitch(Vector args, int level) {
+    public void addWarningSwitch(Vector<String> args, int level) {
         switch (level) {
             case 0 :
                 args.addElement("-w");

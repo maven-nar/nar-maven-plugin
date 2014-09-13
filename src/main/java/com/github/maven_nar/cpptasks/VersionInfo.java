@@ -150,10 +150,10 @@ public final class VersionInfo extends DataType {
      * Private constructor for merge.
      * @param stack list of version infos with most significant first.
      */
-    private VersionInfo(final Vector stack) {
+    private VersionInfo(final Vector<VersionInfo> stack) {
             VersionInfo source = null;
             for(int i = stack.size() - 1; i >= 0; i--) {
-                    source = (VersionInfo) stack.elementAt(i);
+                    source = stack.elementAt(i);
                     if (source.getIf() != null) {
                             ifCond = source.getIf();
                     }
@@ -227,7 +227,7 @@ public final class VersionInfo extends DataType {
             if (currentRef == null) {
                     return this;
             }
-            Vector stack = new Vector(5);
+            Vector<VersionInfo> stack = new Vector<VersionInfo>(5);
             stack.addElement(this);
             while (currentRef != null) {
             Object obj = currentRef.getReferencedObject(getProject());

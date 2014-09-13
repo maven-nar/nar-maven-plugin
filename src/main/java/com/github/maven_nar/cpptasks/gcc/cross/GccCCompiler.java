@@ -114,8 +114,8 @@ public final class GccCCompiler extends GccCompatibleCCompiler {
                 libtoolCompiler, newEnvironment, env);
         isPICMeaningful = System.getProperty("os.name").indexOf("Windows") < 0;
     }
-    public void addImpliedArgs(final Vector args, 
-    		final boolean debug,
+    public void addImpliedArgs(final Vector<String> args, 
+            final boolean debug,
             final boolean multithreaded, 
 			final boolean exceptions, 
 			final LinkType linkType,

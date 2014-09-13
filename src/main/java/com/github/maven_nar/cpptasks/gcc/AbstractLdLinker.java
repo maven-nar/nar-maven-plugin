@@ -47,13 +47,13 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
         this.outputPrefix = outputPrefix;
     }
 
-    protected void addBase(CCTask task, long base, Vector args) {
+    protected void addBase(CCTask task, long base, Vector<String> args) {
             if (base >= 0) {
                     args.addElement("--image-base");
                     args.addElement(Long.toHexString(base));
             }
     }
-    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector args) {
+    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector<String> args) {
         if (debug) {
             args.addElement("-g");
         }
@@ -85,7 +85,7 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
             }
         }
     }
-    protected void addIncremental(CCTask task, boolean incremental, Vector args) {
+    protected void addIncremental(CCTask task, boolean incremental, Vector<String> args) {
             if (incremental) {
                     args.addElement("-i");
             }
@@ -102,8 +102,8 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
         return offset + libnames.length;
     }
     protected String[] addLibrarySets(CCTask task, LibrarySet[] libsets,
-            Vector preargs, Vector midargs, Vector endargs) {
-        Vector libnames = new Vector();
+            Vector<String> preargs, Vector<String> midargs, Vector<String> endargs) {
+        Vector<String> libnames = new Vector<String>();
         super.addLibrarySets(task, libsets, preargs, midargs, endargs);
         LibraryTypeEnum previousLibraryType = null;
         for (int i = 0; i < libsets.length; i++) {
@@ -183,18 +183,18 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
         }
         return rc;
     }
-    protected void addMap(CCTask task, boolean map, Vector args) {
+    protected void addMap(CCTask task, boolean map, Vector<String> args) {
             if (map) {
                     args.addElement("-M");
             }
     }
-    protected void addStack(CCTask task, int stack, Vector args) {
+    protected void addStack(CCTask task, int stack, Vector<String> args) {
             if (stack > 0) {
                     args.addElement("--stack");
                     args.addElement(Integer.toString(stack));
             }
     }
-    protected void addEntry(CCTask task, String entry, Vector args) {
+    protected void addEntry(CCTask task, String entry, Vector<String> args) {
             if (entry != null) {
                     args.addElement("-e");
                     args.addElement(entry);

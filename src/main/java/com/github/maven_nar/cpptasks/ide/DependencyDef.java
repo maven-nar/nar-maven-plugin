@@ -71,10 +71,10 @@ public final class DependencyDef {
     public void setDepends(final String val) {
         depends = val;
     }
-    public List getDependsList() {
+    public List<String> getDependsList() {
         if (depends != null) {
             return StringUtils.split(depends, ',');
         }
-        return Collections.EMPTY_LIST;    
+        return Collections.emptyList();    
     }
 }

@@ -45,7 +45,7 @@ public final class Msvc2005CCompiler extends MsvcCompatibleCCompiler {
     /**
      * Override the default debug flags to use VC 8 compatible versions.
      */
-    protected void addDebugSwitch(Vector args) {
+    protected void addDebugSwitch(Vector<String> args) {
         args.addElement("/Zi");
         args.addElement("/Od");
         args.addElement("/RTC1");
