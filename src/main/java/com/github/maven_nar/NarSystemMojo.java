@@ -23,7 +23,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
+import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -54,8 +54,7 @@ public class NarSystemMojo
 		String narSystemName = null;
 		File narSystemDirectory = null;
 		boolean jniFound = false;
-		for (final Iterator i = getLibraries().iterator(); !jniFound && i.hasNext();) {
-			final Library library = (Library) i.next();
+		for (final Library library : getLibraries()) {
 			if (library.getType().equals(Library.JNI) || library.getType().equals(Library.SHARED)) {
 				packageName = library.getNarSystemPackage();
 				narSystemName = library.getNarSystemName();
