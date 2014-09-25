@@ -27,6 +27,7 @@ import java.util.Iterator;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.sonatype.plexus.build.incremental.BuildContext;
 
 /**
  * Generates a NarSystem class with static methods to use inside the java part
@@ -40,6 +41,9 @@ import org.apache.maven.plugin.MojoFailureException;
  * @author Mark Donszelmann
  */
 public class NarSystemMojo extends AbstractNarMojo {
+
+	/** @component */
+	private BuildContext buildContext;
 
 	@Override
 	public final void narExecute() throws MojoExecutionException, MojoFailureException {
@@ -117,5 +121,7 @@ public class NarSystemMojo extends AbstractNarMojo {
 		} catch (final IOException e) {
 			throw new MojoExecutionException("Could not write '" + narSystemName + "'", e);
 		}
+
+		buildContext.refresh(narSystem);
 	}
 }
