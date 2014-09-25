@@ -113,7 +113,7 @@ public class NarSystemMojo
 			p.println("");
 			p.println("    public static int runUnitTests() {");
 			p.println("	       return new NarSystem().runUnitTestsNative();");
-			p.println("}");
+			p.println("    }");
 			p.println("");
 			p.println("    public native int runUnitTestsNative();");
 			p.println("}");
