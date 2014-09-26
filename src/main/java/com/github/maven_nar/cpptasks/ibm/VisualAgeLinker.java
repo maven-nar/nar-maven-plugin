@@ -20,6 +20,7 @@
 package com.github.maven_nar.cpptasks.ibm;
 import java.util.Vector;
 
+import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
 import com.github.maven_nar.cpptasks.gcc.AbstractLdLinker;
@@ -49,7 +50,7 @@ public final class VisualAgeLinker extends AbstractLdLinker {
         super(command, "-?", extensions, ignoredExtensions, outputPrefix,
                 outputSuffix, false, null);
     }
-    public void addImpliedArgs(boolean debug, LinkType linkType, Vector<String> args) {
+    public void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector<String> args) {
         if (debug) {
             //args.addElement("-g");
         }
