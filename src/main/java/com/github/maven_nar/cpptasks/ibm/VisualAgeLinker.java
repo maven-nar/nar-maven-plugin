@@ -50,6 +50,7 @@ public final class VisualAgeLinker extends AbstractLdLinker {
         super(command, "-?", extensions, ignoredExtensions, outputPrefix,
                 outputSuffix, false, null);
     }
+    @Override
     public void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector<String> args) {
         if (debug) {
             //args.addElement("-g");
@@ -58,6 +59,7 @@ public final class VisualAgeLinker extends AbstractLdLinker {
             args.addElement("-qmkshrobj");
         }
     }
+    @Override
     public Linker getLinker(LinkType type) {
         if (type.isStaticLibrary()) {
             return GccLibrarian.getInstance();
@@ -73,14 +75,17 @@ public final class VisualAgeLinker extends AbstractLdLinker {
      * Initial attempt at extracting version information
      * would lock up.  Using a stock response.
      */
+    @Override
     public String getIdentifier() {
         return "VisualAge linker - unidentified version";
     }
 
+    @Override
     protected String getDynamicLibFlag() {
         return "-bdynamic";
     }
 
+    @Override
     protected String getStaticLibFlag() {
         return "-bstatic";
     }
