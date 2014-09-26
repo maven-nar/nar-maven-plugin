@@ -124,6 +124,8 @@ public class NarSystemMojo
 			throw new MojoExecutionException("Could not write '" + narSystemName + "'", e);
 		}
 
-		buildContext.refresh(narSystem);
+		if (buildContext != null) {
+			buildContext.refresh(narSystem);
+		}
 	}
 }
