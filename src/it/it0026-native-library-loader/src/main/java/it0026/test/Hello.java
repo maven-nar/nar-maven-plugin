@@ -26,4 +26,8 @@ public class Hello {
 	}
 
 	public native static byte test();
+
+	public static void main(final String... args) {
+		System.exit((int) test());
+	}
 }

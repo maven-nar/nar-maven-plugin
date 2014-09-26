@@ -463,6 +463,7 @@
               <localRepositoryPath>${project.build.directory}/it-repo</localRepositoryPath>
               <postBuildHookScript>postbuild</postBuildHookScript>
               <preBuildHookScript>setup</preBuildHookScript>
+              <postBuildHookScript>verify</postBuildHookScript>
               <settingsFile>src/it/settings.xml</settingsFile>
               <goals>
                 <goal>clean</goal>
