@@ -31,6 +31,7 @@ import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.Project;
 
 /**
@@ -43,33 +44,26 @@ public class Lib
 
 	/**
      * Name of the library, or a dependency groupId:artifactId if this library contains sublibraries
-	 * 
-	 * @parameter default-value=""
-	 * @required
 	 */
+    @Parameter(required = true)
 	private String name;
 
 	/**
 	 * Type of linking for this library
-	 * 
-	 * @parameter default-value="shared"
-	 * @required
 	 */
+    @Parameter(defaultValue = "shared", required = true)
 	private String type = Library.SHARED;
 
 	/**
 	 * Location for this library
-	 * 
-	 * @parameter default-value=""
-	 * @required
 	 */
+    @Parameter(required = true)
 	private File directory;
 
 	/**
 	 * Sub libraries for this library
-	 * 
-	 * @parameter default-value=""
 	 */
+    @Parameter
 	private List/* <Lib> */libs;
 
     public final void addLibSet( AbstractDependencyMojo mojo, LinkerDef linker, Project antProject )

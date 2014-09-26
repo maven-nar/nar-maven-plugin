@@ -27,6 +27,8 @@ import java.util.Iterator;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.sonatype.plexus.build.incremental.BuildContext;
 
 /**
@@ -35,12 +37,12 @@ import org.sonatype.plexus.build.incremental.BuildContext;
  * allow the maven-swig-plugin (which runs in generate-sources) to configure the
  * nar plugin and to let it generate a proper system file.
  * 
- * @goal nar-system-generate
- * @phase generate-resources
- * @requiresProject
  * @author Mark Donszelmann
  */
-public class NarSystemMojo extends AbstractNarMojo {
+@Mojo(name = "nar-system-generate", defaultPhase = LifecyclePhase.GENERATE_RESOURCES, requiresProject = true)
+public class NarSystemMojo
+    extends AbstractNarMojo
+{
 
 	/** @component */
 	private BuildContext buildContext;

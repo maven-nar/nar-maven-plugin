@@ -1697,7 +1697,7 @@ public class CCTask extends Task {
      * 
      * ( CUtil.runCommand() will honor this... )
      * 
-     * @parameter commandLogLevel  The log-level for command-logs, default is MSG_VERBOSE.
+     * @param commandLogLevel  The log-level for command-logs, default is MSG_VERBOSE.
      */
     public void setCommandLogLevel( int commandLogLevel ) {
 	this.commandLogLevel = commandLogLevel;

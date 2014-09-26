@@ -31,6 +31,7 @@ import com.github.maven_nar.cpptasks.types.LinkerArgument;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Parameter;
 
 /**
  * Java specifications for NAR
@@ -42,41 +43,34 @@ public class Java
 
     /**
      * Add Java includes to includepath
-     * 
-     * @parameter default-value="false"
-     * @required
      */
+    @Parameter(required = true)
     private boolean include = false;
 
     /**
      * Java Include Paths, relative to a derived ${java.home}. Defaults to: "${java.home}/include" and
      * "${java.home}/include/<i>os-specific</i>".
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private List includePaths;
 
     /**
      * Add Java Runtime to linker
-     * 
-     * @parameter default-value="false"
-     * @required
      */
+    @Parameter(required = true)
     private boolean link = false;
 
     /**
      * Relative path from derived ${java.home} to the java runtime to link with Defaults to Architecture-OS-Linker
      * specific value. FIXME table missing
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private String runtimeDirectory;
 
     /**
      * Name of the runtime
-     * 
-     * @parameter default-value="jvm"
      */
+    @Parameter(defaultValue = "jvm")
     private String runtime = "jvm";
 
     private AbstractCompileMojo mojo;

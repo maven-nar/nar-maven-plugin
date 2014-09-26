@@ -41,6 +41,10 @@ import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.codehaus.plexus.util.FileUtils;
@@ -49,23 +53,17 @@ import org.codehaus.plexus.util.StringUtils;
 /**
  * Compiles native source files.
  * 
- * @goal nar-compile
- * @phase compile
  * @requiresSession
- * @requiresProject
- * @requiresDependencyResolution compile
  * @author Mark Donszelmann
  */
+@Mojo(name = "nar-compile", defaultPhase = LifecyclePhase.COMPILE, requiresProject = true, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class NarCompileMojo
     extends AbstractCompileMojo
 {
     /**
      * The current build session instance.
-     * 
-     * @parameter default-value="${session}"
-     * @required
-     * @readonly
      */
+    @Component
     protected MavenSession session;
 
     @Override

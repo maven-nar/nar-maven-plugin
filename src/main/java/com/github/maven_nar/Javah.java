@@ -34,6 +34,7 @@ import org.apache.bcel.classfile.Method;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.toolchain.Toolchain;
 import org.apache.maven.toolchain.ToolchainManager;
 import org.codehaus.plexus.compiler.util.scan.InclusionScanException;
@@ -54,82 +55,68 @@ public class Javah
 
     /**
      * Javah command to run.
-     * 
-     * @parameter default-value="javah"
      */
+    @Parameter(defaultValue = "javah")
     private String name = "javah";
 
     /**
      * Add boot class paths. By default none.
-     * 
-     * @parameter
      */
+    @Parameter
     private List/* <File> */bootClassPaths = new ArrayList();
 
     /**
      * Add class paths. By default the classDirectory directory is included and all dependent classes.
-     * 
-     * @parameter
      */
+    @Parameter
     private List/* <File> */classPaths = new ArrayList();
 
     /**
      * The target directory into which to generate the output.
-     * 
-     * @parameter default-value="${project.build.directory}/nar/javah-include"
-     * @required
      */
+    @Parameter(defaultValue = "${project.build.directory}/nar/javah-include", required = true)
     private File jniDirectory;
 
     /**
      * The class directory to scan for class files with native interfaces.
-     * 
-     * @parameter default-value="${project.build.directory}/classes"
-     * @required
      */
+    @Parameter(defaultValue = "${project.build.directory}/classes", required = true)
     private File classDirectory;
 
     /**
      * The set of files/patterns to include Defaults to "**\/*.class"
-     * 
-     * @parameter
      */
+    @Parameter
     private Set includes = new HashSet();
 
     /**
      * A list of exclusion filters.
-     * 
-     * @parameter
      */
+    @Parameter
     private Set excludes = new HashSet();
 
     /**
      * A list of class names e.g. from java.sql.* that are also passed to javah.
-     *
-     * @parameter
      */
+    @Parameter
     private Set extraClasses = new HashSet();
 
     /**
      * The granularity in milliseconds of the last modification date for testing whether a source needs recompilation
-     * 
-     * @parameter default-value="0"
-     * @required
      */
+    @Parameter(defaultValue = "0", required = true)
     private int staleMillis = 0;
 
     /**
      * The directory to store the timestampfile for the processed aid files. Defaults to jniDirectory.
-     * 
-     * @parameter
      */
+    @Parameter
     private File timestampDirectory;
 
     /**
      * The timestampfile for the processed class files. Defaults to name of javah.
-     * 
-     * @parameter
      */
+    @Parameter
     private File timestampFile;
 
     private AbstractNarMojo mojo;

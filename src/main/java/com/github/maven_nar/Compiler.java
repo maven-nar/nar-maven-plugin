@@ -40,6 +40,7 @@ import com.github.maven_nar.IncludePath;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -54,208 +55,168 @@ public abstract class Compiler
     /**
      * The name of the compiler. Some choices are: "msvc", "g++", "gcc", "CC", "cc", "icc", "icpc", ... Default is
      * Architecture-OS-Linker specific: FIXME: table missing
-     * 
-     * @parameter default-value=""
+
      */
+    @Parameter
     private String name;
 
     /**
      * Path location of the compile tool
-     *
-     * @parameter default-value=""
      */
+    @Parameter
     private String toolPath;
 
     /**
      * Source directory for native files
-     * 
-     * @parameter default-value="${basedir}/src/main"
-     * @required
      */
+    @Parameter(defaultValue = "${basedir}/src/main", required = true)
     private File sourceDirectory;
 
     /**
      * Source directory for native test files
-     * 
-     * @parameter default-value="${basedir}/src/test"
-     * @required
      */
+    @Parameter(defaultValue = "${basedir}/src/test", required = true)
     private File testSourceDirectory;
 
     /**
      * Include patterns for sources
-     * 
-     * @parameter default-value=""
-     * @required
      */
+    @Parameter(required = true)
     private Set<String> includes = new HashSet<String>();
 
     /**
      * Exclude patterns for sources
-     * 
-     * @parameter default-value=""
-     * @required
      */
+    @Parameter(required = true)
     private Set<String> excludes = new HashSet<String>();
 
     /**
      * Include patterns for test sources
-     * 
-     * @parameter default-value=""
-     * @required
      */
+    @Parameter(required = true)
     private Set<String> testIncludes = new HashSet<String>();
 
     /**
      * Exclude patterns for test sources
-     * 
-     * @parameter default-value=""
-     * @required
      */
+    @Parameter(required = true)
     private Set<String> testExcludes = new HashSet<String>();
 
     /**
      * Compile with debug information.
-     * 
-     * @parameter default-value="false"
-     * @required
      */
+    @Parameter(required = true)
     private boolean debug = false;
 
     /**
      * Enables generation of exception handling code.
-     * 
-     * @parameter default-value="true"
-     * @required
      */
+    @Parameter(defaultValue = "true", required = true)
     private boolean exceptions = true;
 
     /**
      * Enables run-time type information.
-     * 
-     * @parameter default-value="true"
-     * @required
      */
+    @Parameter(defaultValue = "true", required = true)
     private boolean rtti = true;
 
     /**
      * Sets optimization. Possible choices are: "none", "size", "minimal", "speed", "full", "aggressive", "extreme",
      * "unsafe".
-     * 
-     * @parameter default-value="none"
-     * @required
      */
+    @Parameter(defaultValue = "none", required = true)
     private String optimize = "none";
 
     /**
      * Enables or disables generation of multi-threaded code. Default value: false, except on Windows.
-     * 
-     * @parameter default-value="false"
-     * @required
      */
+    @Parameter(required = true)
     private boolean multiThreaded = false;
 
     /**
      * Defines
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private List<String> defines;
 
     /**
      * Defines for the compiler as a comma separated list of name[=value] pairs, where the value is optional. Will work
      * in combination with &lt;defines&gt;.
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private String defineSet;
 
     /**
      * Clears default defines
-     * 
-     * @parameter default-value="false"
-     * @required
      */
+    @Parameter(required = true)
     private boolean clearDefaultDefines;
 
     /**
      * Undefines
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private List<String> undefines;
 
     /**
      * Undefines for the compiler as a comma separated list of name[=value] pairs where the value is optional. Will work
      * in combination with &lt;undefines&gt;.
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private String undefineSet;
 
     /**
      * Clears default undefines
-     * 
-     * @parameter default-value="false"
-     * @required
      */
+    @Parameter
     private boolean clearDefaultUndefines;
 
     /**
      * Include Paths. Defaults to "${sourceDirectory}/include"
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private List<IncludePath> includePaths;
 
     /**
      * Test Include Paths. Defaults to "${testSourceDirectory}/include"
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private List<IncludePath> testIncludePaths;
 
     /**
      * System Include Paths, which are added at the end of all include paths
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private List<String> systemIncludePaths;
 
     /**
      * Additional options for the C++ compiler Defaults to Architecture-OS-Linker specific values. FIXME table missing
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private List<String> options;
 
     /**
      * Additional options for the compiler when running in the nar-testCompile phase.
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private List<String> testOptions;
 
     /**
      * Options for the compiler as a whitespace separated list. Will work in combination with &lt;options&gt;.
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private String optionSet;
 
     /**
      * Clears default options
-     * 
-     * @parameter default-value="false"
-     * @required
      */
+    @Parameter(required = true)
     private boolean clearDefaultOptions;
 
     /**
      * Comma separated list of filenames to compile in order
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private String compileOrder;
 
     private AbstractCompileMojo mojo;

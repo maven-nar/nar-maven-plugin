@@ -39,6 +39,7 @@ import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.Project;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -55,92 +56,78 @@ public class Linker
     /**
      * The Linker Some choices are: "msvc", "g++", "CC", "icpc", ... Default is Architecture-OS-Linker specific: FIXME:
      * table missing
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private String name;
 
     /**
      * Path location of the linker tool
-     *
-     * @parameter default-value=""
      */
+    @Parameter
     private String toolPath;
 
     /**
      * Enables or disables incremental linking.
-     * 
-     * @parameter default-value="false"
-     * @required
      */
+    @Parameter(required = true)
     private boolean incremental = false;
 
     /**
      * Enables or disables the production of a map file.
-     * 
-     * @parameter default-value="false"
-     * @required
      */
+    @Parameter(required = true)
     private boolean map = false;
 
     /**
      * Options for the linker Defaults to Architecture-OS-Linker specific values. FIXME table missing
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private List options;
 
     /**
      * Additional options for the linker when running in the nar-testCompile phase.
      * 
-     * @parameter default-value=""
      */
+    @Parameter
     private List testOptions;
 
     /**
      * Options for the linker as a whitespace separated list. Defaults to Architecture-OS-Linker specific values. Will
      * work in combination with &lt;options&gt;.
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private String optionSet;
 
     /**
      * Clears default options
-     * 
-     * @parameter default-value="false"
-     * @required
      */
+    @Parameter(required = true)
     private boolean clearDefaultOptions;
 
     /**
      * Adds libraries to the linker.
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private List/* <Lib> */libs;
 
     /**
      * Adds libraries to the linker. Will work in combination with &lt;libs&gt;. The format is comma separated,
      * colon-delimited values (name:type:dir), like "myLib:shared:/home/me/libs/, otherLib:static:/some/path".
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private String libSet;
 
     /**
      * Adds system libraries to the linker.
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private List/* <SysLib> */sysLibs;
 
     /**
      * Adds system libraries to the linker. Will work in combination with &lt;sysLibs&gt;. The format is comma
      * separated, colon-delimited values (name:type), like "dl:shared, pthread:shared".
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private String sysLibSet;
 
     /**
@@ -151,9 +138,8 @@ public class Linker
      * <p>
      * Example: &lt;narDependencyLibOrder&gt;someGroup:myProduct, other.group:productB&lt;narDependencyLibOrder&gt;
      * </p>
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private String narDependencyLibOrder;
 
     private final Log log;

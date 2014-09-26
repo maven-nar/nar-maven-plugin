@@ -21,6 +21,9 @@ package com.github.maven_nar;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
@@ -29,20 +32,17 @@ import java.util.List;
 
 /**
  * Validates the configuration of the NAR project (aol and pom)
- * 
- * @goal nar-validate
- * @phase validate
+ *
  * @author Mark Donszelmann
  */
+@Mojo(name = "nar-validate", defaultPhase = LifecyclePhase.VALIDATE)
 public class NarValidateMojo
     extends AbstractCompileMojo
 {
     /**
      * Source directory for GNU style project
-     * 
-     * @parameter default-value="${basedir}/src/gnu"
-     * @required
      */
+    @Parameter(defaultValue = "${basedir}/src/gnu", required = true)
     private File gnuSourceDirectory;
     
 	@Override

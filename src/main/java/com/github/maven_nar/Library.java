@@ -22,6 +22,8 @@ package com.github.maven_nar;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.maven.plugins.annotations.Parameter;
+
 /**
  * Sets up a library to create
  * 
@@ -46,75 +48,63 @@ public class Library
     /**
      * Type of the library to generate. Possible choices are: "plugin", "shared", "static", "jni" or "executable".
      * Defaults to "shared".
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private String type = SHARED;
     
     /**
      * Type of subsystem to generate: "gui", "console", "other". Defaults to "console".
-     *
-     * @parameter default-value=""
      */
+    @Parameter
     private String subSystem = "console";
     
     /**
      * Link with stdcpp if necessary Defaults to true.
-     * 
-     * @parameter default-value=""
      */
+    @Parameter(defaultValue = "true")
     private boolean linkCPP = true;
 
     /**
      * Link with fortran runtime if necessary Defaults to false.
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private boolean linkFortran = false;
 
     /**
      * Link with fortran startup, so that the gcc linker can find the "main" of fortran. Defaults to false.
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private boolean linkFortranMain = false;
 
     /**
      * If specified will create the NarSystem class with methods to load a JNI library.
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private String narSystemPackage = null;
 
     /**
      * Name of the NarSystem class
-     * 
-     * @parameter default-value="NarSystem"
-     * @required
      */
+    @Parameter(defaultValue = "NarSystem", required = true)
     private String narSystemName = "NarSystem";
 
     /**
      * The target directory into which to generate the output.
-     * 
-     * @parameter default-value="${project.build.dir}/nar/nar-generated"
-     * @required
      */
+    @Parameter(defaultValue = "${project.build.dir}/nar/nar-generated", required = true)
     private String narSystemDirectory = "nar-generated";
 
     /**
      * When true and if type is "executable" run this executable. Defaults to false;
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private boolean run = false;
 
     /**
      * Arguments to be used for running this executable. Defaults to empty list. This option is only used if run=true
      * and type=executable.
-     * 
-     * @parameter default-value=""
      */
+    @Parameter
     private List/* <String> */args = new ArrayList();
 
     public final String getType()
