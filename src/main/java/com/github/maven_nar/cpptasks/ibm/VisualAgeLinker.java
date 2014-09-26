@@ -78,11 +78,11 @@ public final class VisualAgeLinker extends AbstractLdLinker {
     }
 
     protected String getDynamicLibFlag() {
-        return "-bdynamic";  
+        return "-bdynamic";
     }
 
     protected String getStaticLibFlag() {
         return "-bstatic";
     }
-    
+
 }
