@@ -20,6 +20,7 @@
 package com.github.maven_nar.cpptasks.ibm;
 import java.util.Vector;
 
+import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
 import com.github.maven_nar.cpptasks.gcc.AbstractLdLinker;
@@ -49,7 +50,8 @@ public final class VisualAgeLinker extends AbstractLdLinker {
         super(command, "-?", extensions, ignoredExtensions, outputPrefix,
                 outputSuffix, false, null);
     }
-    public void addImpliedArgs(boolean debug, LinkType linkType, Vector<String> args) {
+    @Override
+    public void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector<String> args) {
         if (debug) {
             //args.addElement("-g");
         }
@@ -57,6 +59,7 @@ public final class VisualAgeLinker extends AbstractLdLinker {
             args.addElement("-qmkshrobj");
         }
     }
+    @Override
     public Linker getLinker(LinkType type) {
         if (type.isStaticLibrary()) {
             return GccLibrarian.getInstance();
@@ -72,16 +75,19 @@ public final class VisualAgeLinker extends AbstractLdLinker {
      * Initial attempt at extracting version information
      * would lock up.  Using a stock response.
      */
+    @Override
     public String getIdentifier() {
         return "VisualAge linker - unidentified version";
     }
 
+    @Override
     protected String getDynamicLibFlag() {
-        return "-bdynamic";  
+        return "-bdynamic";
     }
 
+    @Override
     protected String getStaticLibFlag() {
         return "-bstatic";
     }
-    
+
 }

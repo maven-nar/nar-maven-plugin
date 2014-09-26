@@ -251,6 +251,16 @@ public class Linker
         		version = m.group( 0 ); 
         	}
         }
+        else if ( name.equals( "xlC") )
+        {
+                NarUtil.runCommand("/usr/vacpp/bin/xlC", new String[] { "-qversion" }, null, null, out, err, dbg, log);
+                Pattern p = Pattern.compile( "\\d+\\.\\d+" );
+                Matcher m = p.matcher( out.toString() );
+                if ( m.find() )
+                {
+                        version = m.group( 0 );
+                }
+        }
         else
         {
             throw new MojoFailureException( "Cannot find version number for linker '" + name + "'" );
