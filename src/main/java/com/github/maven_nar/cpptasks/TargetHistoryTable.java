@@ -22,6 +22,7 @@ package com.github.maven_nar.cpptasks;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
@@ -33,7 +34,6 @@ import java.util.Vector;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
 
 import org.apache.tools.ant.BuildException;
 import org.xml.sax.Attributes;
@@ -235,13 +235,16 @@ public final class TargetHistoryTable {
 
 
             try {
-                historyFile = File.createTempFile("history.xml", Long.toString(System.nanoTime()), outputDir);
-                FileOutputStream outputStream = new FileOutputStream(
-                        historyFile);
-                byte[] historyElement = new byte[]{0x3C, 0x68, 0x69, 0x73,
-                        0x74, 0x6F, 0x72, 0x79, 0x2F, 0x3E};
-                outputStream.write(historyElement);
-                outputStream.close();
+                final File temp = File.createTempFile("history.xml", Long.toString(System.nanoTime()), outputDir);
+                FileWriter writer = new FileWriter(temp);
+                try {
+                    writer.write("<history/>");
+                } finally {
+                    writer.close();
+                }
+                if (!temp.renameTo(historyFile)) {
+                    throw new IOException("Could not rename " + temp + " to " + historyFile);
+                }
             } catch (IOException ex) {
                 throw new BuildException("Can't create history file", ex);
             }
