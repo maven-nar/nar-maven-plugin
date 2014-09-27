@@ -34,7 +34,7 @@ NAR Configuration
   <skip/>
   <skipNar/>
   <skipNarTest/>
-  <arch/>
+  <architecture/>
   <os/>
   <javaHome/>
   <aol/>
@@ -193,7 +193,7 @@ NAR Configuration
 +--
 
 
-* {arch}
+* {architecture}
 
 	The Architecture for which we produce the native library. Examples are
 i386, x86, ppc, ppc64, etc... Default is the system property os.arch.
@@ -211,7 +211,7 @@ property java.home, corrected for MacOSX.
 
 * {aol}
 
-	The Architecture-OS-Linker qualifier. Default is composed from the arch,
+	The Architecture-OS-Linker qualifier. Default is composed from the architecture,
 os and linker.name value.
 
 * {resourceDirectory}
