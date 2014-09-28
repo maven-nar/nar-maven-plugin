@@ -1,0 +1,7 @@
+body.topBarEnabled {
+  padding-top: 80px;
+}
+
+div#bannerLeft, div#bannerRight {
+	display: none;
+}
