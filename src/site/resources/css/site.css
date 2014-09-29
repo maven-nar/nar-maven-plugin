@@ -1,0 +1,9 @@
+body.topBarEnabled {
+  padding-top: 80px;
+}
+
+div#topbar ul.nav li:nth-child(n+5), ul.breadcrumb,
+div.sidebar-nav ul.nav li:nth-last-child(-n+20),
+div#bannerLeft, div#bannerRight {
+	display: none;
+}

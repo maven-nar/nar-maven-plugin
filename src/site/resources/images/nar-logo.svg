@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="nar-logo"
+   version="1.1"
+   inkscape:version="0.48.2 r9819"
+   width="460"
+   height="460"
+   sodipodi:docname="nar-logo.svg">
+  <defs
+     id="nar-defs">
+    <linearGradient
+       id="baseGradient">
+      <stop
+         id="stop1"
+         offset="0"
+         style="stop-color:#c0c0c0;stop-opacity:1;" />
+      <stop
+         id="stop2"
+         offset="0.175"
+         style="stop-color:#606060;stop-opacity:1" />
+      <stop
+         id="stop3"
+         offset="0.86500001"
+         style="stop-color:#606060;stop-opacity:1" />
+      <stop
+         id="stop4"
+         offset="1"
+         style="stop-color:#909090;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="barGradient"
+       inkscape:collect="always"
+       xlink:href="#baseGradient"
+       x1="0"
+       y1="142"
+       x2="0"
+       y2="151"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="bar2Gradient"
+       inkscape:collect="always"
+       xlink:href="#baseGradient"
+       x1="0"
+       y1="142"
+       x2="0"
+       y2="151"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-460,-478)" />
+    <filter
+       inkscape:collect="always"
+       id="blur-filter">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.5"
+         id="gaussian-blue" />
+    </filter>
+  </defs>
+  <rect
+     ry="0"
+     y="142"
+     x="0"
+     height="9"
+     width="460"
+     id="bar"
+     style="fill:url(#barGradient);fill-opacity:1;fill-rule:evenodd;stroke:none" />
+  <rect
+     style="fill:url(#bar2Gradient);fill-opacity:1;fill-rule:evenodd;stroke:none"
+     id="bar2"
+     width="460"
+     height="9"
+     x="-460"
+     y="-336"
+     ry="0"
+     transform="scale(-1,-1)" />
+  <g
+     id="NAR">
+    <path
+       sodipodi:nodetypes="ccccccccccc"
+       inkscape:connector-curvature="0"
+       id="N"
+       d="m 0,165 43,0 54,102 0,-102 36,0 0,149 -42,0 -54,-102 0,102 -37,0 z"
+       style="fill:#000000;fill-opacity:1;filter:url(#blur-filter)" />
+    <path
+       inkscape:connector-curvature="0"
+       id="A"
+       d="m 207,166 -54,148 38,0 9,-27 60,0 9,27 38,0 -54,-148 -46,0 z m 23,36 20,57 -40,0 20,-57 z"
+       style="fill:#000000;fill-opacity:1;filter:url(#blur-filter)" />
+    <path
+       id="R"
+       d="m 327,165 0,150 39,0 0,-56 15,0 c 4,0 10,3 13,6 3,4 6,9 6,9 l 20,41 41,0 c 0,0 -26,-53 -30,-58 -4,-5 -8,-12 -19,-12 17,-6 29,-15 29,-37 1,-23 -9,-43 -50,-43 l -64,0 z m 39,28 22,0 c 10,0 15,8 15,19 0,11 -6,18 -15,18 l -22,0 0,-37 z"
+       style="opacity:1;fill:#000000;fill-opacity:1;filter:url(#blur-filter)"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
