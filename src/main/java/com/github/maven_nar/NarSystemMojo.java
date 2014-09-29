@@ -208,7 +208,7 @@ public class NarSystemMojo
 	        builder.append(delimiter);
 	        delimiter = " else ";
 
-	        builder.append("if (ao.equals(\"").append(entry.getKey()).append("\")) {\n");
+	        builder.append("if (ao.startsWith(\"").append(entry.getKey()).append("\")) {\n");
 		    builder.append("            return new String[] {\n");
 		    String delimiter2 = "              ";
 		    for (final String aol : entry.getValue()) {
