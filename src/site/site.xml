@@ -79,10 +79,6 @@
       <item name="Git Repository" href="source-repository.html"/>
     </menu>
 
-    <menu name="Other Information">
-      <item name="Maven and other languages" href="http://docs.codehaus.org/display/MAVEN/Support+for+other+languages"/>
-    </menu>
-
     <menu ref="reports"/>
   </body>
 </project>
