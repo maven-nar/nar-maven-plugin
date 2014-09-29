@@ -1,11 +1,18 @@
-.DS_Store
-.classpath
-.project
-.settings
+# Maven
+/target/
+
+# Eclipse
+/.classpath
+/.project
+/.settings
+
+# joe & vi
 *.bak
 .*.swp
-build.log
-bin
-target
-.idea/
+
+# IntelliJ
+/.idea/
 *.iml
+
+# MacOSX
+.DS_Store
