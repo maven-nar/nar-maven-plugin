@@ -103,6 +103,9 @@ Examples
 	
 	[it0025-jar-dep-jni] A JAR project which depends on "jni".
 
+	[it0026-native-lib-loader] A demonstration of how to unpack native libraries at runtime from ".nar" files present
+	on the class path, using the `native-lib-loader` library.
+
 	[] 
 
 	These examples are now all run as integration tests by running maven on the nar-maven-plugin from its top-level directory with the profile "run-its".
