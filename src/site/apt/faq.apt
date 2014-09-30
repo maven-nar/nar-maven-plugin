@@ -64,6 +64,18 @@ public class ... {
 }
 +--
 
+	[How do I use the NAR plugin to create a JNI type library for multiple platforms (Windows, MacOSX and Linux)?]
+	First of all, you have to generate the platform-dependent attached artifacts from each platform, which will be
+called ".nar" files for convenience from here. Jenkins is highly recommended in this case.
+Secondly, {{{https://github.com/scijava/native-lib-loader}native-lib-loader}} should be specified as a
+<dependency> in your pom.xml file. Additionally, you need to specify
+{{{http://maven-nar.github.io/configuration.html#narSystemPackage}<narSystemPackage>}} which will be used to load
+the native libraries. In this case, NAR plugin going to use native-lib-loader instead of "System.load()" function.
+Because the native-lib-loader will be used to unpack and load the native libraries from the given ".nar" files.
+This requires the ".nar" files to be in the class path so that native-lib-loader can find
+the appropriate native library.
+
+
 
 
 	
