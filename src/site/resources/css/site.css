@@ -2,6 +2,11 @@ body.topBarEnabled {
   padding-top: 80px;
 }
 
+body.topBarEnabled div.row-fluid a[name] {
+	padding-top: 80px;
+	margin-top: -80px;
+}
+
 div#topbar ul.nav li:nth-child(n+5), ul.breadcrumb,
 div.sidebar-nav ul.nav li:nth-last-child(-n+20),
 div#bannerLeft, div#bannerRight {
