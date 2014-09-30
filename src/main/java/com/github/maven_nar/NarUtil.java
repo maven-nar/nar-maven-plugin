@@ -550,7 +550,7 @@ public final class NarUtil
         char separator = ' ';
         if ( os.equals( OS.WINDOWS ) )
         {
-            pathName = "Path";
+            pathName = "PATH";
             separator = ';';
         }
         else if ( os.equals( OS.MACOSX ) )
