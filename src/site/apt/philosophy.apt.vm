@@ -72,7 +72,7 @@ for both people and the plugins that need to work with them.
 ** {A single Native project produces a single output}
 		
 	Maven produces one primary output (jar, war, ...) per project. For the NAR Plugin 
-the produced nar files are secondary outputs or attached artifact to the 
+the produced nar files are secondary outputs or artifacts attached to the 
 primary output. There are several reasons why the native artifacts are not 
 primary outputs:
 
@@ -104,7 +104,7 @@ primary outputs:
 		
 ** {Standard naming conventions}
 
-	When maven produces a jar file its normally named 
+	When maven produces a jar file it's normally named 
 <<<artifactId-version.jar>>>. The NAR Plugin follows this convention for its
 attached artifacts:
 
