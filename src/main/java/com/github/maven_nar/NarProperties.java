@@ -21,10 +21,15 @@ package com.github.maven_nar;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.LinkedHashSet;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
@@ -115,5 +120,21 @@ public class NarProperties {
 	
 	public String getProperty(String key) {
 		return properties.getProperty(key);
+	}
+
+	public Collection<String> getKnownAOLs() {
+		final Collection<String> result = new LinkedHashSet<String>();
+		final Pattern pattern = Pattern.compile("([^.]+)\\.([^.]+)\\.([^.]+).*");
+		final Enumeration<?> e = properties.propertyNames();
+		while (e.hasMoreElements()) {
+			final Object key = e.nextElement();
+			if (key instanceof String) {
+				final Matcher matcher = pattern.matcher((String) key);
+				if (matcher.matches()) {
+					result.add(matcher.group(1) + "-" + matcher.group(2) + "-" + matcher.group(3));
+				}
+			}
+		}
+		return result;
 	}
 }

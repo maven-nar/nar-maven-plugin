@@ -138,6 +138,55 @@ The example also shows how to configure the
 </project>
 +--
 
+* Create a JNI library that is automatically unpacked from the .nar file using the native-lib-loader project
+
+	The below example shows how to use {{{https://github.com/scijava/native-lib-loader}native-lib-loader}} in the NAR
+plugin. When <narSystemPackage> detects <native-lib-loader> in <dependencies>, <narSystemPackage> provides
+the <native-lib-loader> interface to load the native libraries.
+
++--
+<project>
+  ...
+  <packaging>nar</packaging>
+  ...
+  <dependencies>
+    <dependency>
+      <groupId>org.scijava</groupId>
+      <artifactId>native-lib-loader</artifactId>
+      <version>2.0.2</version>
+    </dependency>
+  </dependencies>
+  ...
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>nar-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <cpp>
+            <exceptions>false</exceptions>
+          </cpp>
+          <libraries>
+            <library>
+              <type>jni</type>
+<!--
+  When generating the NarSystem class, the NAR plugin detects the presence of
+  the native-lib-loader dependency and makes full use of it to unpack and load the
+  native library.
+-->
+              <narSystemPackage>com.mycompany.mypackage</narSystemPackage>
+              <linkCPP>false</linkCPP>
+            </library>
+          </libraries>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
++--
+
 * Assemble libraries made on different platforms for distribution
 
 	This example shows how to download, unpack and assemble

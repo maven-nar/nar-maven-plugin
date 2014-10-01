@@ -273,7 +273,11 @@ the command line for compatible compilers/linkers. Default is false.
 	[narSystemPackage] If specified a NarSystem class will be generated in this package and 
 	added to the main jar artifact. The NarSystem class contains the following methods:
 	
-	* loadLibrary() - which will load the <artifact>-<version> JNI library. 
+	* loadLibrary() - which will load the <artifact>-<version> JNI library. Additionally, native-lib-loader
+	is supported when {{{https://github.com/scijava/native-lib-loader}native-lib-loader}} is specified in <dependency>.
+	In that case, the native-lib-loader will expect the platform-dependent artifact (.nar files) to be present on the
+	class path and unpack the library from there before loading it. This method explicitly supports multi-platform
+	distributions, i.e. it handles the case where there are multiple platform-dependent artifacts on the class path.
 
 	[narSystemName] Specifies the NarSystem class. Defaults to NarSystem.
 
