@@ -96,17 +96,17 @@ combination, see {{{./aol.html}AOL Properties}}.
 and the "Architecture" of the machine. Both can be overridden by setting <<<os>>>
 and <<<arch>>> in the {{{./configuration.html}configuration}}.
                 
-	The name of the linker is looked up in a architecture-os specific way, but can be overridden
+	The name of the linker is looked up in an architecture-os specific way, but can be overridden
 by setting <<<linker.name>>> (this means the subtag \<name\> of the \<linker\> tag in the
 configuration section). Now that the linker name is known
 all other properties are looked up with a prefix of <<<[arch.[os.[linker.]]]>>> from the AOL Properties
 file, but can be overridden in the configuration section (which can be made AOL specific by
-putting it inside a profile.
+putting it inside a profile).
  
 * {nar-validate}
                 
     The NAR plugin makes sure the linker name can be found and that at least one compiler exists
-for this linker. It further check the version number of the linker to see if the linker is actually
+for this linker. It further checks the version number of the linker to see if the linker is actually
 found on the path.               
    
 * {nar-download}
@@ -120,23 +120,23 @@ This goal will download any further necessary nar files into the local repositor
 
 * {nar-unpack}
 
-	Since a nar file is of no use to any native compilation process the nar-unpack goal unpacks the nar into
+	Since a nar file is of no use to any native compilation process, the nar-unpack goal unpacks the nar into
 the "nar/dependencies" subdirectory of the target directory.
         
 * {nar-gnu-configure} 
 
-    If you store files in the gnuSourceDirectory (src/gnu) the NAR plugin will try to run autogen and configure
-over them with a target set to gnuTargetDirectory. This process can be inhibited by setting gnuAutogenSkip and or 
-gnuConfigureSkip and normally does not take place on Windows, unless gnuUseOnWindows is set. The generated and configured
-files are all stored in gnuTargetDirectory and will be handled in subsequent NAR goals.    
+    If you store files in the <gnuSourceDirectory> (src/gnu) the NAR plugin will try to run autogen and configure
+over them with a target set to <gnuTargetDirectory>. This process can be disabled by setting <gnuAutogenSkip> and or 
+<gnuConfigureSkip>. On Windows, this process will only run if <gnuUseOnWindows> is set. The generated and configured
+files are all stored in <gnuTargetDirectory> and will be handled in subsequent NAR goals.    
         
 * {nar-system-generate}
 
     This goal generates a NarSystem class if necessary. This class contains helper methods for your
 code to handle things at run-time. The static method "loadLibrary()" is currently the only method
-generated and will load your JNI library with name "artifactId-version". This goals only executed
+generated and will load your JNI library with name "artifactId-version". This goal is only executed
 if you produce a JNI library and you specify a <narSystemPackage> as subtag of <library>. The NarSystem
-class will then end up in this package.
+class will then be created in this package.
                                             
 * {nar-resources}
 
@@ -147,7 +147,8 @@ with compiled shareable libraries.
   
 * {nar-gnu-resources}
 
-    Copies the resourceIncludeDir (include) from the gunSourceDirectory (src/gnu) into the noarch area inside target.
+    Copies the <resourceIncludeDir> (include) from the <gunSourceDirectory> (src/gnu) into the
+noarch area in the target directory.
                 
 * {nar-javah}
                 
@@ -163,7 +164,7 @@ method.
                 
 * {nar-gnu-make}  
 
-    runs "make" followed by "make install" to put the final files in position for copying to the NAR target areas by the 
+    Runs "make" followed by "make install" to put the final files in position for copying to the NAR target areas by the 
 nar-gnu-process goal.
                 
 * {nar-compile}
@@ -181,7 +182,7 @@ and src/main/fortran, but any file under src/main is searched for.
 	The nar plugin will automatically select the correct compiler (c, c++ or fortran) based on the type of
 source, as specified in the patterns in <<<AOL.c.includes>>>, 
 <<<AOL.cpp.includes>>> and <<<AOL.fortran.includes>>>, where AOL is a dotted qualifier of the architecture,
-os and linker (x86.Windows.msvc for example).
+os and linker (<<<x86.Windows.msvc>>> for example).
 
 	Include paths are added in this order from:
 
@@ -189,7 +190,7 @@ os and linker (x86.Windows.msvc for example).
 
     * the <<<javah.jniDirectory>>>.
 
-    * only if <<<java.include>>> is true or if <<<javah.jniDirectory>>>
+    * if <<<java.include>>> is true or if <<<javah.jniDirectory>>>
     exists we add one of the following, relative to the java home directory:
     
     	* <<<java.includePaths>>> if set,
@@ -241,7 +242,7 @@ and src/test/fortran, but any file under src/test is searched for.
 	The compiler will automatically select the correct compiler (c, c++ or fortran) based on the type of
 sources, as specified in the patterns in <<<AOL.c.includes>>>, 
 <<<AOL.nar.src.includes>>> and <<<AOL.fortran.includes>>>, where AOL is a dotted qualifier of the architecture,
-os and linker (x86.Windows.msvc for example).
+os and linker (<<<x86.Windows.msvc>>> for example).
                 
 	<<TBD If you set maven.nar.includefilesonly to true the compile-tests goal will be 
 skipped.>>
@@ -289,6 +290,6 @@ unpack goal of a dependent artifact upon first usage.
 
 * {deploy}
                 
-	This goal deploys the produced artifacts on a maven (web) server. The jar and nar files only consists
-in their full form on the server and are never unpacked on the server.	
+	This goal deploys the produced artifacts on a maven (web) server. The jar and nar files will always
+be in their packaged form on the server (they will never be unpacked there by maven).
 
