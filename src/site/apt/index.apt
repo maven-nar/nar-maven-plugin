@@ -112,7 +112,7 @@ found on the path.
 * {nar-download}
 
 	Your NAR artifact(s) may be dependent on other nar artifacts. The standard maven dependency 
-declaration in the POM is used to describe such dependencies of type "nar", see {{{./nar-dependencies.html}
+declaration in the POM is used to describe such dependencies of type "nar", see {{{./narDependencies.html}
 nar-dependencies}}. By the time this goal is running maven will have already downloaded 
 all dependent jar and nar files some of which may include a nar.properties file. 
 This property file contains information on what other machine dependent and machine independent nar files to download.
@@ -257,7 +257,7 @@ skipped.>>
 The following jar and nar files are created:
 
     * \<Artifact\>-\<version\>.jar, containing a property file describing the behaviour of the 
-    library and other nar files available. For a description see {{{./nar-dependencies.html}
+    library and other nar files available. For a description see {{{./narDependencies.html}
     nar-dependencies}}. This jar file is renamed to nar when installed or deployed.
     
     * \<Artifact\>-\<version\>-noarch.nar, a compressed jar file containing non machine
