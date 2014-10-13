@@ -55,7 +55,7 @@ public final class TargetMatcher implements FileVisitor {
     }
     public void visit(File parentDir, String filename) throws BuildException {
         File fullPath = new File(parentDir, filename);
-        int hash = Math.abs((parentDir + System.getProperty("file.separator") + filename).hashCode());
+        int hash = Math.abs(fullPath.getPath().hashCode());
         //
         //   see if any processor wants to bid
         //       on this one
