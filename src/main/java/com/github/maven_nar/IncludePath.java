@@ -54,6 +54,9 @@ public class IncludePath {
     public String getPath() {
         return path;
     }
+    public void set(String path) {
+        setPath(path);
+    }
     public void setPath(String path) {
         this.path = path;
         file = new File(path);
