@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,7 +46,7 @@ import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Abstract Compiler class
- * 
+ *
  * @author Mark Donszelmann
  */
 public abstract class Compiler
@@ -55,7 +55,6 @@ public abstract class Compiler
     /**
      * The name of the compiler. Some choices are: "msvc", "g++", "gcc", "CC", "cc", "icc", "icpc", ... Default is
      * Architecture-OS-Linker specific: FIXME: table missing
-
      */
     @Parameter
     private String name;
@@ -349,7 +348,7 @@ public abstract class Compiler
             String defaultIncludes = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "includes" );
             if ( defaultIncludes != null )
             {
-                String[] include = defaultIncludes.split( " " );
+                String[] include = defaultIncludes.split( "[\\s]+" );
                 for ( int i = 0; i < include.length; i++ )
                 {
                     result.add( include[i].trim() );
@@ -382,7 +381,7 @@ public abstract class Compiler
             String defaultExcludes = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "excludes" );
             if ( defaultExcludes != null )
             {
-                String[] exclude = defaultExcludes.split( " " );
+                String[] exclude = defaultExcludes.split( "[\\s]+" );
                 for ( int i = 0; i < exclude.length; i++ )
                 {
                     result.add( exclude[i].trim() );
@@ -423,7 +422,7 @@ public abstract class Compiler
     {
         String name = getName();
         if (name == null) return null;
-        
+
         CompilerDef compiler = new CompilerDef();
         compiler.setProject( mojo.getAntProject() );
         CompilerEnum compilerName = new CompilerEnum();
@@ -461,7 +460,7 @@ public abstract class Compiler
         if ( optionSet != null )
         {
 
-            String[] opts = optionSet.split( "\\s" );
+            String[] opts = optionSet.split( "[\\s]+" );
 
             for ( int i = 0; i < opts.length; i++ )
             {
@@ -479,7 +478,7 @@ public abstract class Compiler
             String optionsProperty = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "options" );
             if ( optionsProperty != null )
             {
-                String[] option = optionsProperty.split( " " );
+                String[] option = optionsProperty.split( "[\\s]+" );
                 for ( int i = 0; i < option.length; i++ )
                 {
                     CompilerArgument arg = new CompilerArgument();
@@ -507,7 +506,7 @@ public abstract class Compiler
         if ( defineSet != null )
         {
 
-            String[] defList = defineSet.split( "," );
+            String[] defList = defineSet.split( ",[\\s]*" );
             DefineSet defSet = new DefineSet();
 
             for ( int i = 0; i < defList.length; i++ )
@@ -554,7 +553,7 @@ public abstract class Compiler
         if ( undefineSet != null )
         {
 
-            String[] undefList = undefineSet.split( "," );
+            String[] undefList = undefineSet.split( ",[\\s]*" );
             DefineSet undefSet = new DefineSet();
 
             for ( int i = 0; i < undefList.length; i++ )
@@ -627,7 +626,7 @@ public abstract class Compiler
             {
                 if ( compileOrder != null )
                 {
-                    compiler.setOrder( Arrays.asList( StringUtils.split( compileOrder, ", " ) ) );
+                    compiler.setOrder( Arrays.asList( compileOrder.split( ",[\\s]*" ) ) );
                 }
 
                 ConditionalFileSet fileSet = new ConditionalFileSet();
