@@ -447,6 +447,22 @@ public abstract class Compiler
         compiler.setOptimize( optimization );
 
         // add options
+        compiler.setClearDefaultOptions(clearDefaultOptions);
+        if ( !clearDefaultOptions )
+        {
+            String optionsProperty = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "options" );
+            if ( optionsProperty != null )
+            {
+                String[] option = optionsProperty.split( "[\\s]+" );
+                for ( int i = 0; i < option.length; i++ )
+                {
+                    CompilerArgument arg = new CompilerArgument();
+                    arg.setValue( option[i] );
+                    compiler.addConfiguredCompilerArg( arg );
+                }
+            }
+        }
+
         if ( options != null )
         {
             for ( Iterator<String> i = options.iterator(); i.hasNext(); )
@@ -472,70 +488,18 @@ public abstract class Compiler
             }
         }
 
-        compiler.setClearDefaultOptions(clearDefaultOptions);
-        if ( !clearDefaultOptions )
-        {
-            String optionsProperty = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "options" );
-            if ( optionsProperty != null )
-            {
-                String[] option = optionsProperty.split( "[\\s]+" );
-                for ( int i = 0; i < option.length; i++ )
-                {
-                    CompilerArgument arg = new CompilerArgument();
-                    arg.setValue( option[i] );
-                    compiler.addConfiguredCompilerArg( arg );
-                }
-            }
-        }
-
-        // add defines
-        if ( defines != null )
-        {
-            DefineSet ds = new DefineSet();
-            for ( Iterator<String> i = defines.iterator(); i.hasNext(); )
-            {
-                DefineArgument define = new DefineArgument();
-                String[] pair = i.next().split( "=", 2 );
-                define.setName( pair[0] );
-                define.setValue( pair.length > 1 ? pair[1] : null );
-                ds.addDefine( define );
-            }
-            compiler.addConfiguredDefineset( ds );
-        }
-
-        if ( defineSet != null )
-        {
-
-            String[] defList = defineSet.split( ",[\\s]*" );
-            DefineSet defSet = new DefineSet();
-
-            for ( int i = 0; i < defList.length; i++ )
-            {
-
-                String[] pair = defList[i].trim().split( "=", 2 );
-                DefineArgument def = new DefineArgument();
-
-                def.setName( pair[0] );
-                def.setValue( pair.length > 1 ? pair[1] : null );
-
-                defSet.addDefine( def );
-            }
-
-            compiler.addConfiguredDefineset( defSet );
-        }
-
-        if ( !clearDefaultDefines )
-        {
-            DefineSet ds = new DefineSet();
-            String defaultDefines = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "defines" );
-            if ( defaultDefines != null )
-            {
-                ds.setDefine( new CUtil.StringArrayBuilder( defaultDefines ) );
-            }
-            compiler.addConfiguredDefineset( ds );
-        }
-
         // add undefines
+        if ( !clearDefaultUndefines )
+        {
+            DefineSet us = new DefineSet();
+            String defaultUndefines = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "undefines" );
+            if ( defaultUndefines != null )
+            {
+                us.setUndefine( new CUtil.StringArrayBuilder( defaultUndefines ) );
+            }
+            compiler.addConfiguredDefineset( us );
+        }
+
         if ( undefines != null )
         {
             DefineSet us = new DefineSet();
@@ -571,15 +535,51 @@ public abstract class Compiler
             compiler.addConfiguredDefineset( undefSet );
         }
 
-        if ( !clearDefaultUndefines )
+        // add defines
+        if ( !clearDefaultDefines )
         {
-            DefineSet us = new DefineSet();
-            String defaultUndefines = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "undefines" );
-            if ( defaultUndefines != null )
+            DefineSet ds = new DefineSet();
+            String defaultDefines = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "defines" );
+            if ( defaultDefines != null )
             {
-                us.setUndefine( new CUtil.StringArrayBuilder( defaultUndefines ) );
+                ds.setDefine( new CUtil.StringArrayBuilder( defaultDefines ) );
             }
-            compiler.addConfiguredDefineset( us );
+            compiler.addConfiguredDefineset( ds );
+        }
+
+        if ( defines != null )
+        {
+            DefineSet ds = new DefineSet();
+            for ( Iterator<String> i = defines.iterator(); i.hasNext(); )
+            {
+                DefineArgument define = new DefineArgument();
+                String[] pair = i.next().split( "=", 2 );
+                define.setName( pair[0] );
+                define.setValue( pair.length > 1 ? pair[1] : null );
+                ds.addDefine( define );
+            }
+            compiler.addConfiguredDefineset( ds );
+        }
+
+        if ( defineSet != null )
+        {
+
+            String[] defList = defineSet.split( ",[\\s]*" );
+            DefineSet defSet = new DefineSet();
+
+            for ( int i = 0; i < defList.length; i++ )
+            {
+
+                String[] pair = defList[i].trim().split( "=", 2 );
+                DefineArgument def = new DefineArgument();
+
+                def.setName( pair[0] );
+                def.setValue( pair.length > 1 ? pair[1] : null );
+
+                defSet.addDefine( def );
+            }
+
+            compiler.addConfiguredDefineset( defSet );
         }
 
         // add include path
