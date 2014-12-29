@@ -60,7 +60,7 @@
       <item name="Usage" href="usage.html"/>
       <item name="Lifecycle" href="lifecycle.html"/>
       <item name="Configuration" href="configuration.html"/>
-      <item name="FAQ" href="faq.html"/>
+      <item name="FAQ" href="https://github.com/maven-nar/nar-maven-plugin/wiki/Frequently_Asked_Questions"/>
       <item name="AOL Properties" href="aol.html"/>
       <item name="Examples" href="examples.html"/>
       <item name="Archetypes" href="archetypes.html"/>
