@@ -11,6 +11,7 @@ using the standard `maven-install-plugin` and `maven-deploy-plugin`.
 
 Links
 -----
+* [FAQ](https://github.com/maven-nar/nar-maven-plugin/wiki/Frequently_Asked_Questions)
 * [Documentation](http://maven-nar.github.io/nar-maven-plugin/)
 * [Mailing list](https://groups.google.com/group/maven-nar)
 * [Issues](https://github.com/maven-nar/nar-maven-plugin/issues)
@@ -24,8 +25,3 @@ Is this plugin available on Maven Central?
 ------------------------------------------
 
 [Yes](http://search.maven.org/#search|ga|1|g%3A%22com.github.maven-nar%22%20a%3A%22nar-maven-plugin%22).
-
-Is there a FAQ?
----------------
-
-[Yes](https://github.com/maven-nar/nar-maven-plugin/wiki/Frequently_Asked_Questions).
