@@ -34,7 +34,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
  * 
  * @author Mark Donszelmann
  */
-@Mojo(name = "nar-unpack", defaultPhase = LifecyclePhase.PROCESS_SOURCES, requiresProject = true)
+@Mojo(name = "nar-unpack", defaultPhase = LifecyclePhase.PROCESS_SOURCES, requiresProject = true, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class NarUnpackMojo
     extends NarDownloadMojo
 {
