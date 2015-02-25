@@ -475,6 +475,7 @@
                 <setupInclude>it0007-lib-shared/pom.xml</setupInclude>
                 <setupInclude>it0010-lib-static/pom.xml</setupInclude>
                 <setupInclude>it0020-lib-3rdparty/pom.xml</setupInclude>
+                <setupInclude>it0026-native-lib-loader/pom.xml</setupInclude>
               </setupIncludes>
               <pomIncludes>
                 <pomInclude>*/pom.xml</pomInclude>
