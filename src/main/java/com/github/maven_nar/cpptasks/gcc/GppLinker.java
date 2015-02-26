@@ -45,7 +45,8 @@ public class GppLinker extends AbstractLdLinker {
     private static String[] linkerOptions = new String[]{"-bundle", "-dylib",
             "-dynamic", "-dynamiclib", "-nostartfiles", "-nostdlib",
             "-prebind", "-s", "-static", "-shared", "-symbolic", "-Xlinker",
-            "-static-libgcc", "-shared-libgcc", "-p", "-pg"};
+            "-static-libgcc", "-shared-libgcc", "-p", "-pg",
+            "-pthread"};
     // FREEHEP refactored dllLinker into soLinker
     private static final GppLinker soLinker = new GppLinker(GPP_COMMAND, objFiles,
             discardFiles, "lib", ".so", false, new GppLinker(GPP_COMMAND, objFiles,
