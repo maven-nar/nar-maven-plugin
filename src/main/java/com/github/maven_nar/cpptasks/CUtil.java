@@ -211,7 +211,7 @@ public class CUtil {
             //
             //  see if the prefixes are the same
             //
-            if (canonicalBase.substring(0, 2).equals("\\\\")) {
+            if (substringMatch(canonicalBase, 0, 2, "\\\\")) {
                 //
                 //  UNC file name, if target file doesn't also start with same
                 //      server name, don't go there
@@ -222,7 +222,7 @@ public class CUtil {
                     return canonicalTarget;
                 }
             } else {
-                if (canonicalBase.substring(1, 3).equals(":\\")) {
+                if (substringMatch(canonicalBase, 1, 3, ":\\")) {
                     int endPrefix = 2;
                     String prefix1 = canonicalBase.substring(0, endPrefix);
                     String prefix2 = canonicalTarget.substring(0, endPrefix);
@@ -522,5 +522,11 @@ public class CUtil {
                 lcPath == "/usr/local/lib";
      }
 
+    private static boolean substringMatch(final String src,
+            final int beginIndex, final int endIndex, final String target)
+    {
+        if (src.length() < endIndex) return false;
+        return src.substring(beginIndex, endIndex).equals(target);
+    }
 
 }
