@@ -88,16 +88,30 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
 				getMavenProject(), getArchitecture(), getOS(), getLinker());
 	}
 
-    protected List<Artifact> getArtifacts() {
-        try {
-            return getNarManager().getNarDependencies(Artifact.SCOPE_COMPILE);
-        } catch (MojoExecutionException e) {
-            e.printStackTrace();
-        } catch (MojoFailureException e) {
-            e.printStackTrace();
-        }
-        return Collections.EMPTY_LIST;
-    }
+	/**
+	 * Returns the artifacts which must be taken in account for the Mojo.
+	 * 
+	 * @return Artifacts
+	 */
+    protected abstract List<Artifact> getArtifacts();
+
+	/**
+	 * Returns the attached NAR Artifacts (AOL and noarch artifacts) from the NAR dependencies artifacts of the project.
+	 * The artifacts which will be processed are those returned by the method getArtifacts() which must be implemented
+	 * in each class which extends AbstractDependencyMojo.
+     * 
+	 * @return Attached NAR Artifacts
+	 * @throws MojoFailureException
+	 * @throws MojoExecutionException
+	 * 
+	 * @see getArtifacts
+	 */
+	protected List<AttachedNarArtifact> getAttachedNarArtifacts() throws MojoFailureException ,MojoExecutionException {
+		getLog().info("Getting Nar dependencies");
+		List<NarArtifact> narArtifacts = getNarArtifacts( );
+		List<AttachedNarArtifact> attachedNarArtifacts = getAllAttachedNarArtifacts( narArtifacts/*, library*/ );
+		return attachedNarArtifacts;
+	}
 
 	/**
 	 * Returns dependencies which are dependent on NAR files (i.e. contain
@@ -302,14 +316,6 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     		    // AOL aol = dependency.getClassifier();  Trim
     		    layout.unpackNar(unpackDir, archiverManager, file, getOS(), getLinker().getName(), getAOL() );            
     	    }
-        }    
-
-	public void narExecute() throws MojoFailureException ,MojoExecutionException {
-		getLog().info("Preparing Nar dependencies");
-		List<NarArtifact> narArtifacts = getNarArtifacts( );
-		List<AttachedNarArtifact> dependencies = getAllAttachedNarArtifacts( narArtifacts/*, library*/ );
-		downloadAttachedNars( dependencies );
-		unpackAttachedNars( dependencies );
-	};
+        }
 
 }

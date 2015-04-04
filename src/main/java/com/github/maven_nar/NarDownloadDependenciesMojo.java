@@ -19,26 +19,53 @@
  */
 package com.github.maven_nar;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
 /**
- * Downloads any dependent NAR files. This includes the noarch and aol type NAR files.
+ * List all the dependencies of the project and downloads the NAR files in local maven repository if needed, this
+ * includes the noarch and aol type NAR files.
  * 
  * @author Mark Donszelmann
  */
-@Mojo(name = "nar-download-dependencies", defaultPhase = LifecyclePhase.PROCESS_SOURCES, requiresProject = true, requiresDependencyResolution = ResolutionScope.TEST)
+@Mojo(name = "nar-download-dependencies", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresProject = true, requiresDependencyResolution = ResolutionScope.TEST)
 public class NarDownloadDependenciesMojo
     extends AbstractDependencyMojo
 {
-    
-	// excludeTransitive 
+	/**
+	 * List all the dependencies of the project.
+	 */
+    @Override
+    protected List<Artifact> getArtifacts() {
+        try {
+        	List<String> scopes = new ArrayList<String>();
+    		scopes.add(Artifact.SCOPE_COMPILE);
+    		scopes.add(Artifact.SCOPE_PROVIDED);
+    		scopes.add(Artifact.SCOPE_RUNTIME);
+    		scopes.add(Artifact.SCOPE_SYSTEM);
+    		scopes.add(Artifact.SCOPE_TEST);
+    		return getNarManager().getDependencies(scopes);
+        } catch (MojoExecutionException e) {
+            e.printStackTrace();
+        } catch (MojoFailureException e) {
+            e.printStackTrace();
+        }
+        return Collections.EMPTY_LIST;
+    }
+
 	@Override
-	protected List/*<Artifact>*/ getArtifacts() {
-		return getMavenProject().getTestArtifacts();  // Artifact.SCOPE_TEST 
-	}	
+	public void narExecute() throws MojoFailureException, MojoExecutionException {
+		// download the dependencies if needed in local maven repository.
+		List<AttachedNarArtifact> attachedNarArtifacts = getAttachedNarArtifacts();
+        downloadAttachedNars( attachedNarArtifacts );
+	}
 
 }

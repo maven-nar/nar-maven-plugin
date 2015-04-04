@@ -21,7 +21,10 @@ package com.github.maven_nar;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
@@ -34,16 +37,33 @@ import org.codehaus.plexus.util.FileUtils;
 
 /**
  * Assemble libraries of NAR files.
+ * 
  * @author Mark Donszelmann
  */
-@Mojo(name = "nar-assembly", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true, requiresDependencyResolution = ResolutionScope.COMPILE)
+@Mojo(name = "nar-assembly", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true, requiresDependencyResolution = ResolutionScope.TEST)
 public class NarAssemblyMojo
     extends AbstractDependencyMojo
 {
-	@Override
-	protected List/*<Artifact>*/ getArtifacts() {
-		return getMavenProject().getCompileArtifacts();  // Artifact.SCOPE_COMPILE 
-	}
+    /**
+     * List the dependencies we want to assemble
+     */
+    @Override
+    protected List<Artifact> getArtifacts() {
+        try {
+            List<String> scopes = new ArrayList<String>();
+            scopes.add(Artifact.SCOPE_COMPILE);
+            scopes.add(Artifact.SCOPE_PROVIDED);
+            scopes.add(Artifact.SCOPE_RUNTIME);
+            //scopes.add(Artifact.SCOPE_SYSTEM);
+            //scopes.add(Artifact.SCOPE_TEST);
+            return getNarManager().getDependencies(scopes);
+        } catch (MojoExecutionException e) {
+            e.printStackTrace();
+        } catch (MojoFailureException e) {
+            e.printStackTrace();
+        }
+        return Collections.EMPTY_LIST;
+    }
 
     /**
      * Copies the unpacked nar libraries and files into the projects target area
@@ -51,16 +71,21 @@ public class NarAssemblyMojo
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-//TODO: old allowed for classifiers
-    	List<NarArtifact> narArtifacts = getNarArtifacts( );
-		List<AttachedNarArtifact> dependencies = getAllAttachedNarArtifacts( narArtifacts/*, library*/ );
-		downloadAttachedNars( dependencies );
-		unpackAttachedNars( dependencies );
-
-//        List dependencies = getNarManager().getAttachedNarDependencies( narArtifacts, classifiers.toArray(new String[0] ) );
+        // download the dependencies if needed in local maven repository.
+        List<AttachedNarArtifact> attachedNarArtifacts = getAttachedNarArtifacts();
+        downloadAttachedNars( attachedNarArtifacts );
+        
+        // Warning, for SNAPSHOT artifacts that were not in the local maven repository, the downloadAttachedNars
+        // method above modified the version in the AttachedNarArtifact object to set the timestamp version from
+        // the web repository.
+        // In order to unpack the files with the correct names we need to get back the AttachedNarArtifact objects with
+        // -SNAPSHOT versions, so we call again getAttachedNarArtifacts() to get the unmodified AttachedNarArtifact
+        // objects
+        attachedNarArtifacts = getAttachedNarArtifacts();
+        unpackAttachedNars( attachedNarArtifacts );
 
         // this may make some extra copies...
-        for ( Iterator d = dependencies.iterator(); d.hasNext(); )
+        for ( Iterator d = attachedNarArtifacts.iterator(); d.hasNext(); )
         {
             Artifact dependency = (Artifact) d.next();
             getLog().debug( "Assemble from " + dependency );

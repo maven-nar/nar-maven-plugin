@@ -22,8 +22,10 @@ package com.github.maven_nar;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -58,9 +60,26 @@ public class NarTestMojo
     @Parameter(defaultValue = "${basedir}/src/test/resources", required = true)
     private File testResourceDirectory;
 
+    /**
+     * List the dependencies needed for tests executions and for executables executions, those dependencies are used
+     * to declare the paths of shared libraries for execution.
+     */
     @Override
-    protected List/*<Artifact>*/ getArtifacts() {
-        return getMavenProject().getTestArtifacts();  // Artifact.SCOPE_TEST
+    protected List<Artifact> getArtifacts() {
+    	try {
+    		List<String> scopes = new ArrayList<String>();
+    		scopes.add(Artifact.SCOPE_COMPILE);
+    		scopes.add(Artifact.SCOPE_PROVIDED);
+    		scopes.add(Artifact.SCOPE_RUNTIME);
+    		scopes.add(Artifact.SCOPE_SYSTEM);
+    		scopes.add(Artifact.SCOPE_TEST);
+    		return getNarManager().getDependencies(scopes);
+        } catch (MojoExecutionException e) {
+            e.printStackTrace();
+        } catch (MojoFailureException e) {
+            e.printStackTrace();
+        }
+        return Collections.EMPTY_LIST;
     }
 
     protected File getUnpackDirectory()
@@ -77,7 +96,7 @@ public class NarTestMojo
         }
         else
         {
-            super.narExecute();
+
             // run all tests
             for ( Iterator i = getTests().iterator(); i.hasNext(); )
             {

@@ -19,6 +19,7 @@
  */
 package com.github.maven_nar;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -32,18 +33,18 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
 /**
- * Unpacks NAR files needed for compilation. Unpacking happens in the project target folder, and also sets flags on
- * binaries and corrects static libraries.
+ * Unpacks NAR files needed for tests compilation and execution. Unpacking happens in the project target folder, and
+ * also sets flags on binaries and corrects static libraries.
  * 
  * @author Mark Donszelmann
  */
-@Mojo(name = "nar-unpack", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresProject = true, requiresDependencyResolution = ResolutionScope.COMPILE)
-public class NarUnpackMojo
+@Mojo(name = "nar-test-unpack", defaultPhase = LifecyclePhase.GENERATE_TEST_SOURCES, requiresProject = true, requiresDependencyResolution = ResolutionScope.TEST)
+public class NarTestUnpackMojo
     extends AbstractDependencyMojo
 {
 
 	/**
-	 * List the dependencies needed for compilation.
+	 * List the dependencies needed for tests compilations and executions.
 	 */
 	@Override
     protected List<Artifact> getArtifacts() {
@@ -51,9 +52,9 @@ public class NarUnpackMojo
 			List<String> scopes = new ArrayList<String>();
     		scopes.add(Artifact.SCOPE_COMPILE);
     		scopes.add(Artifact.SCOPE_PROVIDED);
-    		//scopes.add(Artifact.SCOPE_RUNTIME);
+    		scopes.add(Artifact.SCOPE_RUNTIME);
     		scopes.add(Artifact.SCOPE_SYSTEM);
-    		//scopes.add(Artifact.SCOPE_TEST);
+    		scopes.add(Artifact.SCOPE_TEST);
     		return getNarManager().getDependencies(scopes);
         } catch (MojoExecutionException e) {
             e.printStackTrace();
@@ -62,6 +63,12 @@ public class NarUnpackMojo
         }
         return Collections.EMPTY_LIST;
 	}
+
+	@Override
+    protected File getUnpackDirectory()
+    {
+        return getTestUnpackDirectory() == null ? super.getUnpackDirectory() : getTestUnpackDirectory();
+    }
 
     @Override
     public final void narExecute()
