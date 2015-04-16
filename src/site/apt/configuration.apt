@@ -281,7 +281,7 @@ the command line for compatible compilers/linkers. Default is false.
 
 	[narSystemName] Specifies the NarSystem class. Defaults to NarSystem.
 
-	[narSystemDirectory] Specifies the NarSystem source directory. Defaults to target/nar/nar-generated.
+	[narSystemDirectory] Specifies the NarSystem source directory. Defaults to target/generated-sources/nar.
 	
 	[]
 	

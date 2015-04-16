@@ -91,8 +91,8 @@ public class Library
     /**
      * The target directory into which to generate the output.
      */
-    @Parameter(defaultValue = "${project.build.dir}/nar/nar-generated", required = true)
-    private String narSystemDirectory = "nar-generated";
+    @Parameter(defaultValue = "${project.build.dir}/generated-sources/nar", required = true)
+    private String narSystemDirectory = "nar";
 
     /**
      * When true and if type is "executable" run this executable. Defaults to false;
