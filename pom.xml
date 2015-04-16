@@ -50,6 +50,11 @@
     <tag>HEAD</tag>
   </scm>
 
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/maven-nar/nar-maven-plugin/issues</url>
+  </issueManagement>
+
   <ciManagement>
     <system>BuildHive</system>
     <url>https://buildhive.cloudbees.com/job/maven-nar/job/nar-maven-plugin/</url>
