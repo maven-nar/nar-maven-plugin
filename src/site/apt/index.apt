@@ -70,17 +70,19 @@ allows you to build a jar file as well as nar files. The list below shows the se
     
     [[11]] {{{nar-gnu-process}nar-gnu-process}}
     
-    [[12]] {{{nar-testCompile}nar-testCompile}}
+    [[12]] {{{nar-test-unpack}nar-test-unpack}}
+    
+    [[13]] {{{nar-testCompile}nar-testCompile}}
    
-    [[13]] {{{nar-test}nar-test}}
+    [[14]] {{{nar-test}nar-test}}
     
-    [[14]] {{{nar-package}nar-package}}
+    [[15]] {{{nar-package}nar-package}}
     
-    [[15]] {{{nar-integration-test}nar-integration-test}}
+    [[16]] {{{nar-integration-test}nar-integration-test}}
     
-    [[16]] {{{install}install (standard maven goal)}}
+    [[17]] {{{install}install (standard maven goal)}}
     
-    [[17]] {{{deploy}deploy (standard maven goal)}}
+    [[18]] {{{deploy}deploy (standard maven goal)}}
 
 	[]
 	
@@ -120,8 +122,10 @@ This goal will download any further necessary nar files into the local repositor
 
 * {nar-unpack}
 
-	Since a nar file is of no use to any native compilation process, the nar-unpack goal unpacks the nar into
-the "nar/dependencies" subdirectory of the target directory.
+	Since a nar file is of no use to any native compilation process, the nar-unpack goal unpacks the nar into 
+the "nar" subdirectory of the target directory. The dependencies taken in account are those with the scopes compile, 
+provided and system which are the scopes needed for compilation.
+
         
 * {nar-gnu-configure} 
 
@@ -227,6 +231,12 @@ abstract classes in include files.>>
 * {nar-gnu-process}  
 
     Copies the gnu "install"-ed area into the NAR target area for testing and packing. 
+                
+* {nar-test-unpack}  
+
+    Unpacks the nar dependencies into the "test-nar" subdirectory of the target directory. The dependencies taken in 
+account are those with the scopes compile, provided, runtime, system and test which are the scopes needed for tests 
+compilation and executions.
                 
 * {nar-testCompile}
 

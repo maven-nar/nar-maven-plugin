@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -88,13 +89,30 @@ import org.codehaus.plexus.util.StringUtils;
  * @version $Id: SurefirePlugin.java 652773 2008-05-02 05:58:54Z dfabulich $ Mods by Duns for NAR
  */
 // DUNS, changed class name, inheritance, goal and phase
-@Mojo(name = "nar-integration-test", requiresDependencyResolution = ResolutionScope.TEST, defaultPhase = LifecyclePhase.INTEGRATION_TEST)
+@Mojo(name = "nar-integration-test", defaultPhase = LifecyclePhase.INTEGRATION_TEST, requiresDependencyResolution = ResolutionScope.TEST)
 public class NarIntegrationTestMojo
     extends AbstractDependencyMojo
 {
+	/**
+     * List the dependencies needed for integration tests executions, those dependencies are used to declare the paths
+     * of shared and jni libraries in java.library.path
+     */
 	@Override
-	protected List/*<Artifact>*/ getArtifacts() {
-		return getMavenProject().getTestArtifacts();  // Artifact.SCOPE_TEST 
+	protected List<Artifact> getArtifacts() {
+		try {
+			List<String> scopes = new ArrayList<String>();
+    		scopes.add(Artifact.SCOPE_COMPILE);
+    		scopes.add(Artifact.SCOPE_PROVIDED);
+    		scopes.add(Artifact.SCOPE_RUNTIME);
+    		scopes.add(Artifact.SCOPE_SYSTEM);
+    		scopes.add(Artifact.SCOPE_TEST);
+    		return getNarManager().getDependencies(scopes);
+        } catch (MojoExecutionException e) {
+            e.printStackTrace();
+        } catch (MojoFailureException e) {
+            e.printStackTrace();
+        }
+        return Collections.EMPTY_LIST;
 	}
 
     protected File getUnpackDirectory()
@@ -512,7 +530,6 @@ public class NarIntegrationTestMojo
         }
         else if ( verifyParameters() )
         {
-            super.narExecute();
 
             SurefireBooter surefireBooter = constructSurefireBooter();
 

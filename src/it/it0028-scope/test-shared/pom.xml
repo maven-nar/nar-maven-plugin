@@ -24,60 +24,39 @@
 
   <parent>
     <groupId>com.github.maven-nar.its.nar</groupId>
-    <artifactId>it-parent</artifactId>
+    <artifactId>it0028-scope</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <relativePath>../it-parent/pom.xml</relativePath>
   </parent>
 
-  <artifactId>it0025-jar-dep-jni</artifactId>
-  <packaging>jar</packaging>
+  <artifactId>it0028-scope-test-shared</artifactId>
+  <packaging>nar</packaging>
 
-  <name>JAR Java Class Depends on JNI NAR</name>
+  <name>Test Library</name>
+  <version>1.0-SNAPSHOT</version>
   <description>
-    Java class which depends on a separate JNI library
+    Maven definition of scope test:
+    This scope indicates that the dependency is not required for normal use of the application, and is only available
+    for the test compilation and execution phases.
+    
+    For NAR artifacts this scope can be used for test libraries, like a test runner for example.
   </description>
-
-  <properties>
-    <skipTests>true</skipTests>
-  </properties>
+  <url>http://maven.apache.org/</url>
 
   <build>
-    <defaultGoal>integration-test</defaultGoal>
+    <defaultGoal>install</defaultGoal>
     <plugins>
       <plugin>
         <groupId>@project.groupId@</groupId>
         <artifactId>nar-maven-plugin</artifactId>
         <extensions>true</extensions>
-        <executions>
-          <execution>
-            <id>nar-download</id>
-            <goals>
-              <goal>nar-download</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>nar-test-unpack</id>
-            <goals>
-              <goal>nar-test-unpack</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>nar-integration-test</id>
-            <goals>
-              <goal>nar-integration-test</goal>
-            </goals>
-          </execution>
-        </executions>
+        <configuration>
+          <libraries>
+            <library>
+              <type>shared</type>
+            </library>
+          </libraries>
+        </configuration>
       </plugin>
     </plugins>
   </build>
-
-  <dependencies>
-    <dependency>
-      <groupId>com.github.maven-nar.its.nar</groupId>
-      <artifactId>it0003-jni</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <type>nar</type>
-    </dependency>
-  </dependencies>
 </project>

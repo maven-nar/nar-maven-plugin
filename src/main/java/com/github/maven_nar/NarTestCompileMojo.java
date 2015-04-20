@@ -20,6 +20,8 @@
 package com.github.maven_nar;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -61,9 +63,26 @@ public class NarTestCompileMojo
     @Parameter(property = "skipNar")
     protected boolean skipNar;
 
+    /**
+     * List the dependencies needed for tests compilations, those dependencies are used to get the include paths needed
+	 * for compilation and to get the libraries paths and names needed for linking.
+     */
 	@Override
-	protected List/*<Artifact>*/ getArtifacts() {
-		return getMavenProject().getTestArtifacts();  // Artifact.SCOPE_TEST 
+	protected List<Artifact> getArtifacts() {
+		try {
+			List<String> scopes = new ArrayList<String>();
+    		scopes.add(Artifact.SCOPE_COMPILE);
+    		scopes.add(Artifact.SCOPE_PROVIDED);
+    		//scopes.add(Artifact.SCOPE_RUNTIME);
+    		scopes.add(Artifact.SCOPE_SYSTEM);
+    		scopes.add(Artifact.SCOPE_TEST);
+    		return getNarManager().getDependencies(scopes);
+        } catch (MojoExecutionException e) {
+            e.printStackTrace();
+        } catch (MojoFailureException e) {
+            e.printStackTrace();
+        }
+        return Collections.EMPTY_LIST;
 	}
 
     protected File getUnpackDirectory()
@@ -80,10 +99,7 @@ public class NarTestCompileMojo
         }
         else
         {
-            super.narExecute();
-            // Explicitly unpack the NarArtifacts when fresh artifacts object.
-            // This will unpack SNAPSHOT artifacts with nar expected version name
-            unpackAttachedNars( getAllAttachedNarArtifacts(getNarArtifacts()) );
+
             // make sure destination is there
             getTestTargetDirectory().mkdirs();
 
@@ -238,7 +254,18 @@ public class NarTestCompileMojo
         {
             LibrarySet libSet = new LibrarySet();
             libSet.setProject( antProject );
-            String libs = getNarInfo().getLibs( getAOL() );
+            
+            //String libs = getNarInfo().getLibs( getAOL() );
+            // using getNarInfo().getLibs( getAOL() ); forces to execute the goal nar-prepare-package prior to
+            // nar-testCompile in order to set the "output" property in narInfo with the call : 
+            // narInfo.setOutput( null, mojo.getOutput(true) ); (set in NarLayout21.prepareNarInfo(...))
+            
+            // narInfo.getLibs(aol) call in fact narInfo.getProperty( aol, "libs.names", getOutput( aol, artifactId + "-" + version ) );
+            // where getOutput is the getOutput method in narInfo (which needs the "output" property).
+            // We call then directly narInfo.getProperty( aol, "libs.names", <output value>); but we set <output value>
+            // with AbstractCompileMojo.getOutput( boolean versioned ) as it is done during nar-prepare-package
+            String libs = getNarInfo().getProperty( getAOL(), "libs.names", getOutput(true));
+            
             getLog().debug( "Searching for parent to link with " + libs );
             libSet.setLibs( new CUtil.StringArrayBuilder( libs ) );
             LibraryTypeEnum libType = new LibraryTypeEnum();
@@ -295,7 +322,14 @@ public class NarTestCompileMojo
             aol = dependency.getNarInfo().getAOL( getAOL() );
             getLog().debug( "Using Library AOL: " + aol.toString() );
 
-            if ( !binding.equals( Library.JNI ) && !binding.equals( Library.NONE ) && !binding.equals( Library.EXECUTABLE) )
+            // We dont link against the following library types :
+            // - JNI, they are Java libraries
+            // - executable, they are not libraries
+            // - static, there is no need to link to the test application the static libraries already included in the
+            // tested library
+            // - none, they are not libraries ... I gess
+            if ( !binding.equals( Library.JNI ) && !binding.equals( Library.NONE ) && !binding.equals( Library.EXECUTABLE)
+            		 && !binding.equals( Library.STATIC))
             {
                 // check if it exists in the normal unpack directory 
                 File dir =

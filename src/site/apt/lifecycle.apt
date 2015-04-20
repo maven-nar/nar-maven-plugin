@@ -35,21 +35,21 @@ standard maven goals) attached to them. The order is left to right, top to botto
 *------------------------+---------------------------------------------------------------------+ 
 | validate               | <<nar-validate>>                                                    |
 *------------------------+---------------------------------------------------------------------+ 
-| initialize             |                                                                     |
+| initialize             | <<nar-download>>                                                    |
 *------------------------+---------------------------------------------------------------------+ 
-| generate-sources       | <<nar-download>>                                                    |
+| generate-sources       | <<nar-unpack>>                                                      |
 *------------------------+---------------------------------------------------------------------+ 
-| process-sources        | <<nar-unpack>>, <<nar-gnu-configure>>                               |
+| process-sources        | <<nar-gnu-configure>>                                               |
 *------------------------+---------------------------------------------------------------------+ 
-| generate-resources     | <<nar-system-generate>>                                             |
+| generate-resources     | <<nar-system-generate>>, <<nar-vcproj>>                             |
 *------------------------+---------------------------------------------------------------------+ 
-| process-resources      | resources, <<nar-resources>>, <<nar-gnu-resources>>, <<nar-vcproj>> |
+| process-resources      | resources, <<nar-resources>>, <<nar-gnu-resources>>                 |
 *------------------------+---------------------------------------------------------------------+ 
 | compile                | compile, <<nar-javah>>, <<nar-gnu-make>>, <<nar-compile>>           |
 *------------------------+---------------------------------------------------------------------+ 
 | process-classes        | <<nar-gnu-process>>, <<nar-process-libraries>>                      |
 *------------------------+---------------------------------------------------------------------+ 
-| generate-test-sources  |                                                                     |
+| generate-test-sources  | <<nar-test-unpack>>                                                 |
 *------------------------+---------------------------------------------------------------------+ 
 | process-test-sources   |                                                                     |
 *------------------------+---------------------------------------------------------------------+ 
@@ -57,9 +57,9 @@ standard maven goals) attached to them. The order is left to right, top to botto
 *------------------------+---------------------------------------------------------------------+ 
 | process-test-resources | testResources                                                       |
 *------------------------+---------------------------------------------------------------------+ 
-| test-compile           | testCompile                                                         |
+| test-compile           | testCompile, <<nar-testCompile>>                                    |
 *------------------------+---------------------------------------------------------------------+ 
-| process-test-classes   | <<nar-testCompile>>                                                 |
+| process-test-classes   |                                                                     |
 *------------------------+---------------------------------------------------------------------+ 
 | test                   | test, <<nar-test>>                                                  |
 *------------------------+---------------------------------------------------------------------+ 

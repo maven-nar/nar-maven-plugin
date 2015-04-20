@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  #%L
+  Native ARchive plugin for Maven
+  %%
+  Copyright (C) 2002 - 2014 NAR Maven Plugin developers.
+  %%
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+       http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  #L%
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.github.maven-nar.its.nar</groupId>
+    <artifactId>it0028-scope</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>it0028-scope-app</artifactId>
+  <packaging>nar</packaging>
+
+  <name>Application</name>
+  <version>1.0-SNAPSHOT</version>
+  <description>
+    Application using the libraries of it0028.
+    The library compile-shared is defined as a dependency with the scope compile, this give also acces to the library
+    system-shared for compilation, test compilation (not used for executable) and execution. The library provided-static
+    is not recovered through compile-shared due to the scope provided, and then its header files can't be included in
+    the application code. The library test-shared is not recovered either due to the scope test in compile-shared.
+    The library runtime-shared as been declared as as dependency with the scope runtime in the library compile-shared
+    to allow the execution of the test of compile-shared, the scope runtime is transitive so the library runtime-shared
+    is automatically added as a runtime library the the application. Note that if we remove the test of compile-shared
+    and we remove the runtime-shared dependency in compile-shared, runtime-shared will have to be declared as a runtime
+    dependency for the application.
+  </description>
+  <url>http://maven.apache.org/</url>
+
+  <build>
+    <defaultGoal>package</defaultGoal>
+    <plugins>
+      <plugin>
+        <groupId>@project.groupId@</groupId>
+        <artifactId>nar-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <libraries>
+            <library>
+              <type>executable</type>
+              <run>true</run>
+            </library>
+          </libraries>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>com.github.maven-nar.its.nar</groupId>
+      <artifactId>it0028-scope-compile-shared</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>nar</type>
+    </dependency>
+  </dependencies>
+</project>

@@ -21,6 +21,8 @@ package com.github.maven_nar;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,6 +42,7 @@ import com.github.maven_nar.cpptasks.types.LibrarySet;
 import com.github.maven_nar.cpptasks.types.LinkerArgument;
 import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -55,14 +58,32 @@ import org.apache.tools.ant.Project;
  * @author Darren Sargent
  * 
  */
-@Mojo(name = "nar-vcproj", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE)
+@Mojo(name = "nar-vcproj", defaultPhase = LifecyclePhase.GENERATE_RESOURCES, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class NarVcprojMojo extends AbstractCompileMojo {
 
+	/**
+	 * List the dependencies needed for compilation, those dependencies are used to get the include paths needed for
+	 * compilation and to get the libraries paths and names needed for linking.
+	 */
 	@Override
-	protected List/*<Artifact>*/ getArtifacts() {
-		return getMavenProject().getCompileArtifacts();  // Artifact.SCOPE_COMPILE 
+	protected List<Artifact> getArtifacts() {
+		try {
+			List<String> scopes = new ArrayList<String>();
+    		scopes.add(Artifact.SCOPE_COMPILE);
+    		scopes.add(Artifact.SCOPE_PROVIDED);
+    		//scopes.add(Artifact.SCOPE_RUNTIME);
+    		scopes.add(Artifact.SCOPE_SYSTEM);
+    		//scopes.add(Artifact.SCOPE_TEST);
+    		return getNarManager().getDependencies(scopes);
+        } catch (MojoExecutionException e) {
+            e.printStackTrace();
+        } catch (MojoFailureException e) {
+            e.printStackTrace();
+        }
+        return Collections.EMPTY_LIST;
 	}
 
+	@Override
 	public void narExecute() throws MojoExecutionException,
 			MojoFailureException {
 

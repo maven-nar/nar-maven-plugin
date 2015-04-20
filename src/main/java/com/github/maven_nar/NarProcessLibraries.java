@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
@@ -51,10 +52,12 @@ public class NarProcessLibraries extends AbstractCompileMojo {
 
     private Log log = getLog();
 
+    /**
+     * The method must be implemented but will not be called.
+     */
     @Override
-    protected List getArtifacts() {
-        //TODO: Added to get code compiling after rebasing.  Should this have a concrete implementation in AbstractCompileMojo?
-        return null;
+    protected List<Artifact> getArtifacts() {
+    	return Collections.EMPTY_LIST;
     }
 
     @Override

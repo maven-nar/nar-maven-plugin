@@ -72,8 +72,19 @@ public class NarManager
 	public final List/* <NarArtifact> */getNarDependencies(String scope)
         throws MojoExecutionException
     {
+		List<String> scopes = new ArrayList<String>();
+		scopes.add(scope);
+		return getNarDependencies(scopes);
+	}
+
+	/**
+     * Returns dependencies which are dependent on NAR files (i.e. contain NarInfo)
+	 */
+	public final List/* <NarArtifact> */getNarDependencies(List<String> scopes)
+        throws MojoExecutionException
+    {
 		List narDependencies = new LinkedList();
-        for ( Iterator i = getDependencies( scope ).iterator(); i.hasNext(); )
+        for ( Iterator i = getDependencies( scopes ).iterator(); i.hasNext(); )
         {
 			Artifact dependency = (Artifact) i.next();
 			log.debug("Examining artifact for NarInfo: " + dependency);
@@ -328,12 +339,12 @@ public class NarManager
                                                                    repository.pathOf( dependency ) ) );
 	}
 
-    private List getDependencies( String scope )
+    public List/*<Artifact>*/ getDependencies( List<String> scopes )
     {
         Set<Artifact> artifacts = project.getArtifacts();
         List<Artifact> returnArtifact = new ArrayList<Artifact>();
         for(Artifact a : artifacts) {
-            if(scope.equals(a.getScope()))
+            if(scopes.contains(a.getScope()))
                 returnArtifact.add(a);
         }
         return returnArtifact;

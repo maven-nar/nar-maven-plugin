@@ -27,17 +27,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.github.maven_nar.cpptasks.CCTask;
-import com.github.maven_nar.cpptasks.CUtil;
-import com.github.maven_nar.cpptasks.CompilerDef;
-import com.github.maven_nar.cpptasks.LinkerDef;
-import com.github.maven_nar.cpptasks.OutputTypeEnum;
-import com.github.maven_nar.cpptasks.RuntimeType;
-import com.github.maven_nar.cpptasks.SubsystemEnum;
-import com.github.maven_nar.cpptasks.types.LibrarySet;
-import com.github.maven_nar.cpptasks.types.LinkerArgument;
-import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
-
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -49,6 +39,17 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
+
+import com.github.maven_nar.cpptasks.CCTask;
+import com.github.maven_nar.cpptasks.CUtil;
+import com.github.maven_nar.cpptasks.CompilerDef;
+import com.github.maven_nar.cpptasks.LinkerDef;
+import com.github.maven_nar.cpptasks.OutputTypeEnum;
+import com.github.maven_nar.cpptasks.RuntimeType;
+import com.github.maven_nar.cpptasks.SubsystemEnum;
+import com.github.maven_nar.cpptasks.types.LibrarySet;
+import com.github.maven_nar.cpptasks.types.LinkerArgument;
+import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 
 /**
  * Compiles native source files.
@@ -66,9 +67,26 @@ public class NarCompileMojo
     @Component
     protected MavenSession session;
 
+    /**
+	 * List the dependencies needed for compilation, those dependencies are used to get the include paths needed for
+	 * compilation and to get the libraries paths and names needed for linking.
+	 */
     @Override
-    protected List/*<Artifact>*/ getArtifacts() {
-        return getMavenProject().getCompileArtifacts();  // Artifact.SCOPE_COMPILE
+    protected List<Artifact> getArtifacts() {
+    	try {
+    		List<String> scopes = new ArrayList<String>();
+    		scopes.add(Artifact.SCOPE_COMPILE);
+    		scopes.add(Artifact.SCOPE_PROVIDED);
+    		//scopes.add(Artifact.SCOPE_RUNTIME);
+    		scopes.add(Artifact.SCOPE_SYSTEM);
+    		//scopes.add(Artifact.SCOPE_TEST);
+    		return getNarManager().getDependencies(scopes);
+        } catch (MojoExecutionException e) {
+            e.printStackTrace();
+        } catch (MojoFailureException e) {
+            e.printStackTrace();
+        }
+        return Collections.EMPTY_LIST;
     }
 
     private void copyInclude( Compiler c )
@@ -87,7 +105,6 @@ public class NarCompileMojo
     public final void narExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        super.narExecute();
 
         // make sure destination is there
         getTargetDirectory().mkdirs();
