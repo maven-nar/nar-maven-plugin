@@ -86,8 +86,6 @@ public class NarCompileMojo extends AbstractCompileMojo {
 
     task.setDecorateLinkerOptions(this.decorateLinkerOptions);
 
-    task.setDecorateLinkerOptions(this.decorateLinkerOptions);
-
     // subsystem
     final SubsystemEnum subSystem = new SubsystemEnum();
     subSystem.setValue(library.getSubSystem());
