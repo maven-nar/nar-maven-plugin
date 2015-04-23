@@ -213,7 +213,6 @@ public class NarManager {
       final int dash = classifier.lastIndexOf('-');
       if (dash < 0) {
         aol = new AOL(classifier);
-        type = null;
       } else {
         aol = new AOL(classifier.substring(0, dash));
         type = classifier.substring(dash + 1);
@@ -234,9 +233,7 @@ public class NarManager {
     if (classifiers != null && classifiers.length > 0) {
 
       for (final String classifier : classifiers) {
-        if (artifactList != null) {
-          artifactList.addAll(getAttachedNarDependencies(narArtifacts, classifier));
-        }
+        artifactList.addAll(getAttachedNarDependencies(narArtifacts, classifier));
       }
     } else {
       artifactList.addAll(getAttachedNarDependencies(narArtifacts, (String) null));
