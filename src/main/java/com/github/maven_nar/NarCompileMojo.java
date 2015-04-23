@@ -182,8 +182,6 @@ public class NarCompileMojo
 
         task.setDecorateLinkerOptions(decorateLinkerOptions);
 
-        task.setDecorateLinkerOptions(decorateLinkerOptions);
-
         // subsystem
         SubsystemEnum subSystem = new SubsystemEnum();
         subSystem.setValue( library.getSubSystem() );
