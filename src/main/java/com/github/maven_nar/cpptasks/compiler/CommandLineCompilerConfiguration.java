@@ -35,6 +35,7 @@ import com.github.maven_nar.cpptasks.VersionInfo;
  * @author Curt Arnold
  */
 public final class CommandLineCompilerConfiguration implements CompilerConfiguration {
+  private boolean useCcache;
   private/* final */String[] args;
   private final/* final */CommandLineCompiler compiler;
   private final String[] endArgs;
@@ -64,6 +65,14 @@ public final class CommandLineCompilerConfiguration implements CompilerConfigura
       final File[] includePath, final File[] sysIncludePath, final File[] envIncludePath,
       final String includePathIdentifier, final String[] args, final ProcessorParam[] params, final boolean rebuild,
       final String[] endArgs, final String commandPath) {
+    this(compiler, identifier, includePath, sysIncludePath, envIncludePath, includePathIdentifier, args, params,
+        rebuild, endArgs, commandPath, false);
+  }
+
+  public CommandLineCompilerConfiguration(final CommandLineCompiler compiler, final String identifier,
+      final File[] includePath, final File[] sysIncludePath, final File[] envIncludePath,
+      final String includePathIdentifier, final String[] args, final ProcessorParam[] params, final boolean rebuild,
+      final String[] endArgs, final String commandPath, final boolean useCcache) {
     if (compiler == null) {
       throw new NullPointerException("compiler");
     }
@@ -93,6 +102,7 @@ public final class CommandLineCompilerConfiguration implements CompilerConfigura
     } else {
       this.envIncludePath = envIncludePath.clone();
     }
+    this.useCcache = useCcache;
     this.compiler = compiler;
     this.params = params.clone();
     this.rebuild = rebuild;
@@ -257,6 +267,10 @@ public final class CommandLineCompilerConfiguration implements CompilerConfigura
   @Override
   public boolean isPrecompileGeneration() {
     return this.isPrecompiledHeaderGeneration;
+  }
+
+  public boolean isUseCcache() {
+    return this.useCcache;
   }
 
   @Override

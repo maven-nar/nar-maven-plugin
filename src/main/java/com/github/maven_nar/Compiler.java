@@ -104,6 +104,9 @@ public abstract class Compiler {
   @Parameter(required = true)
   private final Set<String> testExcludes = new HashSet<String>();
 
+  @Parameter(defaultValue = "false", required = false)
+  private final boolean ccache = false;
+
   /**
    * Compile with debug information.
    */
@@ -276,6 +279,7 @@ public abstract class Compiler {
     }
 
     // debug, exceptions, rtti, multiThreaded
+    compilerDef.setCcache(this.ccache);
     compilerDef.setDebug(this.debug);
     compilerDef.setExceptions(this.exceptions);
     compilerDef.setRtti(this.rtti);

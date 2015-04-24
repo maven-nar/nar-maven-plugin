@@ -37,6 +37,7 @@ import com.github.maven_nar.cpptasks.TargetDef;
 import com.github.maven_nar.cpptasks.VersionInfo;
 import com.github.maven_nar.cpptasks.types.CommandLineArgument;
 import com.github.maven_nar.cpptasks.types.UndefineArgument;
+import com.google.common.collect.ObjectArrays;
 
 /**
  * An abstract Compiler implementation which uses an external program to
@@ -45,6 +46,8 @@ import com.github.maven_nar.cpptasks.types.UndefineArgument;
  * @author Adam Murdoch
  */
 public abstract class CommandLineCompiler extends AbstractCompiler {
+  /** Command used when invoking ccache */
+  private static final String CCACHE_CMD = "ccache";
   private String command;
   private final Environment env;
   private String identifier;
@@ -138,14 +141,21 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
    * Compiles a source file.
    * 
    */
-  public void compile(final CCTask task, final File outputDir, final String[] sourceFiles, final String[] args,
+  public void compile(final CCTask task, final File outputDir, final String[] sourceFiles, String[] args,
       final String[] endArgs, final boolean relentless, final CommandLineCompilerConfiguration config,
       final ProgressMonitor monitor) throws BuildException {
     BuildException exc = null;
     //
     // determine length of executable name and args
     //
-    final String command = getCommandWithPath(config);
+    String command = getCommandWithPath(config);
+    if (config.isUseCcache()) {
+      // Replace the command with "ccache" and push the old compiler
+      // command into the args.
+      final String compilerCommand = command;
+      command = CCACHE_CMD;
+      args = ObjectArrays.concat(compilerCommand, args);
+    }
     int baseLength = command.length() + args.length + endArgs.length;
     if (this.libtool) {
       baseLength += 8;
@@ -369,7 +379,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
     final File[] envIncludePath = getEnvironmentIncludePath();
     final String path = specificDef.getToolPath();
     return new CommandLineCompilerConfiguration(this, configId, incPath, sysIncPath, envIncludePath,
-        includePathIdentifier.toString(), argArray, paramArray, rebuild, endArgs, path);
+        includePathIdentifier.toString(), argArray, paramArray, rebuild, endArgs, path, specificDef.getCcache());
   }
 
   protected int getArgumentCountPerInputFile() {
