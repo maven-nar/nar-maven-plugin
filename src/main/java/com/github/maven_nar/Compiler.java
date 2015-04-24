@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,7 +46,7 @@ import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Abstract Compiler class
- * 
+ *
  * @author Mark Donszelmann
  */
 public abstract class Compiler
@@ -55,7 +55,6 @@ public abstract class Compiler
     /**
      * The name of the compiler. Some choices are: "msvc", "g++", "gcc", "CC", "cc", "icc", "icpc", ... Default is
      * Architecture-OS-Linker specific: FIXME: table missing
-
      */
     @Parameter
     private String name;
@@ -349,7 +348,7 @@ public abstract class Compiler
             String defaultIncludes = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "includes" );
             if ( defaultIncludes != null )
             {
-                String[] include = defaultIncludes.split( " " );
+                String[] include = defaultIncludes.split( "[\\s]+" );
                 for ( int i = 0; i < include.length; i++ )
                 {
                     result.add( include[i].trim() );
@@ -382,7 +381,7 @@ public abstract class Compiler
             String defaultExcludes = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "excludes" );
             if ( defaultExcludes != null )
             {
-                String[] exclude = defaultExcludes.split( " " );
+                String[] exclude = defaultExcludes.split( "[\\s]+" );
                 for ( int i = 0; i < exclude.length; i++ )
                 {
                     result.add( exclude[i].trim() );
@@ -423,7 +422,7 @@ public abstract class Compiler
     {
         String name = getName();
         if (name == null) return null;
-        
+
         CompilerDef compiler = new CompilerDef();
         compiler.setProject( mojo.getAntProject() );
         CompilerEnum compilerName = new CompilerEnum();
@@ -448,6 +447,22 @@ public abstract class Compiler
         compiler.setOptimize( optimization );
 
         // add options
+        compiler.setClearDefaultOptions(clearDefaultOptions);
+        if ( !clearDefaultOptions )
+        {
+            String optionsProperty = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "options" );
+            if ( optionsProperty != null )
+            {
+                String[] option = optionsProperty.split( "[\\s]+" );
+                for ( int i = 0; i < option.length; i++ )
+                {
+                    CompilerArgument arg = new CompilerArgument();
+                    arg.setValue( option[i] );
+                    compiler.addConfiguredCompilerArg( arg );
+                }
+            }
+        }
+
         if ( options != null )
         {
             for ( Iterator<String> i = options.iterator(); i.hasNext(); )
@@ -461,7 +476,7 @@ public abstract class Compiler
         if ( optionSet != null )
         {
 
-            String[] opts = optionSet.split( "\\s" );
+            String[] opts = optionSet.split( "[\\s]+" );
 
             for ( int i = 0; i < opts.length; i++ )
             {
@@ -473,70 +488,18 @@ public abstract class Compiler
             }
         }
 
-        compiler.setClearDefaultOptions(clearDefaultOptions);
-        if ( !clearDefaultOptions )
-        {
-            String optionsProperty = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "options" );
-            if ( optionsProperty != null )
-            {
-                String[] option = optionsProperty.split( " " );
-                for ( int i = 0; i < option.length; i++ )
-                {
-                    CompilerArgument arg = new CompilerArgument();
-                    arg.setValue( option[i] );
-                    compiler.addConfiguredCompilerArg( arg );
-                }
-            }
-        }
-
-        // add defines
-        if ( defines != null )
-        {
-            DefineSet ds = new DefineSet();
-            for ( Iterator<String> i = defines.iterator(); i.hasNext(); )
-            {
-                DefineArgument define = new DefineArgument();
-                String[] pair = i.next().split( "=", 2 );
-                define.setName( pair[0] );
-                define.setValue( pair.length > 1 ? pair[1] : null );
-                ds.addDefine( define );
-            }
-            compiler.addConfiguredDefineset( ds );
-        }
-
-        if ( defineSet != null )
-        {
-
-            String[] defList = defineSet.split( "," );
-            DefineSet defSet = new DefineSet();
-
-            for ( int i = 0; i < defList.length; i++ )
-            {
-
-                String[] pair = defList[i].trim().split( "=", 2 );
-                DefineArgument def = new DefineArgument();
-
-                def.setName( pair[0] );
-                def.setValue( pair.length > 1 ? pair[1] : null );
-
-                defSet.addDefine( def );
-            }
-
-            compiler.addConfiguredDefineset( defSet );
-        }
-
-        if ( !clearDefaultDefines )
-        {
-            DefineSet ds = new DefineSet();
-            String defaultDefines = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "defines" );
-            if ( defaultDefines != null )
-            {
-                ds.setDefine( new CUtil.StringArrayBuilder( defaultDefines ) );
-            }
-            compiler.addConfiguredDefineset( ds );
-        }
-
         // add undefines
+        if ( !clearDefaultUndefines )
+        {
+            DefineSet us = new DefineSet();
+            String defaultUndefines = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "undefines" );
+            if ( defaultUndefines != null )
+            {
+                us.setUndefine( new CUtil.StringArrayBuilder( defaultUndefines ) );
+            }
+            compiler.addConfiguredDefineset( us );
+        }
+
         if ( undefines != null )
         {
             DefineSet us = new DefineSet();
@@ -554,7 +517,7 @@ public abstract class Compiler
         if ( undefineSet != null )
         {
 
-            String[] undefList = undefineSet.split( "," );
+            String[] undefList = undefineSet.split( ",[\\s]*" );
             DefineSet undefSet = new DefineSet();
 
             for ( int i = 0; i < undefList.length; i++ )
@@ -572,15 +535,51 @@ public abstract class Compiler
             compiler.addConfiguredDefineset( undefSet );
         }
 
-        if ( !clearDefaultUndefines )
+        // add defines
+        if ( !clearDefaultDefines )
         {
-            DefineSet us = new DefineSet();
-            String defaultUndefines = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "undefines" );
-            if ( defaultUndefines != null )
+            DefineSet ds = new DefineSet();
+            String defaultDefines = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "defines" );
+            if ( defaultDefines != null )
             {
-                us.setUndefine( new CUtil.StringArrayBuilder( defaultUndefines ) );
+                ds.setDefine( new CUtil.StringArrayBuilder( defaultDefines ) );
             }
-            compiler.addConfiguredDefineset( us );
+            compiler.addConfiguredDefineset( ds );
+        }
+
+        if ( defines != null )
+        {
+            DefineSet ds = new DefineSet();
+            for ( Iterator<String> i = defines.iterator(); i.hasNext(); )
+            {
+                DefineArgument define = new DefineArgument();
+                String[] pair = i.next().split( "=", 2 );
+                define.setName( pair[0] );
+                define.setValue( pair.length > 1 ? pair[1] : null );
+                ds.addDefine( define );
+            }
+            compiler.addConfiguredDefineset( ds );
+        }
+
+        if ( defineSet != null )
+        {
+
+            String[] defList = defineSet.split( ",[\\s]*" );
+            DefineSet defSet = new DefineSet();
+
+            for ( int i = 0; i < defList.length; i++ )
+            {
+
+                String[] pair = defList[i].trim().split( "=", 2 );
+                DefineArgument def = new DefineArgument();
+
+                def.setName( pair[0] );
+                def.setValue( pair.length > 1 ? pair[1] : null );
+
+                defSet.addDefine( def );
+            }
+
+            compiler.addConfiguredDefineset( defSet );
         }
 
         // add include path
@@ -627,7 +626,7 @@ public abstract class Compiler
             {
                 if ( compileOrder != null )
                 {
-                    compiler.setOrder( Arrays.asList( StringUtils.split( compileOrder, ", " ) ) );
+                    compiler.setOrder( Arrays.asList( compileOrder.split( ",[\\s]*" ) ) );
                 }
 
                 ConditionalFileSet fileSet = new ConditionalFileSet();
