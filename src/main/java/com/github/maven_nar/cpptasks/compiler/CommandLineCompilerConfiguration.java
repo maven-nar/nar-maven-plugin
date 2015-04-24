@@ -21,8 +21,8 @@ package com.github.maven_nar.cpptasks.compiler;
 import java.io.File;
 
 
-import org.apache.tools.ant.BuildException;
 
+import org.apache.tools.ant.BuildException;
 import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.CompilerParam;
 import com.github.maven_nar.cpptasks.DependencyInfo;
@@ -36,6 +36,7 @@ import com.github.maven_nar.cpptasks.VersionInfo;
 public final class CommandLineCompilerConfiguration
         implements
             CompilerConfiguration {
+    private boolean useCcache;
     private/* final */String[] args;
     private/* final */CommandLineCompiler compiler;
     private String[] endArgs;
@@ -56,14 +57,15 @@ public final class CommandLineCompilerConfiguration
     public CommandLineCompilerConfiguration(CommandLineCompiler compiler,
             String identifier, File[] includePath, File[] sysIncludePath,
             File[] envIncludePath, String includePathIdentifier, String[] args,
-            ProcessorParam[] params, boolean rebuild, String[] endArgs) {
+            ProcessorParam[] params, boolean rebuild, String[] endArgs, boolean useCcache) {
         this(compiler, identifier, includePath, sysIncludePath, envIncludePath,
-            includePathIdentifier, args, params, rebuild, endArgs, null);
+            includePathIdentifier, args, params, rebuild, endArgs, null, useCcache);
     }
+
     public CommandLineCompilerConfiguration(CommandLineCompiler compiler,
             String identifier, File[] includePath, File[] sysIncludePath,
             File[] envIncludePath, String includePathIdentifier, String[] args,
-            ProcessorParam[] params, boolean rebuild, String[] endArgs,String commandPath) {
+            ProcessorParam[] params, boolean rebuild, String[] endArgs,String commandPath, boolean useCcache) {
         if (compiler == null) {
             throw new NullPointerException("compiler");
         }
@@ -93,6 +95,7 @@ public final class CommandLineCompilerConfiguration
         } else {
             this.envIncludePath = (File[]) envIncludePath.clone();
         }
+        this.useCcache = useCcache;
         this.compiler = compiler;
         this.params = (ProcessorParam[]) params.clone();
         this.rebuild = rebuild;
@@ -243,5 +246,10 @@ public final class CommandLineCompilerConfiguration
     }
     public final String getCommandPath() {
         return this.commandPath;
+    }
+
+    public boolean isUseCcache()
+    {
+        return useCcache;
     }
 }
