@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Vector;
+import java.util.ArrayList;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Environment;
@@ -39,7 +40,7 @@ import com.github.maven_nar.cpptasks.types.UndefineArgument;
 /**
  * An abstract Compiler implementation which uses an external program to
  * perform the compile.
- * 
+ *
  * @author Adam Murdoch
  */
 public abstract class CommandLineCompiler extends AbstractCompiler {
@@ -73,11 +74,11 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
 			Boolean rtti, OptimizationEnum optimization);
     /**
      * Adds command-line arguments for include directories.
-     * 
+     *
      * If relativeArgs is not null will add corresponding relative paths
      * include switches to that vector (for use in building a configuration
      * identifier that is consistent between machines).
-     * 
+     *
      * @param baseDirPath Base directory path.
      * @param includeDirs
      *            Array of include directory paths
@@ -134,7 +135,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
     }
     /**
      * Compiles a source file.
-     * 
+     *
      */
     public void compile(CCTask task, File outputDir, String[] sourceFiles,
             String[] args, String[] endArgs, boolean relentless,
@@ -184,25 +185,27 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
             if (libtool) {
                 argCount++;
             }
-            String[] commandline = new String[argCount];
+            ArrayList<String> commandline = new ArrayList<String>();
             int index = 0;
             if (libtool) {
-                commandline[index++] = "libtool";
+                commandline.add("libtool");
             }
-            commandline[index++] = command;
+            commandline.add(command);
             for (int j = 0; j < args.length; j++) {
-                commandline[index++] = args[j];
+                commandline.add(args[j]);
             }
             for (int j = sourceIndex; j < firstFileNextExec; j++) {
                 for (int k = 0; k < argumentCountPerInputFile; k++) {
-                    commandline[index++] = getInputFileArgument(outputDir,
-                            sourceFiles[j], k);
+                    commandline.add(getInputFileArgument(outputDir, sourceFiles[j], k));
                 }
             }
             for (int j = 0; j < endArgs.length; j++) {
-                commandline[index++] = endArgs[j];
+                commandline.add(endArgs[j]);
             }
-            int retval = runCommand(task, outputDir, commandline);
+            commandline.add("-o");
+            File ff = new File(sourceFiles[sourceIndex]);
+            commandline.add(ff.getName().replaceFirst("[.][^.]+$", "") + Math.abs(sourceFiles[sourceIndex].hashCode()) + config.getOutputSuffix());
+            int retval = runCommand(task, outputDir, commandline.toArray(new String[commandline.size()]));
             if (monitor != null) {
                 String[] fileNames = new String[firstFileNextExec - sourceIndex];
 
@@ -240,8 +243,8 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
         }
     }
     protected CompilerConfiguration createConfiguration(final CCTask task,
-            final LinkType linkType, 
-			final ProcessorDef[] baseDefs, 
+            final LinkType linkType,
+			final ProcessorDef[] baseDefs,
 			final CompilerDef specificDef,
 			final TargetDef targetPlatform,
 			final VersionInfo versionInfo) {
@@ -417,17 +420,17 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
         return identifier;
     }
     abstract protected String getIncludeDirSwitch(String source);
-    
+
 	/**
 	 * Added by Darren Sargent 22Oct2008 Returns the include dir switch value.
 	 * Default implementation doesn't treat system includes specially, for
 	 * compilers which don't care.
-	 * 
+	 *
 	 * @param source
 	 *            the given source value.
 	 * @param isSystem
 	 *            "true" if this is a system include path
-	 * 
+	 *
 	 * @return the include dir switch value.
 	 */
 	protected String getIncludeDirSwitch(String source, boolean isSystem) {
@@ -451,7 +454,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
     }
     /**
      * Obtains the same compiler, but with libtool set
-     * 
+     *
      * Default behavior is to ignore libtool
      */
     public final CommandLineCompiler getLibtoolCompiler() {

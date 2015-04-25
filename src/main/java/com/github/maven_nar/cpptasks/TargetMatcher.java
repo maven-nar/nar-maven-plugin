@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -55,6 +55,7 @@ public final class TargetMatcher implements FileVisitor {
     }
     public void visit(File parentDir, String filename) throws BuildException {
         File fullPath = new File(parentDir, filename);
+        int hash = Math.abs(fullPath.getPath().hashCode());
         //
         //   see if any processor wants to bid
         //       on this one
@@ -84,41 +85,36 @@ public final class TargetMatcher implements FileVisitor {
                 }
             }
         } else {
-            //
-            //  get output file name
-            //
-            String[] outputFileNames = selectedCompiler
-                    .getOutputFileNames(filename, versionInfo);
-            sourceFiles[0] = fullPath;
-            //
-            //   if there is some output for this task
-            //      (that is a source file and not an header file)
-            //
-            for (int i = 0; i < outputFileNames.length; i++) {
                 //
-                //   see if the same output file has already been registered
+                //  get output file name
                 //
-                TargetInfo previousTarget = (TargetInfo) targets
-                        .get(outputFileNames[i]);
-                if (previousTarget == null) {
-                    targets.put(outputFileNames[i], new TargetInfo(
+                String[] outputFileNames = selectedCompiler
+                                    .getOutputFileNames(filename, versionInfo);
+                sourceFiles[0] = fullPath;
+
+			          //
+                //   if there is some output for this task
+                //      (that is a source file and not an header file)
+                //
+                for (int i = 0; i < outputFileNames.length; i++) {
+                  //
+                  //   see if the same output file has already been registered
+                  //
+                  TargetInfo previousTarget = (TargetInfo) targets
+                                                      .get(outputFileNames[i]);
+
+                  String ext = outputFileNames[i].substring(outputFileNames[i].lastIndexOf('.'),outputFileNames[i].length());
+                  StringBuffer nf = new StringBuffer(outputFileNames[i].substring(0, outputFileNames[i].lastIndexOf('.')));
+                  nf.append(hash + ext);
+
+                  outputFileNames[i] = nf.toString();
+
+                  targets.put(outputFileNames[i], new TargetInfo(
                             selectedCompiler, sourceFiles, null, new File(
-                                    outputDir, outputFileNames[i]),
-                            selectedCompiler.getRebuild()));
-                } else {
-                    if (!previousTarget.getSources()[0].equals(sourceFiles[0])) {
-                        StringBuffer builder = new StringBuffer(
-                                "Output filename conflict: ");
-                        builder.append(outputFileNames[i]);
-                        builder.append(" would be produced from ");
-                        builder.append(previousTarget.getSources()[0]
-                                .toString());
-                        builder.append(" and ");
-                        builder.append(filename);
-                        throw new BuildException(builder.toString());
-                    }
-                }
-            }
+                                              outputDir, outputFileNames[i]),
+                                              selectedCompiler.getRebuild()));
+
+              }
         }
     }
 }
