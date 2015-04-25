@@ -149,8 +149,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
                     getLog(), dependency.getFile());
         }
 
-		File file = new File(getLocalRepository().getBasedir(),
-				getLocalRepository().pathOf(dependency));
+		File file = dependency.getFile();
 		if (!file.exists()) {
 			getLog().debug("Dependency nar file does not exist: " + file);
 			return null;
