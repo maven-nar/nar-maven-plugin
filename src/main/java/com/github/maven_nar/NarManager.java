@@ -141,7 +141,6 @@ public class NarManager
             if ( dash < 0 )
             {
 				aol = new AOL(classifier);
-				type = null;
             }
             else
             {
@@ -164,10 +163,7 @@ public class NarManager
 
             for ( int j = 0; j < classifiers.length; j++ )
             {
-                if ( artifactList != null )
-                {
                     artifactList.addAll( getAttachedNarDependencies( narArtifacts, classifiers[j] ));
-                }
             }
         }
         else

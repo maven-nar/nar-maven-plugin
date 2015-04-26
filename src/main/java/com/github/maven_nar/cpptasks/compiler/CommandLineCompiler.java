@@ -20,11 +20,11 @@
 package com.github.maven_nar.cpptasks.compiler;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
-
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.types.Environment;
 
 import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.CUtil;
@@ -36,6 +36,10 @@ import com.github.maven_nar.cpptasks.TargetDef;
 import com.github.maven_nar.cpptasks.VersionInfo;
 import com.github.maven_nar.cpptasks.types.CommandLineArgument;
 import com.github.maven_nar.cpptasks.types.UndefineArgument;
+import com.google.common.collect.ObjectArrays;
+import org.apache.maven.surefire.shade.org.apache.commons.lang.ArrayUtils;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.types.Environment;
 /**
  * An abstract Compiler implementation which uses an external program to
  * perform the compile.
@@ -43,6 +47,8 @@ import com.github.maven_nar.cpptasks.types.UndefineArgument;
  * @author Adam Murdoch
  */
 public abstract class CommandLineCompiler extends AbstractCompiler {
+    /** Command used when invoking ccache */
+    private static final String CCACHE_CMD = "ccache";
     private String command;
     private final Environment env;
     private String identifier;
@@ -134,6 +140,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
     }
     /**
      * Compiles a source file.
+     * @param commandPrefixes 
      * 
      */
     public void compile(CCTask task, File outputDir, String[] sourceFiles,
@@ -145,6 +152,13 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
         //   determine length of executable name and args
         //
         String command = getCommandWithPath(config);
+        if (config.isUseCcache())
+        {
+            // Replace the command with "ccache" and push the old compiler command into the args. 
+            String compilerCommand = command;
+            command = CCACHE_CMD;
+            args = ObjectArrays.concat(compilerCommand, args);
+        }
         int baseLength = command.length() + args.length + endArgs.length;
         if (libtool) {
             baseLength += 8;
@@ -379,7 +393,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
         String path = specificDef.getToolPath();
         return new CommandLineCompilerConfiguration(this, configId, incPath,
                 sysIncPath, envIncludePath, includePathIdentifier.toString(),
-                argArray, paramArray, rebuild, endArgs, path);
+                argArray, paramArray, rebuild, endArgs, path, specificDef.getCcache());
     }
     protected int getArgumentCountPerInputFile() {
         return 1;

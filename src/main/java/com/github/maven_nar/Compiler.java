@@ -102,6 +102,9 @@ public abstract class Compiler
     @Parameter(required = true)
     private Set<String> testExcludes = new HashSet<String>();
 
+    @Parameter(defaultValue = "false", required = false)
+    private boolean ccache = false;
+    
     /**
      * Compile with debug information.
      */
@@ -418,34 +421,44 @@ public abstract class Compiler
         return compiler;
     }
 
+    /**
+     * Generates a new {@link CompilerDef} and populates it give the parameters provided.
+     * 
+     * @param type  - main or test library - used to determine include and exclude paths.
+     * @param output - TODO Not sure..
+     * @return {@link CompilerDef} which contains the configuration for this compiler given the type and output.
+     * @throws MojoFailureException TODO
+     * @throws MojoExecutionException TODO
+     */
     public final CompilerDef getCompiler( String type, String output )
         throws MojoFailureException, MojoExecutionException
     {
         String name = getName();
         if (name == null) return null;
         
-        CompilerDef compiler = new CompilerDef();
-        compiler.setProject( mojo.getAntProject() );
+        CompilerDef compilerDef = new CompilerDef();
+        compilerDef.setProject( mojo.getAntProject() );
         CompilerEnum compilerName = new CompilerEnum();
         compilerName.setValue( name );
-        compiler.setName( compilerName );
+        compilerDef.setName( compilerName );
 
         // tool path
         if ( toolPath != null )
         {
-            compiler.setToolPath( toolPath );
+            compilerDef.setToolPath( toolPath );
         }
 
         // debug, exceptions, rtti, multiThreaded
-        compiler.setDebug( debug );
-        compiler.setExceptions( exceptions );
-        compiler.setRtti( rtti );
-        compiler.setMultithreaded( mojo.getOS().equals( "Windows" ) ? true : multiThreaded );
+        compilerDef.setCcache( ccache );
+        compilerDef.setDebug( debug );
+        compilerDef.setExceptions( exceptions );
+        compilerDef.setRtti( rtti );
+        compilerDef.setMultithreaded( mojo.getOS().equals( "Windows" ) ? true : multiThreaded );
 
         // optimize
         OptimizationEnum optimization = new OptimizationEnum();
         optimization.setValue( optimize );
-        compiler.setOptimize( optimization );
+        compilerDef.setOptimize( optimization );
 
         // add options
         if ( options != null )
@@ -454,7 +467,7 @@ public abstract class Compiler
             {
                 CompilerArgument arg = new CompilerArgument();
                 arg.setValue( (String) i.next() );
-                compiler.addConfiguredCompilerArg( arg );
+                compilerDef.addConfiguredCompilerArg( arg );
             }
         }
 
@@ -469,11 +482,11 @@ public abstract class Compiler
                 CompilerArgument arg = new CompilerArgument();
 
                 arg.setValue( opts[i] );
-                compiler.addConfiguredCompilerArg( arg );
+                compilerDef.addConfiguredCompilerArg( arg );
             }
         }
 
-        compiler.setClearDefaultOptions(clearDefaultOptions);
+        compilerDef.setClearDefaultOptions(clearDefaultOptions);
         if ( !clearDefaultOptions )
         {
             String optionsProperty = NarProperties.getInstance(mojo.getMavenProject()).getProperty( getPrefix() + "options" );
@@ -484,7 +497,7 @@ public abstract class Compiler
                 {
                     CompilerArgument arg = new CompilerArgument();
                     arg.setValue( option[i] );
-                    compiler.addConfiguredCompilerArg( arg );
+                    compilerDef.addConfiguredCompilerArg( arg );
                 }
             }
         }
@@ -501,7 +514,7 @@ public abstract class Compiler
                 define.setValue( pair.length > 1 ? pair[1] : null );
                 ds.addDefine( define );
             }
-            compiler.addConfiguredDefineset( ds );
+            compilerDef.addConfiguredDefineset( ds );
         }
 
         if ( defineSet != null )
@@ -522,7 +535,7 @@ public abstract class Compiler
                 defSet.addDefine( def );
             }
 
-            compiler.addConfiguredDefineset( defSet );
+            compilerDef.addConfiguredDefineset( defSet );
         }
 
         if ( !clearDefaultDefines )
@@ -533,7 +546,7 @@ public abstract class Compiler
             {
                 ds.setDefine( new CUtil.StringArrayBuilder( defaultDefines ) );
             }
-            compiler.addConfiguredDefineset( ds );
+            compilerDef.addConfiguredDefineset( ds );
         }
 
         // add undefines
@@ -548,7 +561,7 @@ public abstract class Compiler
                 undefine.setValue( pair.length > 1 ? pair[1] : null );
                 us.addUndefine( undefine );
             }
-            compiler.addConfiguredDefineset( us );
+            compilerDef.addConfiguredDefineset( us );
         }
 
         if ( undefineSet != null )
@@ -569,7 +582,7 @@ public abstract class Compiler
                 undefSet.addUndefine( undef );
             }
 
-            compiler.addConfiguredDefineset( undefSet );
+            compilerDef.addConfiguredDefineset( undefSet );
         }
 
         if ( !clearDefaultUndefines )
@@ -580,7 +593,7 @@ public abstract class Compiler
             {
                 us.setUndefine( new CUtil.StringArrayBuilder( defaultUndefines ) );
             }
-            compiler.addConfiguredDefineset( us );
+            compilerDef.addConfiguredDefineset( us );
         }
 
         // add include path
@@ -591,7 +604,7 @@ public abstract class Compiler
                         if ( ! includePath.exists() ) {
                                 throw new MojoFailureException("NAR: Include path not found: " + includePath);
                         }
-            compiler.createIncludePath().setPath( includePath.getPath() );
+            compilerDef.createIncludePath().setPath( includePath.getPath() );
         }
 
         // add system include path (at the end)
@@ -600,7 +613,7 @@ public abstract class Compiler
             for ( Iterator<String> i = systemIncludePaths.iterator(); i.hasNext(); )
             {
                 String path = i.next();
-                compiler.createSysIncludePath().setPath( path );
+                compilerDef.createSysIncludePath().setPath( path );
             }
         }
 
@@ -627,7 +640,7 @@ public abstract class Compiler
             {
                 if ( compileOrder != null )
                 {
-                    compiler.setOrder( Arrays.asList( StringUtils.split( compileOrder, ", " ) ) );
+                    compilerDef.setOrder( Arrays.asList( StringUtils.split( compileOrder, ", " ) ) );
                 }
 
                 ConditionalFileSet fileSet = new ConditionalFileSet();
@@ -635,11 +648,11 @@ public abstract class Compiler
                 fileSet.setIncludes( StringUtils.join( includeSet.iterator(), "," ) );
                 fileSet.setExcludes( StringUtils.join( excludeSet.iterator(), "," ) );
                 fileSet.setDir( srcDir );
-                compiler.addFileset( fileSet );
+                compilerDef.addFileset( fileSet );
             }
         }
 
-        return compiler;
+        return compilerDef;
     }
 
     protected abstract String getLanguage();

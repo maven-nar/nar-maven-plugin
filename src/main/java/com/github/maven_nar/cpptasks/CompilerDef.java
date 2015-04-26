@@ -18,10 +18,10 @@
  * #L%
  */
 package com.github.maven_nar.cpptasks;
+
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
-
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -36,6 +36,8 @@ import com.github.maven_nar.cpptasks.types.DefineSet;
 import com.github.maven_nar.cpptasks.types.IncludePath;
 import com.github.maven_nar.cpptasks.types.SystemIncludePath;
 import com.github.maven_nar.cpptasks.types.UndefineArgument;
+
+
 /**
  * A compiler definition. compiler elements may be placed either as children of
  * a cc element or the project element. A compiler element with an id attribute
@@ -46,6 +48,7 @@ import com.github.maven_nar.cpptasks.types.UndefineArgument;
 public final class CompilerDef extends ProcessorDef {
     /** The source file sets. */
     private final Vector defineSets = new Vector();
+    private Boolean ccache = false;
     private Boolean exceptions;
     private Boolean rtti;
     private final Vector includePaths = new Vector();
@@ -80,6 +83,7 @@ public final class CompilerDef extends ProcessorDef {
         }
         addConfiguredProcessorArg(arg);
     }
+
     /**
      * Adds a compiler command-line arg.
      */
@@ -89,6 +93,7 @@ public final class CompilerDef extends ProcessorDef {
         }
         addConfiguredProcessorParam(param);
     }
+
     /**
      * Adds a defineset.
      */
@@ -101,6 +106,7 @@ public final class CompilerDef extends ProcessorDef {
         }
         defineSets.addElement(defs);
     }
+
     /**
      * Creates an include path.
      */
@@ -116,6 +122,7 @@ public final class CompilerDef extends ProcessorDef {
         includePaths.addElement(path);
         return path;
     }
+
     /**
      * Specifies precompilation prototype file and exclusions.
      *  
@@ -130,6 +137,7 @@ public final class CompilerDef extends ProcessorDef {
         precompileDefs.addElement(precomp);
         return precomp;
     }
+
     /**
      * Creates a system include path. Locations and timestamps of files located
      * using the system include paths are not used in dependency analysis.
@@ -179,6 +187,7 @@ public final class CompilerDef extends ProcessorDef {
         actives.copyInto(retval);
         return retval;
     }
+
     /**
      * Returns the compiler-specific include path.
      */
@@ -325,6 +334,7 @@ public final class CompilerDef extends ProcessorDef {
         }
         return warnings;
     }
+
     /**
      * Sets the default compiler adapter. Use the "name" attribute when the
      * compiler is a supported compiler.
@@ -342,6 +352,7 @@ public final class CompilerDef extends ProcessorDef {
             throw new BuildException(classname + " does not implement Compiler");
         }
     }
+
     /**
      * Enables or disables exception support.
      * 
@@ -383,6 +394,7 @@ public final class CompilerDef extends ProcessorDef {
         }
         this.multithreaded = booleanValueOf(multithreaded);
     }
+
     /**
      * Sets compiler type.
      * 
@@ -501,6 +513,7 @@ public final class CompilerDef extends ProcessorDef {
             throw new BuildException(ex);
         }
     }
+
     /**
      * Enumerated attribute with the values "none", "severe", "default",
      * "production", "diagnostic", and "aserror".
@@ -508,10 +521,12 @@ public final class CompilerDef extends ProcessorDef {
     public void setWarnings(WarningLevelEnum level) {
         warnings = level.getIndex();
     }
+
     /**
      * Sets optimization level.
      * 
-     * @param value optimization level
+     * @param value
+     *            optimization level
      */
     public void setOptimize(OptimizationEnum value) {
     	if (isReference()) {
@@ -523,6 +538,7 @@ public final class CompilerDef extends ProcessorDef {
     // FREEHEP
 	/**
 	 * List of source filenames without extensions
+     * 
 	 * @param asList
 	 */
 	public void setOrder(List<String> order) {
@@ -540,4 +556,12 @@ public final class CompilerDef extends ProcessorDef {
 	public void setToolPath(String path) {
 		toolPath = path;
 	}
+
+    public Boolean getCcache() {
+        return ccache;
+    }
+
+    public void setCcache(Boolean ccache) {
+        this.ccache = ccache;
+    }
 }
