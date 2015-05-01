@@ -377,13 +377,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
         boolean rebuild = specificDef.getRebuild(baseDefs, 0);
         File[] envIncludePath = getEnvironmentIncludePath();
         String path = specificDef.getToolPath();
-        
-        CommandLineCompiler compiler = this;
-        Environment environment = specificDef.getEnv();
-        if (environment != null) {
-            compiler = (CommandLineCompiler)compiler.changeEnvironment(true, environment);
-        }
-        return new CommandLineCompilerConfiguration(compiler, configId, incPath,
+        return new CommandLineCompilerConfiguration(this, configId, incPath,
                 sysIncPath, envIncludePath, includePathIdentifier.toString(),
                 argArray, paramArray, rebuild, endArgs, path);
     }

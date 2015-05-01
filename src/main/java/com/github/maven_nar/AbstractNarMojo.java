@@ -171,13 +171,6 @@ public abstract class AbstractNarMojo
     @Parameter(readonly = true)
     private File javaHome;
 
-    @Parameter
-    private Msvc msvc = new Msvc();
-    
-    public Msvc getMsvc() {
-      return msvc;
-    }
-    
     protected final void validate()
         throws MojoFailureException, MojoExecutionException
     {

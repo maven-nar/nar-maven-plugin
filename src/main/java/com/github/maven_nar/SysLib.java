@@ -32,7 +32,8 @@ import org.apache.tools.ant.Project;
  * 
  * @author Mark Donszelmann
  */
-public class SysLib {
+public class SysLib
+{
     /**
      * Name of the system library
      */
@@ -45,23 +46,19 @@ public class SysLib {
     @Parameter(defaultValue = "shared")
     private String type = Library.SHARED;
 
-    public final SystemLibrarySet getSysLibSet(Project antProject)
-        throws MojoFailureException {
-        if (name == null) {
-            throw new MojoFailureException(
-                "NAR: Please specify <Name> as part of <SysLib>");
+    public final SystemLibrarySet getSysLibSet( Project antProject )
+        throws MojoFailureException
+    {
+        if ( name == null )
+        {
+            throw new MojoFailureException( "NAR: Please specify <Name> as part of <SysLib>" );
         }
         SystemLibrarySet sysLibSet = new SystemLibrarySet();
-        sysLibSet.setProject(antProject);
-        sysLibSet.setLibs(new CUtil.StringArrayBuilder(name));
+        sysLibSet.setProject( antProject );
+        sysLibSet.setLibs( new CUtil.StringArrayBuilder( name ) );
         LibraryTypeEnum sysLibType = new LibraryTypeEnum();
-        sysLibType.setValue(type);
-        sysLibSet.setType(sysLibType);
+        sysLibType.setValue( type );
+        sysLibSet.setType( sysLibType );
         return sysLibSet;
-    }
-
-    @Override
-    public String toString() {
-        return name + " (" + type + ")";
     }
 }

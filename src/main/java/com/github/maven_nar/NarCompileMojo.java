@@ -176,7 +176,7 @@ public class NarCompileMojo
     {
         getLog().debug( "Creating Library " + library );
         // configure task
-        final CCTask task = new CCTask();
+        CCTask task = new CCTask();
         task.setCommandLogLevel( commandLogLevel );
         task.setProject(antProject);
 
@@ -307,8 +307,6 @@ public class NarCompileMojo
         // add java include paths
         getJava().addIncludePaths(task, type);
 
-        getMsvc().configureCCTask(this, task);
-        
         List<NarArtifact> dependencies = getNarArtifacts();
         // add dependency include paths
         for ( Iterator i = dependencies.iterator(); i.hasNext(); )
@@ -456,7 +454,7 @@ public class NarCompileMojo
 
         // FIXME, this should be done in CPPTasks at some point
         if ( getRuntime( getAOL() ).equals( "dynamic" ) && getOS().equals( OS.WINDOWS )
-            && getLinker().getName( null, null ).equals( "msvc" ) && !getLinker().getVersion(this).startsWith( "6." ) )
+            && getLinker().getName( null, null ).equals( "msvc" ) && !getLinker().getVersion().startsWith( "6." ) )
         {
             String libType = library.getType();
             if ( libType.equals( Library.JNI ) || libType.equals( Library.SHARED ) )
