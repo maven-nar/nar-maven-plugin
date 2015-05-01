@@ -174,6 +174,9 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
   @Parameter(readonly = true)
   private File javaHome;
 
+  @Parameter
+  private Msvc msvc = new Msvc();
+
   @Override
   public final void execute() throws MojoExecutionException, MojoFailureException {
     if (this.skip) {
@@ -246,6 +249,10 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
     return this.mavenProject;
   }
 
+  public Msvc getMsvc() {
+    return this.msvc;
+  }
+
   protected NarInfo getNarInfo() throws MojoExecutionException {
     if (this.narInfo == null) {
       final String groupId = getMavenProject().getGroupId();
@@ -301,6 +308,8 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
   public abstract void narExecute() throws MojoFailureException, MojoExecutionException;
 
   protected final void validate() throws MojoFailureException, MojoExecutionException {
+    this.msvc.setMojo(this);
+
     this.linker = NarUtil.getLinker(this.linker, getLog());
 
     this.architecture = NarUtil.getArchitecture(this.architecture);

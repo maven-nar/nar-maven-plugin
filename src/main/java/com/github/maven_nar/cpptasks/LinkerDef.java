@@ -20,7 +20,11 @@
 package com.github.maven_nar.cpptasks;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import org.apache.tools.ant.BuildException;
@@ -55,6 +59,8 @@ public class LinkerDef extends ProcessorDef {
   private int stack;
   private final Vector sysLibrarySets = new Vector();
   private String toolPath;
+
+  private final Set<File> libraryDirectories = new LinkedHashSet<File>();
 
   /**
    * Default constructor
@@ -99,6 +105,28 @@ public class LinkerDef extends ProcessorDef {
       throw noChildrenAllowed();
     }
     addConfiguredProcessorParam(param);
+  }
+
+  public boolean addLibraryDirectory(final File directory) {
+    if (directory == null || !directory.exists()) {
+      return false;
+    } else {
+      return this.libraryDirectories.add(directory);
+    }
+  }
+
+  public boolean addLibraryDirectory(final File parent, final String path) {
+    if (parent == null) {
+      return false;
+    } else {
+      final File directory = new File(parent, path);
+      return addLibraryDirectory(directory);
+    }
+  }
+
+  public void addLibraryDirectory(final String path) {
+    final File directory = new File(path);
+    addLibraryDirectory(directory);
   }
 
   /**
@@ -240,6 +268,10 @@ public class LinkerDef extends ProcessorDef {
       return defaultProviders[index].getIncremental(defaultProviders, index + 1);
     }
     return false;
+  }
+
+  public List<File> getLibraryDirectories() {
+    return new ArrayList<File>(this.libraryDirectories);
   }
 
   public boolean getMap(final LinkerDef[] defaultProviders, final int index) {

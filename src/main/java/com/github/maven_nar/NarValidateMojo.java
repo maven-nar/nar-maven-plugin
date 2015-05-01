@@ -57,7 +57,7 @@ public class NarValidateMojo extends AbstractCompileMojo {
 
     // check linker exists in retrieving the version number
     final Linker linker = getLinker();
-    getLog().debug("Using linker version: " + linker.getVersion());
+    getLog().debug("Using linker version: " + linker.getVersion(this));
 
     // check compilers
     int noOfCompilers = 0;

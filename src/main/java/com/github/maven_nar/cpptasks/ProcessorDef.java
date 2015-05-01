@@ -159,6 +159,11 @@ public abstract class ProcessorDef extends DataType {
   public void addEnv(final Environment.Variable var) {
     if (this.env == null) {
       this.env = new Environment();
+      this.newEnvironment = true;
+      if (this.processor != null) {
+        // Change the environment in the processor
+        setProcessor(this.processor);
+      }
     }
     this.env.addVariable(var);
   }

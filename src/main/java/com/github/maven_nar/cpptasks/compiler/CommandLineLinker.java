@@ -23,11 +23,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.Vector;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Environment;
 
+import com.github.maven_nar.NarUtil;
+import com.github.maven_nar.OS;
 import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.CUtil;
 import com.github.maven_nar.cpptasks.LinkerDef;
@@ -91,6 +95,25 @@ public abstract class CommandLineLinker extends AbstractLinker {
     // NB: Do nothing by default.
   }
 
+  protected void addLibraryDirectory(final File libraryDirectory, final Vector<String> preargs) {
+    try {
+      if (libraryDirectory != null && libraryDirectory.exists()) {
+        final File currentDir = new File(".").getParentFile();
+        String path = libraryDirectory.getCanonicalPath();
+        if (currentDir != null) {
+          final String currentPath = currentDir.getCanonicalPath();
+          path = CUtil.getRelativePath(currentPath, libraryDirectory);
+        }
+        addLibraryPath(preargs, path);
+      }
+    } catch (final IOException e) {
+      throw new RuntimeException("Unable to add library path: " + libraryDirectory);
+    }
+  }
+
+  protected void addLibraryPath(final Vector<String> preargs, final String path) {
+  }
+
   //
   // Windows processors handle these through file list
   //
@@ -129,9 +152,20 @@ public abstract class CommandLineLinker extends AbstractLinker {
     // any "extends" and finally the specific CompilerDef
     CommandLineArgument[] commandArgs;
     for (int i = defaultProviders.length - 1; i >= 0; i--) {
-      commandArgs = defaultProviders[i].getActiveProcessorArgs();
+      final LinkerDef linkerDef = defaultProviders[i];
+      commandArgs = linkerDef.getActiveProcessorArgs();
       for (final CommandLineArgument commandArg : commandArgs) {
         args[commandArg.getLocation()].addElement(commandArg.getValue());
+      }
+    }
+
+    final Set<File> libraryDirectories = new LinkedHashSet<File>();
+    for (int i = defaultProviders.length - 1; i >= 0; i--) {
+      final LinkerDef linkerDef = defaultProviders[i];
+      for (final File libraryDirectory : linkerDef.getLibraryDirectories()) {
+        if (libraryDirectories.add(libraryDirectory)) {
+          addLibraryDirectory(libraryDirectory, preargs);
+        }
       }
     }
 
@@ -193,7 +227,12 @@ public abstract class CommandLineLinker extends AbstractLinker {
     if (null != specificDef.getEnv() && null == this.env) {
       this.env = specificDef.getEnv();
     }
-
+    for (final ProcessorDef processorDef : baseDefs) {
+      final Environment environment = processorDef.getEnv();
+      if (null != environment && null == this.env) {
+        this.env = environment;
+      }
+    }
     final boolean rebuild = specificDef.getRebuild(baseDefs, 0);
     final boolean map = specificDef.getMap(defaultProviders, 1);
     final String toolPath = specificDef.getToolPath();
@@ -355,8 +394,15 @@ public abstract class CommandLineLinker extends AbstractLinker {
     if (this.isLibtool) {
       allArgsCount++;
     }
+    if (OS.WINDOWS.equals(NarUtil.getOS(null))) {
+      allArgsCount += 2;
+    }
     final String[] allArgs = new String[allArgsCount];
     int index = 0;
+    if (OS.WINDOWS.equals(NarUtil.getOS(null))) {
+      allArgs[index++] = "cmd";
+      allArgs[index++] = "/c";
+    }
     if (this.isLibtool) {
       allArgs[index++] = "libtool";
     }

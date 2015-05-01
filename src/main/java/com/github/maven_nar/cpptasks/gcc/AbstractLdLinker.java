@@ -104,6 +104,11 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
     }
   }
 
+  @Override
+  protected void addLibraryPath(final Vector<String> preargs, final String path) {
+    preargs.addElement("-L" + path);
+  }
+
   protected int addLibraryPatterns(final String[] libnames, final StringBuffer buf, final String prefix,
       final String extension, final String[] patterns, final int offset) {
     for (int i = 0; i < libnames.length; i++) {
