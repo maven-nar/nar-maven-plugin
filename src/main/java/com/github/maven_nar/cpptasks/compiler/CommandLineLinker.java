@@ -32,6 +32,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Environment;
 
+import com.github.maven_nar.NarUtil;
+import com.github.maven_nar.OS;
 import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.CUtil;
 import com.github.maven_nar.cpptasks.LinkerDef;
@@ -398,8 +400,15 @@ public abstract class CommandLineLinker extends AbstractLinker {
         if (isLibtool) {
             allArgsCount++;
         }
+        if (OS.WINDOWS.equals(NarUtil.getOS(null))) {
+            allArgsCount += 2;
+        }
         String[] allArgs = new String[allArgsCount];
         int index = 0;
+        if (OS.WINDOWS.equals(NarUtil.getOS(null))) {
+            allArgs[index++] = "cmd";
+            allArgs[index++] = "/c";
+        }
         if (isLibtool) {
             allArgs[index++] = "libtool";
         }

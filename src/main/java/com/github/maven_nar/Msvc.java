@@ -61,7 +61,7 @@ public class Msvc {
                     + internalVersion.substring(2, 3);
             } else {
                 throw new MojoExecutionException(
-                    "visualStudio.version must be the internal version in the form 10.0 or 120");
+                    "msvc.version must be the internal version in the form 10.0 or 120");
             }
             if (this.home == null) {
                 String commontToolsVar = System.getenv("VS" + internalVersion
@@ -100,7 +100,7 @@ public class Msvc {
             }
             if (maxVersion.length() == 0) {
                 throw new MojoExecutionException(
-                    "visualStudio.version not specified and no VS<Version>COMNTOOLS environment variable can be found");
+                    "msvc.version not specified and no VS<Version>COMNTOOLS environment variable can be found");
             } else {
                 version = maxVersion.substring(0, 2) + "."
                     + maxVersion.substring(2, 3);
@@ -128,7 +128,7 @@ public class Msvc {
                             if (kitVersion.charAt(0) == 'v') {
                                 kitVersion = kitVersion.substring(1);
                             }
-                            if (kitVersion.matches("\\d+.\\d+[A-Z]")) {
+                            if (kitVersion.matches("\\d+.\\d+[A-Z]?")) {
                                 if (windowsSdkVersion.length() == 0) {
                                     if (compareVersion(kitVersion, maxVersion) > 0) {
                                         maxVersion = kitVersion;
@@ -151,7 +151,7 @@ public class Msvc {
         }
         if (maxVersion.length() == 0) {
             throw new MojoExecutionException(
-                "visualStudio.windowsSdkVersion not specified and versions can be found");
+                "msvc.windowsSdkVersion not specified and versions can be found");
         } else {
             windowsSdkVersion = maxVersion;
         }
@@ -164,22 +164,54 @@ public class Msvc {
     public void configureCCTask(NarCompileMojo mojo, CCTask task)
         throws MojoExecutionException {
         String os = mojo.getOS();
+        String mojoArchitecture = mojo.getArchitecture();
+        String osArchitecture = NarUtil.getArchitecture(null);
         if (os.equals(OS.WINDOWS)) {
             init();
-            for (File file : Arrays.asList(new File(home, "VC/bin"), new File(
-                home, "Common7/IDE"))) {
-                task.addPath("PATH", file);
-            }
+            addPath(task, "PATH", home, "Common7/Tools");
             addIncludePath(task, home, "VC/include");
             if (compareVersion(windowsSdkVersion, "7.1A") <= 0) {
+                addPath(task, "PATH", home, "VC/bin");
+                addPath(task, "PATH", windowsSdkHome, "bin");
+
                 addIncludePath(task, windowsSdkHome, "include");
             } else {
+                if ("x86".equals(osArchitecture)) {
+                    addPath(task, "PATH", home, "VC/bin");
+                    if (!"x86".equals(mojoArchitecture)) {
+                        addPath(task, "PATH", home, "VC/bin/" + osArchitecture
+                            + "_" + mojoArchitecture);
+                    }
+                } else {
+                    addPath(task, "PATH", home, "VC/bin/" + osArchitecture);
+                    if (!osArchitecture.equals(mojoArchitecture)) {
+                        addPath(task, "PATH", home, "VC/bin/" + osArchitecture
+                            + "_" + mojoArchitecture);
+                    }
+                }
+                String sdkArch = mojoArchitecture;
+                if ("amd64".equals(mojoArchitecture)) {
+                    sdkArch = "x64";
+                }
+                addPath(task, "PATH", windowsSdkHome, "bin/" + sdkArch);
+
                 addIncludePath(task, windowsSdkHome, "include/shared");
+                addIncludePath(task, windowsSdkHome, "include/um");
             }
+            addPath(task, "PATH", home, "Common7/IDE");
         }
     }
 
-    public void configureLinker(AbstractNarMojo mojo, LinkerDef linker) throws MojoExecutionException {
+    private void addPath(CCTask task, String string, File home, String path)
+        throws MojoExecutionException {
+        File directory = new File(home, path);
+        if (directory.exists()) {
+            task.addPath("PATH", directory);
+        }
+    }
+
+    public void configureLinker(AbstractNarMojo mojo, LinkerDef linker)
+        throws MojoExecutionException {
         String os = mojo.getOS();
         if (os.equals(OS.WINDOWS)) {
             init();
