@@ -32,12 +32,13 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
-
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Environment;
 
+import com.github.maven_nar.NarUtil;
 import com.github.maven_nar.cpptasks.compiler.CompilerConfiguration;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
@@ -1710,6 +1711,17 @@ public class CCTask extends Task {
      */
     public int getCommandLogLevel() {
 	return commandLogLevel;
+    }
+
+    public void addPath(String propertyName, File file) throws MojoExecutionException {
+      if (file.exists()) {
+        try {
+          NarUtil.addPathToEnvironment(compilerDef, propertyName, file.getCanonicalPath());
+          NarUtil.addPathToEnvironment(linkerDef, propertyName, file.getCanonicalPath());
+        } catch (IOException e) {
+          throw new MojoExecutionException("Unable to add to path: "+ file, e);
+        }
+      }
     }
 
 }

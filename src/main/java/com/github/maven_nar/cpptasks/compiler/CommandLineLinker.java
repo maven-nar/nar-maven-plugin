@@ -23,9 +23,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
-
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Environment;
 
@@ -39,36 +42,38 @@ import com.github.maven_nar.cpptasks.VersionInfo;
 import com.github.maven_nar.cpptasks.types.CommandLineArgument;
 import com.github.maven_nar.cpptasks.types.LibrarySet;
 
-
 /**
  * An abstract Linker implementation that performs the link via an external
  * command.
  *
  * @author Adam Murdoch
  */
-public abstract class CommandLineLinker extends AbstractLinker
-{
+public abstract class CommandLineLinker extends AbstractLinker {
     private String command;
+
     private Environment env = null;
+
     private String identifier;
+
     private String identifierArg;
+
     private boolean isLibtool;
+
     private String[] librarySets;
+
     private CommandLineLinker libtoolLinker;
+
     private boolean newEnvironment = false;
+
     private String outputSuffix;
-    
+
     // FREEHEP
     private int maxPathLength = 250;
 
-
     /** Creates a comand line linker invocation */
-    public CommandLineLinker(String command,
-        String identifierArg,
-        String[] extensions,
-        String[] ignoredExtensions, String outputSuffix,
-        boolean isLibtool, CommandLineLinker libtoolLinker)
-    {
+    public CommandLineLinker(String command, String identifierArg,
+        String[] extensions, String[] ignoredExtensions, String outputSuffix,
+        boolean isLibtool, CommandLineLinker libtoolLinker) {
         super(extensions, ignoredExtensions);
         this.command = command;
         this.identifierArg = identifierArg;
@@ -78,66 +83,85 @@ public abstract class CommandLineLinker extends AbstractLinker
     }
 
     protected void addBase(CCTask task, long base, Vector<String> args) {
-      // NB: Do nothing by default.
+        // NB: Do nothing by default.
     }
+
     protected void addFixed(CCTask task, Boolean fixed, Vector<String> args) {
-      // NB: Do nothing by default.
+        // NB: Do nothing by default.
     }
-    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector<String> args) {
-      // NB: Do nothing by default.
+
+    protected void addImpliedArgs(CCTask task, boolean debug,
+        LinkType linkType, Vector<String> args) {
+        // NB: Do nothing by default.
     }
-    protected void addIncremental(CCTask task, boolean incremental, Vector<String> args) {
-      // NB: Do nothing by default.
+
+    protected void addIncremental(CCTask task, boolean incremental,
+        Vector<String> args) {
+        // NB: Do nothing by default.
     }
+
     //
-    //  Windows processors handle these through file list
+    // Windows processors handle these through file list
     //
-    protected String[] addLibrarySets(CCTask task, LibrarySet[] libsets, Vector<String> preargs,
-        Vector<String> midargs, Vector<String> endargs) {
+    protected String[] addLibrarySets(CCTask task, LibrarySet[] libsets,
+        Vector<String> preargs, Vector<String> midargs, Vector<String> endargs) {
         return null;
     }
+
     protected void addMap(CCTask task, boolean map, Vector<String> args) {
-      // NB: Do nothing by default.
+        // NB: Do nothing by default.
     }
+
     protected void addStack(CCTask task, int stack, Vector<String> args) {
-      // NB: Do nothing by default.
+        // NB: Do nothing by default.
     }
+
     protected void addEntry(CCTask task, String entry, Vector<String> args) {
-      // NB: Do nothing by default.
+        // NB: Do nothing by default.
     }
-    
-    protected LinkerConfiguration createConfiguration(
-      CCTask task,
-      LinkType linkType,
-      ProcessorDef[] baseDefs, LinkerDef specificDef, TargetDef targetPlatform,
-	  VersionInfo versionInfo) {
 
-      Vector<String> preargs = new Vector<String>();
-      Vector<String> midargs = new Vector<String>();
-      Vector<String> endargs = new Vector<String>();
-      Vector<String>[] args = new Vector[] { preargs, midargs, endargs };
+    protected LinkerConfiguration createConfiguration(CCTask task,
+        LinkType linkType, ProcessorDef[] baseDefs, LinkerDef specificDef,
+        TargetDef targetPlatform, VersionInfo versionInfo) {
 
-      LinkerDef[] defaultProviders = new LinkerDef[baseDefs.length+1];
-      defaultProviders[0] = specificDef;
-      for(int i = 0; i < baseDefs.length; i++) {
-        defaultProviders[i+1] = (LinkerDef) baseDefs[i];
-      }
-      //
-      //   add command line arguments inherited from <cc> element
-      //     any "extends" and finally the specific CompilerDef
-      CommandLineArgument[] commandArgs;
-      for(int i = defaultProviders.length-1; i >= 0; i--) {
-        commandArgs = defaultProviders[i].getActiveProcessorArgs();
-        for(int j = 0; j < commandArgs.length; j++) {
-          args[commandArgs[j].getLocation()].
-                addElement(commandArgs[j].getValue());
+        Vector<String> preargs = new Vector<String>();
+        Vector<String> midargs = new Vector<String>();
+        Vector<String> endargs = new Vector<String>();
+        Vector<String>[] args = new Vector[] {
+            preargs, midargs, endargs
+        };
+
+        LinkerDef[] defaultProviders = new LinkerDef[baseDefs.length + 1];
+        defaultProviders[0] = specificDef;
+        for (int i = 0; i < baseDefs.length; i++) {
+            defaultProviders[i + 1] = (LinkerDef)baseDefs[i];
         }
-      }
+        //
+        // add command line arguments inherited from <cc> element
+        // any "extends" and finally the specific CompilerDef
+        CommandLineArgument[] commandArgs;
+        for (int i = defaultProviders.length - 1; i >= 0; i--) {
+            LinkerDef linkerDef = defaultProviders[i];
+            commandArgs = linkerDef.getActiveProcessorArgs();
+            for (int j = 0; j < commandArgs.length; j++) {
+                args[commandArgs[j].getLocation()].addElement(commandArgs[j].getValue());
+            }
+        }
+
+        Set<File> libraryDirectories = new LinkedHashSet<File>();
+        for (int i = defaultProviders.length - 1; i >= 0; i--) {
+            LinkerDef linkerDef = defaultProviders[i];
+            for (File libraryDirectory : linkerDef.getLibraryDirectories()) {
+                if (libraryDirectories.add(libraryDirectory)) {
+                    addLibraryDirectory(libraryDirectory, preargs);
+                }
+            }
+        }
 
         Vector<ProcessorParam> params = new Vector<ProcessorParam>();
         //
-        //   add command line arguments inherited from <cc> element
-        //     any "extends" and finally the specific CompilerDef
+        // add command line arguments inherited from <cc> element
+        // any "extends" and finally the specific CompilerDef
         ProcessorParam[] paramArray;
         for (int i = defaultProviders.length - 1; i >= 0; i--) {
             paramArray = defaultProviders[i].getActiveProcessorParams();
@@ -148,58 +172,81 @@ public abstract class CommandLineLinker extends AbstractLinker
 
         paramArray = params.toArray(new ProcessorParam[params.size()]);
 
-        boolean debug = specificDef.getDebug(baseDefs,0);
+        boolean debug = specificDef.getDebug(baseDefs, 0);
 
+        String startupObject = getStartupObject(linkType);
 
-      String startupObject = getStartupObject(linkType);
+        addImpliedArgs(task, debug, linkType, preargs);
+        addIncremental(task, specificDef.getIncremental(defaultProviders, 1),
+            preargs);
+        addFixed(task, specificDef.getFixed(defaultProviders, 1), preargs);
+        addMap(task, specificDef.getMap(defaultProviders, 1), preargs);
+        addBase(task, specificDef.getBase(defaultProviders, 1), preargs);
+        addStack(task, specificDef.getStack(defaultProviders, 1), preargs);
+        addEntry(task, specificDef.getEntry(defaultProviders, 1), preargs);
 
-      addImpliedArgs(task, debug, linkType, preargs);
-      addIncremental(task, specificDef.getIncremental(defaultProviders,1), preargs);
-      addFixed(task, specificDef.getFixed(defaultProviders,1), preargs);
-      addMap(task, specificDef.getMap(defaultProviders,1), preargs);
-      addBase(task, specificDef.getBase(defaultProviders,1), preargs);
-      addStack(task, specificDef.getStack(defaultProviders,1), preargs);
-      addEntry(task, specificDef.getEntry(defaultProviders, 1), preargs);
-
-      String[] libnames = null;
-      LibrarySet[] libsets = specificDef.getActiveLibrarySets(defaultProviders,1);
-// FREEHEP call at all times
-//      if (libsets.length > 0) {
+        String[] libnames = null;
+        LibrarySet[] libsets = specificDef.getActiveLibrarySets(
+            defaultProviders, 1);
+        // FREEHEP call at all times
+        // if (libsets.length > 0) {
         libnames = addLibrarySets(task, libsets, preargs, midargs, endargs);
-//      }
+        // }
 
-      StringBuffer buf = new StringBuffer(getIdentifier());
-      for (int i = 0; i < 3; i++) {
-        Enumeration<String> argenum = args[i].elements();
-        while (argenum.hasMoreElements()) {
-           buf.append(' ');
-           buf.append(argenum.nextElement());
+        StringBuffer buf = new StringBuffer(getIdentifier());
+        for (int i = 0; i < 3; i++) {
+            Enumeration<String> argenum = args[i].elements();
+            while (argenum.hasMoreElements()) {
+                buf.append(' ');
+                buf.append(argenum.nextElement());
+            }
         }
-      }
-      String configId = buf.toString();
+        String configId = buf.toString();
 
-      String[][] options = new String[][] {
-        new String[args[0].size() + args[1].size()],
-        new String[args[2].size()] };
-      args[0].copyInto(options[0]);
-      int offset = args[0].size();
-      for (int i = 0; i < args[1].size(); i++) {
-        options[0][i+offset] = (String) args[1].elementAt(i);
-      }
-      args[2].copyInto(options[1]);
+        String[][] options = new String[][] {
+            new String[args[0].size() + args[1].size()],
+            new String[args[2].size()]
+        };
+        args[0].copyInto(options[0]);
+        int offset = args[0].size();
+        for (int i = 0; i < args[1].size(); i++) {
+            options[0][i + offset] = (String)args[1].elementAt(i);
+        }
+        args[2].copyInto(options[1]);
 
-      // if this linker doesn't have an env, and there is a more generically definition for environment, use it.
-      if( null != specificDef.getEnv() && null == this.env )
-          this.env = specificDef.getEnv();
+        // if this linker doesn't have an env, and there is a more generically
+        // definition for environment, use it.
+        if (null != specificDef.getEnv() && null == this.env)
+            this.env = specificDef.getEnv();
 
-      boolean rebuild = specificDef.getRebuild(baseDefs,0);
-      boolean map = specificDef.getMap(defaultProviders,1);
-      String toolPath = specificDef.getToolPath();
+        boolean rebuild = specificDef.getRebuild(baseDefs, 0);
+        boolean map = specificDef.getMap(defaultProviders, 1);
+        String toolPath = specificDef.getToolPath();
 
-      //task.log("libnames:"+libnames.length, Project.MSG_VERBOSE);
-      return new CommandLineLinkerConfiguration(this,configId,options,
-              paramArray,
-              rebuild,map, debug,libnames, startupObject, toolPath);
+        // task.log("libnames:"+libnames.length, Project.MSG_VERBOSE);
+        return new CommandLineLinkerConfiguration(this, configId, options,
+            paramArray, rebuild, map, debug, libnames, startupObject, toolPath);
+    }
+
+    protected void addLibraryDirectory(File libraryDirectory,
+        Vector<String> preargs) {
+        try {
+            if (libraryDirectory != null && libraryDirectory.exists()) {
+                File currentDir = new File(".").getParentFile();
+                String path = libraryDirectory.getCanonicalPath();
+                if (currentDir != null) {
+                    String currentPath = currentDir.getCanonicalPath();
+                    path = CUtil.getRelativePath(currentPath, libraryDirectory);
+                }
+                addLibraryPath(preargs, path);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to add library path: "
+                + libraryDirectory);
+        }
+    }
+
+    protected void addLibraryPath(Vector<String> preargs, String path) {
     }
 
     /**
@@ -212,117 +259,122 @@ public abstract class CommandLineLinker extends AbstractLinker
      * @param arg linker argument
      */
     protected String decorateLinkerOption(StringBuffer buf, String arg) {
-      return arg;
+        return arg;
     }
 
     protected final String getCommand() {
-      return command;
+        return command;
     }
+
     protected abstract String getCommandFileSwitch(String commandFile);
 
     public String getCommandWithPath(CommandLineLinkerConfiguration config) {
-        if( config.getCommandPath() != null ) {
-            File command = new File( config.getCommandPath(), this.getCommand() );
+        if (config.getCommandPath() != null) {
+            File command = new File(config.getCommandPath(), this.getCommand());
             try {
                 return command.getCanonicalPath();
             } catch (IOException e) {
                 e.printStackTrace();
                 return command.getAbsolutePath();
             }
-        }
-        else
-        {
+        } else {
             return this.getCommand();
         }
     }
 
-     public String getIdentifier() {
-      if(identifier == null) {
-        if (identifierArg == null) {
-          identifier = getIdentifier(new String[] { command }, command);
-        } else {
-          identifier = getIdentifier(new String[] { command, identifierArg },
-            command);
+    public String getIdentifier() {
+        if (identifier == null) {
+            if (identifierArg == null) {
+                identifier = getIdentifier(new String[] {
+                    command
+                }, command);
+            } else {
+                identifier = getIdentifier(new String[] {
+                    command, identifierArg
+                }, command);
+            }
         }
-      }
-      return identifier;
+        return identifier;
     }
+
     public final CommandLineLinker getLibtoolLinker() {
-      if (libtoolLinker != null) {
-        return libtoolLinker;
-      }
-      return this;
+        if (libtoolLinker != null) {
+            return libtoolLinker;
+        }
+        return this;
     }
+
     protected abstract int getMaximumCommandLength();
 
     public String[] getOutputFileNames(String baseName, VersionInfo versionInfo) {
-        return new String[] { baseName + outputSuffix };
+        return new String[] {
+            baseName + outputSuffix
+        };
     }
 
     protected String[] getOutputFileSwitch(CCTask task, String outputFile) {
-    	// FREEHEP BEGIN
-    	if (isWindows() && outputFile.length() > maxPathLength) {
-    		throw new BuildException("Absolute path too long, "+outputFile.length()+" > "+maxPathLength+": '"+outputFile);
-    	}
-    	// FREEHEP END
+        // FREEHEP BEGIN
+        if (isWindows() && outputFile.length() > maxPathLength) {
+            throw new BuildException("Absolute path too long, "
+                + outputFile.length() + " > " + maxPathLength + ": '"
+                + outputFile);
+        }
+        // FREEHEP END
         return getOutputFileSwitch(outputFile);
     }
+
     protected abstract String[] getOutputFileSwitch(String outputFile);
+
     protected String getStartupObject(LinkType linkType) {
-      return null;
+        return null;
     }
 
     /**
      * Performs a link using a command line linker
      *
      */
-    public void link(CCTask task,
-                     File outputFile,
-                     String[] sourceFiles,
-                     CommandLineLinkerConfiguration config)
-                     throws BuildException
-    {
+    public void link(CCTask task, File outputFile, String[] sourceFiles,
+        CommandLineLinkerConfiguration config) throws BuildException {
         File parentDir = new File(outputFile.getParent());
         String parentPath;
         try {
-          parentPath = parentDir.getCanonicalPath();
-        } catch(IOException ex) {
-          parentPath = parentDir.getAbsolutePath();
+            parentPath = parentDir.getCanonicalPath();
+        } catch (IOException ex) {
+            parentPath = parentDir.getAbsolutePath();
         }
-        String[] execArgs = prepareArguments(task, parentPath,outputFile.getName(),
-            sourceFiles, config);
+        String[] execArgs = prepareArguments(task, parentPath,
+            outputFile.getName(), sourceFiles, config);
         int commandLength = 0;
-        for(int i = 0; i < execArgs.length; i++) {
-          commandLength += execArgs[i].length() + 1;
+        for (int i = 0; i < execArgs.length; i++) {
+            commandLength += execArgs[i].length() + 1;
         }
 
         //
-        //   if command length exceeds maximum
-        //       then create a temporary
-        //       file containing everything but the command name
-        if(commandLength >= this.getMaximumCommandLength()) {
-          try {
-            execArgs = prepareResponseFile(outputFile,execArgs);
-          }
-          catch(IOException ex) {
-            throw new BuildException(ex);
-          }
+        // if command length exceeds maximum
+        // then create a temporary
+        // file containing everything but the command name
+        if (commandLength >= this.getMaximumCommandLength()) {
+            try {
+                execArgs = prepareResponseFile(outputFile, execArgs);
+            } catch (IOException ex) {
+                throw new BuildException(ex);
+            }
         }
-        
-        int retval = runCommand(task,parentDir,execArgs);        
+
+        int retval = runCommand(task, parentDir, execArgs);
         //
-        //   if the process returned a failure code then
-        //       throw an BuildException
+        // if the process returned a failure code then
+        // throw an BuildException
         //
-        if(retval != 0) {
-          //
-          //   construct the exception
-          //
-          throw new BuildException(getCommandWithPath(config) + " failed with return code " + retval, task.getLocation());
+        if (retval != 0) {
+            //
+            // construct the exception
+            //
+            throw new BuildException(getCommandWithPath(config)
+                + " failed with return code " + retval, task.getLocation());
         }
-        
+
     }
-
 
     /**
      * Prepares argument list for exec command.  Will return null
@@ -334,42 +386,40 @@ public abstract class CommandLineLinker extends AbstractLinker
      * @param config linker configuration
      * @return arguments for runTask
      */
-    protected String[] prepareArguments(
-        CCTask task,
-        String outputDir,
-        String outputFile,
-        String[] sourceFiles,
+    protected String[] prepareArguments(CCTask task, String outputDir,
+        String outputFile, String[] sourceFiles,
         CommandLineLinkerConfiguration config) {
-                        
+
         String[] preargs = config.getPreArguments();
         String[] endargs = config.getEndArguments();
-        String outputSwitch[] =  getOutputFileSwitch(task, outputFile);
-        int allArgsCount = preargs.length + 1 + outputSwitch.length +
-                sourceFiles.length + endargs.length;
+        String outputSwitch[] = getOutputFileSwitch(task, outputFile);
+        int allArgsCount = preargs.length + 1 + outputSwitch.length
+            + sourceFiles.length + endargs.length;
         if (isLibtool) {
-          allArgsCount++;
+            allArgsCount++;
         }
         String[] allArgs = new String[allArgsCount];
         int index = 0;
         if (isLibtool) {
-          allArgs[index++] = "libtool";
+            allArgs[index++] = "libtool";
         }
         allArgs[index++] = getCommandWithPath(config);
         StringBuffer buf = new StringBuffer();
 
-
         for (int i = 0; i < preargs.length; i++) {
-            allArgs[index++] = task.isDecorateLinkerOptions() ? decorateLinkerOption(buf, preargs[i]): preargs[i];
+            allArgs[index++] = task.isDecorateLinkerOptions() ? decorateLinkerOption(
+                buf, preargs[i]) : preargs[i];
         }
 
         for (int i = 0; i < outputSwitch.length; i++) {
-          allArgs[index++] = outputSwitch[i];
+            allArgs[index++] = outputSwitch[i];
         }
         for (int i = 0; i < sourceFiles.length; i++) {
-          allArgs[index++] = prepareFilename(buf,outputDir,sourceFiles[i]);
+            allArgs[index++] = prepareFilename(buf, outputDir, sourceFiles[i]);
         }
         for (int i = 0; i < endargs.length; i++) {
-            allArgs[index++] = task.isDecorateLinkerOptions() ? decorateLinkerOption(buf, endargs[i]): endargs[i];
+            allArgs[index++] = task.isDecorateLinkerOptions() ? decorateLinkerOption(
+                buf, endargs[i]) : endargs[i];
         }
 
         return allArgs;
@@ -379,14 +429,17 @@ public abstract class CommandLineLinker extends AbstractLinker
      * Processes filename into argument form
      *
      */
-    protected String prepareFilename(StringBuffer buf,
-      String outputDir, String sourceFile) {
-// FREEHEP BEGIN exit if absolute path is too long. Max length on relative paths in windows is even shorter.
-      if (isWindows() && sourceFile.length() > maxPathLength) {
-    	  throw new BuildException("Absolute path too long, "+sourceFile.length()+" > "+maxPathLength+": '"+sourceFile);
-      }
-// FREEHEP END 
-      return quoteFilename(buf, sourceFile);
+    protected String prepareFilename(StringBuffer buf, String outputDir,
+        String sourceFile) {
+        // FREEHEP BEGIN exit if absolute path is too long. Max length on
+        // relative paths in windows is even shorter.
+        if (isWindows() && sourceFile.length() > maxPathLength) {
+            throw new BuildException("Absolute path too long, "
+                + sourceFile.length() + " > " + maxPathLength + ": '"
+                + sourceFile);
+        }
+        // FREEHEP END
+        return quoteFilename(buf, sourceFile);
     }
 
     /**
@@ -397,47 +450,46 @@ public abstract class CommandLineLinker extends AbstractLinker
      * @param args output of prepareArguments
      * @return arguments for runTask
      */
-    protected String[] prepareResponseFile(File outputFile,String[] args) throws IOException
-    {
+    protected String[] prepareResponseFile(File outputFile, String[] args)
+        throws IOException {
         String baseName = outputFile.getName();
-        File commandFile = new File(outputFile.getParent(),baseName + ".rsp");
+        File commandFile = new File(outputFile.getParent(), baseName + ".rsp");
         FileWriter writer = new FileWriter(commandFile);
         int execArgCount = 1;
         if (isLibtool) {
-          execArgCount++;
+            execArgCount++;
         }
-        String[] execArgs = new String[execArgCount+1];
+        String[] execArgs = new String[execArgCount + 1];
         for (int i = 0; i < execArgCount; i++) {
-          execArgs[i] = args[i];
+            execArgs[i] = args[i];
         }
         execArgs[execArgCount] = getCommandFileSwitch(commandFile.toString());
-        for(int i = execArgCount; i < args.length; i++) {
-        	//
-        	//   if embedded space and not quoted then
-        	//       quote argument
-          if (args[i].indexOf(" ") >= 0 && args[i].charAt(0) != '\"') {
-          	writer.write('\"');
-          	writer.write(args[i]);
-          	writer.write("\"\n");
-          } else {
-          	writer.write(args[i]);
-            writer.write('\n');
-          }
+        for (int i = execArgCount; i < args.length; i++) {
+            //
+            // if embedded space and not quoted then
+            // quote argument
+            if (args[i].indexOf(" ") >= 0 && args[i].charAt(0) != '\"') {
+                writer.write('\"');
+                writer.write(args[i]);
+                writer.write("\"\n");
+            } else {
+                writer.write(args[i]);
+                writer.write('\n');
+            }
         }
         writer.close();
         return execArgs;
     }
 
-
-    protected String quoteFilename(StringBuffer buf,String filename) {
-      if(filename.indexOf(' ') >= 0) {
-        buf.setLength(0);
-        buf.append('\"');
-        buf.append(filename);
-        buf.append('\"');
-        return buf.toString();
-      }
-      return filename;
+    protected String quoteFilename(StringBuffer buf, String filename) {
+        if (filename.indexOf(' ') >= 0) {
+            buf.setLength(0);
+            buf.append('\"');
+            buf.append(filename);
+            buf.append('\"');
+            return buf.toString();
+        }
+        return filename;
     }
 
     /**
@@ -445,9 +497,9 @@ public abstract class CommandLineLinker extends AbstractLinker
      * and test the arguments without actually spawning the
      * compiler
      */
-    protected int runCommand(CCTask task, File workingDir,String[] cmdline)
-      throws BuildException {
-      return CUtil.runCommand(task,workingDir,cmdline, newEnvironment, env);
+    protected int runCommand(CCTask task, File workingDir, String[] cmdline)
+        throws BuildException {
+        return CUtil.runCommand(task, workingDir, cmdline, newEnvironment, env);
     }
 
     protected final void setCommand(String command) {

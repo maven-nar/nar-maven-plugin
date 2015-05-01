@@ -20,6 +20,7 @@
 package com.github.maven_nar.test;
 
 import com.github.maven_nar.Linker;
+import com.github.maven_nar.NarCompileMojo;
 import com.github.maven_nar.NarProperties;
 import com.github.maven_nar.NarUtil;
 
@@ -59,7 +60,7 @@ public class TestLinkerVersion
 	    // Skip testing the MSVC linker on Win if vsvars32.bat has not run
 	    return;
 	  }
-        String version = linker.getVersion();
+        String version = linker.getVersion(new NarCompileMojo());
         Assert.assertNotNull( version );
     }
 

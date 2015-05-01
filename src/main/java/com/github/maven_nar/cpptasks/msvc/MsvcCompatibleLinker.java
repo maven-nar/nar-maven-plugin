@@ -26,6 +26,7 @@ import com.github.maven_nar.cpptasks.VersionInfo;
 import com.github.maven_nar.cpptasks.compiler.CommandLineLinker;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.platforms.WindowsPlatform;
+import com.github.maven_nar.cpptasks.types.LibrarySet;
 import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
 
 import java.io.File;
@@ -40,17 +41,40 @@ import java.util.Vector;
  */
 public abstract class MsvcCompatibleLinker extends CommandLineLinker {
     public MsvcCompatibleLinker(String command, String identifierArg,
-            String outputSuffix) {
-        super(command, identifierArg, new String[]{".obj", ".lib", ".res"},
-                new String[]{".map", ".pdb", ".lnk", ".dll", ".tlb", ".rc", ".h"}, outputSuffix,
-                false, null);
+        String outputSuffix) {
+        super(command, identifierArg, new String[] {
+            ".obj", ".lib", ".res"
+        }, new String[] {
+            ".map", ".pdb", ".lnk", ".dll", ".tlb", ".rc", ".h"
+        }, outputSuffix, false, null);
     }
+
+    protected void addLibraryPath(Vector<String> preargs, String path) {
+        preargs.addElement("/LIBPATH:" + path);
+    }
+
+    protected String[] addLibrarySets(CCTask task, LibrarySet[] libsets,
+        Vector<String> preargs, Vector<String> midargs, Vector<String> endargs) {
+        for (int i = 0; i < libsets.length; i++) {
+            LibrarySet set = libsets[i];
+            File libdir = set.getDir(null);
+            String[] libs = set.getLibs();
+            addLibraryDirectory(libdir, preargs);
+
+            for (String libraryName : libs) {
+                endargs.add(libraryName + ".lib");
+            }
+        }
+        return null;
+    }
+
     protected void addBase(CCTask task, long base, Vector<String> args) {
         if (base >= 0) {
             String baseAddr = Long.toHexString(base);
             args.addElement("/BASE:0x" + baseAddr);
         }
     }
+
     protected void addFixed(CCTask task, Boolean fixed, Vector<String> args) {
         if (fixed != null) {
             if (fixed.booleanValue()) {
@@ -60,7 +84,9 @@ public abstract class MsvcCompatibleLinker extends CommandLineLinker {
             }
         }
     }
-    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector<String> args) {
+
+    protected void addImpliedArgs(CCTask task, boolean debug,
+        LinkType linkType, Vector<String> args) {
         args.addElement("/NOLOGO");
         if (debug) {
             args.addElement("/DEBUG");
@@ -69,45 +95,56 @@ public abstract class MsvcCompatibleLinker extends CommandLineLinker {
             args.addElement("/DLL");
         }
         //
-        //  The following lines were commented out
-        //   from v 1.5 to v 1.12 with no explanation
+        // The following lines were commented out
+        // from v 1.5 to v 1.12 with no explanation
         //
-         if(linkType.isSubsystemGUI()) {
-           args.addElement("/SUBSYSTEM:WINDOWS"); } else {
-         if(linkType.isSubsystemConsole()) {
-           args.addElement("/SUBSYSTEM:CONSOLE"); } }
+        if (linkType.isSubsystemGUI()) {
+            args.addElement("/SUBSYSTEM:WINDOWS");
+        } else {
+            if (linkType.isSubsystemConsole()) {
+                args.addElement("/SUBSYSTEM:CONSOLE");
+            }
+        }
     }
-    protected void addIncremental(CCTask task, boolean incremental, Vector<String> args) {
+
+    protected void addIncremental(CCTask task, boolean incremental,
+        Vector<String> args) {
         if (incremental) {
             args.addElement("/INCREMENTAL:YES");
         } else {
             args.addElement("/INCREMENTAL:NO");
         }
     }
+
     protected void addMap(CCTask task, boolean map, Vector<String> args) {
         if (map) {
             args.addElement("/MAP");
         }
     }
+
     protected void addStack(CCTask task, int stack, Vector<String> args) {
         if (stack >= 0) {
             String stackStr = Integer.toHexString(stack);
             args.addElement("/STACK:0x" + stackStr);
         }
     }
+
     protected void addEntry(CCTask task, String entry, Vector<String> args) {
-    	if (entry != null) {
-    		args.addElement("/ENTRY:" + entry);
-    	}
+        if (entry != null) {
+            args.addElement("/ENTRY:" + entry);
+        }
     }
-    
+
     public String getCommandFileSwitch(String commandFile) {
         return "@" + commandFile;
     }
+
     public File[] getLibraryPath() {
         return CUtil.getPathFromEnvironment("LIB", ";");
     }
-    public String[] getLibraryPatterns(String[] libnames, LibraryTypeEnum libType) {
+
+    public String[] getLibraryPatterns(String[] libnames,
+        LibraryTypeEnum libType) {
         StringBuffer buf = new StringBuffer();
         String[] patterns = new String[libnames.length];
         for (int i = 0; i < libnames.length; i++) {
@@ -118,17 +155,22 @@ public abstract class MsvcCompatibleLinker extends CommandLineLinker {
         }
         return patterns;
     }
+
     public int getMaximumCommandLength() {
-// FREEHEP stay on the safe side
+        // FREEHEP stay on the safe side
         return 32000; // 32767;
     }
+
     public String[] getOutputFileSwitch(String outputFile) {
-        return new String[]{"/OUT:" + outputFile};
+        return new String[] {
+            "/OUT:" + outputFile
+        };
     }
+
     public boolean isCaseSensitive() {
         return false;
     }
-    
+
     /**
      * Adds source or object files to the bidded fileset to
      * support version information.
@@ -140,12 +182,10 @@ public abstract class MsvcCompatibleLinker extends CommandLineLinker {
      * @param objDir directory for generated files
      * @param matcher bidded fileset
      */
-	public void addVersionFiles(final VersionInfo versionInfo, 
-			final LinkType linkType,
-			final File outputFile,
-			final boolean isDebug,
-			final File objDir, 
-			final TargetMatcher matcher) throws IOException {
-		WindowsPlatform.addVersionFiles(versionInfo, linkType, outputFile, isDebug, objDir, matcher);
-	}
+    public void addVersionFiles(final VersionInfo versionInfo,
+        final LinkType linkType, final File outputFile, final boolean isDebug,
+        final File objDir, final TargetMatcher matcher) throws IOException {
+        WindowsPlatform.addVersionFiles(versionInfo, linkType, outputFile,
+            isDebug, objDir, matcher);
+    }
 }
