@@ -187,7 +187,7 @@ public class Linker
         return name;
     }
 
-    public final String getVersion() 
+    public final String getVersion(AbstractNarMojo mojo) 
         throws MojoFailureException, MojoExecutionException
     {
         if ( name == null )
@@ -213,13 +213,7 @@ public class Linker
         }
         else if ( name.equals( "msvc" ) )
         {
-            NarUtil.runCommand( "link", new String[] { "/?" }, null, null, out, err, dbg, log, true );
-            Pattern p = Pattern.compile( "\\d+\\.\\d+\\.\\d+(\\.\\d+)?" );
-            Matcher m = p.matcher( out.toString() );
-            if ( m.find() )
-            {
-                version = m.group( 0 );
-            }
+            version = mojo.getMsvc().getVersion();
         }
         else if ( name.equals( "icc" ) || name.equals( "icpc" ) )
         {
@@ -385,7 +379,7 @@ public class Linker
         }
 
         // FIXME, this should be done in CPPTasks at some point, and may not be necessary, but was for VS 2010 beta 2
-        if ( os.equals( OS.WINDOWS ) && getName( null, null ).equals( "msvc" ) && !getVersion().startsWith( "6." ) )
+        if ( os.equals( OS.WINDOWS ) && getName( null, null ).equals( "msvc" ) && !getVersion(mojo).startsWith( "6." ) )
         {
             LinkerArgument arg = new LinkerArgument();
             arg.setValue( "/MANIFEST" );
@@ -505,6 +499,8 @@ public class Linker
             addLibraries( sysLibsList, linker, antProject, true );
         }
 
+        mojo.getMsvc().configureLinker(mojo, linker);
+        
         return linker;
     }
 
@@ -516,45 +512,6 @@ public class Linker
             return;
         }
 
-        String[] lib = libraryList.split( "," );
-
-        for ( int i = 0; i < lib.length; i++ )
-        {
-
-            String[] libInfo = lib[i].trim().split( ":", 3 );
-
-            LibrarySet librarySet = new LibrarySet();
-
-            if ( isSystem )
-            {
-                librarySet = new SystemLibrarySet();
-            }
-
-            librarySet.setProject( antProject );
-            librarySet.setLibs( new CUtil.StringArrayBuilder( libInfo[0] ) );
-
-            if ( libInfo.length > 1 )
-            {
-
-                LibraryTypeEnum libType = new LibraryTypeEnum();
-
-                libType.setValue( libInfo[1] );
-                librarySet.setType( libType );
-
-                if ( !isSystem && ( libInfo.length > 2 ) )
-                {
-                    librarySet.setDir( new File( libInfo[2] ) );
-                }
-            }
-
-            if ( !isSystem )
-            {
-                linker.addLibset( librarySet );
-            }
-            else
-            {
-                linker.addSyslibset( (SystemLibrarySet) librarySet );
-            }
-        }
+        
     }
 }
