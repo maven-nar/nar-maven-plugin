@@ -2,18 +2,23 @@ package com.github.maven_nar;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.tools.ant.types.Environment.Variable;
+import org.apache.xbean.propertyeditor.CollectionUtil;
 
 import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.LinkerDef;
 import com.github.maven_nar.cpptasks.types.SystemIncludePath;
-import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 
 public class Msvc {
 
@@ -29,23 +34,79 @@ public class Msvc {
     @Parameter
     private String windowsSdkVersion;
 
-    public String getWindowsSdkVersion() throws MojoExecutionException {
+    private AbstractNarMojo mojo;
+
+    public void setMojo(AbstractNarMojo mojo) throws MojoExecutionException {
+        this.mojo = mojo;
         init();
+    }
+
+    public String getWindowsSdkVersion() throws MojoExecutionException {
         return windowsSdkVersion;
     }
 
     public String getVersion() throws MojoExecutionException {
-        init();
         return version;
     }
 
     private void init() throws MojoExecutionException {
-        if (NarUtil.getOS(null).equals(OS.WINDOWS)) {
+        String mojoOs = mojo.getOS();
+        if (NarUtil.getOS(null).equals(OS.WINDOWS) && OS.WINDOWS.equals(mojoOs)) {
             initVisualStudio();
             initWindowsSdk();
+            initPath();
         } else {
             version = "";
             windowsSdkVersion = "";
+        }
+    }
+
+    public Variable getPathVariable() {
+        if (paths.isEmpty()) {
+            return null;
+        } else {
+            Variable pathVariable = new Variable();
+            pathVariable.setKey("PATH");
+            StringBuilder string = new StringBuilder();
+            boolean first = true;
+            for (String path : paths) {
+                if (first) {
+                    first = false;
+                } else {
+                    string.append(";");
+                }
+                string.append(path);
+            }
+            pathVariable.setValue(string.toString());
+            return pathVariable;
+        }
+    }
+
+    private void initPath() throws MojoExecutionException {
+        String mojoArchitecture = mojo.getArchitecture();
+        String osArchitecture = NarUtil.getArchitecture(null);
+
+        addPath(home, "Common7/Tools");
+        addPath(home, "Common7/IDE");
+
+        if (compareVersion(windowsSdkVersion, "7.1A") <= 0) {
+            addPath(home, "VC/bin");
+            addPath(windowsSdkHome, "bin");
+        } else {
+            if (!osArchitecture.equals(mojoArchitecture)) {
+                addPath(home, "VC/bin/" + osArchitecture + "_"
+                    + mojoArchitecture);
+            }
+            if ("x86".equals(osArchitecture)) {
+                addPath(home, "VC/bin");
+            } else {
+                addPath(home, "VC/bin/" + osArchitecture);
+            }
+            String sdkArch = mojoArchitecture;
+            if ("amd64".equals(mojoArchitecture)) {
+                sdkArch = "x64";
+            }
+            addPath(windowsSdkHome, "bin/" + sdkArch);
         }
     }
 
@@ -161,52 +222,32 @@ public class Msvc {
         return version1.replace(".", "").compareTo(version2.replace(".", ""));
     }
 
+    private Set<String> paths = new LinkedHashSet<String>();
+
     public void configureCCTask(NarCompileMojo mojo, CCTask task)
         throws MojoExecutionException {
         String os = mojo.getOS();
-        String mojoArchitecture = mojo.getArchitecture();
-        String osArchitecture = NarUtil.getArchitecture(null);
         if (os.equals(OS.WINDOWS)) {
-            init();
-            addPath(task, "PATH", home, "Common7/Tools");
             addIncludePath(task, home, "VC/include");
             if (compareVersion(windowsSdkVersion, "7.1A") <= 0) {
-                addPath(task, "PATH", home, "VC/bin");
-                addPath(task, "PATH", windowsSdkHome, "bin");
-
                 addIncludePath(task, windowsSdkHome, "include");
             } else {
-                if ("x86".equals(osArchitecture)) {
-                    addPath(task, "PATH", home, "VC/bin");
-                    if (!"x86".equals(mojoArchitecture)) {
-                        addPath(task, "PATH", home, "VC/bin/" + osArchitecture
-                            + "_" + mojoArchitecture);
-                    }
-                } else {
-                    addPath(task, "PATH", home, "VC/bin/" + osArchitecture);
-                    if (!osArchitecture.equals(mojoArchitecture)) {
-                        addPath(task, "PATH", home, "VC/bin/" + osArchitecture
-                            + "_" + mojoArchitecture);
-                    }
-                }
-                String sdkArch = mojoArchitecture;
-                if ("amd64".equals(mojoArchitecture)) {
-                    sdkArch = "x64";
-                }
-                addPath(task, "PATH", windowsSdkHome, "bin/" + sdkArch);
-
                 addIncludePath(task, windowsSdkHome, "include/shared");
                 addIncludePath(task, windowsSdkHome, "include/um");
             }
-            addPath(task, "PATH", home, "Common7/IDE");
+            task.addEnv(getPathVariable());
         }
     }
 
-    private void addPath(CCTask task, String string, File home, String path)
-        throws MojoExecutionException {
+    private void addPath(File home, String path) throws MojoExecutionException {
         File directory = new File(home, path);
         if (directory.exists()) {
-            task.addPath("PATH", directory);
+            try {
+                paths.add(directory.getCanonicalPath());
+            } catch (IOException e) {
+                throw new IllegalArgumentException("Unable to get path: "
+                    + directory, e);
+            }
         }
     }
 
@@ -214,33 +255,38 @@ public class Msvc {
         throws MojoExecutionException {
         String os = mojo.getOS();
         if (os.equals(OS.WINDOWS)) {
-            init();
             String arch = mojo.getArchitecture();
-            if ("x86".equals(arch)) {
-                linker.addLibraryDirectory(home, "VC/lib");
-                linker.addLibraryDirectory(windowsSdkHome, "lib");
-            } else {
-                linker.addLibraryDirectory(home, "VC/lib/" + arch);
-                if (compareVersion(windowsSdkVersion, "7.1A") < 0) {
-                    throw new MojoExecutionException("Architecture "
-                        + mojo.getArchitecture()
-                        + " not supported for Microsoft Windows SDK "
-                        + windowsSdkVersion);
+            if (compareVersion(windowsSdkVersion, "7.1A") < 0) {
+                if ("x86".equals(arch)) {
+                    linker.addLibraryDirectory(home, "VC/lib");
+                    linker.addLibraryDirectory(windowsSdkHome, "lib");
                 } else {
-                    String sdkArch = arch;
-                    if ("amd64".equals(arch)) {
-                        sdkArch = "x64";
-                    }
-                    if (compareVersion(windowsSdkVersion, "7.1A") == 0) {
+                    throw new MojoExecutionException("Architure " + arch
+                        + " not supported for Windows SDK " + windowsSdkVersion);
+                }
+            } else {
+                if ("x86".equals(arch)) {
+                    linker.addLibraryDirectory(home, "VC/lib");
+                } else {
+                    linker.addLibraryDirectory(home, "VC/lib/" + arch);
+                }
+                String sdkArch = arch;
+                if ("amd64".equals(arch)) {
+                    sdkArch = "x64";
+                }
+                if (compareVersion(windowsSdkVersion, "7.1A") == 0) {
+                    if ("x86".equals(arch)) {
+                        linker.addLibraryDirectory(windowsSdkHome, "lib");
+                    } else {
                         linker.addLibraryDirectory(windowsSdkHome, "lib/"
                             + sdkArch);
-                    } else if (compareVersion(windowsSdkVersion, "8.0") == 0) {
-                        linker.addLibraryDirectory(windowsSdkHome,
-                            "Lib/Win8/um" + sdkArch);
-                    } else {
-                        linker.addLibraryDirectory(windowsSdkHome,
-                            "Lib/Winv6.3/um" + sdkArch);
                     }
+                } else if (compareVersion(windowsSdkVersion, "8.0") == 0) {
+                    linker.addLibraryDirectory(windowsSdkHome, "Lib/Win8/um/"
+                        + sdkArch);
+                } else {
+                    linker.addLibraryDirectory(windowsSdkHome,
+                        "Lib/Winv6.3/um/" + sdkArch);
                 }
             }
         }
@@ -266,10 +312,6 @@ public class Msvc {
 
     @Override
     public String toString() {
-        try {
-            init();
-        } catch (MojoExecutionException e) {
-        }
         return home + "\n" + windowsSdkHome;
     }
 }

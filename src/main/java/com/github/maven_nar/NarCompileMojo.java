@@ -458,14 +458,15 @@ public class NarCompileMojo
         if ( getRuntime( getAOL() ).equals( "dynamic" ) && getOS().equals( OS.WINDOWS )
             && getLinker().getName( null, null ).equals( "msvc" ) && !getLinker().getVersion(this).startsWith( "6." ) )
         {
+            String[] env =  new String[] {"PATH=" + getMsvc().getPathVariable().getValue()};
             String libType = library.getType();
             if ( libType.equals( Library.JNI ) || libType.equals( Library.SHARED ) )
             {
                 String dll = outFile.getPath() + ".dll";
                 String manifest = dll + ".manifest";
                 int result =
-                    NarUtil.runCommand( "mt.exe", new String[] { "/manifest", manifest,
-                        "/outputresource:" + dll + ";#2" }, null, null, getLog() );
+                    NarUtil.runCommand( "cmd", new String[] {"/C","mt.exe", "/manifest", manifest,
+                        "/outputresource:" + dll + ";#2" }, null, env, getLog() );
                 if (result != 0)
                 {
                     throw new MojoFailureException("MT.EXE failed with exit code: " + result);
@@ -473,9 +474,9 @@ public class NarCompileMojo
             } else if (libType.equals(Library.EXECUTABLE)) {
                 String exe = outFile.getPath() + ".exe";
                 String manifest = exe + ".manifest";
-                int result = NarUtil.runCommand("mt.exe",
-                        new String[] { "/manifest", manifest,
-                                "/outputresource:" + exe + ";#1" }, null, null, getLog());
+                int result = NarUtil.runCommand("cmd",
+                        new String[] { "/C","mt.exe","/manifest", manifest,
+                                "/outputresource:" + exe + ";#1" }, null, env, getLog());
                 if (result != 0)
                     throw new MojoFailureException(
                             "MT.EXE failed with exit code: " + result);

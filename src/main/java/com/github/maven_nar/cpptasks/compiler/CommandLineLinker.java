@@ -220,7 +220,12 @@ public abstract class CommandLineLinker extends AbstractLinker {
         // definition for environment, use it.
         if (null != specificDef.getEnv() && null == this.env)
             this.env = specificDef.getEnv();
-
+        for (ProcessorDef processorDef : baseDefs) {
+            Environment environment = processorDef.getEnv();
+            if (null != environment && null == this.env) {
+                this.env = environment;
+            }
+        }
         boolean rebuild = specificDef.getRebuild(baseDefs, 0);
         boolean map = specificDef.getMap(defaultProviders, 1);
         String toolPath = specificDef.getToolPath();

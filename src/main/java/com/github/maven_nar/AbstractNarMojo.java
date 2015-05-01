@@ -35,10 +35,8 @@ import org.apache.maven.project.MavenProject;
 /**
  * @author Mark Donszelmann
  */
-public abstract class AbstractNarMojo
-    extends AbstractMojo
-    implements NarConstants
-{
+public abstract class AbstractNarMojo extends AbstractMojo implements
+    NarConstants {
 
     /**
      * Skip running of NAR plugins (any) altogether.
@@ -147,12 +145,13 @@ public abstract class AbstractNarMojo
     /**
      * Layout to be used for building and unpacking artifacts
      */
-    @Parameter(property = "nar.layout", defaultValue = "com.github.maven_nar.NarLayout21", required = true)
+    @Parameter(property = "nar.layout",
+            defaultValue = "com.github.maven_nar.NarLayout21", required = true)
     private String layout;
 
     private NarLayout narLayout;
 
-   @Component
+    @Component
     private MavenProject mavenProject;
 
     private AOL aolId;
@@ -173,19 +172,20 @@ public abstract class AbstractNarMojo
 
     @Parameter
     private Msvc msvc = new Msvc();
-    
-    public Msvc getMsvc() {
-      return msvc;
-    }
-    
-    protected final void validate()
-        throws MojoFailureException, MojoExecutionException
-    {
-        linker = NarUtil.getLinker( linker, getLog() );
 
-        architecture = NarUtil.getArchitecture( architecture );
-        os = NarUtil.getOS( os );
-        aolId = NarUtil.getAOL(mavenProject, architecture, os, linker, aol, getLog() );
+    public Msvc getMsvc() {
+        return msvc;
+    }
+
+    protected final void validate() throws MojoFailureException,
+        MojoExecutionException {
+        msvc.setMojo(this);
+        linker = NarUtil.getLinker(linker, getLog());
+
+        architecture = NarUtil.getArchitecture(architecture);
+        os = NarUtil.getOS(os);
+        aolId = NarUtil.getAOL(mavenProject, architecture, os, linker, aol,
+            getLog());
 
         Model model = mavenProject.getModel();
         Properties properties = model.getProperties();
@@ -196,186 +196,153 @@ public abstract class AbstractNarMojo
         properties.setProperty("nar.aol.key", aolId.getKey());
         model.setProperties(properties);
 
-        if ( targetDirectory == null )
-        {
-            targetDirectory = new File( mavenProject.getBuild().getDirectory(), "nar" );
+        if (targetDirectory == null) {
+            targetDirectory = new File(mavenProject.getBuild().getDirectory(),
+                "nar");
         }
-        if ( testTargetDirectory == null )
-        {
-            testTargetDirectory = new File( mavenProject.getBuild().getDirectory(), "test-nar" );
+        if (testTargetDirectory == null) {
+            testTargetDirectory = new File(mavenProject.getBuild()
+                .getDirectory(), "test-nar");
         }
 
-        if ( unpackDirectory == null )
-        {
+        if (unpackDirectory == null) {
             unpackDirectory = targetDirectory;
         }
-        if ( testUnpackDirectory == null )
-        {
+        if (testUnpackDirectory == null) {
             testUnpackDirectory = testTargetDirectory;
         }
     }
 
-    protected final String getOutput( boolean versioned )
-        throws MojoExecutionException
-    {
-        if( output != null && !output.trim().isEmpty()){
+    protected final String getOutput(boolean versioned)
+        throws MojoExecutionException {
+        if (output != null && !output.trim().isEmpty()) {
             return output;
         } else {
-            if( versioned )
-                return getMavenProject().getArtifactId() + "-" + getMavenProject().getVersion();
+            if (versioned)
+                return getMavenProject().getArtifactId() + "-"
+                    + getMavenProject().getVersion();
             else
                 return getMavenProject().getArtifactId();
         }
     }
 
-    protected final String getArchitecture()
-    {
+    protected final String getArchitecture() {
         return architecture;
     }
 
-    protected final String getOS()
-    {
+    protected final String getOS() {
         return os;
     }
 
-    protected final AOL getAOL()
-        throws MojoFailureException, MojoExecutionException
-    {
+    protected final AOL getAOL() throws MojoFailureException,
+        MojoExecutionException {
         return aolId;
     }
 
-    protected final Linker getLinker()
-    {
+    protected final Linker getLinker() {
         return linker;
     }
 
-    protected final File getBasedir()
-    {
+    protected final File getBasedir() {
         return baseDir;
     }
 
-    protected final File getOutputDirectory()
-    {
+    protected final File getOutputDirectory() {
         return outputDirectory;
     }
 
-    protected final File getTargetDirectory()
-    {
+    protected final File getTargetDirectory() {
         return targetDirectory;
     }
-    protected final File getTestTargetDirectory()
-    {
+
+    protected final File getTestTargetDirectory() {
         return testTargetDirectory;
     }
 
-    protected File getUnpackDirectory()
-    {
+    protected File getUnpackDirectory() {
         return unpackDirectory;
     }
 
-    protected final File getTestUnpackDirectory()
-    {
+    protected final File getTestUnpackDirectory() {
         return testUnpackDirectory;
     }
 
-    protected final NarLayout getLayout()
-        throws MojoExecutionException
-    {
-        if ( narLayout == null )
-        {
-            narLayout =
-                AbstractNarLayout.getLayout( layout, getLog() );
+    protected final NarLayout getLayout() throws MojoExecutionException {
+        if (narLayout == null) {
+            narLayout = AbstractNarLayout.getLayout(layout, getLog());
         }
         return narLayout;
     }
 
-    protected final MavenProject getMavenProject()
-    {
+    protected final MavenProject getMavenProject() {
         return mavenProject;
     }
 
-    public final void execute()
-        throws MojoExecutionException, MojoFailureException
-    {
-        if ( skip )
-        {
-            getLog().info( getClass().getName() + " skipped" );
+    public final void execute() throws MojoExecutionException,
+        MojoFailureException {
+        if (skip) {
+            getLog().info(getClass().getName() + " skipped");
             return;
         }
 
-        try
-        {
+        try {
             validate();
             narExecute();
-        }
-        catch ( MojoFailureException mfe )
-        {
-            if ( ignore )
-            {
-                getLog().warn( "IGNORED: " + mfe.getMessage() );
-            }
-            else
-            {
+        } catch (MojoFailureException mfe) {
+            if (ignore) {
+                getLog().warn("IGNORED: " + mfe.getMessage());
+            } else {
                 throw mfe;
             }
-        }
-        catch ( MojoExecutionException mee )
-        {
-            if ( ignore )
-            {
-                getLog().warn( "IGNORED: " + mee.getMessage() );
-            }
-            else
-            {
+        } catch (MojoExecutionException mee) {
+            if (ignore) {
+                getLog().warn("IGNORED: " + mee.getMessage());
+            } else {
                 throw mee;
             }
         }
     }
 
-    public abstract void narExecute()
-        throws MojoFailureException, MojoExecutionException;
+    public abstract void narExecute() throws MojoFailureException,
+        MojoExecutionException;
 
     protected NarInfo getNarInfo() throws MojoExecutionException {
-        if ( narInfo == null )
-        {
+        if (narInfo == null) {
             String groupId = getMavenProject().getGroupId();
             String artifactId = getMavenProject().getArtifactId();
-            String path = "META-INF/nar/" + groupId + "/" + artifactId + "/" + NarInfo.NAR_PROPERTIES;
-            File propertiesFile = new File( classesDirectory, path );
+            String path = "META-INF/nar/" + groupId + "/" + artifactId + "/"
+                + NarInfo.NAR_PROPERTIES;
+            File propertiesFile = new File(classesDirectory, path);
             // should not need to try and read from source.
-            if( !propertiesFile.exists() ){
-                propertiesFile = new File( getMavenProject().getBasedir(), "src/main/resources/" + path);
+            if (!propertiesFile.exists()) {
+                propertiesFile = new File(getMavenProject().getBasedir(),
+                    "src/main/resources/" + path);
             }
 
-            narInfo = new NarInfo(
-                    groupId, artifactId,
-                    getMavenProject().getVersion(),
-                    getLog(),
-                    propertiesFile );
+            narInfo = new NarInfo(groupId, artifactId,
+                getMavenProject().getVersion(), getLog(), propertiesFile);
         }
         return narInfo;
     }
 
     protected final List<Library> getLibraries() {
-        if ( libraries == null )
-        {
+        if (libraries == null) {
             libraries = Collections.EMPTY_LIST;
         }
         return libraries;
     }
 
     protected final Javah getJavah() {
-        if ( javah == null )
-        {
+        if (javah == null) {
             javah = new Javah();
         }
-        javah.setAbstractCompileMojo( this );
+        javah.setAbstractCompileMojo(this);
         return javah;
     }
 
-    protected final File getJavaHome(AOL aol)
-        throws MojoExecutionException {
+    protected final File getJavaHome(AOL aol) throws MojoExecutionException {
         // FIXME should be easier by specifying default...
-        return getNarInfo().getProperty( aol, "javaHome", NarUtil.getJavaHome( javaHome, getOS() ) );
+        return getNarInfo().getProperty(aol, "javaHome",
+            NarUtil.getJavaHome(javaHome, getOS()));
     }
 }
