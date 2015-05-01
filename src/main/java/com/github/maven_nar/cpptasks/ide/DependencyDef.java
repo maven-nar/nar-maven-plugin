@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,62 +19,69 @@
  */
 package com.github.maven_nar.cpptasks.ide;
 
-import org.apache.tools.ant.util.StringUtils;
-
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
+
+import org.apache.tools.ant.util.StringUtils;
 
 /**
  * Defines a dependency
  *
  */
 public final class DependencyDef {
-    private String id;
-    private File file;
-    private String name;
-    private String depends;
+  private String id;
+  private File file;
+  private String name;
+  private String depends;
 
-    public DependencyDef() {
-    }
+  public DependencyDef() {
+  }
 
+  public String getDepends() {
+    return this.depends;
+  }
 
-    public void setID(final String val) {
-        id = val;
+  public List<String> getDependsList() {
+    if (this.depends != null) {
+      return StringUtils.split(this.depends, ',');
     }
-    public File getFile() {
-        return file;
+    return Collections.emptyList();
+  }
+
+  public File getFile() {
+    return this.file;
+  }
+
+  public String getID() {
+    if (this.id != null) {
+      return this.id;
     }
-    public void setFile(final File val) {
-        file = val;
+    return getName();
+  }
+
+  public String getName() {
+    if (this.name != null) {
+      return this.name;
+    } else if (this.file != null) {
+      return this.file.getName();
     }
-    public void setName(final String val) {
-        name = val;
-    }
-    public String getName() {
-        if (name != null) {
-            return name;
-        } else if(file != null) {
-            return file.getName();
-        }
-        return "null";
-    }
-    public String getID() {
-        if (id != null) {
-            return id;
-        }
-        return getName();
-    }
-    public String getDepends() {
-        return depends;
-    }
-    public void setDepends(final String val) {
-        depends = val;
-    }
-    public List<String> getDependsList() {
-        if (depends != null) {
-            return StringUtils.split(depends, ',');
-        }
-        return Collections.emptyList();    
-    }
+    return "null";
+  }
+
+  public void setDepends(final String val) {
+    this.depends = val;
+  }
+
+  public void setFile(final File val) {
+    this.file = val;
+  }
+
+  public void setID(final String val) {
+    this.id = val;
+  }
+
+  public void setName(final String val) {
+    this.name = val;
+  }
 }

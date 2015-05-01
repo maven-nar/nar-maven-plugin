@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,16 +19,14 @@
  */
 package com.github.maven_nar;
 
+import java.io.File;
+import java.util.List;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.xml.Xpp3Dom;
-
-import java.io.File;
-import java.util.List;
 
 /**
  * Validates the configuration of the NAR project (aol and pom)
@@ -36,74 +34,65 @@ import java.util.List;
  * @author Mark Donszelmann
  */
 @Mojo(name = "nar-validate", defaultPhase = LifecyclePhase.VALIDATE)
-public class NarValidateMojo
-    extends AbstractCompileMojo
-{
-    /**
-     * Source directory for GNU style project
-     */
-    @Parameter(defaultValue = "${basedir}/src/gnu", required = true)
-    private File gnuSourceDirectory;
-    
-	@Override
-	protected List/*<Artifact>*/ getArtifacts() {
-		return null;//getMavenProject().getCompileArtifacts();  // Artifact.SCOPE_COMPILE 
-	}
+public class NarValidateMojo extends AbstractCompileMojo {
+  /**
+   * Source directory for GNU style project
+   */
+  @Parameter(defaultValue = "${basedir}/src/gnu", required = true)
+  private File gnuSourceDirectory;
 
-	public final void narExecute()
-        throws MojoExecutionException, MojoFailureException
-    {
-//    	super.narExecute();
+  @Override
+  protected List/* <Artifact> */getArtifacts() {
+    return null;// getMavenProject().getCompileArtifacts(); //
+                // Artifact.SCOPE_COMPILE
+  }
 
-    	// check aol
-        AOL aol = getAOL();
-        getLog().info( "Using AOL: " + aol );
+  @Override
+  public final void narExecute() throws MojoExecutionException, MojoFailureException {
+    // super.narExecute();
 
-        // check linker exists in retrieving the version number
-        Linker linker = getLinker();
-        getLog().debug( "Using linker version: " + linker.getVersion() );
+    // check aol
+    final AOL aol = getAOL();
+    getLog().info("Using AOL: " + aol);
 
-        // check compilers
-        int noOfCompilers = 0;
-        if( onlySpecifiedCompilers ) {
-	        if ( getCpp() != null && getCpp().getName() != null )
-	        {
-	            noOfCompilers++;
-	            // need includes
-	            if ( getCpp().getIncludes( Compiler.MAIN ).isEmpty() )
-	            {
-	                throw new MojoExecutionException( "No includes defined for compiler " + getCpp().getName() );
-	            }
-	        }
-	        
-	        if ( getC() != null && getC().getName() != null )
-	        {
-	            noOfCompilers++;
-	            // need includes
-	            if ( getC().getIncludes( Compiler.MAIN ).isEmpty() )
-	            {
-	                throw new MojoExecutionException( "No includes defined for compiler " + getC().getName() );
-	            }
-	        }        
-	        
-	        if ( getFortran() != null && getFortran().getName() != null )
-	        {
-	            noOfCompilers++;
-	            // need includes
-	            if ( getFortran().getIncludes( Compiler.MAIN ).isEmpty() )
-	            {
-	                throw new MojoExecutionException( "No includes defined for compiler " + getFortran().getName() );
-	            }
-	        }
-	        
-	        // at least one compiler has to be defined
-	        // OR
-	        // a <gnuSourceDirectory> is configured.
-	        if ( noOfCompilers == 0 && ( gnuSourceDirectory == null || !gnuSourceDirectory.exists() ) )
-	        {
-	            throw new MojoExecutionException( "No compilers defined for linker " + linker.getName() + ", and no" +
-	                    " <gnuSourceDirectory> is defined.  Either define a compiler or a linker." );     
-	        }
-        } 
+    // check linker exists in retrieving the version number
+    final Linker linker = getLinker();
+    getLog().debug("Using linker version: " + linker.getVersion(this));
+
+    // check compilers
+    int noOfCompilers = 0;
+    if (this.onlySpecifiedCompilers) {
+      if (getCpp() != null && getCpp().getName() != null) {
+        noOfCompilers++;
+        // need includes
+        if (getCpp().getIncludes(Compiler.MAIN).isEmpty()) {
+          throw new MojoExecutionException("No includes defined for compiler " + getCpp().getName());
+        }
+      }
+
+      if (getC() != null && getC().getName() != null) {
+        noOfCompilers++;
+        // need includes
+        if (getC().getIncludes(Compiler.MAIN).isEmpty()) {
+          throw new MojoExecutionException("No includes defined for compiler " + getC().getName());
+        }
+      }
+
+      if (getFortran() != null && getFortran().getName() != null) {
+        noOfCompilers++;
+        // need includes
+        if (getFortran().getIncludes(Compiler.MAIN).isEmpty()) {
+          throw new MojoExecutionException("No includes defined for compiler " + getFortran().getName());
+        }
+      }
+
+      // at least one compiler has to be defined
+      // OR
+      // a <gnuSourceDirectory> is configured.
+      if (noOfCompilers == 0 && (this.gnuSourceDirectory == null || !this.gnuSourceDirectory.exists())) {
+        throw new MojoExecutionException("No compilers defined for linker " + linker.getName() + ", and no"
+            + " <gnuSourceDirectory> is defined.  Either define a compiler or a linker.");
+      }
     }
+  }
 }

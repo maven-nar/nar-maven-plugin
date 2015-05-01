@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,33 +29,31 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.toolchain.ToolchainManager;
 
 /**
- * Compiles class files into c/c++ headers using "javah". Any class file that contains methods that were declared
+ * Compiles class files into c/c++ headers using "javah". Any class file that
+ * contains methods that were declared
  * "native" will be run through javah.
- * 
+ *
  * @requiresSession
  * @author Mark Donszelmann
  */
 @Mojo(name = "nar-javah", defaultPhase = LifecyclePhase.COMPILE, requiresDependencyResolution = ResolutionScope.COMPILE)
-public class NarJavahMojo
-    extends AbstractNarMojo
-{
-    @Component
-    private ToolchainManager toolchainManager;
+public class NarJavahMojo extends AbstractNarMojo {
+  @Component
+  private ToolchainManager toolchainManager;
 
-    @Component
-    private MavenSession session;
-    
-    protected final ToolchainManager getToolchainManager() {
-        return toolchainManager;
-    }
-    
-    protected final MavenSession getSession() {
-        return session;
-    }
+  @Component
+  private MavenSession session;
 
-    public final void narExecute()
-        throws MojoExecutionException, MojoFailureException
-    {
-        getJavah().execute();
-    }
+  protected final MavenSession getSession() {
+    return this.session;
+  }
+
+  protected final ToolchainManager getToolchainManager() {
+    return this.toolchainManager;
+  }
+
+  @Override
+  public final void narExecute() throws MojoExecutionException, MojoFailureException {
+    getJavah().execute();
+  }
 }

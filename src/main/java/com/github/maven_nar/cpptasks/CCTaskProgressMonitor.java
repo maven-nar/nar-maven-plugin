@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,45 +18,53 @@
  * #L%
  */
 package com.github.maven_nar.cpptasks;
+
 import java.io.IOException;
 
 import com.github.maven_nar.cpptasks.compiler.ProcessorConfiguration;
 import com.github.maven_nar.cpptasks.compiler.ProgressMonitor;
 
 public class CCTaskProgressMonitor implements ProgressMonitor {
-    private ProcessorConfiguration config;
-    private TargetHistoryTable history;
-    private VersionInfo versionInfo;
-    private long lastCommit = -1;
-    public CCTaskProgressMonitor(TargetHistoryTable history, VersionInfo versionInfo) {
-        this.history = history;
-        this.versionInfo = versionInfo;
+  private ProcessorConfiguration config;
+  private final TargetHistoryTable history;
+  private final VersionInfo versionInfo;
+  private long lastCommit = -1;
+
+  public CCTaskProgressMonitor(final TargetHistoryTable history, final VersionInfo versionInfo) {
+    this.history = history;
+    this.versionInfo = versionInfo;
+  }
+
+  @Override
+  public void finish(final ProcessorConfiguration config, final boolean normal) {
+    final long current = System.currentTimeMillis();
+    if (current - this.lastCommit > 120000) {
+      try {
+        this.history.commit();
+        this.lastCommit = System.currentTimeMillis();
+      } catch (final IOException ex) {
+      }
     }
-    public void finish(ProcessorConfiguration config, boolean normal) {
-        long current = System.currentTimeMillis();
-        if ((current - lastCommit) > 120000) {
-            try {
-                history.commit();
-                lastCommit = System.currentTimeMillis();
-            } catch (IOException ex) {
-            }
-        }
+  }
+
+  @Override
+  public void progress(final String[] sources) {
+    this.history.update(this.config, sources, this.versionInfo);
+    final long current = System.currentTimeMillis();
+    if (current - this.lastCommit > 120000) {
+      try {
+        this.history.commit();
+        this.lastCommit = current;
+      } catch (final IOException ex) {
+      }
     }
-    public void progress(String[] sources) {
-        history.update(config, sources, versionInfo);
-        long current = System.currentTimeMillis();
-        if ((current - lastCommit) > 120000) {
-            try {
-                history.commit();
-                lastCommit = current;
-            } catch (IOException ex) {
-            }
-        }
+  }
+
+  @Override
+  public void start(final ProcessorConfiguration config) {
+    if (this.lastCommit < 0) {
+      this.lastCommit = System.currentTimeMillis();
     }
-    public void start(ProcessorConfiguration config) {
-        if (lastCommit < 0) {
-            lastCommit = System.currentTimeMillis();
-        }
-        this.config = config;
-    }
+    this.config = config;
+  }
 }

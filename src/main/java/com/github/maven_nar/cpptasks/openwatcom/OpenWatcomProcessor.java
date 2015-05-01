@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,7 +23,6 @@ import java.util.Vector;
 
 import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
 
-
 /**
  * A add-in class for OpenWatcom processors.
  *
@@ -33,8 +32,10 @@ public final class OpenWatcomProcessor {
   /**
    * Adds warning command line options.
    *
-   * @param args Vector list of options
-   * @param level int value of WarningLevelEnum
+   * @param args
+   *          Vector list of options
+   * @param level
+   *          int value of WarningLevelEnum
    */
   public static void addWarningSwitch(final Vector<String> args, final int level) {
     switch (level) {
@@ -64,11 +65,12 @@ public final class OpenWatcomProcessor {
   /**
    * Gets command line option to read from an option file.
    *
-   * @param cmdFile String file name for option file
+   * @param cmdFile
+   *          String file name for option file
    * @return String Command line option
    */
   public static String getCommandFileSwitch(final String cmdFile) {
-    StringBuffer buf = new StringBuffer("@");
+    final StringBuffer buf = new StringBuffer("@");
     if (cmdFile.indexOf(' ') >= 0) {
       buf.append('\"');
       buf.append(cmdFile.replace('/', '\\'));
@@ -82,13 +84,14 @@ public final class OpenWatcomProcessor {
   /**
    * Creates a command line option to define a preprocessor macro.
    *
-   * @param buffer StringBuffer destination buffer
-   * @param define String parameter to define
-   * @param value String value, may be null
+   * @param buffer
+   *          StringBuffer destination buffer
+   * @param define
+   *          String parameter to define
+   * @param value
+   *          String value, may be null
    */
-  public static void getDefineSwitch(final StringBuffer buffer,
-                                     final String define,
-                                     final String value) {
+  public static void getDefineSwitch(final StringBuffer buffer, final String define, final String value) {
     buffer.append("/d");
     buffer.append(define);
     if (value != null && value.length() > 0) {
@@ -99,7 +102,9 @@ public final class OpenWatcomProcessor {
 
   /**
    * Create a command line option to add a directory to the include path.
-   * @param includeDir String directory
+   * 
+   * @param includeDir
+   *          String directory
    * @return String command line option
    */
   public static String getIncludeDirSwitch(final String includeDir) {
@@ -107,35 +112,17 @@ public final class OpenWatcomProcessor {
   }
 
   /**
-   * Builds command line options to specify the output file names.
-   *
-   * @param outPath String path to output file
-   * @return String[] command line options
-   */
-  public static String[] getOutputFileSwitch(final String outPath) {
-    StringBuffer buf = new StringBuffer("/fo=");
-    if (outPath.indexOf(' ') >= 0) {
-      buf.append('\"');
-      buf.append(outPath);
-      buf.append('\"');
-    } else {
-      buf.append(outPath);
-    }
-    String[] retval = new String[] {
-        buf.toString()};
-    return retval;
-  }
-
-  /**
    * Get file selectors for specified libraries.
-   * @param libnames library names
-   * @param libType library type
+   * 
+   * @param libnames
+   *          library names
+   * @param libType
+   *          library type
    * @return file selectors
    */
-  public static String[] getLibraryPatterns(final String[] libnames,
-                                            final LibraryTypeEnum libType) {
-    StringBuffer buf = new StringBuffer();
-    String[] patterns = new String[libnames.length];
+  public static String[] getLibraryPatterns(final String[] libnames, final LibraryTypeEnum libType) {
+    final StringBuffer buf = new StringBuffer();
+    final String[] patterns = new String[libnames.length];
     for (int i = 0; i < libnames.length; i++) {
       buf.setLength(0);
       buf.append(libnames[i]);
@@ -146,18 +133,43 @@ public final class OpenWatcomProcessor {
   }
 
   /**
-   * Builds a command line option to undefine a preprocessor macro.
-   * @param buffer StringBuffer destination
-   * @param define String macro to be undefined
+   * Builds command line options to specify the output file names.
+   *
+   * @param outPath
+   *          String path to output file
+   * @return String[] command line options
    */
-  public static void getUndefineSwitch(final StringBuffer buffer,
-                                       final String define) {
+  public static String[] getOutputFileSwitch(final String outPath) {
+    final StringBuffer buf = new StringBuffer("/fo=");
+    if (outPath.indexOf(' ') >= 0) {
+      buf.append('\"');
+      buf.append(outPath);
+      buf.append('\"');
+    } else {
+      buf.append(outPath);
+    }
+    final String[] retval = new String[] {
+      buf.toString()
+    };
+    return retval;
+  }
+
+  /**
+   * Builds a command line option to undefine a preprocessor macro.
+   * 
+   * @param buffer
+   *          StringBuffer destination
+   * @param define
+   *          String macro to be undefined
+   */
+  public static void getUndefineSwitch(final StringBuffer buffer, final String define) {
     buffer.append("/u");
     buffer.append(define);
   }
 
   /**
    * Gets whether processor tratement of file names is case-sensitive.
+   * 
    * @return boolean true if case sensitive
    */
   public static boolean isCaseSensitive() {

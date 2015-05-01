@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,32 +18,37 @@
  * #L%
  */
 package com.github.maven_nar.cpptasks.parser;
+
 public class BranchState extends AbstractParserState {
-    private char[] branchChars;
-    private AbstractParserState[] branchStates;
-    private AbstractParserState noMatchState;
-    public BranchState(AbstractParser parser, char[] branchChars,
-            AbstractParserState[] branchStates, AbstractParserState noMatchState) {
-        super(parser);
-        this.branchChars = (char[]) branchChars.clone();
-        this.branchStates = (AbstractParserState[]) branchStates.clone();
-        this.noMatchState = noMatchState;
+  private final char[] branchChars;
+  private final AbstractParserState[] branchStates;
+  private final AbstractParserState noMatchState;
+
+  public BranchState(final AbstractParser parser, final char[] branchChars, final AbstractParserState[] branchStates,
+      final AbstractParserState noMatchState) {
+    super(parser);
+    this.branchChars = branchChars.clone();
+    this.branchStates = branchStates.clone();
+    this.noMatchState = noMatchState;
+  }
+
+  @Override
+  public AbstractParserState consume(final char ch) {
+    AbstractParserState state;
+    for (int i = 0; i < this.branchChars.length; i++) {
+      if (ch == this.branchChars[i]) {
+        state = this.branchStates[i];
+        return state.consume(ch);
+      }
     }
-    public AbstractParserState consume(char ch) {
-        AbstractParserState state;
-        for (int i = 0; i < branchChars.length; i++) {
-            if (ch == branchChars[i]) {
-                state = branchStates[i];
-                return state.consume(ch);
-            }
-        }
-        state = getNoMatchState();
-        if (state != null) {
-            return state.consume(ch);
-        }
-        return state;
+    state = getNoMatchState();
+    if (state != null) {
+      return state.consume(ch);
     }
-    protected AbstractParserState getNoMatchState() {
-        return noMatchState;
-    }
+    return state;
+  }
+
+  protected AbstractParserState getNoMatchState() {
+    return this.noMatchState;
+  }
 }

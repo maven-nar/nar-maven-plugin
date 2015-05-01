@@ -123,6 +123,7 @@ NAR Configuration
     <rtti/>
     <optimize/>
     <multiThreaded/>
+    <ccache/>
     <defines>
       <define/>
     </defines>
@@ -409,6 +410,12 @@ the command line for compatible compilers/linkers. Default is false.
    
     Enables or disables generation of multithreaded code.
     Default value: false, except on Windows.
+
+** {cpp ccache}
+
+    Enables or disables the use of ccache (https://ccache.samba.org/) for compilation. 
+    Ccache must be present on the system and available the path in the same way your compiler is.
+    Default value: false
    
 ** {cpp defines}
 

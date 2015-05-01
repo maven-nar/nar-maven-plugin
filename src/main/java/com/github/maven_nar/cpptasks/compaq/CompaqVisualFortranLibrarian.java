@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,6 +18,10 @@
  * #L%
  */
 package com.github.maven_nar.cpptasks.compaq;
+
+import java.io.File;
+import java.util.Vector;
+
 import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.compiler.CommandLineLinker;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
@@ -26,46 +30,62 @@ import com.github.maven_nar.cpptasks.msvc.MsvcLibrarian;
 import com.github.maven_nar.cpptasks.msvc.MsvcProcessor;
 import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
 
-import java.io.File;
-import java.util.Vector;
-
 /**
  * Adapter for the Compaq(r) Visual Fortran Librarian
- * 
+ *
  * @author Curt Arnold
  */
 public class CompaqVisualFortranLibrarian extends CommandLineLinker {
-    private static final CompaqVisualFortranLibrarian instance = new CompaqVisualFortranLibrarian();
-    public static CompaqVisualFortranLibrarian getInstance() {
-        return instance;
-    }
-    private CompaqVisualFortranLibrarian() {
-        super("lib", "/bogus", new String[]{".obj"}, new String[0], ".lib",
-                false, null);
-    }
+  private static final CompaqVisualFortranLibrarian instance = new CompaqVisualFortranLibrarian();
 
-    protected void addImpliedArgs(CCTask task, boolean debug, LinkType linkType, Vector<String> args) {
-        args.addElement("/nologo");
-    }
-    protected String getCommandFileSwitch(String commandFile) {
-        return MsvcProcessor.getCommandFileSwitch(commandFile);
-    }
-    public File[] getLibraryPath() {
-        return new File[0];
-    }
-    public String[] getLibraryPatterns(String[] libnames, LibraryTypeEnum libType) {
-        return new String[0];
-    }
-    public Linker getLinker(LinkType type) {
-        return CompaqVisualFortranLinker.getInstance().getLinker(type);
-    }
-    protected int getMaximumCommandLength() {
-        return MsvcLibrarian.getInstance().getMaximumCommandLength();
-    }
-    protected String[] getOutputFileSwitch(String outputFile) {
-        return MsvcLibrarian.getInstance().getOutputFileSwitch(outputFile);
-    }
-    public boolean isCaseSensitive() {
-        return false;
-    }
+  public static CompaqVisualFortranLibrarian getInstance() {
+    return instance;
+  }
+
+  private CompaqVisualFortranLibrarian() {
+    super("lib", "/bogus", new String[] {
+      ".obj"
+    }, new String[0], ".lib", false, null);
+  }
+
+  @Override
+  protected void addImpliedArgs(final CCTask task, final boolean debug, final LinkType linkType,
+      final Vector<String> args) {
+    args.addElement("/nologo");
+  }
+
+  @Override
+  protected String getCommandFileSwitch(final String commandFile) {
+    return MsvcProcessor.getCommandFileSwitch(commandFile);
+  }
+
+  @Override
+  public File[] getLibraryPath() {
+    return new File[0];
+  }
+
+  @Override
+  public String[] getLibraryPatterns(final String[] libnames, final LibraryTypeEnum libType) {
+    return new String[0];
+  }
+
+  @Override
+  public Linker getLinker(final LinkType type) {
+    return CompaqVisualFortranLinker.getInstance().getLinker(type);
+  }
+
+  @Override
+  protected int getMaximumCommandLength() {
+    return MsvcLibrarian.getInstance().getMaximumCommandLength();
+  }
+
+  @Override
+  protected String[] getOutputFileSwitch(final String outputFile) {
+    return MsvcLibrarian.getInstance().getOutputFileSwitch(outputFile);
+  }
+
+  @Override
+  public boolean isCaseSensitive() {
+    return false;
+  }
 }

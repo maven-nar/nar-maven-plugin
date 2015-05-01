@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,30 +28,35 @@ import com.github.maven_nar.cpptasks.compiler.Processor;
 import com.github.maven_nar.cpptasks.gcc.GccCompatibleCCompiler;
 
 public final class IntelLinuxFortranCompiler extends GccCompatibleCCompiler {
-    private static final IntelLinuxFortranCompiler instance = new IntelLinuxFortranCompiler(
-            false, new IntelLinuxFortranCompiler(true, null, false, null), false,
-            null);
-    public static IntelLinuxFortranCompiler getInstance() {
-        return instance;
+  private static final IntelLinuxFortranCompiler instance = new IntelLinuxFortranCompiler(false,
+      new IntelLinuxFortranCompiler(true, null, false, null), false, null);
+
+  public static IntelLinuxFortranCompiler getInstance() {
+    return instance;
+  }
+
+  private IntelLinuxFortranCompiler(final boolean isLibtool, final IntelLinuxFortranCompiler libtoolCompiler,
+      final boolean newEnvironment, final Environment env) {
+    super("ifort", "-V", isLibtool, libtoolCompiler, newEnvironment, env);
+  }
+
+  @Override
+  public Processor changeEnvironment(final boolean newEnvironment, final Environment env) {
+    if (newEnvironment || env != null) {
+      return new IntelLinuxFortranCompiler(getLibtool(), (IntelLinuxFortranCompiler) getLibtoolCompiler(),
+          newEnvironment, env);
     }
-    private IntelLinuxFortranCompiler(boolean isLibtool,
-            IntelLinuxFortranCompiler libtoolCompiler, boolean newEnvironment,
-            Environment env) {
-        super("ifort", "-V", isLibtool, libtoolCompiler, newEnvironment, env);
-    }
-    public Processor changeEnvironment(boolean newEnvironment, Environment env) {
-        if (newEnvironment || env != null) {
-            return new IntelLinuxFortranCompiler(getLibtool(),
-                    (IntelLinuxFortranCompiler) getLibtoolCompiler(),
-                    newEnvironment, env);
-        }
-        return this;
-    }
-    public Linker getLinker(LinkType type) {
-        return IntelLinux32Linker.getInstance().getLinker(type);
-    }
-    public int getMaximumCommandLength() {
-        return Integer.MAX_VALUE;
-    }
+    return this;
+  }
+
+  @Override
+  public Linker getLinker(final LinkType type) {
+    return IntelLinux32Linker.getInstance().getLinker(type);
+  }
+
+  @Override
+  public int getMaximumCommandLength() {
+    return Integer.MAX_VALUE;
+  }
 }
 // ENDFREEHEP

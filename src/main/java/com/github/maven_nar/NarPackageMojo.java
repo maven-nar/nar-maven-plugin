@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,38 +24,35 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProjectHelper;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
 
 /**
- * Jar up the NAR files and attach them to the projects main artifact (for installation and deployment).
- * 
+ * Jar up the NAR files and attach them to the projects main artifact (for
+ * installation and deployment).
+ *
  * @author Mark Donszelmann
  */
 @Mojo(name = "nar-package", defaultPhase = LifecyclePhase.PACKAGE, requiresProject = true)
-public class NarPackageMojo
-    extends AbstractNarMojo
-{    
-    /**
-     * To look up Archiver/UnArchiver implementations
-     */
-    @Component(role = org.codehaus.plexus.archiver.manager.ArchiverManager.class)
-    private ArchiverManager archiverManager;
-    
-    /**
-     * Used for attaching the artifact in the project
-     */
-    @Component
-    private MavenProjectHelper projectHelper;
+public class NarPackageMojo extends AbstractNarMojo {
+  /**
+   * To look up Archiver/UnArchiver implementations
+   */
+  @Component(role = org.codehaus.plexus.archiver.manager.ArchiverManager.class)
+  private ArchiverManager archiverManager;
 
+  /**
+   * Used for attaching the artifact in the project
+   */
+  @Component
+  private MavenProjectHelper projectHelper;
 
-    // TODO: this is working of what is present rather than what was requested to be built, POM ~/= artifacts!
-    public final void narExecute()
-        throws MojoExecutionException, MojoFailureException
-    {
-        // let the layout decide which nars to attach
-        getLayout().attachNars( getTargetDirectory(), archiverManager, projectHelper, getMavenProject() );
-     
-    }
+  // TODO: this is working of what is present rather than what was requested to
+  // be built, POM ~/= artifacts!
+  @Override
+  public final void narExecute() throws MojoExecutionException, MojoFailureException {
+    // let the layout decide which nars to attach
+    getLayout().attachNars(getTargetDirectory(), this.archiverManager, this.projectHelper, getMavenProject());
+
+  }
 }
