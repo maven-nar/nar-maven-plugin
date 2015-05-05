@@ -122,12 +122,20 @@ public class LinkerDef extends ProcessorDef {
     }
 
     public boolean addLibraryDirectory(File directory) {
-        return libraryDirectories.add(directory);
+        if (directory == null || !directory.exists()) {
+            return false;
+        } else {
+            return libraryDirectories.add(directory);
+        }
     }
 
     public boolean addLibraryDirectory(File parent, String path) {
-        File directory = new File(parent, path);
-        return addLibraryDirectory(directory);
+        if (parent == null) {
+            return false;
+        } else {
+            File directory = new File(parent, path);
+            return addLibraryDirectory(directory);
+        }
     }
 
     /**
