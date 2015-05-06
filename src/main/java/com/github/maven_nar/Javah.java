@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,7 +22,6 @@ package com.github.maven_nar;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -47,296 +46,252 @@ import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Sets up the javah configuration
- * 
+ *
  * @author Mark Donszelmann
  */
-public class Javah
-{
+public class Javah {
 
-    /**
-     * Javah command to run.
-     */
-    @Parameter(defaultValue = "javah")
-    private String name = "javah";
+  /**
+   * Javah command to run.
+   */
+  @Parameter(defaultValue = "javah")
+  private final String name = "javah";
 
-    /**
-     * Add boot class paths. By default none.
-     */
-    @Parameter
-    private List/* <File> */bootClassPaths = new ArrayList();
+  /**
+   * Add boot class paths. By default none.
+   */
+  @Parameter
+  private final List/* <File> */bootClassPaths = new ArrayList();
 
-    /**
-     * Add class paths. By default the classDirectory directory is included and all dependent classes.
-     */
-    @Parameter
-    private List/* <File> */classPaths = new ArrayList();
+  /**
+   * Add class paths. By default the classDirectory directory is included and
+   * all dependent classes.
+   */
+  @Parameter
+  private final List/* <File> */classPaths = new ArrayList();
 
-    /**
-     * The target directory into which to generate the output.
-     */
-    @Parameter(defaultValue = "${project.build.directory}/nar/javah-include", required = true)
-    private File jniDirectory;
+  /**
+   * The target directory into which to generate the output.
+   */
+  @Parameter(defaultValue = "${project.build.directory}/nar/javah-include", required = true)
+  private File jniDirectory;
 
-    /**
-     * The class directory to scan for class files with native interfaces.
-     */
-    @Parameter(defaultValue = "${project.build.directory}/classes", required = true)
-    private File classDirectory;
+  /**
+   * The class directory to scan for class files with native interfaces.
+   */
+  @Parameter(defaultValue = "${project.build.directory}/classes", required = true)
+  private File classDirectory;
 
-    /**
-     * The set of files/patterns to include Defaults to "**\/*.class"
-     */
-    @Parameter
-    private Set includes = new HashSet();
+  /**
+   * The set of files/patterns to include Defaults to "**\/*.class"
+   */
+  @Parameter
+  private final Set includes = new HashSet();
 
-    /**
-     * A list of exclusion filters.
-     */
-    @Parameter
-    private Set excludes = new HashSet();
+  /**
+   * A list of exclusion filters.
+   */
+  @Parameter
+  private final Set excludes = new HashSet();
 
-    /**
-     * A list of class names e.g. from java.sql.* that are also passed to javah.
-     */
-    @Parameter
-    private Set extraClasses = new HashSet();
+  /**
+   * A list of class names e.g. from java.sql.* that are also passed to javah.
+   */
+  @Parameter
+  private final Set extraClasses = new HashSet();
 
-    /**
-     * The granularity in milliseconds of the last modification date for testing whether a source needs recompilation
-     */
-    @Parameter(defaultValue = "0", required = true)
-    private int staleMillis = 0;
+  /**
+   * The granularity in milliseconds of the last modification date for testing
+   * whether a source needs recompilation
+   */
+  @Parameter(defaultValue = "0", required = true)
+  private final int staleMillis = 0;
 
-    /**
-     * The directory to store the timestampfile for the processed aid files. Defaults to jniDirectory.
-     */
-    @Parameter
-    private File timestampDirectory;
+  /**
+   * The directory to store the timestampfile for the processed aid files.
+   * Defaults to jniDirectory.
+   */
+  @Parameter
+  private File timestampDirectory;
 
-    /**
-     * The timestampfile for the processed class files. Defaults to name of javah.
-     */
-    @Parameter
-    private File timestampFile;
+  /**
+   * The timestampfile for the processed class files. Defaults to name of javah.
+   */
+  @Parameter
+  private File timestampFile;
 
-    private AbstractNarMojo mojo;
+  private AbstractNarMojo mojo;
 
-    public Javah()
-    {
-    }
+  public Javah() {
+  }
 
-    public final void setAbstractCompileMojo( AbstractNarMojo abstractNarMojo )
-    {
-        this.mojo = abstractNarMojo;
-    }
+  public final void execute() throws MojoExecutionException, MojoFailureException {
+    getClassDirectory().mkdirs();
 
-    protected final List getClassPaths()
-        throws MojoExecutionException
-    {
-        if ( classPaths.isEmpty() )
-        {
-            try
-            {
-                classPaths.addAll( mojo.getMavenProject().getCompileClasspathElements() );
+    try {
+      final SourceInclusionScanner scanner = new StaleSourceScanner(this.staleMillis, getIncludes(), this.excludes);
+      if (getTimestampDirectory().exists()) {
+        scanner.addSourceMapping(new SingleTargetSourceMapping(".class", getTimestampFile().getPath()));
+      } else {
+        scanner.addSourceMapping(new SuffixMapping(".class", ".dummy"));
+      }
+
+      final Set classes = scanner.getIncludedSources(getClassDirectory(), getTimestampDirectory());
+
+      if (!classes.isEmpty()) {
+        final Set files = new HashSet();
+        for (final Iterator i = classes.iterator(); i.hasNext();) {
+          final String file = ((File) i.next()).getPath();
+          final JavaClass clazz = NarUtil.getBcelClass(file);
+          final Method[] method = clazz.getMethods();
+          for (final Method element : method) {
+            if (element.isNative()) {
+              files.add(clazz.getClassName());
             }
-            catch ( DependencyResolutionRequiredException e )
-            {
-                throw new MojoExecutionException( "JAVAH, cannot get classpath", e );
-            }
+          }
         }
-        return classPaths;
+
+        if (!files.isEmpty()) {
+          getJniDirectory().mkdirs();
+          getTimestampDirectory().mkdirs();
+
+          final String javah = getJavah();
+
+          this.mojo.getLog().info("Running " + javah + " compiler on " + files.size() + " classes...");
+          final int result = NarUtil.runCommand(javah, generateArgs(files), null, null, this.mojo.getLog());
+          if (result != 0) {
+            throw new MojoFailureException(javah + " failed with exit code " + result + " 0x"
+                + Integer.toHexString(result));
+          }
+          FileUtils.fileWrite(getTimestampDirectory() + "/" + getTimestampFile(), "");
+        }
+      }
+    } catch (final InclusionScanException e) {
+      throw new MojoExecutionException("JAVAH: Class scanning failed", e);
+    } catch (final IOException e) {
+      throw new MojoExecutionException("JAVAH: IO Exception", e);
+    } catch (final ClassFormatException e) {
+      throw new MojoExecutionException("JAVAH: Class could not be inspected", e);
+    }
+  }
+
+  private String[] generateArgs(final Set/* <String> */classes) throws MojoExecutionException {
+
+    final List args = new ArrayList();
+
+    if (!this.bootClassPaths.isEmpty()) {
+      args.add("-bootclasspath");
+      args.add(StringUtils.join(this.bootClassPaths.iterator(), File.pathSeparator));
     }
 
-    protected final File getJniDirectory()
-    {
-        if ( jniDirectory == null )
-        {
-            jniDirectory = new File( mojo.getMavenProject().getBuild().getDirectory(), "nar/javah-include" );
-        }
-        return jniDirectory;
+    args.add("-classpath");
+    args.add(StringUtils.join(getClassPaths().iterator(), File.pathSeparator));
+
+    args.add("-d");
+    args.add(getJniDirectory().getPath());
+
+    if (this.mojo.getLog().isDebugEnabled()) {
+      args.add("-verbose");
     }
 
-    protected final File getClassDirectory()
-    {
-        if ( classDirectory == null )
-        {
-            classDirectory = new File( mojo.getMavenProject().getBuild().getDirectory(), "classes" );
-        }
-        return classDirectory;
+    if (classes != null) {
+      for (final Iterator i = classes.iterator(); i.hasNext();) {
+        args.add(i.next());
+      }
     }
 
-    protected final Set getIncludes()
-    {
-        NarUtil.removeNulls( includes );
-        if ( includes.isEmpty() )
-        {
-            includes.add( "**/*.class" );
-        }
-        return includes;
+    if (this.extraClasses != null) {
+      for (final Iterator i = this.extraClasses.iterator(); i.hasNext();) {
+        args.add(i.next());
+      }
     }
 
-    protected final File getTimestampDirectory()
-    {
-        if ( timestampDirectory == null )
-        {
-            timestampDirectory = getJniDirectory();
-        }
-        return timestampDirectory;
+    return (String[]) args.toArray(new String[args.size()]);
+  }
+
+  protected final File getClassDirectory() {
+    if (this.classDirectory == null) {
+      this.classDirectory = new File(this.mojo.getMavenProject().getBuild().getDirectory(), "classes");
+    }
+    return this.classDirectory;
+  }
+
+  protected final List getClassPaths() throws MojoExecutionException {
+    if (this.classPaths.isEmpty()) {
+      try {
+        this.classPaths.addAll(this.mojo.getMavenProject().getCompileClasspathElements());
+      } catch (final DependencyResolutionRequiredException e) {
+        throw new MojoExecutionException("JAVAH, cannot get classpath", e);
+      }
+    }
+    return this.classPaths;
+  }
+
+  protected final Set getIncludes() {
+    NarUtil.removeNulls(this.includes);
+    if (this.includes.isEmpty()) {
+      this.includes.add("**/*.class");
+    }
+    return this.includes;
+  }
+
+  private String getJavah() throws MojoExecutionException, MojoFailureException {
+    String javah = null;
+
+    // try toolchain
+    final Toolchain toolchain = getToolchain();
+    if (toolchain != null) {
+      javah = toolchain.findTool("javah");
     }
 
-    protected final File getTimestampFile()
-    {
-        if ( timestampFile == null )
-        {
-            timestampFile = new File( name );
-        }
-        return timestampFile;
+    // try java home
+    if (javah == null) {
+      final File javahFile = new File(this.mojo.getJavaHome(this.mojo.getAOL()), "bin");
+      javah = new File(javahFile, this.name).getAbsolutePath();
     }
 
-    public final void execute()
-        throws MojoExecutionException, MojoFailureException
-    {
-        getClassDirectory().mkdirs();
-
-        try
-        {
-            SourceInclusionScanner scanner = new StaleSourceScanner( staleMillis, getIncludes(), excludes );
-            if ( getTimestampDirectory().exists() )
-            {
-                scanner.addSourceMapping( new SingleTargetSourceMapping( ".class", getTimestampFile().getPath() ) );
-            }
-            else
-            {
-                scanner.addSourceMapping( new SuffixMapping( ".class", ".dummy" ) );
-            }
-
-            Set classes = scanner.getIncludedSources( getClassDirectory(), getTimestampDirectory() );
-
-            if ( !classes.isEmpty() )
-            {
-                Set files = new HashSet();
-                for ( Iterator i = classes.iterator(); i.hasNext(); )
-                {
-                    String file = ( (File) i.next() ).getPath();
-                    JavaClass clazz = NarUtil.getBcelClass( file );
-                    Method[] method = clazz.getMethods();
-                    for ( int j = 0; j < method.length; j++ )
-                    {
-                        if ( method[j].isNative() )
-                        {
-                            files.add( clazz.getClassName() );
-                        }
-                    }
-                }
-
-                if ( !files.isEmpty() )
-                {
-                    getJniDirectory().mkdirs();
-                    getTimestampDirectory().mkdirs();
-
-                    String javah = getJavah();
-                    
-                    mojo.getLog().info( "Running " + javah + " compiler on " + files.size() + " classes..." );
-                    int result = NarUtil.runCommand( javah, generateArgs( files ), null, null, mojo.getLog() );
-                    if ( result != 0 )
-                    {
-                        throw new MojoFailureException( javah + " failed with exit code " + result + " 0x"
-                            + Integer.toHexString( result ) );
-                    }
-                    FileUtils.fileWrite( getTimestampDirectory() + "/" + getTimestampFile(), "" );
-                }
-            }
-        }
-        catch ( InclusionScanException e )
-        {
-            throw new MojoExecutionException( "JAVAH: Class scanning failed", e );
-        }
-        catch ( IOException e )
-        {
-            throw new MojoExecutionException( "JAVAH: IO Exception", e );
-        }
-        catch ( ClassFormatException e )
-        {
-            throw new MojoExecutionException( "JAVAH: Class could not be inspected", e );
-        }
+    // forget it...
+    if (javah == null) {
+      throw new MojoExecutionException("NAR: Cannot find 'javah' in Toolchain or on JavaHome");
     }
 
-    private String[] generateArgs( Set/* <String> */classes )
-        throws MojoExecutionException
-    {
+    return javah;
+  }
 
-        List args = new ArrayList();
-
-        if ( !bootClassPaths.isEmpty() )
-        {
-            args.add( "-bootclasspath" );
-            args.add( StringUtils.join( bootClassPaths.iterator(), File.pathSeparator ) );
-        }
-
-        args.add( "-classpath" );
-        args.add( StringUtils.join( getClassPaths().iterator(), File.pathSeparator ) );
-
-        args.add( "-d" );
-        args.add( getJniDirectory().getPath() );
-
-        if ( mojo.getLog().isDebugEnabled() )
-        {
-            args.add( "-verbose" );
-        }
-
-        if ( classes != null )
-        {
-            for ( Iterator i = classes.iterator(); i.hasNext(); )
-            {
-                args.add( i.next() );
-            }
-        }
-
-        if (extraClasses != null)
-        {
-            for ( Iterator i = extraClasses.iterator(); i.hasNext(); )
-            {
-                args.add( i.next() );
-            }
-        }
-
-        return (String[]) args.toArray( new String[args.size()] );
+  protected final File getJniDirectory() {
+    if (this.jniDirectory == null) {
+      this.jniDirectory = new File(this.mojo.getMavenProject().getBuild().getDirectory(), "nar/javah-include");
     }
-    
-    private String getJavah() throws MojoExecutionException, MojoFailureException {
-        String javah = null;
+    return this.jniDirectory;
+  }
 
-        // try toolchain
-        Toolchain toolchain = getToolchain();
-        if (toolchain != null) {
-            javah = toolchain.findTool( "javah" );
-        }
+  protected final File getTimestampDirectory() {
+    if (this.timestampDirectory == null) {
+      this.timestampDirectory = getJniDirectory();
+    }
+    return this.timestampDirectory;
+  }
 
-        // try java home
-        if (javah == null) {
-            File javahFile = new File( mojo.getJavaHome( mojo.getAOL() ), "bin" );
-            javah = new File( javahFile, name ).getAbsolutePath();
-        }
-        
-        // forget it...
-        if (javah == null) {
-            throw new MojoExecutionException( "NAR: Cannot find 'javah' in Toolchain or on JavaHome" );
-        }
-        
-        return javah;
+  protected final File getTimestampFile() {
+    if (this.timestampFile == null) {
+      this.timestampFile = new File(this.name);
     }
-    
-    //TODO remove the part with ToolchainManager lookup once we depend on
-    //2.0.9 (have it as prerequisite). Define as regular component field then.
-    private Toolchain getToolchain()
-    {
-        Toolchain toolChain = null;
-        ToolchainManager toolchainManager = ((NarJavahMojo)mojo).getToolchainManager();
-        
-        if ( toolchainManager != null )
-        {
-            toolChain = toolchainManager.getToolchainFromBuildContext( "jdk", ((NarJavahMojo)mojo).getSession() );
-        }
-        return toolChain;
+    return this.timestampFile;
+  }
+
+  // TODO remove the part with ToolchainManager lookup once we depend on
+  // 2.0.9 (have it as prerequisite). Define as regular component field then.
+  private Toolchain getToolchain() {
+    Toolchain toolChain = null;
+    final ToolchainManager toolchainManager = ((NarJavahMojo) this.mojo).getToolchainManager();
+
+    if (toolchainManager != null) {
+      toolChain = toolchainManager.getToolchainFromBuildContext("jdk", ((NarJavahMojo) this.mojo).getSession());
     }
+    return toolChain;
+  }
+
+  public final void setAbstractCompileMojo(final AbstractNarMojo abstractNarMojo) {
+    this.mojo = abstractNarMojo;
+  }
 }

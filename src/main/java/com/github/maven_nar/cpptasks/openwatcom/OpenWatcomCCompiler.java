@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,7 +20,6 @@
 package com.github.maven_nar.cpptasks.openwatcom;
 
 import java.io.File;
-
 
 import org.apache.tools.ant.types.Environment;
 
@@ -34,17 +33,15 @@ import com.github.maven_nar.cpptasks.parser.Parser;
  *
  * @author Curt Arnold
  */
-public final class OpenWatcomCCompiler
-    extends OpenWatcomCompiler {
+public final class OpenWatcomCCompiler extends OpenWatcomCompiler {
   /**
    * Singleton.
    */
-  private static final OpenWatcomCCompiler INSTANCE = new OpenWatcomCCompiler(
-      "wcl386",
-      false, null);
+  private static final OpenWatcomCCompiler INSTANCE = new OpenWatcomCCompiler("wcl386", false, null);
 
   /**
    * Get compiler.
+   * 
    * @return OpenWatcomCCompiler compiler
    */
   public static OpenWatcomCCompiler getInstance() {
@@ -53,35 +50,42 @@ public final class OpenWatcomCCompiler
 
   /**
    * Constructor.
-   * @param command String command
-   * @param newEnvironment boolean use new environment
-   * @param env Environment environment
+   * 
+   * @param command
+   *          String command
+   * @param newEnvironment
+   *          boolean use new environment
+   * @param env
+   *          Environment environment
    */
-  private OpenWatcomCCompiler(final String command,
-                              final boolean newEnvironment,
-                              final Environment env) {
-    super(command, "/?",
-          new String[] {".c", ".cc", ".cpp", ".cxx", ".c++"}
-          ,
-          new String[] {".h", ".hpp", ".inl"}
-          ,
-          newEnvironment, env);
+  private OpenWatcomCCompiler(final String command, final boolean newEnvironment, final Environment env) {
+    super(command, "/?", new String[] {
+        ".c", ".cc", ".cpp", ".cxx", ".c++"
+    }, new String[] {
+        ".h", ".hpp", ".inl"
+    }, newEnvironment, env);
   }
 
   /**
    * Create parser.
-   * @param source File file to be parsed.
+   * 
+   * @param source
+   *          File file to be parsed.
    * @return Parser parser
    */
+  @Override
   public Parser createParser(final File source) {
     return new CParser();
   }
 
   /**
    * Get linker.
-   * @param type link type
+   * 
+   * @param type
+   *          link type
    * @return linker
    */
+  @Override
   public Linker getLinker(final LinkType type) {
     return OpenWatcomCLinker.getInstance().getLinker(type);
   }

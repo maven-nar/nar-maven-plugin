@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,21 +26,20 @@ import org.apache.maven.plugins.annotations.Mojo;
 
 /**
  * Create the nar.properties file.
+ * 
  * @author GDomjan
  */
 @Mojo(name = "nar-prepare-package", defaultPhase = LifecyclePhase.PREPARE_PACKAGE, requiresProject = true)
-public class NarPreparePackageMojo
-    extends AbstractNarMojo
-{    
-    
-    // TODO: this is working of what is present rather than what was requested to be built, POM ~/= artifacts!
-    public final void narExecute()
-        throws MojoExecutionException, MojoFailureException
-    {
-        // let the layout decide which (additional) nars to attach
-        getLayout().prepareNarInfo( getTargetDirectory(), getMavenProject(), getNarInfo(), this );
+public class NarPreparePackageMojo extends AbstractNarMojo {
 
-        getNarInfo().writeToDirectory( classesDirectory );
-    }
+  // TODO: this is working of what is present rather than what was requested to
+  // be built, POM ~/= artifacts!
+  @Override
+  public final void narExecute() throws MojoExecutionException, MojoFailureException {
+    // let the layout decide which (additional) nars to attach
+    getLayout().prepareNarInfo(getTargetDirectory(), getMavenProject(), getNarInfo(), this);
+
+    getNarInfo().writeToDirectory(this.classesDirectory);
+  }
 
 }

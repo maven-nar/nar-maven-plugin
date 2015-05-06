@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,81 +39,73 @@ import com.github.maven_nar.NarLayout20;
 /**
  * @author Mark Donszelmann (Mark.Donszelmann@gmail.com)
  */
-public class TestNarLayout20
-    extends TestCase
-{
-    private NarFileLayout fileLayout;
+public class TestNarLayout20 extends TestCase {
+  private NarFileLayout fileLayout;
 
-    private Log log;
+  private Log log;
 
-    private NarLayout layout;
+  private NarLayout layout;
 
-    private File baseDir;
+  private File baseDir;
 
-    private String aol;
+  private String aol;
 
-    private String type;
+  private String type;
 
-    /*
-     * (non-Javadoc)
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp()
-        throws Exception
-    {
-        log = new SystemStreamLog();
-        fileLayout = new NarFileLayout10();
-        layout = new NarLayout20( log );
-        baseDir = new File( "/Users/maven" );
-        aol = "x86_64-MacOSX-g++";
-        type = Library.SHARED;
-    }
+  /*
+   * (non-Javadoc)
+   * 
+   * @see junit.framework.TestCase#setUp()
+   */
+  @Override
+  protected void setUp() throws Exception {
+    this.log = new SystemStreamLog();
+    this.fileLayout = new NarFileLayout10();
+    this.layout = new NarLayout20(this.log);
+    this.baseDir = new File("/Users/maven");
+    this.aol = "x86_64-MacOSX-g++";
+    this.type = Library.SHARED;
+  }
 
-    public final void testGetLayout()
-        throws MojoExecutionException
-    {
-        AbstractNarLayout.getLayout( "NarLayout20", log );
-    }
+  /**
+   * Test method for
+   * {@link com.github.maven_nar.NarLayout20#getBinDirectory(java.io.File, java.lang.String)}
+   * .
+   * 
+   * @throws MojoFailureException
+   * @throws MojoExecutionException
+   */
+  public final void testGetBinDirectory() throws MojoExecutionException, MojoFailureException {
+    Assert.assertEquals(new File(this.baseDir, this.fileLayout.getBinDirectory(this.aol)),
+        this.layout.getBinDirectory(this.baseDir, null, null, this.aol));
+  }
 
-    /**
-     * Test method for {@link com.github.maven_nar.NarLayout20#getIncludeDirectory(java.io.File)}.
-     * 
-     * @throws MojoFailureException
-     * @throws MojoExecutionException
-     */
-    public final void testGetIncludeDirectory()
-        throws MojoExecutionException, MojoFailureException
-    {
-        Assert.assertEquals( new File( baseDir, fileLayout.getIncludeDirectory() ),
-                             layout.getIncludeDirectory( baseDir, null, null ) );
-    }
+  /**
+   * Test method for
+   * {@link com.github.maven_nar.NarLayout20#getIncludeDirectory(java.io.File)}.
+   * 
+   * @throws MojoFailureException
+   * @throws MojoExecutionException
+   */
+  public final void testGetIncludeDirectory() throws MojoExecutionException, MojoFailureException {
+    Assert.assertEquals(new File(this.baseDir, this.fileLayout.getIncludeDirectory()),
+        this.layout.getIncludeDirectory(this.baseDir, null, null));
+  }
 
-    /**
-     * Test method for
-     * {@link com.github.maven_nar.NarLayout20#getLibDirectory(java.io.File, java.lang.String, java.lang.String)}
-     * .
-     * 
-     * @throws MojoFailureException
-     * @throws MojoExecutionException
-     */
-    public final void testGetLibDirectory()
-        throws MojoExecutionException, MojoFailureException
-    {
-        Assert.assertEquals( new File( baseDir, fileLayout.getLibDirectory( aol, type ) ),
-                             layout.getLibDirectory( baseDir, null, null, aol, type ) );
-    }
+  public final void testGetLayout() throws MojoExecutionException {
+    AbstractNarLayout.getLayout("NarLayout20", this.log);
+  }
 
-    /**
-     * Test method for {@link com.github.maven_nar.NarLayout20#getBinDirectory(java.io.File, java.lang.String)}.
-     * 
-     * @throws MojoFailureException
-     * @throws MojoExecutionException
-     */
-    public final void testGetBinDirectory()
-        throws MojoExecutionException, MojoFailureException
-    {
-        Assert.assertEquals( new File( baseDir, fileLayout.getBinDirectory( aol ) ), layout.getBinDirectory( baseDir,
-                                                                                                             null,
-                                                                                                             null, aol ) );
-    }
+  /**
+   * Test method for
+   * {@link com.github.maven_nar.NarLayout20#getLibDirectory(java.io.File, java.lang.String, java.lang.String)}
+   * .
+   * 
+   * @throws MojoFailureException
+   * @throws MojoExecutionException
+   */
+  public final void testGetLibDirectory() throws MojoExecutionException, MojoFailureException {
+    Assert.assertEquals(new File(this.baseDir, this.fileLayout.getLibDirectory(this.aol, this.type)),
+        this.layout.getLibDirectory(this.baseDir, null, null, this.aol, this.type));
+  }
 }

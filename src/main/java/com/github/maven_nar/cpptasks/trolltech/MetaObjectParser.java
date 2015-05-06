@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,19 +27,16 @@ import com.github.maven_nar.cpptasks.parser.AbstractParserState;
 import com.github.maven_nar.cpptasks.parser.LetterState;
 import com.github.maven_nar.cpptasks.parser.WhitespaceOrLetterState;
 
-
 /**
  * Scans a source file for Q_OBJECT.
  *
  * @author Curt Arnold
  */
-public final class MetaObjectParser
-    extends AbstractParser {
+public final class MetaObjectParser extends AbstractParser {
   /**
    * Parser state that matches file T character.
    */
-  private static final class FinalTState
-      extends AbstractParserState {
+  private static final class FinalTState extends AbstractParserState {
     /**
      * Parser.
      */
@@ -47,7 +44,9 @@ public final class MetaObjectParser
 
     /**
      * Constructor.
-     * @param parser MetaObjectParser parser
+     * 
+     * @param parser
+     *          MetaObjectParser parser
      */
     public FinalTState(final MetaObjectParser parser) {
       super(parser);
@@ -58,13 +57,14 @@ public final class MetaObjectParser
      * Consumes a character and returns the next state for the parser.
      *
      * @param ch
-     *            next character
+     *          next character
      * @return the configured nextState if ch is the expected character or the
      *         configure noMatchState otherwise.
      */
+    @Override
     public AbstractParserState consume(final char ch) {
       if (ch == 'T') {
-        mocParser.setQObject(true);
+        this.mocParser.setQObject(true);
         return null;
       }
       if (ch == '\n') {
@@ -76,12 +76,15 @@ public final class MetaObjectParser
 
   /**
    * Determines if source file contains Q_OBJECT.
-   * @param reader Reader source reader
-   * @throws IOException if unable to read source file
+   * 
+   * @param reader
+   *          Reader source reader
+   * @throws IOException
+   *           if unable to read source file
    * @return boolean true if source contains Q_OBJECT
    */
   public static boolean hasQObject(final Reader reader) throws IOException {
-    MetaObjectParser parser = new MetaObjectParser();
+    final MetaObjectParser parser = new MetaObjectParser();
     parser.parse(reader);
     return parser.hasQObject;
 
@@ -95,7 +98,7 @@ public final class MetaObjectParser
   /**
    * Parser state for start of new line.
    */
-  private AbstractParserState newLineState;
+  private final AbstractParserState newLineState;
 
   /**
    * Constructor.
@@ -103,48 +106,58 @@ public final class MetaObjectParser
    */
   private MetaObjectParser() {
     //
-    //    search for Q_OBJECT
+    // search for Q_OBJECT
     //
-    AbstractParserState t = new FinalTState(this);
-    AbstractParserState c = new LetterState(this, 'C', t, null);
-    AbstractParserState e = new LetterState(this, 'E', c, null);
-    AbstractParserState j = new LetterState(this, 'J', e, null);
-    AbstractParserState b = new LetterState(this, 'B', j, null);
-    AbstractParserState o = new LetterState(this, 'O', b, null);
-    AbstractParserState underline = new LetterState(this, '_', o, null);
-    newLineState = new WhitespaceOrLetterState(this, 'Q', underline);
+    final AbstractParserState t = new FinalTState(this);
+    final AbstractParserState c = new LetterState(this, 'C', t, null);
+    final AbstractParserState e = new LetterState(this, 'E', c, null);
+    final AbstractParserState j = new LetterState(this, 'J', e, null);
+    final AbstractParserState b = new LetterState(this, 'B', j, null);
+    final AbstractParserState o = new LetterState(this, 'O', b, null);
+    final AbstractParserState underline = new LetterState(this, '_', o, null);
+    this.newLineState = new WhitespaceOrLetterState(this, 'Q', underline);
   }
 
   /**
    * Adds a filename to the list of included files.
    *
-   * @param filename filename to be added
+   * @param filename
+   *          filename to be added
    */
+  @Override
   protected void addFilename(final String filename) {
 
   }
 
   /**
    * Gets new line state.
+   * 
    * @return AbstractParserState new line state.
    */
+  @Override
   public AbstractParserState getNewLineState() {
-    return newLineState;
+    return this.newLineState;
   }
 
   /**
    * Parse input file.
-   * @param reader Reader source file
-   * @throws IOException if error reading source file
+   * 
+   * @param reader
+   *          Reader source file
+   * @throws IOException
+   *           if error reading source file
    */
+  @Override
   public void parse(final Reader reader) throws IOException {
-    hasQObject = false;
+    this.hasQObject = false;
     super.parse(reader);
   }
 
   /**
    * Called FinalTState to set that Q_OBJECT was found.
-   * @param value boolean new value for hasQObject
+   * 
+   * @param value
+   *          boolean new value for hasQObject
    */
   public void setQObject(final boolean value) {
     this.hasQObject = value;

@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,19 +18,20 @@
  * #L%
  */
 package com.github.maven_nar.cpptasks;
+
 /*******************************************************************************
  * Place class description here.
- * 
+ *
  * @author inger
  * @author <additional author>
- * 
- * @since  
+ *
+ * @since
  ******************************************************************************/
 public class CompilerParam extends ProcessorParam {
-    public CompilerParam() {
-    }
-    public void execute() throws org.apache.tools.ant.BuildException {
-        throw new org.apache.tools.ant.BuildException(
-                "Not an actual task, but looks like one for documentation purposes");
-    }
+  public CompilerParam() {
+  }
+
+  public void execute() throws org.apache.tools.ant.BuildException {
+    throw new org.apache.tools.ant.BuildException("Not an actual task, but looks like one for documentation purposes");
+  }
 }

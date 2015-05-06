@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,64 +18,82 @@
  * #L%
  */
 package com.github.maven_nar.cpptasks.parser;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Vector;
+
 /**
  * A parser that extracts #include statements from a Reader.
- * 
+ *
  * @author Adam Murdoch
  * @author Curt Arnold
  */
 public final class CParser extends AbstractParser implements Parser {
-    private final Vector<String> includes = new Vector<String>();
-    private AbstractParserState newLineState;
-    /**
-     * 
-     *  
+  private final Vector<String> includes = new Vector<String>();
+  private final AbstractParserState newLineState;
+
+  /**
+     *
+     *
      */
-    public CParser() {
-        AbstractParserState quote = new FilenameState(this, new char[]{'"'});
-        AbstractParserState bracket = new FilenameState(this, new char[]{'>'});
-        AbstractParserState postE = new PostE(this, bracket, quote);
-        //
-        //    nclude
-        //
-        AbstractParserState e = new LetterState(this, 'e', postE, null);
-        AbstractParserState d = new LetterState(this, 'd', e, null);
-        AbstractParserState u = new LetterState(this, 'u', d, null);
-        AbstractParserState l = new LetterState(this, 'l', u, null);
-        AbstractParserState c = new LetterState(this, 'c', l, null);
-        AbstractParserState n = new LetterState(this, 'n', c, null);
-        //
-        //   mport is equivalent to nclude
-        //
-        AbstractParserState t = new LetterState(this, 't', postE, null);
-        AbstractParserState r = new LetterState(this, 'r', t, null);
-        AbstractParserState o = new LetterState(this, 'o', r, null);
-        AbstractParserState p = new LetterState(this, 'p', o, null);
-        AbstractParserState m = new LetterState(this, 'm', p, null);
-        //
-        //   switch between
-        //
-        AbstractParserState n_m = new BranchState(this, new char[]{'n', 'm'},
-                new AbstractParserState[]{n, m}, null);
-        AbstractParserState i = new WhitespaceOrLetterState(this, 'i', n_m);
-        newLineState = new WhitespaceOrLetterState(this, '#', i);
-    }
-    public void addFilename(String include) {
-        includes.addElement(include);
-    }
-    public String[] getIncludes() {
-        String[] retval = new String[includes.size()];
-        includes.copyInto(retval);
-        return retval;
-    }
-    public AbstractParserState getNewLineState() {
-        return newLineState;
-    }
-    public void parse(Reader reader) throws IOException {
-        includes.setSize(0);
-        super.parse(reader);
-    }
+  public CParser() {
+    final AbstractParserState quote = new FilenameState(this, new char[] {
+      '"'
+    });
+    final AbstractParserState bracket = new FilenameState(this, new char[] {
+      '>'
+    });
+    final AbstractParserState postE = new PostE(this, bracket, quote);
+    //
+    // nclude
+    //
+    final AbstractParserState e = new LetterState(this, 'e', postE, null);
+    final AbstractParserState d = new LetterState(this, 'd', e, null);
+    final AbstractParserState u = new LetterState(this, 'u', d, null);
+    final AbstractParserState l = new LetterState(this, 'l', u, null);
+    final AbstractParserState c = new LetterState(this, 'c', l, null);
+    final AbstractParserState n = new LetterState(this, 'n', c, null);
+    //
+    // mport is equivalent to nclude
+    //
+    final AbstractParserState t = new LetterState(this, 't', postE, null);
+    final AbstractParserState r = new LetterState(this, 'r', t, null);
+    final AbstractParserState o = new LetterState(this, 'o', r, null);
+    final AbstractParserState p = new LetterState(this, 'p', o, null);
+    final AbstractParserState m = new LetterState(this, 'm', p, null);
+    //
+    // switch between
+    //
+    final AbstractParserState n_m = new BranchState(this, new char[] {
+        'n', 'm'
+    }, new AbstractParserState[] {
+        n, m
+    }, null);
+    final AbstractParserState i = new WhitespaceOrLetterState(this, 'i', n_m);
+    this.newLineState = new WhitespaceOrLetterState(this, '#', i);
+  }
+
+  @Override
+  public void addFilename(final String include) {
+    this.includes.addElement(include);
+  }
+
+  @Override
+  public String[] getIncludes() {
+    final String[] retval = new String[this.includes.size()];
+    this.includes.copyInto(retval);
+    return retval;
+  }
+
+  @Override
+  public AbstractParserState getNewLineState() {
+    return this.newLineState;
+  }
+
+  @Override
+  public void parse(final Reader reader) throws IOException {
+    this.includes.setSize(0);
+    super.parse(reader);
+  }
 }

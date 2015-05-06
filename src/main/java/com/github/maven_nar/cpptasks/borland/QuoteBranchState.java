@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,21 +18,26 @@
  * #L%
  */
 package com.github.maven_nar.cpptasks.borland;
+
 import com.github.maven_nar.cpptasks.parser.AbstractParser;
 import com.github.maven_nar.cpptasks.parser.AbstractParserState;
+
 public class QuoteBranchState extends AbstractParserState {
-    private AbstractParserState quote;
-    private AbstractParserState unquote;
-    public QuoteBranchState(AbstractParser parser, AbstractParserState quote,
-            AbstractParserState unquote) {
-        super(parser);
-        this.quote = quote;
-        this.unquote = unquote;
+  private final AbstractParserState quote;
+  private final AbstractParserState unquote;
+
+  public QuoteBranchState(final AbstractParser parser, final AbstractParserState quote,
+      final AbstractParserState unquote) {
+    super(parser);
+    this.quote = quote;
+    this.unquote = unquote;
+  }
+
+  @Override
+  public AbstractParserState consume(final char ch) {
+    if (ch == '"') {
+      return this.quote;
     }
-    public AbstractParserState consume(char ch) {
-        if (ch == '"') {
-            return quote;
-        }
-        return unquote.consume(ch);
-    }
+    return this.unquote.consume(ch);
+  }
 }

@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,21 +28,18 @@ import org.apache.maven.plugins.annotations.Mojo;
 
 /**
  * Move the GNU style output in the correct directories for nar-package
+ * 
  * @author Mark Donszelmann
  */
 @Mojo(name = "nar-gnu-process", defaultPhase = LifecyclePhase.PROCESS_CLASSES, requiresProject = true)
-public class NarGnuProcess
-    extends AbstractGnuMojo
-{
-    public final void narExecute()
-        throws MojoExecutionException, MojoFailureException
-    {
-        File srcDir = getGnuAOLTargetDirectory();
-        if ( srcDir.exists() )
-        {
-            getLog().info( "Running GNU process" );
+public class NarGnuProcess extends AbstractGnuMojo {
+  @Override
+  public final void narExecute() throws MojoExecutionException, MojoFailureException {
+    final File srcDir = getGnuAOLTargetDirectory();
+    if (srcDir.exists()) {
+      getLog().info("Running GNU process");
 
-            copyResources( srcDir, getAOL().toString() );
-        }
+      copyResources(srcDir, getAOL().toString());
     }
+  }
 }

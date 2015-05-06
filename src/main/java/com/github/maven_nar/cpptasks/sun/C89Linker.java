@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,6 +18,7 @@
  * #L%
  */
 package com.github.maven_nar.cpptasks.sun;
+
 import java.io.File;
 import java.util.Vector;
 
@@ -30,104 +31,132 @@ import com.github.maven_nar.cpptasks.compiler.Linker;
 import com.github.maven_nar.cpptasks.types.LibrarySet;
 import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
 
-
 /**
  * Adapter for the Sun C89 Linker
- * 
+ *
  * @author Hiram Chirino (cojonudo14@hotmail.com)
  */
 public final class C89Linker extends CommandLineLinker {
-    private static final C89Linker dllLinker = new C89Linker("lib", ".so");
-    private static final C89Linker instance = new C89Linker("", "");
-    public static C89Linker getInstance() {
-        return instance;
+  private static final C89Linker dllLinker = new C89Linker("lib", ".so");
+  private static final C89Linker instance = new C89Linker("", "");
+
+  public static C89Linker getInstance() {
+    return instance;
+  }
+
+  private final String outputPrefix;
+
+  private C89Linker(final String outputPrefix, final String outputSuffix) {
+    super("ld", "/bogus", new String[] {
+        ".o", ".a", ".lib", ".x"
+    }, new String[] {}, outputSuffix, false, null);
+    this.outputPrefix = outputPrefix;
+  }
+
+  protected void addBase(final long base, final Vector<String> args) {
+  }
+
+  protected void addEntry(final String entry, final Vector<String> args) {
+  }
+
+  protected void addFixed(final Boolean fixed, final Vector<String> args) {
+  }
+
+  protected void addImpliedArgs(final boolean debug, final LinkType linkType, final Vector<String> args) {
+    if (linkType.isSharedLibrary()) {
+      args.addElement("-G");
     }
-    private String outputPrefix;
-    private C89Linker(String outputPrefix, String outputSuffix) {
-        super("ld", "/bogus", new String[]{".o", ".a", ".lib", ".x"},
-                new String[]{}, outputSuffix, false, null);
-        this.outputPrefix = outputPrefix;
+  }
+
+  protected void addIncremental(final boolean incremental, final Vector<String> args) {
+  }
+
+  @Override
+  public String[] addLibrarySets(final CCTask task, final LibrarySet[] libsets, final Vector<String> preargs,
+      final Vector<String> midargs, final Vector<String> endargs) {
+    super.addLibrarySets(task, libsets, preargs, midargs, endargs);
+    final StringBuffer buf = new StringBuffer("-l");
+    for (final LibrarySet set : libsets) {
+      final File libdir = set.getDir(null);
+      final String[] libs = set.getLibs();
+      if (libdir != null) {
+        endargs.addElement("-L");
+        endargs.addElement(libdir.getAbsolutePath());
+      }
+      for (final String lib : libs) {
+        //
+        // reset the buffer to just "-l"
+        //
+        buf.setLength(2);
+        //
+        // add the library name
+        buf.append(lib);
+        //
+        // add the argument to the list
+        endargs.addElement(buf.toString());
+      }
     }
-    protected void addBase(long base, Vector<String> args) {
+    return null;
+  }
+
+  protected void addMap(final boolean map, final Vector<String> args) {
+  }
+
+  protected void addStack(final int stack, final Vector<String> args) {
+  }
+
+  @Override
+  public String getCommandFileSwitch(final String commandFile) {
+    return "@" + commandFile;
+  }
+
+  @Override
+  public File[] getLibraryPath() {
+    return CUtil.getPathFromEnvironment("LIB", ";");
+  }
+
+  @Override
+  public String[] getLibraryPatterns(final String[] libnames, final LibraryTypeEnum libType) {
+    return C89Processor.getLibraryPatterns(libnames, libType);
+  }
+
+  @Override
+  public Linker getLinker(final LinkType linkType) {
+    if (linkType.isSharedLibrary()) {
+      return dllLinker;
     }
-    protected void addFixed(Boolean fixed, Vector<String> args) {
+    /*
+     * if(linkType.isStaticLibrary()) { return
+     * OS390Librarian.getInstance(); }
+     */
+    return instance;
+  }
+
+  @Override
+  public int getMaximumCommandLength() {
+    return Integer.MAX_VALUE;
+  }
+
+  @Override
+  public String[] getOutputFileNames(final String baseName, final VersionInfo versionInfo) {
+    final String[] baseNames = super.getOutputFileNames(baseName, versionInfo);
+    if (this.outputPrefix.length() > 0) {
+      for (int i = 0; i < baseNames.length; i++) {
+        baseNames[i] = this.outputPrefix + baseNames[i];
+      }
     }
-    protected void addImpliedArgs(boolean debug, LinkType linkType, Vector<String> args) {
-        if (linkType.isSharedLibrary()) {
-            args.addElement("-G");
-        }
-    }
-    protected void addIncremental(boolean incremental, Vector<String> args) {
-    }
-    public String[] addLibrarySets(CCTask task, LibrarySet[] libsets,
-            Vector<String> preargs, Vector<String> midargs, Vector<String> endargs) {
-        super.addLibrarySets(task, libsets, preargs, midargs, endargs);
-        StringBuffer buf = new StringBuffer("-l");
-        for (int i = 0; i < libsets.length; i++) {
-            LibrarySet set = libsets[i];
-            File libdir = set.getDir(null);
-            String[] libs = set.getLibs();
-            if (libdir != null) {
-                endargs.addElement("-L");
-                endargs.addElement(libdir.getAbsolutePath());
-            }
-            for (int j = 0; j < libs.length; j++) {
-                //
-                //  reset the buffer to just "-l"
-                //
-                buf.setLength(2);
-                //
-                //  add the library name
-                buf.append(libs[j]);
-                //
-                //  add the argument to the list
-                endargs.addElement(buf.toString());
-            }
-        }
-        return null;
-    }
-    protected void addMap(boolean map, Vector<String> args) {
-    }
-    protected void addStack(int stack, Vector<String> args) {
-    }
-    protected void addEntry(String entry, Vector<String> args) {
-    }
-    
-    public String getCommandFileSwitch(String commandFile) {
-        return "@" + commandFile;
-    }
-    public File[] getLibraryPath() {
-        return CUtil.getPathFromEnvironment("LIB", ";");
-    }
-    public String[] getLibraryPatterns(String[] libnames, LibraryTypeEnum libType) {
-        return C89Processor.getLibraryPatterns(libnames, libType);
-    }
-    public Linker getLinker(LinkType linkType) {
-        if (linkType.isSharedLibrary()) {
-            return dllLinker;
-        }
-        /*
-         * if(linkType.isStaticLibrary()) { return
-         * OS390Librarian.getInstance(); }
-         */
-        return instance;
-    }
-    public int getMaximumCommandLength() {
-        return Integer.MAX_VALUE;
-    }
-    public String[] getOutputFileNames(String baseName, VersionInfo versionInfo) {
-    	String[] baseNames = super.getOutputFileNames(baseName, versionInfo);
-    	if (outputPrefix.length() > 0) {
-    		for(int i = 0; i < baseNames.length; i++) {
-    			baseNames[i] = outputPrefix + baseNames[i];
-    		}
-    	}
-        return baseNames;
-    }
-    public String[] getOutputFileSwitch(String outputFile) {
-        return new String[]{"-o", outputFile};
-    }
-    public boolean isCaseSensitive() {
-        return C89Processor.isCaseSensitive();
-    }
+    return baseNames;
+  }
+
+  @Override
+  public String[] getOutputFileSwitch(final String outputFile) {
+    return new String[] {
+        "-o", outputFile
+    };
+  }
+
+  @Override
+  public boolean isCaseSensitive() {
+    return C89Processor.isCaseSensitive();
+  }
 }
