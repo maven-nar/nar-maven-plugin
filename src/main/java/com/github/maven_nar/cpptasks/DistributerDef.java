@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,17 +19,16 @@
  */
 package com.github.maven_nar.cpptasks;
 
+import java.util.Vector;
 
 import org.apache.tools.ant.types.DataType;
 import org.apache.tools.ant.types.Reference;
-import java.util.Vector;
 
 /**
  * Distributed build information (Non-functional prototype).
  *
  */
-public final class DistributerDef
-    extends DataType {
+public final class DistributerDef extends DataType {
   /**
    * if property.
    */
@@ -63,7 +62,7 @@ public final class DistributerDef
   private String user;
 
   /**
-   *  local to remote file name maps.
+   * local to remote file name maps.
    */
   private final Vector maps = new Vector();
 
@@ -75,32 +74,99 @@ public final class DistributerDef
   }
 
   /**
+   * Local to remote filename maps.
+   * 
+   * @return new map
+   */
+  public DistributerMap createMap() {
+    final DistributerMap map = new DistributerMap();
+    map.setProject(getProject());
+    this.maps.addElement(map);
+    return map;
+  }
+
+  /**
    * Required by documentation generator.
    */
   public void execute() {
-    throw new org.apache.tools.ant.BuildException(
-        "Not an actual task, but looks like one for documentation purposes");
+    throw new org.apache.tools.ant.BuildException("Not an actual task, but looks like one for documentation purposes");
+  }
+
+  /**
+   * Gets hosts.
+   * 
+   * @return hosts, may be null.
+   *
+   */
+  public String getHosts() {
+    if (isReference()) {
+      final DistributerDef refDistributer = (DistributerDef) getCheckedRef(DistributerDef.class, "DistributerDef");
+      return refDistributer.getHosts();
+    }
+    return this.hosts;
+  }
+
+  /**
+   * Gets protocol.
+   * 
+   * @return protocol, may be null.
+   *
+   */
+  public DistributerProtocolEnum getProtocol() {
+    if (isReference()) {
+      final DistributerDef refDistributer = (DistributerDef) getCheckedRef(DistributerDef.class, "DistributerDef");
+      return refDistributer.getProtocol();
+    }
+    return this.protocol;
+  }
+
+  /**
+   * Gets tcp cork.
+   * 
+   * @return TCP_CORK value.
+   *
+   */
+  public int getTcpcork() {
+    if (isReference()) {
+      final DistributerDef refDistributer = (DistributerDef) getCheckedRef(DistributerDef.class, "DistributerDef");
+      return refDistributer.getTcpcork();
+    }
+    return this.tcpCork;
   }
 
   /**
    * Returns true if the if and unless conditions (if any) are
    * satisfied.
+   * 
    * @return true if definition is active.
    */
   public boolean isActive() {
-    return CUtil.isActive(getProject(), ifCond, unlessCond);
+    return CUtil.isActive(getProject(), this.ifCond, this.unlessCond);
+  }
+
+  /**
+   * Sets hosts.
+   * 
+   * @param value
+   *          new value
+   */
+  public void setHosts(final String value) {
+    if (isReference()) {
+      throw tooManyAttributes();
+    }
+    this.hosts = value;
   }
 
   /**
    * Sets an id that can be used to reference this element.
    *
    * @param id
-   *            id
+   *          id
    */
   public void setId(final String id) {
     //
-    //  this is actually accomplished by a different
-    //     mechanism, but we can document it
+    // this is actually accomplished by a different
+    // mechanism, but we can document it
     //
   }
 
@@ -114,20 +180,49 @@ public final class DistributerDef
    * evaluated.
    *
    * @param propName
-   *            property name
+   *          property name
    */
   public void setIf(final String propName) {
-    ifCond = propName;
+    this.ifCond = propName;
+  }
+
+  /**
+   * Sets protocol.
+   * 
+   * @param value
+   *          new value
+   */
+  public void setProtocol(final DistributerProtocolEnum value) {
+    if (isReference()) {
+      throw tooManyAttributes();
+    }
+    this.protocol = value;
   }
 
   /**
    * Specifies that this element should behave as if the content of the
    * element with the matching id attribute was inserted at this location. If
    * specified, no other attributes should be specified.
-   * @param r reference name
+   * 
+   * @param r
+   *          reference name
    */
-  public void setRefid(final Reference r)  {
+  @Override
+  public void setRefid(final Reference r) {
     super.setRefid(r);
+  }
+
+  /**
+   * Sets TCP_CORK value.
+   * 
+   * @param value
+   *          new value
+   */
+  public void setTcpcork(final int value) {
+    if (isReference()) {
+      throw tooManyAttributes();
+    }
+    this.tcpCork = value;
   }
 
   /**
@@ -140,107 +235,20 @@ public final class DistributerDef
    * exception when evaluated.
    *
    * @param propName
-   *            name of property
+   *          name of property
    */
   public void setUnless(final String propName) {
-    unlessCond = propName;
+    this.unlessCond = propName;
   }
 
   /**
-   * Gets hosts.
-   * @return hosts, may be null.
-   *
-   */
-  public String getHosts() {
-    if (isReference()) {
-      DistributerDef refDistributer = (DistributerDef)
-          getCheckedRef(DistributerDef.class,
-                        "DistributerDef");
-      return refDistributer.getHosts();
-    }
-    return hosts;
-  }
-
-  /**
-   * Gets tcp cork.
-   * @return TCP_CORK value.
-   *
-   */
-  public int getTcpcork() {
-    if (isReference()) {
-      DistributerDef refDistributer = (DistributerDef)
-          getCheckedRef(DistributerDef.class,
-                        "DistributerDef");
-      return refDistributer.getTcpcork();
-    }
-    return tcpCork;
-  }
-
-  /**
-   * Gets protocol.
-   * @return protocol, may be null.
-   *
-   */
-  public DistributerProtocolEnum getProtocol() {
-    if (isReference()) {
-      DistributerDef refDistributer = (DistributerDef)
-          getCheckedRef(DistributerDef.class,
-                        "DistributerDef");
-      return refDistributer.getProtocol();
-    }
-    return protocol;
-  }
-
-  /**
-   * Sets hosts.
-   * @param value new value
-   */
-  public void setHosts(final String value) {
-    if (isReference()) {
-      throw tooManyAttributes();
-    }
-    hosts = value;
-  }
-
-  /**
-   * Sets TCP_CORK value.
-   * @param value new value
-   */
-  public void setTcpcork(final int value) {
-    if (isReference()) {
-      throw tooManyAttributes();
-    }
-    tcpCork = value;
-  }
-
-  /**
-   * Sets protocol.
-   * @param value new value
-   */
-  public void setProtocol(final DistributerProtocolEnum value) {
-    if (isReference()) {
-      throw tooManyAttributes();
-    }
-    protocol = value;
-  }
-
-  /**
-   *  Local to remote filename maps.
-   * @return new map
-   */
-  public DistributerMap createMap() {
-    DistributerMap map = new DistributerMap();
-    map.setProject(getProject());
-    maps.addElement(map);
-    return map;
-  }
-
-  /**
-   *  Sets remote user name.
-   * @param value user name
+   * Sets remote user name.
+   * 
+   * @param value
+   *          user name
    */
   public void setUser(final String value) {
-    user = value;
+    this.user = value;
   }
 
 }

@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,12 +18,17 @@
  * #L%
  */
 package com.github.maven_nar.cpptasks;
+
 import org.apache.tools.ant.types.EnumeratedAttribute;
+
 /**
  * Enumerated attribute with the values "dynamic" and "static",
  */
 public class RuntimeType extends EnumeratedAttribute {
-    public String[] getValues() {
-        return new String[]{"dynamic", "static"};
-    }
+  @Override
+  public String[] getValues() {
+    return new String[] {
+        "dynamic", "static"
+    };
+  }
 }

@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,68 +28,73 @@ import org.apache.maven.project.MavenProjectHelper;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
 
 /**
- * Interface to define the layout of nar files (executables, libs, include dirs) in both the repository (local,
+ * Interface to define the layout of nar files (executables, libs, include dirs)
+ * in both the repository (local,
  * unpacked) as well as in target.
- * 
+ *
  * @author Mark Donszelmann (Mark.Donszelmann@gmail.com)
  */
-public interface NarLayout
-{
-    /**
-     * Specifies where all the "no architecture" specific files are stored
-     */
-    File getNoArchDirectory( File baseDir, String artifactId, String version )
-        throws MojoExecutionException, MojoFailureException;
+public interface NarLayout {
+  /**
+   * Called to attach nars to main nar/jar file. This method needs to produce
+   * all the attached nar archive files.
+   */
+  void
+      attachNars(File baseDir, ArchiverManager archiverManager, MavenProjectHelper projectHelper, MavenProject project)
+          throws MojoExecutionException, MojoFailureException;
 
-    /**
-     * Specifies where libraries are stored
-     * 
-     * @return
-     * @throws MojoExecutionException, MojoFailureException
-     */
-    File getLibDirectory( File baseDir, String artifactId, String version, String aol, String type )
-        throws MojoExecutionException, MojoFailureException;
+  /**
+   * Specifies where binaries are stored
+   * 
+   * @return
+   */
+  File getBinDirectory(File baseDir, String artifactId, String version, String aol)
+      throws MojoExecutionException, MojoFailureException;
 
-    /**
-     * Specifies where includes are stored
-     * 
-     * @return
-     */
-    File getIncludeDirectory( File baseDir, String artifactId, String version )
-        throws MojoExecutionException, MojoFailureException;
+  /**
+   * Specifies where includes are stored
+   * 
+   * @return
+   */
+  File getIncludeDirectory(File baseDir, String artifactId, String version)
+      throws MojoExecutionException, MojoFailureException;
 
-    /**
-     * Specifies where binaries are stored
-     * 
-     * @return
-     */
-    File getBinDirectory( File baseDir, String artifactId, String version, String aol )
-        throws MojoExecutionException, MojoFailureException;
+  /**
+   * Specifies where libraries are stored
+   * 
+   * @return
+   * @throws MojoExecutionException
+   *           , MojoFailureException
+   */
+  File getLibDirectory(File baseDir, String artifactId, String version, String aol, String type)
+      throws MojoExecutionException, MojoFailureException;
 
-    /**
-     * Called to attach nars to main nar/jar file. This method needs to set NarInfo accordingly so it can be included in the nar archive.
-     */
-    void prepareNarInfo( File baseDir, MavenProject project, NarInfo narInfo, AbstractNarMojo libraryName )
-        throws MojoExecutionException;
+  /**
+   * Returns the unpack directory of a specific nar file.
+   */
+  File getNarUnpackDirectory(File baseUnpackDirectory, File narFile);
 
-    /**
-     * Called to attach nars to main nar/jar file. This method needs to produce all the attached nar archive files.
-     */
-    void attachNars( File baseDir, ArchiverManager archiverManager, MavenProjectHelper projectHelper,
-                     MavenProject project)
-        throws MojoExecutionException, MojoFailureException;
+  /**
+   * Specifies where all the "no architecture" specific files are stored
+   */
+  File getNoArchDirectory(File baseDir, String artifactId, String version)
+      throws MojoExecutionException, MojoFailureException;
 
-    /**
-     * Called to unpack a nar file
-     * @param defaultAOL 
-     * @param linkerName 
-     */
-    void unpackNar( File baseDir, ArchiverManager archiverManager, File file, String os, String linkerName, AOL defaultAOL )
-        throws MojoExecutionException, MojoFailureException;
+  /**
+   * Called to attach nars to main nar/jar file. This method needs to set
+   * NarInfo accordingly so it can be included in the nar archive.
+   */
+  void prepareNarInfo(File baseDir, MavenProject project, NarInfo narInfo, AbstractNarMojo libraryName)
+      throws MojoExecutionException;
 
-    /**
-     * Returns the unpack directory of a specific nar file.
-     */
-    File getNarUnpackDirectory(File baseUnpackDirectory, File narFile);
+  /**
+   * Called to unpack a nar file
+   * 
+   * @param defaultAOL
+   * @param linkerName
+   */
+  void
+      unpackNar(File baseDir, ArchiverManager archiverManager, File file, String os, String linkerName, AOL defaultAOL)
+          throws MojoExecutionException, MojoFailureException;
 
 }

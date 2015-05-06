@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,8 +29,7 @@ import org.apache.tools.ant.types.DataType;
  * Local to remote filename mapping (Experimental).
  *
  */
-public final class DistributerMap
-    extends DataType {
+public final class DistributerMap extends DataType {
   /**
    * if property.
    */
@@ -79,9 +78,28 @@ public final class DistributerMap
   /**
    * Required by documentation generator.
    */
-  public void execute()  {
-    throw new org.apache.tools.ant.BuildException(
-        "Not an actual task, but looks like one for documentation purposes");
+  public void execute() {
+    throw new org.apache.tools.ant.BuildException("Not an actual task, but looks like one for documentation purposes");
+  }
+
+  /**
+   * Gets local directory.
+   * 
+   * @return local directory, may be null.
+   *
+   */
+  public File getLocal() {
+    return this.localName;
+  }
+
+  /**
+   * Gets remote name for directory.
+   * 
+   * @return remote name, may be null.
+   *
+   */
+  public String getRemote() {
+    return this.remoteName;
   }
 
   /**
@@ -90,8 +108,18 @@ public final class DistributerMap
    *
    * @return true if this object is active.
    */
-  public boolean isActive()  {
-    return CUtil.isActive(getProject(), ifCond, unlessCond);
+  public boolean isActive() {
+    return CUtil.isActive(getProject(), this.ifCond, this.unlessCond);
+  }
+
+  /**
+   * Sets hosts for which this mapping is valid.
+   *
+   * @param value
+   *          hosts
+   */
+  public void setHosts(final String value) {
+    this.hosts = value;
   }
 
   /**
@@ -104,10 +132,54 @@ public final class DistributerMap
    * evaluated.
    *
    * @param propName
-   *            property name
+   *          property name
    */
   public void setIf(final String propName) {
-    ifCond = propName;
+    this.ifCond = propName;
+  }
+
+  /**
+   * Sets local directory for base of mapping.
+   *
+   * @param value
+   *          value
+   */
+  public void setLocal(final File value) {
+    if (value == null) {
+      throw new NullPointerException("value");
+    }
+    if (value.exists() && !value.isDirectory()) {
+      throw new BuildException("local should be a directory");
+    }
+    this.localName = value;
+    try {
+      this.canonicalPath = this.localName.getCanonicalPath();
+    } catch (final IOException ex) {
+      throw new BuildException(ex);
+    }
+  }
+
+  /**
+   * Sets remote name for directory.
+   * 
+   * @param value
+   *          remote name for directory
+   */
+  public void setRemote(final String value) {
+    this.remoteName = value;
+  }
+
+  /**
+   * Sets the separator character (/ or \) for the remote system.
+   * 
+   * @param value
+   *          separator character
+   */
+  public void setRemoteSeparator(final String value) {
+    if (value != null && value.length() != 1) {
+      throw new BuildException("remote separator must be a single character");
+    }
+    this.remoteSeparator = value.charAt(0);
   }
 
   /**
@@ -120,102 +192,36 @@ public final class DistributerMap
    * exception when evaluated.
    *
    * @param propName
-   *            name of property
+   *          name of property
    */
   public void setUnless(final String propName) {
-    unlessCond = propName;
-  }
-
-  /**
-   * Gets local directory.
-   * @return local directory, may be null.
-   *
-   */
-  public File getLocal() {
-    return localName;
-  }
-
-  /**
-   * Gets remote name for directory.
-   * @return remote name, may be null.
-   *
-   */
-  public String getRemote() {
-    return remoteName;
+    this.unlessCond = propName;
   }
 
   /**
    * Converts the local file name to the remote name for the same file.
    *
-   * @param host host
-   * @param localFile local file
+   * @param host
+   *          host
+   * @param localFile
+   *          local file
    * @return remote name for local file, null if unknown.
    */
   public String toRemote(final String host, final File localFile) {
-    if (remoteName != null
-        && (hosts == null || hosts.indexOf(host) >= 0)) {
+    if (this.remoteName != null && (this.hosts == null || this.hosts.indexOf(host) >= 0)) {
       try {
-        String canonical = localFile.getCanonicalPath();
-        if (canonical.startsWith(canonicalPath)) {
+        final String canonical = localFile.getCanonicalPath();
+        if (canonical.startsWith(this.canonicalPath)) {
           if (isActive()) {
-            return remoteName
-                + canonical.substring(canonicalPath.length()).replace(File.
-                separatorChar, remoteSeparator);
+            return this.remoteName
+                + canonical.substring(this.canonicalPath.length()).replace(File.separatorChar, this.remoteSeparator);
           }
         }
-      } catch (IOException ex) {
+      } catch (final IOException ex) {
         return null;
       }
     }
     return null;
-  }
-
-  /**
-   * Sets local directory for base of mapping.
-   *
-   * @param value value
-   */
-  public void setLocal(final File value)  {
-    if (value == null) {
-      throw new NullPointerException("value");
-    }
-    if (value.exists() && !value.isDirectory()) {
-      throw new BuildException("local should be a directory");
-    }
-    localName = value;
-    try {
-      canonicalPath = localName.getCanonicalPath();
-    } catch (IOException ex) {
-      throw new BuildException(ex);
-    }
-  }
-
-  /**
-   * Sets remote name for directory.
-   * @param value remote name for directory
-   */
-  public void setRemote(final String value) {
-    remoteName = value;
-  }
-
-  /**
-   * Sets the separator character (/ or \) for the remote system.
-   * @param value separator character
-   */
-  public void setRemoteSeparator(final String value)  {
-    if (value != null && value.length() != 1) {
-      throw new BuildException("remote separator must be a single character");
-    }
-    remoteSeparator = value.charAt(0);
-  }
-
-  /**
-   * Sets hosts for which this mapping is valid.
-   *
-   * @param value hosts
-   */
-  public void setHosts(final String value) {
-    hosts = value;
   }
 
 }

@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,8 +25,7 @@ package com.github.maven_nar.cpptasks.parser;
  *
  * @author Curt Arnold
  */
-public final class CaseInsensitiveLetterState
-    extends AbstractParserState {
+public final class CaseInsensitiveLetterState extends AbstractParserState {
   /**
    * Next state if a match is found.
    */
@@ -51,18 +50,16 @@ public final class CaseInsensitiveLetterState
    * Constructor.
    *
    * @param parser
-   *            parser
+   *          parser
    * @param matchLetter
-   *            letter to match
+   *          letter to match
    * @param nextStateArg
-   *            next state if a match on the letter
+   *          next state if a match on the letter
    * @param noMatchStateArg
-   *            state if no match on letter
+   *          state if no match on letter
    */
-  public CaseInsensitiveLetterState(final AbstractParser parser,
-                                    final char matchLetter,
-                                    final AbstractParserState nextStateArg,
-                                    final AbstractParserState noMatchStateArg) {
+  public CaseInsensitiveLetterState(final AbstractParser parser, final char matchLetter,
+      final AbstractParserState nextStateArg, final AbstractParserState noMatchStateArg) {
     super(parser);
     this.lowerLetter = Character.toLowerCase(matchLetter);
     this.upperLetter = Character.toUpperCase(matchLetter);
@@ -74,17 +71,18 @@ public final class CaseInsensitiveLetterState
    * Consumes a character and returns the next state for the parser.
    *
    * @param ch
-   *            next character
+   *          next character
    * @return the configured nextState if ch is the expected character or the
    *         configure noMatchState otherwise.
    */
+  @Override
   public AbstractParserState consume(final char ch) {
-    if (ch == lowerLetter || ch == upperLetter) {
-      return nextState;
+    if (ch == this.lowerLetter || ch == this.upperLetter) {
+      return this.nextState;
     }
     if (ch == '\n') {
       getParser().getNewLineState();
     }
-    return noMatchState;
+    return this.noMatchState;
   }
 }

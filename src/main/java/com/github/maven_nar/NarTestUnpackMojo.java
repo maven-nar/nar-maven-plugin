@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,7 +22,6 @@ package com.github.maven_nar;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
@@ -33,48 +32,45 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
 /**
- * Unpacks NAR files needed for tests compilation and execution. Unpacking happens in the project target folder, and
+ * Unpacks NAR files needed for tests compilation and execution. Unpacking
+ * happens in the project target folder, and
  * also sets flags on binaries and corrects static libraries.
- * 
+ *
  * @author Mark Donszelmann
  */
-@Mojo(name = "nar-test-unpack", defaultPhase = LifecyclePhase.GENERATE_TEST_SOURCES, requiresProject = true, requiresDependencyResolution = ResolutionScope.TEST)
-public class NarTestUnpackMojo
-    extends AbstractDependencyMojo
-{
+@Mojo(name = "nar-test-unpack", defaultPhase = LifecyclePhase.GENERATE_TEST_SOURCES, requiresProject = true,
+  requiresDependencyResolution = ResolutionScope.TEST)
+public class NarTestUnpackMojo extends AbstractDependencyMojo {
 
-	/**
-	 * List the dependencies needed for tests compilations and executions.
-	 */
-	@Override
-    protected List<Artifact> getArtifacts() {
-		try {
-			List<String> scopes = new ArrayList<String>();
-    		scopes.add(Artifact.SCOPE_COMPILE);
-    		scopes.add(Artifact.SCOPE_PROVIDED);
-    		scopes.add(Artifact.SCOPE_RUNTIME);
-    		scopes.add(Artifact.SCOPE_SYSTEM);
-    		scopes.add(Artifact.SCOPE_TEST);
-    		return getNarManager().getDependencies(scopes);
-        } catch (MojoExecutionException e) {
-            e.printStackTrace();
-        } catch (MojoFailureException e) {
-            e.printStackTrace();
-        }
-        return Collections.EMPTY_LIST;
-	}
-
-	@Override
-    protected File getUnpackDirectory()
-    {
-        return getTestUnpackDirectory() == null ? super.getUnpackDirectory() : getTestUnpackDirectory();
+  /**
+   * List the dependencies needed for tests compilations and executions.
+   */
+  @Override
+  protected List<Artifact> getArtifacts() {
+    try {
+      final List<String> scopes = new ArrayList<String>();
+      scopes.add(Artifact.SCOPE_COMPILE);
+      scopes.add(Artifact.SCOPE_PROVIDED);
+      scopes.add(Artifact.SCOPE_RUNTIME);
+      scopes.add(Artifact.SCOPE_SYSTEM);
+      scopes.add(Artifact.SCOPE_TEST);
+      return getNarManager().getDependencies(scopes);
+    } catch (final MojoExecutionException e) {
+      e.printStackTrace();
+    } catch (final MojoFailureException e) {
+      e.printStackTrace();
     }
+    return Collections.EMPTY_LIST;
+  }
 
-    @Override
-    public final void narExecute()
-        throws MojoExecutionException, MojoFailureException
-    {
-    	List<AttachedNarArtifact> attachedNarArtifacts = getAttachedNarArtifacts();
-    	unpackAttachedNars( attachedNarArtifacts );
-    }
+  @Override
+  protected File getUnpackDirectory() {
+    return getTestUnpackDirectory() == null ? super.getUnpackDirectory() : getTestUnpackDirectory();
+  }
+
+  @Override
+  public final void narExecute() throws MojoExecutionException, MojoFailureException {
+    final List<AttachedNarArtifact> attachedNarArtifacts = getAttachedNarArtifacts();
+    unpackAttachedNars(attachedNarArtifacts);
+  }
 }

@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,7 +24,6 @@ import java.io.Reader;
 
 import com.github.maven_nar.cpptasks.parser.Parser;
 
-
 /**
  * Dependency scanner for Trolltech Qt User Interface definition files.
  *
@@ -34,11 +33,10 @@ import com.github.maven_nar.cpptasks.parser.Parser;
  *
  * @author Curt Arnold
  */
-public final class UserInterfaceParser
-    implements Parser {
+public final class UserInterfaceParser implements Parser {
 
   /**
-   *   Constructor.
+   * Constructor.
    *
    */
   public UserInterfaceParser() {
@@ -47,15 +45,18 @@ public final class UserInterfaceParser
   /**
    * Adds filename to the list of included files.
    *
-   * @param include String included file name
+   * @param include
+   *          String included file name
    */
   public void addFilename(final String include) {
   }
 
   /**
    * Gets included files.
+   * 
    * @return String[] included files
    */
+  @Override
   public String[] getIncludes() {
     return new String[0];
   }
@@ -63,9 +64,12 @@ public final class UserInterfaceParser
   /**
    * Parses source file for dependencies.
    *
-   * @param reader Reader reader
-   * @throws IOException if error reading source file
+   * @param reader
+   *          Reader reader
+   * @throws IOException
+   *           if error reading source file
    */
+  @Override
   public void parse(final Reader reader) throws IOException {
   }
 }

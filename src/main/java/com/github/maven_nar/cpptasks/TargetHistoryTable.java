@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -49,416 +49,398 @@ import com.github.maven_nar.cpptasks.compiler.ProcessorConfiguration;
  * @author Curt Arnold
  */
 public final class TargetHistoryTable {
-    /**
-     * This class handles populates the TargetHistory hashtable in response to
-     * SAX parse events
-     */
-    private class TargetHistoryTableHandler extends DefaultHandler {
-        private final File baseDir;
-        private String config;
-        private final Hashtable<String, TargetHistory> history;
-        private String output;
-        private long outputLastModified;
-        private final Vector<SourceHistory> sources = new Vector<SourceHistory>();
-
-        /**
-         * Constructor
-         *
-         * @param history     hashtable of TargetHistory keyed by output name
-         */
-        private TargetHistoryTableHandler(Hashtable<String, TargetHistory> history, File baseDir) {
-            this.history = history;
-            config = null;
-            output = null;
-            this.baseDir = baseDir;
-        }
-
-        public void endElement(String namespaceURI, String localName,
-                               String qName) throws SAXException {
-            //
-            //   if </target> then
-            //       create TargetHistory object and add to hashtable
-            //           if corresponding output file exists and
-            //           has the same timestamp
-            //
-            if (qName.equals("target")) {
-                if (config != null && output != null) {
-                    File existingFile = new File(baseDir, output);
-                    //
-                    //   if the corresponding files doesn't exist or has a
-                    // different
-                    //      modification time, then discard this record
-                    if (existingFile.exists()) {
-                        //
-                        //   would have expected exact time stamps
-                        //      but have observed slight differences
-                        //      in return value for multiple evaluations of
-                        //      lastModified(). Check if times are within
-                        //      a second
-                        long existingLastModified = existingFile.lastModified();
-                        if (!CUtil.isSignificantlyBefore(existingLastModified, outputLastModified)
-                                && !CUtil.isSignificantlyAfter(existingLastModified, outputLastModified)) {
-                            SourceHistory[] sourcesArray = new SourceHistory[sources
-                                    .size()];
-                            sources.copyInto(sourcesArray);
-                            TargetHistory targetHistory = new TargetHistory(
-                                    config, output, outputLastModified,
-                                    sourcesArray);
-                            history.put(output, targetHistory);
-                        }
-                    }
-                }
-                output = null;
-                sources.setSize(0);
-            } else {
-                //
-                //   reset config so targets not within a processor element
-                //      don't pick up a previous processors signature
-                //
-                if (qName.equals("processor")) {
-                    config = null;
-                }
-            }
-        }
-
-        /**
-         * startElement handler
-         */
-        public void startElement(String namespaceURI, String localName,
-                                 String qName, Attributes atts) throws SAXException {
-            //
-            //   if sourceElement
-            //
-            if (qName.equals("source")) {
-                String sourceFile = atts.getValue("file");
-                long sourceLastModified = Long.parseLong(atts
-                        .getValue("lastModified"), 16);
-                sources.addElement(new SourceHistory(sourceFile,
-                        sourceLastModified));
-            } else {
-                //
-                //   if <target> element,
-                //      grab file name and lastModified values
-                //      TargetHistory object will be created in endElement
-                //
-                if (qName.equals("target")) {
-                    sources.setSize(0);
-                    output = atts.getValue("file");
-                    outputLastModified = Long.parseLong(atts
-                            .getValue("lastModified"), 16);
-                } else {
-                    //
-                    //   if <processor> element,
-                    //       grab signature attribute
-                    //
-                    if (qName.equals("processor")) {
-                        config = atts.getValue("signature");
-                    }
-                }
-            }
-        }
-    }
+  /**
+   * This class handles populates the TargetHistory hashtable in response to
+   * SAX parse events
+   */
+  private class TargetHistoryTableHandler extends DefaultHandler {
+    private final File baseDir;
+    private String config;
+    private final Hashtable<String, TargetHistory> history;
+    private String output;
+    private long outputLastModified;
+    private final Vector<SourceHistory> sources = new Vector<SourceHistory>();
 
     /**
-     * Flag indicating whether the cache should be written back to file.
-     */
-    private boolean dirty;
-    /**
-     * a hashtable of TargetHistory's keyed by output file name
-     */
-    private final Hashtable<String, TargetHistory> history = new Hashtable<String, TargetHistory>();
-    /**
-     * The file the cache was loaded from.
-     */
-    private/* final */ File historyFile;
-    private/* final */ File outputDir;
-    private String outputDirPath;
-
-    public File getHistoryFile() {
-        return historyFile;
-    }
-
-    /**
-     * Creates a target history table from history.xml in the output directory,
-     * if it exists. Otherwise, initializes the history table empty.
+     * Constructor
      *
-     * @param task      task used for logging history load errors
-     * @param outputDir output directory for task
+     * @param history
+     *          hashtable of TargetHistory keyed by output name
      */
-    public TargetHistoryTable(CCTask task, File outputDir) throws BuildException
+    private TargetHistoryTableHandler(final Hashtable<String, TargetHistory> history, final File baseDir) {
+      this.history = history;
+      this.config = null;
+      this.output = null;
+      this.baseDir = baseDir;
+    }
 
-    {
-        if (outputDir == null) {
-            throw new NullPointerException("outputDir");
-        }
-        if (!outputDir.isDirectory()) {
-            throw new BuildException("Output directory is not a directory");
-        }
-        if (!outputDir.exists()) {
-            throw new BuildException("Output directory does not exist");
-        }
-        this.outputDir = outputDir;
-        try {
-            outputDirPath = outputDir.getCanonicalPath();
-        } catch (IOException ex) {
-            outputDirPath = outputDir.toString();
-        }
-        //
-        //   load any existing history from file
-        //       suppressing any records whose corresponding
-        //       file does not exist, is zero-length or
-        //          last modified dates differ
-        historyFile = new File(outputDir, "history.xml");
-
-
-        if (historyFile.exists()) {
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            factory.setValidating(false);
-            try {
-                SAXParser parser = factory.newSAXParser();
-                parser.parse(historyFile, new TargetHistoryTableHandler(
-                        history, outputDir));
-            } catch (Exception ex) {
-                //
-                //   a failure on loading this history is not critical
-                //       but should be logged
-                task.log("Error reading history.xml: " + ex.toString());
+    @Override
+    public void endElement(final String namespaceURI, final String localName, final String qName) throws SAXException {
+      //
+      // if </target> then
+      // create TargetHistory object and add to hashtable
+      // if corresponding output file exists and
+      // has the same timestamp
+      //
+      if (qName.equals("target")) {
+        if (this.config != null && this.output != null) {
+          final File existingFile = new File(this.baseDir, this.output);
+          //
+          // if the corresponding files doesn't exist or has a
+          // different
+          // modification time, then discard this record
+          if (existingFile.exists()) {
+            //
+            // would have expected exact time stamps
+            // but have observed slight differences
+            // in return value for multiple evaluations of
+            // lastModified(). Check if times are within
+            // a second
+            final long existingLastModified = existingFile.lastModified();
+            if (!CUtil.isSignificantlyBefore(existingLastModified, this.outputLastModified)
+                && !CUtil.isSignificantlyAfter(existingLastModified, this.outputLastModified)) {
+              final SourceHistory[] sourcesArray = new SourceHistory[this.sources.size()];
+              this.sources.copyInto(sourcesArray);
+              final TargetHistory targetHistory = new TargetHistory(this.config, this.output, this.outputLastModified,
+                  sourcesArray);
+              this.history.put(this.output, targetHistory);
             }
+          }
+        }
+        this.output = null;
+        this.sources.setSize(0);
+      } else {
+        //
+        // reset config so targets not within a processor element
+        // don't pick up a previous processors signature
+        //
+        if (qName.equals("processor")) {
+          this.config = null;
+        }
+      }
+    }
+
+    /**
+     * startElement handler
+     */
+    @Override
+    public void startElement(final String namespaceURI, final String localName, final String qName,
+        final Attributes atts) throws SAXException {
+      //
+      // if sourceElement
+      //
+      if (qName.equals("source")) {
+        final String sourceFile = atts.getValue("file");
+        final long sourceLastModified = Long.parseLong(atts.getValue("lastModified"), 16);
+        this.sources.addElement(new SourceHistory(sourceFile, sourceLastModified));
+      } else {
+        //
+        // if <target> element,
+        // grab file name and lastModified values
+        // TargetHistory object will be created in endElement
+        //
+        if (qName.equals("target")) {
+          this.sources.setSize(0);
+          this.output = atts.getValue("file");
+          this.outputLastModified = Long.parseLong(atts.getValue("lastModified"), 16);
         } else {
-            //
-            // create empty history file for identifying new files by last
-            // modified
-            //   timestamp comperation (to compare with
-            //   System.currentTimeMillis() don't work on Unix, because it
-            //   maesure timestamps only in seconds).
-            //      try {
+          //
+          // if <processor> element,
+          // grab signature attribute
+          //
+          if (qName.equals("processor")) {
+            this.config = atts.getValue("signature");
+          }
+        }
+      }
+    }
+  }
 
+  /**
+   * Flag indicating whether the cache should be written back to file.
+   */
+  private boolean dirty;
+  /**
+   * a hashtable of TargetHistory's keyed by output file name
+   */
+  private final Hashtable<String, TargetHistory> history = new Hashtable<String, TargetHistory>();
+  /**
+   * The file the cache was loaded from.
+   */
+  private final/* final */File historyFile;
+  private final/* final */File outputDir;
+  private String outputDirPath;
 
+  /**
+   * Creates a target history table from history.xml in the output directory,
+   * if it exists. Otherwise, initializes the history table empty.
+   *
+   * @param task
+   *          task used for logging history load errors
+   * @param outputDir
+   *          output directory for task
+   */
+  public TargetHistoryTable(final CCTask task, final File outputDir) throws BuildException
+
+  {
+    if (outputDir == null) {
+      throw new NullPointerException("outputDir");
+    }
+    if (!outputDir.isDirectory()) {
+      throw new BuildException("Output directory is not a directory");
+    }
+    if (!outputDir.exists()) {
+      throw new BuildException("Output directory does not exist");
+    }
+    this.outputDir = outputDir;
+    try {
+      this.outputDirPath = outputDir.getCanonicalPath();
+    } catch (final IOException ex) {
+      this.outputDirPath = outputDir.toString();
+    }
+    //
+    // load any existing history from file
+    // suppressing any records whose corresponding
+    // file does not exist, is zero-length or
+    // last modified dates differ
+    this.historyFile = new File(outputDir, "history.xml");
+
+    if (this.historyFile.exists()) {
+      final SAXParserFactory factory = SAXParserFactory.newInstance();
+      factory.setValidating(false);
+      try {
+        final SAXParser parser = factory.newSAXParser();
+        parser.parse(this.historyFile, new TargetHistoryTableHandler(this.history, outputDir));
+      } catch (final Exception ex) {
+        //
+        // a failure on loading this history is not critical
+        // but should be logged
+        task.log("Error reading history.xml: " + ex.toString());
+      }
+    } else {
+      //
+      // create empty history file for identifying new files by last
+      // modified
+      // timestamp comperation (to compare with
+      // System.currentTimeMillis() don't work on Unix, because it
+      // maesure timestamps only in seconds).
+      // try {
+
+      try {
+        final File temp = File.createTempFile("history.xml", Long.toString(System.nanoTime()), outputDir);
+        final FileWriter writer = new FileWriter(temp);
+        try {
+          writer.write("<history/>");
+        } finally {
+          writer.close();
+        }
+        if (!temp.renameTo(this.historyFile)) {
+          throw new IOException("Could not rename " + temp + " to " + this.historyFile);
+        }
+      } catch (final IOException ex) {
+        throw new BuildException("Can't create history file", ex);
+      }
+    }
+  }
+
+  public void commit() throws IOException {
+    //
+    // if not dirty, no need to update file
+    //
+    if (this.dirty) {
+      //
+      // build (small) hashtable of config id's in history
+      //
+      final Hashtable<String, String> configs = new Hashtable<String, String>(20);
+      Enumeration<TargetHistory> elements = this.history.elements();
+      while (elements.hasMoreElements()) {
+        final TargetHistory targetHistory = elements.nextElement();
+        final String configId = targetHistory.getProcessorConfiguration();
+        if (configs.get(configId) == null) {
+          configs.put(configId, configId);
+        }
+      }
+      final FileOutputStream outStream = new FileOutputStream(this.historyFile);
+      OutputStreamWriter outWriter;
+      //
+      // early VM's don't support UTF-8 encoding
+      // try and fallback to the default encoding
+      // otherwise
+      String encodingName = "UTF-8";
+      try {
+        outWriter = new OutputStreamWriter(outStream, "UTF-8");
+      } catch (final UnsupportedEncodingException ex) {
+        outWriter = new OutputStreamWriter(outStream);
+        encodingName = outWriter.getEncoding();
+      }
+      final BufferedWriter writer = new BufferedWriter(outWriter);
+      writer.write("<?xml version='1.0' encoding='");
+      writer.write(encodingName);
+      writer.write("'?>\n");
+      writer.write("<history>\n");
+      final StringBuffer buf = new StringBuffer(200);
+      final Enumeration<String> configEnum = configs.elements();
+      while (configEnum.hasMoreElements()) {
+        final String configId = configEnum.nextElement();
+        buf.setLength(0);
+        buf.append("   <processor signature=\"");
+        buf.append(CUtil.xmlAttribEncode(configId));
+        buf.append("\">\n");
+        writer.write(buf.toString());
+        elements = this.history.elements();
+        while (elements.hasMoreElements()) {
+          final TargetHistory targetHistory = elements.nextElement();
+          if (targetHistory.getProcessorConfiguration().equals(configId)) {
+            buf.setLength(0);
+            buf.append("      <target file=\"");
+            buf.append(CUtil.xmlAttribEncode(targetHistory.getOutput()));
+            buf.append("\" lastModified=\"");
+            buf.append(Long.toHexString(targetHistory.getOutputLastModified()));
+            buf.append("\">\n");
+            writer.write(buf.toString());
+            final SourceHistory[] sourceHistories = targetHistory.getSources();
+            for (final SourceHistory sourceHistorie : sourceHistories) {
+              buf.setLength(0);
+              buf.append("         <source file=\"");
+              buf.append(CUtil.xmlAttribEncode(sourceHistorie.getRelativePath()));
+              buf.append("\" lastModified=\"");
+              buf.append(Long.toHexString(sourceHistorie.getLastModified()));
+              buf.append("\"/>\n");
+              writer.write(buf.toString());
+            }
+            writer.write("      </target>\n");
+          }
+        }
+        writer.write("   </processor>\n");
+      }
+      writer.write("</history>\n");
+      writer.close();
+      this.dirty = false;
+    }
+  }
+
+  public TargetHistory get(final String configId, final String outputName) {
+    TargetHistory targetHistory = this.history.get(outputName);
+    if (targetHistory != null) {
+      if (!targetHistory.getProcessorConfiguration().equals(configId)) {
+        targetHistory = null;
+      }
+    }
+    return targetHistory;
+  }
+
+  public File getHistoryFile() {
+    return this.historyFile;
+  }
+
+  public void markForRebuild(final Map<String, TargetInfo> targetInfos) {
+    final Iterator<TargetInfo> targetInfoEnum = targetInfos.values().iterator();
+    while (targetInfoEnum.hasNext()) {
+      markForRebuild(targetInfoEnum.next());
+    }
+  }
+
+  // FREEHEP added synchronized
+  public synchronized void markForRebuild(final TargetInfo targetInfo) {
+    //
+    // if it must already be rebuilt, no need to check further
+    //
+    if (!targetInfo.getRebuild()) {
+      final TargetHistory history = get(targetInfo.getConfiguration().toString(), targetInfo.getOutput().getName());
+      if (history == null) {
+        targetInfo.mustRebuild();
+      } else {
+        final SourceHistory[] sourceHistories = history.getSources();
+        final File[] sources = targetInfo.getSources();
+        if (sourceHistories.length != sources.length) {
+          targetInfo.mustRebuild();
+        } else {
+          final Hashtable<String, File> sourceMap = new Hashtable<String, File>(sources.length);
+          for (final File source : sources) {
             try {
-                final File temp = File.createTempFile("history.xml", Long.toString(System.nanoTime()), outputDir);
-                FileWriter writer = new FileWriter(temp);
-                try {
-                    writer.write("<history/>");
-                } finally {
-                    writer.close();
-                }
-                if (!temp.renameTo(historyFile)) {
-                    throw new IOException("Could not rename " + temp + " to " + historyFile);
-                }
-            } catch (IOException ex) {
-                throw new BuildException("Can't create history file", ex);
+              sourceMap.put(source.getCanonicalPath(), source);
+            } catch (final IOException ex) {
+              sourceMap.put(source.getAbsolutePath(), source);
             }
-        }
-    }
-
-    public void commit() throws IOException {
-        //
-        //   if not dirty, no need to update file
-        //
-        if (dirty) {
+          }
+          for (final SourceHistory sourceHistorie : sourceHistories) {
             //
-            //   build (small) hashtable of config id's in history
+            // relative file name, must absolutize it on output
+            // directory
             //
-            Hashtable<String, String> configs = new Hashtable<String, String>(20);
-            Enumeration<TargetHistory> elements = history.elements();
-            while (elements.hasMoreElements()) {
-                TargetHistory targetHistory = elements.nextElement();
-                String configId = targetHistory.getProcessorConfiguration();
-                if (configs.get(configId) == null) {
-                    configs.put(configId, configId);
-                }
-            }
-            FileOutputStream outStream = new FileOutputStream(historyFile);
-            OutputStreamWriter outWriter;
-            //
-            //   early VM's don't support UTF-8 encoding
-            //       try and fallback to the default encoding
-            //           otherwise
-            String encodingName = "UTF-8";
-            try {
-                outWriter = new OutputStreamWriter(outStream, "UTF-8");
-            } catch (UnsupportedEncodingException ex) {
-                outWriter = new OutputStreamWriter(outStream);
-                encodingName = outWriter.getEncoding();
-            }
-            BufferedWriter writer = new BufferedWriter(outWriter);
-            writer.write("<?xml version='1.0' encoding='");
-            writer.write(encodingName);
-            writer.write("'?>\n");
-            writer.write("<history>\n");
-            StringBuffer buf = new StringBuffer(200);
-            Enumeration<String> configEnum = configs.elements();
-            while (configEnum.hasMoreElements()) {
-                String configId = configEnum.nextElement();
-                buf.setLength(0);
-                buf.append("   <processor signature=\"");
-                buf.append(CUtil.xmlAttribEncode(configId));
-                buf.append("\">\n");
-                writer.write(buf.toString());
-                elements = history.elements();
-                while (elements.hasMoreElements()) {
-                    TargetHistory targetHistory = (TargetHistory) elements
-                            .nextElement();
-                    if (targetHistory.getProcessorConfiguration().equals(
-                            configId)) {
-                        buf.setLength(0);
-                        buf.append("      <target file=\"");
-                        buf.append(CUtil.xmlAttribEncode(targetHistory
-                                .getOutput()));
-                        buf.append("\" lastModified=\"");
-                        buf.append(Long.toHexString(targetHistory
-                                .getOutputLastModified()));
-                        buf.append("\">\n");
-                        writer.write(buf.toString());
-                        SourceHistory[] sourceHistories = targetHistory
-                                .getSources();
-                        for (int i = 0; i < sourceHistories.length; i++) {
-                            buf.setLength(0);
-                            buf.append("         <source file=\"");
-                            buf.append(CUtil.xmlAttribEncode(sourceHistories[i]
-                                    .getRelativePath()));
-                            buf.append("\" lastModified=\"");
-                            buf.append(Long.toHexString(sourceHistories[i]
-                                    .getLastModified()));
-                            buf.append("\"/>\n");
-                            writer.write(buf.toString());
-                        }
-                        writer.write("      </target>\n");
-                    }
-                }
-                writer.write("   </processor>\n");
-            }
-            writer.write("</history>\n");
-            writer.close();
-            dirty = false;
-        }
-    }
-
-    public TargetHistory get(String configId, String outputName) {
-        TargetHistory targetHistory = (TargetHistory) history.get(outputName);
-        if (targetHistory != null) {
-            if (!targetHistory.getProcessorConfiguration().equals(configId)) {
-                targetHistory = null;
-            }
-        }
-        return targetHistory;
-    }
-
-    public void markForRebuild(Map<String, TargetInfo> targetInfos) {
-        Iterator<TargetInfo> targetInfoEnum = targetInfos.values().iterator();
-        while (targetInfoEnum.hasNext()) {
-            markForRebuild(targetInfoEnum.next());
-        }
-    }
-
-    // FREEHEP added synchronized
-    public synchronized void markForRebuild(TargetInfo targetInfo) {
-        //
-        //     if it must already be rebuilt, no need to check further
-        //
-        if (!targetInfo.getRebuild()) {
-            TargetHistory history = get(targetInfo.getConfiguration()
-                    .toString(), targetInfo.getOutput().getName());
-            if (history == null) {
+            final String absPath = sourceHistorie.getAbsolutePath(this.outputDir);
+            File match = sourceMap.get(absPath);
+            if (match != null) {
+              try {
+                match = sourceMap.get(new File(absPath).getCanonicalPath());
+              } catch (final IOException ex) {
                 targetInfo.mustRebuild();
-            } else {
-                SourceHistory[] sourceHistories = history.getSources();
-                File[] sources = targetInfo.getSources();
-                if (sourceHistories.length != sources.length) {
-                    targetInfo.mustRebuild();
-                } else {
-                    Hashtable<String, File> sourceMap = new Hashtable<String, File>(sources.length);
-                    for (int i = 0; i < sources.length; i++) {
-                        try {
-                            sourceMap.put(sources[i].getCanonicalPath(), sources[i]);
-                        } catch (IOException ex) {
-                            sourceMap.put(sources[i].getAbsolutePath(), sources[i]);
-                        }
-                    }
-                    for (int i = 0; i < sourceHistories.length; i++) {
-                        //
-                        //   relative file name, must absolutize it on output
-                        // directory
-                        //
-                        String absPath = sourceHistories[i].getAbsolutePath(outputDir);
-                        File match = (File) sourceMap.get(absPath);
-                        if (match != null) {
-                            try {
-                                match = (File) sourceMap.get(new File(absPath).getCanonicalPath());
-                            } catch (IOException ex) {
-                                targetInfo.mustRebuild();
-                                break;
-                            }
-                        }
-                        if (match == null || match.lastModified() != sourceHistories[i].getLastModified()) {
-                            targetInfo.mustRebuild();
-                            break;
-                        }
-                    }
-                }
+                break;
+              }
             }
-        }
-    }
-
-    public void update(ProcessorConfiguration config, String[] sources, VersionInfo versionInfo) {
-        String configId = config.getIdentifier();
-        String[] onesource = new String[1];
-        String[] outputNames;
-        for (int i = 0; i < sources.length; i++) {
-            onesource[0] = sources[i];
-            outputNames = config.getOutputFileNames(sources[i], versionInfo);
-            for (int j = 0; j < outputNames.length; j++) {
-                update(configId, outputNames[j], onesource);
+            if (match == null || match.lastModified() != sourceHistorie.getLastModified()) {
+              targetInfo.mustRebuild();
+              break;
             }
+          }
         }
+      }
     }
+  }
 
-    // FREEHEP added synchronized
-    private synchronized void update(String configId, String outputName, String[] sources) {
-        File outputFile = new File(outputDir, outputName);
-        //
-        //   if output file doesn't exist or predates the start of the
-        //        compile step (most likely a compilation error) then
-        //        do not write add a history entry
-        //
-        if (outputFile.exists() &&
-                !CUtil.isSignificantlyBefore(outputFile.lastModified(), historyFile.lastModified())) {
-            dirty = true;
-            history.remove(outputName);
-            SourceHistory[] sourceHistories = new SourceHistory[sources.length];
-            for (int i = 0; i < sources.length; i++) {
-                File sourceFile = new File(sources[i]);
-                long lastModified = sourceFile.lastModified();
-                String relativePath = CUtil.getRelativePath(outputDirPath,
-                        sourceFile);
-                sourceHistories[i] = new SourceHistory(relativePath,
-                        lastModified);
-            }
-            TargetHistory newHistory = new TargetHistory(configId, outputName,
-                    outputFile.lastModified(), sourceHistories);
-            history.put(outputName, newHistory);
-        }
+  public void update(final ProcessorConfiguration config, final String[] sources, final VersionInfo versionInfo) {
+    final String configId = config.getIdentifier();
+    final String[] onesource = new String[1];
+    String[] outputNames;
+    for (final String source : sources) {
+      onesource[0] = source;
+      outputNames = config.getOutputFileNames(source, versionInfo);
+      for (final String outputName : outputNames) {
+        update(configId, outputName, onesource);
+      }
     }
+  }
 
-    // FREEHEP added synchronized
-    public synchronized void update(TargetInfo linkTarget) {
-        File outputFile = linkTarget.getOutput();
-        String outputName = outputFile.getName();
-        //
-        //   if output file doesn't exist or predates the start of the
-        //        compile or link step (most likely a compilation error) then
-        //        do not write add a history entry
-        //
-        if (outputFile.exists()
-                && !CUtil.isSignificantlyBefore(outputFile.lastModified(), historyFile.lastModified())) {
-            dirty = true;
-            history.remove(outputName);
-            SourceHistory[] sourceHistories = linkTarget
-                    .getSourceHistories(outputDirPath);
-            TargetHistory newHistory = new TargetHistory(linkTarget
-                    .getConfiguration().getIdentifier(), outputName, outputFile
-                    .lastModified(), sourceHistories);
-            history.put(outputName, newHistory);
-        }
+  // FREEHEP added synchronized
+  private synchronized void update(final String configId, final String outputName, final String[] sources) {
+    final File outputFile = new File(this.outputDir, outputName);
+    //
+    // if output file doesn't exist or predates the start of the
+    // compile step (most likely a compilation error) then
+    // do not write add a history entry
+    //
+    if (outputFile.exists() && !CUtil.isSignificantlyBefore(outputFile.lastModified(), this.historyFile.lastModified())) {
+      this.dirty = true;
+      this.history.remove(outputName);
+      final SourceHistory[] sourceHistories = new SourceHistory[sources.length];
+      for (int i = 0; i < sources.length; i++) {
+        final File sourceFile = new File(sources[i]);
+        final long lastModified = sourceFile.lastModified();
+        final String relativePath = CUtil.getRelativePath(this.outputDirPath, sourceFile);
+        sourceHistories[i] = new SourceHistory(relativePath, lastModified);
+      }
+      final TargetHistory newHistory = new TargetHistory(configId, outputName, outputFile.lastModified(),
+          sourceHistories);
+      this.history.put(outputName, newHistory);
     }
+  }
+
+  // FREEHEP added synchronized
+  public synchronized void update(final TargetInfo linkTarget) {
+    final File outputFile = linkTarget.getOutput();
+    final String outputName = outputFile.getName();
+    //
+    // if output file doesn't exist or predates the start of the
+    // compile or link step (most likely a compilation error) then
+    // do not write add a history entry
+    //
+    if (outputFile.exists() && !CUtil.isSignificantlyBefore(outputFile.lastModified(), this.historyFile.lastModified())) {
+      this.dirty = true;
+      this.history.remove(outputName);
+      final SourceHistory[] sourceHistories = linkTarget.getSourceHistories(this.outputDirPath);
+      final TargetHistory newHistory = new TargetHistory(linkTarget.getConfiguration().getIdentifier(), outputName,
+          outputFile.lastModified(), sourceHistories);
+      this.history.put(outputName, newHistory);
+    }
+  }
 }

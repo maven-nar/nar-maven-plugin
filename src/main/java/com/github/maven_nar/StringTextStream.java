@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,35 +21,33 @@ package com.github.maven_nar;
 
 /**
  * Stream to write to a string.
- * 
+ *
  * @author Mark Donszelmann (Mark.Donszelmann@gmail.com)
  * @version $Id$
  */
-public class StringTextStream
-    implements TextStream
-{
-    private StringBuffer sb;
+public class StringTextStream implements TextStream {
+  private final StringBuffer sb;
 
-    private String lineSeparator;
+  private final String lineSeparator;
 
-    public StringTextStream()
-    {
-        sb = new StringBuffer();
-        lineSeparator = System.getProperty( "line.separator", "\n" );
-    }
+  public StringTextStream() {
+    this.sb = new StringBuffer();
+    this.lineSeparator = System.getProperty("line.separator", "\n");
+  }
 
-    /*
-     * (non-Javadoc)
-     * @see com.github.maven_nar.TextStream#println(java.lang.String)
-     */
-    public final void println( String text )
-    {
-        sb.append( text );
-        sb.append( lineSeparator );
-    }
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.github.maven_nar.TextStream#println(java.lang.String)
+   */
+  @Override
+  public final void println(final String text) {
+    this.sb.append(text);
+    this.sb.append(this.lineSeparator);
+  }
 
-    public final String toString()
-    {
-        return sb.toString();
-    }
+  @Override
+  public final String toString() {
+    return this.sb.toString();
+  }
 }

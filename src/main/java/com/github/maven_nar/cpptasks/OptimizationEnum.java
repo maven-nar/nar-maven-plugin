@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,8 +27,7 @@ import org.apache.tools.ant.types.EnumeratedAttribute;
  * @author Curt Arnold
  *
  */
-public final class OptimizationEnum
-    extends EnumeratedAttribute {
+public final class OptimizationEnum extends EnumeratedAttribute {
   /**
    * Constructor.
    *
@@ -45,21 +44,25 @@ public final class OptimizationEnum
    *
    * @see org.apache.tools.ant.types.EnumeratedAttribute#getValues()
    */
+  @Override
   public String[] getValues() {
     return new String[] {
-        "none",
-        "size",
-        "minimal",
-        "speed",
-        "full",
-        "aggressive",
-        "extreme",
-        "unsafe"
+        "none", "size", "minimal", "speed", "full", "aggressive", "extreme", "unsafe"
     };
   }
 
   /**
+   * Is no optimization performed.
+   * 
+   * @return boolean true if no optimization is performed.
+   */
+  public boolean isNoOptimization() {
+    return "none".equals(getValue());
+  }
+
+  /**
    * Is size optimized.
+   * 
    * @return boolean true if size is optimized.
    */
   public boolean isSize() {
@@ -68,18 +71,11 @@ public final class OptimizationEnum
 
   /**
    * Is speed optimized.
+   * 
    * @return boolean true if speed is optimized.
    */
   public boolean isSpeed() {
     return !isSize() && !isNoOptimization();
-  }
-
-  /**
-   * Is no optimization performed.
-   * @return boolean true if no optimization is performed.
-   */
-  public boolean isNoOptimization() {
-    return "none".equals(getValue());
   }
 
 }

@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,51 +25,56 @@ import java.util.List;
 import org.apache.maven.plugins.annotations.Parameter;
 
 public class ProcessLibraryCommand {
-    
-    /**
-     * The executable to run
-     */
-    @Parameter
-    private String executable;
-    
-    /**
-     * The library type that this command is valid for
-     */
-    @Parameter
-    private String libraryType;
-    
-    /**
-     * Any additional arguments to pass into the executable
-     */
-    @Parameter
-    private List<String> arguments;
-    
-    public List<String> getCommandList() {
-	List<String> command = new ArrayList<String>();
-	command.add(executable);
-	if (arguments != null) {
-		command.addAll(arguments);
-	}
-	return command;	
+
+  /**
+   * The executable to run
+   */
+  @Parameter
+  private String executable;
+
+  /**
+   * The library type that this command is valid for
+   */
+  @Parameter
+  private String libraryType;
+
+  /**
+   * Any additional arguments to pass into the executable
+   */
+  @Parameter
+  private List<String> arguments;
+
+  public List<String> getArguments() {
+    return this.arguments;
+  }
+
+  public List<String> getCommandList() {
+    final List<String> command = new ArrayList<String>();
+    command.add(this.executable);
+    if (this.arguments != null) {
+      command.addAll(this.arguments);
     }
-    
-    public String getExecutable() {
-        return executable;
-    }
-    public void setExecutable(String executable) {
-        this.executable = executable;
-    }
-    public List<String> getArguments() {
-        return arguments;
-    }
-    public void setArguments(List<String> arguments) {
-        this.arguments = arguments;
-    }
-    public String getType() {
-	return libraryType;
-    }
-    public void setType(String type) {
-    	libraryType = type;
-    }
+    return command;
+  }
+
+  public String getExecutable() {
+    return this.executable;
+  }
+
+  public String getType() {
+    return this.libraryType;
+  }
+
+  public void setArguments(final List<String> arguments) {
+    this.arguments = arguments;
+  }
+
+  public void setExecutable(final String executable) {
+    this.executable = executable;
+  }
+
+  public void setType(final String type) {
+    this.libraryType = type;
+  }
 
 }

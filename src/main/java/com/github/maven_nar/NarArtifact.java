@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,27 +25,22 @@ import org.apache.maven.artifact.DefaultArtifact;
 /**
  * @author Mark Donszelmann
  */
-public class NarArtifact
-    extends DefaultArtifact
-{
+public class NarArtifact extends DefaultArtifact {
 
-    private NarInfo narInfo;
+  private final NarInfo narInfo;
 
-    public NarArtifact( Artifact dependency, NarInfo narInfo )
-    {
-        super( dependency.getGroupId(), dependency.getArtifactId(), dependency.getVersionRange(),
-               dependency.getScope(), dependency.getType(), dependency.getClassifier(),
-               dependency.getArtifactHandler(), dependency.isOptional() );
-        this.setFile( dependency.getFile() );
-        this.narInfo = narInfo;
-    }
+  public NarArtifact(final Artifact dependency, final NarInfo narInfo) {
+    super(dependency.getGroupId(), dependency.getArtifactId(), dependency.getVersionRange(), dependency.getScope(),
+        dependency.getType(), dependency.getClassifier(), dependency.getArtifactHandler(), dependency.isOptional());
+    this.setFile(dependency.getFile());
+    this.narInfo = narInfo;
+  }
 
-    public final NarInfo getNarInfo()
-    {
-        return narInfo;
-    }
-    
-    public String getBaseFilename() {
-        return getArtifactId()+"-"+getBaseVersion()+"-"+getClassifier();
-    }
+  public String getBaseFilename() {
+    return getArtifactId() + "-" + getBaseVersion() + "-" + getClassifier();
+  }
+
+  public final NarInfo getNarInfo() {
+    return this.narInfo;
+  }
 }

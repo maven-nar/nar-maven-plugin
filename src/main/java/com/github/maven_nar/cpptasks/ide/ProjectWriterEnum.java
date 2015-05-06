@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,7 +29,8 @@ import com.github.maven_nar.cpptasks.msvc.VisualStudioNETProjectWriter;
 /**
  * Enumeration of supported project file generators.
  *
- * <table width="100%" border="1"> <thead>Supported project generators </thead>
+ * <table width="100%" border="1">
+ * <thead>Supported project generators </thead>
  * <tr>
  * <td>cbuilderx</td>
  * <td>Borland C++BuilderX</td>
@@ -67,26 +68,24 @@ import com.github.maven_nar.cpptasks.msvc.VisualStudioNETProjectWriter;
  * @author Curt Arnold
  *
  */
-public final class ProjectWriterEnum
-    extends EnumeratedAttribute {
+public final class ProjectWriterEnum extends EnumeratedAttribute {
   /**
    * Enumeration values.
    */
   private static String[] values = new String[] {
-      "cbuilderx", "msvc5",
-      "msvc6", "msvc7", "msvc71", "msvc8", "msvc9", "xcode"};
+      "cbuilderx", "msvc5", "msvc6", "msvc7", "msvc71", "msvc8", "msvc9", "xcode"
+  };
 
   /**
    * Project writers associated with enumeration values.
    */
   private static ProjectWriter[] writers = new ProjectWriter[] {
-      new CBuilderXProjectWriter(), new MsvcProjectWriter("5.00"),
-      new MsvcProjectWriter("6.00"),
+      new CBuilderXProjectWriter(), new MsvcProjectWriter("5.00"), new MsvcProjectWriter("6.00"),
       new VisualStudioNETProjectWriter("7.00", "TRUE", "FALSE"),
       new VisualStudioNETProjectWriter("7.10", "TRUE", "FALSE"),
       new VisualStudioNETProjectWriter("8.00", "true", "false"),
-      new VisualStudioNETProjectWriter("9.00", "true", "false"),
-      new XcodeProjectWriter()};
+      new VisualStudioNETProjectWriter("9.00", "true", "false"), new XcodeProjectWriter()
+  };
 
   /**
    * Gets ProjectWriter associated with enumeration value.
@@ -102,8 +101,8 @@ public final class ProjectWriterEnum
    *
    * @return acceptible values
    */
+  @Override
   public String[] getValues() {
-    return (String[]) values.clone();
+    return values.clone();
   }
 }
-

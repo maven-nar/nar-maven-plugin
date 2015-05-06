@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,6 +18,7 @@
  * #L%
  */
 package com.github.maven_nar.cpptasks;
+
 import org.apache.tools.ant.types.EnumeratedAttribute;
 
 /**
@@ -25,19 +26,23 @@ import org.apache.tools.ant.types.EnumeratedAttribute;
  * "production", "diagnostic", and "aserror".
  */
 public final class WarningLevelEnum extends EnumeratedAttribute {
-   /**
-    * Constructor.
-    *
-    */
-    public WarningLevelEnum() {
-        setValue("default");
-    }
-    /**
-     * Get allowable values.
-     * @return allowable values
-     */
-    public String[] getValues() {
-        return new String[]{"none", "severe", "default", "production",
-              "diagnostic", "aserror"};
-    }
+  /**
+   * Constructor.
+   *
+   */
+  public WarningLevelEnum() {
+    setValue("default");
+  }
+
+  /**
+   * Get allowable values.
+   * 
+   * @return allowable values
+   */
+  @Override
+  public String[] getValues() {
+    return new String[] {
+        "none", "severe", "default", "production", "diagnostic", "aserror"
+    };
+  }
 }
