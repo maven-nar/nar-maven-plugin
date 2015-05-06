@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,174 +29,182 @@ import java.util.Vector;
 
 import org.apache.tools.ant.taskdefs.Execute;
 import org.apache.tools.ant.taskdefs.ExecuteStreamHandler;
+
 /**
  * Implements ExecuteStreamHandler to capture the output of a Execute to an
  * array of strings
- * 
+ *
  * @author Curt Arnold
  */
 public class CaptureStreamHandler implements ExecuteStreamHandler {
 
-	private String[] stderr;
-	private String[] stdout;
+  static class Copier extends Thread {
+    InputStream is;
 
-	/**
-	 * Runs an executable and captures the output in a String array
-	 * 
-	 * @param cmdline
-	 *            command line arguments
-	 * @return output of process
-	 * @see CaptureStreamHandler#getOutput()
-	 */
-	public static String[] run(String[] cmdline) {
-		CaptureStreamHandler handler = execute(cmdline);
-		return handler.getOutput() != null ? handler.getOutput() : new String[0];
-	}
+    Vector<String> lines;
 
-	/**
-	 * Executes the given command, capturing the output using a newly allocated
-	 * {@link CaptureStreamHandler}, which is then returned.
-	 * <p>
-	 * In contrast to {@link #run(String[])}, this method allows both the
-	 * standard error and standard output streams to be inspected after execution
-	 * (via the {@link #getStderr()} and {@link #getStdout()} methods,
-	 * respectively).
-	 * </p>
-	 * 
-	 * @param cmdline
-	 *            command line arguments
-	 * @return The {@link CaptureStreamHandler} used to capture the output.
-	 */
-	public static CaptureStreamHandler execute(String[] cmdline) {
-		CaptureStreamHandler handler = new CaptureStreamHandler();
-		Execute exec = new Execute(handler);
-		exec.setCommandline(cmdline);
-		try {
-			int status = exec.execute();
-		} catch (IOException ex) {
-		}
-		return handler;
-	}
+    Copier(final InputStream is) {
+      this.is = is;
+      this.lines = new Vector<String>(10);
+    }
 
-	private InputStream processErrorStream;
+    public Vector<String> getLines() {
+      return this.lines;
+    }
 
-	private InputStream processOutputStream;
+    @Override
+    public void run() {
+      try {
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(this.is));
+        while (true) {
+          final String line = reader.readLine();
+          if (line == null) {
+            break;
+          }
+          this.lines.addElement(line);
+        }
+      } catch (final IOException e) {
+        // Ignore
+      }
+    }
+  }
 
-	public CaptureStreamHandler() {
-	}
+  /**
+   * Executes the given command, capturing the output using a newly allocated
+   * {@link CaptureStreamHandler}, which is then returned.
+   * <p>
+   * In contrast to {@link #run(String[])}, this method allows both the standard
+   * error and standard output streams to be inspected after execution (via the
+   * {@link #getStderr()} and {@link #getStdout()} methods, respectively).
+   * </p>
+   * 
+   * @param cmdline
+   *          command line arguments
+   * @return The {@link CaptureStreamHandler} used to capture the output.
+   */
+  public static CaptureStreamHandler execute(final String[] cmdline) {
+    final CaptureStreamHandler handler = new CaptureStreamHandler();
+    final Execute exec = new Execute(handler);
+    exec.setCommandline(cmdline);
+    try {
+      final int status = exec.execute();
+    } catch (final IOException ex) {
+    }
+    return handler;
+  }
 
-	/**
-	 * Gets the output of the execution. If standard error is not empty,
-	 * it is returned; otherwise, standard output is returned.
-	 */
-	public String[] getOutput() {
-		return (null != stderr && stderr.length > 0 ) ? stderr : stdout;
-	}
+  /**
+   * Runs an executable and captures the output in a String array
+   * 
+   * @param cmdline
+   *          command line arguments
+   * @return output of process
+   * @see CaptureStreamHandler#getOutput()
+   */
+  public static String[] run(final String[] cmdline) {
+    final CaptureStreamHandler handler = execute(cmdline);
+    return handler.getOutput() != null ? handler.getOutput() : new String[0];
+  }
 
-	/** Gets the output of the execution's standard error stream. */
-	public String[] getStderr() {
-		return stderr;
-	}
+  private String[] stderr;
 
-	/** Gets the output of the execution's standard output stream. */
-	public String[] getStdout() {
-		return stdout;
-	}
+  private String[] stdout;
 
-	static class Copier extends Thread {
-		InputStream is;
+  private InputStream processErrorStream;
 
-		Vector<String> lines;
+  private InputStream processOutputStream;
 
-		Copier(InputStream is) {
-			this.is = is;
-			lines = new Vector<String>(10);
-		}
+  public CaptureStreamHandler() {
+  }
 
-		public void run() {
-			try {
-				BufferedReader reader = new BufferedReader( new InputStreamReader(is) );
-				while ( true ) {
-					String line = reader.readLine();
-					if ( line == null )
-						break;
-					lines.addElement( line );
-				}
-			} catch (IOException e) {
-				// Ignore
-			}
-		}
+  /**
+   * Reads concurrently both the process standard output and standard error.
+   * The standard error is copied to the stderr string array field.
+   * The standard output is copied to the stdout string array field.
+   * Both fields are set to an empty array in case of any error.
+   */
+  public void gatherOutput() {
+    try {
+      final Copier errorCopier = new Copier(this.processErrorStream);
+      final Copier outputCopier = new Copier(this.processOutputStream);
+      errorCopier.start();
+      outputCopier.start();
+      errorCopier.join();
+      outputCopier.join();
+      this.stderr = new String[errorCopier.getLines().size()];
+      errorCopier.getLines().copyInto(this.stderr);
+      this.stdout = new String[outputCopier.getLines().size()];
+      outputCopier.getLines().copyInto(this.stdout);
+    } catch (final Exception e) {
+      this.stderr = this.stdout = new String[0];
+    }
+  }
 
-		public Vector<String> getLines() {
-			return lines;
-		}
-	}
+  /**
+   * Gets the output of the execution. If standard error is not empty,
+   * it is returned; otherwise, standard output is returned.
+   */
+  public String[] getOutput() {
+    return null != this.stderr && this.stderr.length > 0 ? this.stderr : this.stdout;
+  }
 
-	/**
-	 * Reads concurrently both the process standard output and standard error.
-	 * The standard error is copied to the stderr string array field.
-	 * The standard output is copied to the stdout string array field.
-	 * Both fields are set to an empty array in case of any error.
-	 */
-	public void gatherOutput() {
-		try {
-			Copier errorCopier = new Copier(processErrorStream);
-			Copier outputCopier = new Copier(processOutputStream);
-			errorCopier.start();
-			outputCopier.start();
-			errorCopier.join();
-			outputCopier.join();
-			stderr = new String[errorCopier.getLines().size()];
-			errorCopier.getLines().copyInto(stderr);
-			stdout = new String[outputCopier.getLines().size()];
-			outputCopier.getLines().copyInto(stdout);
-		} catch (Exception e) {
-			stderr = stdout = new String[0];
-		}
-	}
+  /** Gets the output of the execution's standard error stream. */
+  public String[] getStderr() {
+    return this.stderr;
+  }
 
-	/**
-	 * Install a handler for the error stream of the subprocess.
-	 * 
-	 * @param is
-	 *            input stream to read from the error stream from the subprocess
-	 */
-	public void setProcessErrorStream(InputStream is) throws IOException {
-		processErrorStream = is;
-	}
+  /** Gets the output of the execution's standard output stream. */
+  public String[] getStdout() {
+    return this.stdout;
+  }
 
-	/**
-	 * Install a handler for the input stream of the subprocess.
-	 * 
-	 * @param os
-	 *            output stream to write to the standard input stream of the
-	 *            subprocess
-	 */
-	public void setProcessInputStream(OutputStream os) throws IOException {
-		os.close();
-	}
+  /**
+   * Install a handler for the error stream of the subprocess.
+   * 
+   * @param is
+   *          input stream to read from the error stream from the subprocess
+   */
+  @Override
+  public void setProcessErrorStream(final InputStream is) throws IOException {
+    this.processErrorStream = is;
+  }
 
-	/**
-	 * Install a handler for the output stream of the subprocess.
-	 * 
-	 * @param is
-	 *            input stream to read from the error stream from the subprocess
-	 */
-	public void setProcessOutputStream(InputStream is) throws IOException {
-		processOutputStream = is;
-	}
+  /**
+   * Install a handler for the input stream of the subprocess.
+   * 
+   * @param os
+   *          output stream to write to the standard input stream of the
+   *          subprocess
+   */
+  @Override
+  public void setProcessInputStream(final OutputStream os) throws IOException {
+    os.close();
+  }
 
-	/**
-	 * Start handling of the streams.
-	 */
-	public void start() throws IOException {
-		gatherOutput();
-	}
+  /**
+   * Install a handler for the output stream of the subprocess.
+   * 
+   * @param is
+   *          input stream to read from the error stream from the subprocess
+   */
+  @Override
+  public void setProcessOutputStream(final InputStream is) throws IOException {
+    this.processOutputStream = is;
+  }
 
-	/**
-	 * Stop handling of the streams - will not be restarted.
-	 */
-	public void stop() {
-	}
-// ENDFREEHEP
+  /**
+   * Start handling of the streams.
+   */
+  @Override
+  public void start() throws IOException {
+    gatherOutput();
+  }
+
+  /**
+   * Stop handling of the streams - will not be restarted.
+   */
+  @Override
+  public void stop() {
+  }
+  // ENDFREEHEP
 }

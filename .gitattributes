@@ -1,0 +1,38 @@
+* text=auto
+
+# text lf
+*.c text eol=lf
+*.css text eol=lf
+*.cxx text eol=lf
+*.h text eol=lf
+*.i text eol=lf
+*.ini text eol=crlf
+*.java text eol=lf
+*.jsp text eol=lf
+*.properties text eol=lf
+*.py text eol=lf
+*.txt text eol=lf
+*.xml text eol=lf
+*.xsd text eol=lf
+*.rglayer text eol=lf
+*.rgobject text eol=lf
+
+#text crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ini text eol=crlf
+*.exe.manifest text eol=crlf
+
+#binary
+*.exe binary
+*.ftp binary
+*.png binary
+*.jpg binary
+*.exe binary
+*.ddl binary
+*.exp binary
+*.lib binary
+*.jar binary
+*.zip binary
+*.dylib binary
+*.pdb binary

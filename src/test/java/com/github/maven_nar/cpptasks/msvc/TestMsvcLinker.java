@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,32 +18,35 @@
  * #L%
  */
 package com.github.maven_nar.cpptasks.msvc;
+
 import org.apache.tools.ant.taskdefs.condition.Os;
 
 import com.github.maven_nar.cpptasks.compiler.AbstractProcessor;
 import com.github.maven_nar.cpptasks.compiler.TestAbstractLinker;
-import com.github.maven_nar.cpptasks.msvc.MsvcLinker;
+
 /**
  * Test for Microsoft Developer Studio linker
- * 
+ *
  * Override create to test concrete compiler implementions
  */
 public class TestMsvcLinker extends TestAbstractLinker {
-    public TestMsvcLinker(String name) {
-        super(name);
+  public TestMsvcLinker(final String name) {
+    super(name);
+  }
+
+  @Override
+  protected AbstractProcessor create() {
+    return MsvcLinker.getInstance();
+  }
+
+  @Override
+  public void testGetIdentfier() {
+    if (!Os.isFamily("windows")) {
+      return;
     }
-    protected AbstractProcessor create() {
-        return MsvcLinker.getInstance();
-    }
-    public void testGetIdentfier() {
-        if (!Os.isFamily("windows")) {
-            return;
-        }
-        AbstractProcessor compiler = create();
-        String id = compiler.getIdentifier();
-        boolean hasMSLinker = ((id.indexOf("Microsoft") >= 0) && (id
-                .indexOf("Linker") >= 0))
-                || id.indexOf("link") >= 0;
-        assertTrue(hasMSLinker);
-    }
+    final AbstractProcessor compiler = create();
+    final String id = compiler.getIdentifier();
+    final boolean hasMSLinker = id.indexOf("Microsoft") >= 0 && id.indexOf("Linker") >= 0 || id.indexOf("link") >= 0;
+    assertTrue(hasMSLinker);
+  }
 }

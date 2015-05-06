@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,8 +23,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.maven_nar.cpptasks.FileVisitor;
-
 /**
  * Implementation of FileVisitor that collects visited files for later
  * retrieval.
@@ -32,8 +30,7 @@ import com.github.maven_nar.cpptasks.FileVisitor;
  * @author Curt Arnold
  *
  */
-public final class MockFileCollector
-    implements FileVisitor {
+public final class MockFileCollector implements FileVisitor {
 
   /**
    * list of fileName parameter values.
@@ -53,35 +50,25 @@ public final class MockFileCollector
   }
 
   /**
-   * Implementation of FileVisitor.visit.
-   * @param baseDir base directory
-   * @param fileName file name
+   * Get value of baseDir parameter for the specified index.
+   *
+   * @param index
+   *          index
+   * @return value of baseDir parameter
    */
-  public void visit(final File baseDir, final String fileName) {
-    fileNames.add(fileName);
-    baseDirs.add(baseDir);
+  public File getBaseDir(final int index) {
+    return (File) this.baseDirs.get(index);
   }
 
   /**
    * Get value of fileName parameter for a specified index.
    *
    * @param index
-   *            index
+   *          index
    * @return value of failName parameter
    */
   public String getFileName(final int index) {
-    return (String) fileNames.get(index);
-  }
-
-  /**
-   * Get value of baseDir parameter for the specified index.
-   *
-   * @param index
-   *            index
-   * @return value of baseDir parameter
-   */
-  public File getBaseDir(final int index) {
-    return (File) baseDirs.get(index);
+    return (String) this.fileNames.get(index);
   }
 
   /**
@@ -90,6 +77,20 @@ public final class MockFileCollector
    * @return count of calls.
    */
   public int size() {
-    return fileNames.size();
+    return this.fileNames.size();
+  }
+
+  /**
+   * Implementation of FileVisitor.visit.
+   * 
+   * @param baseDir
+   *          base directory
+   * @param fileName
+   *          file name
+   */
+  @Override
+  public void visit(final File baseDir, final String fileName) {
+    this.fileNames.add(fileName);
+    this.baseDirs.add(baseDir);
   }
 }

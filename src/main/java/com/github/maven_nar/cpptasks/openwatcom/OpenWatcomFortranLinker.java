@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,20 +27,19 @@ import com.github.maven_nar.cpptasks.compiler.Linker;
  *
  * @author Curt Arnold
  */
-public final class OpenWatcomFortranLinker
-    extends OpenWatcomLinker {
+public final class OpenWatcomFortranLinker extends OpenWatcomLinker {
   /**
    * Singleton for DLL linking.
    */
-  private static final OpenWatcomFortranLinker DLL_LINKER = new
-      OpenWatcomFortranLinker(".dll");
+  private static final OpenWatcomFortranLinker DLL_LINKER = new OpenWatcomFortranLinker(".dll");
   /**
    * Singleton for executables.
    */
-  private static final OpenWatcomFortranLinker INSTANCE = new
-      OpenWatcomFortranLinker(".exe");
+  private static final OpenWatcomFortranLinker INSTANCE = new OpenWatcomFortranLinker(".exe");
+
   /**
    * Get instance.
+   * 
    * @return OpenWatcomFortranLinker linker
    */
   public static OpenWatcomFortranLinker getInstance() {
@@ -49,7 +48,9 @@ public final class OpenWatcomFortranLinker
 
   /**
    * Constructor.
-   * @param outputSuffix String output suffix
+   * 
+   * @param outputSuffix
+   *          String output suffix
    */
   private OpenWatcomFortranLinker(final String outputSuffix) {
     super("wfl386", outputSuffix);
@@ -57,9 +58,12 @@ public final class OpenWatcomFortranLinker
 
   /**
    * Get linker.
-   * @param type LinkType link type
+   * 
+   * @param type
+   *          LinkType link type
    * @return Linker linker
    */
+  @Override
   public Linker getLinker(final LinkType type) {
     if (type.isStaticLibrary()) {
       return OpenWatcomLibrarian.getInstance();

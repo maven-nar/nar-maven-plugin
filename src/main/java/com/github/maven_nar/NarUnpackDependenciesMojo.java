@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,25 +28,27 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
 /**
- * List all the dependencies of the project and downloads the NAR files in local maven repository if needed, this
- * includes the noarch and aol type NAR files, and then unpack the files in the project target folder. This also sets
+ * List all the dependencies of the project and downloads the NAR files in local
+ * maven repository if needed, this
+ * includes the noarch and aol type NAR files, and then unpack the files in the
+ * project target folder. This also sets
  * flags on binaries and corrects static libraries.
- * 
+ *
  * @author Mark Donszelmann
  */
-@Mojo(name = "nar-unpack-dependencies", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true)
-public class NarUnpackDependenciesMojo
-    extends NarDownloadDependenciesMojo
-{
+@Mojo(name = "nar-unpack-dependencies", defaultPhase = LifecyclePhase.GENERATE_SOURCES,
+  requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true)
+public class NarUnpackDependenciesMojo extends NarDownloadDependenciesMojo {
 
-	@Override
-	public void narExecute() throws MojoFailureException, MojoExecutionException {
-		// download the dependencies if needed in local maven repository using NarDownloadDependenciesMojo
-		super.narExecute();
-		
-        // unpack the nar files
-		List<AttachedNarArtifact> attachedNarArtifacts = getAttachedNarArtifacts();
-    	unpackAttachedNars( attachedNarArtifacts );
-	}
+  @Override
+  public void narExecute() throws MojoFailureException, MojoExecutionException {
+    // download the dependencies if needed in local maven repository using
+    // NarDownloadDependenciesMojo
+    super.narExecute();
+
+    // unpack the nar files
+    final List<AttachedNarArtifact> attachedNarArtifacts = getAttachedNarArtifacts();
+    unpackAttachedNars(attachedNarArtifacts);
+  }
 
 }

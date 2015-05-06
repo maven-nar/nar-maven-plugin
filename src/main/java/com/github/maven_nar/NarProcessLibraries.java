@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,83 +39,85 @@ import org.apache.maven.plugins.annotations.Parameter;
  * compiled output (ie: ranlib/ar/etc)
  *
  * @author Richard Kerr
-  * @author Richard Kerr
+ * @author Richard Kerr
  */
 @Mojo(name = "nar-process-libraries", defaultPhase = LifecyclePhase.PROCESS_CLASSES, requiresProject = true)
 public class NarProcessLibraries extends AbstractCompileMojo {
 
-    /**
-     * List of commands to execute
-     */
-    @Parameter
-    private List<ProcessLibraryCommand> commands;
+  /**
+   * List of commands to execute
+   */
+  @Parameter
+  private List<ProcessLibraryCommand> commands;
 
-    private Log log = getLog();
+  private final Log log = getLog();
 
-    /**
-     * The method must be implemented but will not be called.
-     */
-    @Override
-    protected List<Artifact> getArtifacts() {
-    	return Collections.EMPTY_LIST;
-    }
+  /**
+   * The method must be implemented but will not be called.
+   */
+  @Override
+  protected List<Artifact> getArtifacts() {
+    return Collections.EMPTY_LIST;
+  }
 
-    @Override
-    public void narExecute() throws MojoFailureException, MojoExecutionException {
-        log.info("Running process libraries");
-        // For each of the libraries defined for this build
-        for (Library library : getLibraries()) {
-            log.info("Processing library " + library);
-            String type = library.getType();
-            File outFile;
-            // Find what the output directory is
-            if (type.equalsIgnoreCase(Library.EXECUTABLE)) {
-                File outDir = getLayout().getBinDirectory(getTargetDirectory(), getMavenProject().getArtifactId(),
-                        getMavenProject().getVersion(), getAOL().toString());
-                outFile = new File(outDir, getOutput(false));
-            } else {
-                File outDir = getLayout().getLibDirectory(getTargetDirectory(), getMavenProject().getArtifactId(),
-                        getMavenProject().getVersion(), getAOL().toString(), type);
-                outFile = new File(outDir, getOutput(true));
-            }
+  @Override
+  public void narExecute() throws MojoFailureException, MojoExecutionException {
+    this.log.info("Running process libraries");
+    // For each of the libraries defined for this build
+    for (final Library library : getLibraries()) {
+      this.log.info("Processing library " + library);
+      final String type = library.getType();
+      File outFile;
+      // Find what the output directory is
+      if (type.equalsIgnoreCase(Library.EXECUTABLE)) {
+        final File outDir = getLayout().getBinDirectory(getTargetDirectory(), getMavenProject().getArtifactId(),
+            getMavenProject().getVersion(), getAOL().toString());
+        outFile = new File(outDir, getOutput(false));
+      } else {
+        final File outDir = getLayout().getLibDirectory(getTargetDirectory(), getMavenProject().getArtifactId(),
+            getMavenProject().getVersion(), getAOL().toString(), type);
+        outFile = new File(outDir, getOutput(true));
+      }
 
-            // Then run the commands that are applicable for this library type
-            for (ProcessLibraryCommand command : commands == null ? new ArrayList<ProcessLibraryCommand>() : commands) {
-                if (command.getType().equalsIgnoreCase(type))
-                    runCommand(command, outFile);
-            }
+      // Then run the commands that are applicable for this library type
+      for (final ProcessLibraryCommand command : this.commands == null ? new ArrayList<ProcessLibraryCommand>()
+          : this.commands) {
+        if (command.getType().equalsIgnoreCase(type)) {
+          runCommand(command, outFile);
         }
-
+      }
     }
 
-    private void runCommand(ProcessLibraryCommand command, File outputFile) throws MojoFailureException,
-            MojoExecutionException {
-        ProcessBuilder p = new ProcessBuilder(command.getCommandList());
-        p.command().add(outputFile.toString());
-        p.redirectErrorStream(true);
-        log.info("Running command \"" + p.command() + "\"");
-        try {
-            Process process = p.start();
-            BufferedInputStream bis = new BufferedInputStream(process.getInputStream());
-            byte[] buffer = new byte[1024];
-            int endOfStream = 0;
-            do {
-                endOfStream = bis.read(buffer);
-                log.debug(new String(buffer, 0, endOfStream == -1 ? 0 : endOfStream));
-            } while (endOfStream != -1);
+  }
 
-            if (process.waitFor() != 0) {
-                // TODO: Maybe this shouldn't be an exception, it might have
-                // still worked?!
-                throw new MojoFailureException("Process exited abnormally");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new MojoFailureException("Failed to run the command \"" + p.command() + "\"", e);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            throw new MojoFailureException("Failed to run the command \"" + p.command() + "\"", e);
-        }
+  private void runCommand(final ProcessLibraryCommand command, final File outputFile)
+      throws MojoFailureException, MojoExecutionException {
+    final ProcessBuilder p = new ProcessBuilder(command.getCommandList());
+    p.command().add(outputFile.toString());
+    p.redirectErrorStream(true);
+    this.log.info("Running command \"" + p.command() + "\"");
+    try {
+      final Process process = p.start();
+      final BufferedInputStream bis = new BufferedInputStream(process.getInputStream());
+      final byte[] buffer = new byte[1024];
+      int endOfStream = 0;
+      do {
+        endOfStream = bis.read(buffer);
+        this.log.debug(new String(buffer, 0, endOfStream == -1 ? 0 : endOfStream));
+      } while (endOfStream != -1);
+
+      if (process.waitFor() != 0) {
+        // TODO: Maybe this shouldn't be an exception, it might have
+        // still worked?!
+        throw new MojoFailureException("Process exited abnormally");
+      }
+    } catch (final IOException e) {
+      e.printStackTrace();
+      throw new MojoFailureException("Failed to run the command \"" + p.command() + "\"", e);
+    } catch (final InterruptedException e) {
+      e.printStackTrace();
+      throw new MojoFailureException("Failed to run the command \"" + p.command() + "\"", e);
     }
+  }
 
 }

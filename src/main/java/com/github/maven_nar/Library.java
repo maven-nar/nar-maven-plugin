@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,143 +26,139 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 /**
  * Sets up a library to create
- * 
+ *
  * @author Mark Donszelmann
  */
-public class Library
-    implements Executable
-{
+public class Library implements Executable {
 
-    public static final String STATIC = "static";
+  public static final String STATIC = "static";
 
-    public static final String SHARED = "shared";
+  public static final String SHARED = "shared";
 
-    public static final String EXECUTABLE = "executable";
+  public static final String EXECUTABLE = "executable";
 
-    public static final String JNI = "jni";
+  public static final String JNI = "jni";
 
-    public static final String PLUGIN = "plugin";
+  public static final String PLUGIN = "plugin";
 
-    public static final String NONE = "none"; // no library produced
+  public static final String NONE = "none"; // no library produced
 
-    /**
-     * Type of the library to generate. Possible choices are: "plugin", "shared", "static", "jni" or "executable".
-     * Defaults to "shared".
-     */
-    @Parameter
-    private String type = SHARED;
-    
-    /**
-     * Type of subsystem to generate: "gui", "console", "other". Defaults to "console".
-     */
-    @Parameter
-    private String subSystem = "console";
-    
-    /**
-     * Link with stdcpp if necessary Defaults to true.
-     */
-    @Parameter(defaultValue = "true")
-    private boolean linkCPP = true;
+  /**
+   * Type of the library to generate. Possible choices are: "plugin", "shared",
+   * "static", "jni" or "executable".
+   * Defaults to "shared".
+   */
+  @Parameter
+  private final String type = SHARED;
 
-    /**
-     * Link with fortran runtime if necessary Defaults to false.
-     */
-    @Parameter
-    private boolean linkFortran = false;
+  /**
+   * Type of subsystem to generate: "gui", "console", "other". Defaults to
+   * "console".
+   */
+  @Parameter
+  private final String subSystem = "console";
 
-    /**
-     * Link with fortran startup, so that the gcc linker can find the "main" of fortran. Defaults to false.
-     */
-    @Parameter
-    private boolean linkFortranMain = false;
+  /**
+   * Link with stdcpp if necessary Defaults to true.
+   */
+  @Parameter(defaultValue = "true")
+  private final boolean linkCPP = true;
 
-    /**
-     * If specified will create the NarSystem class with methods to load a JNI library.
-     */
-    @Parameter
-    private String narSystemPackage = null;
+  /**
+   * Link with fortran runtime if necessary Defaults to false.
+   */
+  @Parameter
+  private final boolean linkFortran = false;
 
-    /**
-     * Name of the NarSystem class
-     */
-    @Parameter(defaultValue = "NarSystem", required = true)
-    private String narSystemName = "NarSystem";
+  /**
+   * Link with fortran startup, so that the gcc linker can find the "main" of
+   * fortran. Defaults to false.
+   */
+  @Parameter
+  private final boolean linkFortranMain = false;
 
-    /**
-     * The target directory into which to generate the output.
-     */
-    @Parameter(defaultValue = "${project.build.dir}/nar/nar-generated", required = true)
-    private String narSystemDirectory = "nar-generated";
+  /**
+   * If specified will create the NarSystem class with methods to load a JNI
+   * library.
+   */
+  @Parameter
+  private final String narSystemPackage = null;
 
-    /**
-     * When true and if type is "executable" run this executable. Defaults to false;
-     */
-    @Parameter
-    private boolean run = false;
+  /**
+   * Name of the NarSystem class
+   */
+  @Parameter(defaultValue = "NarSystem", required = true)
+  private final String narSystemName = "NarSystem";
 
-    /**
-     * Arguments to be used for running this executable. Defaults to empty list. This option is only used if run=true
-     * and type=executable.
-     */
-    @Parameter
-    private List/* <String> */args = new ArrayList();
+  /**
+   * The target directory into which to generate the output.
+   */
+  @Parameter(defaultValue = "${project.build.dir}/nar/nar-generated", required = true)
+  private final String narSystemDirectory = "nar-generated";
 
-    public final String getType()
-    {
-        return type;
-    }
+  /**
+   * When true and if type is "executable" run this executable. Defaults to
+   * false;
+   */
+  @Parameter
+  private final boolean run = false;
 
-    public final boolean linkCPP()
-    {
-        return linkCPP;
-    }
+  /**
+   * Arguments to be used for running this executable. Defaults to empty list.
+   * This option is only used if run=true
+   * and type=executable.
+   */
+  @Parameter
+  private final List/* <String> */args = new ArrayList();
 
-    public final boolean linkFortran()
-    {
-        return linkFortran;
-    }
+  @Override
+  public final List/* <String> */getArgs() {
+    return this.args;
+  }
 
-    public final boolean linkFortranMain()
-    {
-        return linkFortranMain;
-    }
+  public final String getNarSystemDirectory() {
+    return this.narSystemDirectory;
+  }
 
-    public final String getNarSystemPackage()
-    {
-        return narSystemPackage;
-    }
+  public final String getNarSystemName() {
+    return this.narSystemName;
+  }
 
-    public final boolean shouldRun()
-    {
-        return run;
-    }
+  public final String getNarSystemPackage() {
+    return this.narSystemPackage;
+  }
 
-    public final List/* <String> */getArgs()
-    {
-        return args;
-    }
+  public String getSubSystem() {
+    return this.subSystem;
+  }
 
-    public final String getNarSystemName()
-    {
-        return narSystemName;
-    }
+  public final String getType() {
+    return this.type;
+  }
 
-    public final String getNarSystemDirectory()
-    {
-        return narSystemDirectory;
-    }
+  public final boolean linkCPP() {
+    return this.linkCPP;
+  }
 
-    // FIXME incomplete
-    public final String toString()
-    {
-        StringBuffer sb = new StringBuffer( "Library: " );
-        sb.append( "type: " );
-        sb.append( getType() );
-        return sb.toString();
-    }
+  public final boolean linkFortran() {
+    return this.linkFortran;
+  }
 
-    public String getSubSystem()
-    {
-        return subSystem;
-    }
+  public final boolean linkFortranMain() {
+    return this.linkFortranMain;
+  }
+
+  @Override
+  public final boolean shouldRun() {
+    return this.run;
+  }
+
+  // FIXME incomplete
+  @Override
+  public final String toString() {
+    final StringBuffer sb = new StringBuffer("Library: ");
+    sb.append("type: ");
+    sb.append(getType());
+    return sb.toString();
+  }
 }

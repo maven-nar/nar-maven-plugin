@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,29 +28,33 @@ import com.github.maven_nar.cpptasks.compiler.Processor;
 import com.github.maven_nar.cpptasks.gcc.GccCompatibleCCompiler;
 
 public final class IntelLinux32Compiler extends GccCompatibleCCompiler {
-    private static final IntelLinux32Compiler instance = new IntelLinux32Compiler(
-            false, new IntelLinux32Compiler(true, null, false, null), false,
-            null);
-    public static IntelLinux32Compiler getInstance() {
-        return instance;
+  private static final IntelLinux32Compiler instance = new IntelLinux32Compiler(false, new IntelLinux32Compiler(true,
+      null, false, null), false, null);
+
+  public static IntelLinux32Compiler getInstance() {
+    return instance;
+  }
+
+  private IntelLinux32Compiler(final boolean isLibtool, final IntelLinux32Compiler libtoolCompiler,
+      final boolean newEnvironment, final Environment env) {
+    super("icpc", "-V", isLibtool, libtoolCompiler, newEnvironment, env);
+  }
+
+  @Override
+  public Processor changeEnvironment(final boolean newEnvironment, final Environment env) {
+    if (newEnvironment || env != null) {
+      return new IntelLinux32Compiler(getLibtool(), (IntelLinux32Compiler) getLibtoolCompiler(), newEnvironment, env);
     }
-    private IntelLinux32Compiler(boolean isLibtool,
-            IntelLinux32Compiler libtoolCompiler, boolean newEnvironment,
-            Environment env) {
-        super("icpc", "-V", isLibtool, libtoolCompiler, newEnvironment, env);
-    }
-    public Processor changeEnvironment(boolean newEnvironment, Environment env) {
-        if (newEnvironment || env != null) {
-            return new IntelLinux32Compiler(getLibtool(),
-                    (IntelLinux32Compiler) getLibtoolCompiler(),
-                    newEnvironment, env);
-        }
-        return this;
-    }
-    public Linker getLinker(LinkType type) {
-        return IntelLinux32Linker.getInstance().getLinker(type);
-    }
-    public int getMaximumCommandLength() {
-        return Integer.MAX_VALUE;
-    }
+    return this;
+  }
+
+  @Override
+  public Linker getLinker(final LinkType type) {
+    return IntelLinux32Linker.getInstance().getLinker(type);
+  }
+
+  @Override
+  public int getMaximumCommandLength() {
+    return Integer.MAX_VALUE;
+  }
 }
