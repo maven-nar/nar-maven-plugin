@@ -241,6 +241,22 @@ public abstract class Compiler {
     }
   }
 
+  /**
+   * Generates a new {@link CompilerDef} and populates it give the parameters
+   * provided.
+   * 
+   * @param type
+   *          - main or test library - used to determine include and exclude
+   *          paths.
+   * @param output
+   *          - TODO Not sure..
+   * @return {@link CompilerDef} which contains the configuration for this
+   *         compiler given the type and output.
+   * @throws MojoFailureException
+   *           TODO
+   * @throws MojoExecutionException
+   *           TODO
+   */
   public final CompilerDef getCompiler(final String type, final String output)
       throws MojoFailureException, MojoExecutionException {
     final String name = getName();
