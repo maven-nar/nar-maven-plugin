@@ -47,6 +47,7 @@ import com.github.maven_nar.cpptasks.types.UndefineArgument;
 public final class CompilerDef extends ProcessorDef {
   /** The source file sets. */
   private final Vector defineSets = new Vector();
+  private Boolean ccache = false;
   private Boolean exceptions;
   private Boolean rtti;
   private final Vector includePaths = new Vector();
@@ -238,6 +239,10 @@ public final class CompilerDef extends ProcessorDef {
     return getActivePaths(this.sysIncludePaths);
   }
 
+  public Boolean getCcache() {
+    return this.ccache;
+  }
+
   public final boolean getExceptions(final CompilerDef[] defaultProviders, final int index) {
     if (isReference()) {
       return ((CompilerDef) getCheckedRef(CompilerDef.class, "CompilerDef")).getExceptions(defaultProviders, index);
@@ -329,6 +334,10 @@ public final class CompilerDef extends ProcessorDef {
 
   public boolean isClearDefaultOptions() {
     return this.clearDefaultOptions;
+  }
+
+  public void setCcache(final Boolean ccache) {
+    this.ccache = ccache;
   }
 
   /**
