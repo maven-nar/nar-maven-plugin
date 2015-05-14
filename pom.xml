@@ -13,18 +13,17 @@
   <artifactId>nar-maven-plugin</artifactId>
   <version>3.2.4-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
+
   <name>Native ARchive plugin for Maven</name>
-  <url>https://github.com/maven-nar</url>
   <description>
     This plugin compiles native code and publishes native artifacts in the form of nar files.
   </description>
-
+  <url>https://github.com/maven-nar</url>
   <inceptionYear>2005</inceptionYear>
   <organization>
     <name>NAR Maven Plugin developers</name>
     <url>https://github.com/maven-nar</url>
   </organization>
-
   <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
@@ -32,33 +31,6 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-
-  <mailingLists>
-    <mailingList>
-      <name>NAR plugin</name>
-      <subscribe>https://groups.google.com/group/maven-nar</subscribe>
-      <unsubscribe>https://groups.google.com/group/maven-nar</unsubscribe>
-      <post>maven-nar@googlegroups.com</post>
-      <archive>https://groups.google.com/group/maven-nar</archive>
-    </mailingList>
-  </mailingLists>
-
-  <scm>
-    <connection>scm:git:git://github.com/maven-nar/nar-maven-plugin</connection>
-    <developerConnection>scm:git:git@github.com:maven-nar/nar-maven-plugin</developerConnection>
-    <url>https://github.com/maven-nar/nar-maven-plugin</url>
-    <tag>HEAD</tag>
-  </scm>
-
-  <issueManagement>
-    <system>GitHub Issues</system>
-    <url>https://github.com/maven-nar/nar-maven-plugin/issues</url>
-  </issueManagement>
-
-  <ciManagement>
-    <system>BuildHive</system>
-    <url>https://buildhive.cloudbees.com/job/maven-nar/job/nar-maven-plugin/</url>
-  </ciManagement>
 
   <developers>
     <developer>
@@ -89,6 +61,47 @@
     </developer>
   </developers>
 
+  <mailingLists>
+    <mailingList>
+      <name>NAR plugin</name>
+      <subscribe>https://groups.google.com/group/maven-nar</subscribe>
+      <unsubscribe>https://groups.google.com/group/maven-nar</unsubscribe>
+      <post>maven-nar@googlegroups.com</post>
+      <archive>https://groups.google.com/group/maven-nar</archive>
+    </mailingList>
+  </mailingLists>
+
+  <prerequisites>
+    <maven>2.0.9</maven>
+  </prerequisites>
+
+  <scm>
+    <connection>scm:git:git://github.com/maven-nar/nar-maven-plugin</connection>
+    <developerConnection>scm:git:git@github.com:maven-nar/nar-maven-plugin</developerConnection>
+    <url>https://github.com/maven-nar/nar-maven-plugin</url>
+    <tag>HEAD</tag>
+  </scm>
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/maven-nar/nar-maven-plugin/issues</url>
+  </issueManagement>
+  <ciManagement>
+    <system>BuildHive</system>
+    <url>https://buildhive.cloudbees.com/job/maven-nar/job/nar-maven-plugin/</url>
+  </ciManagement>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>${sonatypeOssDistMgmtSnapshotsUrl}</url>
+    </snapshotRepository>
+    <repository>
+      <id>sonatype-nexus-staging</id>
+      <name>Nexus Release Repository</name>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
   <properties>
     <invoker.debug>false</invoker.debug>
     <its.to.skip>dummy</its.to.skip>
@@ -111,9 +124,19 @@
     <sourceReleaseAssemblyDescriptor>source-release</sourceReleaseAssemblyDescriptor>
   </properties>
 
-  <prerequisites>
-    <maven>2.0.9</maven>
-  </prerequisites>
+  <repositories>
+    <repository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 
   <dependencies>
     <dependency>
@@ -232,13 +255,6 @@
 
   <build>
     <defaultGoal>install</defaultGoal>
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-webdav-jackrabbit</artifactId>
-        <version>1.0</version>
-      </extension>
-    </extensions>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -337,6 +353,13 @@
         </configuration>
       </plugin>
     </plugins>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav-jackrabbit</artifactId>
+        <version>1.0</version>
+      </extension>
+    </extensions>
   </build>
 
   <reporting>
@@ -353,34 +376,6 @@
       </plugin>
     </plugins>
   </reporting>
-
-  <repositories>
-    <repository>
-      <id>sonatype-nexus-snapshots</id>
-      <name>Sonatype Nexus Snapshots</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
-
-  <distributionManagement>
-    <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <name>Sonatype Nexus Snapshots</name>
-      <url>${sonatypeOssDistMgmtSnapshotsUrl}</url>
-    </snapshotRepository>
-    <repository>
-      <id>sonatype-nexus-staging</id>
-      <name>Nexus Release Repository</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
 
   <profiles>
     <profile>
