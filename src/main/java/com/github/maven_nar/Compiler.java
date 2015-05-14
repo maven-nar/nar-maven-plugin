@@ -264,34 +264,34 @@ public abstract class Compiler {
       return null;
     }
 
-    final CompilerDef compiler = new CompilerDef();
-    compiler.setProject(this.mojo.getAntProject());
+    final CompilerDef compilerDef = new CompilerDef();
+    compilerDef.setProject(this.mojo.getAntProject());
     final CompilerEnum compilerName = new CompilerEnum();
     compilerName.setValue(name);
-    compiler.setName(compilerName);
+    compilerDef.setName(compilerName);
 
     // tool path
     if (this.toolPath != null) {
-      compiler.setToolPath(this.toolPath);
+      compilerDef.setToolPath(this.toolPath);
     }
 
     // debug, exceptions, rtti, multiThreaded
-    compiler.setDebug(this.debug);
-    compiler.setExceptions(this.exceptions);
-    compiler.setRtti(this.rtti);
-    compiler.setMultithreaded(this.mojo.getOS().equals("Windows") ? true : this.multiThreaded);
+    compilerDef.setDebug(this.debug);
+    compilerDef.setExceptions(this.exceptions);
+    compilerDef.setRtti(this.rtti);
+    compilerDef.setMultithreaded(this.mojo.getOS().equals("Windows") ? true : this.multiThreaded);
 
     // optimize
     final OptimizationEnum optimization = new OptimizationEnum();
     optimization.setValue(this.optimize);
-    compiler.setOptimize(optimization);
+    compilerDef.setOptimize(optimization);
 
     // add options
     if (this.options != null) {
       for (final String string : this.options) {
         final CompilerArgument arg = new CompilerArgument();
         arg.setValue(string);
-        compiler.addConfiguredCompilerArg(arg);
+        compilerDef.addConfiguredCompilerArg(arg);
       }
     }
 
@@ -304,11 +304,11 @@ public abstract class Compiler {
         final CompilerArgument arg = new CompilerArgument();
 
         arg.setValue(opt);
-        compiler.addConfiguredCompilerArg(arg);
+        compilerDef.addConfiguredCompilerArg(arg);
       }
     }
 
-    compiler.setClearDefaultOptions(this.clearDefaultOptions);
+    compilerDef.setClearDefaultOptions(this.clearDefaultOptions);
     if (!this.clearDefaultOptions) {
       final String optionsProperty = NarProperties.getInstance(this.mojo.getMavenProject()).getProperty(
           getPrefix() + "options");
@@ -317,7 +317,7 @@ public abstract class Compiler {
         for (final String element : option) {
           final CompilerArgument arg = new CompilerArgument();
           arg.setValue(element);
-          compiler.addConfiguredCompilerArg(arg);
+          compilerDef.addConfiguredCompilerArg(arg);
         }
       }
     }
@@ -332,7 +332,7 @@ public abstract class Compiler {
         define.setValue(pair.length > 1 ? pair[1] : null);
         ds.addDefine(define);
       }
-      compiler.addConfiguredDefineset(ds);
+      compilerDef.addConfiguredDefineset(ds);
     }
 
     if (this.defineSet != null) {
@@ -351,7 +351,7 @@ public abstract class Compiler {
         defSet.addDefine(def);
       }
 
-      compiler.addConfiguredDefineset(defSet);
+      compilerDef.addConfiguredDefineset(defSet);
     }
 
     if (!this.clearDefaultDefines) {
@@ -361,7 +361,7 @@ public abstract class Compiler {
       if (defaultDefines != null) {
         ds.setDefine(new CUtil.StringArrayBuilder(defaultDefines));
       }
-      compiler.addConfiguredDefineset(ds);
+      compilerDef.addConfiguredDefineset(ds);
     }
 
     // add undefines
@@ -374,7 +374,7 @@ public abstract class Compiler {
         undefine.setValue(pair.length > 1 ? pair[1] : null);
         us.addUndefine(undefine);
       }
-      compiler.addConfiguredDefineset(us);
+      compilerDef.addConfiguredDefineset(us);
     }
 
     if (this.undefineSet != null) {
@@ -393,7 +393,7 @@ public abstract class Compiler {
         undefSet.addUndefine(undef);
       }
 
-      compiler.addConfiguredDefineset(undefSet);
+      compilerDef.addConfiguredDefineset(undefSet);
     }
 
     if (!this.clearDefaultUndefines) {
@@ -403,7 +403,7 @@ public abstract class Compiler {
       if (defaultUndefines != null) {
         us.setUndefine(new CUtil.StringArrayBuilder(defaultUndefines));
       }
-      compiler.addConfiguredDefineset(us);
+      compilerDef.addConfiguredDefineset(us);
     }
 
     // add include path
@@ -413,13 +413,13 @@ public abstract class Compiler {
       if (!includePath.exists()) {
         throw new MojoFailureException("NAR: Include path not found: " + includePath);
       }
-      compiler.createIncludePath().setPath(includePath.getPath());
+      compilerDef.createIncludePath().setPath(includePath.getPath());
     }
 
     // add system include path (at the end)
     if (this.systemIncludePaths != null) {
       for (final String path : this.systemIncludePaths) {
-        compiler.createSysIncludePath().setPath(path);
+        compilerDef.createSysIncludePath().setPath(path);
       }
     }
 
@@ -440,7 +440,7 @@ public abstract class Compiler {
       this.mojo.getLog().debug("Checking for existence of " + getLanguage() + " source directory: " + srcDir);
       if (srcDir.exists()) {
         if (this.compileOrder != null) {
-          compiler.setOrder(Arrays.asList(StringUtils.split(this.compileOrder, ", ")));
+          compilerDef.setOrder(Arrays.asList(StringUtils.split(this.compileOrder, ", ")));
         }
 
         final ConditionalFileSet fileSet = new ConditionalFileSet();
@@ -448,11 +448,11 @@ public abstract class Compiler {
         fileSet.setIncludes(StringUtils.join(includeSet.iterator(), ","));
         fileSet.setExcludes(StringUtils.join(excludeSet.iterator(), ","));
         fileSet.setDir(srcDir);
-        compiler.addFileset(fileSet);
+        compilerDef.addFileset(fileSet);
       }
     }
 
-    return compiler;
+    return compilerDef;
   }
 
   public final Set<String> getExcludes() throws MojoFailureException, MojoExecutionException {
