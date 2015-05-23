@@ -84,46 +84,46 @@ public abstract class Compiler {
    * Include patterns for sources
    */
   @Parameter(required = true)
-  private final Set<String> includes = new HashSet<String>();
+  private Set<String> includes = new HashSet<String>();
 
   /**
    * Exclude patterns for sources
    */
   @Parameter(required = true)
-  private final Set<String> excludes = new HashSet<String>();
+  private Set<String> excludes = new HashSet<String>();
 
   /**
    * Include patterns for test sources
    */
   @Parameter(required = true)
-  private final Set<String> testIncludes = new HashSet<String>();
+  private Set<String> testIncludes = new HashSet<String>();
 
   /**
    * Exclude patterns for test sources
    */
   @Parameter(required = true)
-  private final Set<String> testExcludes = new HashSet<String>();
+  private Set<String> testExcludes = new HashSet<String>();
 
   @Parameter(defaultValue = "false", required = false)
-  private final boolean ccache = false;
+  private boolean ccache = false;
 
   /**
    * Compile with debug information.
    */
   @Parameter(required = true)
-  private final boolean debug = false;
+  private boolean debug = false;
 
   /**
    * Enables generation of exception handling code.
    */
   @Parameter(defaultValue = "true", required = true)
-  private final boolean exceptions = true;
+  private boolean exceptions = true;
 
   /**
    * Enables run-time type information.
    */
   @Parameter(defaultValue = "true", required = true)
-  private final boolean rtti = true;
+  private boolean rtti = true;
 
   /**
    * Sets optimization. Possible choices are: "none", "size", "minimal",
@@ -131,14 +131,14 @@ public abstract class Compiler {
    * "unsafe".
    */
   @Parameter(defaultValue = "none", required = true)
-  private final String optimize = "none";
+  private String optimize = "none";
 
   /**
    * Enables or disables generation of multi-threaded code. Default value:
    * false, except on Windows.
    */
   @Parameter(required = true)
-  private final boolean multiThreaded = false;
+  private boolean multiThreaded = false;
 
   /**
    * Defines

@@ -69,13 +69,13 @@ public class Linker {
    * Enables or disables incremental linking.
    */
   @Parameter(required = true)
-  private final boolean incremental = false;
+  private boolean incremental = false;
 
   /**
    * Enables or disables the production of a map file.
    */
   @Parameter(required = true)
-  private final boolean map = false;
+  private boolean map = false;
 
   /**
    * Options for the linker Defaults to Architecture-OS-Linker specific values.

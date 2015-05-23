@@ -49,59 +49,59 @@ public class Library implements Executable {
    * Defaults to "shared".
    */
   @Parameter
-  private final String type = SHARED;
+  private String type = SHARED;
 
   /**
    * Type of subsystem to generate: "gui", "console", "other". Defaults to
    * "console".
    */
   @Parameter
-  private final String subSystem = "console";
+  private String subSystem = "console";
 
   /**
    * Link with stdcpp if necessary Defaults to true.
    */
   @Parameter(defaultValue = "true")
-  private final boolean linkCPP = true;
+  private boolean linkCPP = true;
 
   /**
    * Link with fortran runtime if necessary Defaults to false.
    */
   @Parameter
-  private final boolean linkFortran = false;
+  private boolean linkFortran = false;
 
   /**
    * Link with fortran startup, so that the gcc linker can find the "main" of
    * fortran. Defaults to false.
    */
   @Parameter
-  private final boolean linkFortranMain = false;
+  private boolean linkFortranMain = false;
 
   /**
    * If specified will create the NarSystem class with methods to load a JNI
    * library.
    */
   @Parameter
-  private final String narSystemPackage = null;
+  private String narSystemPackage = null;
 
   /**
    * Name of the NarSystem class
    */
   @Parameter(defaultValue = "NarSystem", required = true)
-  private final String narSystemName = "NarSystem";
+  private String narSystemName = "NarSystem";
 
   /**
    * The target directory into which to generate the output.
    */
   @Parameter(defaultValue = "${project.build.dir}/nar/nar-generated", required = true)
-  private final String narSystemDirectory = "nar-generated";
+  private String narSystemDirectory = "nar-generated";
 
   /**
    * When true and if type is "executable" run this executable. Defaults to
    * false;
    */
   @Parameter
-  private final boolean run = false;
+  private boolean run = false;
 
   /**
    * Arguments to be used for running this executable. Defaults to empty list.
@@ -109,7 +109,7 @@ public class Library implements Executable {
    * and type=executable.
    */
   @Parameter
-  private final List/* <String> */args = new ArrayList();
+  private List/* <String> */args = new ArrayList();
 
   @Override
   public final List/* <String> */getArgs() {

@@ -44,7 +44,7 @@ public class Java {
    * Add Java includes to includepath
    */
   @Parameter(required = true)
-  private final boolean include = false;
+  private boolean include = false;
 
   /**
    * Java Include Paths, relative to a derived ${java.home}. Defaults to:
@@ -58,7 +58,7 @@ public class Java {
    * Add Java Runtime to linker
    */
   @Parameter(required = true)
-  private final boolean link = false;
+  private boolean link = false;
 
   /**
    * Relative path from derived ${java.home} to the java runtime to link with
@@ -72,7 +72,7 @@ public class Java {
    * Name of the runtime
    */
   @Parameter(defaultValue = "jvm")
-  private final String runtime = "jvm";
+  private String runtime = "jvm";
 
   private AbstractCompileMojo mojo;
 

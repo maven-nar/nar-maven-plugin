@@ -43,7 +43,7 @@ public class SysLib {
    * Type of linking for this system library
    */
   @Parameter(defaultValue = "shared")
-  private final String type = Library.SHARED;
+  private String type = Library.SHARED;
 
   public final SystemLibrarySet getSysLibSet(final Project antProject) throws MojoFailureException {
     if (this.name == null) {

@@ -55,20 +55,20 @@ public class Javah {
    * Javah command to run.
    */
   @Parameter(defaultValue = "javah")
-  private final String name = "javah";
+  private String name = "javah";
 
   /**
    * Add boot class paths. By default none.
    */
   @Parameter
-  private final List/* <File> */bootClassPaths = new ArrayList();
+  private List/* <File> */bootClassPaths = new ArrayList();
 
   /**
    * Add class paths. By default the classDirectory directory is included and
    * all dependent classes.
    */
   @Parameter
-  private final List/* <File> */classPaths = new ArrayList();
+  private List/* <File> */classPaths = new ArrayList();
 
   /**
    * The target directory into which to generate the output.
@@ -86,26 +86,26 @@ public class Javah {
    * The set of files/patterns to include Defaults to "**\/*.class"
    */
   @Parameter
-  private final Set includes = new HashSet();
+  private Set includes = new HashSet();
 
   /**
    * A list of exclusion filters.
    */
   @Parameter
-  private final Set excludes = new HashSet();
+  private Set excludes = new HashSet();
 
   /**
    * A list of class names e.g. from java.sql.* that are also passed to javah.
    */
   @Parameter
-  private final Set extraClasses = new HashSet();
+  private Set extraClasses = new HashSet();
 
   /**
    * The granularity in milliseconds of the last modification date for testing
    * whether a source needs recompilation
    */
   @Parameter(defaultValue = "0", required = true)
-  private final int staleMillis = 0;
+  private int staleMillis = 0;
 
   /**
    * The directory to store the timestampfile for the processed aid files.
