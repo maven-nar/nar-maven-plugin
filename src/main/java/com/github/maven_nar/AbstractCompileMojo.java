@@ -87,7 +87,7 @@ public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
    * Maximum number of Cores/CPU's to use. 0 means unlimited.
    */
   @Parameter
-  private final int maxCores = 0;
+  private int maxCores = 0;
 
   /**
    * Fail on compilation/linking error.

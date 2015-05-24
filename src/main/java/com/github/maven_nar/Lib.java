@@ -52,7 +52,7 @@ public class Lib {
    * Type of linking for this library
    */
   @Parameter(defaultValue = "shared", required = true)
-  private final String type = Library.SHARED;
+  private String type = Library.SHARED;
 
   /**
    * Location for this library

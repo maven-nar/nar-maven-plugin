@@ -264,7 +264,7 @@ public class NarIntegrationTestMojo extends AbstractDependencyMojo {
    * has errors.
    */
   @Parameter(property = "surefire.printSummary", defaultValue = "true")
-  private final boolean printSummary = true;
+  private boolean printSummary = true;
 
   /**
    * Selects the formatting for the test report to be generated. Can be set as
@@ -358,7 +358,7 @@ public class NarIntegrationTestMojo extends AbstractDependencyMojo {
    * @since 2.1.3
    */
   @Parameter
-  private final Map environmentVariables = new HashMap();
+  private Map environmentVariables = new HashMap();
 
   /**
    * Command line working directory.
@@ -464,7 +464,7 @@ public class NarIntegrationTestMojo extends AbstractDependencyMojo {
    * @since 2.2
    */
   @Parameter(property = "trimStackTrace", defaultValue = "true")
-  private final boolean trimStackTrace = true;
+  private boolean trimStackTrace = true;
 
   /**
    * Creates the artifact
@@ -513,7 +513,7 @@ public class NarIntegrationTestMojo extends AbstractDependencyMojo {
    * @since 2.4.3
    */
   @Parameter(property = "surefire.useManifestOnlyJar", defaultValue = "true")
-  private final boolean useManifestOnlyJar = true;
+  private boolean useManifestOnlyJar = true;
 
   /**
    * By default, Surefire enables JVM assertions for the execution of your test
