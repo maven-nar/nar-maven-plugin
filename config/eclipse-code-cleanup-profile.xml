@@ -13,7 +13,7 @@
 <setting id="cleanup.remove_redundant_type_arguments" value="true"/>
 <setting id="cleanup.remove_unused_imports" value="true"/>
 <setting id="cleanup.insert_inferred_type_arguments" value="false"/>
-<setting id="cleanup.make_private_fields_final" value="true"/>
+<setting id="cleanup.make_private_fields_final" value="false"/>
 <setting id="cleanup.use_lambda" value="true"/>
 <setting id="cleanup.always_use_blocks" value="true"/>
 <setting id="cleanup.use_this_for_non_static_field_access_only_if_necessary" value="false"/>
