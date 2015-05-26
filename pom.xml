@@ -645,5 +645,15 @@
         </pluginManagement>
       </build>
     </profile>
+    <!-- NB: This profile disables doclint for Java 8+. -->
+    <profile>
+      <id>java-8</id>
+      <activation>
+        <jdk>[1.8,)</jdk>
+      </activation>
+      <properties>
+        <additionalparam>-Xdoclint:none</additionalparam>
+      </properties>
+    </profile>
   </profiles>
 </project>
