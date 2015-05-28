@@ -249,7 +249,8 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
     return this.mavenProject;
   }
 
-  public Msvc getMsvc() {
+  public Msvc getMsvc() throws MojoFailureException, MojoExecutionException {
+    this.msvc.setMojo(this);
     return this.msvc;
   }
 
