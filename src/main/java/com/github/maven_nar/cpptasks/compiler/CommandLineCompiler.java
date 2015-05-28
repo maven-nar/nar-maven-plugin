@@ -27,6 +27,7 @@ import java.util.Vector;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Environment;
 
+import com.github.maven_nar.NarUtil;
 import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.CUtil;
 import com.github.maven_nar.cpptasks.CompilerDef;
@@ -191,8 +192,15 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       if (this.libtool) {
         argCount++;
       }
+      if (NarUtil.isWindows()) {
+        argCount += 2;
+      }
       final String[] commandline = new String[argCount];
       int index = 0;
+      if (NarUtil.isWindows()) {
+        commandline[index++] = "cmd";
+        commandline[index++] = "/c";
+      }
       if (this.libtool) {
         commandline[index++] = "libtool";
       }
@@ -378,7 +386,20 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
     final boolean rebuild = specificDef.getRebuild(baseDefs, 0);
     final File[] envIncludePath = getEnvironmentIncludePath();
     final String path = specificDef.getToolPath();
-    return new CommandLineCompilerConfiguration(this, configId, incPath, sysIncPath, envIncludePath,
+
+    CommandLineCompiler compiler = this;
+    Environment environment = specificDef.getEnv();
+    if (environment == null) {
+      for (final ProcessorDef baseDef : baseDefs) {
+        environment = baseDef.getEnv();
+        if (environment != null) {
+          compiler = (CommandLineCompiler) compiler.changeEnvironment(true, environment);
+        }
+      }
+    } else {
+      compiler = (CommandLineCompiler) compiler.changeEnvironment(true, environment);
+    }
+    return new CommandLineCompilerConfiguration(compiler, configId, incPath, sysIncPath, envIncludePath,
         includePathIdentifier.toString(), argArray, paramArray, rebuild, endArgs, path, specificDef.getCcache());
   }
 

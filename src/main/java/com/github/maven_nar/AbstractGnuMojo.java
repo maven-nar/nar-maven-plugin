@@ -86,6 +86,6 @@ public abstract class AbstractGnuMojo extends AbstractResourcesMojo {
    * @return
    */
   protected final boolean useGnu() {
-    return this.gnuUseOnWindows || !OS.WINDOWS.equals(NarUtil.getOS(null));
+    return this.gnuUseOnWindows || !NarUtil.isWindows();
   }
 }

@@ -30,6 +30,7 @@ import com.github.maven_nar.cpptasks.VersionInfo;
 import com.github.maven_nar.cpptasks.compiler.CommandLineLinker;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.platforms.WindowsPlatform;
+import com.github.maven_nar.cpptasks.types.LibrarySet;
 import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
 
 /**
@@ -103,6 +104,26 @@ public abstract class MsvcCompatibleLinker extends CommandLineLinker {
     } else {
       args.addElement("/INCREMENTAL:NO");
     }
+  }
+
+  @Override
+  protected void addLibraryPath(final Vector<String> preargs, final String path) {
+    preargs.addElement("/LIBPATH:" + path);
+  }
+
+  @Override
+  protected String[] addLibrarySets(final CCTask task, final LibrarySet[] libsets, final Vector<String> preargs,
+      final Vector<String> midargs, final Vector<String> endargs) {
+    for (final LibrarySet set : libsets) {
+      final File libdir = set.getDir(null);
+      final String[] libs = set.getLibs();
+      addLibraryDirectory(libdir, preargs);
+
+      for (final String libraryName : libs) {
+        endargs.add(libraryName + ".lib");
+      }
+    }
+    return null;
   }
 
   @Override

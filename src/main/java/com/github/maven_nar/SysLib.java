@@ -57,4 +57,9 @@ public class SysLib {
     sysLibSet.setType(sysLibType);
     return sysLibSet;
   }
+
+  @Override
+  public String toString() {
+    return this.name + " (" + this.type + ")";
+  }
 }

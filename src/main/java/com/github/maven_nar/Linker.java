@@ -284,7 +284,7 @@ public class Linker {
 
     // FIXME, this should be done in CPPTasks at some point, and may not be
     // necessary, but was for VS 2010 beta 2
-    if (os.equals(OS.WINDOWS) && getName(null, null).equals("msvc") && !getVersion().startsWith("6.")) {
+    if (os.equals(OS.WINDOWS) && getName(null, null).equals("msvc") && !getVersion(mojo).startsWith("6.")) {
       final LinkerArgument arg = new LinkerArgument();
       arg.setValue("/MANIFEST");
       linker.addConfiguredLinkerArg(arg);
@@ -382,6 +382,8 @@ public class Linker {
       addLibraries(sysLibsList, linker, antProject, true);
     }
 
+    mojo.getMsvc().configureLinker(mojo, linker);
+
     return linker;
   }
 
@@ -420,6 +422,10 @@ public class Linker {
   }
 
   public final String getVersion() throws MojoFailureException, MojoExecutionException {
+    return getVersion(new NarCompileMojo());
+  }
+
+  public final String getVersion(final AbstractNarMojo mojo) throws MojoFailureException, MojoExecutionException {
     if (this.name == null) {
       throw new MojoFailureException("Cannot deduce linker version if name is null");
     }
@@ -440,14 +446,7 @@ public class Linker {
         version = m.group(0);
       }
     } else if (this.name.equals("msvc")) {
-      NarUtil.runCommand("link", new String[] {
-        "/?"
-      }, null, null, out, err, dbg, this.log, true);
-      final Pattern p = Pattern.compile("\\d+\\.\\d+\\.\\d+(\\.\\d+)?");
-      final Matcher m = p.matcher(out.toString());
-      if (m.find()) {
-        version = m.group(0);
-      }
+      version = mojo.getMsvc().getVersion();
     } else if (this.name.equals("icc") || this.name.equals("icpc")) {
       NarUtil.runCommand("icc", new String[] {
         "--version"
