@@ -310,8 +310,10 @@ public class Msvc {
   }
 
   public void setMojo(final AbstractNarMojo mojo) throws MojoFailureException, MojoExecutionException {
-    this.mojo = mojo;
-    init();
+    if (mojo != this.mojo) {
+      this.mojo = mojo;
+      init();
+    }
   }
 
   @Override
