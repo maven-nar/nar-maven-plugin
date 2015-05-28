@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -104,6 +104,11 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
     }
   }
 
+  @Override
+  protected void addLibraryPath(final Vector<String> preargs, final String path) {
+    preargs.addElement("-L" + path);
+  }
+
   protected int addLibraryPatterns(final String[] libnames, final StringBuffer buf, final String prefix,
       final String extension, final String[] patterns, final int offset) {
     for (int i = 0; i < libnames.length; i++) {
@@ -130,7 +135,7 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
         String relPath = libdir.getAbsolutePath();
         // File outputFile = task.getOutfile();
         final File currentDir = new File(".");
-        if (currentDir.getParentFile() != null) {
+        if (currentDir != null && currentDir.getParentFile() != null) {
           relPath = CUtil.getRelativePath(currentDir.getParentFile().getAbsolutePath(), libdir);
         }
         if (set.getType() != null && "framework".equals(set.getType().getValue()) && isDarwin()) {
@@ -180,8 +185,8 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
       }
     }
 
-    // BEGINFREEHEP if last was -Bstatic reset it to -Bdynamic so that libc and
-    // libm can be found as shareables
+    // BEGINFREEHEP if last was -Bstatic reset it to -Bdynamic so that libc
+    // and libm can be found as shareables
     if (previousLibraryType != null && previousLibraryType.getValue().equals("static") && !isDarwin()) {
       endargs.addElement(getDynamicLibFlag());
     }

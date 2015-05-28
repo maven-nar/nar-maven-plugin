@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,6 +30,7 @@ import com.github.maven_nar.cpptasks.VersionInfo;
 import com.github.maven_nar.cpptasks.compiler.CommandLineLinker;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.platforms.WindowsPlatform;
+import com.github.maven_nar.cpptasks.types.LibrarySet;
 import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
 
 /**
@@ -106,6 +107,26 @@ public abstract class MsvcCompatibleLinker extends CommandLineLinker {
   }
 
   @Override
+  protected void addLibraryPath(final Vector<String> preargs, final String path) {
+    preargs.addElement("/LIBPATH:" + path);
+  }
+
+  @Override
+  protected String[] addLibrarySets(final CCTask task, final LibrarySet[] libsets, final Vector<String> preargs,
+      final Vector<String> midargs, final Vector<String> endargs) {
+    for (final LibrarySet set : libsets) {
+      final File libdir = set.getDir(null);
+      final String[] libs = set.getLibs();
+      addLibraryDirectory(libdir, preargs);
+
+      for (final String libraryName : libs) {
+        endargs.add(libraryName + ".lib");
+      }
+    }
+    return null;
+  }
+
+  @Override
   protected void addMap(final CCTask task, final boolean map, final Vector<String> args) {
     if (map) {
       args.addElement("/MAP");
@@ -123,7 +144,7 @@ public abstract class MsvcCompatibleLinker extends CommandLineLinker {
   /**
    * Adds source or object files to the bidded fileset to
    * support version information.
-   * 
+   *
    * @param versionInfo
    *          version information
    * @param linkType

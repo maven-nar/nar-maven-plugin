@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -87,7 +87,7 @@ public class Linker {
   /**
    * Additional options for the linker when running in the nar-testCompile
    * phase.
-   * 
+   *
    */
   @Parameter
   private List testOptions;
@@ -163,7 +163,7 @@ public class Linker {
 
   /**
    * For use with specific named linker.
-   * 
+   *
    * @param name
    */
   public Linker(final String name, final Log log) {
@@ -284,7 +284,7 @@ public class Linker {
 
     // FIXME, this should be done in CPPTasks at some point, and may not be
     // necessary, but was for VS 2010 beta 2
-    if (os.equals(OS.WINDOWS) && getName(null, null).equals("msvc") && !getVersion().startsWith("6.")) {
+    if (os.equals(OS.WINDOWS) && getName(null, null).equals("msvc") && !getVersion(mojo).startsWith("6.")) {
       final LinkerArgument arg = new LinkerArgument();
       arg.setValue("/MANIFEST");
       linker.addConfiguredLinkerArg(arg);
@@ -382,6 +382,8 @@ public class Linker {
       addLibraries(sysLibsList, linker, antProject, true);
     }
 
+    mojo.getMsvc().configureLinker(mojo, linker);
+
     return linker;
   }
 
@@ -419,7 +421,7 @@ public class Linker {
     return linker;
   }
 
-  public final String getVersion() throws MojoFailureException, MojoExecutionException {
+  public final String getVersion(final AbstractNarMojo mojo) throws MojoFailureException, MojoExecutionException {
     if (this.name == null) {
       throw new MojoFailureException("Cannot deduce linker version if name is null");
     }
@@ -440,14 +442,7 @@ public class Linker {
         version = m.group(0);
       }
     } else if (this.name.equals("msvc")) {
-      NarUtil.runCommand("link", new String[] {
-        "/?"
-      }, null, null, out, err, dbg, this.log, true);
-      final Pattern p = Pattern.compile("\\d+\\.\\d+\\.\\d+(\\.\\d+)?");
-      final Matcher m = p.matcher(out.toString());
-      if (m.find()) {
-        version = m.group(0);
-      }
+      version = mojo.getMsvc().getVersion();
     } else if (this.name.equals("icc") || this.name.equals("icpc")) {
       NarUtil.runCommand("icc", new String[] {
         "--version"

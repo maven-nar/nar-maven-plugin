@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -201,6 +201,8 @@ public class NarCompileMojo extends AbstractCompileMojo {
     // add java include paths
     getJava().addIncludePaths(task, type);
 
+    getMsvc().configureCCTask(this, task);
+
     final List<NarArtifact> dependencies = getNarArtifacts();
     // add dependency include paths
     for (final Object element : dependencies) {
@@ -327,23 +329,26 @@ public class NarCompileMojo extends AbstractCompileMojo {
 
     // FIXME, this should be done in CPPTasks at some point
     if (getRuntime(getAOL()).equals("dynamic") && getOS().equals(OS.WINDOWS)
-        && getLinker().getName(null, null).equals("msvc") && !getLinker().getVersion().startsWith("6.")) {
+        && getLinker().getName(null, null).equals("msvc") && !getLinker().getVersion(this).startsWith("6.")) {
+      final String[] env = new String[] {
+        "PATH=" + getMsvc().getPathVariable().getValue()
+      };
       final String libType = library.getType();
       if (libType.equals(Library.JNI) || libType.equals(Library.SHARED)) {
         final String dll = outFile.getPath() + ".dll";
         final String manifest = dll + ".manifest";
-        final int result = NarUtil.runCommand("mt.exe", new String[] {
-            "/manifest", manifest, "/outputresource:" + dll + ";#2"
-        }, null, null, getLog());
+        final int result = NarUtil.runCommand("cmd", new String[] {
+            "/C", "mt.exe", "/manifest", manifest, "/outputresource:" + dll + ";#2"
+        }, null, env, getLog());
         if (result != 0) {
           throw new MojoFailureException("MT.EXE failed with exit code: " + result);
         }
       } else if (libType.equals(Library.EXECUTABLE)) {
         final String exe = outFile.getPath() + ".exe";
         final String manifest = exe + ".manifest";
-        final int result = NarUtil.runCommand("mt.exe", new String[] {
-            "/manifest", manifest, "/outputresource:" + exe + ";#1"
-        }, null, null, getLog());
+        final int result = NarUtil.runCommand("cmd", new String[] {
+            "/C", "mt.exe", "/manifest", manifest, "/outputresource:" + exe + ";#1"
+        }, null, env, getLog());
         if (result != 0) {
           throw new MojoFailureException("MT.EXE failed with exit code: " + result);
         }

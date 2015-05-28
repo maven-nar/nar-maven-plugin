@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -115,7 +115,7 @@ public final class NarUtil {
    * (Darren) this code lifted from mvn help:active-profiles plugin Recurses
    * into the project's parent poms to find the active profiles of the
    * specified project and all its parents.
-   * 
+   *
    * @param project
    *          The project to start with
    * @return A list of active profiles
@@ -212,6 +212,12 @@ public final class NarUtil {
 
   // FIXME, should go to AOL.
   /*
+   * <<<<<<< HEAD
+   * NOT USED ? public static String getAOLKey( String architecture, String
+   * os, Linker linker ) throws MojoFailureException, MojoExecutionException {
+   * // construct AOL key prefix return getArchitecture( architecture ) + "."
+   * + getOS( os ) + "." + getLinkerName( architecture, os, linker ) + "."; }
+   * =======
    * NOT USED ?
    * public static String getAOLKey( String architecture, String os, Linker
    * linker )
@@ -222,6 +228,7 @@ public final class NarUtil {
    * getLinkerName( architecture, os, linker )
    * + ".";
    * }
+   * >>>>>>> refs/remotes/origin/master
    */
 
   public static AOL getAOL(final MavenProject project, final String architecture, final String os, final Linker linker,
@@ -245,7 +252,7 @@ public final class NarUtil {
 
   /**
    * Returns the Bcel Class corresponding to the given class filename
-   * 
+   *
    * @param filename
    *          the absolute file name of the class
    * @return the Bcel Class.
@@ -280,7 +287,7 @@ public final class NarUtil {
   /**
    * Returns the header file name (javah) corresponding to the given class file
    * name
-   * 
+   *
    * @param filename
    *          the absolute file name of the class
    * @return the header file name.
@@ -454,7 +461,7 @@ public final class NarUtil {
 
   /**
    * Replaces target with replacement in string. For jdk 1.4 compatiblity.
-   * 
+   *
    * @param target
    * @param replacement
    * @param string
@@ -462,7 +469,13 @@ public final class NarUtil {
    */
   public static String replace(final CharSequence target, final CharSequence replacement, final String string) {
     return Pattern.compile(quote(target.toString())/*
+                                                    * <<<<<<< HEAD
+                                                    * , Pattern.LITERAL jdk
+                                                    * 1.4
+                                                    * =======
                                                     * , Pattern.LITERAL jdk 1.4
+                                                    * >>>>>>>
+                                                    * refs/remotes/origin/master
                                                     */).matcher(string).replaceAll(
     /* Matcher. jdk 1.4 */quoteReplacement(replacement.toString()));
   }

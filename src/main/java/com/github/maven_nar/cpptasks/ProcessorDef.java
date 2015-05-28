@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,9 +44,9 @@ import com.github.maven_nar.cpptasks.types.ConditionalFileSet;
 public abstract class ProcessorDef extends DataType {
   /**
    * Returns the equivalent Boolean object for the specified value
-   * 
+   *
    * Equivalent to Boolean.valueOf in JDK 1.4
-   * 
+   *
    * @param val
    *          boolean value
    * @return Boolean.TRUE or Boolean.FALSE
@@ -107,7 +107,7 @@ public abstract class ProcessorDef extends DataType {
 
   /**
    * Constructor
-   * 
+   *
    */
   protected ProcessorDef() throws NullPointerException {
     this.inherit = true;
@@ -115,7 +115,7 @@ public abstract class ProcessorDef extends DataType {
 
   /**
    * Adds a <compilerarg>or <linkerarg>
-   * 
+   *
    * @param arg
    *          command line argument, must not be null
    * @throws NullPointerException
@@ -135,7 +135,7 @@ public abstract class ProcessorDef extends DataType {
 
   /**
    * Adds a <compilerarg>or <linkerarg>
-   * 
+   *
    * @param param
    *          command line argument, must not be null
    * @throws NullPointerException
@@ -159,16 +159,21 @@ public abstract class ProcessorDef extends DataType {
   public void addEnv(final Environment.Variable var) {
     if (this.env == null) {
       this.env = new Environment();
+      this.newEnvironment = true;
+      if (this.processor != null) {
+        // Change the environment in the processor
+        setProcessor(this.processor);
+      }
     }
     this.env.addVariable(var);
   }
 
   /**
    * Adds a source file set.
-   * 
+   *
    * Files in these set will be processed by this configuration and will not
    * participate in the auction.
-   * 
+   *
    * @param srcSet
    *          Fileset identifying files that should be processed by this
    *          processor
@@ -185,11 +190,11 @@ public abstract class ProcessorDef extends DataType {
 
   /**
    * Creates a configuration
-   * 
+   *
    * @param baseDef
    *          reference to def from containing cc element, may be null
    * @return configuration
-   * 
+   *
    */
   public ProcessorConfiguration createConfiguration(final CCTask task, final LinkType linkType,
       final ProcessorDef baseDef, final TargetDef targetPlatform, final VersionInfo versionInfo) {
@@ -205,7 +210,7 @@ public abstract class ProcessorDef extends DataType {
   /**
    * Prepares list of processor arguments ( compilerarg, linkerarg ) that
    * are active for the current project settings.
-   * 
+   *
    * @return active compiler arguments
    */
   public CommandLineArgument[] getActiveProcessorArgs() {
@@ -231,7 +236,7 @@ public abstract class ProcessorDef extends DataType {
   /**
    * Prepares list of processor arguments ( compilerarg, linkerarg) that
    * are active for the current project settings.
-   * 
+   *
    * @return active compiler arguments
    */
   public ProcessorParam[] getActiveProcessorParams() {
@@ -256,7 +261,7 @@ public abstract class ProcessorDef extends DataType {
 
   /**
    * Gets boolean indicating debug build
-   * 
+   *
    * @param defaultProviders
    *          array of ProcessorDef's in descending priority
    * @param index
@@ -280,12 +285,12 @@ public abstract class ProcessorDef extends DataType {
   /**
    * Creates an chain of objects which provide default values in descending
    * order of significance.
-   * 
+   *
    * @param baseDef
    *          corresponding ProcessorDef from CCTask, will be last element
    *          in array unless inherit = false
    * @return default provider array
-   * 
+   *
    */
   protected final ProcessorDef[] getDefaultProviders(final ProcessorDef baseDef) {
     ProcessorDef extendsDef = getExtends();
@@ -306,7 +311,7 @@ public abstract class ProcessorDef extends DataType {
    * Because linkers have multiples and none of them share the environment
    * settings here is a hack to give direct access to copy it just before
    * running
-   * 
+   *
    * @return
    */
   public Environment getEnv() {
@@ -315,7 +320,7 @@ public abstract class ProcessorDef extends DataType {
 
   /**
    * Gets the ProcessorDef specified by the extends attribute
-   * 
+   *
    * @return Base ProcessorDef, null if extends is not specified
    * @throws BuildException
    *           if reference is not same type object
@@ -335,7 +340,7 @@ public abstract class ProcessorDef extends DataType {
   /**
    * Gets the inherit attribute. If the inherit value is true, this processor
    * definition will inherit default values from the containing cc element.
-   * 
+   *
    * @return if true then properties from the containing <cc>element are
    *         used.
    */
@@ -359,7 +364,7 @@ public abstract class ProcessorDef extends DataType {
 
   /**
    * Obtains the appropriate processor (compiler, linker)
-   * 
+   *
    * @return processor
    */
   protected Processor getProcessor() {
@@ -392,7 +397,7 @@ public abstract class ProcessorDef extends DataType {
   /**
    * Gets a boolean value indicating whether all targets must be rebuilt
    * regardless of dependency analysis.
-   * 
+   *
    * @param defaultProviders
    *          array of ProcessorDef's in descending priority
    * @param index
@@ -416,7 +421,7 @@ public abstract class ProcessorDef extends DataType {
   /**
    * Returns true if the processor definition contains embedded file set
    * definitions
-   * 
+   *
    * @return true if processor definition contains embedded filesets
    */
   public boolean hasFileSets() {
@@ -428,11 +433,11 @@ public abstract class ProcessorDef extends DataType {
 
   /**
    * Determine if this def should be used.
-   * 
+   *
    * Definition will be active if the "if" variable (if specified) is set and
    * the "unless" variable (if specified) is not set and that all reference
    * or extended definitions are active
-   * 
+   *
    * @return true if processor is active
    * @throws IllegalStateException
    *           if not properly initialized
@@ -465,10 +470,10 @@ public abstract class ProcessorDef extends DataType {
   /**
    * Sets the class name for the adapter. Use the "name" attribute when the
    * tool is supported.
-   * 
+   *
    * @param className
    *          full class name
-   * 
+   *
    */
   public void setClassname(final String className) throws BuildException {
     Object proc = null;
@@ -488,7 +493,7 @@ public abstract class ProcessorDef extends DataType {
 
   /**
    * If set true, all targets will be built for debugging.
-   * 
+   *
    * @param debug
    *          true if targets should be built for debugging
    * @throws BuildException
@@ -514,7 +519,7 @@ public abstract class ProcessorDef extends DataType {
    * matching value. The configuration will be constructed from the settings
    * of this element, element referenced by extends, and the containing cc
    * element.
-   * 
+   *
    * @param extendsRef
    *          Reference to the extended processor definition.
    * @throws BuildException
@@ -529,7 +534,7 @@ public abstract class ProcessorDef extends DataType {
 
   /**
    * Sets an id that can be used to reference this element.
-   * 
+   *
    * @param id
    *          id
    */
@@ -542,13 +547,13 @@ public abstract class ProcessorDef extends DataType {
 
   /**
    * Sets the property name for the 'if' condition.
-   * 
+   *
    * The configuration will be ignored unless the property is defined.
-   * 
+   *
    * The value of the property is insignificant, but values that would imply
    * misinterpretation ("false", "no") will throw an exception when
    * evaluated.
-   * 
+   *
    * @param propName
    *          name of property
    */
@@ -559,7 +564,7 @@ public abstract class ProcessorDef extends DataType {
   /**
    * If inherit has the default value of true, defines, includes and other
    * settings from the containing cc element will be inherited.
-   * 
+   *
    * @param inherit
    *          new value
    * @throws BuildException
@@ -574,9 +579,9 @@ public abstract class ProcessorDef extends DataType {
 
   /**
    * Set use of libtool.
-   * 
+   *
    * If set to true, the "libtool " will be prepended to the command line
-   * 
+   *
    * @param libtool
    *          If true, use libtool.
    */
@@ -597,7 +602,7 @@ public abstract class ProcessorDef extends DataType {
 
   /**
    * Sets the processor
-   * 
+   *
    * @param processor
    *          processor, may not be null.
    * @throws BuildException
@@ -621,7 +626,7 @@ public abstract class ProcessorDef extends DataType {
 
   /**
    * If set true, all targets will be unconditionally rebuilt.
-   * 
+   *
    * @param rebuild
    *          if true, rebuild all targets.
    * @throws BuildException
@@ -639,10 +644,10 @@ public abstract class ProcessorDef extends DataType {
    * element with the matching id attribute was inserted at this location. If
    * specified, no other attributes or child content should be specified,
    * other than "if", "unless" and "description".
-   * 
+   *
    * @param ref
    *          Reference to other element
-   * 
+   *
    */
   @Override
   public void setRefid(final org.apache.tools.ant.types.Reference ref) {
@@ -651,13 +656,13 @@ public abstract class ProcessorDef extends DataType {
 
   /**
    * Set the property name for the 'unless' condition.
-   * 
+   *
    * If named property is set, the configuration will be ignored.
-   * 
+   *
    * The value of the property is insignificant, but values that would imply
    * misinterpretation ("false", "no") of the behavior will throw an
    * exception when evaluated.
-   * 
+   *
    * @param propName
    *          name of property
    */
@@ -668,7 +673,7 @@ public abstract class ProcessorDef extends DataType {
   /**
    * This method calls the FileVistor's visit function for every file in the
    * processors definition
-   * 
+   *
    * @param visitor
    *          object whose visit method is called for every file
    */

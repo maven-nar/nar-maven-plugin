@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,11 @@
 package com.github.maven_nar.cpptasks;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import org.apache.tools.ant.BuildException;
@@ -56,9 +60,11 @@ public class LinkerDef extends ProcessorDef {
   private final Vector sysLibrarySets = new Vector();
   private String toolPath;
 
+  private final Set<File> libraryDirectories = new LinkedHashSet<File>();
+
   /**
    * Default constructor
-   * 
+   *
    * @see java.lang.Object#Object()
    */
   public LinkerDef() {
@@ -101,7 +107,121 @@ public class LinkerDef extends ProcessorDef {
     addConfiguredProcessorParam(param);
   }
 
+  public boolean addLibraryDirectory(final File directory) {
+    if (directory == null || !directory.exists()) {
+      return false;
+    } else {
+      return this.libraryDirectories.add(directory);
+    }
+  }
+
+  public boolean addLibraryDirectory(final File parent, final String path) {
+    if (parent == null) {
+      return false;
+    } else {
+      final File directory = new File(parent, path);
+      return addLibraryDirectory(directory);
+    }
+  }
+
+  public void addLibraryDirectory(final String path) {
+    final File directory = new File(path);
+    addLibraryDirectory(directory);
+  }
+
   /**
+   * Sets linker type.
+   *
+   *
+   * <table width="100%" border="1">
+   * <thead>Supported linkers </thead>
+   * <tr>
+   * <td>gcc</td>
+   * <td>Gcc Linker</td>
+   * </tr>
+   * <tr>
+   * <td>g++</td>
+   * <td>G++ Linker</td>
+   * </tr>
+   * <tr>
+   * <td>ld</td>
+   * <td>Ld Linker</td>
+   * </tr>
+   * <tr>
+   * <td>ar</td>
+   * <td>Gcc Librarian</td>
+   * </tr>
+   * <tr>
+   * <td>msvc</td>
+   * <td>Microsoft Linker</td>
+   * </tr>
+   * <tr>
+   * <td>bcc</td>
+   * <td>Borland Linker</td>
+   * </tr>
+   * <tr>
+   * <td>df</td>
+   * <td>Compaq Visual Fortran Linker</td>
+   * </tr>
+   * <tr>
+   * <td>icl</td>
+   * <td>Intel Linker for Windows (IA-32)</td>
+   * </tr>
+   * <tr>
+   * <td>ecl</td>
+   * <td>Intel Linker for Windows (IA-64)</td>
+   * </tr>
+   * <tr>
+   * <td>icc</td>
+   * <td>Intel Linker for Linux (IA-32)</td>
+   * </tr>
+   * <tr>
+   * <td>ecc</td>
+   * <td>Intel Linker for Linux (IA-64)</td>
+   * </tr>
+   * <tr>
+   * <td>CC</td>
+   * <td>Sun ONE Linker</td>
+   * </tr>
+   * <tr>
+   * <td>aCC</td>
+   * <td>HP aC++ Linker</td>
+   * </tr>
+   * <tr>
+   * <td>os390</td>
+   * <td>OS390 Linker</td>
+   * </tr>
+   * <tr>
+   * <td>os390batch</td>
+   * <td>OS390 Linker</td>
+   * </tr>
+   * <tr>
+   * <td>os400</td>
+   * <td>IccLinker</td>
+   * </tr>
+   * <tr>
+   * <td>sunc89</td>
+   * <td>C89 Linker</td>
+   * </tr>
+   * <tr>
+   * <td>xlC</td>
+   * <td>VisualAge Linker</td>
+   * </tr>
+   * <tr>
+   * <td>wcl</td>
+   * <td>OpenWatcom C/C++ linker</td>
+   * </tr>
+   * <tr>
+   * <td>wfl</td>
+   * <td>OpenWatcom FORTRAN linker</td>
+   * </tr>
+   * </table>
+   *
+   * =======
+   * addConfiguredProcessorParam(param);
+   * }
+   *
+   * /**
    * Adds a system library set.
    */
   public void addLibset(final LibrarySet libset) {
@@ -242,6 +362,10 @@ public class LinkerDef extends ProcessorDef {
     return false;
   }
 
+  public List<File> getLibraryDirectories() {
+    return new ArrayList<File>(this.libraryDirectories);
+  }
+
   public boolean getMap(final LinkerDef[] defaultProviders, final int index) {
     if (isReference()) {
       return ((LinkerDef) getCheckedRef(LinkerDef.class, "LinkerDef")).getMap(defaultProviders, index);
@@ -292,10 +416,10 @@ public class LinkerDef extends ProcessorDef {
 
   /**
    * Sets the base address. May be specified in either decimal or hex.
-   * 
+   *
    * @param base
    *          base address
-   * 
+   *
    */
   public void setBase(final FlexLong base) {
     if (isReference()) {
@@ -306,7 +430,7 @@ public class LinkerDef extends ProcessorDef {
 
   /**
    * Sets the starting address.
-   * 
+   *
    * @param entry
    *          function name
    */
@@ -329,7 +453,7 @@ public class LinkerDef extends ProcessorDef {
 
   /**
    * If true, allows incremental linking.
-   * 
+   *
    */
   public void setIncremental(final boolean incremental) {
     if (isReference()) {
@@ -350,8 +474,8 @@ public class LinkerDef extends ProcessorDef {
 
   /**
    * Sets linker type.
-   * 
-   * 
+   *
+   *
    * <table width="100%" border="1">
    * <thead>Supported linkers </thead>
    * <tr>
@@ -435,7 +559,8 @@ public class LinkerDef extends ProcessorDef {
    * <td>OpenWatcom FORTRAN linker</td>
    * </tr>
    * </table>
-   * 
+   *
+   * >>>>>>> refs/remotes/origin/master
    */
   public void setName(final LinkerEnum name) throws BuildException {
     if (isReference()) {

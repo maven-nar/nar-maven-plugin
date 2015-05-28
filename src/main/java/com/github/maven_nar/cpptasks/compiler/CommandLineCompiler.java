@@ -27,6 +27,8 @@ import java.util.Vector;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Environment;
 
+import com.github.maven_nar.NarUtil;
+import com.github.maven_nar.OS;
 import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.CUtil;
 import com.github.maven_nar.cpptasks.CompilerDef;
@@ -48,19 +50,24 @@ import com.google.common.collect.ObjectArrays;
 public abstract class CommandLineCompiler extends AbstractCompiler {
   /** Command used when invoking ccache */
   private static final String CCACHE_CMD = "ccache";
+
   private String command;
+
   private final Environment env;
+
   private String identifier;
+
   private final String identifierArg;
+
   private final boolean libtool;
+
   private final CommandLineCompiler libtoolCompiler;
+
   private final boolean newEnvironment;
 
   protected CommandLineCompiler(final String command, final String identifierArg, final String[] sourceExtensions,
-      final String[] headerExtensions,
-
-      final String outputSuffix, final boolean libtool, final CommandLineCompiler libtoolCompiler,
-      final boolean newEnvironment, final Environment env) {
+      final String[] headerExtensions, final String outputSuffix, final boolean libtool,
+      final CommandLineCompiler libtoolCompiler, final boolean newEnvironment, final Environment env) {
     super(sourceExtensions, headerExtensions, outputSuffix);
     this.command = command;
     if (libtool && libtoolCompiler != null) {
@@ -78,11 +85,11 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
 
   /**
    * Adds command-line arguments for include directories.
-   * 
+   *
    * If relativeArgs is not null will add corresponding relative paths
    * include switches to that vector (for use in building a configuration
    * identifier that is consistent between machines).
-   * 
+   *
    * @param baseDirPath
    *          Base directory path.
    * @param includeDirs
@@ -139,7 +146,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
 
   /**
    * Compiles a source file.
-   * 
+   *
    */
   public void compile(final CCTask task, final File outputDir, final String[] sourceFiles, String[] args,
       final String[] endArgs, final boolean relentless, final CommandLineCompilerConfiguration config,
@@ -191,8 +198,15 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       if (this.libtool) {
         argCount++;
       }
+      if (OS.WINDOWS.equals(NarUtil.getOS(null))) {
+        argCount += 2;
+      }
       final String[] commandline = new String[argCount];
       int index = 0;
+      if (OS.WINDOWS.equals(NarUtil.getOS(null))) {
+        commandline[index++] = "cmd";
+        commandline[index++] = "/c";
+      }
       if (this.libtool) {
         commandline[index++] = "libtool";
       }
@@ -378,8 +392,21 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
     final boolean rebuild = specificDef.getRebuild(baseDefs, 0);
     final File[] envIncludePath = getEnvironmentIncludePath();
     final String path = specificDef.getToolPath();
-    return new CommandLineCompilerConfiguration(this, configId, incPath, sysIncPath, envIncludePath,
-        includePathIdentifier.toString(), argArray, paramArray, rebuild, endArgs, path, specificDef.getCcache());
+
+    CommandLineCompiler compiler = this;
+    Environment environment = specificDef.getEnv();
+    if (environment == null) {
+      for (final ProcessorDef baseDef : baseDefs) {
+        environment = baseDef.getEnv();
+        if (environment != null) {
+          compiler = (CommandLineCompiler) compiler.changeEnvironment(true, environment);
+        }
+      }
+    } else {
+      compiler = (CommandLineCompiler) compiler.changeEnvironment(true, environment);
+    }
+    return new CommandLineCompilerConfiguration(compiler, configId, incPath, sysIncPath, envIncludePath,
+        includePathIdentifier.toString(), argArray, paramArray, rebuild, endArgs, path);
   }
 
   protected int getArgumentCountPerInputFile() {
@@ -430,12 +457,12 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
    * Added by Darren Sargent 22Oct2008 Returns the include dir switch value.
    * Default implementation doesn't treat system includes specially, for
    * compilers which don't care.
-   * 
+   *
    * @param source
    *          the given source value.
    * @param isSystem
    *          "true" if this is a system include path
-   * 
+   *
    * @return the include dir switch value.
    */
   protected String getIncludeDirSwitch(final String source, final boolean isSystem) {
@@ -461,7 +488,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
 
   /**
    * Obtains the same compiler, but with libtool set
-   * 
+   *
    * Default behavior is to ignore libtool
    */
   public final CommandLineCompiler getLibtoolCompiler() {
