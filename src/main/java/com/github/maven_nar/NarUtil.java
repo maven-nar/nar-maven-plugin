@@ -346,6 +346,10 @@ public final class NarUtil {
     return os;
   }
 
+  public static boolean isWindows() {
+    return getOS(null) == OS.WINDOWS;
+  }
+
   public static void makeExecutable(final File file, final Log log) throws MojoExecutionException, MojoFailureException {
     if (!file.exists()) {
       return;

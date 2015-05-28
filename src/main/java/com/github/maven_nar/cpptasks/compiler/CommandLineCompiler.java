@@ -192,12 +192,12 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       if (this.libtool) {
         argCount++;
       }
-      if (OS.WINDOWS.equals(NarUtil.getOS(null))) {
+      if (NarUtil.isWindows()) {
         argCount += 2;
       }
       final String[] commandline = new String[argCount];
       int index = 0;
-      if (OS.WINDOWS.equals(NarUtil.getOS(null))) {
+      if (NarUtil.isWindows()) {
         commandline[index++] = "cmd";
         commandline[index++] = "/c";
       }

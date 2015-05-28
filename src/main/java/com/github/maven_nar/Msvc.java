@@ -155,7 +155,7 @@ public class Msvc {
 
   private void init() throws MojoFailureException, MojoExecutionException {
     final String mojoOs = this.mojo.getOS();
-    if (NarUtil.getOS(null).equals(OS.WINDOWS) && OS.WINDOWS.equals(mojoOs)) {
+    if (NarUtil.isWindows() && OS.WINDOWS.equals(mojoOs)) {
       initVisualStudio();
       initWindowsSdk();
       initPath();
