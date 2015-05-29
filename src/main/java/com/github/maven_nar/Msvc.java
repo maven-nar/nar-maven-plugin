@@ -74,7 +74,7 @@ public class Msvc {
     return version1.replace(".", "").compareTo(version2.replace(".", ""));
   }
 
-  public void configureCCTask(final NarCompileMojo mojo, final CCTask task) throws MojoExecutionException {
+  public void configureCCTask(final AbstractNarMojo mojo, final CCTask task) throws MojoExecutionException {
     final String os = mojo.getOS();
     if (os.equals(OS.WINDOWS)) {
       addIncludePath(task, this.home, "VC/include");
@@ -248,7 +248,7 @@ public class Msvc {
         final TextStream dbg = new StringTextStream();
 
         NarUtil.runCommand("link", new String[] {
-            "/?"
+          "/?"
         }, null, null, out, err, dbg, null, true);
         final Pattern p = Pattern.compile("\\d+\\.\\d+\\.\\d+(\\.\\d+)?");
         final Matcher m = p.matcher(out.toString());
