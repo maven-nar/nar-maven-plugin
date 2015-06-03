@@ -74,7 +74,7 @@ public class Msvc {
     return version1.replace(".", "").compareTo(version2.replace(".", ""));
   }
 
-  public void configureCCTask(final NarCompileMojo mojo, final CCTask task) throws MojoExecutionException {
+  public void configureCCTask(final AbstractNarMojo mojo, final CCTask task) throws MojoExecutionException {
     final String os = mojo.getOS();
     if (os.equals(OS.WINDOWS)) {
       addIncludePath(task, this.home, "VC/include");
