@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -97,7 +97,7 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
    * - for libs default-value="${project.artifactId}-${project.version}"
    * - for exe default-value="${project.artifactId}"
    * -- for tests default-value="${test.name}"
-   * 
+   *
    */
   @Parameter
   private String output;
@@ -175,7 +175,7 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
   private File javaHome;
 
   @Parameter
-  private Msvc msvc = new Msvc();
+  private final Msvc msvc = new Msvc();
 
   @Override
   public final void execute() throws MojoExecutionException, MojoFailureException {

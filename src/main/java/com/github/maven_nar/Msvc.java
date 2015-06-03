@@ -248,7 +248,7 @@ public class Msvc {
         final TextStream dbg = new StringTextStream();
 
         NarUtil.runCommand("link", new String[] {
-            "/?"
+          "/?"
         }, null, null, out, err, dbg, null, true);
         final Pattern p = Pattern.compile("\\d+\\.\\d+\\.\\d+(\\.\\d+)?");
         final Matcher m = p.matcher(out.toString());
