@@ -273,12 +273,11 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
       // We dont link against the following library types :
       // - JNI, they are Java libraries
       // - executable, they are not libraries
-      // - static, there is no need to link to the test application the static
-      // libraries already included in the
-      // tested library
       // - none, they are not libraries ... I gess
-      if (!binding.equals(Library.JNI) && !binding.equals(Library.NONE) && !binding.equals(Library.EXECUTABLE)
-          && !binding.equals(Library.STATIC)) {
+      // Static libraries should be linked. Even though the libraries
+      // themselves will have been tested already, the test code could
+      // use methods or classes defined in them.
+      if (!binding.equals(Library.JNI) && !binding.equals(Library.NONE) && !binding.equals(Library.EXECUTABLE)) {
         // check if it exists in the normal unpack directory
         File dir = getLayout().getLibDirectory(getUnpackDirectory(), dependency.getArtifactId(),
             dependency.getBaseVersion(), aol.toString(), binding);
