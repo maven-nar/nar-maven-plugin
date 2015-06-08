@@ -277,7 +277,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
       // Static libraries should be linked. Even though the libraries
       // themselves will have been tested already, the test code could
       // use methods or classes defined in them.
-      if (!binding.equals(Library.JNI) && !binding.equals(Library.NONE) && !binding.equals(Library.EXECUTABLE) {
+      if (!binding.equals(Library.JNI) && !binding.equals(Library.NONE) && !binding.equals(Library.EXECUTABLE)) {
         // check if it exists in the normal unpack directory
         File dir = getLayout().getLibDirectory(getUnpackDirectory(), dependency.getArtifactId(),
             dependency.getBaseVersion(), aol.toString(), binding);
