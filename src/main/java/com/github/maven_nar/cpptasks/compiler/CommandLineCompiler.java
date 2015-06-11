@@ -26,6 +26,7 @@ import java.util.Vector;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Environment;
+import org.apache.commons.io.FilenameUtils;
 
 import com.github.maven_nar.NarUtil;
 import com.github.maven_nar.cpptasks.CCTask;
@@ -188,7 +189,8 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       if (firstFileNextExec == sourceIndex) {
         throw new BuildException("Extremely long file name, can't fit on command line");
       }
-      int argCount = args.length + 1 + endArgs.length + (firstFileNextExec - sourceIndex) * argumentCountPerInputFile;
+      // int argCount = args.length + 1 + endArgs.length + (firstFileNextExec - sourceIndex) * argumentCountPerInputFile;
+      int argCount = args.length + 1 + endArgs.length + 3;
       if (this.libtool) {
         argCount++;
       }
@@ -208,15 +210,28 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       for (final String arg : args) {
         commandline[index++] = arg;
       }
-      for (int j = sourceIndex; j < firstFileNextExec; j++) {
-        for (int k = 0; k < argumentCountPerInputFile; k++) {
-          commandline[index++] = getInputFileArgument(outputDir, sourceFiles[j], k);
-        }
-      }
       for (final String endArg : endArgs) {
         commandline[index++] = endArg;
       }
-      final int retval = runCommand(task, outputDir, commandline);
+      int anchor = index;
+      int retval = 0;
+      for (int j = sourceIndex; j < firstFileNextExec; j++) {
+        index = anchor;
+        commandline[index++] = "-o";
+
+        StringBuffer sb = new StringBuffer( FilenameUtils.getBaseName(sourceFiles[j]) );
+        sb.append( sourceFiles[j].hashCode() + ".o" );
+        final String newOutputFileName = sb.toString();
+
+        commandline[index++] = newOutputFileName;
+
+        // for (int k = 0; k < argumentCountPerInputFile; k++) {
+        commandline[index++] = getInputFileArgument(outputDir, sourceFiles[j], 0);
+        // }
+        final int ret = runCommand(task, outputDir, commandline);
+        if (ret != 0) retval = ret;
+      }
+      // final int retval = runCommand(task, outputDir, commandline);
       if (monitor != null) {
         final String[] fileNames = new String[firstFileNextExec - sourceIndex];
 
