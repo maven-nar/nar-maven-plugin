@@ -50,7 +50,7 @@ import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 
 /**
  * Compiles native test source files.
- *
+ * 
  * @author Mark Donszelmann
  */
 @Mojo(name = "nar-testCompile", defaultPhase = LifecyclePhase.TEST_COMPILE,
@@ -162,8 +162,8 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
     }
 
     // add linker
-    final LinkerDef linkerDefinition = getLinker().getTestLinker(this, antProject, getOS(),
-        getAOL().getKey() + ".linker.", type);
+    final LinkerDef linkerDefinition = getLinker().getTestLinker(this, task, getOS(), getAOL().getKey() + ".linker.",
+        type);
     task.addConfiguredLinker(linkerDefinition);
 
     final File includeDir = getLayout().getIncludeDirectory(getTargetDirectory(), getMavenProject().getArtifactId(),

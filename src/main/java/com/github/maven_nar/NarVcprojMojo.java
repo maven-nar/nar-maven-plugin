@@ -159,7 +159,7 @@ public class NarVcprojMojo extends AbstractCompileMojo {
     }
 
     // add linker
-    final LinkerDef linkerDefinition = getLinker().getLinker(this, antProject, getOS(), getAOL().getKey() + ".linker.",
+    final LinkerDef linkerDefinition = getLinker().getLinker(this, task, getOS(), getAOL().getKey() + ".linker.",
         type);
     task.addConfiguredLinker(linkerDefinition);
 
