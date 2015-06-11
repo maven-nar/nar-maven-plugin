@@ -157,14 +157,16 @@ public class NarCompileMojo extends AbstractCompileMojo {
       final CompilerDef idl = getIdl().getCompiler(Compiler.MAIN, null);
       if (idl != null) {
         task.addConfiguredCompiler(idl);
-        task.createIncludePath().setPath(objDir.getPath()); // generated 'sources'
+        task.createIncludePath().setPath(objDir.getPath()); // generated
+                                                            // 'sources'
       }
     }
     if (getMessage() != null) {
       final CompilerDef mc = getMessage().getCompiler(Compiler.MAIN, null);
       if (mc != null) {
         task.addConfiguredCompiler(mc);
-        task.createIncludePath().setPath(objDir.getPath()); // generated 'sources'
+        task.createIncludePath().setPath(objDir.getPath()); // generated
+                                                            // 'sources'
       }
     }
     if (getResource() != null) {
@@ -229,7 +231,11 @@ public class NarCompileMojo extends AbstractCompileMojo {
         if (include.exists()) {
           task.createIncludePath().setPath(include.getPath());
         } else {
-          throw new MojoExecutionException("NAR: unable to locate include path: " + include);
+          // Ideally includes are used from lib (static or shared)
+          // however it's not required.
+          // make a note in the log if something has gone wrong,
+          // but don't block compilation
+          getLog().warn(String.format("Unable to locate %1$s lib include path '%2$s'", binding, include));
         }
       }
     }
