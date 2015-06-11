@@ -101,7 +101,7 @@ public final class TargetMatcher implements FileVisitor {
         // see if the same output file has already been registered
         //
         StringBuffer sb = new StringBuffer( FilenameUtils.removeExtension(outputFileName) );
-        sb.append( fullPath.getAbsolutePath().hashCode() + ".o" );
+        sb.append( fullPath.getAbsolutePath().hashCode() + "." + FilenameUtils.getExtension(outputFileName) );
         String newOutputFileName = sb.toString();
 
         final TargetInfo previousTarget = this.targets.get(newOutputFileName);

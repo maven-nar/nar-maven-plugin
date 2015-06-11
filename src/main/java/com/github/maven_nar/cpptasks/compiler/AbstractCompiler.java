@@ -208,4 +208,8 @@ public abstract class AbstractCompiler extends AbstractProcessor implements Comp
     }
     return false;
   }
+
+  public final String getOutputSuffix() {
+    return this.outputSuffix;
+  }
 }

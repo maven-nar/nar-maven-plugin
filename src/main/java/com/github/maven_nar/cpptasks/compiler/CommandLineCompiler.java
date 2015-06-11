@@ -220,7 +220,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
         commandline[index++] = "-o";
 
         StringBuffer sb = new StringBuffer( FilenameUtils.getBaseName(sourceFiles[j]) );
-        sb.append( sourceFiles[j].hashCode() + ".o" );
+        sb.append( sourceFiles[j].hashCode() + getOutputSuffix());
         final String newOutputFileName = sb.toString();
 
         commandline[index++] = newOutputFileName;
