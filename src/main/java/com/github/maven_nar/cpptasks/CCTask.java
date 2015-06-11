@@ -418,6 +418,10 @@ public class CCTask extends Task {
    */
   public void addEnv(final Environment.Variable var) {
     this.compilerDef.addEnv(var);
+    for (int i = 0; i < this._compilers.size(); i++) {
+        final CompilerDef currentCompilerDef = this._compilers.elementAt(i);
+        currentCompilerDef.addEnv(var);
+      }
     this.linkerDef.addEnv(var);
   }
 
@@ -1587,6 +1591,10 @@ public class CCTask extends Task {
    */
   public void setNewenvironment(final boolean newenv) {
     this.compilerDef.setNewenvironment(newenv);
+    for (int i = 0; i < this._compilers.size(); i++) {
+        final CompilerDef currentCompilerDef = this._compilers.elementAt(i);
+        currentCompilerDef.setNewenvironment(newenv);
+      }
     this.linkerDef.setNewenvironment(newenv);
   }
 

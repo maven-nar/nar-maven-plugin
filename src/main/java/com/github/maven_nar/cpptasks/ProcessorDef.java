@@ -599,6 +599,9 @@ public abstract class ProcessorDef extends DataType {
   public void setNewenvironment(final boolean newenv) {
     this.newEnvironment = newenv;
   }
+  public boolean isNewEnvironment() {
+    return this.newEnvironment;
+  }
 
   /**
    * Sets the processor

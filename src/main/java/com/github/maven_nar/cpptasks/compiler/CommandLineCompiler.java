@@ -192,15 +192,8 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       if (this.libtool) {
         argCount++;
       }
-      if (NarUtil.isWindows()) {
-        argCount += 2;
-      }
       final String[] commandline = new String[argCount];
       int index = 0;
-      if (NarUtil.isWindows()) {
-        commandline[index++] = "cmd";
-        commandline[index++] = "/c";
-      }
       if (this.libtool) {
         commandline[index++] = "libtool";
       }
@@ -393,11 +386,11 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       for (final ProcessorDef baseDef : baseDefs) {
         environment = baseDef.getEnv();
         if (environment != null) {
-          compiler = (CommandLineCompiler) compiler.changeEnvironment(true, environment);
+          compiler = (CommandLineCompiler) compiler.changeEnvironment(baseDef.isNewEnvironment(), environment);
         }
       }
     } else {
-      compiler = (CommandLineCompiler) compiler.changeEnvironment(true, environment);
+      compiler = (CommandLineCompiler) compiler.changeEnvironment(specificDef.isNewEnvironment(), environment);
     }
     return new CommandLineCompilerConfiguration(compiler, configId, incPath, sysIncPath, envIncludePath,
         includePathIdentifier.toString(), argArray, paramArray, rebuild, endArgs, path, specificDef.getCcache());
