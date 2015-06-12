@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.commons.io.FilenameUtils;
 
 import com.github.maven_nar.cpptasks.compiler.LinkerConfiguration;
 import com.github.maven_nar.cpptasks.compiler.ProcessorConfiguration;
@@ -99,10 +100,14 @@ public final class TargetMatcher implements FileVisitor {
         //
         // see if the same output file has already been registered
         //
-        final TargetInfo previousTarget = this.targets.get(outputFileName);
+        StringBuffer sb = new StringBuffer(FilenameUtils.removeExtension(outputFileName));
+        sb.append("." + fullPath.getAbsolutePath().hashCode() + "." + FilenameUtils.getExtension(outputFileName) );
+        String newOutputFileName = sb.toString();
+
+        final TargetInfo previousTarget = this.targets.get(newOutputFileName);
         if (previousTarget == null) {
-          this.targets.put(outputFileName, new TargetInfo(selectedCompiler, this.sourceFiles, null, new File(
-              this.outputDir, outputFileName), selectedCompiler.getRebuild()));
+          this.targets.put(newOutputFileName, new TargetInfo(selectedCompiler, this.sourceFiles, null, new File(
+              this.outputDir, newOutputFileName), selectedCompiler.getRebuild()));
         } else {
           if (!previousTarget.getSources()[0].equals(this.sourceFiles[0])) {
             final StringBuffer builder = new StringBuffer("Output filename conflict: ");

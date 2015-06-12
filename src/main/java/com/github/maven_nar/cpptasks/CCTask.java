@@ -37,6 +37,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Environment;
+import org.apache.commons.io.FilenameUtils;
 
 import com.github.maven_nar.cpptasks.compiler.CompilerConfiguration;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
@@ -1169,6 +1170,9 @@ public class CCTask extends Task {
         // breaks multi compilers like resource/midl if same basename as c/cpp
         // so moved the comparison to above to avoid trimming the extension if
         // there is no order, which half fixes the issue.
+
+        f0 = FilenameUtils.getBaseName(f0);
+        f1 = FilenameUtils.getBaseName(f1);
 
         f0 = f0.lastIndexOf('.') < 0 ? f0 : f0.substring(0, f0.lastIndexOf('.'));
         f1 = f1.lastIndexOf('.') < 0 ? f1 : f1.substring(0, f1.lastIndexOf('.'));

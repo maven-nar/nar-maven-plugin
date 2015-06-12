@@ -26,6 +26,7 @@ import java.util.Vector;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Environment;
+import org.apache.commons.io.FilenameUtils;
 
 import com.github.maven_nar.NarUtil;
 import com.github.maven_nar.cpptasks.CCTask;
@@ -38,6 +39,7 @@ import com.github.maven_nar.cpptasks.TargetDef;
 import com.github.maven_nar.cpptasks.VersionInfo;
 import com.github.maven_nar.cpptasks.types.CommandLineArgument;
 import com.github.maven_nar.cpptasks.types.UndefineArgument;
+import com.github.maven_nar.cpptasks.compiler.CommandLineCCompiler;
 import com.google.common.collect.ObjectArrays;
 
 /**
@@ -188,12 +190,16 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       if (firstFileNextExec == sourceIndex) {
         throw new BuildException("Extremely long file name, can't fit on command line");
       }
-      int argCount = args.length + 1 + endArgs.length + (firstFileNextExec - sourceIndex) * argumentCountPerInputFile;
+
+      // int argCount = args.length + 1 + endArgs.length + (firstFileNextExec - sourceIndex) * argumentCountPerInputFile;
+      int argCount = args.length + 3 + endArgs.length + 1;
+
       if (this.libtool) {
         argCount++;
       }
       if (NarUtil.isWindows()) {
-        argCount += 2;
+        argCount += 2; // cmd /c
+        argCount -= 1; // /Fo
       }
       final String[] commandline = new String[argCount];
       int index = 0;
@@ -208,15 +214,32 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       for (final String arg : args) {
         commandline[index++] = arg;
       }
+
+      final int anchor = index;
+      int retval = 0;
       for (int j = sourceIndex; j < firstFileNextExec; j++) {
+        index = anchor;
+
+        StringBuffer sb = new StringBuffer( FilenameUtils.getBaseName(sourceFiles[j]) );
+        sb.append( "." + sourceFiles[j].hashCode() + getOutputSuffix());
+        final String newOutputFileName = sb.toString();
+
+        if (NarUtil.isWindows()) {
+          commandline[index++] = "/Fo" + newOutputFileName;
+        } else {
+          commandline[index++] = "-o";
+          commandline[index++] = newOutputFileName;
+        }
         for (int k = 0; k < argumentCountPerInputFile; k++) {
           commandline[index++] = getInputFileArgument(outputDir, sourceFiles[j], k);
         }
+        for (final String endArg : endArgs) {
+          commandline[index++] = endArg;
+        }
+
+        final int ret = runCommand(task, outputDir, commandline);
+        if (ret != 0) { retval = ret; }
       }
-      for (final String endArg : endArgs) {
-        commandline[index++] = endArg;
-      }
-      final int retval = runCommand(task, outputDir, commandline);
       if (monitor != null) {
         final String[] fileNames = new String[firstFileNextExec - sourceIndex];
 
