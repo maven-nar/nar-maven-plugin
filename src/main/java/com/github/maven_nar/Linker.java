@@ -300,7 +300,8 @@ public class Linker {
 
     // FIXME, this should be done in CPPTasks at some point, and may not be
     // necessary, but was for VS 2010 beta 2
-    if (os.equals(OS.WINDOWS) && getName(null, null).equals("msvc") && !getVersion(mojo).startsWith("6.")) {
+    if (os.equals(OS.WINDOWS) && getName(null, null).equals("msvc") && !getVersion(mojo).startsWith("6.")
+        && (type.equals(Library.SHARED) || type.equals(Library.JNI)|| type.equals(Library.EXECUTABLE))) {
       final LinkerArgument arg = new LinkerArgument();
       if (isGenerateManifest())
         arg.setValue("/MANIFEST");
