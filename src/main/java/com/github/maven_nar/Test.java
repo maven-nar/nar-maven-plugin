@@ -52,6 +52,14 @@ public class Test implements Executable {
   private boolean run = true;
 
   /**
+   * Type of the library to generate. 
+   * Possible choices are: "shared", "static" or "executable".
+   * Defaults to "executable".
+   */
+  @Parameter
+  private String type = Library.EXECUTABLE;
+  
+  /**
    * Arguments to be used for running this test. Defaults to empty list. This
    * option is only used if run=true.
    */
@@ -72,6 +80,10 @@ public class Test implements Executable {
       throw new MojoFailureException("NAR: Please specify <Name> as part of <Test>");
     }
     return this.name;
+  }
+
+  public String getType() {
+    return this.type;
   }
 
   @Override

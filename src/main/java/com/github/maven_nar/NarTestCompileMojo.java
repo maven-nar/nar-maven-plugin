@@ -77,7 +77,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
 
     // outtype
     final OutputTypeEnum outTypeEnum = new OutputTypeEnum();
-    outTypeEnum.setValue(Library.EXECUTABLE);
+    outTypeEnum.setValue(test.getType());
     task.setOuttype(outTypeEnum);
 
     // outDir
