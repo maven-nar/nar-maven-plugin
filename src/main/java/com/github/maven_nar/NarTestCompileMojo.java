@@ -138,6 +138,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
     getMsvc().configureCCTask(this, task);
 
     List depLibs = getNarArtifacts();
+    
     // add dependency include paths
     for (final Iterator i = depLibs.iterator(); i.hasNext();) {
       final Artifact artifact = (Artifact) i.next();
@@ -169,8 +170,9 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
     final File includeDir = getLayout().getIncludeDirectory(getTargetDirectory(), getMavenProject().getArtifactId(),
         getMavenProject().getVersion());
 
+    String linkType = test.getLink( getLibraries() );
     final File libDir = getLayout().getLibDirectory(getTargetDirectory(), getMavenProject().getArtifactId(),
-        getMavenProject().getVersion(), getAOL().toString(), test.getLink());
+        getMavenProject().getVersion(), getAOL().toString(), linkType);
 
     // copy shared library
     // FIXME why do we do this ?
@@ -222,7 +224,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
       getLog().debug("Searching for parent to link with " + libs);
       libSet.setLibs(new CUtil.StringArrayBuilder(libs));
       final LibraryTypeEnum libType = new LibraryTypeEnum();
-      libType.setValue(test.getLink());
+      libType.setValue(linkType);
       libSet.setType(libType);
       libSet.setDir(libDir);
       task.addLibset(libSet);
