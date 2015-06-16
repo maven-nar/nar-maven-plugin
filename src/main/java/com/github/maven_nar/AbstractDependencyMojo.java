@@ -217,12 +217,15 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     final List<NarArtifact> narDependencies = new LinkedList<NarArtifact>();
     for (final Object element : getArtifacts()) {
       final Artifact dependency = (Artifact) element;
-      getLog().debug("Examining artifact for NarInfo: " + dependency);
 
-      final NarInfo narInfo = getNarInfo(dependency);
-      if (narInfo != null) {
-        getLog().debug("    - added as NarDependency");
-        narDependencies.add(new NarArtifact(dependency, narInfo));
+      if ("nar".equalsIgnoreCase(dependency.getType())) {
+        getLog().debug("Examining artifact for NarInfo: " + dependency);
+
+        final NarInfo narInfo = getNarInfo(dependency);
+        if (narInfo != null) {
+          getLog().debug("    - added as NarDependency");
+          narDependencies.add(new NarArtifact(dependency, narInfo));
+        }
       }
     }
     getLog().debug("Dependencies contained " + narDependencies.size() + " NAR artifacts.");
