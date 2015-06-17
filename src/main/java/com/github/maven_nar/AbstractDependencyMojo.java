@@ -66,6 +66,38 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
   protected List remoteArtifactRepositories;
 
   /**
+   * Comma separated list of Artifact names to exclude.
+   * 
+   * @since 2.0
+   */
+  @Parameter(property = "excludeArtifactIds", defaultValue = "")
+  protected String excludeArtifactIds;
+
+  /**
+   * Comma separated list of Artifact names to include.
+   * 
+   * @since 2.0
+   */
+  @Parameter(property = "includeArtifactIds", defaultValue = "")
+  protected String includeArtifactIds;
+
+  /**
+   * Comma separated list of GroupId Names to exclude.
+   * 
+   * @since 2.0
+   */
+  @Parameter(property = "excludeGroupIds", defaultValue = "")
+  protected String excludeGroupIds;
+
+  /**
+   * Comma separated list of GroupIds to include.
+   * 
+   * @since 2.0
+   */
+  @Parameter(property = "includeGroupIds", defaultValue = "")
+  protected String includeGroupIds;
+
+  /**
    * To look up Archiver/UnArchiver implementations
    */
   @Component(role = org.codehaus.plexus.archiver.manager.ArchiverManager.class)
@@ -232,6 +264,12 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
 
     FilterArtifacts filter = new FilterArtifacts();
 
+    filter.addFilter(new GroupIdFilter(cleanToBeTokenizedString(this.includeGroupIds),
+        cleanToBeTokenizedString(this.excludeGroupIds)));
+
+    filter.addFilter(new ArtifactIdFilter(cleanToBeTokenizedString(this.includeArtifactIds),
+        cleanToBeTokenizedString(this.excludeArtifactIds)));
+
     filter.addFilter(getArtifactScopeFilter());
 
     @SuppressWarnings("unchecked")
@@ -337,4 +375,16 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     }
   }
 
+  //
+  // clean up configuration string before it can be tokenized
+  //
+  private static String cleanToBeTokenizedString(String str) {
+    String ret = "";
+    if (!StringUtils.isEmpty(str)) {
+      // remove initial and ending spaces, plus all spaces next to commas
+      ret = str.trim().replaceAll("[\\s]*,[\\s]*", ",");
+    }
+
+    return ret;
+  }
 }
