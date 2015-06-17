@@ -37,6 +37,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.codehaus.plexus.util.FileUtils;
@@ -391,21 +392,8 @@ public class NarCompileMojo extends AbstractCompileMojo {
    * compilation and to get the libraries paths and names needed for linking.
    */
   @Override
-  protected List<Artifact> getArtifacts() {
-    try {
-      final List<String> scopes = new ArrayList<String>();
-      scopes.add(Artifact.SCOPE_COMPILE);
-      scopes.add(Artifact.SCOPE_PROVIDED);
-      // scopes.add(Artifact.SCOPE_RUNTIME);
-      scopes.add(Artifact.SCOPE_SYSTEM);
-      // scopes.add(Artifact.SCOPE_TEST);
-      return getNarManager().getDependencies(scopes);
-    } catch (final MojoExecutionException e) {
-      e.printStackTrace();
-    } catch (final MojoFailureException e) {
-      e.printStackTrace();
-    }
-    return Collections.EMPTY_LIST;
+  protected ScopeFilter getArtifactScopeFilter() {
+    return new ScopeFilter(Artifact.SCOPE_COMPILE, null);
   }
 
   private List getSourcesFor(final Compiler compiler) throws MojoFailureException, MojoExecutionException {

@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.jar.JarFile;
 
 import org.apache.maven.artifact.Artifact;
@@ -36,7 +37,13 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.shared.artifact.filter.collection.ArtifactFilterException;
+import org.apache.maven.shared.artifact.filter.collection.ArtifactIdFilter;
+import org.apache.maven.shared.artifact.filter.collection.FilterArtifacts;
+import org.apache.maven.shared.artifact.filter.collection.GroupIdFilter;
+import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author Mark Donszelmann
@@ -123,7 +130,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
    * 
    * @return Artifacts
    */
-  protected abstract List<Artifact> getArtifacts();
+  protected abstract ScopeFilter getArtifactScopeFilter();
 
   /**
    * Returns the attached NAR Artifacts (AOL and noarch artifacts) from the NAR
@@ -222,7 +229,22 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
    */
   public final List<NarArtifact> getNarArtifacts() throws MojoExecutionException {
     final List<NarArtifact> narDependencies = new LinkedList<NarArtifact>();
-    for (final Object element : getArtifacts()) {
+
+    FilterArtifacts filter = new FilterArtifacts();
+
+    filter.addFilter(getArtifactScopeFilter());
+
+    @SuppressWarnings("unchecked")
+    Set<Artifact> artifacts = getMavenProject().getArtifacts();
+
+    // perform filtering
+    try {
+      artifacts = filter.filter(artifacts);
+    } catch (ArtifactFilterException e) {
+      throw new MojoExecutionException(e.getMessage(), e);
+    }
+
+    for (final Object element : artifacts) {
       final Artifact dependency = (Artifact) element;
 
       if ("nar".equalsIgnoreCase(dependency.getType())) {

@@ -23,16 +23,15 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
 
 /**
  * Adds the ability to run arbitrary command line tools to post-process the
@@ -56,8 +55,8 @@ public class NarProcessLibraries extends AbstractCompileMojo {
    * The method must be implemented but will not be called.
    */
   @Override
-  protected List<Artifact> getArtifacts() {
-    return Collections.EMPTY_LIST;
+  protected ScopeFilter getArtifactScopeFilter() {
+    return null;
   }
 
   @Override

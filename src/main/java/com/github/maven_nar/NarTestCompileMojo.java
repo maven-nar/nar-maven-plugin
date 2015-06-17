@@ -20,8 +20,6 @@
 package com.github.maven_nar;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,6 +31,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 
@@ -348,21 +347,9 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
    * linking.
    */
   @Override
-  protected List<Artifact> getArtifacts() {
-    try {
-      final List<String> scopes = new ArrayList<String>();
-      scopes.add(Artifact.SCOPE_COMPILE);
-      scopes.add(Artifact.SCOPE_PROVIDED);
-      // scopes.add(Artifact.SCOPE_RUNTIME);
-      scopes.add(Artifact.SCOPE_SYSTEM);
-      scopes.add(Artifact.SCOPE_TEST);
-      return getNarManager().getDependencies(scopes);
-    } catch (final MojoExecutionException e) {
-      e.printStackTrace();
-    } catch (final MojoFailureException e) {
-      e.printStackTrace();
-    }
-    return Collections.EMPTY_LIST;
+  protected ScopeFilter getArtifactScopeFilter() {
+    // Was Artifact.SCOPE_TEST  - runtime??
+    return new ScopeFilter( Artifact.SCOPE_TEST, null );
   }
 
   @Override
