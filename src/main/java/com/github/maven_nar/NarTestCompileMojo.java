@@ -135,7 +135,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
     // add java include paths
     getJava().addIncludePaths(task, type);
 
-    getMsvc().configureCCTask(this, task);
+    getMsvc().configureCCTask(task);
 
     List depLibs = getNarArtifacts();
     

@@ -80,7 +80,7 @@ public class Msvc {
     return version1.replace(".", "").compareTo(version2.replace(".", ""));
   }
 
-  public void configureCCTask(final AbstractNarMojo mojo, final CCTask task) throws MojoExecutionException {
+  public void configureCCTask(final CCTask task) throws MojoExecutionException {
     final String os = mojo.getOS();
     if (os.equals(OS.WINDOWS)) {
       addIncludePath(task, this.home, "VC/include");
@@ -112,7 +112,7 @@ public class Msvc {
     }
   }
 
-  public void configureLinker(final AbstractNarMojo mojo, final LinkerDef linker) throws MojoExecutionException {
+  public void configureLinker(final LinkerDef linker) throws MojoExecutionException {
     final String os = mojo.getOS();
     if (os.equals(OS.WINDOWS)) {
       final String arch = mojo.getArchitecture();
