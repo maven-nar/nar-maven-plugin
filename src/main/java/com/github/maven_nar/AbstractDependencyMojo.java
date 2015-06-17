@@ -95,13 +95,20 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
       throws MojoExecutionException, MojoFailureException {
     final List<AttachedNarArtifact> artifactList = new ArrayList<AttachedNarArtifact>();
     for (NarArtifact dependency : narArtifacts) {
-      final String binding = getBinding(/* library, */dependency);
+      if ("NAR".equalsIgnoreCase(getMavenProject().getPackaging())) {
+        final String binding = getBinding(/* library, */dependency);
 
-      // TODO: dependency.getFile(); find out what the stored pom says
-      // about this - what nars should exist, what layout are they
-      // using...
-      artifactList.addAll(getAttachedNarArtifacts(dependency, /* library. */
-          getAOL(), binding));
+        // TODO: dependency.getFile(); find out what the stored pom says
+        // about this - what nars should exist, what layout are they
+        // using...
+        artifactList.addAll(getAttachedNarArtifacts(dependency, /* library. */
+            getAOL(), binding));
+      } else {
+        artifactList.addAll(getAttachedNarArtifacts(dependency, getAOL(), Library.EXECUTABLE));
+        artifactList.addAll(getAttachedNarArtifacts(dependency, getAOL(), Library.SHARED));
+        artifactList.addAll(getAttachedNarArtifacts(dependency, getAOL(), Library.JNI));
+        artifactList.addAll(getAttachedNarArtifacts(dependency, getAOL(), Library.STATIC));
+      }
       artifactList.addAll(getAttachedNarArtifacts(dependency, null, NarConstants.NAR_NO_ARCH));
     }
     return artifactList;
