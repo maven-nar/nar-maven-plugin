@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Vector;
+import java.util.ArrayList;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Environment;
@@ -191,53 +192,44 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
         throw new BuildException("Extremely long file name, can't fit on command line");
       }
 
-      // int argCount = args.length + 1 + endArgs.length + (firstFileNextExec - sourceIndex) * argumentCountPerInputFile;
-      int argCount = args.length + 3 + endArgs.length + 1;
-
-      if (this.libtool) {
-        argCount++;
-      }
+      ArrayList<String> commandlinePrefix = new ArrayList<String>();
       if (NarUtil.isWindows()) {
-        argCount += 2; // cmd /c
-        argCount -= 1; // /Fo
-      }
-      final String[] commandline = new String[argCount];
-      int index = 0;
-      if (NarUtil.isWindows()) {
-        commandline[index++] = "cmd";
-        commandline[index++] = "/c";
+        commandlinePrefix.add("cmd");
+        commandlinePrefix.add("/c");
       }
       if (this.libtool) {
-        commandline[index++] = "libtool";
+        commandlinePrefix.add("libtool");
       }
-      commandline[index++] = command;
+      commandlinePrefix.add(command);
       for (final String arg : args) {
-        commandline[index++] = arg;
+        commandlinePrefix.add(arg);
       }
 
-      final int anchor = index;
       int retval = 0;
       for (int j = sourceIndex; j < firstFileNextExec; j++) {
-        index = anchor;
+        ArrayList<String> commandlineSuffix = new ArrayList<String>();
 
         StringBuffer sb = new StringBuffer( FilenameUtils.getBaseName(sourceFiles[j]) );
         sb.append( "." + sourceFiles[j].hashCode() + getOutputSuffix());
         final String newOutputFileName = sb.toString();
 
         if (NarUtil.isWindows()) {
-          commandline[index++] = "/Fo" + newOutputFileName;
+          commandlineSuffix.add("/Fo" + newOutputFileName);
         } else {
-          commandline[index++] = "-o";
-          commandline[index++] = newOutputFileName;
+          commandlineSuffix.add("-o");
+          commandlineSuffix.add(newOutputFileName);
         }
         for (int k = 0; k < argumentCountPerInputFile; k++) {
-          commandline[index++] = getInputFileArgument(outputDir, sourceFiles[j], k);
+          commandlineSuffix.add(getInputFileArgument(outputDir, sourceFiles[j], k));
         }
         for (final String endArg : endArgs) {
-          commandline[index++] = endArg;
+          commandlineSuffix.add(endArg);
         }
 
-        final int ret = runCommand(task, outputDir, commandline);
+        ArrayList<String> commandline = new ArrayList<String>(commandlinePrefix);
+        commandline.addAll(commandlineSuffix);
+        final int ret = runCommand(task, outputDir,
+            commandline.toArray(new String[commandline.size()]));
         if (ret != 0) { retval = ret; }
       }
       if (monitor != null) {
