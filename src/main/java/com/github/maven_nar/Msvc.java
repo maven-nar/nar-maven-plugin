@@ -76,7 +76,7 @@ public class Msvc {
     return false;
   }
 
-  private int compareVersion(final String version1, final String version2) {
+  public int compareVersion(final String version1, final String version2) {
     return version1.replace(".", "").compareTo(version2.replace(".", ""));
   }
 

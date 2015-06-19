@@ -377,7 +377,17 @@ public class NarCompileMojo extends AbstractCompileMojo {
             }
           }
           String[] commandlineArgsArray = commandlineArgs.toArray(new String[0]);
-          int result = NarUtil.runCommand("mt.exe", commandlineArgsArray, null, null, getLog());
+          String mtexe = "mt.exe";
+          if (getMsvc().compareVersion( getMsvc().getWindowsSdkVersion(),"7.0")<0 && getLinker().getVersion(this).startsWith("8.")) { // VS2005 VC8 only one that includes mt.exe
+            File mtexeFile = new File(getMsvc().getToolPath(), mtexe);
+            if (mtexeFile.exists())
+              mtexe = mtexeFile.getAbsolutePath();
+          } else {
+            File mtexeFile = new File(getMsvc().getSDKToolPath(), mtexe);
+            if (mtexeFile.exists())
+              mtexe = mtexeFile.getAbsolutePath();
+          }
+          int result = NarUtil.runCommand(mtexe, commandlineArgsArray, null, null, getLog());
           if (result != 0) {
             throw new MojoFailureException("MT.EXE failed with exit code: " + result);
           }
