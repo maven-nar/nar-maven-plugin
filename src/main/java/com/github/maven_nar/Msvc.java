@@ -238,13 +238,14 @@ public class Msvc {
   }
 
   private void initVisualStudio() throws MojoFailureException, MojoExecutionException {
+    mojo.getLog().debug(" -- Searching for usable VisualStudio ");
     if (this.version != null && this.version.trim().length() > 1) {
       String internalVersion;
-      if (this.version.matches("\\d\\d.\\d")) {
-        internalVersion = this.version.substring(0, 2) + this.version.substring(3, 4);
-      } else if (this.version.matches("\\d\\d\\d")) {
-        internalVersion = this.version;
-        this.version = internalVersion.substring(0, 2) + "." + internalVersion.substring(2, 3);
+      Pattern r = Pattern.compile("(\\d+)\\.*(\\d)");
+      Matcher matcher = r.matcher(this.version);
+      if (matcher.find()) {
+        internalVersion = matcher.group(1) + matcher.group(2);
+        this.version = matcher.group(1) + "." + matcher.group(2);
       } else {
         throw new MojoExecutionException("msvc.version must be the internal version in the form 10.0 or 120");
       }
@@ -260,29 +261,30 @@ public class Msvc {
         // able to acccess - HKLM\SOFTWARE\Microsoft\Visual
         // Studio\Major.Minor:InstallDir
       }
+      mojo.getLog().debug(
+          String.format(" VisualStudio %1s (%2s) found %3s ", this.version, internalVersion, this.home));
     } else {
-      String maxVersion = "";
+      this.version = "";
       File home = null;
       for (final Entry<String, String> entry : System.getenv().entrySet()) {
         final String key = entry.getKey();
         final String value = entry.getValue();
-        final Pattern versionPattern = Pattern.compile("VS(\\d\\d\\d)COMNTOOLS");
+        final Pattern versionPattern = Pattern.compile("VS(\\d+)(\\d)COMNTOOLS");
         final Matcher matcher = versionPattern.matcher(key);
         if (matcher.matches()) {
-          final String version = matcher.group(1);
-          if (version.compareTo(maxVersion) > 0) {
+          final String version = matcher.group(1) + "." + matcher.group(2);
+          if (version.compareTo(this.version) > 0) {
             final File commonToolsDirectory = new File(value);
             if (commonToolsDirectory.exists()) {
-              maxVersion = version;
-              home = commonToolsDirectory.getParentFile().getParentFile();
+              this.version = version;
+              this.home = commonToolsDirectory.getParentFile().getParentFile();
+              mojo.getLog().debug(
+                  String.format(" VisualStudio %1s (%2s) found %3s ", this.version, matcher.group(1) + matcher.group(2), this.home));
             }
           }
         }
       }
-      if (this.home == null) {
-        this.home = home;
-      }
-      if (maxVersion.length() == 0) {
+      if (this.version.length() == 0) {
         final TextStream out = new StringTextStream();
         final TextStream err = new StringTextStream();
         final TextStream dbg = new StringTextStream();
@@ -290,16 +292,16 @@ public class Msvc {
         NarUtil.runCommand("link", new String[] {
           "/?"
         }, null, null, out, err, dbg, null, true);
-        final Pattern p = Pattern.compile("\\d+\\.\\d+\\.\\d+(\\.\\d+)?");
+        final Pattern p = Pattern.compile("(\\d+\\.\\d+)\\.\\d+(\\.\\d+)?");
         final Matcher m = p.matcher(out.toString());
         if (m.find()) {
-          this.version = m.group(0);
+          this.version = m.group(1);
+          mojo.getLog().debug(
+              String.format(" VisualStudio Not found but link runs and reports version %1s (%2s)", this.version, m.group(0)));
         } else {
           throw new MojoExecutionException(
               "msvc.version not specified and no VS<Version>COMNTOOLS environment variable can be found");
         }
-      } else {
-        this.version = maxVersion.substring(0, 2) + "." + maxVersion.substring(2, 3);
       }
     }
   }
@@ -311,6 +313,7 @@ public class Msvc {
     }
     String maxVersion = "";
     File home = null;
+    mojo.getLog().debug(" -- Searching for usable WindowSDK ");
     for (final File directory : Arrays.asList(new File("C:/Program Files (x86)/Microsoft SDKs/Windows"), new File(
         "C:/Program Files (x86)/Windows Kits"))) {
       if (directory.exists()) {
@@ -322,13 +325,16 @@ public class Msvc {
               if (kitVersion.charAt(0) == 'v') {
                 kitVersion = kitVersion.substring(1);
               }
-              if (kitVersion.matches("\\d+.\\d+[A-Z]?")) {
+              mojo.getLog().debug(String.format(" WindowSDK %1s found %2s",kitVersion,kitDirectory.getAbsolutePath()));
+              if (kitVersion.matches("\\d+\\.\\d+[A-Z]?")) {
                 if (this.windowsSdkVersion.length() == 0) {
                   if (compareVersion(kitVersion, maxVersion) > 0) {
                     maxVersion = kitVersion;
                     home = kitDirectory;
                   }
                 } else {
+                  // TODO: is it acceptable to be sloppy - msvc installs 'A' version, windows platform sdk installs more complete
+                  // if (this.windowsSdkVersion.startsWith(kitVersion)) {  
                   if (kitVersion.equals(this.windowsSdkVersion)) {
                     maxVersion = this.windowsSdkVersion;
                     home = kitDirectory;
@@ -347,6 +353,7 @@ public class Msvc {
       throw new MojoExecutionException("msvc.windowsSdkVersion not specified and versions can be found");
     }
     this.windowsSdkVersion = maxVersion;
+    mojo.getLog().debug(String.format(" Using WindowSDK %1s found %2s",this.windowsSdkVersion,this.windowsSdkHome));
   }
 
   public void setMojo(final AbstractNarMojo mojo) throws MojoFailureException, MojoExecutionException {
