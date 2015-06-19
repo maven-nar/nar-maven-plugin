@@ -117,8 +117,6 @@ public class Msvc {
     if (os.equals(OS.WINDOWS)) {
       final String arch = mojo.getArchitecture();
 
-      linker.setToolPath(this.toolPathLinker);
-
       // Visual Studio
       if ("x86".equals(arch)) {
         linker.addLibraryDirectory(this.home, "VC/lib");
@@ -363,6 +361,8 @@ public class Msvc {
     return this.home + "\n" + this.windowsSdkHome;
   }
 
+  public String getToolPath() {return this.toolPathLinker;}
+  public String getSDKToolPath() {return this.toolPathWindowsSDK;}
   public void setToolPath(CompilerDef compilerDef, String name) {
     if ("res".equals(name) || "mc".equals(name) || "idl".equals(name)) {
       compilerDef.setToolPath(this.toolPathWindowsSDK);

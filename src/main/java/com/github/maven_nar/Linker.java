@@ -244,6 +244,8 @@ public class Linker {
     // tool path
     if (this.toolPath != null) {
       linker.setToolPath(this.toolPath);
+    } else {
+      linker.setToolPath(mojo.getMsvc().getToolPath());
     }
 
     // incremental, map
