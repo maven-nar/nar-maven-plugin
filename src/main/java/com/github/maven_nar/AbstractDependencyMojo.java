@@ -247,6 +247,11 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
       return null;
     }
 
+    if (!dependency.getType().equals("jar") && !dependency.getType().equals("nar")) {
+       getLog().debug("Skipping unreadable artifact: " + file);
+       return null;
+    }
+
     JarFile jar = null;
     try {
       jar = new JarFile(file);
