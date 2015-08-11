@@ -20,11 +20,16 @@
 package com.github.maven_nar;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.jar.JarFile;
+import java.util.zip.ZipException;
+import java.util.zip.ZipInputStream;
+import org.apache.commons.io.IOUtils;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -247,6 +252,19 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
       return null;
     }
 
+    ZipInputStream zipStream = null;
+    try {
+      zipStream = new ZipInputStream(new FileInputStream(file));
+      if (zipStream.getNextEntry() == null) {
+        getLog().debug("Skipping unreadable artifact: " + file);
+        return null;
+      }
+    } catch (IOException e) {
+      throw new MojoExecutionException("Error while testing for zip file " + file, e);
+    } finally {
+      IOUtils.closeQuietly(zipStream);
+    }
+
     JarFile jar = null;
     try {
       jar = new JarFile(file);
@@ -261,13 +279,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     } catch (final IOException e) {
       throw new MojoExecutionException("Error while reading " + file, e);
     } finally {
-      if (jar != null) {
-        try {
-          jar.close();
-        } catch (final IOException e) {
-          // ignore
-        }
-      }
+      IOUtils.closeQuietly(jar);
     }
   }
 
