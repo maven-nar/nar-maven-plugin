@@ -394,15 +394,8 @@ public abstract class CommandLineLinker extends AbstractLinker {
     if (this.isLibtool) {
       allArgsCount++;
     }
-    if (NarUtil.isWindows()) {
-      allArgsCount += 2;
-    }
     final String[] allArgs = new String[allArgsCount];
     int index = 0;
-    if (NarUtil.isWindows()) {
-      allArgs[index++] = "cmd";
-      allArgs[index++] = "/c";
-    }
     if (this.isLibtool) {
       allArgs[index++] = "libtool";
     }

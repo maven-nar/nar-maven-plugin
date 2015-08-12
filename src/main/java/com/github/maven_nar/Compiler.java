@@ -276,6 +276,8 @@ public abstract class Compiler {
     // tool path
     if (this.toolPath != null) {
       compilerDef.setToolPath(this.toolPath);
+    } else {
+      mojo.getMsvc().setToolPath(compilerDef,getLanguage());
     }
 
     // debug, exceptions, rtti, multiThreaded

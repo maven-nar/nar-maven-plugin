@@ -21,8 +21,6 @@ package com.github.maven_nar;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
@@ -31,6 +29,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
 import org.codehaus.plexus.util.FileUtils;
 
 /**
@@ -45,21 +44,10 @@ public class NarAssemblyMojo extends AbstractDependencyMojo {
    * List the dependencies we want to assemble
    */
   @Override
-  protected List<Artifact> getArtifacts() {
-    try {
-      final List<String> scopes = new ArrayList<String>();
-      scopes.add(Artifact.SCOPE_COMPILE);
-      scopes.add(Artifact.SCOPE_PROVIDED);
-      scopes.add(Artifact.SCOPE_RUNTIME);
-      // scopes.add(Artifact.SCOPE_SYSTEM);
-      // scopes.add(Artifact.SCOPE_TEST);
-      return getNarManager().getDependencies(scopes);
-    } catch (final MojoExecutionException e) {
-      e.printStackTrace();
-    } catch (final MojoFailureException e) {
-      e.printStackTrace();
-    }
-    return Collections.EMPTY_LIST;
+  protected ScopeFilter getArtifactScopeFilter() {
+    // Was Artifact.SCOPE_RUNTIME  + provided?
+    // Think Provided isn't appropriate in Assembly - otherwise it isn't provided.
+    return new ScopeFilter( Artifact.SCOPE_RUNTIME, null );
   }
 
   /**
