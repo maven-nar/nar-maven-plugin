@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -212,20 +213,20 @@ public class CCTask extends Task {
    * Builds a Hashtable to targets needing to be rebuilt keyed by compiler
    * configuration
    */
-  public static Map<ProcessorConfiguration, Vector<TargetInfo>> getTargetsToBuildByConfiguration(
+  public static Map<CompilerConfiguration, Vector<TargetInfo>> getTargetsToBuildByConfiguration(
       final Map<String, TargetInfo> targets) {
-    final Map<ProcessorConfiguration, Vector<TargetInfo>> targetsByConfig = new HashMap<ProcessorConfiguration, Vector<TargetInfo>>();
+    final Map<CompilerConfiguration, Vector<TargetInfo>> targetsByConfig = new HashMap<CompilerConfiguration, Vector<TargetInfo>>();
     final Iterator<TargetInfo> targetEnum = targets.values().iterator();
     while (targetEnum.hasNext()) {
       final TargetInfo target = targetEnum.next();
       if (target.getRebuild()) {
-        Vector<TargetInfo> targetsForSameConfig = targetsByConfig.get(target.getConfiguration());
+        Vector<TargetInfo> targetsForSameConfig = targetsByConfig.get((CompilerConfiguration)target.getConfiguration());
         if (targetsForSameConfig != null) {
           targetsForSameConfig.addElement(target);
         } else {
           targetsForSameConfig = new Vector<TargetInfo>();
           targetsForSameConfig.addElement(target);
-          targetsByConfig.put(target.getConfiguration(), targetsForSameConfig);
+          targetsByConfig.put((CompilerConfiguration)target.getConfiguration(), targetsForSameConfig);
         }
       }
     }
@@ -419,6 +420,10 @@ public class CCTask extends Task {
    */
   public void addEnv(final Environment.Variable var) {
     this.compilerDef.addEnv(var);
+    for (int i = 0; i < this._compilers.size(); i++) {
+        final CompilerDef currentCompilerDef = this._compilers.elementAt(i);
+        currentCompilerDef.addEnv(var);
+      }
     this.linkerDef.addEnv(var);
   }
 
@@ -778,164 +783,38 @@ public class CCTask extends Task {
       //
       // compile all targets with getRebuild() == true
       //
-      final Map<ProcessorConfiguration, Vector<TargetInfo>> targetsByConfig = getTargetsToBuildByConfiguration(targets);
+      final Map<CompilerConfiguration, Vector<TargetInfo>> targetsByConfig = getTargetsToBuildByConfiguration(targets);
       //
       // build array containing Vectors with precompiled generation
       // steps going first
       //
-      final Vector<TargetInfo>[] targetVectors = new Vector[targetsByConfig.size()];
+      final ArrayList<Vector<TargetInfo>> targetVectorsPreComp = new ArrayList<Vector<TargetInfo>>();
+      final ArrayList<Vector<TargetInfo>> targetVectors = new ArrayList<Vector<TargetInfo>>();
+      
       int index = 0;
-      Iterator<Vector<TargetInfo>> targetVectorEnum = targetsByConfig.values().iterator();
+      Iterator<Map.Entry<CompilerConfiguration, Vector<TargetInfo>>> targetVectorEnum = 
+          targetsByConfig.entrySet().iterator();
       while (targetVectorEnum.hasNext()) {
-        final Vector<TargetInfo> targetsForConfig = targetVectorEnum.next();
+        final Map.Entry<CompilerConfiguration, Vector<TargetInfo>> targetsForConfig = targetVectorEnum.next();
         //
         // get the configuration from the first entry
         //
-        final CompilerConfiguration config = (CompilerConfiguration) targetsForConfig.elementAt(0).getConfiguration();
+        final CompilerConfiguration config = targetsForConfig.getKey();
         if (config.isPrecompileGeneration()) {
-          targetVectors[index++] = targetsForConfig;
+          targetVectorsPreComp.add(targetsForConfig.getValue());
+        } else {
+          targetVectors.add(targetsForConfig.getValue());
         }
       }
-      targetVectorEnum = targetsByConfig.values().iterator();
-      while (targetVectorEnum.hasNext()) {
-        final Vector<TargetInfo> targetsForConfig = targetVectorEnum.next();
-        for (int i = 0; i < targetVectors.length; i++) {
-          if (targetVectors[i] == targetsForConfig) {
-            break;
-          }
-          if (targetVectors[i] == null) {
-            targetVectors[i] = targetsForConfig;
-            break;
-          }
-        }
-      }
+
       // BEGINFREEHEP
       final Progress progress = new Progress(getObjdir(), rebuildCount);
       progress.start();
       // ENDFREEHEP
 
-      for (final Vector<TargetInfo> targetsForConfig : targetVectors) {
-        //
-        // get the configuration from the first entry
-        //
-        final CompilerConfiguration config = (CompilerConfiguration) targetsForConfig.elementAt(0).getConfiguration();
-        //
-        // prepare the list of source files
-        //
-
-        // BEGINFREEHEP
-        int noOfCores = Runtime.getRuntime().availableProcessors();
-        log("Found " + noOfCores + " processors available");
-        if (this.maxCores > 0) {
-          noOfCores = Math.min(this.maxCores, noOfCores);
-          log("Limited processors to " + noOfCores);
-        }
-        final int noOfFiles = targetsForConfig.size();
-        if (noOfFiles < noOfCores) {
-          noOfCores = noOfFiles;
-          log("Limited used processors to " + noOfCores);
-        }
-        if (this.ordered) {
-          noOfCores = 1;
-          log("Limited processors to 1 due to ordering of source files");
-        }
-
-        final List<String>[] sourceFiles = new List[noOfCores];
-        for (int j = 0; j < sourceFiles.length; j++) {
-          sourceFiles[j] = new ArrayList<String>(noOfFiles / sourceFiles.length);
-        }
-        final Enumeration<TargetInfo> targetsEnum = targetsForConfig.elements();
-        index = 0;
-        while (targetsEnum.hasMoreElements()) {
-          final TargetInfo targetInfo = targetsEnum.nextElement();
-          sourceFiles[index++].add(targetInfo.getSources()[0].toString());
-          index %= sourceFiles.length;
-        }
-
-        // setup cores/cpus
-        final Core[] cores = new Core[noOfCores];
-        for (int j = 0; j < cores.length; j++) {
-          cores[j] = new Core(this, j, config, this._objDir, sourceFiles[j], this.relentless, monitor);
-          log("\nStarting Core " + j + " with " + sourceFiles[j].size() + " source files...");
-        }
-
-        // starting cores
-        for (final Core core : cores) {
-          core.start();
-        }
-
-        // checking cores
-        boolean alive = false;
-        try {
-          do {
-            alive = false;
-            for (int j = 0; j < cores.length; j++) {
-              if (cores[j] != null) {
-                if (cores[j].isAlive()) {
-                  alive = true;
-                } else {
-                  final Exception exception = cores[j].getException();
-                  if (exception != null) {
-                    if (compileException == null && exception instanceof BuildException) {
-                      compileException = (BuildException) exception;
-                    } else {
-                      log(cores[j].getName() + " " + exception + "                                  ", Project.MSG_ERR);
-                    }
-                    if (!this.relentless) {
-                      cores[j] = null;
-                      alive = false;
-                      break;
-                    }
-                  }
-                  cores[j] = null;
-                }
-              }
-            }
-            if (alive) {
-              // wait for a maximum of 5 seconds or #files*2 seconds.
-              Thread.sleep(Math.min(5000, sourceFiles[0].size() * 2000));
-            }
-          } while (alive);
-        } catch (final InterruptedException e) {
-          break;
-        }
-
-        // killing leftovers
-        for (final Core core : cores) {
-          if (core != null) {
-            core.interrupt();
-            log(core.getName() + " interrupted                                          ");
-          }
-        }
-
-        if (!this.relentless && compileException != null) {
-          break;
-        }
-        // ENDFREEHEP
-
-        /*
-         * OLD CODE
-         * String[] sourceFiles = new String[targetsForConfig.size()];
-         * Enumeration targetsEnum = targetsForConfig.elements();
-         * index = 0;
-         * while (targetsEnum.hasMoreElements()) {
-         * TargetInfo targetInfo = ((TargetInfo) targetsEnum
-         * .nextElement());
-         * sourceFiles[index++] = targetInfo.getSources()[0]
-         * .toString();
-         * }
-         * try {
-         * config.compile(this, _objDir, sourceFiles, relentless,
-         * monitor);
-         * } catch (BuildException ex) {
-         * if (compileException == null) {
-         * compileException = ex;
-         * }
-         * if (!relentless)
-         * break;
-         * }
-         */
-      }
+      compileException = runTargetPool(monitor, compileException, targetVectorsPreComp);
+      if (compileException == null || this.relentless)
+        compileException = runTargetPool(monitor, compileException, targetVectors);
 
       // BEGINFREEHEP
       progress.exit();
@@ -1030,6 +909,134 @@ public class CCTask extends Task {
         }
       }
     }
+  }
+
+  private BuildException runTargetPool(final CCTaskProgressMonitor monitor, BuildException compileException,
+      final ArrayList<Vector<TargetInfo>> targetVectors) {
+    int index;
+    for (final Vector<TargetInfo> targetsForConfig : targetVectors) {
+      //
+      // get the configuration from the first entry
+      //
+      final CompilerConfiguration config = (CompilerConfiguration) targetsForConfig.elementAt(0).getConfiguration();
+      //
+      // prepare the list of source files
+      //
+
+      // BEGINFREEHEP
+      int noOfCores = Runtime.getRuntime().availableProcessors();
+      log("Found " + noOfCores + " processors available");
+      if (this.maxCores > 0) {
+        noOfCores = Math.min(this.maxCores, noOfCores);
+        log("Limited processors to " + noOfCores);
+      }
+      final int noOfFiles = targetsForConfig.size();
+      if (noOfFiles < noOfCores) {
+        noOfCores = noOfFiles;
+        log("Limited used processors to " + noOfCores);
+      }
+      if (this.ordered) {
+        noOfCores = 1;
+        log("Limited processors to 1 due to ordering of source files");
+      }
+
+      final List<String>[] sourceFiles = new List[noOfCores];
+      for (int j = 0; j < sourceFiles.length; j++) {
+        sourceFiles[j] = new ArrayList<String>(noOfFiles / sourceFiles.length);
+      }
+      final Enumeration<TargetInfo> targetsEnum = targetsForConfig.elements();
+      index = 0;
+      while (targetsEnum.hasMoreElements()) {
+        final TargetInfo targetInfo = targetsEnum.nextElement();
+        sourceFiles[index++].add(targetInfo.getSources()[0].toString());
+        index %= sourceFiles.length;
+      }
+
+      // setup cores/cpus
+      final Core[] cores = new Core[noOfCores];
+      for (int j = 0; j < cores.length; j++) {
+        cores[j] = new Core(this, j, config, this._objDir, sourceFiles[j], this.relentless, monitor);
+        log("\nStarting Core " + j + " with " + sourceFiles[j].size() + " source files...");
+      }
+
+      // starting cores
+      for (final Core core : cores) {
+        core.start();
+      }
+
+      // checking cores
+      boolean alive = false;
+      try {
+        do {
+          alive = false;
+          for (int j = 0; j < cores.length; j++) {
+            if (cores[j] != null) {
+              if (cores[j].isAlive()) {
+                alive = true;
+              } else {
+                final Exception exception = cores[j].getException();
+                if (exception != null) {
+                  if (compileException == null && exception instanceof BuildException) {
+                    compileException = (BuildException) exception;
+                  } else {
+                    log(cores[j].getName() + " " + exception + "                                  ", Project.MSG_ERR);
+                  }
+                  if (!this.relentless) {
+                    cores[j] = null;
+                    alive = false;
+                    break;
+                  }
+                }
+                cores[j] = null;
+              }
+            }
+          }
+          if (alive) {
+            // wait for a maximum of 5 seconds or #files*2 seconds.
+            Thread.sleep(Math.min(5000, sourceFiles[0].size() * 2000));
+          }
+        } while (alive);
+      } catch (final InterruptedException e) {
+        break;
+      }
+
+      // killing leftovers
+      for (final Core core : cores) {
+        if (core != null) {
+          core.interrupt();
+          log(core.getName() + " interrupted                                          ");
+        }
+      }
+
+      if (!this.relentless && compileException != null) {
+        break;
+      }
+      // ENDFREEHEP
+
+      /*
+       * OLD CODE
+       * String[] sourceFiles = new String[targetsForConfig.size()];
+       * Enumeration targetsEnum = targetsForConfig.elements();
+       * index = 0;
+       * while (targetsEnum.hasMoreElements()) {
+       * TargetInfo targetInfo = ((TargetInfo) targetsEnum
+       * .nextElement());
+       * sourceFiles[index++] = targetInfo.getSources()[0]
+       * .toString();
+       * }
+       * try {
+       * config.compile(this, _objDir, sourceFiles, relentless,
+       * monitor);
+       * } catch (BuildException ex) {
+       * if (compileException == null) {
+       * compileException = ex;
+       * }
+       * if (!relentless)
+       * break;
+       * }
+       */
+    }
+    return compileException;
   }
 
   // ENDFREEHEP
@@ -1591,6 +1598,10 @@ public class CCTask extends Task {
    */
   public void setNewenvironment(final boolean newenv) {
     this.compilerDef.setNewenvironment(newenv);
+    for (int i = 0; i < this._compilers.size(); i++) {
+        final CompilerDef currentCompilerDef = this._compilers.elementAt(i);
+        currentCompilerDef.setNewenvironment(newenv);
+      }
     this.linkerDef.setNewenvironment(newenv);
   }
 

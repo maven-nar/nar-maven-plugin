@@ -36,6 +36,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.Project;
 import org.codehaus.plexus.util.FileUtils;
 
+import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.CUtil;
 import com.github.maven_nar.cpptasks.LinkerDef;
 import com.github.maven_nar.cpptasks.LinkerEnum;
@@ -46,7 +47,7 @@ import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 
 /**
  * Linker tag
- *
+ * 
  * @author Mark Donszelmann
  */
 public class Linker {
@@ -150,6 +151,13 @@ public class Linker {
   @Parameter
   private String narDependencyLibOrder;
 
+  /**
+   * Specify that the linker should generate an intermediate manifest based on
+   * the inputs.
+   */
+  @Parameter(property = "nar.generateManifest", defaultValue = "true")
+  private boolean generateManifest = true;
+
   private final Log log;
 
   public Linker() {
@@ -213,8 +221,16 @@ public class Linker {
     }
   }
 
-  public final LinkerDef getLinker(final AbstractCompileMojo mojo, final Project antProject, final String os,
+  /**
+   *  
+   **/
+  public boolean isGenerateManifest() {
+    return generateManifest;
+  }
+
+  public final LinkerDef getLinker(final AbstractCompileMojo mojo, final CCTask task, final String os,
       final String prefix, final String type) throws MojoFailureException, MojoExecutionException {
+    Project antProject = task.getProject();
     if (this.name == null) {
       throw new MojoFailureException("NAR: Please specify a <Name> as part of <Linker>");
     }
@@ -228,6 +244,8 @@ public class Linker {
     // tool path
     if (this.toolPath != null) {
       linker.setToolPath(this.toolPath);
+    } else {
+      linker.setToolPath(mojo.getMsvc().getToolPath());
     }
 
     // incremental, map
@@ -284,10 +302,21 @@ public class Linker {
 
     // FIXME, this should be done in CPPTasks at some point, and may not be
     // necessary, but was for VS 2010 beta 2
-    if (os.equals(OS.WINDOWS) && getName(null, null).equals("msvc") && !getVersion(mojo).startsWith("6.")) {
+    if (os.equals(OS.WINDOWS) && getName(null, null).equals("msvc") && !getVersion(mojo).startsWith("6.")
+        && (type.equals(Library.SHARED) || type.equals(Library.JNI) || type.equals(Library.EXECUTABLE))) {
       final LinkerArgument arg = new LinkerArgument();
-      arg.setValue("/MANIFEST");
+      if (isGenerateManifest())
+        arg.setValue("/MANIFEST");
+      else
+        arg.setValue("/MANIFEST:NO");
       linker.addConfiguredLinkerArg(arg);
+
+      if (isGenerateManifest()) {
+        final LinkerArgument arg2 = new LinkerArgument();
+        arg2.setValue("/MANIFESTFILE:" + task.getOutfile() + ".manifest");
+        linker.addConfiguredLinkerArg(arg2);
+      }
+
     }
 
     // Add options to linker
@@ -382,7 +411,7 @@ public class Linker {
       addLibraries(sysLibsList, linker, antProject, true);
     }
 
-    mojo.getMsvc().configureLinker(mojo, linker);
+    mojo.getMsvc().configureLinker(linker);
 
     return linker;
   }
@@ -408,9 +437,9 @@ public class Linker {
    * @return The standard Linker configuration with 'testOptions' added to the
    *         argument list.
    */
-  public final LinkerDef getTestLinker(final AbstractCompileMojo mojo, final Project antProject, final String os,
+  public final LinkerDef getTestLinker(final AbstractCompileMojo mojo, final CCTask task, final String os,
       final String prefix, final String type) throws MojoFailureException, MojoExecutionException {
-    final LinkerDef linker = getLinker(mojo, antProject, os, prefix, type);
+    final LinkerDef linker = getLinker(mojo, task, os, prefix, type);
     if (this.testOptions != null) {
       for (final Iterator i = this.testOptions.iterator(); i.hasNext();) {
         final LinkerArgument arg = new LinkerArgument();

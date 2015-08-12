@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
@@ -41,7 +42,13 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.shared.artifact.filter.collection.ArtifactFilterException;
+import org.apache.maven.shared.artifact.filter.collection.ArtifactIdFilter;
+import org.apache.maven.shared.artifact.filter.collection.FilterArtifacts;
+import org.apache.maven.shared.artifact.filter.collection.GroupIdFilter;
+import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author Mark Donszelmann
@@ -62,6 +69,38 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
    */
   @Parameter(defaultValue = "${project.remoteArtifactRepositories}", required = true, readonly = true)
   protected List remoteArtifactRepositories;
+
+  /**
+   * Comma separated list of Artifact names to exclude.
+   * 
+   * @since 2.0
+   */
+  @Parameter(property = "excludeArtifactIds", defaultValue = "")
+  protected String excludeArtifactIds;
+
+  /**
+   * Comma separated list of Artifact names to include.
+   * 
+   * @since 2.0
+   */
+  @Parameter(property = "includeArtifactIds", defaultValue = "")
+  protected String includeArtifactIds;
+
+  /**
+   * Comma separated list of GroupId Names to exclude.
+   * 
+   * @since 2.0
+   */
+  @Parameter(property = "excludeGroupIds", defaultValue = "")
+  protected String excludeGroupIds;
+
+  /**
+   * Comma separated list of GroupIds to include.
+   * 
+   * @since 2.0
+   */
+  @Parameter(property = "includeGroupIds", defaultValue = "")
+  protected String includeGroupIds;
 
   /**
    * To look up Archiver/UnArchiver implementations
@@ -100,13 +139,20 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
       throws MojoExecutionException, MojoFailureException {
     final List<AttachedNarArtifact> artifactList = new ArrayList<AttachedNarArtifact>();
     for (NarArtifact dependency : narArtifacts) {
-      final String binding = getBinding(/* library, */dependency);
+      if ("NAR".equalsIgnoreCase(getMavenProject().getPackaging())) {
+        final String binding = getBinding(/* library, */dependency);
 
-      // TODO: dependency.getFile(); find out what the stored pom says
-      // about this - what nars should exist, what layout are they
-      // using...
-      artifactList.addAll(getAttachedNarArtifacts(dependency, /* library. */
-          getAOL(), binding));
+        // TODO: dependency.getFile(); find out what the stored pom says
+        // about this - what nars should exist, what layout are they
+        // using...
+        artifactList.addAll(getAttachedNarArtifacts(dependency, /* library. */
+            getAOL(), binding));
+      } else {
+        artifactList.addAll(getAttachedNarArtifacts(dependency, getAOL(), Library.EXECUTABLE));
+        artifactList.addAll(getAttachedNarArtifacts(dependency, getAOL(), Library.SHARED));
+        artifactList.addAll(getAttachedNarArtifacts(dependency, getAOL(), Library.JNI));
+        artifactList.addAll(getAttachedNarArtifacts(dependency, getAOL(), Library.STATIC));
+      }
       artifactList.addAll(getAttachedNarArtifacts(dependency, null, NarConstants.NAR_NO_ARCH));
     }
     return artifactList;
@@ -121,7 +167,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
    * 
    * @return Artifacts
    */
-  protected abstract List<Artifact> getArtifacts();
+  protected abstract ScopeFilter getArtifactScopeFilter();
 
   /**
    * Returns the attached NAR Artifacts (AOL and noarch artifacts) from the NAR
@@ -220,14 +266,38 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
    */
   public final List<NarArtifact> getNarArtifacts() throws MojoExecutionException {
     final List<NarArtifact> narDependencies = new LinkedList<NarArtifact>();
-    for (final Object element : getArtifacts()) {
-      final Artifact dependency = (Artifact) element;
-      getLog().debug("Examining artifact for NarInfo: " + dependency);
 
-      final NarInfo narInfo = getNarInfo(dependency);
-      if (narInfo != null) {
-        getLog().debug("    - added as NarDependency");
-        narDependencies.add(new NarArtifact(dependency, narInfo));
+    FilterArtifacts filter = new FilterArtifacts();
+
+    filter.addFilter(new GroupIdFilter(cleanToBeTokenizedString(this.includeGroupIds),
+        cleanToBeTokenizedString(this.excludeGroupIds)));
+
+    filter.addFilter(new ArtifactIdFilter(cleanToBeTokenizedString(this.includeArtifactIds),
+        cleanToBeTokenizedString(this.excludeArtifactIds)));
+
+    filter.addFilter(getArtifactScopeFilter());
+
+    @SuppressWarnings("unchecked")
+    Set<Artifact> artifacts = getMavenProject().getArtifacts();
+
+    // perform filtering
+    try {
+      artifacts = filter.filter(artifacts);
+    } catch (ArtifactFilterException e) {
+      throw new MojoExecutionException(e.getMessage(), e);
+    }
+
+    for (final Object element : artifacts) {
+      final Artifact dependency = (Artifact) element;
+
+      if ("nar".equalsIgnoreCase(dependency.getType())) {
+        getLog().debug("Examining artifact for NarInfo: " + dependency);
+
+        final NarInfo narInfo = getNarInfo(dependency);
+        if (narInfo != null) {
+          getLog().debug("    - added as NarDependency");
+          narDependencies.add(new NarArtifact(dependency, narInfo));
+        }
       }
     }
     getLog().debug("Dependencies contained " + narDependencies.size() + " NAR artifacts.");
@@ -317,4 +387,16 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     }
   }
 
+  //
+  // clean up configuration string before it can be tokenized
+  //
+  private static String cleanToBeTokenizedString(String str) {
+    String ret = "";
+    if (!StringUtils.isEmpty(str)) {
+      // remove initial and ending spaces, plus all spaces next to commas
+      ret = str.trim().replaceAll("[\\s]*,[\\s]*", ",");
+    }
+
+    return ret;
+  }
 }

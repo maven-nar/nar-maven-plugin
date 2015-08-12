@@ -309,12 +309,11 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
   public abstract void narExecute() throws MojoFailureException, MojoExecutionException;
 
   protected final void validate() throws MojoFailureException, MojoExecutionException {
-    this.msvc.setMojo(this);
-
-    this.linker = NarUtil.getLinker(this.linker, getLog());
 
     this.architecture = NarUtil.getArchitecture(this.architecture);
     this.os = NarUtil.getOS(this.os);
+    this.msvc.setMojo(this);
+    this.linker = NarUtil.getLinker(this.linker, getLog()); // linker name set in NarUtil.getAOL if not configured
     this.aolId = NarUtil.getAOL(this.mavenProject, this.architecture, this.os, this.linker, this.aol, getLog());
 
     final Model model = this.mavenProject.getModel();

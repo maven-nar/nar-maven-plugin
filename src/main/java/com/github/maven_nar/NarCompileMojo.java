@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.execution.MavenSession;
@@ -34,7 +35,9 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.codehaus.plexus.util.FileUtils;
@@ -53,13 +56,20 @@ import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 
 /**
  * Compiles native source files.
- *
+ * 
  * @requiresSession
  * @author Mark Donszelmann
  */
 @Mojo(name = "nar-compile", defaultPhase = LifecyclePhase.COMPILE, requiresProject = true,
   requiresDependencyResolution = ResolutionScope.COMPILE)
 public class NarCompileMojo extends AbstractCompileMojo {
+  /**
+   * Specify that the final manifest should be embedded in the output (default
+   * true) or false for side by side.
+   */
+  @Parameter(property = "nar.embedManifest", defaultValue = "true")
+  protected boolean embedManifest = true;
+
   /**
    * The current build session instance.
    */
@@ -148,12 +158,16 @@ public class NarCompileMojo extends AbstractCompileMojo {
       final CompilerDef idl = getIdl().getCompiler(Compiler.MAIN, null);
       if (idl != null) {
         task.addConfiguredCompiler(idl);
+        task.createIncludePath().setPath(objDir.getPath()); // generated
+                                                            // 'sources'
       }
     }
     if (getMessage() != null) {
       final CompilerDef mc = getMessage().getCompiler(Compiler.MAIN, null);
       if (mc != null) {
         task.addConfiguredCompiler(mc);
+        task.createIncludePath().setPath(objDir.getPath()); // generated
+                                                            // 'sources'
       }
     }
     if (getResource() != null) {
@@ -201,7 +215,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
     // add java include paths
     getJava().addIncludePaths(task, type);
 
-    getMsvc().configureCCTask(this, task);
+    getMsvc().configureCCTask(task);
 
     final List<NarArtifact> dependencies = getNarArtifacts();
     // add dependency include paths
@@ -218,14 +232,17 @@ public class NarCompileMojo extends AbstractCompileMojo {
         if (include.exists()) {
           task.createIncludePath().setPath(include.getPath());
         } else {
-          throw new MojoExecutionException("NAR: unable to locate include path: " + include);
+          // Ideally includes are used from lib (static or shared)
+          // however it's not required.
+          // make a note in the log if something has gone wrong,
+          // but don't block compilation
+          getLog().warn(String.format("Unable to locate %1$s lib include path '%2$s'", binding, include));
         }
       }
     }
 
     // add linker
-    final LinkerDef linkerDefinition = getLinker().getLinker(this, antProject, getOS(), getAOL().getKey() + ".linker.",
-        type);
+    final LinkerDef linkerDefinition = getLinker().getLinker(this, task, getOS(), getAOL().getKey() + ".linker.", type);
     task.addConfiguredLinker(linkerDefinition);
 
     // add dependency libraries
@@ -328,29 +345,52 @@ public class NarCompileMojo extends AbstractCompileMojo {
     }
 
     // FIXME, this should be done in CPPTasks at some point
-    if (getRuntime(getAOL()).equals("dynamic") && getOS().equals(OS.WINDOWS)
+    // getRuntime(getAOL()).equals("dynamic") &&
+    if ((isEmbedManifest() || getLinker().isGenerateManifest()) && getOS().equals(OS.WINDOWS)
         && getLinker().getName(null, null).equals("msvc") && !getLinker().getVersion(this).startsWith("6.")) {
       final String[] env = new String[] {
         "PATH=" + getMsvc().getPathVariable().getValue()
       };
       final String libType = library.getType();
-      if (libType.equals(Library.JNI) || libType.equals(Library.SHARED)) {
-        final String dll = outFile.getPath() + ".dll";
-        final String manifest = dll + ".manifest";
-        final int result = NarUtil.runCommand("cmd", new String[] {
-            "/C", "mt.exe", "/manifest", manifest, "/outputresource:" + dll + ";#2"
-        }, null, env, getLog());
-        if (result != 0) {
-          throw new MojoFailureException("MT.EXE failed with exit code: " + result);
-        }
-      } else if (libType.equals(Library.EXECUTABLE)) {
-        final String exe = outFile.getPath() + ".exe";
-        final String manifest = exe + ".manifest";
-        final int result = NarUtil.runCommand("cmd", new String[] {
-            "/C", "mt.exe", "/manifest", manifest, "/outputresource:" + exe + ";#1"
-        }, null, env, getLog());
-        if (result != 0) {
-          throw new MojoFailureException("MT.EXE failed with exit code: " + result);
+      if (Library.JNI.equals(libType) || Library.SHARED.equals(libType) || Library.EXECUTABLE.equals(libType)) {
+        Vector<String> commandlineArgs = new Vector<String>();
+        commandlineArgs.add("/manifest");
+        getManifests(outFile.getPath(), commandlineArgs);
+        if (commandlineArgs.size() == 1) {
+          if (isEmbedManifest())
+            getLog().warn("Embed manifest requested, no source manifests to embed, no manifest generated");
+        } else {
+          if (Library.JNI.equals(libType) || Library.SHARED.equals(libType)) {
+            String dll = outFile.getPath() + ".dll";
+            if (isEmbedManifest()) {
+              commandlineArgs.add("/outputresource:" + dll + ";#2");
+            } else {
+              commandlineArgs.add("/out:" + dll + ".manifest");
+            }
+          } else // if (Library.EXECUTABLE.equals( libType ))
+          {
+            String exe = outFile.getPath() + ".exe";
+            if (isEmbedManifest()) {
+              commandlineArgs.add("/outputresource:" + exe + ";#1");
+            } else {
+              commandlineArgs.add("/out:" + exe + ".manifest");
+            }
+          }
+          String[] commandlineArgsArray = commandlineArgs.toArray(new String[0]);
+          String mtexe = "mt.exe";
+          if (getMsvc().compareVersion( getMsvc().getWindowsSdkVersion(),"7.0")<0 && getLinker().getVersion(this).startsWith("8.")) { // VS2005 VC8 only one that includes mt.exe
+            File mtexeFile = new File(getMsvc().getToolPath(), mtexe);
+            if (mtexeFile.exists())
+              mtexe = mtexeFile.getAbsolutePath();
+          } else {
+            File mtexeFile = new File(getMsvc().getSDKToolPath(), mtexe);
+            if (mtexeFile.exists())
+              mtexe = mtexeFile.getAbsolutePath();
+          }
+          int result = NarUtil.runCommand(mtexe, commandlineArgsArray, null, null, getLog());
+          if (result != 0) {
+            throw new MojoFailureException("MT.EXE failed with exit code: " + result);
+          }
         }
       }
     }
@@ -362,21 +402,8 @@ public class NarCompileMojo extends AbstractCompileMojo {
    * compilation and to get the libraries paths and names needed for linking.
    */
   @Override
-  protected List<Artifact> getArtifacts() {
-    try {
-      final List<String> scopes = new ArrayList<String>();
-      scopes.add(Artifact.SCOPE_COMPILE);
-      scopes.add(Artifact.SCOPE_PROVIDED);
-      // scopes.add(Artifact.SCOPE_RUNTIME);
-      scopes.add(Artifact.SCOPE_SYSTEM);
-      // scopes.add(Artifact.SCOPE_TEST);
-      return getNarManager().getDependencies(scopes);
-    } catch (final MojoExecutionException e) {
-      e.printStackTrace();
-    } catch (final MojoFailureException e) {
-      e.printStackTrace();
-    }
-    return Collections.EMPTY_LIST;
+  protected ScopeFilter getArtifactScopeFilter() {
+    return new ScopeFilter(Artifact.SCOPE_COMPILE, null);
   }
 
   private List getSourcesFor(final Compiler compiler) throws MojoFailureException, MojoExecutionException {
@@ -430,4 +457,17 @@ public class NarCompileMojo extends AbstractCompileMojo {
 
     getNarInfo().writeToDirectory(this.classesDirectory);
   }
+
+  public boolean isEmbedManifest() {
+    return embedManifest;
+  }
+
+  private void getManifests(String generated, Vector<String> manifests) {
+    // TODO: /manifest should be followed by the list of manifest files
+    // - the one generated by link, any others provided in source.
+    // search the source for .manifest files.
+    if (getLinker().isGenerateManifest())
+      manifests.add(generated + ".manifest");
+  }
+
 }

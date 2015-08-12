@@ -39,11 +39,12 @@ public class Test implements Executable {
   private String name = null;
 
   /**
-   * Type of linking used for this test Possible choices are: "shared" or
-   * "static". Defaults to "shared".
+   * Type of linking to main artifact used for this test.
+   * Possible choices are: "shared" or "static".
+   * Defaults to library type if single library is built or "shared" otherwise.
    */
   @Parameter(defaultValue = "shared")
-  private String link = Library.SHARED;
+  private String link = null;
 
   /**
    * When true run this test. Defaults to true;
@@ -51,6 +52,14 @@ public class Test implements Executable {
   @Parameter(defaultValue = "true")
   private boolean run = true;
 
+  /**
+   * Type of the library to generate. 
+   * Possible choices are: "shared", "static" or "executable".
+   * Defaults to "executable".
+   */
+  @Parameter
+  private String type = Library.EXECUTABLE;
+  
   /**
    * Arguments to be used for running this test. Defaults to empty list. This
    * option is only used if run=true.
@@ -63,8 +72,18 @@ public class Test implements Executable {
     return this.args;
   }
 
-  public final String getLink() {
-    return this.link;
+  public final String getLink( List<Library> libraries ) {
+    if( this.link != null )
+      return this.link;
+    
+    String libraryPreferred = null;
+    if(libraries.size() == 1){
+      String type = libraries.get(0).getType();
+      if (Library.SHARED.equals(type)||Library.STATIC.equals(type) )
+        libraryPreferred = type;
+      //if(Library.JNI.equals(type)) default shared
+    }
+    return libraryPreferred == null ? Library.SHARED : libraryPreferred; 
   }
 
   public final String getName() throws MojoFailureException {
@@ -72,6 +91,10 @@ public class Test implements Executable {
       throw new MojoFailureException("NAR: Please specify <Name> as part of <Test>");
     }
     return this.name;
+  }
+
+  public String getType() {
+    return this.type;
   }
 
   @Override
