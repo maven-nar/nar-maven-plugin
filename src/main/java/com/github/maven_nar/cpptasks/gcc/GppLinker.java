@@ -330,6 +330,6 @@ public class GppLinker extends AbstractLdLinker {
         command, "--version"
     };
     final String[] cmdout = CaptureStreamHandler.execute(cmd).getStdout();
-    return cmdout.length > 0 && cmdout[0].contains("(clang-");
+    return cmdout != null && cmdout.length > 0 && cmdout[0].contains("(clang-");
   }
 }
