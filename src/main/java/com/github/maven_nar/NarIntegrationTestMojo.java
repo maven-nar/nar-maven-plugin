@@ -907,7 +907,10 @@ public class NarIntegrationTestMojo extends AbstractDependencyMojo {
           final String binding = binding2;
           if (!binding.equals(Library.STATIC)) {
             final File depLibPathEntry = getLayout().getLibDirectory(getUnpackDirectory(), dependency.getArtifactId(),
-                dependency.getVersion(), getAOL().toString(), binding);
+                dependency.getBaseVersion(), getAOL().toString(), binding);
+                //dependency.getVersion() calls the maven super class, which is not used when
+            	//unpacking the NarDependencies in AbstractDependencyMojo.  This causes
+            	//the path to not exist and not be added to the library path.
             if (depLibPathEntry.exists()) {
               getLog().debug("Adding dependency directory to java.library.path: " + depLibPathEntry);
               if (javaLibraryPath.length() > 0) {
