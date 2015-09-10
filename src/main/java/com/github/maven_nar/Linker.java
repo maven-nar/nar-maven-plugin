@@ -517,6 +517,8 @@ public class Linker {
     }
 
     if (version == null) {
+      if(!err.toString().isEmpty())
+        mojo.getLog().debug("linker returned error stream: " + err.toString() );
       throw new MojoFailureException("Cannot deduce version number from: " + out.toString());
     }
     return version;
