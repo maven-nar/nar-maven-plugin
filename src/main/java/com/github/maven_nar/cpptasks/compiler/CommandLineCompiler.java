@@ -193,10 +193,6 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       }
 
       ArrayList<String> commandlinePrefix = new ArrayList<String>();
-      if (NarUtil.isWindows()) {
-        commandlinePrefix.add("cmd");
-        commandlinePrefix.add("/c");
-      }
       if (this.libtool) {
         commandlinePrefix.add("libtool");
       }
