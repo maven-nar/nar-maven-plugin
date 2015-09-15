@@ -64,15 +64,20 @@ public abstract class TestCompilerConfiguration extends TestCase {
 
   public void testGetOutputFileName2() {
     final CompilerConfiguration compiler = create();
-    String[] output = compiler.getOutputFileNames("c:/foo\\bar\\hello.c", null);
-    assertEquals("hello" + getObjectFileExtension(), output[0]);
-    output = compiler.getOutputFileNames("c:/foo\\bar/hello.c", null);
-    assertEquals("hello" + getObjectFileExtension(), output[0]);
+//    String[] output = compiler.getOutputFileNames("c:\\foo\\bar\\hello.c", null);  Windows only, on *nix gets treated as filename not pathed.
+    String[] output = compiler.getOutputFileNames("c:/foo/bar/hello.c", null);
+    String[] output2 = compiler.getOutputFileNames("c:/foo/bar/fake/../hello.c", null);
+    assertEquals(output[0], output2[0]); // files in same location get mangled same way - full path
+
     output = compiler.getOutputFileNames("hello.c", null);
-    assertEquals("hello" + getObjectFileExtension(), output[0]);
-    output = compiler.getOutputFileNames("c:/foo\\bar\\hello.h", null);
+    assertNotSame(output[0], output2[0]); // files in different folders get mangled in different way
+    
+    output2 = compiler.getOutputFileNames("fake/../hello.c", null);
+    assertEquals(output[0], output2[0]); // files in same location get mangled same way - relative path
+    
+    output = compiler.getOutputFileNames("c:/foo/bar/hello.h", null);
     assertEquals(0, output.length);
-    output = compiler.getOutputFileNames("c:/foo\\bar/hello.h", null);
+    output = compiler.getOutputFileNames("c:/foo/bar/fake/../hello.h", null);
     assertEquals(0, output.length);
   }
 }

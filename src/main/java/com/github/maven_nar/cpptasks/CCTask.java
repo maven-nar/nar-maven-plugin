@@ -58,14 +58,14 @@ import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 
 /**
  * Compile and link task.
- *
+ * 
  * <p>
  * This task can compile various source languages and produce executables,
  * shared libraries (aka DLL's) and static libraries. Compiler adaptors are
  * currently available for several C/C++ compilers, FORTRAN, MIDL and Windows
  * Resource files.
  * </p>
- *
+ * 
  * @author Adam Murdoch
  * @author Curt Arnold
  */
@@ -220,13 +220,14 @@ public class CCTask extends Task {
     while (targetEnum.hasNext()) {
       final TargetInfo target = targetEnum.next();
       if (target.getRebuild()) {
-        Vector<TargetInfo> targetsForSameConfig = targetsByConfig.get((CompilerConfiguration)target.getConfiguration());
+        Vector<TargetInfo> targetsForSameConfig = 
+            targetsByConfig.get((CompilerConfiguration) target.getConfiguration());
         if (targetsForSameConfig != null) {
           targetsForSameConfig.addElement(target);
         } else {
           targetsForSameConfig = new Vector<TargetInfo>();
           targetsForSameConfig.addElement(target);
-          targetsByConfig.put((CompilerConfiguration)target.getConfiguration(), targetsForSameConfig);
+          targetsByConfig.put((CompilerConfiguration) target.getConfiguration(), targetsForSameConfig);
         }
       }
     }
@@ -421,9 +422,9 @@ public class CCTask extends Task {
   public void addEnv(final Environment.Variable var) {
     this.compilerDef.addEnv(var);
     for (int i = 0; i < this._compilers.size(); i++) {
-        final CompilerDef currentCompilerDef = this._compilers.elementAt(i);
-        currentCompilerDef.addEnv(var);
-      }
+      final CompilerDef currentCompilerDef = this._compilers.elementAt(i);
+      currentCompilerDef.addEnv(var);
+    }
     this.linkerDef.addEnv(var);
   }
 
@@ -790,10 +791,10 @@ public class CCTask extends Task {
       //
       final ArrayList<Vector<TargetInfo>> targetVectorsPreComp = new ArrayList<Vector<TargetInfo>>();
       final ArrayList<Vector<TargetInfo>> targetVectors = new ArrayList<Vector<TargetInfo>>();
-      
+
       int index = 0;
-      Iterator<Map.Entry<CompilerConfiguration, Vector<TargetInfo>>> targetVectorEnum = 
-          targetsByConfig.entrySet().iterator();
+      Iterator<Map.Entry<CompilerConfiguration, Vector<TargetInfo>>> targetVectorEnum = targetsByConfig.entrySet()
+          .iterator();
       while (targetVectorEnum.hasNext()) {
         final Map.Entry<CompilerConfiguration, Vector<TargetInfo>> targetsForConfig = targetVectorEnum.next();
         //
@@ -1173,45 +1174,59 @@ public class CCTask extends Task {
           return f0.compareTo(f1);
         }
 
-        // Not sure why DUNS is trimming the trailing file extension - but this
-        // breaks multi compilers like resource/midl if same basename as c/cpp
-        // so moved the comparison to above to avoid trimming the extension if
-        // there is no order, which half fixes the issue.
+        // Trimming the path and trailing file extension to allow for order
+        // comparison
+        String compf0 = FilenameUtils.getBaseName(f0);
+        String compf1 = FilenameUtils.getBaseName(f1);
 
-        f0 = FilenameUtils.getBaseName(f0);
-        f1 = FilenameUtils.getBaseName(f1);
-
-        f0 = f0.lastIndexOf('.') < 0 ? f0 : f0.substring(0, f0.lastIndexOf('.'));
-        f1 = f1.lastIndexOf('.') < 0 ? f1 : f1.substring(0, f1.lastIndexOf('.'));
-
-        // make sure we use only one core
-        CCTask.this.ordered = true;
+        // remove the hash
+        // TODO: well we hope it's a hash
+        compf0 = FilenameUtils.removeExtension(compf0);
+        compf1 = FilenameUtils.removeExtension(compf1);
 
         // order according to list or alphabetical
-        final int i0 = order.indexOf(f0);
-        final int i1 = order.indexOf(f1);
+        final int i0 = order.indexOf(compf0);
+        final int i1 = order.indexOf(compf1);
 
-        if (i0 < 0) {
-          if (i1 < 0) {
-            // none in list
-            return f0.compareTo(f1);
-          } else {
-            // i1 in list
-            return +1;
-          }
+        if (i0 < 0 && i1 < 0) {
+          // none in list
+          // compare original values
+          return f0.compareTo(f1);
         } else {
-          if (i1 < 0) {
+          // make sure we use only one core
+          CCTask.this.ordered = true;
+
+          if (i0 > 0 && i1 > 0) {
+            // both in list
+            return i0 == i1 ? 0 : i0 < i1 ? -1 : +1;
+          } else if (i1 < 0) {
             // i0 in list
             return -1;
           } else {
-            // both in list
-            return i0 == i1 ? 0 : i0 < i1 ? -1 : +1;
+            // i1 in list
+            return +1;
           }
         }
       }
     });
 
     final TargetDef targetPlatform = getTargetPlatform();
+
+    // BEGINFREEHEP
+    // a little trick here, the inner function needs the list to be final,
+    // so that the map order doesn't change after we start adding items,
+    // populate with all the ordered items from each compiler type
+    order.clear();
+    for (int i = 0; i < this._compilers.size(); i++) {
+      final CompilerDef currentCompilerDef = this._compilers.elementAt(i);
+      if (currentCompilerDef.isActive()) {
+        final List<String> compilerFileOrder = currentCompilerDef.getOrder();
+        if (compilerFileOrder != null) {
+          order.addAll(compilerFileOrder);
+        }
+      }
+    }
+    // ENDFREEHEP
     //
     // find active (specialized) compilers
     //
@@ -1269,15 +1284,6 @@ public class CCTask extends Task {
             localConfigs[1] = config;
           }
         }
-        // BEGINFREEHEP
-        // a little trick here, the inner function needs the list to be final,
-        // so we repopulate it
-        order.clear();
-        final List<String> newOrder = currentCompilerDef.getOrder();
-        if (newOrder != null) {
-          order.addAll(newOrder);
-        }
-        // ENDFREEHEP
 
         //
         // if the compiler has a fileset
@@ -1599,9 +1605,9 @@ public class CCTask extends Task {
   public void setNewenvironment(final boolean newenv) {
     this.compilerDef.setNewenvironment(newenv);
     for (int i = 0; i < this._compilers.size(); i++) {
-        final CompilerDef currentCompilerDef = this._compilers.elementAt(i);
-        currentCompilerDef.setNewenvironment(newenv);
-      }
+      final CompilerDef currentCompilerDef = this._compilers.elementAt(i);
+      currentCompilerDef.setNewenvironment(newenv);
+    }
     this.linkerDef.setNewenvironment(newenv);
   }
 
