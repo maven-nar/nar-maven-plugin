@@ -38,6 +38,9 @@ public class Msvc {
   @Parameter
   private String windowsSdkVersion;
 
+  @Parameter
+  private String tempPath;
+
   private File windowsHome;
   private String toolPathWindowsSDK;
   private String versionPathWindowsSDK = "";
@@ -107,7 +110,7 @@ public class Msvc {
       // cl needs TMP otherwise D8050 is raised c1xx.dll
       envVariable = new Variable();
       envVariable.setKey("TMP");
-      envVariable.setValue("C:\\Temp");
+      envVariable.setValue(getTempPath());
       task.addEnv(envVariable);
     }
   }
@@ -150,6 +153,17 @@ public class Msvc {
       linker.addLibraryDirectory(this.windowsSdkHome, "Lib" + versionPathWindowsSDK + "/ucrt/" + sdkArch); // 10+
       linker.addLibraryDirectory(this.windowsSdkHome, "Lib" + versionPathWindowsSDK + "/um/" + sdkArch); // 10+
     }
+  }
+
+  private String getTempPath(){
+    if( null == tempPath ){
+      tempPath = System.getenv("TMP");
+      if( null == tempPath )
+        tempPath = System.getenv("TEMP");
+      if( null == tempPath )
+        tempPath = "C:\\Temp";
+    }
+    return tempPath;
   }
 
   public Variable getPathVariable() {
