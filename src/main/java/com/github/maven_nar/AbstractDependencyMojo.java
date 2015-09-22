@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -131,22 +132,20 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     }
   }
 
-  public final List<AttachedNarArtifact> getAllAttachedNarArtifacts(final List<NarArtifact> narArtifacts/*
-                                                                                                         * ,
-                                                                                                         * Library
-                                                                                                         * library
-                                                                                                         */)
-      throws MojoExecutionException, MojoFailureException {
+  public final List<AttachedNarArtifact> getAllAttachedNarArtifacts(final List<NarArtifact> narArtifacts,
+      List<? extends Executable> libraries) throws MojoExecutionException, MojoFailureException {
     final List<AttachedNarArtifact> artifactList = new ArrayList<AttachedNarArtifact>();
     for (NarArtifact dependency : narArtifacts) {
       if ("NAR".equalsIgnoreCase(getMavenProject().getPackaging())) {
-        final String binding = getBinding(/* library, */dependency);
+        final String bindings[] = getBindings(libraries, dependency);
 
         // TODO: dependency.getFile(); find out what the stored pom says
         // about this - what nars should exist, what layout are they
         // using...
-        artifactList.addAll(getAttachedNarArtifacts(dependency, /* library. */
-            getAOL(), binding));
+        for (final String binding : bindings) {
+          artifactList.addAll(getAttachedNarArtifacts(dependency, /* library. */
+              getAOL(), binding));
+        }
       } else {
         artifactList.addAll(getAttachedNarArtifacts(dependency, getAOL(), Library.EXECUTABLE));
         artifactList.addAll(getAttachedNarArtifacts(dependency, getAOL(), Library.SHARED));
@@ -182,13 +181,11 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
    * 
    * @see getArtifacts
    */
-  protected List<AttachedNarArtifact> getAttachedNarArtifacts() throws MojoFailureException, MojoExecutionException {
+  protected List<AttachedNarArtifact> getAttachedNarArtifacts(List<? extends Executable> libraries)
+      throws MojoFailureException, MojoExecutionException {
     getLog().info("Getting Nar dependencies");
     final List<NarArtifact> narArtifacts = getNarArtifacts();
-    final List<AttachedNarArtifact> attachedNarArtifacts = getAllAttachedNarArtifacts(narArtifacts/*
-                                                                                                   * ,
-                                                                                                   * library
-                                                                                                   */);
+    final List<AttachedNarArtifact> attachedNarArtifacts = getAllAttachedNarArtifacts(narArtifacts, libraries);
     return attachedNarArtifacts;
   }
 
@@ -231,20 +228,51 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     return artifactList;
   }
 
-  protected String getBinding(/* Library library, */final NarArtifact dependency)
+  protected String[] getBindings(List<? extends Executable> libraries, NarArtifact dependency)
       throws MojoFailureException, MojoExecutionException {
-    // how does this project specify the dependency is used
-    // - library.getLinker().getLibs();
-    // - if it is specified but the artifact is not available should fail.
-    // otherwise how does the artifact specify it should be used by default
-    //
-    // - what is the preference for this type of library to use (shared -
-    // shared, static - static...)
+
+    Set<String> bindings = new HashSet<String>();
+    if (libraries != null){
+      for (Object library : libraries) {
+        Executable exec = (Executable) library;
+        // how does this project specify the dependency is used
+        String binding = exec.getBinding(dependency);
+        if( null != binding )
+          bindings.add(binding);
+      }
+    }
+
+    // - if it is specified but the atrifact is not available should fail.
+    // otherwise
+    // how does the artifact specify it should be used by default
+    // -
+    // whats the preference for this type of library to use (shared - shared,
+    // static - static...)
 
     // library.getType()
-    final String binding = dependency.getNarInfo().getBinding(
-    /* library. */getAOL(), /* type != null ? type : */
-    Library.STATIC);
+    if (bindings.isEmpty())
+      bindings.add(dependency.getNarInfo().getBinding(getAOL(), Library.STATIC));
+
+    return bindings.toArray(new String[1]);
+  }
+
+  protected String getBinding(Executable exec, NarArtifact dependency)
+      throws MojoFailureException, MojoExecutionException {
+
+    // how does this project specify the dependency is used
+    String binding = exec.getBinding(dependency);
+
+    // - if it is specified but the atrifact is not available should fail.
+    // otherwise
+    // how does the artifact specify it should be used by default
+    // -
+    // whats the preference for this type of library to use (shared - shared,
+    // static - static...)
+
+    // library.getType()
+    if (binding == null)
+      binding = dependency.getNarInfo().getBinding(getAOL(), Library.STATIC);
+
     return binding;
   }
 

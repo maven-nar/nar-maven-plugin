@@ -264,8 +264,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
 
       // FIXME no handling of "local"
 
-      // FIXME, no way to override this at this stage
-      final String binding = dependency.getNarInfo().getBinding(getAOL(), Library.NONE);
+      final String binding = getBinding(test, dependency);
       getLog().debug("Using Binding: " + binding);
       AOL aol = getAOL();
       aol = dependency.getNarInfo().getAOL(getAOL());

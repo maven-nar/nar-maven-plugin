@@ -26,6 +26,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
 
@@ -41,6 +42,12 @@ import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
 public class NarUnpackMojo extends AbstractDependencyMojo {
 
   /**
+   * List of tests to create
+   */
+  @Parameter
+  private List tests;
+  
+  /**
    * List the dependencies needed for compilation.
    */
   @Override
@@ -50,7 +57,7 @@ public class NarUnpackMojo extends AbstractDependencyMojo {
 
   @Override
   public final void narExecute() throws MojoExecutionException, MojoFailureException {
-    final List<AttachedNarArtifact> attachedNarArtifacts = getAttachedNarArtifacts();
+    final List<AttachedNarArtifact> attachedNarArtifacts = getAttachedNarArtifacts(libraries);
     unpackAttachedNars(attachedNarArtifacts);
   }
 }

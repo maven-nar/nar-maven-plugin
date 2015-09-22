@@ -67,9 +67,28 @@ public class Test implements Executable {
   @Parameter
   private List/* <String> */args = new ArrayList();
 
+  /**
+   * List of artifact:binding  for type of dependency to link against when there is a choice.
+   */
+  @Parameter
+  private List<String> dependencyBindings = new ArrayList<String>();
+  
+
   @Override
   public final List/* <String> */getArgs() {
     return this.args;
+  }
+
+  public String getBinding(NarArtifact dependency) {
+    for (String dependBind : dependencyBindings ) {
+      String[] pair = dependBind.trim().split( ":", 2 );  // TODO: match how much?
+      if( dependency.getArtifactId().equals(pair[0].trim()) ){
+        String result = pair[1].trim();
+        if( !result.isEmpty() )
+          return result;
+      }
+    }
+    return null;
   }
 
   public final String getLink( List<Library> libraries ) {
@@ -85,7 +104,7 @@ public class Test implements Executable {
     }
     return libraryPreferred == null ? Library.SHARED : libraryPreferred; 
   }
-
+  
   public final String getName() throws MojoFailureException {
     if (this.name == null) {
       throw new MojoFailureException("NAR: Please specify <Name> as part of <Test>");

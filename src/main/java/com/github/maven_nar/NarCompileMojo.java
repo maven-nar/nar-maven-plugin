@@ -222,7 +222,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
     for (final Object element : dependencies) {
       // FIXME, handle multiple includes from one NAR
       final NarArtifact narDependency = (NarArtifact) element;
-      final String binding = narDependency.getNarInfo().getBinding(getAOL(), Library.STATIC);
+      final String binding = getBinding(library, narDependency);
       getLog().debug("Looking for " + narDependency + " found binding " + binding);
       if (!binding.equals(Library.JNI)) {
         final File unpackDirectory = getUnpackDirectory();

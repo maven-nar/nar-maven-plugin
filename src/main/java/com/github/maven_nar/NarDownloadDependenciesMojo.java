@@ -26,6 +26,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
 
@@ -39,6 +40,13 @@ import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
 @Mojo(name = "nar-download-dependencies", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresProject = true,
   requiresDependencyResolution = ResolutionScope.TEST)
 public class NarDownloadDependenciesMojo extends AbstractDependencyMojo {
+  
+  /**
+   * List of tests to create
+   */
+  @Parameter
+  private List tests;
+  
   /**
    * List all the dependencies of the project.
    */
@@ -50,7 +58,8 @@ public class NarDownloadDependenciesMojo extends AbstractDependencyMojo {
   @Override
   public void narExecute() throws MojoFailureException, MojoExecutionException {
     // download the dependencies if needed in local maven repository.
-    final List<AttachedNarArtifact> attachedNarArtifacts = getAttachedNarArtifacts();
+    final List<AttachedNarArtifact> attachedNarArtifacts = getAttachedNarArtifacts(libraries);
+    attachedNarArtifacts.addAll( getAttachedNarArtifacts(tests) );
     downloadAttachedNars(attachedNarArtifacts);
   }
 

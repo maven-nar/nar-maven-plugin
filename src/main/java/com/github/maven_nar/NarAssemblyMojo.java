@@ -56,7 +56,7 @@ public class NarAssemblyMojo extends AbstractDependencyMojo {
   @Override
   public final void narExecute() throws MojoExecutionException, MojoFailureException {
     // download the dependencies if needed in local maven repository.
-    List<AttachedNarArtifact> attachedNarArtifacts = getAttachedNarArtifacts();
+    List<AttachedNarArtifact> attachedNarArtifacts = getAttachedNarArtifacts(libraries);
     downloadAttachedNars(attachedNarArtifacts);
 
     // Warning, for SNAPSHOT artifacts that were not in the local maven
@@ -69,7 +69,7 @@ public class NarAssemblyMojo extends AbstractDependencyMojo {
     // -SNAPSHOT versions, so we call again getAttachedNarArtifacts() to get the
     // unmodified AttachedNarArtifact
     // objects
-    attachedNarArtifacts = getAttachedNarArtifacts();
+    attachedNarArtifacts = getAttachedNarArtifacts(libraries);
     unpackAttachedNars(attachedNarArtifacts);
 
     // this may make some extra copies...
