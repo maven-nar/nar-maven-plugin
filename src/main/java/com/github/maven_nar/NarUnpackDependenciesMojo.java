@@ -25,6 +25,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
 /**
@@ -40,6 +41,12 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
   requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true)
 public class NarUnpackDependenciesMojo extends NarDownloadDependenciesMojo {
 
+  /**
+   * List of tests to create
+   */
+  @Parameter
+  private List tests;
+  
   @Override
   public void narExecute() throws MojoFailureException, MojoExecutionException {
     // download the dependencies if needed in local maven repository using
@@ -47,7 +54,7 @@ public class NarUnpackDependenciesMojo extends NarDownloadDependenciesMojo {
     super.narExecute();
 
     // unpack the nar files
-    final List<AttachedNarArtifact> attachedNarArtifacts = getAttachedNarArtifacts();
+    final List<AttachedNarArtifact> attachedNarArtifacts = getAttachedNarArtifacts(tests);
     unpackAttachedNars(attachedNarArtifacts);
   }
 

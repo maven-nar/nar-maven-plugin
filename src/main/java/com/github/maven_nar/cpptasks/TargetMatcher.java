@@ -89,8 +89,9 @@ public final class TargetMatcher implements FileVisitor {
     } else {
       //
       // get output file name
+      // requires full path as output name may be changed based on location
       //
-      final String[] outputFileNames = selectedCompiler.getOutputFileNames(filename, this.versionInfo);
+      final String[] outputFileNames = selectedCompiler.getOutputFileNames(fullPath.getPath(), this.versionInfo);
       this.sourceFiles[0] = fullPath;
       //
       // if there is some output for this task
@@ -100,14 +101,10 @@ public final class TargetMatcher implements FileVisitor {
         //
         // see if the same output file has already been registered
         //
-        StringBuffer sb = new StringBuffer(FilenameUtils.removeExtension(outputFileName));
-        sb.append("." + fullPath.getAbsolutePath().hashCode() + "." + FilenameUtils.getExtension(outputFileName) );
-        String newOutputFileName = sb.toString();
-
-        final TargetInfo previousTarget = this.targets.get(newOutputFileName);
+        final TargetInfo previousTarget = this.targets.get(outputFileName);
         if (previousTarget == null) {
-          this.targets.put(newOutputFileName, new TargetInfo(selectedCompiler, this.sourceFiles, null, new File(
-              this.outputDir, newOutputFileName), selectedCompiler.getRebuild()));
+          this.targets.put(outputFileName, new TargetInfo(selectedCompiler, this.sourceFiles, null, new File(
+              this.outputDir, outputFileName), selectedCompiler.getRebuild()));
         } else {
           if (!previousTarget.getSources()[0].equals(this.sourceFiles[0])) {
             final StringBuffer builder = new StringBuffer("Output filename conflict: ");

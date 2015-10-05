@@ -137,6 +137,21 @@ public abstract class MsvcCompatibleCCompiler extends PrecompilingCommandLineCCo
   }
 
   @Override
+  protected int getArgumentCountPerInputFile() {
+    return 2;
+  }
+
+  @Override
+  protected String getInputFileArgument(final File outputDir, final String filename, final int index) {
+    if (index == 0) {
+      final String outputFileName = getOutputFileNames(filename, null)[0];
+      final String fullOutputName = new File(outputDir, outputFileName).toString();
+      return "/Fo" + fullOutputName;
+    }
+    return filename;
+  }
+
+  @Override
   protected void getDefineSwitch(final StringBuffer buffer, final String define, final String value) {
     MsvcProcessor.getDefineSwitch(buffer, define, value);
   }

@@ -27,6 +27,8 @@ import java.util.List;
 public interface Executable {
 
   List/* <String> */getArgs();
+  String getBinding(NarArtifact dependency);
 
   boolean shouldRun();
+  
 }

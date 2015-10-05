@@ -113,6 +113,20 @@ public final class MsvcMIDLCompiler extends CommandLineCompiler {
   }
 
   @Override
+  public String[] getOutputFileNames(final String inputFile, final VersionInfo versionInfo) {
+    //
+    // if a recognized input file
+    //
+    if (bid(inputFile) > 1) {
+      final String baseName = getBaseOutputName(inputFile);
+      return new String[] {
+        baseName + getOutputSuffix()
+      };
+    }
+    return new String[0];
+  }
+  
+  @Override
   protected String getInputFileArgument(final File outputDir, final String filename, final int index) {
     switch (index) {
       case 0:

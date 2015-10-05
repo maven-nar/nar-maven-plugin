@@ -222,7 +222,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
     for (final Object element : dependencies) {
       // FIXME, handle multiple includes from one NAR
       final NarArtifact narDependency = (NarArtifact) element;
-      final String binding = narDependency.getNarInfo().getBinding(getAOL(), Library.STATIC);
+      final String binding = getBinding(library, narDependency);
       getLog().debug("Looking for " + narDependency + " found binding " + binding);
       if (!binding.equals(Library.JNI)) {
         final File unpackDirectory = getUnpackDirectory();
@@ -392,6 +392,14 @@ public class NarCompileMojo extends AbstractCompileMojo {
             throw new MojoFailureException("MT.EXE failed with exit code: " + result);
           }
         }
+      }
+    }
+    if( getOS().equals(OS.WINDOWS) && Library.STATIC.equals(library.getType()) ){  // option? should debug symbols always be provided.
+      getLog().debug( "Copy static pdbs from intermediat dir to " + task.getOutfile().getParentFile() );
+      try {
+        NarUtil.copyDirectoryStructure(task.getObjdir(), task.getOutfile().getParentFile(), "**/*.pdb", NarUtil.DEFAULT_EXCLUDES );
+      } catch (IOException e) {
+        getLog().info( "Failed to copy pdbs from " + task.getObjdir() + "\nexception" + e.getMessage() );
       }
     }
   }

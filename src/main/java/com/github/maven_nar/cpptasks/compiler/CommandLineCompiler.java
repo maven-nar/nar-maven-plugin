@@ -141,6 +141,25 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
     }
   }
 
+  @Override
+  public String[] getOutputFileNames(final String inputFile, final VersionInfo versionInfo) {
+    //
+    // if a recognized input file
+    //
+    if (bid(inputFile) > 1) {
+      final String baseName = getBaseOutputName(inputFile);
+      final File standardisedFile = new File(inputFile);
+      try {
+        return new String[] {
+          baseName + FilenameUtils.EXTENSION_SEPARATOR + Integer.toHexString(standardisedFile.getCanonicalPath().hashCode()) + getOutputSuffix()
+        };
+      } catch (IOException e) {
+        throw new BuildException("Source file not found", e);
+      }
+    }
+    return new String[0];
+  }
+
   /**
    * Compiles a source file.
    * 
@@ -193,10 +212,6 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       }
 
       ArrayList<String> commandlinePrefix = new ArrayList<String>();
-      if (NarUtil.isWindows()) {
-        commandlinePrefix.add("cmd");
-        commandlinePrefix.add("/c");
-      }
       if (this.libtool) {
         commandlinePrefix.add("libtool");
       }
@@ -209,16 +224,6 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       for (int j = sourceIndex; j < firstFileNextExec; j++) {
         ArrayList<String> commandlineSuffix = new ArrayList<String>();
 
-        StringBuffer sb = new StringBuffer( FilenameUtils.getBaseName(sourceFiles[j]) );
-        sb.append( "." + sourceFiles[j].hashCode() + getOutputSuffix());
-        final String newOutputFileName = sb.toString();
-
-        if (NarUtil.isWindows()) {
-          commandlineSuffix.add("/Fo" + newOutputFileName);
-        } else {
-          commandlineSuffix.add("-o");
-          commandlineSuffix.add(newOutputFileName);
-        }
         for (int k = 0; k < argumentCountPerInputFile; k++) {
           commandlineSuffix.add(getInputFileArgument(outputDir, sourceFiles[j], k));
         }

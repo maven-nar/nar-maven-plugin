@@ -139,6 +139,24 @@ public abstract class GccCompatibleCCompiler extends CommandLineCCompiler {
   }
 
   @Override
+  protected int getArgumentCountPerInputFile() {
+    return 3;
+  }
+
+  @Override
+  protected String getInputFileArgument(final File outputDir, final String filename, final int index) {
+    switch (index) {
+      case 0:
+        return "-o";
+      case 1:
+        final String outputFileName = getOutputFileNames(filename, null)[0];
+        final String objectName = new File(outputDir, outputFileName).toString();
+        return objectName;
+    }
+    return filename;
+  }
+
+  @Override
   public void getDefineSwitch(final StringBuffer buffer, final String define, final String value) {
     buffer.append("-D");
     buffer.append(define);
