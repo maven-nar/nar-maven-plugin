@@ -115,6 +115,9 @@ public class NarSystemMojo extends AbstractNarMojo {
     builder
         .append("                final File file = new File(prefix + aol + \"-jni/lib/\" + aol + \"/jni/\" + mapped);\n");
     builder.append("                if (file.isFile()) return file;\n");
+ builder
+    	.append("            final File file_shared = new File(prefix + aol + \"-jni/lib/\" + aol + \"/shared/\" + mapped);\n");
+    builder.append("            if (file_shared.isFile()) return file_shared;\n");  
     builder.append("            }\n");
     builder.append("        }\n");
     builder.append("        return null;\n");
@@ -124,8 +127,10 @@ public class NarSystemMojo extends AbstractNarMojo {
         .append("    private static String getLibPath(final ClassLoader loader, final String[] aols, final String[] mappedNames) {\n");
     builder.append("        for (final String aol : aols) {\n");
     builder.append("            final String libPath = \"lib/\" + aol + \"/jni/\";\n");
+    builder.append("            final String libPath_shared = \"lib/\" + aol + \"/shared/\";\n");
     builder.append("            for(final String mapped : mappedNames) {\n");
     builder.append("                if (loader.getResource(libPath + mapped) != null) return libPath;\n");
+    builder.append("  		    if (loader.getResource(libPath_shared + mapped) != null) return libPath_shared;\n");
     builder.append("            }\n");
     builder.append("        }\n");
     builder.append("        throw new RuntimeException(\"Library '\" + mappedNames[0] + \"' not found!\");\n");
