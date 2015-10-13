@@ -128,13 +128,17 @@ public final class CommandLineCompilerConfiguration implements CompilerConfigura
       this.exceptFiles = exceptFiles.clone();
     }
     this.isPrecompiledHeaderGeneration = isPrecompileHeaderGeneration;
-    this.args = new String[base.args.length + additionalArgs.length];
-    for (int i = 0; i < base.args.length; i++) {
-      this.args[i] = base.args[i];
-    }
-    int index = base.args.length;
-    for (final String additionalArg : additionalArgs) {
-      this.args[index++] = additionalArg;
+    if (additionalArgs != null) {
+      this.args = new String[base.args.length + additionalArgs.length];
+      for (int i = 0; i < base.args.length; i++) {
+        this.args[i] = base.args[i];
+      }
+      int index = base.args.length;
+      for (final String additionalArg : additionalArgs) {
+        this.args[index++] = additionalArg;
+      }
+    } else {
+      this.args = base.args.clone();
     }
     this.commandPath = base.commandPath;
   }

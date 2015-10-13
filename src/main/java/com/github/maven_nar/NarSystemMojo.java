@@ -90,8 +90,20 @@ public class NarSystemMojo extends AbstractNarMojo {
     builder.append("        }\n");
     builder.append("    }\n");
     builder.append("\n");
+    builder.append("    private static String[] getMappedLibraryNames(String fileName) {\n");
+    builder.append("        String mapped = System.mapLibraryName(fileName);\n");
     builder
-        .append("    private static File getUnpackedLibPath(final ClassLoader loader, final String[] aols, final String fileName, final String mapped) {\n");
+    .append("        final String ao = System.getProperty(\"os.arch\") + \"-\" + System.getProperty(\"os.name\").replaceAll(\" \", \"\");\n");
+    builder.append("    	if (ao.startsWith(\"x86_64-MacOSX\")){\n");
+    builder.append("    		// .jnilib or .dylib depends on JDK version\n");
+    builder.append("    		mapped = mapped.substring(0, mapped.lastIndexOf('.'));\n");
+    builder.append("    		return new String[]{mapped+\".dylib\", mapped+\".jnilib\"};\n");
+    builder.append("    	}\n");
+    builder.append("    	return new String[]{mapped};\n");
+    builder.append("    }\n");
+    builder.append("\n");
+    builder
+        .append("    private static File getUnpackedLibPath(final ClassLoader loader, final String[] aols, final String fileName, final String[] mappedNames) {\n");
     builder.append("        final String classPath = NarSystem.class.getName().replace('.', '/') + \".class\";\n");
     builder.append("        final URL url = loader.getResource(classPath);\n");
     builder.append("        if (url == null || !\"file\".equals(url.getProtocol())) return null;\n");
@@ -99,25 +111,29 @@ public class NarSystemMojo extends AbstractNarMojo {
     builder
         .append("        final String prefix = path.substring(0, path.length() - classPath.length()) + \"../nar/\" + fileName + \"-\";\n");
     builder.append("        for (final String aol : aols) {\n");
+    builder.append("            for(final String mapped : mappedNames) {\n");
     builder
-        .append("            final File file = new File(prefix + aol + \"-jni/lib/\" + aol + \"/jni/\" + mapped);\n");
-    builder.append("            if (file.isFile()) return file;\n");
-    builder
+        .append("                final File file = new File(prefix + aol + \"-jni/lib/\" + aol + \"/jni/\" + mapped);\n");
+    builder.append("                if (file.isFile()) return file;\n");
+ builder
     	.append("            final File file_shared = new File(prefix + aol + \"-jni/lib/\" + aol + \"/shared/\" + mapped);\n");
-    builder.append("            if (file_shared.isFile()) return file_shared;\n");    
+    builder.append("            if (file_shared.isFile()) return file_shared;\n");  
+    builder.append("            }\n");
     builder.append("        }\n");
     builder.append("        return null;\n");
     builder.append("    }\n");
     builder.append("\n");
     builder
-        .append("    private static String getLibPath(final ClassLoader loader, final String[] aols, final String mapped) {\n");
+        .append("    private static String getLibPath(final ClassLoader loader, final String[] aols, final String[] mappedNames) {\n");
     builder.append("        for (final String aol : aols) {\n");
     builder.append("            final String libPath = \"lib/\" + aol + \"/jni/\";\n");
-    builder.append("            if (loader.getResource(libPath + mapped) != null) return libPath;\n");
     builder.append("            final String libPath_shared = \"lib/\" + aol + \"/shared/\";\n");
-    builder.append("            if (loader.getResource(libPath_shared + mapped) != null) return libPath_shared;\n");
+    builder.append("            for(final String mapped : mappedNames) {\n");
+    builder.append("                if (loader.getResource(libPath + mapped) != null) return libPath;\n");
+    builder.append("  		    if (loader.getResource(libPath_shared + mapped) != null) return libPath_shared;\n");
+    builder.append("            }\n");
     builder.append("        }\n");
-    builder.append("        throw new RuntimeException(\"Library '\" + mapped + \"' not found!\");\n");
+    builder.append("        throw new RuntimeException(\"Library '\" + mappedNames[0] + \"' not found!\");\n");
     builder.append("    }\n");
 
     return builder.toString();
@@ -192,14 +208,14 @@ public class NarSystemMojo extends AbstractNarMojo {
           + "        }\n"
           + "        catch (UnsatisfiedLinkError e) {\n"
           + "        }\n"
-          + "        final String mapped = System.mapLibraryName(fileName);\n"
+          + "        final String[] mappedNames = getMappedLibraryNames(fileName);\n"
           + "        final String[] aols = getAOLs();\n"
           + "        final ClassLoader loader = NarSystem.class.getClassLoader();\n"
-          + "        final File unpacked = getUnpackedLibPath(loader, aols, fileName, mapped);\n"
+          + "        final File unpacked = getUnpackedLibPath(loader, aols, fileName, mappedNames);\n"
           + "        if (unpacked != null) {\n"
           + "            System.load(unpacked.getPath());\n"
           + "        } else try {\n"
-          + "            final String libPath = getLibPath(loader, aols, mapped);\n"
+          + "            final String libPath = getLibPath(loader, aols, mappedNames);\n"
           + "            final JniExtractor extractor = new DefaultJniExtractor(NarSystem.class, System.getProperty(\"java.io.tmpdir\"));\n"
           + "            final File extracted = extractor.extractJni(libPath, fileName);\n"
           + "            System.load(extracted.getPath());\n" + "        } catch (final Exception e) {\n"

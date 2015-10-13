@@ -116,11 +116,13 @@ public abstract class MsvcCompatibleLinker extends CommandLineLinker {
       final Vector<String> midargs, final Vector<String> endargs) {
     for (final LibrarySet set : libsets) {
       final File libdir = set.getDir(null);
-      final String[] libs = set.getLibs();
       addLibraryDirectory(libdir, preargs);
 
-      for (final String libraryName : libs) {
-        endargs.add(libraryName + ".lib");
+      for (final String libraryName : set.getLibs()) {
+        // TODO: ? Should look to the path for system or other libs - rather than assume they can be found on the path
+        // Shortcut, no/empty lib dir for syslibs and others indicates should be on the path
+        if( !(null != libdir && libdir.exists()) || new File(libdir,libraryName + ".lib").exists())
+          endargs.add(libraryName + ".lib");
       }
     }
     return null;

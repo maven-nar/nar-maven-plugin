@@ -20,8 +20,6 @@
 package com.github.maven_nar;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,6 +31,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 
@@ -50,7 +49,7 @@ import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 
 /**
  * Compiles native test source files.
- *
+ * 
  * @author Mark Donszelmann
  */
 @Mojo(name = "nar-testCompile", defaultPhase = LifecyclePhase.TEST_COMPILE,
@@ -77,7 +76,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
 
     // outtype
     final OutputTypeEnum outTypeEnum = new OutputTypeEnum();
-    outTypeEnum.setValue(Library.EXECUTABLE);
+    outTypeEnum.setValue(test.getType());
     task.setOuttype(outTypeEnum);
 
     // outDir
@@ -135,9 +134,10 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
     // add java include paths
     getJava().addIncludePaths(task, type);
 
-    getMsvc().configureCCTask(this, task);
+    getMsvc().configureCCTask(task);
 
     List depLibs = getNarArtifacts();
+    
     // add dependency include paths
     for (final Iterator i = depLibs.iterator(); i.hasNext();) {
       final Artifact artifact = (Artifact) i.next();
@@ -162,15 +162,16 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
     }
 
     // add linker
-    final LinkerDef linkerDefinition = getLinker().getTestLinker(this, antProject, getOS(),
-        getAOL().getKey() + ".linker.", type);
+    final LinkerDef linkerDefinition = getLinker().getTestLinker(this, task, getOS(), getAOL().getKey() + ".linker.",
+        type);
     task.addConfiguredLinker(linkerDefinition);
 
     final File includeDir = getLayout().getIncludeDirectory(getTargetDirectory(), getMavenProject().getArtifactId(),
         getMavenProject().getVersion());
 
+    String linkType = test.getLink( getLibraries() );
     final File libDir = getLayout().getLibDirectory(getTargetDirectory(), getMavenProject().getArtifactId(),
-        getMavenProject().getVersion(), getAOL().toString(), test.getLink());
+        getMavenProject().getVersion(), getAOL().toString(), linkType);
 
     // copy shared library
     // FIXME why do we do this ?
@@ -222,7 +223,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
       getLog().debug("Searching for parent to link with " + libs);
       libSet.setLibs(new CUtil.StringArrayBuilder(libs));
       final LibraryTypeEnum libType = new LibraryTypeEnum();
-      libType.setValue(test.getLink());
+      libType.setValue(linkType);
       libSet.setType(libType);
       libSet.setDir(libDir);
       task.addLibset(libSet);
@@ -263,8 +264,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
 
       // FIXME no handling of "local"
 
-      // FIXME, no way to override this at this stage
-      final String binding = dependency.getNarInfo().getBinding(getAOL(), Library.NONE);
+      final String binding = getBinding(test, dependency);
       getLog().debug("Using Binding: " + binding);
       AOL aol = getAOL();
       aol = dependency.getNarInfo().getAOL(getAOL());
@@ -346,21 +346,9 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
    * linking.
    */
   @Override
-  protected List<Artifact> getArtifacts() {
-    try {
-      final List<String> scopes = new ArrayList<String>();
-      scopes.add(Artifact.SCOPE_COMPILE);
-      scopes.add(Artifact.SCOPE_PROVIDED);
-      // scopes.add(Artifact.SCOPE_RUNTIME);
-      scopes.add(Artifact.SCOPE_SYSTEM);
-      scopes.add(Artifact.SCOPE_TEST);
-      return getNarManager().getDependencies(scopes);
-    } catch (final MojoExecutionException e) {
-      e.printStackTrace();
-    } catch (final MojoFailureException e) {
-      e.printStackTrace();
-    }
-    return Collections.EMPTY_LIST;
+  protected ScopeFilter getArtifactScopeFilter() {
+    // Was Artifact.SCOPE_TEST  - runtime??
+    return new ScopeFilter( Artifact.SCOPE_TEST, null );
   }
 
   @Override

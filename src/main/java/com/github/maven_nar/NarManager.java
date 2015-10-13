@@ -22,12 +22,8 @@ package com.github.maven_nar;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.jar.JarFile;
 
 import org.apache.maven.artifact.Artifact;
@@ -240,66 +236,6 @@ public class NarManager {
     }
 
     return artifactList;
-  }
-
-  /**
-   * Returns all NAR dependencies by type: noarch, static, dynamic, jni, plugin.
-   * 
-   * @throws MojoFailureException
-   */
-  public final Map/* <String, List<AttachedNarArtifact>> */getAttachedNarDependencyMap(final String scope)
-      throws MojoExecutionException, MojoFailureException {
-    final Map attachedNarDependencies = new HashMap();
-    for (final Iterator i = getNarDependencies(scope).iterator(); i.hasNext();) {
-      final Artifact dependency = (Artifact) i.next();
-      for (final String narType : this.narTypes) {
-        final List artifactList = getAttachedNarDependencies(dependency, this.defaultAOL, narType);
-        if (artifactList != null) {
-          attachedNarDependencies.put(narType, artifactList);
-        }
-      }
-    }
-    return attachedNarDependencies;
-  }
-
-  public List/* <Artifact> */getDependencies(final List<String> scopes) {
-    final Set<Artifact> artifacts = this.project.getArtifacts();
-    final List<Artifact> returnArtifact = new ArrayList<Artifact>();
-    for (final Artifact a : artifacts) {
-      if (scopes.contains(a.getScope())) {
-        returnArtifact.add(a);
-      }
-    }
-    return returnArtifact;
-  }
-
-  /**
-   * Returns dependencies which are dependent on NAR files (i.e. contain
-   * NarInfo)
-   */
-  public final List/* <NarArtifact> */getNarDependencies(final List<String> scopes) throws MojoExecutionException {
-    final List narDependencies = new LinkedList();
-    for (final Iterator i = getDependencies(scopes).iterator(); i.hasNext();) {
-      final Artifact dependency = (Artifact) i.next();
-      this.log.debug("Examining artifact for NarInfo: " + dependency);
-
-      final NarInfo narInfo = getNarInfo(dependency);
-      if (narInfo != null) {
-        this.log.debug("    - added as NarDependency");
-        narDependencies.add(new NarArtifact(dependency, narInfo));
-      }
-    }
-    return narDependencies;
-  }
-
-  /**
-   * Returns dependencies which are dependent on NAR files (i.e. contain
-   * NarInfo)
-   */
-  public final List/* <NarArtifact> */getNarDependencies(final String scope) throws MojoExecutionException {
-    final List<String> scopes = new ArrayList<String>();
-    scopes.add(scope);
-    return getNarDependencies(scopes);
   }
 
   public final File getNarFile(final Artifact dependency) throws MojoFailureException {

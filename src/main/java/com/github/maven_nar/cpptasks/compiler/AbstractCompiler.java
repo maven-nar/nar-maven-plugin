@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Vector;
 
+import org.apache.commons.io.FilenameUtils;
+
 import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.CUtil;
 import com.github.maven_nar.cpptasks.CompilerDef;
@@ -83,22 +85,9 @@ public abstract class AbstractCompiler extends AbstractProcessor implements Comp
   }
 
   abstract protected Parser createParser(File sourceFile);
-
+  
   protected String getBaseOutputName(final String inputFile) {
-    int lastSlash = inputFile.lastIndexOf('/');
-    final int lastReverse = inputFile.lastIndexOf('\\');
-    final int lastSep = inputFile.lastIndexOf(File.separatorChar);
-    if (lastReverse > lastSlash) {
-      lastSlash = lastReverse;
-    }
-    if (lastSep > lastSlash) {
-      lastSlash = lastSep;
-    }
-    int lastPeriod = inputFile.lastIndexOf('.');
-    if (lastPeriod < 0) {
-      lastPeriod = inputFile.length();
-    }
-    return inputFile.substring(lastSlash + 1, lastPeriod);
+    return FilenameUtils.getBaseName(inputFile);
   }
 
   @Override
@@ -207,5 +196,9 @@ public abstract class AbstractCompiler extends AbstractProcessor implements Comp
       }
     }
     return false;
+  }
+
+  public final String getOutputSuffix() {
+    return this.outputSuffix;
   }
 }

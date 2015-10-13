@@ -20,13 +20,13 @@
 package com.github.maven_nar;
 
 import java.io.File;
-import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
 
 /**
  * Validates the configuration of the NAR project (aol and pom)
@@ -42,9 +42,8 @@ public class NarValidateMojo extends AbstractCompileMojo {
   private File gnuSourceDirectory;
 
   @Override
-  protected List/* <Artifact> */getArtifacts() {
-    return null;// getMavenProject().getCompileArtifacts(); //
-                // Artifact.SCOPE_COMPILE
+  protected ScopeFilter/* <Artifact> */getArtifactScopeFilter() {
+    return null;
   }
 
   @Override

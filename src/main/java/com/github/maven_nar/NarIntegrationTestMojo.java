@@ -49,6 +49,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
 import org.apache.maven.surefire.booter.ForkConfiguration;
 import org.apache.maven.surefire.booter.SurefireBooter;
 import org.apache.maven.surefire.booter.SurefireBooterForkException;
@@ -1003,21 +1004,8 @@ public class NarIntegrationTestMojo extends AbstractDependencyMojo {
    * of shared and jni libraries in java.library.path
    */
   @Override
-  protected List<Artifact> getArtifacts() {
-    try {
-      final List<String> scopes = new ArrayList<String>();
-      scopes.add(Artifact.SCOPE_COMPILE);
-      scopes.add(Artifact.SCOPE_PROVIDED);
-      scopes.add(Artifact.SCOPE_RUNTIME);
-      scopes.add(Artifact.SCOPE_SYSTEM);
-      scopes.add(Artifact.SCOPE_TEST);
-      return getNarManager().getDependencies(scopes);
-    } catch (final MojoExecutionException e) {
-      e.printStackTrace();
-    } catch (final MojoFailureException e) {
-      e.printStackTrace();
-    }
-    return Collections.EMPTY_LIST;
+  protected ScopeFilter getArtifactScopeFilter() {
+    return new ScopeFilter( Artifact.SCOPE_TEST, null );
   }
 
   // TODO remove the part with ToolchainManager lookup once we depend on

@@ -23,9 +23,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Vector;
+import java.util.ArrayList;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Environment;
+import org.apache.commons.io.FilenameUtils;
 
 import com.github.maven_nar.NarUtil;
 import com.github.maven_nar.cpptasks.CCTask;
@@ -38,6 +40,7 @@ import com.github.maven_nar.cpptasks.TargetDef;
 import com.github.maven_nar.cpptasks.VersionInfo;
 import com.github.maven_nar.cpptasks.types.CommandLineArgument;
 import com.github.maven_nar.cpptasks.types.UndefineArgument;
+import com.github.maven_nar.cpptasks.compiler.CommandLineCCompiler;
 import com.google.common.collect.ObjectArrays;
 
 /**
@@ -138,6 +141,25 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
     }
   }
 
+  @Override
+  public String[] getOutputFileNames(final String inputFile, final VersionInfo versionInfo) {
+    //
+    // if a recognized input file
+    //
+    if (bid(inputFile) > 1) {
+      final String baseName = getBaseOutputName(inputFile);
+      final File standardisedFile = new File(inputFile);
+      try {
+        return new String[] {
+          baseName + FilenameUtils.EXTENSION_SEPARATOR + Integer.toHexString(standardisedFile.getCanonicalPath().hashCode()) + getOutputSuffix()
+        };
+      } catch (IOException e) {
+        throw new BuildException("Source file not found", e);
+      }
+    }
+    return new String[0];
+  }
+
   /**
    * Compiles a source file.
    * 
@@ -188,35 +210,33 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       if (firstFileNextExec == sourceIndex) {
         throw new BuildException("Extremely long file name, can't fit on command line");
       }
-      int argCount = args.length + 1 + endArgs.length + (firstFileNextExec - sourceIndex) * argumentCountPerInputFile;
+
+      ArrayList<String> commandlinePrefix = new ArrayList<String>();
       if (this.libtool) {
-        argCount++;
+        commandlinePrefix.add("libtool");
       }
-      if (NarUtil.isWindows()) {
-        argCount += 2;
-      }
-      final String[] commandline = new String[argCount];
-      int index = 0;
-      if (NarUtil.isWindows()) {
-        commandline[index++] = "cmd";
-        commandline[index++] = "/c";
-      }
-      if (this.libtool) {
-        commandline[index++] = "libtool";
-      }
-      commandline[index++] = command;
+      commandlinePrefix.add(command);
       for (final String arg : args) {
-        commandline[index++] = arg;
+        commandlinePrefix.add(arg);
       }
+
+      int retval = 0;
       for (int j = sourceIndex; j < firstFileNextExec; j++) {
+        ArrayList<String> commandlineSuffix = new ArrayList<String>();
+
         for (int k = 0; k < argumentCountPerInputFile; k++) {
-          commandline[index++] = getInputFileArgument(outputDir, sourceFiles[j], k);
+          commandlineSuffix.add(getInputFileArgument(outputDir, sourceFiles[j], k));
         }
+        for (final String endArg : endArgs) {
+          commandlineSuffix.add(endArg);
+        }
+
+        ArrayList<String> commandline = new ArrayList<String>(commandlinePrefix);
+        commandline.addAll(commandlineSuffix);
+        final int ret = runCommand(task, outputDir,
+            commandline.toArray(new String[commandline.size()]));
+        if (ret != 0) { retval = ret; }
       }
-      for (final String endArg : endArgs) {
-        commandline[index++] = endArg;
-      }
-      final int retval = runCommand(task, outputDir, commandline);
       if (monitor != null) {
         final String[] fileNames = new String[firstFileNextExec - sourceIndex];
 
@@ -393,11 +413,11 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       for (final ProcessorDef baseDef : baseDefs) {
         environment = baseDef.getEnv();
         if (environment != null) {
-          compiler = (CommandLineCompiler) compiler.changeEnvironment(true, environment);
+          compiler = (CommandLineCompiler) compiler.changeEnvironment(baseDef.isNewEnvironment(), environment);
         }
       }
     } else {
-      compiler = (CommandLineCompiler) compiler.changeEnvironment(true, environment);
+      compiler = (CommandLineCompiler) compiler.changeEnvironment(specificDef.isNewEnvironment(), environment);
     }
     return new CommandLineCompilerConfiguration(compiler, configId, incPath, sysIncPath, envIncludePath,
         includePathIdentifier.toString(), argArray, paramArray, rebuild, endArgs, path, specificDef.getCcache());

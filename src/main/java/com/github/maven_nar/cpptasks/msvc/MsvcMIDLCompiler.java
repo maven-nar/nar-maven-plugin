@@ -24,9 +24,16 @@ import java.util.Vector;
 
 import org.apache.tools.ant.types.Environment;
 
+import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.CUtil;
+import com.github.maven_nar.cpptasks.CompilerDef;
 import com.github.maven_nar.cpptasks.OptimizationEnum;
+import com.github.maven_nar.cpptasks.ProcessorDef;
+import com.github.maven_nar.cpptasks.TargetDef;
+import com.github.maven_nar.cpptasks.VersionInfo;
 import com.github.maven_nar.cpptasks.compiler.CommandLineCompiler;
+import com.github.maven_nar.cpptasks.compiler.CommandLineCompilerConfiguration;
+import com.github.maven_nar.cpptasks.compiler.CompilerConfiguration;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
 import com.github.maven_nar.cpptasks.compiler.Processor;
@@ -68,6 +75,13 @@ public final class MsvcMIDLCompiler extends CommandLineCompiler {
     }
     return this;
   }
+  
+  @Override
+  protected CompilerConfiguration createConfiguration(final CCTask task, final LinkType linkType,
+      final ProcessorDef[] baseDefs, final CompilerDef specificDef, final TargetDef targetPlatform,
+      final VersionInfo versionInfo) {
+    return new CommandLineCompilerConfiguration((CommandLineCompilerConfiguration)super.createConfiguration(task, linkType, baseDefs, specificDef, targetPlatform, versionInfo), null, null, true);
+  }
 
   /**
    * The include parser for C will work just fine, but we didn't want to
@@ -98,6 +112,20 @@ public final class MsvcMIDLCompiler extends CommandLineCompiler {
     return MsvcProcessor.getIncludeDirSwitch(includeDir);
   }
 
+  @Override
+  public String[] getOutputFileNames(final String inputFile, final VersionInfo versionInfo) {
+    //
+    // if a recognized input file
+    //
+    if (bid(inputFile) > 1) {
+      final String baseName = getBaseOutputName(inputFile);
+      return new String[] {
+        baseName + getOutputSuffix()
+      };
+    }
+    return new String[0];
+  }
+  
   @Override
   protected String getInputFileArgument(final File outputDir, final String filename, final int index) {
     switch (index) {

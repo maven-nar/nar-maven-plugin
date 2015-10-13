@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.commons.io.FilenameUtils;
 
 import com.github.maven_nar.cpptasks.compiler.LinkerConfiguration;
 import com.github.maven_nar.cpptasks.compiler.ProcessorConfiguration;
@@ -88,8 +89,9 @@ public final class TargetMatcher implements FileVisitor {
     } else {
       //
       // get output file name
+      // requires full path as output name may be changed based on location
       //
-      final String[] outputFileNames = selectedCompiler.getOutputFileNames(filename, this.versionInfo);
+      final String[] outputFileNames = selectedCompiler.getOutputFileNames(fullPath.getPath(), this.versionInfo);
       this.sourceFiles[0] = fullPath;
       //
       // if there is some output for this task
