@@ -55,6 +55,7 @@ NAR Configuration
   <gnuTargetDirectory/>
   <gnuAutogenSkip/>
   <gnuConfigureSkip/>
+  <gnuMakeSkip/>
 
   <libraries>
     <library>
@@ -260,6 +261,11 @@ Default is dynamic.
 
 	Set use of libtool. If set to true, the "libtool " will be prepended to 
 the command line for compatible compilers/linkers. Default is false.
+
+* {gnuMakeSkip}
+    
+    Skip the GNU Make step if you are using the GNU stages. This is useful if you 
+wish to run a GNU configure step but not the full make process.
 
 * {libraries}
 
