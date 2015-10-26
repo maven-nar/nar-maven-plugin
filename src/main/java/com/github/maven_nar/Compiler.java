@@ -276,7 +276,7 @@ public abstract class Compiler {
     // tool path
     if (this.toolPath != null) {
       compilerDef.setToolPath(this.toolPath);
-    } else {
+    } else if ( "msvc".equalsIgnoreCase(name)){
       mojo.getMsvc().setToolPath(compilerDef,getLanguage());
     }
 
@@ -285,7 +285,7 @@ public abstract class Compiler {
     compilerDef.setDebug(this.debug);
     compilerDef.setExceptions(this.exceptions);
     compilerDef.setRtti(this.rtti);
-    compilerDef.setMultithreaded(this.mojo.getOS().equals("Windows") ? true : this.multiThreaded);
+    compilerDef.setMultithreaded(this.mojo.getOS().equals("Windows") || this.multiThreaded);
 
     // optimize
     final OptimizationEnum optimization = new OptimizationEnum();
@@ -596,7 +596,7 @@ public abstract class Compiler {
   public final CompilerDef getTestCompiler(final String type, final String output)
       throws MojoFailureException, MojoExecutionException {
     final CompilerDef compiler = getCompiler(type, output);
-    if (this.testOptions != null) {
+    if (compiler != null && this.testOptions != null) {
       for (final String string : this.testOptions) {
         final CompilerArgument arg = new CompilerArgument();
         arg.setValue(string);
