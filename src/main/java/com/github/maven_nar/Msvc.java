@@ -82,8 +82,8 @@ public class Msvc {
   }
 
   public void configureCCTask(final CCTask task) throws MojoExecutionException {
-    final String os = mojo.getOS();
-    if (os.equals(OS.WINDOWS)) {
+    if (OS.WINDOWS.equals(mojo.getOS())
+          && "msvc".equalsIgnoreCase(mojo.getLinker().getName())) {
       addIncludePath(task, this.home, "VC/include");
       addIncludePath(task, this.home, "VC/atlmfc/include");
       if (compareVersion(this.windowsSdkVersion, "7.1A") <= 0) {

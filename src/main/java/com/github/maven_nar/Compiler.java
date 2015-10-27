@@ -276,7 +276,7 @@ public abstract class Compiler {
     // tool path
     if (this.toolPath != null) {
       compilerDef.setToolPath(this.toolPath);
-    } else if ( "msvc".equalsIgnoreCase(name)){
+    } else if ("msvc".equalsIgnoreCase( this.mojo.getLinker().getName())){
       mojo.getMsvc().setToolPath(compilerDef,getLanguage());
     }
 

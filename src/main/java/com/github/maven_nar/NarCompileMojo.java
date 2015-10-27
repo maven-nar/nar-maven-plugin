@@ -347,7 +347,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
     // FIXME, this should be done in CPPTasks at some point
     // getRuntime(getAOL()).equals("dynamic") &&
     if ((isEmbedManifest() || getLinker().isGenerateManifest()) && getOS().equals(OS.WINDOWS)
-        && getLinker().getName(null, null).equals("msvc") && !getLinker().getVersion(this).startsWith("6.")) {
+        && getLinker().getName().equals("msvc") && !getLinker().getVersion(this).startsWith("6.")) {
       final String[] env = new String[] {
         "PATH=" + getMsvc().getPathVariable().getValue()
       };
