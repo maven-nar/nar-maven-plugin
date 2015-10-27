@@ -117,7 +117,7 @@ public class Msvc {
 
   public void configureLinker(final LinkerDef linker) throws MojoExecutionException {
     final String os = mojo.getOS();
-    if (os.equals(OS.WINDOWS)) {
+    if (os.equals(OS.WINDOWS) && "msvc".equalsIgnoreCase(mojo.getLinker().getName())) {
       final String arch = mojo.getArchitecture();
 
       // Visual Studio
