@@ -111,7 +111,7 @@ public class Linker {
    * Adds libraries to the linker.
    */
   @Parameter
-  private List/* <Lib> */libs;
+  private List/* <Lib> */ libs;
 
   /**
    * Adds libraries to the linker. Will work in combination with &lt;libs&gt;.
@@ -126,7 +126,7 @@ public class Linker {
    * Adds system libraries to the linker.
    */
   @Parameter
-  private List/* <SysLib> */sysLibs;
+  private List/* <SysLib> */ sysLibs;
 
   /**
    * Adds system libraries to the linker. Will work in combination with
@@ -244,7 +244,7 @@ public class Linker {
     // tool path
     if (this.toolPath != null) {
       linker.setToolPath(this.toolPath);
-    } else if ( "msvc".equalsIgnoreCase(name)){
+    } else if ("msvc".equalsIgnoreCase(name)) {
       linker.setToolPath(mojo.getMsvc().getToolPath());
     }
 
@@ -467,7 +467,7 @@ public class Linker {
 
     if (this.name.equals("g++") || this.name.equals("gcc")) {
       NarUtil.runCommand("gcc", new String[] {
-        "--version"
+          "--version"
       }, null, null, out, err, dbg, this.log);
       final Pattern p = Pattern.compile("\\d+\\.\\d+\\.\\d+");
       final Matcher m = p.matcher(out.toString());
@@ -478,7 +478,7 @@ public class Linker {
       version = mojo.getMsvc().getVersion();
     } else if (this.name.equals("icc") || this.name.equals("icpc")) {
       NarUtil.runCommand("icc", new String[] {
-        "--version"
+          "--version"
       }, null, null, out, err, dbg, this.log);
       final Pattern p = Pattern.compile("\\d+\\.\\d+");
       final Matcher m = p.matcher(out.toString());
@@ -487,7 +487,7 @@ public class Linker {
       }
     } else if (this.name.equals("icl")) {
       NarUtil.runCommand("icl", new String[] {
-        "/QV"
+          "/QV"
       }, null, null, out, err, dbg, this.log);
       final Pattern p = Pattern.compile("\\d+\\.\\d+");
       final Matcher m = p.matcher(err.toString());
@@ -496,7 +496,7 @@ public class Linker {
       }
     } else if (this.name.equals("CC")) {
       NarUtil.runCommand("CC", new String[] {
-        "-V"
+          "-V"
       }, null, null, out, err, dbg, this.log);
       final Pattern p = Pattern.compile("\\d+\\.d+");
       final Matcher m = p.matcher(err.toString());
@@ -505,9 +505,18 @@ public class Linker {
       }
     } else if (this.name.equals("xlC")) {
       NarUtil.runCommand("/usr/vacpp/bin/xlC", new String[] {
-        "-qversion"
+          "-qversion"
       }, null, null, out, err, dbg, this.log);
       final Pattern p = Pattern.compile("\\d+\\.\\d+");
+      final Matcher m = p.matcher(out.toString());
+      if (m.find()) {
+        version = m.group(0);
+      }
+    } else if (name.equals("clang") || name.equals("clang++")) {
+      NarUtil.runCommand("clang", new String[] {
+          "--version"
+      }, null, null, out, err, dbg, log);
+      final Pattern p = Pattern.compile("\\d+\\.\\d+\\.\\d+");
       final Matcher m = p.matcher(out.toString());
       if (m.find()) {
         version = m.group(0);
@@ -517,8 +526,8 @@ public class Linker {
     }
 
     if (version == null) {
-      if(!err.toString().isEmpty())
-        mojo.getLog().debug("linker returned error stream: " + err.toString() );
+      if (!err.toString().isEmpty())
+        mojo.getLog().debug("linker returned error stream: " + err.toString());
       throw new MojoFailureException("Cannot deduce version number from: " + out.toString());
     }
     return version;
