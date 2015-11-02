@@ -45,6 +45,13 @@ public class NarGnuMakeMojo extends AbstractGnuMojo {
    */
   @Parameter(defaultValue = "")
   private String gnuMakeEnv;
+  
+  /**
+   * Skip running of make.
+   * Useful if you just want to run the configure step for generating source.
+   */
+  @Parameter(property = "nar.gnu.make.skip")
+  private boolean gnuMakeSkip;
 
   /**
    * Boolean to control if we should skip 'make install' after the make
@@ -54,7 +61,7 @@ public class NarGnuMakeMojo extends AbstractGnuMojo {
 
   @Override
   public final void narExecute() throws MojoExecutionException, MojoFailureException {
-    if (!useGnu()) {
+    if (!useGnu() || gnuMakeSkip) {
       return;
     }
 
