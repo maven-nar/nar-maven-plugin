@@ -63,6 +63,12 @@ public abstract class Compiler {
   private String name;
 
   /**
+   * The prefix for the compiler.
+   */
+  @Parameter
+  private String prefix;
+
+  /**
    * Path location of the compile tool
    */
   @Parameter
@@ -281,6 +287,7 @@ public abstract class Compiler {
     }
 
     // debug, exceptions, rtti, multiThreaded
+    compilerDef.setCompilerPrefix(this.prefix);
     compilerDef.setCcache(this.ccache);
     compilerDef.setDebug(this.debug);
     compilerDef.setExceptions(this.exceptions);
@@ -535,6 +542,9 @@ public abstract class Compiler {
     // adjust default values
     if (this.name == null) {
       this.name = NarProperties.getInstance(this.mojo.getMavenProject()).getProperty(getPrefix() + "compiler");
+    }
+    if (this.prefix == null) {
+      this.prefix = NarProperties.getInstance(this.mojo.getMavenProject()).getProperty(getPrefix() + "prefix");
     }
     return this.name;
   }

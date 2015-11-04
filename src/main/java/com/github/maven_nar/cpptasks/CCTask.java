@@ -1300,25 +1300,27 @@ public class CCTask extends Task {
     //
     // add fallback compiler at the end
     //
-    final ProcessorConfiguration config = this.compilerDef.createConfiguration(this, this.linkType, null,
-        targetPlatform, versionInfo);
-    biddingProcessors.addElement(config);
-    final ProcessorConfiguration[] bidders = new ProcessorConfiguration[biddingProcessors.size()];
-    biddingProcessors.copyInto(bidders);
-    //
-    // bid out the <fileset>'s in the cctask
-    //
-    final TargetMatcher matcher = new TargetMatcher(this, this._objDir, bidders, linkerConfig, objectFiles, targets,
-        versionInfo);
-    this.compilerDef.visitFiles(matcher);
+    if (this._compilers.size()==0) {
+      final ProcessorConfiguration config = this.compilerDef.createConfiguration(this, this.linkType, null,
+          targetPlatform, versionInfo);
+      biddingProcessors.addElement(config);
+      final ProcessorConfiguration[] bidders = new ProcessorConfiguration[biddingProcessors.size()];
+      biddingProcessors.copyInto(bidders);
+      //
+      // bid out the <fileset>'s in the cctask
+      //
+      final TargetMatcher matcher = new TargetMatcher(this, this._objDir, bidders, linkerConfig, objectFiles, targets,
+          versionInfo);
+      this.compilerDef.visitFiles(matcher);
 
-    if (outputFile != null && versionInfo != null) {
-      final boolean isDebug = linkerConfig.isDebug();
-      try {
-        linkerConfig.getLinker()
-            .addVersionFiles(versionInfo, this.linkType, outputFile, isDebug, this._objDir, matcher);
-      } catch (final IOException ex) {
-        throw new BuildException(ex);
+      if (outputFile != null && versionInfo != null) {
+        final boolean isDebug = linkerConfig.isDebug();
+        try {
+          linkerConfig.getLinker()
+              .addVersionFiles(versionInfo, this.linkType, outputFile, isDebug, this._objDir, matcher);
+        } catch (final IOException ex) {
+          throw new BuildException(ex);
+        }
       }
     }
     return targets;

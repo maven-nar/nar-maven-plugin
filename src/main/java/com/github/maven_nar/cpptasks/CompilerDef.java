@@ -58,6 +58,7 @@ public final class CompilerDef extends ProcessorDef {
   private int warnings = -1;
   private List<String> order;
   private String toolPath;
+  private String compilerPrefix;
 
   private boolean clearDefaultOptions;
 
@@ -320,6 +321,10 @@ public final class CompilerDef extends ProcessorDef {
     return this.toolPath;
   }
 
+  public String getCompilerPrefix() {
+    return this.compilerPrefix;
+  }
+
   public int getWarnings(final CompilerDef[] defaultProviders, final int index) {
     if (isReference()) {
       return ((CompilerDef) getCheckedRef(CompilerDef.class, "CompilerDef")).getWarnings(defaultProviders, index);
@@ -552,6 +557,10 @@ public final class CompilerDef extends ProcessorDef {
 
   public void setToolPath(final String path) {
     this.toolPath = path;
+  }
+
+  public void setCompilerPrefix(final String prefix) {
+    this.compilerPrefix = prefix;
   }
 
   /**

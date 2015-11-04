@@ -61,6 +61,12 @@ public class Linker {
   private String name;
 
   /**
+   * The prefix for the linker.
+   */
+  @Parameter
+  private String prefix;
+
+  /**
    * Path location of the linker tool
    */
   @Parameter
@@ -249,6 +255,7 @@ public class Linker {
     }
 
     // incremental, map
+    linker.setLinkerPrefix(this.prefix);
     linker.setIncremental(this.incremental);
     linker.setMap(this.map);
 
@@ -460,14 +467,19 @@ public class Linker {
     }
 
     String version = null;
+    String linkerPrefix = "";
+
+    if (this.prefix != null && (!this.prefix.isEmpty())) {
+      linkerPrefix = this.prefix;
+    }
 
     final TextStream out = new StringTextStream();
     final TextStream err = new StringTextStream();
     final TextStream dbg = new StringTextStream();
 
     if (this.name.equals("g++") || this.name.equals("gcc")) {
-      NarUtil.runCommand("gcc", new String[] {
-          "--version"
+      NarUtil.runCommand(linkerPrefix+"gcc", new String[] {
+        "--version"
       }, null, null, out, err, dbg, this.log);
       final Pattern p = Pattern.compile("\\d+\\.\\d+\\.\\d+");
       final Matcher m = p.matcher(out.toString());
@@ -522,7 +534,18 @@ public class Linker {
         version = m.group(0);
       }
     } else {
-      throw new MojoFailureException("Cannot find version number for linker '" + this.name + "'");
+      if (!this.prefix.isEmpty()) {
+        NarUtil.runCommand(linkerPrefix+this.name, new String[] {
+          "--version"
+        }, null, null, out, err, dbg, this.log);
+        final Pattern p = Pattern.compile("\\d+\\.\\d+\\.\\d+");
+        final Matcher m = p.matcher(out.toString());
+        if (m.find()) {
+          version = m.group(0);
+        }
+      } else {
+        throw new MojoFailureException("Cannot find version number for linker '" + this.name + "'");
+      }
     }
 
     if (version == null) {

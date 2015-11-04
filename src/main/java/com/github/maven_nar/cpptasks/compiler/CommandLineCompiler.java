@@ -53,6 +53,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
   /** Command used when invoking ccache */
   private static final String CCACHE_CMD = "ccache";
   private String command;
+  private String prefix;
   private final Environment env;
   private String identifier;
   private final String identifierArg;
@@ -62,7 +63,6 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
 
   protected CommandLineCompiler(final String command, final String identifierArg, final String[] sourceExtensions,
       final String[] headerExtensions,
-
       final String outputSuffix, final boolean libtool, final CommandLineCompiler libtoolCompiler,
       final boolean newEnvironment, final Environment env) {
     super(sourceExtensions, headerExtensions, outputSuffix);
@@ -276,6 +276,9 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
   protected CompilerConfiguration createConfiguration(final CCTask task, final LinkType linkType,
       final ProcessorDef[] baseDefs, final CompilerDef specificDef, final TargetDef targetPlatform,
       final VersionInfo versionInfo) {
+
+    this.prefix = specificDef.getCompilerPrefix();
+
     final Vector<String> args = new Vector<String>();
     final CompilerDef[] defaultProviders = new CompilerDef[baseDefs.length + 1];
     for (int i = 0; i < baseDefs.length; i++) {
@@ -283,6 +286,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
     }
     defaultProviders[0] = specificDef;
     final Vector<CommandLineArgument> cmdArgs = new Vector<CommandLineArgument>();
+
     //
     // add command line arguments inherited from <cc> element
     // any "extends" and finally the specific CompilerDef
@@ -428,7 +432,11 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
   }
 
   protected final String getCommand() {
-    return this.command;
+    if (this.prefix != null && (!this.prefix.isEmpty())) {
+      return this.prefix + this.command;
+    } else {
+      return this.command;
+    }
   }
 
   public String getCommandWithPath(final CommandLineCompilerConfiguration config) {
@@ -454,12 +462,12 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
     if (this.identifier == null) {
       if (this.identifierArg == null) {
         this.identifier = getIdentifier(new String[] {
-          this.command
-        }, this.command);
+          this.getCommand()
+        }, this.getCommand());
       } else {
         this.identifier = getIdentifier(new String[] {
-            this.command, this.identifierArg
-        }, this.command);
+          this.getCommand(), this.identifierArg
+        }, this.getCommand());
       }
     }
     return this.identifier;

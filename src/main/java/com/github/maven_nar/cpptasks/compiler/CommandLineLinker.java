@@ -50,6 +50,7 @@ import com.github.maven_nar.cpptasks.types.LibrarySet;
  */
 public abstract class CommandLineLinker extends AbstractLinker {
   private String command;
+  private String prefix;
   private Environment env = null;
   private String identifier;
   private final String identifierArg;
@@ -142,11 +143,14 @@ public abstract class CommandLineLinker extends AbstractLinker {
         preargs, midargs, endargs
     };
 
+    this.prefix  = specificDef.getLinkerPrefix();
+
     final LinkerDef[] defaultProviders = new LinkerDef[baseDefs.length + 1];
     defaultProviders[0] = specificDef;
     for (int i = 0; i < baseDefs.length; i++) {
       defaultProviders[i + 1] = (LinkerDef) baseDefs[i];
     }
+
     //
     // add command line arguments inherited from <cc> element
     // any "extends" and finally the specific CompilerDef
@@ -258,7 +262,11 @@ public abstract class CommandLineLinker extends AbstractLinker {
   }
 
   protected final String getCommand() {
-    return this.command;
+    if (this.prefix != null && (!this.prefix.isEmpty())) {
+      return this.prefix + this.command;
+    } else {
+      return this.command;
+    }
   }
 
   protected abstract String getCommandFileSwitch(String commandFile);
@@ -282,12 +290,12 @@ public abstract class CommandLineLinker extends AbstractLinker {
     if (this.identifier == null) {
       if (this.identifierArg == null) {
         this.identifier = getIdentifier(new String[] {
-          this.command
-        }, this.command);
+          this.getCommand()
+        }, this.getCommand());
       } else {
         this.identifier = getIdentifier(new String[] {
-            this.command, this.identifierArg
-        }, this.command);
+          this.getCommand(), this.identifierArg
+        }, this.getCommand());
       }
     }
     return this.identifier;
