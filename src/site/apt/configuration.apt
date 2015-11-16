@@ -84,6 +84,7 @@ NAR Configuration
 
   <linker>
     <name/>
+    <prefix/>
     <toolPath/>
     <incremental/>
     <map/>
@@ -111,6 +112,7 @@ NAR Configuration
 
   <cpp>
     <name/>
+    <prefix/>
     <toolPath/>
     <sourceDirectory/>
     <includes>
@@ -321,6 +323,10 @@ wish to run a GNU configure step but not the full make process.
 	The Linker. Some choices are: "msvc", "g++", "CC", "icpc", ...
     Default is Architecture OS specific.
 
+** {linker prefix}
+
+    Add prefix to the linker name: "prefix-name"
+
 ** {linker toolPath}
 
 	The path that the linker is located within.  Default is to use the system's environment.
@@ -378,6 +384,10 @@ wish to run a GNU configure step but not the full make process.
 	The name of the compiler. Some choices are: "msvc", "g++", "gcc", "CC", "cc", "icc", "icpc", ...
     Default is AOL specific.
     
+** {cpp prefix}
+
+    Add prefix to the compiler name: "prefix-name"
+
 ** {cpp toolPath}
 
 	The path that the compiler is located within.  Default is to use the system's environment.
