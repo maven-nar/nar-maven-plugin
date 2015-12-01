@@ -248,11 +248,11 @@ public class NarSystemMojo extends AbstractNarMojo {
       p.println("    {");
       p.println("    }");
       p.println("");
-      p.println("   /**");
-      p.println("    * Load jni library: " + output);
-      p.println("    *");
-      p.println("    * @author nar-maven-plugin");
-      p.println("    */");
+      p.println("    /**");
+      p.println("     * Load jni library: " + output);
+      p.println("     *");
+      p.println("     * @author nar-maven-plugin");
+      p.println("     */");
       p.println("    public static void loadLibrary()");
       p.println("    {");
       p.println("        " + loadLibraryString);
