@@ -115,7 +115,7 @@ public class NarSystemMojo extends AbstractNarMojo {
     builder
         .append("                final File file = new File(prefix + aol + \"-jni/lib/\" + aol + \"/jni/\" + mapped);\n");
     builder.append("                if (file.isFile()) return file;\n");
-    builder.append("                final File fileShared = new File(prefix + aol + \"-jni/lib/\" + aol + \"/shared/\" + mapped);\n");
+    builder.append("                final File fileShared = new File(prefix + aol + \"-shared/lib/\" + aol + \"/shared/\" + mapped);\n");
     builder.append("                if (fileShared.isFile()) return fileShared;\n");
     builder.append("            }\n");
     builder.append("        }\n");
