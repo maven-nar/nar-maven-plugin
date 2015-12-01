@@ -140,7 +140,6 @@ public class NarSystemMojo extends AbstractNarMojo {
 
   private boolean hasNativeLibLoaderAsDependency() {
     for (MavenProject project = getMavenProject(); project != null; project = project.getParent()) {
-      @SuppressWarnings("unchecked")
       final List<Dependency> dependencies = project.getDependencies();
       for (final Dependency dependency : dependencies) {
         final String artifactId = dependency.getArtifactId();
