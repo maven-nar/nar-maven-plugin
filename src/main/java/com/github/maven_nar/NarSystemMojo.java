@@ -186,6 +186,7 @@ public class NarSystemMojo extends AbstractNarMojo {
 
     final File narSystem = new File(fullDir, narSystemName + ".java");
     getLog().info("Generating " + narSystem);
+
     // initialize string variable to be used in NarSystem.java
     final String importString, loadLibraryString, extraMethods, output = getOutput(true);
     if (hasNativeLibLoaderAsDependency()) {
@@ -226,6 +227,30 @@ public class NarSystemMojo extends AbstractNarMojo {
       loadLibraryString = "System.loadLibrary(\"" + output + "\");";
       extraMethods = null;
     }
+
+/////////////////
+    // initialize Velocity engine; enable loading of templates as resources
+    VelocityEngine ve = new VelocityEngine();
+    Properties p = new Properties();
+    p.setProperty("resource.loader", "class");
+    p.setProperty("class.resource.loader.class",
+      "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+    ve.init(p);
+
+    // populate Velocity context
+    VelocityContext context = new VelocityContext();
+    context.put("hasNativeLibLoaderAsDependency", hasNativeLibLoaderAsDependency());
+
+    // process the velocity template
+    String inFile = null;
+    String outFile = null;
+    Template t = ve.getTemplate(inFile);
+    StringWriter writer = new StringWriter();
+    t.merge(context, writer);
+    PrintWriter out = new PrintWriter(new File(outFile), "UTF-8");
+    out.print(writer.toString());
+    out.close();
+/////////////////
 
     try {
       final FileOutputStream fos = new FileOutputStream(narSystem);
