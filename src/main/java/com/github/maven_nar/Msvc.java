@@ -338,8 +338,11 @@ public class Msvc {
     String maxVersion = "";
     File home = null;
     mojo.getLog().debug(" -- Searching for usable WindowSDK ");
-    for (final File directory : Arrays.asList(new File("C:/Program Files (x86)/Microsoft SDKs/Windows"), new File(
-        "C:/Program Files (x86)/Windows Kits"))) {
+    for (final File directory : Arrays.asList(
+            new File("C:/Program Files (x86)/Microsoft SDKs/Windows"),
+            new File("C:/Program Files (x86)/Windows Kits"),
+            new File("C:/Program Files/Microsoft SDKs/Windows"),
+            new File("C:/Program Files/Windows Kits") )) {
       if (directory.exists()) {
         final File[] kitDirectories = directory.listFiles();
         if (kitDirectories != null) {
