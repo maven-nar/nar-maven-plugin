@@ -2,13 +2,17 @@ package com.github.maven_nar;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Comparator;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -20,8 +24,11 @@ import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.CompilerDef;
 import com.github.maven_nar.cpptasks.LinkerDef;
 import com.github.maven_nar.cpptasks.types.SystemIncludePath;
+import com.google.common.collect.Sets;
 
 public class Msvc {
+  private static final String WINDOWS_SDK_10 = "10";
+
   @Parameter
   private File home;
 
@@ -45,6 +52,9 @@ public class Msvc {
   private String toolPathWindowsSDK;
   private String versionPathWindowsSDK = "";
   private String toolPathLinker;
+  private List<File> sdkIncludes = new ArrayList<>();
+  private List<File> sdkLibs = new ArrayList<>();
+  private Set<String> libsRequired = Sets.newHashSet("ucrt", "um", "shared", "winrt");
 
   private boolean addIncludePath(final CCTask task, final File home, final String subDirectory)
       throws MojoExecutionException {
@@ -52,14 +62,19 @@ public class Msvc {
       return false;
     }
     final File file = new File(home, subDirectory);
+    if (file.exists())
+      return addIncludePathToTask(task, file);
+
+    return false;
+  }
+
+  private boolean addIncludePathToTask(final CCTask task, final File file)
+       throws MojoExecutionException {
     try {
-      if (file.exists()) {
-        final SystemIncludePath includePath = task.createSysIncludePath();
-        final String fullPath = file.getCanonicalPath();
-        includePath.setPath(fullPath);
-        return true;
-      }
-      return false;
+      final SystemIncludePath includePath = task.createSysIncludePath();
+      final String fullPath = file.getCanonicalPath();
+      includePath.setPath(fullPath);
+      return true;
     } catch (final IOException e) {
       throw new MojoExecutionException("Unable to add system include: " + file.getAbsolutePath(), e);
     }
@@ -82,17 +97,15 @@ public class Msvc {
   }
 
   public void configureCCTask(final CCTask task) throws MojoExecutionException {
-    if (OS.WINDOWS.equals(mojo.getOS())
-          && "msvc".equalsIgnoreCase(mojo.getLinker().getName())) {
+    if (OS.WINDOWS.equals(mojo.getOS()) && "msvc".equalsIgnoreCase(mojo.getLinker().getName())) {
       addIncludePath(task, this.home, "VC/include");
       addIncludePath(task, this.home, "VC/atlmfc/include");
       if (compareVersion(this.windowsSdkVersion, "7.1A") <= 0) {
         addIncludePath(task, this.windowsSdkHome, "include");
-      } else {
-        addIncludePath(task, this.windowsSdkHome, "include" + versionPathWindowsSDK + "/ucrt");
-        addIncludePath(task, this.windowsSdkHome, "include" + versionPathWindowsSDK + "/um");
-        addIncludePath(task, this.windowsSdkHome, "include" + versionPathWindowsSDK + "/shared");
-        addIncludePath(task, this.windowsSdkHome, "include" + versionPathWindowsSDK + "/winrt");
+      } else { 
+        for (File sdkInclude : sdkIncludes)
+          addIncludePathToTask(task, sdkInclude);
+
       }
       task.addEnv(getPathVariable());
       // TODO: supporting running with clean environment - addEnv sets
@@ -138,20 +151,13 @@ public class Msvc {
         if ("x86".equals(arch)) {
           linker.addLibraryDirectory(this.windowsSdkHome, "lib");
         } else {
-          linker.addLibraryDirectory(this.windowsSdkHome, "lib/" + sdkArch);
+          linker.addLibraryDirectory(this.windowsSdkHome, "lib/"
+              + sdkArch);
         }
-      } else if (compareVersion(this.windowsSdkVersion, "8.0") == 0) {
-        linker.addLibraryDirectory(this.windowsSdkHome, "Lib/Win8/um/" + sdkArch); // 8+
-      } else {
-        linker.addLibraryDirectory(this.windowsSdkHome, "Lib/Winv6.3/um/" + sdkArch); // win
-                                                                                      // 8
-                                                                                      // sdk
-                                                                                      // compatible
-                                                                                      // with
-                                                                                      // XP
-      }
-      linker.addLibraryDirectory(this.windowsSdkHome, "Lib" + versionPathWindowsSDK + "/ucrt/" + sdkArch); // 10+
-      linker.addLibraryDirectory(this.windowsSdkHome, "Lib" + versionPathWindowsSDK + "/um/" + sdkArch); // 10+
+      } else
+        for (File sdkLib : sdkLibs)
+          linker.addLibraryDirectory(sdkLib, sdkArch);
+
     }
   }
 
@@ -210,6 +216,7 @@ public class Msvc {
 
     // Cross tools first if necessary, platform tools second, more generic tools
     // later
+
     if (!osArchitecture.equals(mojoArchitecture) && !matchMojo) {
       if (!addPath(this.home, "VC/bin/" + osArchitecture + "_" + mojoArchitecture)) {
         throw new MojoExecutionException("Unable to find compiler for architecture " + mojoArchitecture + ".\n"
@@ -280,11 +287,10 @@ public class Msvc {
           }
         }
         // TODO: else Registry might be more reliable but adds dependency to be
-        // able to acccess - HKLM\SOFTWARE\Microsoft\Visual
-        // Studio\Major.Minor:InstallDir
+        // able to acccess - HKLM\SOFTWARE\Microsoft\Visual Studio\Major.Minor:InstallDir
       }
-      mojo.getLog()
-          .debug(String.format(" VisualStudio %1s (%2s) found %3s ", this.version, internalVersion, this.home));
+      mojo.getLog().debug(
+          String.format(" VisualStudio %1s (%2s) found %3s ", this.version, internalVersion, this.home));
     } else {
       this.version = "";
       File home = null;
@@ -300,9 +306,8 @@ public class Msvc {
             if (commonToolsDirectory.exists()) {
               this.version = version;
               this.home = commonToolsDirectory.getParentFile().getParentFile();
-              mojo.getLog().debug(
-                  String.format(" VisualStudio %1s (%2s) found %3s ", this.version,
-                      matcher.group(1) + matcher.group(2), this.home));
+              mojo.getLog().debug(String.format(" VisualStudio %1s (%2s) found %3s ",
+                          this.version, matcher.group(1) + matcher.group(2), this.home));
             }
           }
         }
@@ -312,109 +317,150 @@ public class Msvc {
         final TextStream err = new StringTextStream();
         final TextStream dbg = new StringTextStream();
 
-        NarUtil.runCommand("link", new String[] {
-          "/?"
-        }, null, null, out, err, dbg, null, true);
-        final Pattern p = Pattern.compile("(\\d+\\.\\d+)\\.\\d+(\\.\\d+)?");
+        NarUtil.runCommand("link", new String[] { "/?" }, null, null,
+            out, err, dbg, null, true);
+        final Pattern p = Pattern
+            .compile("(\\d+\\.\\d+)\\.\\d+(\\.\\d+)?");
         final Matcher m = p.matcher(out.toString());
         if (m.find()) {
           this.version = m.group(1);
-          mojo.getLog().debug(
-              String.format(" VisualStudio Not found but link runs and reports version %1s (%2s)", this.version,
-                  m.group(0)));
+          mojo.getLog().debug(String.format(" VisualStudio Not found but link runs and reports version %1s (%2s)", this.version, m.group(0)));
         } else {
-          throw new MojoExecutionException(
-              "msvc.version not specified and no VS<Version>COMNTOOLS environment variable can be found");
+          throw new MojoExecutionException("msvc.version not specified and no VS<Version>COMNTOOLS environment variable can be found");
         }
       }
     }
   }
 
+  private final Comparator<File> versionComparator = new Comparator<File>() {
+    @Override
+    public int compare(File o1, File o2) {
+      // will be sorted smallest first, so we need to invert the order of
+      // the objects
+      String firstDir = o2.getName(), secondDir = o1.getName();
+      if (firstDir.charAt(0) == 'v') { // remove 'v' and 'A' at the end
+        firstDir = firstDir.substring(1, firstDir.length() - 1);
+        secondDir = secondDir.substring(1, secondDir.length() - 1);
+      }
+      // impossible that two dirs are the same
+      String[] firstVersionString = firstDir.split("\\."), secondVersionString = secondDir.split("\\.");
+
+      int maxIdx = Math.min(firstVersionString.length, secondVersionString.length);
+      int deltaVer;
+      try {
+        for (int i = 0; i < maxIdx; i++)
+          if ((deltaVer = Integer.parseInt(firstVersionString[i]) - Integer.parseInt(secondVersionString[i])) != 0)
+            return deltaVer;
+
+      } catch (NumberFormatException e) {
+        return firstDir.compareTo(secondDir);
+      }
+      if (firstVersionString.length > maxIdx) // 10.0.150 > 10.0
+        return 1;
+      else if (secondVersionString.length > maxIdx) // 10.0 < 10.0.150
+        return -1;
+      return 0; // impossible that they are the same
+    }
+  };
+
   private void initWindowsSdk() throws MojoExecutionException {
     final boolean hasVersion = this.windowsSdkVersion != null && this.windowsSdkVersion.trim().length() >= 0;
-    if (!hasVersion) {
+
+    if (!hasVersion)
       this.windowsSdkVersion = "";
-    }
-    String maxVersion = "";
-    File home = null;
+
     mojo.getLog().debug(" -- Searching for usable WindowSDK ");
-    for (final File directory : Arrays.asList(
-            new File("C:/Program Files (x86)/Microsoft SDKs/Windows"),
-            new File("C:/Program Files (x86)/Windows Kits"),
-            new File("C:/Program Files/Microsoft SDKs/Windows"),
-            new File("C:/Program Files/Windows Kits") )) {
+    // newer first: look up in 10 -> 8.1 -> 8.0 -> 7.1 and look for libs
+    // specified
+    for (final File directory : Arrays.asList(new File(
+        "C:/Program Files (x86)/Windows Kits"), new File(
+        "C:/Program Files (x86)/Microsoft SDKs/Windows"), new File(
+        "C:/Program Files/Windows Kits"), new File(
+        "C:/Program Files/Microsoft SDKs/Windows"))) {
       if (directory.exists()) {
         final File[] kitDirectories = directory.listFiles();
-        if (kitDirectories != null) {
-          for (final File kitDirectory : kitDirectories) {
-            if (new File(kitDirectory, "Include").exists()) {
-              String kitVersion = kitDirectory.getName();
-              if (kitVersion.charAt(0) == 'v') {
-                kitVersion = kitVersion.substring(1);
-              }
-              mojo.getLog()
-                  .debug(String.format(" WindowSDK %1s found %2s", kitVersion, kitDirectory.getAbsolutePath()));
-              if (kitVersion.matches("\\d+\\.\\d+?[A-Z]?")) { // windows 8/8.1
-                                                              // SDK
-                if (this.windowsSdkVersion.length() == 0) {
-                  if (compareVersion(kitVersion, maxVersion) > 0) {
-                    maxVersion = kitVersion;
-                    home = kitDirectory;
-                  }
-                } else {
-                  // TODO: is it acceptable to be sloppy - msvc installs 'A'
-                  // version, windows platform sdk installs more complete
-                  // if (this.windowsSdkVersion.startsWith(kitVersion)) {
-                  if (kitVersion.equals(this.windowsSdkVersion)) {
-                    maxVersion = this.windowsSdkVersion;
-                    home = kitDirectory;
-                  }
-                }
-              }
-              if (kitVersion.matches("\\d+?")) { // windows 10 SDK supports
-                                                 // multiple installs
-                home = kitDirectory;
-                final File[] kitVersionDirectories = new File(kitDirectory, "Include").listFiles();
-                for (final File kitVersionDirectory : kitVersionDirectories) {
-                  mojo.getLog().debug(String.format(" KitDir %1s", kitVersionDirectory.getAbsolutePath()));
-                  if (new File(kitVersionDirectory, "um").exists()) {
-                    String kitSpecificVersion = kitVersionDirectory.getName();
-                    if (this.windowsSdkVersion.length() == 0 || kitVersion.equals(this.windowsSdkVersion)) { // unspecified
-                                                                                                             // or
-                                                                                                             // generic
-                                                                                                             // 10
-                      // find the max version available.
-                      mojo.getLog().debug(String.format(" KitVer %1s, maxVer %2s", kitSpecificVersion, maxVersion));
-                      if (compareVersion(kitSpecificVersion, maxVersion) > 0) {
-                        maxVersion = kitSpecificVersion;
-                        versionPathWindowsSDK = "/" + maxVersion;
-                      }
-                    } else {
-                      // find the specific version
-                      if (kitVersion.equals(this.windowsSdkVersion)) {
-                        maxVersion = kitSpecificVersion;
-                        versionPathWindowsSDK = "/" + maxVersion;
-                      }
-                    }
-                  }
-                }
-              }
+        Arrays.sort(kitDirectories, versionComparator);
+        for (final File kitDirectory : kitDirectories) {
+
+          if (new File(kitDirectory, "Include").exists()) { // legacy
+                                    // SDK
+            String kitVersion = kitDirectory.getName();
+            if (kitVersion.charAt(0) == 'v')
+              kitVersion = kitVersion.substring(1);
+            
+            mojo.getLog().debug(String.format(" WindowSDK %1s found %2s", kitVersion, kitDirectory.getAbsolutePath()));
+            if (kitVersion.matches("\\d+\\.\\d+?[A-Z]?")) {
+              // windows <= 8.1
+              legacySDK(kitDirectory);
+            } else if (kitVersion.matches("\\d+?")) { // windows 10
+                                  // SDK
+                                  // supports
+              addNewSDKLibraries(kitDirectory);
             }
+            if (libsRequired.size() == 0)
+              break;
           }
         }
       }
     }
-    if (this.windowsSdkHome == null) {
-      this.windowsSdkHome = home;
-    }
-    if (maxVersion.length() == 0) {
+    if (this.windowsSdkVersion == null) {
       throw new MojoExecutionException("msvc.windowsSdkVersion not specified and versions cannot be found");
     }
-    this.windowsSdkVersion = maxVersion;
     mojo.getLog().debug(String.format(" Using WindowSDK %1s found %2s", this.windowsSdkVersion, this.windowsSdkHome));
   }
 
-  public void setMojo(final AbstractNarMojo mojo) throws MojoFailureException, MojoExecutionException {
+  private void addNewSDKLibraries(final File kitDirectory) {
+    // multiple installs
+    List<File> kitVersionDirectories = Arrays.asList(new File(kitDirectory, "Include").listFiles());
+    Collections.sort(kitVersionDirectories,  versionComparator);
+    ListIterator<File> kitVersionDirectoriesIt = kitVersionDirectories.listIterator();
+    File kitVersionDirectory = null;
+    while (kitVersionDirectoriesIt.hasNext() && (kitVersionDirectory = kitVersionDirectoriesIt.next()) != null) 
+      if (new File(kitVersionDirectory, "ucrt").exists()) 
+        break;
+    
+    if (kitVersionDirectory != null){
+      String version = kitVersionDirectory.getName();
+      mojo.getLog().debug(String.format(" Latest Win %1s KitDir at %2s", kitVersionDirectory.getName(), kitVersionDirectory.getAbsolutePath()));
+      // add the libraries found:
+      File includeDir = new File(kitDirectory, "Include/" + version);
+      File libDir = new File(kitDirectory, "Lib/" + version);
+      addSDKLibs(includeDir, libDir);
+    }
+  }
+
+  private void setKit(File home) {
+    if (this.windowsSdkVersion.equals("")) {
+      this.windowsSdkVersion = home.getName();
+      this.windowsSdkHome = home;
+    }
+  }
+
+  private void legacySDK(final File kitDirectory) {
+    File includeDir = new File(kitDirectory, "Include");
+    if(includeDir.exists()){
+      File libDir = new File(kitDirectory, "Lib");
+      // take the first dir in lib dir
+      libDir = libDir.listFiles()[0];
+      addSDKLibs(includeDir, libDir);
+      setKit(kitDirectory);
+    }
+  }
+
+  private void addSDKLibs(File includeDir, File libdir) {
+    final File[] libs = includeDir.listFiles();
+    for (final File libDir : libs) {
+      // <libName> <include path> <lib path>
+      if (libsRequired.remove(libDir.getName())) {
+        mojo.getLog().debug(String.format(" Using directory %1s for library %2s", libDir.getAbsolutePath(), libDir.getName()));
+        sdkIncludes.add(libDir);
+        sdkLibs.add(new File(libdir, libDir.getName()));
+      }
+    }
+  }
+
+  public void setMojo(final AbstractNarMojo mojo)
+      throws MojoFailureException, MojoExecutionException {
     if (mojo != this.mojo) {
       this.mojo = mojo;
       init();
