@@ -9,6 +9,37 @@ linker(L) identified as AOL. These nar files can be installed in the
 local Maven repository and deployed to a standard Maven (web) server,
 using the standard `maven-install-plugin` and `maven-deploy-plugin`.
 
+Usage
+-----
+
+In your POM:
+
+```xml
+<build>
+	<plugins>
+		<plugin>
+			<groupId>com.github.maven-nar</groupId>
+			<artifactId>nar-maven-plugin</artifactId>
+			<version>3.2.3</version>
+			<extensions>true</extensions>
+			<configuration>
+				...
+			</configuration>
+		</plugin>
+	</plugins>
+</build>
+```
+
+Of course, it is recommended that you use the
+[latest version](http://search.maven.org/#search|ga|1|g%3A%22com.github.maven-nar%22%20a%3A%22nar-maven-plugin%22).
+
+What you put in the `<configuration>` section will depend on your build;
+see the
+[Working examples](https://github.com/maven-nar/nar-maven-plugin/wiki/Working-examples)
+and
+[integration tests](https://github.com/maven-nar/nar-maven-plugin/tree/master/src/it)
+for ideas.
+
 Links
 -----
 * [How to contribute](https://github.com/maven-nar/nar-maven-plugin/wiki/How-to-contribute)
