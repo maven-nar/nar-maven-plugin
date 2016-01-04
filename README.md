@@ -55,3 +55,10 @@ Community
 What about maven-nar-plugin?
 ----------------------------
 This *is* the [official](https://github.com/maven-nar/nar-maven-plugin/wiki/Frequently_Asked_Questions#q-is-this-repository-httpsgithubcommaven-narnar-maven-plugin-the-official-home-of-the-nar-plugin) `maven-nar-plugin` project, renamed to `nar-maven-plugin` [as per Apache Maven's requirements](https://github.com/maven-nar/nar-maven-plugin/wiki/Frequently_Asked_Questions#q-why-was-the-plugin-renamed-to-nar-maven-plugin).
+
+Alternatives and Complements
+----------------------------
+* [Native Library Loader](https://github.com/scijava/native-lib-loader) which
+  [integrates with NAR](https://github.com/maven-nar/nar-maven-plugin/wiki/Native-Library-Loader)
+* [Native Maven Plugin](https://github.com/mojohaus/maven-native) from Mojohaus
+* [Java Native Loader](https://github.com/uw-dims/java-native-loader)
