@@ -52,8 +52,3 @@ Links
 What about maven-nar-plugin?
 ----------------------------
 This *is* the [official](https://github.com/maven-nar/nar-maven-plugin/wiki/Frequently_Asked_Questions#q-is-this-repository-httpsgithubcommaven-narnar-maven-plugin-the-official-home-of-the-nar-plugin) `maven-nar-plugin` project, renamed to `nar-maven-plugin` [as per Apache Maven's requirements](https://github.com/maven-nar/nar-maven-plugin/wiki/Frequently_Asked_Questions#q-why-was-the-plugin-renamed-to-nar-maven-plugin).
-
-Is this plugin available on Maven Central?
-------------------------------------------
-
-[Yes](http://search.maven.org/#search|ga|1|g%3A%22com.github.maven-nar%22%20a%3A%22nar-maven-plugin%22).
