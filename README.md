@@ -34,11 +34,9 @@ Of course, it is recommended that you use the
 [latest version](http://search.maven.org/#search|ga|1|g%3A%22com.github.maven-nar%22%20a%3A%22nar-maven-plugin%22).
 
 What you put in the `<configuration>` section will depend on your build;
-see the
-[Working examples](https://github.com/maven-nar/nar-maven-plugin/wiki/Working-examples)
-and
-[integration tests](https://github.com/maven-nar/nar-maven-plugin/tree/master/src/it)
-for ideas.
+for ideas, see:
+* [Working examples](https://github.com/maven-nar/nar-maven-plugin/wiki/Working-examples)
+* [integration tests](https://github.com/maven-nar/nar-maven-plugin/tree/master/src/it)
 
 Documentation
 -------------
