@@ -40,14 +40,17 @@ and
 [integration tests](https://github.com/maven-nar/nar-maven-plugin/tree/master/src/it)
 for ideas.
 
-Links
------
-* [How to contribute](https://github.com/maven-nar/nar-maven-plugin/wiki/How-to-contribute)
-* [FAQ](https://github.com/maven-nar/nar-maven-plugin/wiki/Frequently_Asked_Questions)
-* [Documentation](http://maven-nar.github.io/nar-maven-plugin/)
+Documentation
+-------------
+* [Wiki](https://github.com/maven-nar/nar-maven-plugin/wiki)
+    * [How to contribute](https://github.com/maven-nar/nar-maven-plugin/wiki/How-to-contribute)
+    * [FAQ](https://github.com/maven-nar/nar-maven-plugin/wiki/Frequently_Asked_Questions)
+* [Maven site](http://maven-nar.github.io/)
+
+Community
+---------
 * [Mailing list](https://groups.google.com/group/maven-nar)
 * [Issues](https://github.com/maven-nar/nar-maven-plugin/issues)
-* [SCM](https://github.com/maven-nar)
 
 What about maven-nar-plugin?
 ----------------------------
