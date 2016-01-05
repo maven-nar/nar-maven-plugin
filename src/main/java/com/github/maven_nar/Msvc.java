@@ -27,7 +27,6 @@ import com.github.maven_nar.cpptasks.types.SystemIncludePath;
 import com.google.common.collect.Sets;
 
 public class Msvc {
-  private static final String WINDOWS_SDK_10 = "10";
 
   @Parameter
   private File home;
@@ -50,7 +49,6 @@ public class Msvc {
 
   private File windowsHome;
   private String toolPathWindowsSDK;
-  private String versionPathWindowsSDK = "";
   private String toolPathLinker;
   private List<File> sdkIncludes = new ArrayList<>();
   private List<File> sdkLibs = new ArrayList<>();
@@ -245,7 +243,6 @@ public class Msvc {
       }
       addPath(this.windowsSdkHome, "bin");
     } else {
-      String sdkArch = mojoArchitecture;
       if ("amd64".equals(osArchitecture) && !matchMojo) {
         addPath(this.windowsSdkHome, "bin/x64");
       }
@@ -288,11 +285,10 @@ public class Msvc {
         // TODO: else Registry might be more reliable but adds dependency to be
         // able to acccess - HKLM\SOFTWARE\Microsoft\Visual Studio\Major.Minor:InstallDir
       }
-      mojo.getLog()
-          .debug(String.format(" VisualStudio %1s (%2s) found %3s ", this.version, internalVersion, this.home));
+      mojo.getLog().debug(
+          String.format(" VisualStudio %1s (%2s) found %3s ", this.version, internalVersion, this.home));
     } else {
       this.version = "";
-      File home = null;
       for (final Entry<String, String> entry : System.getenv().entrySet()) {
         final String key = entry.getKey();
         final String value = entry.getValue();
@@ -365,12 +361,11 @@ public class Msvc {
       return 0; // impossible that they are the same
     }
   };
-
+  private boolean foundSDK = false;
   private void initWindowsSdk() throws MojoExecutionException {
-    final boolean hasVersion = this.windowsSdkVersion != null && this.windowsSdkVersion.trim().length() >= 0;
-    if (!hasVersion) {
-      this.windowsSdkVersion = "";
-    }
+    if(this.windowsSdkVersion != null && this.windowsSdkVersion.trim().equals(""))
+      this.windowsSdkVersion = null;
+
     mojo.getLog().debug(" -- Searching for usable WindowSDK ");
     // newer first: 10 -> 8.1 -> 8.0 -> 7.1 and look for libs specified
     for (final File directory : Arrays.asList(
@@ -390,6 +385,8 @@ public class Msvc {
               if (kitVersion.charAt(0) == 'v') {
                 kitVersion = kitVersion.substring(1);
               }
+              if (this.windowsSdkVersion!=null && compareVersion(kitVersion,this.windowsSdkVersion)>0)
+                continue; // skip versions higher than the previous version
               mojo.getLog()
                   .debug(String.format(" WindowSDK %1s found %2s", kitVersion, kitDirectory.getAbsolutePath()));
               if (kitVersion.matches("\\d+\\.\\d+?[A-Z]?")) {
@@ -399,17 +396,15 @@ public class Msvc {
                 // windows 10 SDK supports
                 addNewSDKLibraries(kitDirectory);
               }
-              if (libsRequired.size() == 0) {
-                break;
-              }
-            }
-          }
-        }
-      }
+	        }
+	      }
+          if (libsRequired.size() == 0) // need it here to break out of the outer loop
+              break;
+	    }
+	  }
     }
-    if (this.windowsSdkVersion == null) {
+    if (!foundSDK)
       throw new MojoExecutionException("msvc.windowsSdkVersion not specified and versions cannot be found");
-    }
     mojo.getLog().debug(String.format(" Using WindowSDK %1s found %2s", this.windowsSdkVersion, this.windowsSdkHome));
   }
 
@@ -436,9 +431,12 @@ public class Msvc {
   }
 
   private void setKit(File home) {
-    if (this.windowsSdkVersion.equals("")) {
-      this.windowsSdkVersion = home.getName();
-      this.windowsSdkHome = home;
+    if (!foundSDK) {
+      if(this.windowsSdkVersion==null)
+        this.windowsSdkVersion = home.getName();
+      if(this.windowsSdkHome==null)
+        this.windowsSdkHome = home;
+      foundSDK=true;
     }
   }
 
