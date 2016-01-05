@@ -285,8 +285,8 @@ public class Msvc {
         // TODO: else Registry might be more reliable but adds dependency to be
         // able to acccess - HKLM\SOFTWARE\Microsoft\Visual Studio\Major.Minor:InstallDir
       }
-      mojo.getLog()
-          .debug(String.format(" VisualStudio %1s (%2s) found %3s ", this.version, internalVersion, this.home));
+      mojo.getLog().debug(
+          String.format(" VisualStudio %1s (%2s) found %3s ", this.version, internalVersion, this.home));
     } else {
       this.version = "";
       for (final Entry<String, String> entry : System.getenv().entrySet()) {
