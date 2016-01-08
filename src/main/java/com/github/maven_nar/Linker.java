@@ -84,6 +84,9 @@ public class Linker {
   @Parameter(required = true)
   private boolean map = false;
 
+  @Parameter(required = true)
+  private boolean skipDepLink = false;
+  
   /**
    * Options for the linker Defaults to Architecture-OS-Linker specific values.
    * FIXME table missing
@@ -254,6 +257,8 @@ public class Linker {
       linker.setToolPath(mojo.getMsvc().getToolPath());
     }
 
+    linker.setSkipDepLink(this.skipDepLink);
+    
     // incremental, map
     linker.setLinkerPrefix(this.prefix);
     linker.setIncremental(this.incremental);
