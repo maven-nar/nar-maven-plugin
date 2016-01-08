@@ -60,6 +60,7 @@ public class LinkerDef extends ProcessorDef {
   private final Vector sysLibrarySets = new Vector();
   private String toolPath;
   private String linkerPrefix;
+  private Boolean skipDepLink;
 
   private final Set<File> libraryDirectories = new LinkedHashSet<File>();
 
@@ -326,7 +327,11 @@ public class LinkerDef extends ProcessorDef {
   public String getLinkerPrefix() {
     return this.linkerPrefix;
   }
-
+  
+ public boolean isSkipDepLink() {
+    return this.skipDepLink.booleanValue();
+  }
+  
   /**
    * Sets the base address. May be specified in either decimal or hex.
    * 
@@ -510,6 +515,10 @@ public class LinkerDef extends ProcessorDef {
 
   public void setLinkerPrefix(final String prefix) {
     this.linkerPrefix = prefix;
+  }
+  
+  public void setSkipDepLink(final boolean skipDepLink) {
+    this.skipDepLink = booleanValueOf(skipDepLink);
   }
 
   public void visitSystemLibraries(final Linker linker, final FileVisitor libraryVisitor) {

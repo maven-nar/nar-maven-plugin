@@ -248,7 +248,8 @@ public class NarCompileMojo extends AbstractCompileMojo {
     // add dependency libraries
     // FIXME: what about PLUGIN and STATIC, depending on STATIC, should we
     // not add all libraries, see NARPLUGIN-96
-    if (type.equals(Library.SHARED) || type.equals(Library.JNI) || type.equals(Library.EXECUTABLE)) {
+    final boolean skipDepLink = linkerDefinition.isSkipDepLink();
+    if (((type.equals(Library.SHARED) || type.equals(Library.JNI) || type.equals(Library.EXECUTABLE))) && !skipDepLink) {
 
       final List depLibOrder = getDependencyLibOrder();
       List depLibs = dependencies;
