@@ -60,3 +60,4 @@ Alternatives and Complements
   [integrates with NAR](https://github.com/maven-nar/nar-maven-plugin/wiki/Native-Library-Loader)
 * [Native Maven Plugin](https://github.com/mojohaus/maven-native) from Mojohaus
 * [Java Native Loader](https://github.com/uw-dims/java-native-loader)
+* [Gradle Native](http://gradle.org/getting-started-native/)
