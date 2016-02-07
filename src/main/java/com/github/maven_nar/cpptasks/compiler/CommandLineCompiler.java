@@ -42,6 +42,7 @@ import com.github.maven_nar.cpptasks.types.CommandLineArgument;
 import com.github.maven_nar.cpptasks.types.UndefineArgument;
 import com.github.maven_nar.cpptasks.compiler.CommandLineCCompiler;
 import com.google.common.collect.ObjectArrays;
+import org.apache.tools.ant.util.FileUtils;
 
 /**
  * An abstract Compiler implementation which uses an external program to
@@ -233,7 +234,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
 
         ArrayList<String> commandline = new ArrayList<String>(commandlinePrefix);
         commandline.addAll(commandlineSuffix);
-        final int ret = runCommand(task, outputDir,
+        final int ret = runCommand(task, workDir,
             commandline.toArray(new String[commandline.size()]));
         if (ret != 0) { retval = ret; }
       }
@@ -278,7 +279,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       final VersionInfo versionInfo) {
 
     this.prefix = specificDef.getCompilerPrefix();
-
+    this.objDir = task.getObjdir();
     final Vector<String> args = new Vector<String>();
     final CompilerDef[] defaultProviders = new CompilerDef[baseDefs.length + 1];
     for (int i = 0; i < baseDefs.length; i++) {
@@ -495,13 +496,24 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
     //
     // if there is an embedded space,
     // must enclose in quotes
-    if (filename.indexOf(' ') >= 0) {
+    String relative="";
+    String inputFile;
+    try {
+      relative = FileUtils.getRelativePath(workDir, new File(filename));
+    } catch (Exception ex) {
+    }
+    if (relative.isEmpty()) {
+      inputFile = filename;
+    } else {
+      inputFile = relative;
+    }
+    if (inputFile.indexOf(' ') >= 0) {
       final StringBuffer buf = new StringBuffer("\"");
-      buf.append(filename);
+      buf.append(inputFile);
       buf.append("\"");
       return buf.toString();
     }
-    return filename;
+    return inputFile;
   }
 
   protected final boolean getLibtool() {

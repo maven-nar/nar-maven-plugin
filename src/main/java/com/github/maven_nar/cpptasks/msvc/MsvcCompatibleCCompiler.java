@@ -31,6 +31,7 @@ import com.github.maven_nar.cpptasks.compiler.CommandLineCompilerConfiguration;
 import com.github.maven_nar.cpptasks.compiler.CompilerConfiguration;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.PrecompilingCommandLineCCompiler;
+import org.apache.tools.ant.util.FileUtils;
 
 /**
  * An abstract base class for compilers that are basically command line
@@ -59,6 +60,7 @@ public abstract class MsvcCompatibleCCompiler extends PrecompilingCommandLineCCo
 
   protected void addDebugSwitch(final Vector<String> args) {
     args.addElement("/Zi");
+    args.addElement("/Fd" + objDir.getAbsolutePath() + File.separator);
     args.addElement("/Od");
     args.addElement("/RTC1");
     args.addElement("/D_DEBUG");
@@ -148,7 +150,17 @@ public abstract class MsvcCompatibleCCompiler extends PrecompilingCommandLineCCo
       final String fullOutputName = new File(outputDir, outputFileName).toString();
       return "/Fo" + fullOutputName;
     }
-    return filename;
+
+    String relative="";
+      try {
+        relative = FileUtils.getRelativePath(workDir, new File(filename));
+      } catch (Exception ex) {
+      }
+      if (relative.isEmpty()) {
+          return filename;
+      } else {
+          return relative;
+      }
   }
 
   @Override

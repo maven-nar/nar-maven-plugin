@@ -36,6 +36,7 @@ import com.github.maven_nar.cpptasks.types.DefineSet;
 import com.github.maven_nar.cpptasks.types.IncludePath;
 import com.github.maven_nar.cpptasks.types.SystemIncludePath;
 import com.github.maven_nar.cpptasks.types.UndefineArgument;
+import java.io.File;
 
 /**
  * A compiler definition. compiler elements may be placed either as children of
@@ -59,6 +60,7 @@ public final class CompilerDef extends ProcessorDef {
   private List<String> order;
   private String toolPath;
   private String compilerPrefix;
+  private File workDir;
 
   private boolean clearDefaultOptions;
 
@@ -325,6 +327,10 @@ public final class CompilerDef extends ProcessorDef {
     return this.compilerPrefix;
   }
 
+  public File getWorkDir() {
+      return this.workDir;
+  }
+  
   public int getWarnings(final CompilerDef[] defaultProviders, final int index) {
     if (isReference()) {
       return ((CompilerDef) getCheckedRef(CompilerDef.class, "CompilerDef")).getWarnings(defaultProviders, index);
@@ -563,6 +569,10 @@ public final class CompilerDef extends ProcessorDef {
     this.compilerPrefix = prefix;
   }
 
+  public void setWorkDir(final File workDir) {
+      this.workDir = workDir;
+  }
+  
   /**
    * Enumerated attribute with the values "none", "severe", "default",
    * "production", "diagnostic", and "aserror".

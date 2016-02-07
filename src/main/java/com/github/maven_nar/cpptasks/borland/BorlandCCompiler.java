@@ -31,6 +31,7 @@ import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
 import com.github.maven_nar.cpptasks.compiler.PrecompilingCommandLineCCompiler;
 import com.github.maven_nar.cpptasks.compiler.Processor;
+import org.apache.tools.ant.util.FileUtils;
 
 /**
  * Adapter for the Borland(r) C/C++ compiler.
@@ -139,7 +140,16 @@ public class BorlandCCompiler extends PrecompilingCommandLineCCompiler {
         final String objectName = new File(outputDir, outputFileName).toString();
         return objectName;
     }
-    return filename;
+    String relative="";
+    try {
+      relative = FileUtils.getRelativePath(workDir, new File(filename));
+    } catch (Exception ex) {
+    }
+    if (relative.isEmpty()) {
+      return filename;
+    } else {
+      return relative;
+    }
   }
 
   @Override

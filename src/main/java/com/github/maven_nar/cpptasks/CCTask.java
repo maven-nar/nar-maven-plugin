@@ -46,6 +46,8 @@ import com.github.maven_nar.cpptasks.compiler.Linker;
 import com.github.maven_nar.cpptasks.compiler.LinkerConfiguration;
 import com.github.maven_nar.cpptasks.compiler.Processor;
 import com.github.maven_nar.cpptasks.compiler.ProcessorConfiguration;
+import com.github.maven_nar.cpptasks.compiler.AbstractCompiler;
+import com.github.maven_nar.cpptasks.compiler.CommandLineCompilerConfiguration;
 import com.github.maven_nar.cpptasks.ide.ProjectDef;
 import com.github.maven_nar.cpptasks.types.CompilerArgument;
 import com.github.maven_nar.cpptasks.types.ConditionalFileSet;
@@ -1240,6 +1242,9 @@ public class CCTask extends Task {
         // see if this processor had a precompile child element
         //
         final PrecompileDef precompileDef = currentCompilerDef.getActivePrecompile(this.compilerDef);
+        CommandLineCompilerConfiguration commandLineConfig = (CommandLineCompilerConfiguration) config;
+        AbstractCompiler compiler = (AbstractCompiler) commandLineConfig.getCompiler();
+        compiler.setWorkDir(currentCompilerDef.getWorkDir());
         ProcessorConfiguration[] localConfigs = new ProcessorConfiguration[] {
           config
         };
