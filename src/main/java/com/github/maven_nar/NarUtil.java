@@ -88,6 +88,9 @@ public final class NarUtil {
     } else if (os.equals(OS.MACOSX)) {
       pathName = "DYLD_LIBRARY_PATH";
       separator = ':';
+    } else if (os.equals(OS.AIX)) {
+        pathName = "LIBPATH";
+        separator = ':';
     } else {
       pathName = "LD_LIBRARY_PATH";
       separator = ':';
