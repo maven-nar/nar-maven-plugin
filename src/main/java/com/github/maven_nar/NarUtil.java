@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -39,6 +40,7 @@ import org.apache.bcel.classfile.JavaClass;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.cli.Commandline;
@@ -630,6 +632,33 @@ public final class NarUtil {
         throw new MojoExecutionException("Failed to execute 'ranlib " + file.getPath() + "'" + " return code: \'"
             + result + "\'.");
       }
+    }
+  }
+
+  /**
+   * Produces a human-readable string of the given object which has fields
+   * annotated with the Maven {@link Parameter} annotation.
+   * 
+   * @param o The object for which a human-readable string is desired.
+   * @return A human-readable string, with each {@code @Parameter} field on a
+   *         separate line rendered as a key/value pair.
+   */
+  public static String prettyMavenString(final Object o) {
+    final StringBuilder sb = new StringBuilder();
+    sb.append(o.getClass().getName() + ":\n");
+    for (final Field f : o.getClass().getDeclaredFields()) {
+      if (f.getAnnotation(Parameter.class) == null) continue;
+      sb.append("\t" + f.getName() + "=" + fieldValue(f, o) + "\n");
+    }
+    return sb.toString();
+  }
+
+  private static Object fieldValue(final Field f, final Object o) {
+    try {
+      return f.get(o);
+    }
+    catch (final IllegalArgumentException | IllegalAccessException exc) {
+      return "<ERROR>";
     }
   }
 
