@@ -46,6 +46,8 @@ import com.github.maven_nar.cpptasks.parser.Parser;
 public abstract class AbstractCompiler extends AbstractProcessor implements Compiler {
   private static final String[] emptyIncludeArray = new String[0];
   private final String outputSuffix;
+  protected File workDir;
+  protected File objDir;
 
   protected AbstractCompiler(final String[] sourceExtensions, final String[] headerExtensions, final String outputSuffix) {
     super(sourceExtensions, headerExtensions);
@@ -200,5 +202,13 @@ public abstract class AbstractCompiler extends AbstractProcessor implements Comp
 
   public final String getOutputSuffix() {
     return this.outputSuffix;
+  }
+
+  public void setWorkDir(final File workDir) {
+    this.workDir = workDir;
+  }
+
+  public void setObjDir(final File objDir) {
+    this.objDir = objDir;
   }
 }

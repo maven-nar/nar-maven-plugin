@@ -19,6 +19,7 @@
  */
 package com.github.maven_nar.cpptasks.msvc;
 
+import java.io.File;
 import java.util.Vector;
 
 import org.apache.tools.ant.types.Environment;
@@ -49,6 +50,7 @@ public final class Msvc2005CCompiler extends MsvcCompatibleCCompiler {
   @Override
   protected void addDebugSwitch(final Vector<String> args) {
     args.addElement("/Zi");
+    args.addElement("/Fd" + objDir.getAbsolutePath() + File.separator);
     args.addElement("/Od");
     args.addElement("/RTC1");
     args.addElement("/D_DEBUG");

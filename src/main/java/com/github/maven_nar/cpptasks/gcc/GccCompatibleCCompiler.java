@@ -28,6 +28,7 @@ import com.github.maven_nar.cpptasks.CUtil;
 import com.github.maven_nar.cpptasks.OptimizationEnum;
 import com.github.maven_nar.cpptasks.compiler.CommandLineCCompiler;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
+import org.apache.tools.ant.util.FileUtils;
 
 /**
  * Abstract base class for compilers that attempt to be command line compatible
@@ -153,7 +154,16 @@ public abstract class GccCompatibleCCompiler extends CommandLineCCompiler {
         final String objectName = new File(outputDir, outputFileName).toString();
         return objectName;
     }
-    return filename;
+    String relative="";
+      try {
+          relative = FileUtils.getRelativePath(workDir, new File(filename));
+      } catch (Exception ex) {
+      }
+      if (relative.isEmpty()) {
+          return filename;
+      } else {
+          return relative;
+      }
   }
 
   @Override

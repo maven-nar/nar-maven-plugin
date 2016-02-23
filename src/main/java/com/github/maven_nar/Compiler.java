@@ -464,7 +464,16 @@ public abstract class Compiler {
         compilerDef.addFileset(fileSet);
       }
     }
-
+    
+    if (type.equals(TEST)) {
+      if (this.testSourceDirectory.exists()) {
+        compilerDef.setWorkDir(this.testSourceDirectory);
+      }
+    } else {
+      if (this.sourceDirectory.exists()) {
+        compilerDef.setWorkDir(this.sourceDirectory);
+      }
+    }
     return compilerDef;
   }
 
