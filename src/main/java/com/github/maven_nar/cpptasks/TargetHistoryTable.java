@@ -321,10 +321,8 @@ public final class TargetHistoryTable {
 
   public TargetHistory get(final String configId, final String outputName) {
     TargetHistory targetHistory = this.history.get(outputName);
-    if (targetHistory != null) {
-      if (!targetHistory.getProcessorConfiguration().equals(configId)) {
+    if (targetHistory != null && !targetHistory.getProcessorConfiguration().equals(configId)) {
         targetHistory = null;
-      }
     }
     return targetHistory;
   }

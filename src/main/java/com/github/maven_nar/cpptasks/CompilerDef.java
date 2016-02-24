@@ -335,10 +335,8 @@ public final class CompilerDef extends ProcessorDef {
     if (isReference()) {
       return ((CompilerDef) getCheckedRef(CompilerDef.class, "CompilerDef")).getWarnings(defaultProviders, index);
     }
-    if (this.warnings == -1) {
-      if (defaultProviders != null && index < defaultProviders.length) {
-        return defaultProviders[index].getWarnings(defaultProviders, index + 1);
-      }
+    if (this.warnings == -1 && defaultProviders != null && index < defaultProviders.length) {
+      return defaultProviders[index].getWarnings(defaultProviders, index + 1);
     }
     return this.warnings;
   }

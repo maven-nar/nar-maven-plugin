@@ -235,14 +235,12 @@ public final class DependencyTable {
 
     @Override
     public boolean visit(final DependencyInfo dependInfo) {
-      if (this.noNeedToRebuild) {
-        if (CUtil.isSignificantlyAfter(dependInfo.getSourceLastModified(), this.outputLastModified)) {
+      if (this.noNeedToRebuild && CUtil.isSignificantlyAfter(dependInfo.getSourceLastModified(), this.outputLastModified)) {
           // FREEHEP
           // ||
           // CUtil.isSignificantlyAfter(dependInfo.getCompositeLastModified(),
           // outputLastModified)) {
           this.noNeedToRebuild = false;
-        }
       }
       //
       // only need to process the children if

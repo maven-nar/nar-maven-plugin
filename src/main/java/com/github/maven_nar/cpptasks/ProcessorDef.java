@@ -450,10 +450,8 @@ public abstract class ProcessorDef extends DataType {
     if (!CUtil.isActive(project, this.ifProp, this.unlessProp)) {
       return false;
     }
-    if (isReference()) {
-      if (!((ProcessorDef) getCheckedRef(ProcessorDef.class, "ProcessorDef")).isActive()) {
+    if (isReference() && !((ProcessorDef) getCheckedRef(ProcessorDef.class, "ProcessorDef")).isActive()) {
         return false;
-      }
     }
     //
     // walk through any extended definitions

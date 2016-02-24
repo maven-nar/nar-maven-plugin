@@ -93,10 +93,8 @@ public abstract class AbstractArLibrarian extends CommandLineLinker {
     //
     // if there is an existing library then
     // we must delete it before executing "ar"
-    if (outputFile.exists()) {
-      if (!outputFile.delete()) {
+    if (outputFile.exists() && !outputFile.delete()) {
         throw new BuildException("Unable to delete " + outputFile.getAbsolutePath());
-      }
     }
     //
     // delegate to CommandLineLinker
