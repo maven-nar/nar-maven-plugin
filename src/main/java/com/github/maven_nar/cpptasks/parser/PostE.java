@@ -41,6 +41,8 @@ public class PostE extends AbstractParserState {
         return this.quote;
       case '\n':
         return getParser().getNewLineState();
+      default:
+      	break;
     }
     return null;
   }

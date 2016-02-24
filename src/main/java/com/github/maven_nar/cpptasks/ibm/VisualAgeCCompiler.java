@@ -104,6 +104,8 @@ public final class VisualAgeCCompiler extends GccCompatibleCCompiler {
       case 5:
         args.addElement("-qhalt=w:w");
         break;
+      default:
+      	break;
     }
   }
 

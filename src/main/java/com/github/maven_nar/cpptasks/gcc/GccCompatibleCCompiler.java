@@ -136,6 +136,8 @@ public abstract class GccCompatibleCCompiler extends CommandLineCCompiler {
       case 3:
         args.addElement("-Wall");
         break;
+      default:
+      	break;
     }
   }
 
@@ -153,6 +155,8 @@ public abstract class GccCompatibleCCompiler extends CommandLineCCompiler {
         final String outputFileName = getOutputFileNames(filename, null)[0];
         final String objectName = new File(outputDir, outputFileName).toString();
         return objectName;
+      default:
+      	break;
     }
     String relative="";
       try {

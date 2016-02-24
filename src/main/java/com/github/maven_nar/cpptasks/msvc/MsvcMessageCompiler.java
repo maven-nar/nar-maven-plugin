@@ -140,6 +140,8 @@ public final class MsvcMessageCompiler extends CommandLineCompiler {
         return "-r";
       case 1:
         return outputDir.getAbsolutePath();
+      default:
+      	break;
     }
     return filename;
   }

@@ -100,6 +100,8 @@ public abstract class AbstractLinker extends AbstractProcessor implements Linker
         //
       case 1:
         return 0;
+      default:
+      	break;
     }
     return bid;
   }

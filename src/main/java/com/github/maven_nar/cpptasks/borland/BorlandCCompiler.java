@@ -139,6 +139,8 @@ public class BorlandCCompiler extends PrecompilingCommandLineCCompiler {
         final String outputFileName = getOutputFileNames(filename, null)[0];
         final String objectName = new File(outputDir, outputFileName).toString();
         return objectName;
+      default:
+      	break;
     }
     String relative="";
     try {
