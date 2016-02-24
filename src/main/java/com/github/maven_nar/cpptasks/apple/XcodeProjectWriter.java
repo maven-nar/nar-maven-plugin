@@ -439,7 +439,7 @@ public final class XcodeProjectWriter implements ProjectWriter {
         final PBXObjectRef referenceProxy = createPBXReferenceProxy(proxy, dependency);
         objects.put(referenceProxy.getID(), referenceProxy.getProperties());
 
-        final PBXObjectRef buildFile = createPBXBuildFile(referenceProxy, Collections.EMPTY_MAP);
+        final PBXObjectRef buildFile = createPBXBuildFile(referenceProxy, Collections.emptyMap());
         objects.put(buildFile.getID(), buildFile.getProperties());
 
         final List productsChildren = new ArrayList();

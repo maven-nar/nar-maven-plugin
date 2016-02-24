@@ -214,7 +214,7 @@ public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
 
   protected final List getTests() {
     if (this.tests == null) {
-      this.tests = Collections.EMPTY_LIST;
+      this.tests = Collections.emptyList();
     }
     return this.tests;
   }
