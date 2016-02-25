@@ -417,7 +417,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
 
   private List getSourcesFor(final Compiler compiler) throws MojoFailureException, MojoExecutionException {
     if (compiler == null) {
-      return Collections.EMPTY_LIST;
+      return Collections.emptyList();
     }
 
     try {
@@ -431,7 +431,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
       }
       return files;
     } catch (final IOException e) {
-      return Collections.EMPTY_LIST;
+      return Collections.emptyList();
     }
   }
 

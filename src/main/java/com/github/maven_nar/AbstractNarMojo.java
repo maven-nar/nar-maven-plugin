@@ -236,7 +236,7 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
 
   protected final List<Library> getLibraries() {
     if (this.libraries == null) {
-      this.libraries = Collections.EMPTY_LIST;
+      this.libraries = Collections.emptyList();
     }
     return this.libraries;
   }
