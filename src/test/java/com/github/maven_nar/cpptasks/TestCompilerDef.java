@@ -206,6 +206,8 @@ public final class TestCompilerDef extends TestProcessorDef {
     setCompilerName(extendedCompiler, "msvc");
     final CCTask cctask = new CCTask();
     final LinkType linkType = new LinkType();
+    final File objDir = new File("dummy");
+    cctask.setObjdir(objDir);
     linkType.setStaticRuntime(true);
     final CommandLineCompilerConfiguration config = (CommandLineCompilerConfiguration) extendedCompiler
         .createConfiguration(cctask, linkType, null, null, null);
