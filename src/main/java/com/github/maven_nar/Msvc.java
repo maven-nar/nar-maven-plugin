@@ -444,21 +444,28 @@ public class Msvc {
     File includeDir = new File(kitDirectory, "Include");
     if(includeDir.exists()){
       File libDir = new File(kitDirectory, "Lib");
-      // take the first dir in lib dir
-      libDir = libDir.listFiles()[0];
-      addSDKLibs(includeDir, libDir);
+      File usableLibDir = null;
+      for( final File libSubDir : libDir.listFiles()){
+        final File um = new File(libSubDir,"um");
+        if( um.exists())
+          usableLibDir = libSubDir;
+      }
+      if( null == usableLibDir )
+        usableLibDir = libDir.listFiles()[0];
+      
+      addSDKLibs(includeDir, usableLibDir);
       setKit(kitDirectory);
     }
   }
 
   private void addSDKLibs(File includeDir, File libdir) {
     final File[] libs = includeDir.listFiles();
-    for (final File libDir : libs) {
+    for (final File libIncludeDir : libs) {
       // <libName> <include path> <lib path>
-      if (libsRequired.remove(libDir.getName())) {
-        mojo.getLog().debug(String.format(" Using directory %1s for library %2s", libDir.getAbsolutePath(), libDir.getName()));
-        sdkIncludes.add(libDir);
-        sdkLibs.add(new File(libdir, libDir.getName()));
+      if (libsRequired.remove(libIncludeDir.getName())) {
+        mojo.getLog().debug(String.format(" Using directory %1s for library %2s", libIncludeDir.getAbsolutePath(), libIncludeDir.getName()));
+        sdkIncludes.add(libIncludeDir);
+        sdkLibs.add(new File(libdir, libIncludeDir.getName()));
       }
     }
   }
