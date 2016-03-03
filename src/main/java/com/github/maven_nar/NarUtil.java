@@ -188,6 +188,26 @@ public final class NarUtil {
     return copied;
   }
 
+  public static void deleteDirectory(final File dir) throws MojoExecutionException {
+    int retries = OS.WINDOWS.equalsIgnoreCase(System.getProperty("os.name")) ? 3 : 1;  // Windows file locking (such as due to virus scanners) and sometimes deleting slowly, or slow to report completion.
+    while (retries > 0) {
+      retries--;
+      try {
+        FileUtils.deleteDirectory(dir);
+      } catch (final IOException e) {
+        if (retries > 0) {
+//          getLog().info("Could not delete directory: " + dir + " : Retrying");
+          Thread.yield();
+        } else {
+          throw new MojoExecutionException("Could not delete directory: " + dir, e);
+        }
+      }
+      //TODO: if( windows and interactive ) prompt for retry?
+      //@Component(role=org.codehaus.plexus.components.interactivity.Prompter.class, hint="archetype")
+      //public class ArchetypePrompter
+    }
+  }
+  
   static Set findInstallNameToolCandidates(final File[] files, final Log log)
       throws MojoExecutionException, MojoFailureException {
     final HashSet candidates = new HashSet();
