@@ -112,10 +112,7 @@ public class NarInfo {
   }
 
   public final String getLibs(final AOL aol) {
-    // TODO: resolve output Vs libs.names
-    // nothing is available to set libs.names within the build.
-    // if there is an existing nar.properties that was hand crafter with
-    // libs.names then this would work - undocumented feature?
+    // resolve output Vs libs.names
     return getProperty(aol, "libs.names", getOutput(aol, this.artifactId + "-" + this.version));
   }
 
@@ -179,6 +176,10 @@ public class NarInfo {
 
   public final void setOutput(final AOL aol, final String value) {
     setProperty(aol, "output", value);
+  }
+
+  public final void setLibs(final AOL aol, final String value) {
+    setProperty(aol, "libs.names", value);
   }
 
   private void setProperty(final AOL aol, final String key, final String value) {

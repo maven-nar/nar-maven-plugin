@@ -111,6 +111,7 @@
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
     <skip.autoconf.it>it0013-gnu-executable/**</skip.autoconf.it>
+    <skip.it0029>it0029-gnu-libsName/**</skip.it0029>
     <skip.fortran.it>it0018-fortran/**</skip.fortran.it>
     <skip.toolchain.it>it0017-toolchain/**</skip.toolchain.it>
     <sonatypeOssDistMgmtSnapshotsUrl>https://oss.sonatype.org/content/repositories/snapshots/</sonatypeOssDistMgmtSnapshotsUrl>
@@ -512,6 +513,7 @@
                 <pomExclude>${skip.autoconf.it}</pomExclude>
                 <pomExclude>${skip.fortran.it}</pomExclude>
                 <pomExclude>${skip.toolchain.it}</pomExclude>
+                <pomExclude>${skip.it0029}</pomExclude>
               </pomExcludes>
               <localRepositoryPath>${project.build.directory}/it-repo</localRepositoryPath>
               <postBuildHookScript>postbuild</postBuildHookScript>
@@ -545,6 +547,7 @@
       </activation>
       <properties>
         <skip.autoconf.it>false</skip.autoconf.it>
+        <skip.it0029>false</skip.it0029>
       </properties>
     </profile>
     <profile>

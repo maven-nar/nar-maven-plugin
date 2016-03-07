@@ -196,6 +196,10 @@ public class NarLayout21 extends AbstractNarLayout {
           narInfo.setOutput(aol, mojo.getOutput(!Library.EXECUTABLE.equals(type)));
         }
 
+        if (mojo.getLibsName() != null) {
+          narInfo.setLibs(aol, mojo.getLibsName());
+        }
+
         // We prefer shared to jni/executable/static/none,
         if (type.equals(Library.SHARED)) // overwrite whatever we had
         {

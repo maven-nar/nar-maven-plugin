@@ -192,6 +192,9 @@ public class NarLayout20 extends AbstractNarLayout {
       }
 
       final AOL aol = new AOL(libAOL[i]);
+      if (mojo.getLibsName() != null) {
+        narInfo.setLibs(aol, mojo.getLibsName());
+      }
       if (narInfo.getBinding(aol, null) == null) {
         narInfo.setBinding(aol, bindingType != null ? bindingType : Library.NONE);
       }
