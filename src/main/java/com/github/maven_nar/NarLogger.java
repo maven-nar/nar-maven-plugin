@@ -62,7 +62,6 @@ public class NarLogger implements BuildListener {
         this.log.warn(msg);
         break;
       case Project.MSG_INFO:
-        this.log.info(msg);
         if (msg.indexOf("error") >= 0) {
           this.log.error(msg);
         } else {
