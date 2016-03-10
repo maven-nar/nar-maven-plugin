@@ -102,6 +102,8 @@ public class CompaqVisualFortranCompiler extends CommandLineFortranCompiler {
       case 5:
         args.addElement("/warn:errors");
         break;
+      default:
+      	break;
     }
   }
 

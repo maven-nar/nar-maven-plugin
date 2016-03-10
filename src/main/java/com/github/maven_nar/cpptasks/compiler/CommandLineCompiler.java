@@ -346,6 +346,8 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
         case 2:
           endCount++;
           break;
+        default:
+        	break;
       }
     }
     final String[] endArgs = new String[endCount];

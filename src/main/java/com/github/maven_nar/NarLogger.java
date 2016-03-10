@@ -71,10 +71,11 @@ public class NarLogger implements BuildListener {
       case Project.MSG_VERBOSE:
         this.log.debug(msg);
         break;
-      default:
       case Project.MSG_DEBUG:
         this.log.debug(msg);
         break;
+      default:
+    	break;
     }
   }
 

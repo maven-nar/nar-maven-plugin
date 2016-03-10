@@ -93,6 +93,8 @@ public final class ForteF77Compiler extends GccCompatibleCCompiler {
       case 5:
         args.addElement("+w2");
         break;
+      default:
+      	break;
     }
   }
 

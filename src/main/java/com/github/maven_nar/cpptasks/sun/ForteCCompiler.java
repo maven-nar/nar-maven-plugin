@@ -93,6 +93,8 @@ public final class ForteCCompiler extends GccCompatibleCCompiler {
       case 5:
         args.addElement("+w2");
         break;
+      default:
+      	break;
     }
   }
 

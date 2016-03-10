@@ -93,6 +93,8 @@ public final class aCCCompiler extends GccCompatibleCCompiler {
       case 2:
         args.addElement("+w");
         break;
+      default:
+      	break;
     /*
      * case 3: case 4: case 5: args.addElement("+w2"); break;
      */

@@ -46,6 +46,8 @@ public class MsvcProcessor {
       case 5:
         args.addElement("/WX");
         break;
+      default:
+      	break;
     }
   }
 

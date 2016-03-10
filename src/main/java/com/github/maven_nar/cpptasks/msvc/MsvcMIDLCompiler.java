@@ -133,6 +133,8 @@ public final class MsvcMIDLCompiler extends CommandLineCompiler {
         return "/tlb";
       case 1:
         return new File(outputDir, getOutputFileNames(filename, null)[0]).getAbsolutePath();
+      default:
+      	break;
     }
     return filename;
   }
