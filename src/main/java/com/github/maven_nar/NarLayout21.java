@@ -239,12 +239,11 @@ public class NarLayout21 extends AbstractNarLayout {
     } else if (!dir.exists()) {
       process = true;
     } else if (file.lastModified() > dir.lastModified()) {
-      try {
-        FileUtils.deleteDirectory(dir);
-      } catch (final IOException e) {
-        throw new MojoExecutionException("Could not delete directory: " + dir, e);
-      }
-
+      NarUtil.deleteDirectory(dir);
+      process = true;
+    } else if (unpackDirectory.list().length == 0) {
+      // a previously failed cleanup which failed deleting all may have left a
+      // state where dir modified > file modified but not unpacked.
       process = true;
     }
 
@@ -252,4 +251,5 @@ public class NarLayout21 extends AbstractNarLayout {
       unpackNarAndProcess(archiverManager, file, dir, os, linkerName, defaultAOL);
     }
   }
+
 }

@@ -82,6 +82,8 @@ public abstract class TestProcessorDef extends TestCase {
   protected final ProcessorConfiguration getConfiguration(final ProcessorDef extendedProcessor) {
     final CCTask cctask = new CCTask();
     final LinkType linkType = new LinkType();
+    final File objDir = new File("dummy");
+    cctask.setObjdir(objDir);
     return extendedProcessor.createConfiguration(cctask, linkType, null, null, null);
   }
 

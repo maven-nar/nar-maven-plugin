@@ -60,10 +60,14 @@ public abstract class MsvcCompatibleCCompiler extends PrecompilingCommandLineCCo
 
   protected void addDebugSwitch(final Vector<String> args) {
     args.addElement("/Zi");
-    args.addElement("/Fd" + objDir.getAbsolutePath() + File.separator);
     args.addElement("/Od");
     args.addElement("/RTC1");
     args.addElement("/D_DEBUG");
+  }
+
+  protected void addPathSwitch(final Vector<String> args) {
+    args.addElement("/Fd" + objDir.getAbsolutePath() + File.separator); // vc[version].pdb
+    args.addElement("/Fa" + objDir.getAbsolutePath() + File.separator);
   }
 
   @Override
@@ -110,6 +114,7 @@ public abstract class MsvcCompatibleCCompiler extends PrecompilingCommandLineCCo
       // /GR- to disable it
       args.addElement("/GR-");
     }
+    addPathSwitch(args);
   }
 
   @Override

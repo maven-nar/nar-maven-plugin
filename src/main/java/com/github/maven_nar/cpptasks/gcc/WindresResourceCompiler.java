@@ -138,13 +138,6 @@ public final class WindresResourceCompiler extends CommandLineCompiler {
   }
 
   @Override
-  protected int getTotalArgumentLengthForInputFile(final File outputDir, final String inputFile) {
-    final String arg1 = getInputFileArgument(outputDir, inputFile, 0);
-    final String arg2 = getInputFileArgument(outputDir, inputFile, 1);
-    return arg1.length() + arg2.length() + 2;
-  }
-
-  @Override
   protected void getUndefineSwitch(final StringBuffer buffer, final String define) {
     buffer.append("-U");
     buffer.append(define);

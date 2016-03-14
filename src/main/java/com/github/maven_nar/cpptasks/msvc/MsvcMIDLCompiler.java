@@ -94,7 +94,7 @@ public final class MsvcMIDLCompiler extends CommandLineCompiler {
 
   @Override
   protected int getArgumentCountPerInputFile() {
-    return 3;
+    return 5;
   }
 
   @Override
@@ -133,6 +133,11 @@ public final class MsvcMIDLCompiler extends CommandLineCompiler {
         return "/tlb";
       case 1:
         return new File(outputDir, getOutputFileNames(filename, null)[0]).getAbsolutePath();
+      case 2:
+        return "/out";
+      case 3:
+        return outputDir.getAbsolutePath();
+       
     }
     return filename;
   }
@@ -151,14 +156,6 @@ public final class MsvcMIDLCompiler extends CommandLineCompiler {
   @Override
   protected int getMaximumInputFilesPerCommand() {
     return 1;
-  }
-
-  @Override
-  protected int getTotalArgumentLengthForInputFile(final File outputDir, final String inputFile) {
-    final String arg1 = getInputFileArgument(outputDir, inputFile, 0);
-    final String arg2 = getInputFileArgument(outputDir, inputFile, 1);
-    final String arg3 = getInputFileArgument(outputDir, inputFile, 2);
-    return arg1.length() + arg2.length() + arg3.length() + 3;
   }
 
   @Override

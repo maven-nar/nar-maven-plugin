@@ -110,7 +110,7 @@ public final class MsvcMessageCompiler extends CommandLineCompiler {
 
   @Override
   protected int getArgumentCountPerInputFile() {
-    return 3;
+    return 5;
   }
 
   @Override
@@ -140,6 +140,10 @@ public final class MsvcMessageCompiler extends CommandLineCompiler {
         return "-r";
       case 1:
         return outputDir.getAbsolutePath();
+      case 2:
+        return "-h";
+      case 3:
+        return outputDir.getAbsolutePath();
     }
     return filename;
   }
@@ -157,13 +161,6 @@ public final class MsvcMessageCompiler extends CommandLineCompiler {
   @Override
   protected int getMaximumInputFilesPerCommand() {
     return 1;
-  }
-
-  @Override
-  protected int getTotalArgumentLengthForInputFile(final File outputDir, final String inputFile) {
-    final String arg1 = getInputFileArgument(outputDir, inputFile, 0);
-    final String arg2 = getInputFileArgument(outputDir, inputFile, 1);
-    return arg1.length() + arg2.length() + 2;
   }
 
   @Override
