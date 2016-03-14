@@ -365,22 +365,6 @@ public final class UserInterfaceCompiler extends CommandLineCompiler {
   }
 
   /**
-   * Get total command line length due to the input file.
-   * 
-   * @param outputDir
-   *          File output directory
-   * @param inputFile
-   *          String input file
-   * @return int characters added to command line for the input file.
-   */
-  @Override
-  protected int getTotalArgumentLengthForInputFile(final File outputDir, final String inputFile) {
-    final String arg1 = getInputFileArgument(outputDir, inputFile, 1);
-    final String arg2 = getInputFileArgument(outputDir, inputFile, 2);
-    return arg1.length() + arg2.length() + 4;
-  }
-
-  /**
    * Gets switch to undefine preprocessor macro.
    * 
    * @param buffer

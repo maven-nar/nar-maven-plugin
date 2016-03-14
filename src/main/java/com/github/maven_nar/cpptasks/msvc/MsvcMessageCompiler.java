@@ -163,17 +163,6 @@ public final class MsvcMessageCompiler extends CommandLineCompiler {
     return 1;
   }
 
-  
-  @Override
-  protected int getTotalArgumentLengthForInputFile(final File outputDir, final String inputFile) {
-    final int argumentCountPerInputFile = getArgumentCountPerInputFile();
-    int len=0;
-    for (int k = 0; k < argumentCountPerInputFile; k++) {
-      len+=getInputFileArgument(outputDir, inputFile, k).length();
-    }
-    return len + argumentCountPerInputFile; // argumentCountPerInputFile added for spaces
-  }
-
   @Override
   protected void getUndefineSwitch(final StringBuffer buffer, final String define) {
     MsvcProcessor.getUndefineSwitch(buffer, define);
