@@ -333,7 +333,7 @@ public class LibrarySet extends DataType {
           // style linkers but unnecessary fails
           // Unix style linkers. Will need to revisit.
           //
-          if (matches == 0 && false) {
+          if (matches == 0 ) {
             final StringBuffer msg = new StringBuffer("No file matching ");
             if (patterns.length == 1) {
               msg.append("pattern (");
@@ -351,7 +351,9 @@ public class LibrarySet extends DataType {
             msg.append(" for library name \"");
             msg.append(libname);
             msg.append("\" was found.");
-            throw new BuildException(msg.toString());
+            // TODO: raising the message in the log rather 
+            //throw new BuildException(msg.toString());
+            project.log(msg.toString(), Project.MSG_WARN);
           }
         }
       }
