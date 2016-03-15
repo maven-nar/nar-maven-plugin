@@ -44,18 +44,6 @@ public final class Msvc2005CCompiler extends MsvcCompatibleCCompiler {
     super(command, "/bogus", newEnvironment, env);
   }
 
-  /**
-   * Override the default debug flags to use VC 8 compatible versions.
-   */
-  @Override
-  protected void addDebugSwitch(final Vector<String> args) {
-    args.addElement("/Zi");
-    args.addElement("/Fd" + objDir.getAbsolutePath() + File.separator);
-    args.addElement("/Od");
-    args.addElement("/RTC1");
-    args.addElement("/D_DEBUG");
-  }
-
   @Override
   public Processor changeEnvironment(final boolean newEnvironment, final Environment env) {
     if (newEnvironment || env != null) {
