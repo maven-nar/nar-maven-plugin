@@ -21,6 +21,8 @@ package com.github.maven_nar.cpptasks.msvc;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Vector;
 
 import com.github.maven_nar.cpptasks.CCTask;
@@ -48,6 +50,8 @@ public abstract class MsvcCompatibleLinker extends CommandLineLinker {
     }, outputSuffix, false, null);
   }
 
+  private ArrayList<File> libPaths = new ArrayList<File>(Arrays.asList(CUtil.getPathFromEnvironment("LIB", ";")));
+  
   @Override
   protected void addBase(final CCTask task, final long base, final Vector<String> args) {
     if (base >= 0) {
@@ -109,6 +113,7 @@ public abstract class MsvcCompatibleLinker extends CommandLineLinker {
   @Override
   protected void addLibraryPath(final Vector<String> preargs, final String path) {
     preargs.addElement("/LIBPATH:" + path);
+    libPaths.add(0,new File(path));
   }
 
   @Override
@@ -117,13 +122,6 @@ public abstract class MsvcCompatibleLinker extends CommandLineLinker {
     for (final LibrarySet set : libsets) {
       final File libdir = set.getDir(null);
       addLibraryDirectory(libdir, preargs);
-
-      for (final String libraryName : set.getLibs()) {
-        // TODO: ? Should look to the path for system or other libs - rather than assume they can be found on the path
-        // Shortcut, no/empty lib dir for syslibs and others indicates should be on the path
-        if( !(null != libdir && libdir.exists()) || new File(libdir,libraryName + ".lib").exists())
-          endargs.add(libraryName + ".lib");
-      }
     }
     return null;
   }
@@ -173,7 +171,7 @@ public abstract class MsvcCompatibleLinker extends CommandLineLinker {
 
   @Override
   public File[] getLibraryPath() {
-    return CUtil.getPathFromEnvironment("LIB", ";");
+    return libPaths.toArray(new File[libPaths.size()]);
   }
 
   @Override
