@@ -241,7 +241,7 @@ public class NarLayout21 extends AbstractNarLayout {
     } else if (file.lastModified() > dir.lastModified()) {
       NarUtil.deleteDirectory(dir);
       process = true;
-    } else if (unpackDirectory.list().length == 0) {
+    } else if (dir.list().length == 0) {
       // a previously failed cleanup which failed deleting all may have left a
       // state where dir modified > file modified but not unpacked.
       process = true;
