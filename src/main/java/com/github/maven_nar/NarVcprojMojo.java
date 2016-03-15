@@ -152,7 +152,7 @@ public class NarVcprojMojo extends AbstractCompileMojo {
         if (include.exists()) {
           task.createIncludePath().setPath(include.getPath());
         } else {
-          throw new MojoExecutionException("NAR: unable to locate include path: " + include);
+          getLog().warn(String.format("Unable to locate %1$s lib include path '%2$s'", binding, include));
         }
       }
     }
