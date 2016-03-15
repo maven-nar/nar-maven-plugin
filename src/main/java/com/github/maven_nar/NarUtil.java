@@ -194,17 +194,24 @@ public final class NarUtil {
       retries--;
       try {
         FileUtils.deleteDirectory(dir);
+        retries = 0;
       } catch (final IOException e) {
         if (retries > 0) {
-//          getLog().info("Could not delete directory: " + dir + " : Retrying");
           Thread.yield();
         } else {
           throw new MojoExecutionException("Could not delete directory: " + dir, e);
         }
       }
+      if (retries > 0) {
+//      getLog().info("Could not delete directory: " + dir + " : Retrying");
+        try {
+          Thread.sleep(200);
+        } catch (InterruptedException e) {
+        }
       //TODO: if( windows and interactive ) prompt for retry?
       //@Component(role=org.codehaus.plexus.components.interactivity.Prompter.class, hint="archetype")
       //public class ArchetypePrompter
+      }
     }
   }
   
