@@ -67,7 +67,6 @@ public abstract class MsvcCompatibleCCompiler extends PrecompilingCommandLineCCo
 
   protected void addPathSwitch(final Vector<String> args) {
     args.addElement("/Fd" + objDir.getAbsolutePath() + File.separator); // vc[version].pdb
-    args.addElement("/Fa" + objDir.getAbsolutePath() + File.separator);
   }
 
   @Override

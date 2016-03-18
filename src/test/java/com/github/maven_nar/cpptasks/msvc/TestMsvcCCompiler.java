@@ -40,12 +40,11 @@ public class TestMsvcCCompiler extends TestCase {
     compiler.setObjDir(objDir);
     compiler.addDebugSwitch(args);
     compiler.addPathSwitch(args);
-    assertEquals(6, args.size());
+    assertEquals(5, args.size());
     assertEquals("/Zi", args.elementAt(0));
     assertEquals("/Od", args.elementAt(1));
     assertEquals("/RTC1", args.elementAt(2));
     assertEquals("/D_DEBUG", args.elementAt(3));
     assertEquals("/Fd" + objDir.getAbsolutePath() + File.separator, args.elementAt(4));
-    assertEquals("/Fa" + objDir.getAbsolutePath() + File.separator, args.elementAt(5));
   }
 }
