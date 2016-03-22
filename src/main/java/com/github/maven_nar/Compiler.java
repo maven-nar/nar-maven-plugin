@@ -21,6 +21,7 @@ package com.github.maven_nar;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -627,5 +628,10 @@ public abstract class Compiler {
 
   public final void setAbstractCompileMojo(final AbstractCompileMojo mojo) {
     this.mojo = mojo;
+  }
+
+  @Override
+  public String toString() {
+    return NarUtil.prettyMavenString(this);
   }
 }
