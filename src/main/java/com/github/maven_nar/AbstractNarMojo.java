@@ -147,6 +147,12 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
   protected List<Library> libraries;
 
   /**
+   * Name of the libraries included
+   */
+  @Parameter
+  private String libsName;
+
+  /**
    * Layout to be used for building and unpacking artifacts
    */
   @Parameter(property = "nar.layout", defaultValue = "com.github.maven_nar.NarLayout21", required = true)
@@ -283,6 +289,14 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
       } else {
         return getMavenProject().getArtifactId();
       }
+    }
+  }
+
+  protected final String getLibsName() throws MojoExecutionException {
+    if (this.libsName != null && !this.libsName.trim().isEmpty()) {
+      return this.libsName;
+    } else {
+      return null;
     }
   }
 

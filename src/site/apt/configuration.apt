@@ -56,6 +56,7 @@ NAR Configuration
   <gnuAutogenSkip/>
   <gnuConfigureSkip/>
   <gnuMakeSkip/>
+  <libsName/>
 
   <libraries>
     <library>
@@ -268,6 +269,13 @@ the command line for compatible compilers/linkers. Default is false.
     
     Skip the GNU Make step if you are using the GNU stages. This is useful if you 
 wish to run a GNU configure step but not the full make process.
+
+* {libsName}
+
+    This tag is use to list multiple libs to be included into the linker.
+    This is really usefull when packaging 3rd party libraries.
+    
+    Use the CSV notation: \<libsName\>lib1,lib2\</libsName\>
 
 * {libraries}
 
