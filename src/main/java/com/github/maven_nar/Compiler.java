@@ -242,6 +242,16 @@ public abstract class Compiler {
   protected Compiler() {
   }
 
+  /**
+   * Filter elements such as cr\lf that are problematic when used inside a `define`
+   *  
+   * @param value  define value to be cleaned
+   * @return
+   */
+  private String cleanDefineValue(final String value) {
+    return value.replaceAll("\r", "").replaceAll("\n", ""); // ?maybe replace with chars \\n
+  }
+  
   public final void copyIncludeFiles(final MavenProject mavenProject, final File targetDirectory) throws IOException {
     for (final IncludePath includePath : getIncludePaths("dummy")) {
       if (includePath.exists()) {
@@ -343,7 +353,7 @@ public abstract class Compiler {
         final DefineArgument define = new DefineArgument();
         final String[] pair = string.split("=", 2);
         define.setName(pair[0]);
-        define.setValue(pair.length > 1 ? pair[1] : null);
+        define.setValue(pair.length > 1 ? cleanDefineValue(pair[1]) : null);
         ds.addDefine(define);
       }
       compilerDef.addConfiguredDefineset(ds);
@@ -360,7 +370,7 @@ public abstract class Compiler {
         final DefineArgument def = new DefineArgument();
 
         def.setName(pair[0]);
-        def.setValue(pair.length > 1 ? pair[1] : null);
+        def.setValue(pair.length > 1 ? cleanDefineValue(pair[1]) : null);
 
         defSet.addDefine(def);
       }

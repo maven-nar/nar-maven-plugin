@@ -359,7 +359,7 @@ public class CUtil {
    */
   public static boolean isSystemPath(final File source) {
     final String lcPath = source.getAbsolutePath().toLowerCase(java.util.Locale.US);
-    return lcPath.indexOf("platformsdk") != -1 || lcPath.indexOf("microsoft") != -1 || lcPath == "/usr/include"
+    return lcPath.indexOf("platformsdk") != -1 || lcPath.indexOf("windows kits") != -1 || lcPath.indexOf("microsoft") != -1 || lcPath == "/usr/include"
         || lcPath == "/usr/lib" || lcPath == "/usr/local/include" || lcPath == "/usr/local/lib";
   }
 

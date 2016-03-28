@@ -442,8 +442,8 @@ public class Msvc {
 
   private void legacySDK(final File kitDirectory) {
     File includeDir = new File(kitDirectory, "Include");
-    if(includeDir.exists()){
-      File libDir = new File(kitDirectory, "Lib");
+    File libDir = new File(kitDirectory, "Lib");
+    if(includeDir.exists() && libDir.exists()){
       File usableLibDir = null;
       for( final File libSubDir : libDir.listFiles()){
         final File um = new File(libSubDir,"um");
