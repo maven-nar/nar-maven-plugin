@@ -296,7 +296,7 @@ public class Msvc {
         final Matcher matcher = versionPattern.matcher(key);
         if (matcher.matches()) {
           final String version = matcher.group(1) + "." + matcher.group(2);
-          if (version.compareTo(this.version) > 0) {
+          if (versionStringComparator.compare(version, this.version) > 0) {
             final File commonToolsDirectory = new File(value);
             if (commonToolsDirectory.exists()) {
               this.version = version;
@@ -330,6 +330,13 @@ public class Msvc {
       }
     }
   }
+
+  private final Comparator<String> versionStringComparator = new Comparator<String>() {
+    @Override
+    public int compare(String o1, String o2) {
+      return Double.compare(Double.parseDouble(o1), Double.parseDouble(o2));
+    }
+  };
 
   private final Comparator<File> versionComparator = new Comparator<File>() {
     @Override
