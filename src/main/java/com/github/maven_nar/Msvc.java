@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -334,7 +335,9 @@ public class Msvc {
   private final Comparator<String> versionStringComparator = new Comparator<String>() {
     @Override
     public int compare(String o1, String o2) {
-      return Double.compare(Double.parseDouble(o1), Double.parseDouble(o2));
+      DefaultArtifactVersion version1 = new DefaultArtifactVersion(o1);
+      DefaultArtifactVersion version2 = new DefaultArtifactVersion(o2);
+      return version1.compareTo(version2);
     }
   };
 
