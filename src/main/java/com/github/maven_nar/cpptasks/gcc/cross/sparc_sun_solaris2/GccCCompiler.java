@@ -233,7 +233,7 @@ public final class GccCCompiler extends GccCompatibleCCompiler {
       if (getLibtool()) {
         buf = new StringBuffer("libtool ");
       } else {
-        buf = new StringBuffer(' ');
+        buf = new StringBuffer(" ");
       }
       buf.append(getCommand());
       buf.append(' ');

@@ -25,7 +25,7 @@ package com.github.maven_nar.cpptasks.compiler;
  * @author Curt Arnold
  */
 public interface ProgressMonitor {
-  public void finish(ProcessorConfiguration config, boolean normal);
+  void finish(ProcessorConfiguration config, boolean normal);
 
   /**
    * Called to notify monitor of progress
@@ -33,5 +33,5 @@ public interface ProgressMonitor {
    */
   void progress(String[] sources);
 
-  public void start(ProcessorConfiguration config);
+  void start(ProcessorConfiguration config);
 }

@@ -27,12 +27,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import org.apache.bcel.classfile.ClassParser;
@@ -169,7 +164,7 @@ public final class NarUtil {
           final Method setExecutable = destination.getClass()
               .getDeclaredMethod("setExecutable", boolean.class, boolean.class);
           setExecutable
-              .invoke(destination, (Boolean) canExecute.invoke(file), Boolean.FALSE);
+              .invoke(destination, canExecute.invoke(file), Boolean.FALSE);
         } catch (final SecurityException | InvocationTargetException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException e) {
           // ignored
         }
@@ -374,7 +369,7 @@ public final class NarUtil {
   }
 
   public static boolean isWindows() {
-    return getOS(null) == OS.WINDOWS;
+    return Objects.equals(getOS(null), OS.WINDOWS);
   }
 
   public static void makeExecutable(final File file, final Log log) throws MojoExecutionException, MojoFailureException {
@@ -621,7 +616,7 @@ public final class NarUtil {
         final File dependentFile = (File) lib;
         final String dependentPath = dependentFile.getPath();
 
-        if (dependentPath == subjectPath) {
+        if (Objects.equals(dependentPath, subjectPath)) {
           continue;
         }
 

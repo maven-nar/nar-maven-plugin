@@ -116,15 +116,14 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     getLog().debug("}");
 
     for (final AttachedNarArtifact attachedNarArtifact : dependencies) {
-      final Artifact dependency = attachedNarArtifact;
       try {
-        getLog().debug("Resolving " + dependency);
-        this.artifactResolver.resolve(dependency, this.remoteArtifactRepositories, getLocalRepository());
+        getLog().debug("Resolving " + attachedNarArtifact);
+        this.artifactResolver.resolve(attachedNarArtifact, this.remoteArtifactRepositories, getLocalRepository());
       } catch (final ArtifactNotFoundException e) {
-        final String message = "nar not found " + dependency.getId();
+        final String message = "nar not found " + attachedNarArtifact.getId();
         throw new MojoExecutionException(message, e);
       } catch (final ArtifactResolutionException e) {
-        final String message = "nar cannot resolve " + dependency.getId();
+        final String message = "nar cannot resolve " + attachedNarArtifact.getId();
         throw new MojoExecutionException(message, e);
       }
     }

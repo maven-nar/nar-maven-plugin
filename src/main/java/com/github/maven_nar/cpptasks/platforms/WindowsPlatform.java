@@ -257,9 +257,11 @@ public final class WindowsPlatform {
     if (Boolean.TRUE.equals(prerelease)) {
       buf.append("0x2L /* VS_FF_PRERELEASE */ | ");
     }
+    // FIXME: What are the possible values of private build? Would it be sufficient to check if private build is empty?
     if (Boolean.TRUE.equals(versionInfo.getPrivatebuild())) {
       buf.append("0x8L /* VS_FF_PRIVATEBUILD */ | ");
     }
+    // FIXME: What are the possible values of special build? Would it be sufficient to check if special build is empty?
     if (Boolean.TRUE.equals(versionInfo.getSpecialbuild())) {
       buf.append("0x20L /* VS_FF_SPECIALBUILD */ | ");
     }

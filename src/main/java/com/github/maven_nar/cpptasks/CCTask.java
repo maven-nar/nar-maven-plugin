@@ -219,8 +219,8 @@ public class CCTask extends Task {
     final Map<CompilerConfiguration, Vector<TargetInfo>> targetsByConfig = new HashMap<>();
     for (final TargetInfo target : targets.values()) {
       if (target.getRebuild()) {
-        Vector<TargetInfo> targetsForSameConfig = targetsByConfig
-            .get(target.getConfiguration());
+        // FIXME: Types do not match between the key of targetsByConfig and the return value of target.getConfiguration
+        Vector<TargetInfo> targetsForSameConfig = targetsByConfig.get(target.getConfiguration());
         if (targetsForSameConfig != null) {
           targetsForSameConfig.addElement(target);
         } else {
