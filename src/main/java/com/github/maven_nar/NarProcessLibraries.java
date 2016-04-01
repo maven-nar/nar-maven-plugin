@@ -110,10 +110,7 @@ public class NarProcessLibraries extends AbstractCompileMojo {
         // still worked?!
         throw new MojoFailureException("Process exited abnormally");
       }
-    } catch (final IOException e) {
-      e.printStackTrace();
-      throw new MojoFailureException("Failed to run the command \"" + p.command() + "\"", e);
-    } catch (final InterruptedException e) {
+    } catch (final IOException | InterruptedException e) {
       e.printStackTrace();
       throw new MojoFailureException("Failed to run the command \"" + p.command() + "\"", e);
     }

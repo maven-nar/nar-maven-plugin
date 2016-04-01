@@ -140,15 +140,13 @@ public class GccProcessor {
         // build a relative path like
         // ../lib/gcc-lib/i686-pc-cygwin/2.95.3-5/specs
         //
-        final StringBuffer buf = new StringBuffer("../lib/gcc-lib/");
-        buf.append(getMachine());
-        buf.append('/');
-        buf.append(getVersion());
-        buf.append("/specs");
         //
         // resolve it relative to the location of gcc.exe
         //
-        final String relativePath = buf.toString();
+        final String relativePath = "../lib/gcc-lib/" + getMachine() +
+            '/' +
+            getVersion() +
+            "/specs";
         final File specsFile = new File(gccParent, relativePath);
         //
         // found the specs file
@@ -206,7 +204,7 @@ public class GccProcessor {
 
   private static boolean isHPUX() {
     final String osname = System.getProperty("os.name").toLowerCase();
-    if (osname.indexOf("hp") >= 0 && osname.indexOf("ux") >= 0) {
+    if (osname.contains("hp") && osname.contains("ux")) {
       return true;
     }
     return false;

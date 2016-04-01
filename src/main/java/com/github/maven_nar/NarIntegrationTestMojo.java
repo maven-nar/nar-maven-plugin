@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -777,8 +776,8 @@ public class NarIntegrationTestMojo extends AbstractDependencyMojo {
       this.classpathElements.add(this.testClassesDirectory.getAbsolutePath());
     }
 
-    for (final Iterator i = this.classpathElements.iterator(); i.hasNext();) {
-      final String classpathElement = (String) i.next();
+    for (final Object classpathElement1 : this.classpathElements) {
+      final String classpathElement = (String) classpathElement1;
 
       getLog().debug("  " + classpathElement);
 
@@ -800,8 +799,8 @@ public class NarIntegrationTestMojo extends AbstractDependencyMojo {
     }
 
     if (this.additionalClasspathElements != null) {
-      for (final Iterator i = this.additionalClasspathElements.iterator(); i.hasNext();) {
-        final String classpathElement = (String) i.next();
+      for (final Object additionalClasspathElement : this.additionalClasspathElements) {
+        final String classpathElement = (String) additionalClasspathElement;
 
         getLog().debug("  " + classpathElement);
 
@@ -894,23 +893,23 @@ public class NarIntegrationTestMojo extends AbstractDependencyMojo {
                                                    // sure if we can push this
                                                    // up to before the fork to
                                                    // use it multiple times.
-      for (final Iterator i = dependencies.iterator(); i.hasNext();) {
-        final NarArtifact dependency = (NarArtifact) i.next();
+      for (final Object dependency1 : dependencies) {
+        final NarArtifact dependency = (NarArtifact) dependency1;
         // FIXME this should be overridable
         // NarInfo info = dependency.getNarInfo();
         // String binding = info.getBinding(getAOL(), Library.STATIC);
         // NOTE: fixed to shared, jni
-        final String[] bindings = {
-            Library.SHARED, Library.JNI
+        final String[] bindings = { Library.SHARED, Library.JNI
         };
         for (final String binding2 : bindings) {
           final String binding = binding2;
           if (!binding.equals(Library.STATIC)) {
-            final File depLibPathEntry = getLayout().getLibDirectory(getUnpackDirectory(), dependency.getArtifactId(),
-                dependency.getBaseVersion(), getAOL().toString(), binding);
-                //dependency.getVersion() calls the maven super class, which is not used when
-            	//unpacking the NarDependencies in AbstractDependencyMojo.  This causes
-            	//the path to not exist and not be added to the library path.
+            final File depLibPathEntry = getLayout()
+                .getLibDirectory(getUnpackDirectory(), dependency.getArtifactId(), dependency.getBaseVersion(),
+                    getAOL().toString(), binding);
+            //dependency.getVersion() calls the maven super class, which is not used when
+            //unpacking the NarDependencies in AbstractDependencyMojo.  This causes
+            //the path to not exist and not be added to the library path.
             if (depLibPathEntry.exists()) {
               getLog().debug("Adding dependency directory to java.library.path: " + depLibPathEntry);
               if (javaLibraryPath.length() > 0) {
@@ -997,7 +996,7 @@ public class NarIntegrationTestMojo extends AbstractDependencyMojo {
     }
 
     if (this.threadCount > 0) {
-      this.properties.setProperty("threadcount", new Integer(this.threadCount).toString());
+      this.properties.setProperty("threadcount", Integer.toString(this.threadCount));
     }
   }
 
@@ -1056,9 +1055,7 @@ public class NarIntegrationTestMojo extends AbstractDependencyMojo {
       int result;
       try {
         result = surefireBooter.run();
-      } catch (final SurefireBooterForkException e) {
-        throw new MojoExecutionException(e.getMessage(), e);
-      } catch (final SurefireExecutionException e) {
+      } catch (final SurefireBooterForkException | SurefireExecutionException e) {
         throw new MojoExecutionException(e.getMessage(), e);
       }
 
@@ -1120,10 +1117,9 @@ public class NarIntegrationTestMojo extends AbstractDependencyMojo {
 
     if (setInSystem) {
       // Add all system properties configured by the user
-      final Iterator iter = this.systemProperties.keySet().iterator();
 
-      while (iter.hasNext()) {
-        final String key = (String) iter.next();
+      for (final Object o : this.systemProperties.keySet()) {
+        final String key = (String) o;
 
         final String value = this.systemProperties.getProperty(key);
 
@@ -1156,8 +1152,8 @@ public class NarIntegrationTestMojo extends AbstractDependencyMojo {
   }
 
   private void showMap(final Map map, final String setting) {
-    for (final Iterator i = map.keySet().iterator(); i.hasNext();) {
-      final String key = (String) i.next();
+    for (final Object o : map.keySet()) {
+      final String key = (String) o;
       final String value = (String) map.get(key);
       getLog().debug("Setting " + setting + " [" + key + "]=[" + value + "]");
     }

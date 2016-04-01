@@ -22,7 +22,6 @@ package com.github.maven_nar;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.jar.JarFile;
 
@@ -74,13 +73,13 @@ public class NarManager {
     final List dependencies = getAttachedNarDependencies(narArtifacts, classifier);
 
     this.log.debug("Download called with classifier: " + classifier + " for NarDependencies {");
-    for (final Iterator i = dependencies.iterator(); i.hasNext();) {
-      this.log.debug("  - " + i.next());
+    for (final Object dependency2 : dependencies) {
+      this.log.debug("  - " + dependency2);
     }
     this.log.debug("}");
 
-    for (final Iterator i = dependencies.iterator(); i.hasNext();) {
-      final Artifact dependency = (Artifact) i.next();
+    for (final Object dependency1 : dependencies) {
+      final Artifact dependency = (Artifact) dependency1;
       try {
         this.log.debug("Resolving " + dependency);
         resolver.resolve(dependency, remoteRepositories, this.repository);
@@ -176,8 +175,8 @@ public class NarManager {
     }
 
     final List artifactList = new ArrayList();
-    for (final Iterator i = narArtifacts.iterator(); i.hasNext();) {
-      final Artifact dependency = (Artifact) i.next();
+    for (final Object narArtifact : narArtifacts) {
+      final Artifact dependency = (Artifact) narArtifact;
       final NarInfo narInfo = getNarInfo(dependency);
       if (noarch) {
         artifactList.addAll(getAttachedNarDependencies(dependency, null, NarConstants.NAR_NO_ARCH));
@@ -283,14 +282,14 @@ public class NarManager {
       final ArchiverManager archiverManager, final String classifier, final String os, final NarLayout layout,
       final File unpackDir) throws MojoExecutionException, MojoFailureException {
     this.log.debug("Unpack called for OS: " + os + ", classifier: " + classifier + " for NarArtifacts {");
-    for (final Iterator i = narArtifacts.iterator(); i.hasNext();) {
-      this.log.debug("  - " + i.next());
+    for (final Object narArtifact : narArtifacts) {
+      this.log.debug("  - " + narArtifact);
     }
     this.log.debug("}");
     // FIXME, kludge to get to download the -noarch, based on classifier
     final List dependencies = getAttachedNarDependencies(narArtifacts, classifier);
-    for (final Iterator i = dependencies.iterator(); i.hasNext();) {
-      final Artifact dependency = (Artifact) i.next();
+    for (final Object dependency1 : dependencies) {
+      final Artifact dependency = (Artifact) dependency1;
       this.log.debug("Unpack " + dependency + " to " + unpackDir);
       final File file = getNarFile(dependency);
 

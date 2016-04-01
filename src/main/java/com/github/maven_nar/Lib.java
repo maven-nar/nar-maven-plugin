@@ -20,7 +20,6 @@
 package com.github.maven_nar;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
@@ -86,18 +85,18 @@ public class Lib {
   private void addMultipleLibSets(final AbstractDependencyMojo mojo, final LinkerDef linker, final Project antProject,
       final String name) throws MojoFailureException, MojoExecutionException {
     final List dependencies = mojo.getNarArtifacts();
-    for (final Iterator i = this.libs.iterator(); i.hasNext();) {
-      final Lib lib = (Lib) i.next();
+    for (final Object lib1 : this.libs) {
+      final Lib lib = (Lib) lib1;
       final String[] ids = name.split(":", 2);
       if (ids.length != 2) {
         throw new MojoFailureException("NAR: Please specify <Name> as part of <Lib> in format 'groupId:artifactId'");
       }
-      for (final Iterator j = dependencies.iterator(); j.hasNext();) {
-        final Artifact dependency = (Artifact) j.next();
+      for (final Object dependency1 : dependencies) {
+        final Artifact dependency = (Artifact) dependency1;
         if (dependency.getGroupId().equals(ids[0]) && dependency.getArtifactId().equals(ids[1])) {
           // FIXME NAR-90
-          final File narDir = new File(dependency.getFile().getParentFile(), "nar/lib/" + mojo.getAOL() + "/"
-              + lib.type);
+          final File narDir = new File(dependency.getFile().getParentFile(),
+              "nar/lib/" + mojo.getAOL() + "/" + lib.type);
           final String narName = dependency.getArtifactId() + "-" + lib.name + "-" + dependency.getBaseVersion();
           lib.addLibSet(mojo, linker, antProject, narName, narDir);
         }

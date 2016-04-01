@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -139,9 +138,7 @@ public final class MsvcProjectWriter implements ProjectWriter {
     //
     // get the first target and assume that it is representative
     //
-    final Iterator<TargetInfo> targetIter = targets.values().iterator();
-    while (targetIter.hasNext()) {
-      final TargetInfo targetInfo = targetIter.next();
+    for (final TargetInfo targetInfo : targets.values()) {
       final ProcessorConfiguration config = targetInfo.getConfiguration();
       //
       // for the first cl compiler
@@ -190,7 +187,7 @@ public final class MsvcProjectWriter implements ProjectWriter {
     if (lastDot >= 0 && lastDot < fileName.length() - 1) {
       final String extension = ";" + fileName.substring(lastDot + 1).toLowerCase() + ";";
       final String semiFilter = ";" + filter + ";";
-      return semiFilter.indexOf(extension) >= 0;
+      return semiFilter.contains(extension);
     }
     return false;
   }
@@ -222,7 +219,7 @@ public final class MsvcProjectWriter implements ProjectWriter {
       options.append(CUtil.toWindowsPath(relPath));
       options.append('"');
     }
-    final Hashtable<String, String> optionMap = new Hashtable<String, String>();
+    final Hashtable<String, String> optionMap = new Hashtable<>();
 
     if (isDebug) {
       //
@@ -247,12 +244,12 @@ public final class MsvcProjectWriter implements ProjectWriter {
     }
 
     final String[] preArgs = compilerConfig.getPreArguments();
-    for (int i = 0; i < preArgs.length; i++) {
-      if (preArgs[i].startsWith("/D")) {
+    for (final String preArg : preArgs) {
+      if (preArg.startsWith("/D")) {
         options.append(" /D ");
         baseOptions.append(" /D ");
-        final String body = preArgs[i].substring(2);
-        if (preArgs[i].indexOf('=') >= 0) {
+        final String body = preArg.substring(2);
+        if (preArg.indexOf('=') >= 0) {
           options.append(body);
           baseOptions.append(body);
         } else {
@@ -270,8 +267,8 @@ public final class MsvcProjectWriter implements ProjectWriter {
           options.append(buf);
           baseOptions.append(buf);
         }
-      } else if (!preArgs[i].startsWith("/I")) {
-        String option = preArgs[i];
+      } else if (!preArg.startsWith("/I")) {
+        String option = preArg;
         final String key = option.toUpperCase(Locale.US);
         if (optionMap.containsKey(key)) {
           option = optionMap.get(key);
@@ -363,17 +360,17 @@ public final class MsvcProjectWriter implements ProjectWriter {
       final CommandLineLinkerConfiguration linkConfig = (CommandLineLinkerConfiguration) config;
 
       final File[] linkSources = linkTarget.getAllSources();
-      for (int i = 0; i < linkSources.length; i++) {
+      for (final File linkSource : linkSources) {
         //
         // if file was not compiled or otherwise generated
         //
-        if (targets.get(linkSources[i].getName()) == null) {
+        if (targets.get(linkSource.getName()) == null) {
           //
           // if source appears to be a system library or object file
           // just output the name of the file (advapi.lib for example)
           // otherwise construct a relative path.
           //
-          String relPath = linkSources[i].getName();
+          String relPath = linkSource.getName();
           //
           // check if file comes from a project dependency
           // if it does it should not be explicitly linked
@@ -387,8 +384,8 @@ public final class MsvcProjectWriter implements ProjectWriter {
             }
           }
           if (!fromDependency) {
-            if (!CUtil.isSystemPath(linkSources[i])) {
-              relPath = CUtil.getRelativePath(basePath, linkSources[i]);
+            if (!CUtil.isSystemPath(linkSource)) {
+              relPath = CUtil.getRelativePath(basePath, linkSource);
             }
             //
             // if path has an embedded space then
@@ -405,12 +402,12 @@ public final class MsvcProjectWriter implements ProjectWriter {
         }
       }
       final String[] preArgs = linkConfig.getPreArguments();
-      for (int i = 0; i < preArgs.length; i++) {
-        if (isDebug || !preArgs[i].equals("/DEBUG")) {
+      for (final String preArg : preArgs) {
+        if (isDebug || !preArg.equals("/DEBUG")) {
           options.append(' ');
-          options.append(preArgs[i]);
+          options.append(preArg);
           baseOptions.append(' ');
-          baseOptions.append(preArgs[i]);
+          baseOptions.append(preArg);
         }
       }
       final String[] endArgs = linkConfig.getEndArguments();
@@ -594,9 +591,9 @@ public final class MsvcProjectWriter implements ProjectWriter {
       writer.write("# Begin Group \"Source Files\"\r\n\r\n");
       writer.write("# PROP Default_Filter \"" + sourceFilter + "\"\r\n");
 
-      for (int i = 0; i < sortedSources.length; i++) {
-        if (!isGroupMember(headerFilter, sortedSources[i]) && !isGroupMember(resourceFilter, sortedSources[i])) {
-          writeSource(writer, basePath, sortedSources[i]);
+      for (final File sortedSource1 : sortedSources) {
+        if (!isGroupMember(headerFilter, sortedSource1) && !isGroupMember(resourceFilter, sortedSource1)) {
+          writeSource(writer, basePath, sortedSource1);
         }
       }
       writer.write("# End Group\r\n");
@@ -658,7 +655,7 @@ public final class MsvcProjectWriter implements ProjectWriter {
     //
     // if relative path is just a name (hello.c) then
     // make it .\hello.c
-    if (!relativePath.startsWith(".") && relativePath.indexOf(":") < 0 && !relativePath.startsWith("\\")) {
+    if (!relativePath.startsWith(".") && !relativePath.contains(":") && !relativePath.startsWith("\\")) {
       relativePath = ".\\" + relativePath;
     }
     writer.write(CUtil.toWindowsPath(relativePath));
@@ -677,7 +674,7 @@ public final class MsvcProjectWriter implements ProjectWriter {
     writeComments(writer, project.getComments());
 
     final List<DependencyDef> dependencies = project.getDependencies();
-    final List<String> projectDeps = new ArrayList<String>();
+    final List<String> projectDeps = new ArrayList<>();
     final String basePath = dspFile.getParent();
     for (final DependencyDef dep : dependencies) {
       if (dep.getFile() != null) {

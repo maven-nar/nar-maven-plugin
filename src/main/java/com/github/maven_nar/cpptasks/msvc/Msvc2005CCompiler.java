@@ -19,9 +19,6 @@
  */
 package com.github.maven_nar.cpptasks.msvc;
 
-import java.io.File;
-import java.util.Vector;
-
 import org.apache.tools.ant.types.Environment;
 
 import com.github.maven_nar.cpptasks.compiler.LinkType;

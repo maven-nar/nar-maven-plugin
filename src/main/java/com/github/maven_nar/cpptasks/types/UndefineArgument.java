@@ -51,7 +51,7 @@ public class UndefineArgument {
       final UndefineArgument[] baseClone = base.clone();
       return baseClone;
     }
-    final Vector<UndefineArgument> unduplicated = new Vector<UndefineArgument>(base.length);
+    final Vector<UndefineArgument> unduplicated = new Vector<>(base.length);
     for (final UndefineArgument current : base) {
       final String currentName = current.getName();
       boolean match = false;
@@ -73,9 +73,7 @@ public class UndefineArgument {
     final UndefineArgument[] combined = new UndefineArgument[unduplicated.size() + override.length];
     unduplicated.copyInto(combined);
     final int offset = unduplicated.size();
-    for (int i = 0; i < override.length; i++) {
-      combined[offset + i] = override[i];
-    }
+    System.arraycopy(override, 0, combined, offset + 0, override.length);
     return combined;
   }
 

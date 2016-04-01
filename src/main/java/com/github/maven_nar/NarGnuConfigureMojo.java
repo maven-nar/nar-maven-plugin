@@ -157,9 +157,7 @@ public class NarGnuConfigureMojo extends AbstractGnuMojo {
           final String[] a = this.gnuConfigureArgs.split(" ");
           args = new String[a.length + 2];
 
-          for (int i = 0; i < a.length; i++) {
-            args[i + 2] = a[i];
-          }
+          System.arraycopy(a, 0, args, 2, a.length);
         } else {
           args = new String[2];
         }
@@ -194,9 +192,7 @@ public class NarGnuConfigureMojo extends AbstractGnuMojo {
     String arguments[] = null;
     if (args != null) {
       arguments = new String[1 + args.length];
-      for (int i = 0; i < args.length; ++i) {
-        arguments[i + 1] = args[i];
-      }
+      System.arraycopy(args, 0, arguments, 1, args.length);
     } else {
       arguments = new String[1];
     }

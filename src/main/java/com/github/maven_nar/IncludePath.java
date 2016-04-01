@@ -67,7 +67,7 @@ public class IncludePath {
     }
 
     for (final String s : (List<String>) this.includes) {
-      includesString.append(s + ",");
+      includesString.append(s).append(",");
     }
 
     return includesString.toString();

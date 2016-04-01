@@ -41,12 +41,8 @@ public class FlexLong {
     // Java 1.1 did not support Long.decode().. so we call it by
     // reflection.
     try {
-      final Method m = Long.class.getMethod("decode", new Class[] {
-        String.class
-      });
-      final Object rc = m.invoke(null, new Object[] {
-        value
-      });
+      final Method m = Long.class.getMethod("decode", String.class);
+      final Object rc = m.invoke(null, value);
       this.value = (Long) rc;
     } catch (final Exception e) {
       // Try it the old fashioned way, we must be on a 1.1 jre

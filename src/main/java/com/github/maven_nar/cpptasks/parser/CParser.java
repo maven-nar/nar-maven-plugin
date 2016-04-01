@@ -30,7 +30,7 @@ import java.util.Vector;
  * @author Curt Arnold
  */
 public final class CParser extends AbstractParser implements Parser {
-  private final Vector<String> includes = new Vector<String>();
+  private final Vector<String> includes = new Vector<>();
   private final AbstractParserState newLineState;
 
   /**

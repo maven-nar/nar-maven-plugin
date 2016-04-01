@@ -42,7 +42,7 @@ public abstract class TestXMLConsumer extends TestCase {
    * @param tmpFile
    *          name for temporary file created in /tmp or similar.
    */
-  public static final void copyResourceToTmpDir(final String resourceName, final String tmpFile) throws IOException {
+  public static void copyResourceToTmpDir(final String resourceName, final String tmpFile) throws IOException {
     String tmpDir = System.getProperty("java.io.tmpdir");
 
     final File tempdir = File.createTempFile(tmpFile, Long.toString(System.nanoTime()), new File(tmpDir));
@@ -67,8 +67,7 @@ public abstract class TestXMLConsumer extends TestCase {
     try {
       final File destFile = new File(tmpDir, tmpFile);
       destFile.deleteOnExit();
-      final FileOutputStream dest = new FileOutputStream(destFile);
-      try {
+      try (FileOutputStream dest = new FileOutputStream(destFile)) {
         int bytesRead = 0;
         final byte[] buffer = new byte[4096];
         do {
@@ -77,8 +76,6 @@ public abstract class TestXMLConsumer extends TestCase {
             dest.write(buffer, 0, bytesRead);
           }
         } while (bytesRead == buffer.length);
-      } finally {
-        dest.close();
       }
     } finally {
       src.close();

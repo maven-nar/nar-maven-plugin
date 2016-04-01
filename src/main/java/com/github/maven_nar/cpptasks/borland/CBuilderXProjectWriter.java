@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -117,7 +116,7 @@ public final class CBuilderXProjectWriter implements ProjectWriter {
    */
   private String getActivePlatform(final CCTask task) {
     final String osName = System.getProperty("os.name").toLowerCase(Locale.US);
-    if (osName.indexOf("windows") >= 0) {
+    if (osName.contains("windows")) {
       return "win32";
     }
     return "linux";
@@ -139,9 +138,7 @@ public final class CBuilderXProjectWriter implements ProjectWriter {
     //
     // get the first target and assume that it is representative
     //
-    final Iterator<TargetInfo> targetIter = targets.values().iterator();
-    while (targetIter.hasNext()) {
-      final TargetInfo targetInfo = targetIter.next();
+    for (final TargetInfo targetInfo : targets.values()) {
       final ProcessorConfiguration config = targetInfo.getConfiguration();
       final String identifier = config.getIdentifier();
       //
@@ -149,8 +146,8 @@ public final class CBuilderXProjectWriter implements ProjectWriter {
       //
       if (config instanceof CommandLineCompilerConfiguration) {
         compilerConfig = (CommandLineCompilerConfiguration) config;
-        if (compilerConfig.getCompiler() instanceof GccCCompiler
-            || compilerConfig.getCompiler() instanceof BorlandCCompiler) {
+        if (compilerConfig.getCompiler() instanceof GccCCompiler || compilerConfig
+            .getCompiler() instanceof BorlandCCompiler) {
           return compilerConfig;
         }
       }
@@ -227,16 +224,16 @@ public final class CBuilderXProjectWriter implements ProjectWriter {
     int defineIndex = 1;
     int undefineIndex = 1;
     final String[] preArgs = compilerConfig.getPreArguments();
-    for (int i = 0; i < preArgs.length; i++) {
-      if (preArgs[i].startsWith("-D")) {
-        writer.write(compileID, defineOption + defineIndex++, preArgs[i].substring(2));
-      } else if (preArgs[i].startsWith("-U")) {
-        writer.write(compileID, "option.U.arg." + undefineIndex++, preArgs[i].substring(2));
-      } else if (!(preArgs[i].startsWith("-I") || preArgs[i].startsWith("-o"))) {
+    for (final String preArg : preArgs) {
+      if (preArg.startsWith("-D")) {
+        writer.write(compileID, defineOption + defineIndex++, preArg.substring(2));
+      } else if (preArg.startsWith("-U")) {
+        writer.write(compileID, "option.U.arg." + undefineIndex++, preArg.substring(2));
+      } else if (!(preArg.startsWith("-I") || preArg.startsWith("-o"))) {
         //
         // any others (-g, -fno-rtti, -w, -Wall, etc)
         //
-        writer.write(compileID, "option." + preArgs[i].substring(1) + ".enabled", "1");
+        writer.write(compileID, "option." + preArg.substring(1) + ".enabled", "1");
       }
     }
     if (defineIndex > 1) {
@@ -469,9 +466,7 @@ public final class CBuilderXProjectWriter implements ProjectWriter {
       gccAttributes.addAttribute(null, "value", "value", "#PCDATA", compilerConfig.getCommand());
     }
 
-    final Iterator<TargetInfo> targetIter = targets.values().iterator();
-    while (targetIter.hasNext()) {
-      final TargetInfo info = targetIter.next();
+    for (final TargetInfo info : targets.values()) {
       final File[] targetsources = info.getSources();
       for (final File targetsource : targetsources) {
         final String relativePath = CUtil.getRelativePath(basePath, targetsource);

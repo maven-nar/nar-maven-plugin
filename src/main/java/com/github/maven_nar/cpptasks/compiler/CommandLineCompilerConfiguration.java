@@ -130,9 +130,7 @@ public final class CommandLineCompilerConfiguration implements CompilerConfigura
     this.isPrecompiledHeaderGeneration = isPrecompileHeaderGeneration;
     if (additionalArgs != null) {
       this.args = new String[base.args.length + additionalArgs.length];
-      for (int i = 0; i < base.args.length; i++) {
-        this.args[i] = base.args[i];
-      }
+      System.arraycopy(base.args, 0, this.args, 0, base.args.length);
       int index = base.args.length;
       for (final String additionalArg : additionalArgs) {
         this.args[index++] = additionalArg;

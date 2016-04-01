@@ -418,7 +418,7 @@ public final class VersionInfo extends DataType {
     if (currentRef == null) {
       return this;
     }
-    final Vector<VersionInfo> stack = new Vector<VersionInfo>(5);
+    final Vector<VersionInfo> stack = new Vector<>(5);
     stack.addElement(this);
     while (currentRef != null) {
       final Object obj = currentRef.getReferencedObject(getProject());

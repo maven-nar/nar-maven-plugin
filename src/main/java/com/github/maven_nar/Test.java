@@ -71,7 +71,7 @@ public class Test implements Executable {
    * List of artifact:binding  for type of dependency to link against when there is a choice.
    */
   @Parameter
-  private List<String> dependencyBindings = new ArrayList<String>();
+  private List<String> dependencyBindings = new ArrayList<>();
   
 
   @Override

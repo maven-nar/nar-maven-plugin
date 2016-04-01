@@ -90,12 +90,12 @@ public final class ProjectDef extends DataType {
   /**
    * List of dependency definitions.
    */
-  private final List<DependencyDef> dependencies = new ArrayList<DependencyDef>();
+  private final List<DependencyDef> dependencies = new ArrayList<>();
 
   /**
    * List of comments.
    */
-  private final List<CommentDef> comments = new ArrayList<CommentDef>();
+  private final List<CommentDef> comments = new ArrayList<>();
 
   /**
    * Constructor.
@@ -165,11 +165,11 @@ public final class ProjectDef extends DataType {
   }
 
   public List<CommentDef> getComments() {
-    return new ArrayList<CommentDef>(this.comments);
+    return new ArrayList<>(this.comments);
   }
 
   public List<DependencyDef> getDependencies() {
-    return new ArrayList<DependencyDef>(this.dependencies);
+    return new ArrayList<>(this.dependencies);
   }
 
   /**
@@ -242,8 +242,8 @@ public final class ProjectDef extends DataType {
     try {
       final Class<?> implClass = ProjectDef.class.getClassLoader().loadClass(className);
       try {
-        final Method getInstance = implClass.getMethod("getInstance", new Class[0]);
-        proc = getInstance.invoke(null, new Object[0]);
+        final Method getInstance = implClass.getMethod("getInstance");
+        proc = getInstance.invoke(null);
       } catch (final Exception ex) {
         proc = implClass.newInstance();
       }

@@ -50,9 +50,9 @@ public class NarLogger implements BuildListener {
     final String msg = event.getMessage();
     switch (event.getPriority()) {
       case Project.MSG_ERR:
-        if (msg.indexOf("ar: creating archive") >= 0) {
+        if (msg.contains("ar: creating archive")) {
           this.log.debug(msg);
-        } else if (msg.indexOf("warning") >= 0) {
+        } else if (msg.contains("warning")) {
           this.log.warn(msg);
         } else {
           this.log.error(msg);
@@ -62,7 +62,7 @@ public class NarLogger implements BuildListener {
         this.log.warn(msg);
         break;
       case Project.MSG_INFO:
-        if (msg.indexOf("error") >= 0) {
+        if (msg.contains("error")) {
           this.log.error(msg);
         } else {
           this.log.info(msg);

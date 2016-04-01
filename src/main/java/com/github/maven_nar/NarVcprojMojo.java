@@ -26,6 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.model.Profile;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -176,11 +177,11 @@ public class NarVcprojMojo extends AbstractCompileMojo {
 
         final List tmp = new LinkedList();
 
-        for (final Iterator i = depLibOrder.iterator(); i.hasNext();) {
+        for (final Object aDepLibOrder : depLibOrder) {
 
-          final String depToOrderName = (String) i.next();
+          final String depToOrderName = (String) aDepLibOrder;
 
-          for (final Iterator j = depLibs.iterator(); j.hasNext();) {
+          for (final Iterator j = depLibs.iterator(); j.hasNext(); ) {
 
             final NarArtifact dep = (NarArtifact) j.next();
             final String depName = dep.getGroupId() + ":" + dep.getArtifactId();
@@ -197,9 +198,9 @@ public class NarVcprojMojo extends AbstractCompileMojo {
         depLibs = tmp;
       }
 
-      for (final Iterator i = depLibs.iterator(); i.hasNext();) {
+      for (final Object depLib : depLibs) {
 
-        final NarArtifact dependency = (NarArtifact) i.next();
+        final NarArtifact dependency = (NarArtifact) depLib;
 
         // FIXME no handling of "local"
 
@@ -212,8 +213,9 @@ public class NarVcprojMojo extends AbstractCompileMojo {
 
         if (!binding.equals(Library.JNI) && !binding.equals(Library.NONE) && !binding.equals(Library.EXECUTABLE)) {
           final File unpackDirectory = getUnpackDirectory();
-          final File dir = getLayout().getLibDirectory(unpackDirectory, dependency.getArtifactId(),
-              dependency.getBaseVersion(), aol.toString(), binding);
+          final File dir = getLayout()
+              .getLibDirectory(unpackDirectory, dependency.getArtifactId(), dependency.getBaseVersion(), aol.toString(),
+                  binding);
           getLog().debug("Looking for Library Directory: " + dir);
           if (dir.exists()) {
             final LibrarySet libSet = new LibrarySet();
@@ -319,8 +321,8 @@ public class NarVcprojMojo extends AbstractCompileMojo {
     boolean debug = false;
 
     final List profiles = NarUtil.collectActiveProfiles(getMavenProject());
-    for (final Iterator i = profiles.iterator(); i.hasNext();) {
-      final org.apache.maven.model.Profile profile = (org.apache.maven.model.Profile) i.next();
+    for (final Object profile1 : profiles) {
+      final Profile profile = (Profile) profile1;
       if (profile.getId().equalsIgnoreCase("windows-debug")) {
         debug = true;
         break;

@@ -21,11 +21,9 @@ package com.github.maven_nar;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -91,25 +89,25 @@ public abstract class Compiler {
    * Include patterns for sources
    */
   @Parameter(required = true)
-  private Set<String> includes = new HashSet<String>();
+  private Set<String> includes = new HashSet<>();
 
   /**
    * Exclude patterns for sources
    */
   @Parameter(required = true)
-  private Set<String> excludes = new HashSet<String>();
+  private Set<String> excludes = new HashSet<>();
 
   /**
    * Include patterns for test sources
    */
   @Parameter(required = true)
-  private Set<String> testIncludes = new HashSet<String>();
+  private Set<String> testIncludes = new HashSet<>();
 
   /**
    * Exclude patterns for test sources
    */
   @Parameter(required = true)
-  private Set<String> testExcludes = new HashSet<String>();
+  private Set<String> testExcludes = new HashSet<>();
 
   @Parameter(defaultValue = "false", required = false)
   private boolean ccache = false;
@@ -453,8 +451,8 @@ public abstract class Compiler {
     final Set<String> excludeSet = getExcludes(type);
 
     // now add all but the current test to the excludes
-    for (final Iterator i = this.mojo.getTests().iterator(); i.hasNext();) {
-      final Test test = (Test) i.next();
+    for (final Object o : this.mojo.getTests()) {
+      final Test test = (Test) o;
       if (!test.getName().equals(output)) {
         excludeSet.add("**/" + test.getName() + ".*");
       }
@@ -493,7 +491,7 @@ public abstract class Compiler {
   }
 
   protected final Set<String> getExcludes(final String type) throws MojoFailureException, MojoExecutionException {
-    final Set<String> result = new HashSet<String>();
+    final Set<String> result = new HashSet<>();
     if (type.equals(TEST) && !this.testExcludes.isEmpty()) {
       result.addAll(this.testExcludes);
     } else if (!this.excludes.isEmpty()) {
@@ -519,7 +517,7 @@ public abstract class Compiler {
       return includeList;
     }
 
-    includeList = new ArrayList<IncludePath>();
+    includeList = new ArrayList<>();
     for (final File file2 : getSourceDirectories(type)) {
       // VR 20100318 only add include directories that exist - we now fail the
       // build fast if an include directory does not exist
@@ -538,7 +536,7 @@ public abstract class Compiler {
   }
 
   protected final Set<String> getIncludes(final String type) throws MojoFailureException, MojoExecutionException {
-    final Set<String> result = new HashSet<String>();
+    final Set<String> result = new HashSet<>();
     if (!type.equals(TEST) && !this.includes.isEmpty()) {
       result.addAll(this.includes);
     } else if (type.equals(TEST) && !this.testIncludes.isEmpty()) {
@@ -578,7 +576,7 @@ public abstract class Compiler {
   }
 
   private List<File> getSourceDirectories(final String type) {
-    final List<File> sourceDirectories = new ArrayList<File>();
+    final List<File> sourceDirectories = new ArrayList<>();
     final File baseDir = this.mojo.getMavenProject().getBasedir();
 
     if (type.equals(TEST)) {

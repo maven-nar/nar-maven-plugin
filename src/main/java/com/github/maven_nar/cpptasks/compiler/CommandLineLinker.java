@@ -22,16 +22,11 @@ package com.github.maven_nar.cpptasks.compiler;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Environment;
 
-import com.github.maven_nar.NarUtil;
-import com.github.maven_nar.OS;
 import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.CUtil;
 import com.github.maven_nar.cpptasks.LinkerDef;
@@ -136,9 +131,9 @@ public abstract class CommandLineLinker extends AbstractLinker {
       final ProcessorDef[] baseDefs, final LinkerDef specificDef, final TargetDef targetPlatform,
       final VersionInfo versionInfo) {
 
-    final Vector<String> preargs = new Vector<String>();
-    final Vector<String> midargs = new Vector<String>();
-    final Vector<String> endargs = new Vector<String>();
+    final Vector<String> preargs = new Vector<>();
+    final Vector<String> midargs = new Vector<>();
+    final Vector<String> endargs = new Vector<>();
     final Vector<String>[] args = new Vector[] {
         preargs, midargs, endargs
     };
@@ -163,7 +158,7 @@ public abstract class CommandLineLinker extends AbstractLinker {
       }
     }
 
-    final Set<File> libraryDirectories = new LinkedHashSet<File>();
+    final Set<File> libraryDirectories = new LinkedHashSet<>();
     for (int i = defaultProviders.length - 1; i >= 0; i--) {
       final LinkerDef linkerDef = defaultProviders[i];
       for (final File libraryDirectory : linkerDef.getLibraryDirectories()) {
@@ -173,16 +168,14 @@ public abstract class CommandLineLinker extends AbstractLinker {
       }
     }
 
-    final Vector<ProcessorParam> params = new Vector<ProcessorParam>();
+    final Vector<ProcessorParam> params = new Vector<>();
     //
     // add command line arguments inherited from <cc> element
     // any "extends" and finally the specific CompilerDef
     ProcessorParam[] paramArray;
     for (int i = defaultProviders.length - 1; i >= 0; i--) {
       paramArray = defaultProviders[i].getActiveProcessorParams();
-      for (final ProcessorParam element : paramArray) {
-        params.add(element);
-      }
+      Collections.addAll(params, paramArray);
     }
 
     paramArray = params.toArray(new ProcessorParam[params.size()]);
@@ -461,15 +454,13 @@ public abstract class CommandLineLinker extends AbstractLinker {
       execArgCount++;
     }
     final String[] execArgs = new String[execArgCount + 1];
-    for (int i = 0; i < execArgCount; i++) {
-      execArgs[i] = args[i];
-    }
+    System.arraycopy(args, 0, execArgs, 0, execArgCount);
     execArgs[execArgCount] = getCommandFileSwitch(commandFile.toString());
     for (int i = execArgCount; i < args.length; i++) {
       //
       // if embedded space and not quoted then
       // quote argument
-      if (args[i].indexOf(" ") >= 0 && args[i].charAt(0) != '\"') {
+      if (args[i].contains(" ") && args[i].charAt(0) != '\"') {
         writer.write('\"');
         writer.write(args[i]);
         writer.write("\"\n");

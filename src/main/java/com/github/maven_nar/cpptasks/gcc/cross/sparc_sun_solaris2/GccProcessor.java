@@ -141,15 +141,13 @@ public class GccProcessor {
         // build a relative path like
         // ../lib/gcc-lib/i686-pc-cygwin/2.95.3-5/specs
         //
-        final StringBuffer buf = new StringBuffer("../lib/gcc-lib/");
-        buf.append(getMachine());
-        buf.append('/');
-        buf.append(getVersion());
-        buf.append("/specs");
         //
         // resolve it relative to the location of gcc.exe
         //
-        final String relativePath = buf.toString();
+        final String relativePath = "../lib/gcc-lib/" + getMachine() +
+            '/' +
+            getVersion() +
+            "/specs";
         final File specsFile = new File(gccParent, relativePath);
         //
         // found the specs file
@@ -159,7 +157,7 @@ public class GccProcessor {
           // read the lines in the file
           //
           final BufferedReader reader = new BufferedReader(new FileReader(specsFile));
-          final Vector<String> lines = new Vector<String>(100);
+          final Vector<String> lines = new Vector<>(100);
           String line = reader.readLine();
           while (line != null) {
             lines.addElement(line);
@@ -207,7 +205,7 @@ public class GccProcessor {
 
   private static boolean isHPUX() {
     final String osname = System.getProperty("os.name").toLowerCase();
-    if (osname.indexOf("hp") >= 0 && osname.indexOf("ux") >= 0) {
+    if (osname.contains("hp") && osname.contains("ux")) {
       return true;
     }
     return false;
@@ -246,7 +244,7 @@ public class GccProcessor {
       if (specLine.startsWith(specSectionStart)) {
         final Vector<String>[] optionVectors = new Vector[options.length];
         for (int j = 0; j < options.length; j++) {
-          optionVectors[j] = new Vector<String>(10);
+          optionVectors[j] = new Vector<>(10);
         }
         //
         // go to next line and examine contents

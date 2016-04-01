@@ -20,7 +20,6 @@
 package com.github.maven_nar;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
@@ -83,8 +82,8 @@ public class Java {
       throws MojoFailureException, MojoExecutionException {
     if (this.include || this.mojo.getJavah().getJniDirectory().exists()) {
       if (this.includePaths != null) {
-        for (final Iterator i = this.includePaths.iterator(); i.hasNext();) {
-          final String path = (String) i.next();
+        for (final Object includePath : this.includePaths) {
+          final String path = (String) includePath;
           task.createIncludePath().setPath(new File(this.mojo.getJavaHome(this.mojo.getAOL()), path).getPath());
         }
       } else {

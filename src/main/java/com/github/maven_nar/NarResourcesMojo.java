@@ -71,22 +71,22 @@ public class NarResourcesMojo extends AbstractResourcesMojo {
     final File aolDir = new File(this.resourceDirectory, NarConstants.NAR_AOL);
     if (aolDir.exists()) {
       final String[] aol = aolDir.list();
-      for (int i = 0; i < aol.length; i++) {
+      for (final String anAol : aol) {
         // copy only resources of current AOL
-        if (this.resourcesCopyAOL && !aol[i].equals(getAOL().toString())) {
+        if (this.resourcesCopyAOL && !anAol.equals(getAOL().toString())) {
           continue;
         }
 
         boolean ignore = false;
         for (final Object element : FileUtils.getDefaultExcludesAsList()) {
           final String exclude = (String) element;
-          if (SelectorUtils.matchPath(exclude.replace('/', File.separatorChar), aol[i])) {
+          if (SelectorUtils.matchPath(exclude.replace('/', File.separatorChar), anAol)) {
             ignore = true;
             break;
           }
         }
         if (!ignore) {
-          final File aolFile = new File(aolDir, aol[i]);
+          final File aolFile = new File(aolDir, anAol);
           copyResources(aolFile, aolFile.getName());
         }
       }

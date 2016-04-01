@@ -22,14 +22,12 @@ package com.github.maven_nar;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.jar.JarFile;
-import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
 import org.apache.commons.io.IOUtils;
 
@@ -134,7 +132,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
 
   public final List<AttachedNarArtifact> getAllAttachedNarArtifacts(final List<NarArtifact> narArtifacts,
       List<? extends Executable> libraries) throws MojoExecutionException, MojoFailureException {
-    final List<AttachedNarArtifact> artifactList = new ArrayList<AttachedNarArtifact>();
+    final List<AttachedNarArtifact> artifactList = new ArrayList<>();
     for (NarArtifact dependency : narArtifacts) {
       if ("NAR".equalsIgnoreCase(getMavenProject().getPackaging())) {
         final String bindings[] = getBindings(libraries, dependency);
@@ -192,7 +190,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
   private List<AttachedNarArtifact> getAttachedNarArtifacts(final NarArtifact dependency, final AOL aol,
       final String type) throws MojoExecutionException, MojoFailureException {
     getLog().debug("GetNarDependencies for " + dependency + ", aol: " + aol + ", type: " + type);
-    final List<AttachedNarArtifact> artifactList = new ArrayList<AttachedNarArtifact>();
+    final List<AttachedNarArtifact> artifactList = new ArrayList<>();
     final NarInfo narInfo = dependency.getNarInfo();
     final String[] nars = narInfo.getAttachedNars(aol, type);
     // FIXME Move this to NarInfo....
@@ -231,7 +229,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
   protected String[] getBindings(List<? extends Executable> libraries, NarArtifact dependency)
       throws MojoFailureException, MojoExecutionException {
 
-    Set<String> bindings = new HashSet<String>();
+    Set<String> bindings = new HashSet<>();
     if (libraries != null){
       for (Object library : libraries) {
         Executable exec = (Executable) library;
@@ -293,7 +291,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
    * NarInfo)
    */
   public final List<NarArtifact> getNarArtifacts() throws MojoExecutionException {
-    final List<NarArtifact> narDependencies = new LinkedList<NarArtifact>();
+    final List<NarArtifact> narDependencies = new LinkedList<>();
 
     FilterArtifacts filter = new FilterArtifacts();
 

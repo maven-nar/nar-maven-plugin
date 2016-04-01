@@ -113,12 +113,8 @@ public class ClxxCCompiler extends CommandLineCCompiler {
       return c_dir;
     }
     final File[] combo = new File[c_dir.length + cx_dir.length];
-    for (int i = 0; i < cx_dir.length; i++) {
-      combo[i] = cx_dir[i];
-    }
-    for (int i = 0; i < c_dir.length; i++) {
-      combo[i + cx_dir.length] = c_dir[i];
-    }
+    System.arraycopy(cx_dir, 0, combo, 0, cx_dir.length);
+    System.arraycopy(c_dir, 0, combo, 0 + cx_dir.length, c_dir.length);
     return combo;
   }
 

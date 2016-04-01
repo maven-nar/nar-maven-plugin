@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -67,8 +66,8 @@ public final class PropertyListSerialization {
     handler.setResult(result);
 
     handler.startDocument();
-    for (final Iterator iter = comments.iterator(); iter.hasNext();) {
-      final char[] comment = String.valueOf(iter.next()).toCharArray();
+    for (final Object comment1 : comments) {
+      final char[] comment = String.valueOf(comment1).toCharArray();
       handler.comment(comment, 0, comment.length);
     }
     final AttributesImpl attributes = new AttributesImpl();
@@ -146,8 +145,8 @@ public final class PropertyListSerialization {
   private static void serializeList(final List list, final ContentHandler handler) throws SAXException {
     final AttributesImpl attributes = new AttributesImpl();
     handler.startElement(null, "array", "array", attributes);
-    for (final Iterator iter = list.iterator(); iter.hasNext();) {
-      serializeObject(iter.next(), handler);
+    for (final Object aList : list) {
+      serializeObject(aList, handler);
     }
     handler.endElement(null, "array", "array");
   }

@@ -136,7 +136,7 @@ public final class GccCCompiler extends GccCompatibleCCompiler {
   private GccCCompiler(final String command, final String[] sourceExtensions, final String[] headerExtensions,
       final boolean isLibtool, final GccCCompiler libtoolCompiler, final boolean newEnvironment, final Environment env) {
     super(command, null, sourceExtensions, headerExtensions, isLibtool, libtoolCompiler, newEnvironment, env);
-    this.isPICMeaningful = System.getProperty("os.name").indexOf("Windows") < 0;
+    this.isPICMeaningful = !System.getProperty("os.name").contains("Windows");
   }
 
   @Override
@@ -192,12 +192,11 @@ public final class GccCCompiler extends GccCompatibleCCompiler {
       // construct default include path from machine id and version id
       //
       final String[] defaultInclude = new String[1];
-      final StringBuffer buf = new StringBuffer("/lib/");
-      buf.append(GccProcessor.getMachine());
-      buf.append('/');
-      buf.append(GccProcessor.getVersion());
-      buf.append("/include");
-      defaultInclude[0] = buf.toString();
+      final String buf = "/lib/" + GccProcessor.getMachine() +
+          '/' +
+          GccProcessor.getVersion() +
+          "/include";
+      defaultInclude[0] = buf;
       //
       // read specs file and look for -istart and -idirafter
       //
@@ -243,9 +242,9 @@ public final class GccCCompiler extends GccCompatibleCCompiler {
       this.includePath = new File[count];
       int index = 0;
       for (final String[] optionValue : optionValues) {
-        for (int j = 0; j < optionValue.length; j++) {
-          if (optionValue[j] != null) {
-            this.includePath[index++] = new File(optionValue[j]);
+        for (final String anOptionValue : optionValue) {
+          if (anOptionValue != null) {
+            this.includePath[index++] = new File(anOptionValue);
           }
         }
       }

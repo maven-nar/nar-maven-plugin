@@ -114,7 +114,7 @@ public class NarProperties {
   }
 
   public Collection<String> getKnownAOLs() {
-    final Collection<String> result = new LinkedHashSet<String>();
+    final Collection<String> result = new LinkedHashSet<>();
     final Pattern pattern = Pattern.compile("([^.]+)\\.([^.]+)\\.([^.]+).*");
     final Enumeration<?> e = this.properties.propertyNames();
     while (e.hasMoreElements()) {

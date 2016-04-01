@@ -58,13 +58,13 @@ public class NarSystemMojo extends AbstractNarMojo {
         .append("        final String ao = System.getProperty(\"os.arch\") + \"-\" + System.getProperty(\"os.name\").replaceAll(\" \", \"\");\n");
 
     // build map: AO -> AOLs
-    final Map<String, List<String>> aoMap = new LinkedHashMap<String, List<String>>();
+    final Map<String, List<String>> aoMap = new LinkedHashMap<>();
     for (final String aol : NarProperties.getInstance(getMavenProject()).getKnownAOLs()) {
       final int dash = aol.lastIndexOf('-');
       final String ao = aol.substring(0, dash);
       List<String> list = aoMap.get(ao);
       if (list == null) {
-        aoMap.put(ao, list = new ArrayList<String>());
+        aoMap.put(ao, list = new ArrayList<>());
       }
       list.add(aol);
     }

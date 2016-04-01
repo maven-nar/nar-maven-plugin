@@ -51,19 +51,13 @@ public abstract class AbstractNarLayout implements NarLayout, NarConstants {
     Class cls;
     try {
       cls = Class.forName(className);
-      final Constructor ctor = cls.getConstructor(new Class[] {
-        Log.class
-      });
-      return (NarLayout) ctor.newInstance(new Object[] {
-        log
-      });
+      final Constructor ctor = cls.getConstructor(Log.class);
+      return (NarLayout) ctor.newInstance(log);
     } catch (final ClassNotFoundException e) {
       throw new MojoExecutionException("Cannot find class for layout " + className, e);
     } catch (final InstantiationException e) {
       throw new MojoExecutionException("Cannot instantiate class for layout " + className, e);
-    } catch (final IllegalAccessException e) {
-      throw new MojoExecutionException("Cannot access class for layout " + className, e);
-    } catch (final SecurityException e) {
+    } catch (final IllegalAccessException | SecurityException e) {
       throw new MojoExecutionException("Cannot access class for layout " + className, e);
     } catch (final NoSuchMethodException e) {
       throw new MojoExecutionException("Cannot find ctor(Log) for layout " + className, e);
@@ -97,9 +91,7 @@ public abstract class AbstractNarLayout implements NarLayout, NarConstants {
       archiver.createArchive();
     } catch (final NoSuchArchiverException e) {
       throw new MojoExecutionException("NAR: cannot find archiver", e);
-    } catch (final ArchiverException e) {
-      throw new MojoExecutionException("NAR: cannot create NAR archive '" + narFile + "'", e);
-    } catch (final IOException e) {
+    } catch (final ArchiverException | IOException e) {
       throw new MojoExecutionException("NAR: cannot create NAR archive '" + narFile + "'", e);
     }
     projectHelper.attachArtifact(project, NarConstants.NAR_TYPE, classifier, narFile);
@@ -125,9 +117,7 @@ public abstract class AbstractNarLayout implements NarLayout, NarConstants {
       unArchiver.setSourceFile(file);
       unArchiver.setDestDirectory(narLocation);
       unArchiver.extract();
-    } catch (final NoSuchArchiverException e) {
-      throw new MojoExecutionException("Error unpacking file: " + file + " to: " + narLocation, e);
-    } catch (final ArchiverException e) {
+    } catch (final NoSuchArchiverException | ArchiverException e) {
       throw new MojoExecutionException("Error unpacking file: " + file + " to: " + narLocation, e);
     }
 

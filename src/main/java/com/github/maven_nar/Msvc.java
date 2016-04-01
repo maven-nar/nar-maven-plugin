@@ -33,7 +33,7 @@ public class Msvc {
 
   private AbstractNarMojo mojo;
 
-  private final Set<String> paths = new LinkedHashSet<String>();
+  private final Set<String> paths = new LinkedHashSet<>();
 
   @Parameter
   private String version;

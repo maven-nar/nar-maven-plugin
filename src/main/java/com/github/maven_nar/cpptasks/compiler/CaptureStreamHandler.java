@@ -45,7 +45,7 @@ public class CaptureStreamHandler implements ExecuteStreamHandler {
 
     Copier(final InputStream is) {
       this.is = is;
-      this.lines = new Vector<String>(10);
+      this.lines = new Vector<>(10);
     }
 
     public Vector<String> getLines() {

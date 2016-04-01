@@ -49,7 +49,7 @@ public class ProcessLibraryCommand {
   }
 
   public List<String> getCommandList() {
-    final List<String> command = new ArrayList<String>();
+    final List<String> command = new ArrayList<>();
     command.add(this.executable);
     if (this.arguments != null) {
       command.addAll(this.arguments);

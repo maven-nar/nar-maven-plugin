@@ -21,7 +21,6 @@ package com.github.maven_nar;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
@@ -150,9 +149,8 @@ public abstract class AbstractResourcesMojo extends AbstractNarMojo {
       // unpack jar files
       final File classesDirectory = new File(getOutputDirectory(), "classes");
       classesDirectory.mkdirs();
-      final List jars = FileUtils.getFiles(srcDir, "**/*.jar", null);
-      for (final Iterator i = jars.iterator(); i.hasNext();) {
-        final File jar = (File) i.next();
+      final List<File> jars = FileUtils.getFiles(srcDir, "**/*.jar", null);
+      for (final File jar : jars) {
         getLog().debug("Unpacking jar " + jar);
         UnArchiver unArchiver;
         unArchiver = this.archiverManager.getUnArchiver(NarConstants.NAR_ROLE_HINT);

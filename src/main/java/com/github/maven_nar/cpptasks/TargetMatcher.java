@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.apache.tools.ant.BuildException;
-import org.apache.commons.io.FilenameUtils;
 
 import com.github.maven_nar.cpptasks.compiler.LinkerConfiguration;
 import com.github.maven_nar.cpptasks.compiler.ProcessorConfiguration;
@@ -107,13 +106,12 @@ public final class TargetMatcher implements FileVisitor {
               this.outputDir, outputFileName), selectedCompiler.getRebuild()));
         } else {
           if (!previousTarget.getSources()[0].equals(this.sourceFiles[0])) {
-            final StringBuffer builder = new StringBuffer("Output filename conflict: ");
-            builder.append(outputFileName);
-            builder.append(" would be produced from ");
-            builder.append(previousTarget.getSources()[0].toString());
-            builder.append(" and ");
-            builder.append(filename);
-            throw new BuildException(builder.toString());
+            final String builder = "Output filename conflict: " + outputFileName +
+                " would be produced from " +
+                previousTarget.getSources()[0].toString() +
+                " and " +
+                filename;
+            throw new BuildException(builder);
           }
         }
       }
