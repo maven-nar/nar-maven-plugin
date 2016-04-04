@@ -49,7 +49,11 @@ public class NarValidateMojo extends AbstractCompileMojo {
   @Override
   public final void narExecute() throws MojoExecutionException, MojoFailureException {
     // super.narExecute();
-
+    if (this.skip) {
+      getLog().info(getClass().getName() + " skipped");
+      return;
+    }
+    
     // check aol
     final AOL aol = getAOL();
     getLog().info("Using AOL: " + aol);

@@ -41,7 +41,7 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
    * Skip running of NAR plugins (any) altogether.
    */
   @Parameter(property = "nar.skip", defaultValue = "false")
-  private boolean skip;
+  protected boolean skip;
 
   /**
    * Skip the tests. Listens to Maven's general 'maven.skip.test'.
