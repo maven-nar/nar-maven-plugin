@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -296,7 +297,7 @@ public class Msvc {
         final Matcher matcher = versionPattern.matcher(key);
         if (matcher.matches()) {
           final String version = matcher.group(1) + "." + matcher.group(2);
-          if (version.compareTo(this.version) > 0) {
+          if (versionStringComparator.compare(version, this.version) > 0) {
             final File commonToolsDirectory = new File(value);
             if (commonToolsDirectory.exists()) {
               this.version = version;
@@ -330,6 +331,15 @@ public class Msvc {
       }
     }
   }
+
+  private final Comparator<String> versionStringComparator = new Comparator<String>() {
+    @Override
+    public int compare(String o1, String o2) {
+      DefaultArtifactVersion version1 = new DefaultArtifactVersion(o1);
+      DefaultArtifactVersion version2 = new DefaultArtifactVersion(o2);
+      return version1.compareTo(version2);
+    }
+  };
 
   private final Comparator<File> versionComparator = new Comparator<File>() {
     @Override
