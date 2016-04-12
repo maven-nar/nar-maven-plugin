@@ -28,5 +28,5 @@ import org.apache.tools.ant.BuildException;
  * ProcessorDef
  */
 public interface FileVisitor {
-  abstract void visit(File parentDir, String filename) throws BuildException;
+  void visit(File parentDir, String filename) throws BuildException;
 }

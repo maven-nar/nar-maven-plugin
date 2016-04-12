@@ -193,17 +193,11 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
     try {
       validate();
       narExecute();
-    } catch (final MojoFailureException mfe) {
+    } catch (final MojoFailureException | MojoExecutionException mfe) {
       if (this.ignore) {
         getLog().warn("IGNORED: " + mfe.getMessage());
       } else {
         throw mfe;
-      }
-    } catch (final MojoExecutionException mee) {
-      if (this.ignore) {
-        getLog().warn("IGNORED: " + mee.getMessage());
-      } else {
-        throw mee;
       }
     }
   }

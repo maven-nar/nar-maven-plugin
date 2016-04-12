@@ -459,8 +459,8 @@ public abstract class ProcessorDef extends DataType {
     // walk through any extended definitions
     //
     final ProcessorDef[] defaultProviders = getDefaultProviders(null);
-    for (int i = 0; i < defaultProviders.length; i++) {
-      if (!defaultProviders[i].isActive()) {
+    for (final ProcessorDef defaultProvider : defaultProviders) {
+      if (!defaultProvider.isActive()) {
         return false;
       }
     }
@@ -480,8 +480,8 @@ public abstract class ProcessorDef extends DataType {
     try {
       final Class implClass = ProcessorDef.class.getClassLoader().loadClass(className);
       try {
-        final Method getInstance = implClass.getMethod("getInstance", new Class[0]);
-        proc = getInstance.invoke(null, new Object[0]);
+        final Method getInstance = implClass.getMethod("getInstance");
+        proc = getInstance.invoke(null);
       } catch (final Exception ex) {
         proc = implClass.newInstance();
       }

@@ -65,7 +65,7 @@ public class TestAbstractArLibrarian extends TestAbstractLinker {
   public void testGetIdentfier() {
     final AbstractProcessor processor = create();
     final String id = processor.getIdentifier();
-    assertTrue(id.indexOf("ar") >= 0);
+    assertTrue(id.contains("ar"));
   }
 
   /**

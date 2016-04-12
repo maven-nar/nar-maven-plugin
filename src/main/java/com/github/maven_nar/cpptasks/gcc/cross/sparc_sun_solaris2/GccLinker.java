@@ -70,7 +70,7 @@ public class GccLinker extends AbstractLdLinker {
   protected void addImpliedArgs(final CCTask task, final boolean debug, final LinkType linkType,
       final Vector<String> args) {
     super.addImpliedArgs(task, debug, linkType, args);
-    if (getIdentifier().indexOf("mingw") >= 0) {
+    if (getIdentifier().contains("mingw")) {
       if (linkType.isSubsystemConsole()) {
         args.addElement("-mconsole");
       }
@@ -177,7 +177,7 @@ public class GccLinker extends AbstractLdLinker {
         };
       }
       for (int i = 0; i < libpath.length; i++) {
-        if (libpath[i].indexOf("mingw") >= 0) {
+        if (libpath[i].contains("mingw")) {
           libpath[i] = null;
         }
       }

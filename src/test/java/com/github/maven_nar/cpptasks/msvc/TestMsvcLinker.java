@@ -46,7 +46,7 @@ public class TestMsvcLinker extends TestAbstractLinker {
     }
     final AbstractProcessor compiler = create();
     final String id = compiler.getIdentifier();
-    final boolean hasMSLinker = id.indexOf("Microsoft") >= 0 && id.indexOf("Linker") >= 0 || id.indexOf("link") >= 0;
+    final boolean hasMSLinker = id.contains("Microsoft") && id.contains("Linker") || id.contains("link");
     assertTrue(hasMSLinker);
   }
 }

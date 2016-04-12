@@ -262,7 +262,7 @@ public final class OpenWatcomLibrarian extends CommandLineLinker {
     final String[] preargs = config.getPreArguments();
     final String[] endargs = config.getEndArguments();
     final StringBuffer buf = new StringBuffer();
-    final Vector<String> execArgs = new Vector<String>(preargs.length + endargs.length + 10 + sourceFiles.length);
+    final Vector<String> execArgs = new Vector<>(preargs.length + endargs.length + 10 + sourceFiles.length);
 
     execArgs.addElement(this.getCommand());
     final String outputFileName = new File(outputDir, outputName).toString();

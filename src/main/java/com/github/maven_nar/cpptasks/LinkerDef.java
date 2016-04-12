@@ -62,7 +62,7 @@ public class LinkerDef extends ProcessorDef {
   private String linkerPrefix;
   private Boolean skipDepLink;
 
-  private final Set<File> libraryDirectories = new LinkedHashSet<File>();
+  private final Set<File> libraryDirectories = new LinkedHashSet<>();
 
   /**
    * Default constructor
@@ -273,7 +273,7 @@ public class LinkerDef extends ProcessorDef {
   }
 
   public List<File> getLibraryDirectories() {
-    return new ArrayList<File>(this.libraryDirectories);
+    return new ArrayList<>(this.libraryDirectories);
   }
 
   public boolean getMap(final LinkerDef[] defaultProviders, final int index) {

@@ -94,9 +94,7 @@ public final class PrecompileDef extends DataType {
         } else {
           if (scannerFiles.length > 0) {
             final String[] newFiles = new String[exceptFiles.length + scannerFiles.length];
-            for (int i = 0; i < exceptFiles.length; i++) {
-              newFiles[i] = exceptFiles[i];
-            }
+            System.arraycopy(exceptFiles, 0, newFiles, 0, exceptFiles.length);
             int index = exceptFiles.length;
             for (final String scannerFile : scannerFiles) {
               newFiles[index++] = scannerFile;

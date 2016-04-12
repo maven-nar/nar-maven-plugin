@@ -22,7 +22,6 @@ package com.github.maven_nar;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -271,8 +270,8 @@ public class Linker {
       try {
         if (mojo.getC() != null) {
           final List cSrcDirs = mojo.getC().getSourceDirectories();
-          for (final Iterator i = cSrcDirs.iterator(); i.hasNext();) {
-            final File dir = (File) i.next();
+          for (final Object cSrcDir : cSrcDirs) {
+            final File dir = (File) cSrcDir;
             if (dir.exists()) {
               defs.addAll(FileUtils.getFiles(dir, "**/*.def", null));
             }
@@ -283,8 +282,8 @@ public class Linker {
       try {
         if (mojo.getCpp() != null) {
           final List cppSrcDirs = mojo.getCpp().getSourceDirectories();
-          for (final Iterator i = cppSrcDirs.iterator(); i.hasNext();) {
-            final File dir = (File) i.next();
+          for (final Object cppSrcDir : cppSrcDirs) {
+            final File dir = (File) cppSrcDir;
             if (dir.exists()) {
               defs.addAll(FileUtils.getFiles(dir, "**/*.def", null));
             }
@@ -295,8 +294,8 @@ public class Linker {
       try {
         if (mojo.getFortran() != null) {
           final List fortranSrcDirs = mojo.getFortran().getSourceDirectories();
-          for (final Iterator i = fortranSrcDirs.iterator(); i.hasNext();) {
-            final File dir = (File) i.next();
+          for (final Object fortranSrcDir : fortranSrcDirs) {
+            final File dir = (File) fortranSrcDir;
             if (dir.exists()) {
               defs.addAll(FileUtils.getFiles(dir, "**/*.def", null));
             }
@@ -305,9 +304,9 @@ public class Linker {
       } catch (final IOException e) {
       }
 
-      for (final Iterator i = defs.iterator(); i.hasNext();) {
+      for (final Object def : defs) {
         final LinkerArgument arg = new LinkerArgument();
-        arg.setValue("/def:" + i.next());
+        arg.setValue("/def:" + def);
         linker.addConfiguredLinkerArg(arg);
       }
     }
@@ -333,9 +332,9 @@ public class Linker {
 
     // Add options to linker
     if (this.options != null) {
-      for (final Iterator i = this.options.iterator(); i.hasNext();) {
+      for (final Object option : this.options) {
         final LinkerArgument arg = new LinkerArgument();
-        arg.setValue((String) i.next());
+        arg.setValue((String) option);
         linker.addConfiguredLinkerArg(arg);
       }
     }
@@ -384,9 +383,9 @@ public class Linker {
 
       if (this.libs != null) {
 
-        for (final Iterator i = this.libs.iterator(); i.hasNext();) {
+        for (final Object lib1 : this.libs) {
 
-          final Lib lib = (Lib) i.next();
+          final Lib lib = (Lib) lib1;
           lib.addLibSet(mojo, linker, antProject);
         }
       }
@@ -406,9 +405,9 @@ public class Linker {
 
       if (this.sysLibs != null) {
 
-        for (final Iterator i = this.sysLibs.iterator(); i.hasNext();) {
+        for (final Object sysLib1 : this.sysLibs) {
 
-          final SysLib sysLib = (SysLib) i.next();
+          final SysLib sysLib = (SysLib) sysLib1;
           linker.addSyslibset(sysLib.getSysLibSet(antProject));
         }
       }
@@ -453,9 +452,9 @@ public class Linker {
       final String prefix, final String type) throws MojoFailureException, MojoExecutionException {
     final LinkerDef linker = getLinker(mojo, task, os, prefix, type);
     if (this.testOptions != null) {
-      for (final Iterator i = this.testOptions.iterator(); i.hasNext();) {
+      for (final Object testOption : this.testOptions) {
         final LinkerArgument arg = new LinkerArgument();
-        arg.setValue((String) i.next());
+        arg.setValue((String) testOption);
         linker.addConfiguredLinkerArg(arg);
       }
     }

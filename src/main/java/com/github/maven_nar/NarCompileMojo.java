@@ -259,10 +259,10 @@ public class NarCompileMojo extends AbstractCompileMojo {
       if (depLibOrder != null && !depLibOrder.isEmpty()) {
         final List tmp = new LinkedList();
 
-        for (final Iterator i = depLibOrder.iterator(); i.hasNext();) {
-          final String depToOrderName = (String) i.next();
+        for (final Object aDepLibOrder : depLibOrder) {
+          final String depToOrderName = (String) aDepLibOrder;
 
-          for (final Iterator j = depLibs.iterator(); j.hasNext();) {
+          for (final Iterator j = depLibs.iterator(); j.hasNext(); ) {
             final NarArtifact dep = (NarArtifact) j.next();
             final String depName = dep.getGroupId() + ":" + dep.getArtifactId();
 
@@ -277,8 +277,8 @@ public class NarCompileMojo extends AbstractCompileMojo {
         depLibs = tmp;
       }
 
-      for (final Iterator i = depLibs.iterator(); i.hasNext();) {
-        final NarArtifact dependency = (NarArtifact) i.next();
+      for (final Object depLib : depLibs) {
+        final NarArtifact dependency = (NarArtifact) depLib;
 
         // FIXME no handling of "local"
 
@@ -292,8 +292,9 @@ public class NarCompileMojo extends AbstractCompileMojo {
         if (!binding.equals(Library.JNI) && !binding.equals(Library.NONE) && !binding.equals(Library.EXECUTABLE)) {
           final File unpackDirectory = getUnpackDirectory();
 
-          final File dir = getLayout().getLibDirectory(unpackDirectory, dependency.getArtifactId(),
-              dependency.getBaseVersion(), aol.toString(), binding);
+          final File dir = getLayout()
+              .getLibDirectory(unpackDirectory, dependency.getArtifactId(), dependency.getBaseVersion(), aol.toString(),
+                  binding);
 
           getLog().debug("Looking for Library Directory: " + dir);
           if (dir.exists()) {
@@ -354,7 +355,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
       };
       final String libType = library.getType();
       if (Library.JNI.equals(libType) || Library.SHARED.equals(libType) || Library.EXECUTABLE.equals(libType)) {
-        Vector<String> commandlineArgs = new Vector<String>();
+        Vector<String> commandlineArgs = new Vector<>();
         commandlineArgs.add("/manifest");
         getManifests(outFile.getPath(), commandlineArgs);
         if (commandlineArgs.size() == 1) {
@@ -423,8 +424,8 @@ public class NarCompileMojo extends AbstractCompileMojo {
     try {
       final List files = new ArrayList();
       final List srcDirs = compiler.getSourceDirectories();
-      for (final Iterator i = srcDirs.iterator(); i.hasNext();) {
-        final File dir = (File) i.next();
+      for (final Object srcDir : srcDirs) {
+        final File dir = (File) srcDir;
         if (dir.exists()) {
           files.addAll(FileUtils.getFiles(dir, StringUtils.join(compiler.getIncludes().iterator(), ","), null));
         }

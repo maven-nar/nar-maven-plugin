@@ -124,7 +124,7 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
   @Override
   protected String[] addLibrarySets(final CCTask task, final LibrarySet[] libsets, final Vector<String> preargs,
       final Vector<String> midargs, final Vector<String> endargs) {
-    final Vector<String> libnames = new Vector<String>();
+    final Vector<String> libnames = new Vector<>();
     super.addLibrarySets(task, libsets, preargs, midargs, endargs);
     LibraryTypeEnum previousLibraryType = null;
     for (final LibrarySet libset : libsets) {
@@ -315,7 +315,7 @@ public abstract class AbstractLdLinker extends CommandLineLinker {
 
   protected boolean isHPUX() {
     final String osname = System.getProperty("os.name").toLowerCase();
-    if (osname.indexOf("hp") >= 0 && osname.indexOf("ux") >= 0) {
+    if (osname.contains("hp") && osname.contains("ux")) {
       return true;
     }
     return false;

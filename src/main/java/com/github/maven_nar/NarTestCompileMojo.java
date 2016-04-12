@@ -139,16 +139,16 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
     List depLibs = getNarArtifacts();
     
     // add dependency include paths
-    for (final Iterator i = depLibs.iterator(); i.hasNext();) {
-      final Artifact artifact = (Artifact) i.next();
+    for (final Object depLib1 : depLibs) {
+      final Artifact artifact = (Artifact) depLib1;
 
       // check if it exists in the normal unpack directory
-      File include = getLayout().getIncludeDirectory(getUnpackDirectory(), artifact.getArtifactId(),
-          artifact.getBaseVersion());
+      File include = getLayout()
+          .getIncludeDirectory(getUnpackDirectory(), artifact.getArtifactId(), artifact.getBaseVersion());
       if (!include.exists()) {
         // otherwise try the test unpack directory
-        include = getLayout().getIncludeDirectory(getTestUnpackDirectory(), artifact.getArtifactId(),
-            artifact.getBaseVersion());
+        include = getLayout()
+            .getIncludeDirectory(getTestUnpackDirectory(), artifact.getArtifactId(), artifact.getBaseVersion());
       }
       if (include.exists()) {
         task.createIncludePath().setPath(include.getPath());
@@ -238,11 +238,11 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
 
       final List tmp = new LinkedList();
 
-      for (final Iterator i = depLibOrder.iterator(); i.hasNext();) {
+      for (final Object aDepLibOrder : depLibOrder) {
 
-        final String depToOrderName = (String) i.next();
+        final String depToOrderName = (String) aDepLibOrder;
 
-        for (final Iterator j = depLibs.iterator(); j.hasNext();) {
+        for (final Iterator j = depLibs.iterator(); j.hasNext(); ) {
 
           final NarArtifact dep = (NarArtifact) j.next();
           final String depName = dep.getGroupId() + ":" + dep.getArtifactId();
@@ -259,8 +259,8 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
       depLibs = tmp;
     }
 
-    for (final Iterator i = depLibs.iterator(); i.hasNext();) {
-      final NarArtifact dependency = (NarArtifact) i.next();
+    for (final Object depLib : depLibs) {
+      final NarArtifact dependency = (NarArtifact) depLib;
 
       // FIXME no handling of "local"
 
@@ -279,15 +279,17 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
       // use methods or classes defined in them.
       if (!binding.equals(Library.JNI) && !binding.equals(Library.NONE) && !binding.equals(Library.EXECUTABLE)) {
         // check if it exists in the normal unpack directory
-        File dir = getLayout().getLibDirectory(getUnpackDirectory(), dependency.getArtifactId(),
-            dependency.getBaseVersion(), aol.toString(), binding);
+        File dir = getLayout()
+            .getLibDirectory(getUnpackDirectory(), dependency.getArtifactId(), dependency.getBaseVersion(),
+                aol.toString(), binding);
         getLog().debug("Looking for Library Directory: " + dir);
         if (!dir.exists()) {
           getLog().debug("Library Directory " + dir + " does NOT exist.");
 
           // otherwise try the test unpack directory
-          dir = getLayout().getLibDirectory(getTestUnpackDirectory(), dependency.getArtifactId(),
-              dependency.getBaseVersion(), aol.toString(), binding);
+          dir = getLayout()
+              .getLibDirectory(getTestUnpackDirectory(), dependency.getArtifactId(), dependency.getBaseVersion(),
+                  aol.toString(), binding);
           getLog().debug("Looking for Library Directory: " + dir);
         }
         if (dir.exists()) {
@@ -365,8 +367,8 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
       // make sure destination is there
       getTestTargetDirectory().mkdirs();
 
-      for (final Iterator i = getTests().iterator(); i.hasNext();) {
-        createTest(getAntProject(), (Test) i.next());
+      for (final Object o : getTests()) {
+        createTest(getAntProject(), (Test) o);
       }
     }
   }

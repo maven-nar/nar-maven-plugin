@@ -115,7 +115,7 @@ public class Library implements Executable {
    * List of artifact:binding  for type of dependency to link against when there is a choice.
    */
   @Parameter
-  private List<String> dependencyBindings = new ArrayList<String>();
+  private List<String> dependencyBindings = new ArrayList<>();
   
   @Override
   public final List/* <String> */getArgs() {
@@ -174,9 +174,8 @@ public class Library implements Executable {
   // FIXME incomplete
   @Override
   public final String toString() {
-    final StringBuffer sb = new StringBuffer("Library: ");
-    sb.append("type: ");
-    sb.append(getType());
-    return sb.toString();
+    final String sb = "Library: " + "type: " +
+        getType();
+    return sb;
   }
 }

@@ -78,8 +78,8 @@ public class NarTestMojo extends AbstractCompileMojo {
     final String classifier = getAOL() + "-shared";
     final List narArtifacts = getNarArtifacts();
     final List dependencies = getNarManager().getAttachedNarDependencies(narArtifacts, classifier);
-    for (final Iterator d = dependencies.iterator(); d.hasNext();) {
-      final Artifact dependency = (Artifact) d.next();
+    for (final Object dependency1 : dependencies) {
+      final Artifact dependency = (Artifact) dependency1;
       getLog().debug("Looking for dependency " + dependency);
 
       // FIXME reported to maven developer list, isSnapshot
@@ -87,8 +87,9 @@ public class NarTestMojo extends AbstractCompileMojo {
       // of getBaseVersion, called in pathOf.
       dependency.isSnapshot();
 
-      final File libDirectory = getLayout().getLibDirectory(getUnpackDirectory(), dependency.getArtifactId(),
-          dependency.getBaseVersion(), getAOL().toString(), Library.SHARED);
+      final File libDirectory = getLayout()
+          .getLibDirectory(getUnpackDirectory(), dependency.getArtifactId(), dependency.getBaseVersion(),
+              getAOL().toString(), Library.SHARED);
       sharedPaths.add(libDirectory);
     }
 
@@ -139,8 +140,8 @@ public class NarTestMojo extends AbstractCompileMojo {
     } else {
 
       // run all tests
-      for (final Iterator i = getTests().iterator(); i.hasNext();) {
-        runTest((Test) i.next());
+      for (final Object o : getTests()) {
+        runTest((Test) o);
       }
 
       for (final Object element : getLibraries()) {

@@ -33,7 +33,7 @@ import com.github.maven_nar.cpptasks.TargetInfo;
 public interface LinkerConfiguration extends ProcessorConfiguration {
   Linker getLinker();
 
-  public LinkerParam getParam(String name);
+  LinkerParam getParam(String name);
 
   boolean isDebug();
 

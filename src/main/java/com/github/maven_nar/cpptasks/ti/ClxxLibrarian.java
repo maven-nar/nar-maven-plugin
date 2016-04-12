@@ -38,11 +38,11 @@ public class ClxxLibrarian extends CommandLineLinker {
   private static final ClxxLibrarian cl55Instance = new ClxxLibrarian("ar55");
   private static final ClxxLibrarian cl6xInstance = new ClxxLibrarian("ar6x");
 
-  public static final ClxxLibrarian getCl55Instance() {
+  public static ClxxLibrarian getCl55Instance() {
     return cl55Instance;
   }
 
-  public static final ClxxLibrarian getCl6xInstance() {
+  public static ClxxLibrarian getCl6xInstance() {
     return cl6xInstance;
   }
 

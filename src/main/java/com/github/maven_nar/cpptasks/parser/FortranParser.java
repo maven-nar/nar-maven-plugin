@@ -32,7 +32,7 @@ public final class FortranParser extends AbstractParser implements Parser {
   /**
    * List of included filenames.
    */
-  private final Vector<String> includes = new Vector<String>();
+  private final Vector<String> includes = new Vector<>();
 
   /**
    * State that starts consuming content at the beginning of a line.

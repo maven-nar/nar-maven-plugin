@@ -88,7 +88,7 @@ public class TestCUtil extends TestCase {
     // skip the UNC test unless running on Windows
     //
     final String osName = System.getProperty("os.name");
-    if (osName.indexOf("Windows") >= 0) {
+    if (osName.contains("Windows")) {
       final File uncFile = new File("\\\\fred\\foo.bar");
       String uncPath;
       try {

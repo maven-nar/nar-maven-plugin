@@ -20,7 +20,6 @@
 package com.github.maven_nar;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.apache.maven.plugin.MojoExecutionException;
@@ -168,7 +167,7 @@ public class NarLayout21 extends AbstractNarLayout {
     final String artifactIdVersion = project.getArtifactId() + "-" + project.getVersion();
     // list all directories in basedir, scan them for classifiers
     final String[] subDirs = baseDir.list();
-    final ArrayList<String> classifiers = new ArrayList<String>();
+    final ArrayList<String> classifiers = new ArrayList<>();
     for (int i = 0; subDirs != null && i < subDirs.length; i++) {
       // skip entries not belonging to this project
       if (!subDirs[i].startsWith(artifactIdVersion)) {

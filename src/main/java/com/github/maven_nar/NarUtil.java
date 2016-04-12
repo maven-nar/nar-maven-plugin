@@ -27,12 +27,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import org.apache.bcel.classfile.ClassParser;
@@ -84,18 +79,23 @@ public final class NarUtil {
   public static String addLibraryPathToEnv(final String path, final Map environment, final String os) {
     String pathName = null;
     char separator = ' ';
-    if (os.equals(OS.WINDOWS)) {
-      pathName = "PATH";
-      separator = ';';
-    } else if (os.equals(OS.MACOSX)) {
-      pathName = "DYLD_LIBRARY_PATH";
-      separator = ':';
-    } else if (os.equals(OS.AIX)) {
+    switch (os) {
+      case OS.WINDOWS:
+        pathName = "PATH";
+        separator = ';';
+        break;
+      case OS.MACOSX:
+        pathName = "DYLD_LIBRARY_PATH";
+        separator = ':';
+        break;
+      case OS.AIX:
         pathName = "LIBPATH";
         separator = ':';
-    } else {
-      pathName = "LD_LIBRARY_PATH";
-      separator = ':';
+        break;
+      default:
+        pathName = "LD_LIBRARY_PATH";
+        separator = ':';
+        break;
     }
 
     String value = environment != null ? (String) environment.get(pathName) : null;
@@ -145,8 +145,8 @@ public final class NarUtil {
     final String sourcePath = sourceDirectory.getAbsolutePath();
 
     int copied = 0;
-    for (final Iterator i = files.iterator(); i.hasNext();) {
-      final File file = (File) i.next();
+    for (final Object file1 : files) {
+      final File file = (File) file1;
       String dest = file.getAbsolutePath();
       dest = dest.substring(sourcePath.length() + 1);
       final File destination = new File(destinationDirectory, dest);
@@ -160,22 +160,12 @@ public final class NarUtil {
         try {
           // 1.6 only so coded using introspection
           // destination.setExecutable( file.canExecute(), false );
-          final Method canExecute = file.getClass().getDeclaredMethod("canExecute", new Class[] {});
-          final Method setExecutable = destination.getClass().getDeclaredMethod("setExecutable", new Class[] {
-              boolean.class, boolean.class
-          });
-          setExecutable.invoke(destination, new Object[] {
-              (Boolean) canExecute.invoke(file, new Object[] {}), Boolean.FALSE
-          });
-        } catch (final SecurityException e) {
-          // ignored
-        } catch (final NoSuchMethodException e) {
-          // ignored
-        } catch (final IllegalArgumentException e) {
-          // ignored
-        } catch (final IllegalAccessException e) {
-          // ignored
-        } catch (final InvocationTargetException e) {
+          final Method canExecute = file.getClass().getDeclaredMethod("canExecute");
+          final Method setExecutable = destination.getClass()
+              .getDeclaredMethod("setExecutable", boolean.class, boolean.class);
+          setExecutable
+              .invoke(destination, canExecute.invoke(file), Boolean.FALSE);
+        } catch (final SecurityException | InvocationTargetException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException e) {
           // ignored
         }
       } else if (file.isDirectory()) {
@@ -379,7 +369,7 @@ public final class NarUtil {
   }
 
   public static boolean isWindows() {
-    return getOS(null) == OS.WINDOWS;
+    return Objects.equals(getOS(null), OS.WINDOWS);
   }
 
   public static void makeExecutable(final File file, final Log log) throws MojoExecutionException, MojoFailureException {
@@ -509,7 +499,7 @@ public final class NarUtil {
       final StringBuilder argLine = new StringBuilder();
       if (args != null) {
         for (final String arg : args) {
-          argLine.append(" " + arg);
+          argLine.append(" ").append(arg);
         }
       }
       if (workingDirectory != null) {
@@ -608,35 +598,36 @@ public final class NarUtil {
   static void runInstallNameTool(final File[] files, final Log log) throws MojoExecutionException, MojoFailureException {
     final Set libs = findInstallNameToolCandidates(files, log);
 
-    for (final Iterator i = libs.iterator(); i.hasNext();) {
-      final File subjectFile = (File) i.next();
+    for (final Object lib1 : libs) {
+      final File subjectFile = (File) lib1;
       final String subjectName = subjectFile.getName();
       final String subjectPath = subjectFile.getPath();
 
-      final int idResult = runCommand("install_name_tool", new String[] {
-          "-id", subjectPath, subjectPath
+      final int idResult = runCommand("install_name_tool", new String[] { "-id", subjectPath, subjectPath
       }, null, null, log);
 
       if (idResult != 0) {
-        throw new MojoExecutionException("Failed to execute 'install_name_tool -id " + subjectPath + " " + subjectPath
-            + "'" + " return code: \'" + idResult + "\'.");
+        throw new MojoExecutionException(
+            "Failed to execute 'install_name_tool -id " + subjectPath + " " + subjectPath + "'" + " return code: \'"
+                + idResult + "\'.");
       }
 
-      for (final Iterator j = libs.iterator(); j.hasNext();) {
-        final File dependentFile = (File) j.next();
+      for (final Object lib : libs) {
+        final File dependentFile = (File) lib;
         final String dependentPath = dependentFile.getPath();
 
-        if (dependentPath == subjectPath) {
+        if (Objects.equals(dependentPath, subjectPath)) {
           continue;
         }
 
-        final int changeResult = runCommand("install_name_tool", new String[] {
-            "-change", subjectName, subjectPath, dependentPath
-        }, null, null, log);
+        final int changeResult = runCommand("install_name_tool",
+            new String[] { "-change", subjectName, subjectPath, dependentPath
+            }, null, null, log);
 
         if (changeResult != 0) {
-          throw new MojoExecutionException("Failed to execute 'install_name_tool -change " + subjectName + " "
-              + subjectPath + " " + dependentPath + "'" + " return code: \'" + changeResult + "\'.");
+          throw new MojoExecutionException(
+              "Failed to execute 'install_name_tool -change " + subjectName + " " + subjectPath + " " + dependentPath
+                  + "'" + " return code: \'" + changeResult + "\'.");
         }
       }
     }
@@ -675,10 +666,10 @@ public final class NarUtil {
    */
   public static String prettyMavenString(final Object o) {
     final StringBuilder sb = new StringBuilder();
-    sb.append(o.getClass().getName() + ":\n");
+    sb.append(o.getClass().getName()).append(":\n");
     for (final Field f : o.getClass().getDeclaredFields()) {
       if (f.getAnnotation(Parameter.class) == null) continue;
-      sb.append("\t" + f.getName() + "=" + fieldValue(f, o) + "\n");
+      sb.append("\t").append(f.getName()).append("=").append(fieldValue(f, o)).append("\n");
     }
     return sb.toString();
   }

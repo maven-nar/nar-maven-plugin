@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -130,17 +129,17 @@ public final class VisualStudioNETProjectWriter implements ProjectWriter {
     String dependencies = null;
     final File[] linkSources = linkTarget.getAllSources();
     final StringBuffer buf = new StringBuffer();
-    for (int i = 0; i < linkSources.length; i++) {
+    for (final File linkSource : linkSources) {
       //
       // if file was not compiled or otherwise generated
       //
-      if (targets.get(linkSources[i].getName()) == null) {
+      if (targets.get(linkSource.getName()) == null) {
         //
         // if source appears to be a system library or object file
         // just output the name of the file (advapi.lib for example)
         // otherwise construct a relative path.
         //
-        String relPath = linkSources[i].getName();
+        String relPath = linkSource.getName();
         //
         // check if file comes from a project dependency
         // if it does it should not be explicitly linked
@@ -155,8 +154,8 @@ public final class VisualStudioNETProjectWriter implements ProjectWriter {
         }
 
         if (!fromDependency) {
-          if (!CUtil.isSystemPath(linkSources[i])) {
-            relPath = CUtil.getRelativePath(basePath, linkSources[i]);
+          if (!CUtil.isSystemPath(linkSource)) {
+            relPath = CUtil.getRelativePath(basePath, linkSource);
           }
           //
           // if path has an embedded space then
@@ -224,9 +223,7 @@ public final class VisualStudioNETProjectWriter implements ProjectWriter {
     //
     // get the first target and assume that it is representative
     //
-    final Iterator<TargetInfo> targetIter = targets.values().iterator();
-    while (targetIter.hasNext()) {
-      final TargetInfo targetInfo = targetIter.next();
+    for (final TargetInfo targetInfo : targets.values()) {
       final ProcessorConfiguration config = targetInfo.getConfiguration();
       //
       // for the first cl compiler
@@ -592,7 +589,7 @@ public final class VisualStudioNETProjectWriter implements ProjectWriter {
     if (lastDot >= 0 && lastDot < fileName.length() - 1) {
       final String extension = ";" + fileName.substring(lastDot + 1).toLowerCase() + ";";
       final String semiFilter = ";" + filter + ";";
-      return semiFilter.indexOf(extension) >= 0;
+      return semiFilter.contains(extension);
     }
     return false;
   }

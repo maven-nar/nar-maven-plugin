@@ -28,7 +28,6 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
@@ -59,7 +58,7 @@ public final class TargetHistoryTable {
     private final Hashtable<String, TargetHistory> history;
     private String output;
     private long outputLastModified;
-    private final Vector<SourceHistory> sources = new Vector<SourceHistory>();
+    private final Vector<SourceHistory> sources = new Vector<>();
 
     /**
      * Constructor
@@ -163,7 +162,7 @@ public final class TargetHistoryTable {
   /**
    * a hashtable of TargetHistory's keyed by output file name
    */
-  private final Hashtable<String, TargetHistory> history = new Hashtable<String, TargetHistory>();
+  private final Hashtable<String, TargetHistory> history = new Hashtable<>();
   /**
    * The file the cache was loaded from.
    */
@@ -228,11 +227,8 @@ public final class TargetHistoryTable {
 
       try {
         final File temp = File.createTempFile("history.xml", Long.toString(System.nanoTime()), outputDir);
-        final FileWriter writer = new FileWriter(temp);
-        try {
+        try (FileWriter writer = new FileWriter(temp)) {
           writer.write("<history/>");
-        } finally {
-          writer.close();
         }
         if (!temp.renameTo(this.historyFile)) {
           throw new IOException("Could not rename " + temp + " to " + this.historyFile);
@@ -251,7 +247,7 @@ public final class TargetHistoryTable {
       //
       // build (small) hashtable of config id's in history
       //
-      final Hashtable<String, String> configs = new Hashtable<String, String>(20);
+      final Hashtable<String, String> configs = new Hashtable<>(20);
       Enumeration<TargetHistory> elements = this.history.elements();
       while (elements.hasMoreElements()) {
         final TargetHistory targetHistory = elements.nextElement();
@@ -334,9 +330,8 @@ public final class TargetHistoryTable {
   }
 
   public void markForRebuild(final Map<String, TargetInfo> targetInfos) {
-    final Iterator<TargetInfo> targetInfoEnum = targetInfos.values().iterator();
-    while (targetInfoEnum.hasNext()) {
-      markForRebuild(targetInfoEnum.next());
+    for (final TargetInfo targetInfo : targetInfos.values()) {
+      markForRebuild(targetInfo);
     }
   }
 
@@ -355,7 +350,7 @@ public final class TargetHistoryTable {
         if (sourceHistories.length != sources.length) {
           targetInfo.mustRebuild();
         } else {
-          final Hashtable<String, File> sourceMap = new Hashtable<String, File>(sources.length);
+          final Hashtable<String, File> sourceMap = new Hashtable<>(sources.length);
           for (final File source : sources) {
             try {
               sourceMap.put(source.getCanonicalPath(), source);

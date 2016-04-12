@@ -477,9 +477,7 @@ public final class DependencyTable {
       // of dependencies for the file
       final DependencyInfo[] combined = new DependencyInfo[old.length + 1];
       combined[0] = dependInfo;
-      for (int i = 0; i < old.length; i++) {
-        combined[i + 1] = old[i];
-      }
+      System.arraycopy(old, 0, combined, 1, old.length);
       this.dependencies.put(key, combined);
     }
     return;

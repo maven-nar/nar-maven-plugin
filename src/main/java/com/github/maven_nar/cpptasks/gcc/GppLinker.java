@@ -86,7 +86,7 @@ public class GppLinker extends AbstractLdLinker {
   protected void addImpliedArgs(final CCTask task, final boolean debug, final LinkType linkType,
       final Vector<String> args) {
     super.addImpliedArgs(task, debug, linkType, args);
-    if (getIdentifier().indexOf("mingw") >= 0) {
+    if (getIdentifier().contains("mingw")) {
       if (linkType.isSubsystemConsole()) {
         args.addElement("-mconsole");
       }
@@ -252,7 +252,7 @@ public class GppLinker extends AbstractLdLinker {
   @Override
   public File[] getLibraryPath() {
     if (this.libDirs == null) {
-      final Vector<String> dirs = new Vector<String>();
+      final Vector<String> dirs = new Vector<>();
       // Ask GCC where it will look for its libraries.
       final String[] args = new String[] {
           "g++", "-print-search-dirs"

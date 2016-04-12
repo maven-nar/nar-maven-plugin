@@ -50,7 +50,7 @@ public abstract class MsvcCompatibleLinker extends CommandLineLinker {
     }, outputSuffix, false, null);
   }
 
-  private ArrayList<File> libPaths = new ArrayList<File>(Arrays.asList(CUtil.getPathFromEnvironment("LIB", ";")));
+  private ArrayList<File> libPaths = new ArrayList<>(Arrays.asList(CUtil.getPathFromEnvironment("LIB", ";")));
   
   @Override
   protected void addBase(final CCTask task, final long base, final Vector<String> args) {

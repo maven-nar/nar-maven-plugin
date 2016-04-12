@@ -130,17 +130,15 @@ public class CompaqVisualFortranCompiler extends CommandLineFortranCompiler {
 
   @Override
   protected String getIncludeDirSwitch(final String includeDir) {
-    final StringBuffer buf = new StringBuffer("/include:");
     // BEGINFREEHEP quotes seem to confuse the compiler
     // if (includeDir.indexOf(' ') >= 0) {
     // buf.append('"');
     // buf.append(includeDir);
     // buf.append('"');
     // } else {
-    buf.append(includeDir);
     // }
     // ENDFREEHEP
-    return buf.toString();
+    return "/include:" + includeDir;
   }
 
   @Override

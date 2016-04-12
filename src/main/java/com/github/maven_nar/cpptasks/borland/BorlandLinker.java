@@ -206,7 +206,7 @@ public final class BorlandLinker extends CommandLineLinker {
       final String[] sourceFiles, final CommandLineLinkerConfiguration config) {
     final String[] preargs = config.getPreArguments();
     final String[] endargs = config.getEndArguments();
-    final Vector<String> execArgs = new Vector<String>(preargs.length + endargs.length + 10 + sourceFiles.length);
+    final Vector<String> execArgs = new Vector<>(preargs.length + endargs.length + 10 + sourceFiles.length);
     execArgs.addElement(this.getCommand());
     for (final String prearg : preargs) {
       execArgs.addElement(prearg);
@@ -232,8 +232,8 @@ public final class BorlandLinker extends CommandLineLinker {
       startup = config.getStartupObject();
     }
     execArgs.addElement(startup);
-    final Vector<String> resFiles = new Vector<String>();
-    final Vector<String> libFiles = new Vector<String>();
+    final Vector<String> resFiles = new Vector<>();
+    final Vector<String> libFiles = new Vector<>();
     String defFile = null;
     final StringBuffer buf = new StringBuffer();
     for (final String sourceFile : sourceFiles) {

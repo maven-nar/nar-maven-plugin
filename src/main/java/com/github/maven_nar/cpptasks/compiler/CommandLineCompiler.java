@@ -21,6 +21,7 @@ package com.github.maven_nar.cpptasks.compiler;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.ArrayList;
@@ -29,7 +30,6 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Environment;
 import org.apache.commons.io.FilenameUtils;
 
-import com.github.maven_nar.NarUtil;
 import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.CUtil;
 import com.github.maven_nar.cpptasks.CompilerDef;
@@ -40,7 +40,6 @@ import com.github.maven_nar.cpptasks.TargetDef;
 import com.github.maven_nar.cpptasks.VersionInfo;
 import com.github.maven_nar.cpptasks.types.CommandLineArgument;
 import com.github.maven_nar.cpptasks.types.UndefineArgument;
-import com.github.maven_nar.cpptasks.compiler.CommandLineCCompiler;
 import com.google.common.collect.ObjectArrays;
 import org.apache.tools.ant.util.FileUtils;
 
@@ -212,27 +211,23 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
         throw new BuildException("Extremely long file name, can't fit on command line");
       }
 
-      ArrayList<String> commandlinePrefix = new ArrayList<String>();
+      ArrayList<String> commandlinePrefix = new ArrayList<>();
       if (this.libtool) {
         commandlinePrefix.add("libtool");
       }
       commandlinePrefix.add(command);
-      for (final String arg : args) {
-        commandlinePrefix.add(arg);
-      }
+      Collections.addAll(commandlinePrefix, args);
 
       int retval = 0;
       for (int j = sourceIndex; j < firstFileNextExec; j++) {
-        ArrayList<String> commandlineSuffix = new ArrayList<String>();
+        ArrayList<String> commandlineSuffix = new ArrayList<>();
 
         for (int k = 0; k < argumentCountPerInputFile; k++) {
           commandlineSuffix.add(getInputFileArgument(outputDir, sourceFiles[j], k));
         }
-        for (final String endArg : endArgs) {
-          commandlineSuffix.add(endArg);
-        }
+        Collections.addAll(commandlineSuffix, endArgs);
 
-        ArrayList<String> commandline = new ArrayList<String>(commandlinePrefix);
+        ArrayList<String> commandline = new ArrayList<>(commandlinePrefix);
         commandline.addAll(commandlineSuffix);
         final int ret = runCommand(task, workDir,
             commandline.toArray(new String[commandline.size()]));
@@ -241,9 +236,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       if (monitor != null) {
         final String[] fileNames = new String[firstFileNextExec - sourceIndex];
 
-        for (int j = 0; j < fileNames.length; j++) {
-          fileNames[j] = sourceFiles[sourceIndex + j];
-        }
+        System.arraycopy(sourceFiles, sourceIndex + 0, fileNames, 0, fileNames.length);
         monitor.progress(fileNames);
       }
       //
@@ -280,13 +273,13 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
 
     this.prefix = specificDef.getCompilerPrefix();
     this.objDir = task.getObjdir();
-    final Vector<String> args = new Vector<String>();
+    final Vector<String> args = new Vector<>();
     final CompilerDef[] defaultProviders = new CompilerDef[baseDefs.length + 1];
     for (int i = 0; i < baseDefs.length; i++) {
       defaultProviders[i + 1] = (CompilerDef) baseDefs[i];
     }
     defaultProviders[0] = specificDef;
-    final Vector<CommandLineArgument> cmdArgs = new Vector<CommandLineArgument>();
+    final Vector<CommandLineArgument> cmdArgs = new Vector<>();
 
     //
     // add command line arguments inherited from <cc> element
@@ -307,16 +300,14 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
         }
       }
     }
-    final Vector<ProcessorParam> params = new Vector<ProcessorParam>();
+    final Vector<ProcessorParam> params = new Vector<>();
     //
     // add command line arguments inherited from <cc> element
     // any "extends" and finally the specific CompilerDef
     ProcessorParam[] paramArray;
     for (int i = defaultProviders.length - 1; i >= 0; i--) {
       paramArray = defaultProviders[i].getActiveProcessorParams();
-      for (final ProcessorParam element : paramArray) {
-        params.add(element);
-      }
+      Collections.addAll(params, paramArray);
     }
     paramArray = params.toArray(new ProcessorParam[params.size()]);
 
@@ -374,8 +365,8 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
     } catch (final IOException ex) {
       baseDirPath = baseDir.toString();
     }
-    final Vector<String> includePath = new Vector<String>();
-    final Vector<String> sysIncludePath = new Vector<String>();
+    final Vector<String> includePath = new Vector<>();
+    final Vector<String> sysIncludePath = new Vector<>();
     for (int i = defaultProviders.length - 1; i >= 0; i--) {
       String[] incPath = defaultProviders[i].getActiveIncludePaths();
       for (final String element : incPath) {
@@ -508,10 +499,9 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       inputFile = relative;
     }
     if (inputFile.indexOf(' ') >= 0) {
-      final StringBuffer buf = new StringBuffer("\"");
-      buf.append(inputFile);
-      buf.append("\"");
-      return buf.toString();
+      final String buf = "\"" + inputFile +
+          "\"";
+      return buf;
     }
     return inputFile;
   }

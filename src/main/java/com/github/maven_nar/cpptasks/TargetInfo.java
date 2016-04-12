@@ -76,13 +76,9 @@ public final class TargetInfo {
 
   public File[] getAllSources() {
     final File[] allSources = new File[this.sources.length + this.sysSources.length];
-    for (int i = 0; i < this.sysSources.length; i++) {
-      allSources[i] = this.sysSources[i];
-    }
+    System.arraycopy(this.sysSources, 0, allSources, 0, this.sysSources.length);
     final int offset = this.sysSources.length;
-    for (int i = 0; i < this.sources.length; i++) {
-      allSources[i + offset] = this.sources[i];
-    }
+    System.arraycopy(this.sources, 0, allSources, 0 + offset, this.sources.length);
     return allSources;
   }
 

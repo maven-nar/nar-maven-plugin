@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -140,8 +139,8 @@ public class Javah {
 
       if (!classes.isEmpty()) {
         final Set files = new HashSet();
-        for (final Iterator i = classes.iterator(); i.hasNext();) {
-          final String file = ((File) i.next()).getPath();
+        for (final Object aClass : classes) {
+          final String file = ((File) aClass).getPath();
           final JavaClass clazz = NarUtil.getBcelClass(file);
           final Method[] method = clazz.getMethods();
           for (final Method element : method) {
@@ -195,14 +194,14 @@ public class Javah {
     }
 
     if (classes != null) {
-      for (final Iterator i = classes.iterator(); i.hasNext();) {
-        args.add(i.next());
+      for (final Object aClass : classes) {
+        args.add(aClass);
       }
     }
 
     if (this.extraClasses != null) {
-      for (final Iterator i = this.extraClasses.iterator(); i.hasNext();) {
-        args.add(i.next());
+      for (final Object extraClass : this.extraClasses) {
+        args.add(extraClass);
       }
     }
 

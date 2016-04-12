@@ -21,10 +21,7 @@ package com.github.maven_nar.cpptasks;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.StringTokenizer;
-import java.util.Vector;
+import java.util.*;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -359,8 +356,10 @@ public class CUtil {
    */
   public static boolean isSystemPath(final File source) {
     final String lcPath = source.getAbsolutePath().toLowerCase(java.util.Locale.US);
-    return lcPath.indexOf("platformsdk") != -1 || lcPath.indexOf("windows kits") != -1 || lcPath.indexOf("microsoft") != -1 || lcPath == "/usr/include"
-        || lcPath == "/usr/lib" || lcPath == "/usr/local/include" || lcPath == "/usr/local/lib";
+    return lcPath.contains("platformsdk") || lcPath.contains("windows kits") || lcPath.contains("microsoft")
+        || Objects.equals(lcPath, "/usr/include")
+        || Objects.equals(lcPath, "/usr/lib") || Objects.equals(lcPath, "/usr/local/include")
+        || Objects.equals(lcPath, "/usr/local/lib");
   }
 
   /**

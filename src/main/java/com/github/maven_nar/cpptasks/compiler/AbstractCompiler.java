@@ -162,11 +162,10 @@ public abstract class AbstractCompiler extends AbstractProcessor implements Comp
       }
     }
     for (final String include : includes) {
-      final String includeName = include;
-      if (!resolveInclude(includeName, sourcePath, onIncludePath)) {
-        if (!resolveInclude(includeName, includePath, onIncludePath)) {
-          if (!resolveInclude(includeName, sysIncludePath, onSysIncludePath)) {
-            if (!resolveInclude(includeName, envIncludePath, onSysIncludePath)) {
+      if (!resolveInclude(include, sourcePath, onIncludePath)) {
+        if (!resolveInclude(include, includePath, onIncludePath)) {
+          if (!resolveInclude(include, sysIncludePath, onSysIncludePath)) {
+            if (!resolveInclude(include, envIncludePath, onSysIncludePath)) {
               //
               // this should be enough to require us to reparse
               // the file with the missing include for dependency
