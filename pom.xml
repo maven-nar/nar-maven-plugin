@@ -18,7 +18,7 @@
   <description>
     This plugin compiles native code and publishes native artifacts in the form of nar files.
   </description>
-  <url>https://github.com/maven-nar</url>
+  <url>https://maven-nar.github.io/</url>
   <inceptionYear>2005</inceptionYear>
   <organization>
     <name>NAR Maven Plugin developers</name>
