@@ -199,14 +199,14 @@ public class NarLayout21 extends AbstractNarLayout {
           narInfo.setLibs(aol, mojo.getLibsName());
         }
 
-        // We prefer shared to jni/executable/static/none,
-        if (type.equals(Library.SHARED)) // overwrite whatever we had
+        // We prefer libs of shared & static to jni/executable/none,
+        if ( (type.equals(Library.SHARED)) || (type.equals(Library.STATIC)) ) // overwrite whatever we had
         {
           narInfo.setBinding(aol, type);
           narInfo.setBinding(null, type);
         } else {
           // if the binding is already set, then don't write it for
-          // jni/executable/static/none.
+          // jni/executable/none.
           if (narInfo.getBinding(aol, null) == null) {
             narInfo.setBinding(aol, type);
           }
