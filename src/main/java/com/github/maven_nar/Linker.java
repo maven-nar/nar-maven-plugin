@@ -514,7 +514,7 @@ public class Linker {
       NarUtil.runCommand("CC", new String[] {
           "-V"
       }, null, null, out, err, dbg, this.log);
-      final Pattern p = Pattern.compile("\\d+\\.d+");
+      final Pattern p = Pattern.compile("\\d+\\.\\d+");
       final Matcher m = p.matcher(err.toString());
       if (m.find()) {
         version = m.group(0);
