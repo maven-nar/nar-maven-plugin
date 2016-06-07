@@ -206,10 +206,18 @@ public class NarLayout21 extends AbstractNarLayout {
           narInfo.setBinding(null, type);
         } else {
           // if the binding is already set, then don't write it for
-          // jni/executable/static/none.
+          // jni/executable/none.
           if (narInfo.getBinding(aol, null) == null) {
             narInfo.setBinding(aol, type);
+          } else {
+            //static lib is preferred over other remaining types; see #231
+            if (type.equals(Library.STATIC))
+            {
+              narInfo.setBinding(aol, type);
+              narInfo.setBinding(null, type);
+            }
           }
+
           if (narInfo.getBinding(null, null) == null) {
             narInfo.setBinding(null, type);
           }
