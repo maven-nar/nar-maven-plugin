@@ -265,7 +265,7 @@ public class Linker {
     // tool path
     if (this.toolPath != null) {
       linker.setToolPath(this.toolPath);
-    } else if ("msvc".equalsIgnoreCase(name)) {
+    } else if (Msvc.isMSVC(name)) {
       linker.setToolPath(mojo.getMsvc().getToolPath());
     }
 

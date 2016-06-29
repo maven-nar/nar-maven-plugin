@@ -95,9 +95,16 @@ public class Msvc {
     return false;
   }
 
+  static boolean isMSVC(final AbstractNarMojo mojo) {
+    return isMSVC(mojo.getLinker().getName());
+  }
+
+  static boolean isMSVC(final String name) {
+    return "msvc".equalsIgnoreCase(name);
+  }
+
   public void configureCCTask(final CCTask task) throws MojoExecutionException {
-    if (OS.WINDOWS.equals(mojo.getOS())
-          && "msvc".equalsIgnoreCase(mojo.getLinker().getName())) {
+    if (OS.WINDOWS.equals(mojo.getOS()) && isMSVC(mojo)) {
       addIncludePath(task, this.home, "VC/include");
       addIncludePath(task, this.home, "VC/atlmfc/include");
       if (compareVersion(this.windowsSdkVersion, "7.1A") <= 0) {
@@ -130,7 +137,7 @@ public class Msvc {
 
   public void configureLinker(final LinkerDef linker) throws MojoExecutionException {
     final String os = mojo.getOS();
-    if (os.equals(OS.WINDOWS) && "msvc".equalsIgnoreCase(mojo.getLinker().getName())) {
+    if (os.equals(OS.WINDOWS) && isMSVC(mojo)) {
       final String arch = mojo.getArchitecture();
 
       // Visual Studio
@@ -191,7 +198,7 @@ public class Msvc {
 
   private void init() throws MojoFailureException, MojoExecutionException {
     final String mojoOs = this.mojo.getOS();
-    if (NarUtil.isWindows() && OS.WINDOWS.equals(mojoOs) && "msvc".equalsIgnoreCase(mojo.getLinker().getName())) {
+    if (NarUtil.isWindows() && OS.WINDOWS.equals(mojoOs) && isMSVC(mojo)) {
       windowsHome = new File(System.getenv("SystemRoot"));
       initVisualStudio();
       initWindowsSdk();
