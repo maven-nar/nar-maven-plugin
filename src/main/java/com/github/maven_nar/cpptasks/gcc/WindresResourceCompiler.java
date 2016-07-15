@@ -23,6 +23,7 @@ import java.io.File;
 import java.util.Vector;
 
 import org.apache.tools.ant.types.Environment;
+import org.apache.tools.ant.util.FileUtils;
 
 import com.github.maven_nar.cpptasks.OptimizationEnum;
 import com.github.maven_nar.cpptasks.compiler.CommandLineCompiler;
@@ -117,9 +118,19 @@ public final class WindresResourceCompiler extends CommandLineCompiler {
   protected String getInputFileArgument(final File outputDir, final String filename, final int index) {
     if (index == 0) {
       final String outputFileName = getOutputFileNames(filename, null)[0];
-      return "-o" + outputFileName;
+      final String objectName = new File(outputDir, outputFileName).toString();
+      return "-o" + objectName;
     }
-    return filename;
+    String relative="";
+    try {
+        relative = FileUtils.getRelativePath(workDir, new File(filename));
+    } catch (Exception ex) {
+    }
+    if (relative.isEmpty()) {
+        return filename;
+    } else {
+        return relative;
+    }
   }
 
   @Override
