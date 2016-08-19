@@ -529,12 +529,10 @@ public class CCTask extends Task {
       }
       targetEnum = targets.values().iterator();
       while (targetEnum.hasNext()) {
-        final TargetInfo target = targetEnum.next();
-        if (!target.getRebuild()) {
-          if (dependencyTable.needsRebuild(this, target, this.dependencyDepth)) {
-            target.mustRebuild();
-          }
-        }
+    	  final TargetInfo target = targetEnum.next();
+    	  if (!target.getRebuild() && dependencyTable.needsRebuild(this, target, this.dependencyDepth)) {
+    		  target.mustRebuild();
+    	  }
       }
       dependencyTable.commit(this);
     }
@@ -746,12 +744,10 @@ public class CCTask extends Task {
       final List<File> files = new ArrayList<>();
       final ProjectFileCollector matcher = new ProjectFileCollector(files);
       for (int i = 0; i < this._compilers.size(); i++) {
-        final CompilerDef currentCompilerDef = this._compilers.elementAt(i);
-        if (currentCompilerDef.isActive()) {
-          if (currentCompilerDef.hasFileSets()) {
-            currentCompilerDef.visitFiles(matcher);
-          }
-        }
+    	  final CompilerDef currentCompilerDef = this._compilers.elementAt(i);
+    	  if (currentCompilerDef.isActive() && currentCompilerDef.hasFileSets()) {
+    		  currentCompilerDef.visitFiles(matcher);
+    	  }
       }
       this.compilerDef.visitFiles(matcher);
 

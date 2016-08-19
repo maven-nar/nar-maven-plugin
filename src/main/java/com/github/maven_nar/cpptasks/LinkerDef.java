@@ -226,10 +226,8 @@ public class LinkerDef extends ProcessorDef {
     if (isReference()) {
       return ((LinkerDef) getCheckedRef(LinkerDef.class, "LinkerDef")).getBase(defaultProviders, index);
     }
-    if (this.base <= 0) {
-      if (defaultProviders != null && index < defaultProviders.length) {
+    if (this.base <= 0 && defaultProviders != null && index < defaultProviders.length) {
         return defaultProviders[index].getBase(defaultProviders, index + 1);
-      }
     }
     return this.base;
   }
@@ -251,10 +249,8 @@ public class LinkerDef extends ProcessorDef {
     if (isReference()) {
       return ((LinkerDef) getCheckedRef(LinkerDef.class, "LinkerDef")).getFixed(defaultProviders, index);
     }
-    if (this.fixed == null) {
-      if (defaultProviders != null && index < defaultProviders.length) {
+    if (this.fixed == null && defaultProviders != null && index < defaultProviders.length) {
         return defaultProviders[index].getFixed(defaultProviders, index + 1);
-      }
     }
     return this.fixed;
   }
@@ -312,10 +308,8 @@ public class LinkerDef extends ProcessorDef {
     if (isReference()) {
       return ((LinkerDef) getCheckedRef(LinkerDef.class, "LinkerDef")).getStack(defaultProviders, index);
     }
-    if (this.stack < 0) {
-      if (defaultProviders != null && index < defaultProviders.length) {
+    if (this.stack < 0 && defaultProviders != null && index < defaultProviders.length) {
         return defaultProviders[index].getStack(defaultProviders, index + 1);
-      }
     }
     return this.stack;
   }

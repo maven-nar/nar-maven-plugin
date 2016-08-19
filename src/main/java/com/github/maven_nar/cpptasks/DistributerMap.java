@@ -211,11 +211,9 @@ public final class DistributerMap extends DataType {
     if (this.remoteName != null && (this.hosts == null || this.hosts.contains(host))) {
       try {
         final String canonical = localFile.getCanonicalPath();
-        if (canonical.startsWith(this.canonicalPath)) {
-          if (isActive()) {
+        if (canonical.startsWith(this.canonicalPath) && isActive()) {
             return this.remoteName
                 + canonical.substring(this.canonicalPath.length()).replace(File.separatorChar, this.remoteSeparator);
-          }
         }
       } catch (final IOException ex) {
         return null;

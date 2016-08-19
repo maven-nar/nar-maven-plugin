@@ -240,11 +240,9 @@ public class CUtil {
             return canonicalTarget;
           }
         } else {
-          if (canonicalBase.charAt(0) == '/') {
-            if (canonicalTarget.charAt(0) != '/') {
-              return canonicalTarget;
-            }
-          }
+        	if (canonicalBase.charAt(0) == '/' && canonicalTarget.charAt(0) != '/') {
+        		return canonicalTarget;
+        	}
         }
       }
       final char separator = File.separatorChar;
