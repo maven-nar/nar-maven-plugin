@@ -151,8 +151,8 @@
       <version>1.8.1</version>
     </dependency>
     <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>bcel-findbugs</artifactId>
+      <groupId>org.apache.bcel</groupId>
+      <artifactId>bcel</artifactId>
       <version>6.0</version>
     </dependency>
     <dependency>
