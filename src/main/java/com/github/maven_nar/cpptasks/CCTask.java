@@ -1232,6 +1232,7 @@ public class CCTask extends Task {
         CommandLineCompilerConfiguration commandLineConfig = (CommandLineCompilerConfiguration) config;
         AbstractCompiler compiler = (AbstractCompiler) commandLineConfig.getCompiler();
         compiler.setWorkDir(currentCompilerDef.getWorkDir());
+        compiler.setGccFileAbsolutePath(currentCompilerDef.getGccFileAbsolutePath());
         ProcessorConfiguration[] localConfigs = new ProcessorConfiguration[] {
           config
         };

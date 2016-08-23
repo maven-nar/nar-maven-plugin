@@ -86,6 +86,16 @@ public abstract class Compiler {
   private File testSourceDirectory;
 
   /**
+   * To use full path for the filenames.
+   * false to have "relative" path
+   * true to have "absolute" path
+   * absolute: will give path from filesystem root "/"
+   * relative: will give relative path from "workdir" which is usually after "${basedir}/src/main"
+   */
+  @Parameter(required = true)
+  private boolean gccFileAbsolutePath = false;
+
+  /**
    * Include patterns for sources
    */
   @Parameter(required = true)
@@ -483,6 +493,9 @@ public abstract class Compiler {
         compilerDef.setWorkDir(this.sourceDirectory);
       }
     }
+
+    compilerDef.setGccFileAbsolutePath(this.gccFileAbsolutePath);
+
     return compilerDef;
   }
 
