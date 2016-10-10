@@ -60,17 +60,17 @@
     See also: https://github.com/maven-nar/nar-maven-plugin/graphs/contributors
     -->
     <contributor>
-      <id>duns</id>
       <name>Mark Donszelmann</name>
       <roles><role>founder</role></roles>
+      <properties><id>duns</id></properties>
     </contributor>
     <contributor>
-      <id>dscho</id>
       <name>Johannes Schindelin</name>
+      <properties><id>dscho</id></properties>
     </contributor>
     <contributor>
-      <id>richardkerr</id>
       <name>Richard Kerr</name>
+      <properties><id>richardkerr</id></properties>
     </contributor>
   </contributors>
 
