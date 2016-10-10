@@ -33,33 +33,46 @@
   </licenses>
 
   <developers>
+    <!-- NB: People who currently take responsibility for the project. -->
     <developer>
       <id>ctrueden</id>
       <name>Curtis Rueden</name>
-      <email>ctrueden@wisc.edu</email>
       <url>http://loci.wisc.edu/people/curtis-rueden</url>
       <organization>UW-Madison LOCI</organization>
       <organizationUrl>http://loci.wisc.edu/</organizationUrl>
       <roles>
-        <role>architect</role>
-        <role>developer</role>
+        <role>lead</role>
+        <role>maintainer</role>
       </roles>
-      <timezone>-6</timezone>
     </developer>
     <developer>
-      <id>dscho</id>
-      <name>Johannes Schindelin</name>
-      <email>johannes.schindelin@gmx.de</email>
-      <url>http://loci.wisc.edu/people/johannes-schindelin</url>
-      <organization>UW-Madison LOCI</organization>
-      <organizationUrl>http://loci.wisc.edu/</organizationUrl>
+      <id>GregDomjan</id>
+      <name>Greg Domjan</name>
       <roles>
-        <role>architect</role>
-        <role>developer</role>
+        <role>reviewer</role>
+        <role>support</role>
       </roles>
-      <timezone>-6</timezone>
     </developer>
   </developers>
+  <contributors>
+    <!--
+    NB: People who have contributed substantial code to the project.
+    See also: https://github.com/maven-nar/nar-maven-plugin/graphs/contributors
+    -->
+    <contributor>
+      <id>duns</id>
+      <name>Mark Donszelmann</name>
+      <roles><role>founder</role></roles>
+    </contributor>
+    <contributor>
+      <id>dscho</id>
+      <name>Johannes Schindelin</name>
+    </contributor>
+    <contributor>
+      <id>richardkerr</id>
+      <name>Richard Kerr</name>
+    </contributor>
+  </contributors>
 
   <mailingLists>
     <mailingList>
