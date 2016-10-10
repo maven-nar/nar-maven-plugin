@@ -20,7 +20,7 @@ In your POM:
 		<plugin>
 			<groupId>com.github.maven-nar</groupId>
 			<artifactId>nar-maven-plugin</artifactId>
-			<version>3.2.3</version>
+			<version>3.5.1</version>
 			<extensions>true</extensions>
 			<configuration>
 				...
