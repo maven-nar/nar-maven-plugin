@@ -59,7 +59,7 @@ public class GppLinker extends AbstractLdLinker {
   private static final GppLinker machPluginLinker = new GppLinker(GPP_COMMAND, objFiles, discardFiles, "lib",
       ".bundle", false, null);
   // FREEHEP
-  private static final GppLinker machJNILinker = new GppLinker(GPP_COMMAND, objFiles, discardFiles, "lib", ".jnilib",
+  private static final GppLinker machJNILinker = new GppLinker(GPP_COMMAND, objFiles, discardFiles, "lib", ".dylib",
       false, null);
   // FREEHEP added dllLinker for windows
   private static final GppLinker dllLinker = new GppLinker(GPP_COMMAND, objFiles, discardFiles, "", ".dll", false, null);

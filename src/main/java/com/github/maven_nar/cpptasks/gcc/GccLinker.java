@@ -55,7 +55,7 @@ public class GccLinker extends AbstractLdLinker {
       false, null);
   private static final GccLinker machDllLinker = new GccLinker("gcc", objFiles, discardFiles, "lib", ".dylib", false,
       null);
-  private static final GccLinker machJNILinker = new GccLinker("gcc", objFiles, discardFiles, "lib", ".jnilib", false,
+  private static final GccLinker machJNILinker = new GccLinker("gcc", objFiles, discardFiles, "lib", ".dylib", false,
       null);
   // FREEHEP added dllLinker for windows
   private static final GccLinker dllLinker = new GccLinker("gcc", objFiles, discardFiles, "", ".dll", false, null);
