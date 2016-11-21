@@ -26,7 +26,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,7 +41,7 @@ public class NarProperties {
 
   private final static String AOL_PROPERTIES = "aol.properties";
   private final static String CUSTOM_AOL_PROPERTY_KEY = "nar.aolProperties";
-  private static NarProperties instance;
+  private static Map<MavenProject,NarProperties> instances = new HashMap<MavenProject,NarProperties>();
 
   /**
    * Retrieve the NarProperties
@@ -50,8 +52,26 @@ public class NarProperties {
    * @throws MojoFailureException
    */
   public static NarProperties getInstance(final MavenProject project) throws MojoFailureException {
+    NarProperties instance = instances.get(project);
     if (instance == null) {
-      instance = new NarProperties(project);
+      if (project == null) {
+          instance = new NarProperties(project, null, null);
+      } else {
+        String customPropertyLocation = project.getProperties().getProperty(CUSTOM_AOL_PROPERTY_KEY);
+        if (customPropertyLocation == null) {
+          // Try and read from the system property in case it's specified there
+          customPropertyLocation = System.getProperties().getProperty(CUSTOM_AOL_PROPERTY_KEY);
+        }
+        File narFile = (customPropertyLocation != null) ? new File(customPropertyLocation) :
+            new File(project.getBasedir(), AOL_PROPERTIES);
+        if (narFile.exists()) {
+          instance = new NarProperties(project, narFile, customPropertyLocation);
+        } else {
+          // use instance from parent
+          instance = getInstance(project.getParent());
+        }
+      }
+      instances.put(project,instance);
     }
     return instance;
   }
@@ -73,7 +93,7 @@ public class NarProperties {
 
   private final Properties properties;
 
-  private NarProperties(final MavenProject project) throws MojoFailureException {
+  private NarProperties(final MavenProject project, File narFile, String customPropertyLocation) throws MojoFailureException {
 
     final Properties defaults = PropertyUtils.loadProperties(NarUtil.class.getResourceAsStream(AOL_PROPERTIES));
     if (defaults == null) {
@@ -82,16 +102,9 @@ public class NarProperties {
 
     this.properties = new Properties(defaults);
     FileInputStream fis = null;
-    String customPropertyLocation = null;
     try {
       if (project != null) {
-        customPropertyLocation = project.getProperties().getProperty(CUSTOM_AOL_PROPERTY_KEY);
-        if (customPropertyLocation == null) {
-          // Try and read from the system property in case it's specified there
-          customPropertyLocation = System.getProperties().getProperty(CUSTOM_AOL_PROPERTY_KEY);
-        }
-        fis = new FileInputStream(customPropertyLocation != null ? customPropertyLocation : project.getBasedir()
-            + File.separator + AOL_PROPERTIES);
+        fis = new FileInputStream(narFile);
         this.properties.load(fis);
       }
     } catch (final FileNotFoundException e) {
