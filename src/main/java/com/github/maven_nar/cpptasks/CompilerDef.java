@@ -61,6 +61,7 @@ public final class CompilerDef extends ProcessorDef {
   private String toolPath;
   private String compilerPrefix;
   private File workDir;
+  private boolean gccFileAbsolutePath;
 
   private boolean clearDefaultOptions;
 
@@ -577,5 +578,14 @@ public final class CompilerDef extends ProcessorDef {
    */
   public void setWarnings(final WarningLevelEnum level) {
     this.warnings = level.getIndex();
+  }
+
+  public void setGccFileAbsolutePath(final boolean sourceFileAbsPath) {
+    this.gccFileAbsolutePath = sourceFileAbsPath;
+    return;
+  }
+
+  public boolean getGccFileAbsolutePath() {
+    return this.gccFileAbsolutePath;
   }
 }

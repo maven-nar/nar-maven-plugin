@@ -154,16 +154,21 @@ public abstract class GccCompatibleCCompiler extends CommandLineCCompiler {
         final String objectName = new File(outputDir, outputFileName).toString();
         return objectName;
     }
-    String relative="";
+    String relative = "";
+    if ( this.gccFileAbsolutePath) {
+      return filename;
+    } else {
       try {
-          relative = FileUtils.getRelativePath(workDir, new File(filename));
+        relative = FileUtils.getRelativePath(workDir, new File(filename));
       } catch (Exception ex) {
       }
-      if (relative.isEmpty()) {
-          return filename;
-      } else {
-          return relative;
-      }
+    }
+	
+    if (relative.isEmpty()) {
+      return filename;
+    } else {
+      return relative;
+    }
   }
 
   @Override

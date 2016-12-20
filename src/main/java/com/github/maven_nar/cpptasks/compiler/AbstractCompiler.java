@@ -48,6 +48,7 @@ public abstract class AbstractCompiler extends AbstractProcessor implements Comp
   private final String outputSuffix;
   protected File workDir;
   protected File objDir;
+  protected boolean gccFileAbsolutePath;
 
   protected AbstractCompiler(final String[] sourceExtensions, final String[] headerExtensions, final String outputSuffix) {
     super(sourceExtensions, headerExtensions);
@@ -205,6 +206,10 @@ public abstract class AbstractCompiler extends AbstractProcessor implements Comp
 
   public void setWorkDir(final File workDir) {
     this.workDir = workDir;
+  }
+
+  public void setGccFileAbsolutePath(final boolean gccFileAbsolutePath) {
+    this.gccFileAbsolutePath = gccFileAbsolutePath;
   }
 
   public void setObjDir(final File objDir) {
