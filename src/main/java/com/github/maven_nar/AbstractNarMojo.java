@@ -320,9 +320,9 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
 
     this.architecture = NarUtil.getArchitecture(this.architecture);
     this.os = NarUtil.getOS(this.os);
-    this.msvc.setMojo(this);
     this.linker = NarUtil.getLinker(this.linker, getLog()); // linker name set in NarUtil.getAOL if not configured
     this.aolId = NarUtil.getAOL(this.mavenProject, this.architecture, this.os, this.linker, this.aol, getLog());
+    this.msvc.setMojo(this);
 
     final Model model = this.mavenProject.getModel();
     final Properties properties = model.getProperties();
