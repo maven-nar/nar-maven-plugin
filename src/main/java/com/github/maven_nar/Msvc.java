@@ -100,10 +100,12 @@ public class Msvc {
   }
 
   static boolean isMSVC(final String name) {
+	
     return "msvc".equalsIgnoreCase(name);
   }
 
   public void configureCCTask(final CCTask task) throws MojoExecutionException {
+
     if (OS.WINDOWS.equals(mojo.getOS()) && isMSVC(mojo)) {
       addIncludePath(task, this.home, "VC/include");
       addIncludePath(task, this.home, "VC/atlmfc/include");
@@ -137,6 +139,7 @@ public class Msvc {
 
   public void configureLinker(final LinkerDef linker) throws MojoExecutionException {
     final String os = mojo.getOS();
+
     if (os.equals(OS.WINDOWS) && isMSVC(mojo)) {
       final String arch = mojo.getArchitecture();
 
@@ -199,13 +202,15 @@ public class Msvc {
   private void init() throws MojoFailureException, MojoExecutionException {
     final String mojoOs = this.mojo.getOS();
     if (NarUtil.isWindows() && OS.WINDOWS.equals(mojoOs) && isMSVC(mojo)) {
-      windowsHome = new File(System.getenv("SystemRoot"));
+	  windowsHome = new File(System.getenv("SystemRoot"));
+	  
       initVisualStudio();
       initWindowsSdk();
       initPath();
     } else {
       this.version = "";
       this.windowsSdkVersion = "";
+        this.windowsHome = null;
     }
   }
 
@@ -488,10 +493,17 @@ public class Msvc {
   }
 
   public void setMojo(final AbstractNarMojo mojo) throws MojoFailureException, MojoExecutionException {
-    if (mojo != this.mojo) {
+      if (mojo != this.mojo) {
       this.mojo = mojo;
       init();
     }
+      else {
+          if( isMSVC(mojo) && (this.windowsHome== null))
+          {     //If the variables were not initialized yet
+              init();
+          }
+
+      }
   }
 
   @Override
