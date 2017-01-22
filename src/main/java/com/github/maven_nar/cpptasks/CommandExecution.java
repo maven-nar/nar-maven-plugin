@@ -1,4 +1,4 @@
-package net.sf.antcontrib.cpptasks;
+package com.github.maven_nar.cpptasks;
 
 
 import org.apache.tools.ant.Project;
