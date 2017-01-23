@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
+import com.github.maven_nar.cpptasks.*;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -43,13 +44,6 @@ import org.apache.tools.ant.Project;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 
-import com.github.maven_nar.cpptasks.CCTask;
-import com.github.maven_nar.cpptasks.CUtil;
-import com.github.maven_nar.cpptasks.CompilerDef;
-import com.github.maven_nar.cpptasks.LinkerDef;
-import com.github.maven_nar.cpptasks.OutputTypeEnum;
-import com.github.maven_nar.cpptasks.RuntimeType;
-import com.github.maven_nar.cpptasks.SubsystemEnum;
 import com.github.maven_nar.cpptasks.types.LibrarySet;
 import com.github.maven_nar.cpptasks.types.LinkerArgument;
 import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
@@ -204,6 +198,27 @@ public class NarCompileMojo extends AbstractCompileMojo {
         task.addConfiguredCompiler(fortran);
       }
     }
+
+      // Add VersionInfo for the Windows binaries
+      if(getOS().equals( OS.WINDOWS ) && getLinker().getName( null, null ).equals( "msvc" ))
+      {
+         NARVersionInfo narVersioninfo = getNARVersionInfo() ;
+          if(narVersioninfo !=  null)
+          {
+
+              VersionInfo versionInfo=narVersioninfo.getVersionInfo(getAntProject());
+
+              if(versionInfo != null)
+              {
+                  task.addConfiguredVersioninfo(versionInfo);
+                  // CompilerDef resourceCompiler = ResourceCompiler.getCompiler(Compiler.MAIN, getOutput( getAOL()),getAntProject() );
+                  CompilerDef resourceCompiler =ResourceCompiler.getCompiler(Compiler.MAIN, null,getAntProject() );
+                  task.addConfiguredCompiler( resourceCompiler );
+
+              }
+          }
+      }
+
     // end Darren
 
     // add javah include path
