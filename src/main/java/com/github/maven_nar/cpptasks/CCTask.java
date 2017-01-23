@@ -1297,6 +1297,8 @@ public class CCTask extends Task {
       final ProcessorConfiguration config = this.compilerDef.createConfiguration(this, this.linkType, null,
           targetPlatform, versionInfo);
       biddingProcessors.addElement(config);
+	}
+	
       final ProcessorConfiguration[] bidders = new ProcessorConfiguration[biddingProcessors.size()];
       biddingProcessors.copyInto(bidders);
       //
@@ -1305,7 +1307,8 @@ public class CCTask extends Task {
       final TargetMatcher matcher = new TargetMatcher(this, this._objDir, bidders, linkerConfig, objectFiles, targets,
           versionInfo);
       this.compilerDef.visitFiles(matcher);
-
+		
+	    //Add the VersionInfo when relevant	
       if (outputFile != null && versionInfo != null) {
         final boolean isDebug = linkerConfig.isDebug();
         try {
@@ -1315,7 +1318,7 @@ public class CCTask extends Task {
           throw new BuildException(ex);
         }
       }
-    }
+    
     return targets;
   }
 
