@@ -308,7 +308,7 @@ public class GppLinker extends AbstractLdLinker {
       return isDarwin() ? machPluginLinker : isWindows() ? dllLinker : soLinker;
     }
     if (type.isSharedLibrary()) {
-      return isDarwin() ? machDllLinker : isWindows() ? dllLinker : soLinker;
+        return isDarwin() ? machDllLinker : isWindows() ? dllLinker :isAIX() ?  aLinker : soLinker;
     }
     // ENDFREEHEP
     return instance;
