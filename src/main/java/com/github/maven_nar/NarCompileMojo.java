@@ -211,10 +211,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
               if(versionInfo != null)
               {
                   task.addConfiguredVersioninfo(versionInfo);
-                  // CompilerDef resourceCompiler = ResourceCompiler.getCompiler(Compiler.MAIN, getOutput( getAOL()),getAntProject() );
-                  CompilerDef resourceCompiler =ResourceCompiler.getCompiler(Compiler.MAIN, null,getAntProject() );
-                  task.addConfiguredCompiler( resourceCompiler );
-
+                 
               }
           }
       }
