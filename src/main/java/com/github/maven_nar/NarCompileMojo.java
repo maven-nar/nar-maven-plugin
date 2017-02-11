@@ -215,8 +215,6 @@ public class NarCompileMojo extends AbstractCompileMojo {
     // add java include paths
     getJava().addIncludePaths(task, type);
 
-    getMsvc().configureCCTask(task);
-
     final List<NarArtifact> dependencies = getNarArtifacts();
     // add dependency include paths
     for (final Object element : dependencies) {
