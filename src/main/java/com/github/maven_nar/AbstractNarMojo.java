@@ -65,7 +65,7 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
 
   /**
    * The Operating System for the nar. Some choices are: "Windows", "Linux",
-   * "MacOSX", "SunOS", ... Defaults to a
+   * "MacOSX", "SunOS","AIX" ... Defaults to a
    * derived value from ${os.name} FIXME table missing
    */
   @Parameter(property = "nar.os")

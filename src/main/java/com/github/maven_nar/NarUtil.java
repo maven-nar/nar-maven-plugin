@@ -364,6 +364,14 @@ public final class NarUtil {
       if (name.equals("mac os x")) {
         os = OS.MACOSX;
       }
+	 if ( name.equals( "AIX" ) )
+	{
+		os = OS.AIX;
+	}
+	if ( name.equals( "SunOS" ) )
+	{
+		os = OS.SUNOS;
+	}
     }
     return os;
   }

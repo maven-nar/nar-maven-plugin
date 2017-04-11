@@ -149,7 +149,12 @@ public abstract class AbstractProcessor implements Processor, Cloneable {
     final String osName = getOSName();
     return osName != null && osName.startsWith("Windows");
   }
-
+ 
+  protected boolean isAIX() {
+       final String osName = getOSName();
+        return (osName != null) && osName.equals("AIX");
+   }
+	
   // ENDFREEHEP
 
   @Override

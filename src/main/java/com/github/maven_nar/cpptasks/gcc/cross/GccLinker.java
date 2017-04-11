@@ -44,6 +44,9 @@ public class GccLinker extends AbstractLdLinker {
   };
   private static final GccLinker dllLinker = new GccLinker("gcc", objFiles, discardFiles, "lib", ".so", false,
       new GccLinker("gcc", objFiles, discardFiles, "lib", ".so", true, null));
+   /*On AIX shared libaries use .a for extension */
+  private static final GccLinker aLinker = new GccLinker("gcc",objFiles, discardFiles, "lib", ".a", false, null);
+	  
   private static final GccLinker instance = new GccLinker("gcc", objFiles, discardFiles, "", "", false, null);
   private static final String[] libtoolObjFiles = new String[] {
       ".fo", ".a", ".lib", ".dll", ".so", ".sl"
@@ -232,7 +235,7 @@ public class GccLinker extends AbstractLdLinker {
       if (isDarwin()) {
         return machDllLinker;
       } else {
-        return dllLinker;
+        return isAIX() ?  aLinker:dllLinker;
       }
     }
     return instance;
