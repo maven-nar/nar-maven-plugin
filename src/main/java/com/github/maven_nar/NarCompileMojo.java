@@ -177,6 +177,22 @@ public class NarCompileMojo extends AbstractCompileMojo {
       }
     }
 
+      if(getOS().equals( OS.WINDOWS ) && getArchitecture().equals("amd64"))
+      {
+
+          int noOfASMSources = getSourcesFor(getAssembler()).size();
+
+          if(noOfASMSources > 0)
+          {  // Assmbler files exist
+
+              CompilerDef assembler = getAssembler().getCompiler( Compiler.MAIN, null );
+
+              // CompilerDef msAssembler64bitCompiler = MSAssmbler64bitCompiler.getCompiler(Compiler.MAIN, getOutput( ),getAntProject() );
+               task.addConfiguredCompiler( assembler );
+          }
+
+      }
+
     // Darren Sargent Feb 11 2010: Use Compiler.MAIN for "type"...appears the
     // wrong "type" variable was being used
     // since getCompiler() expects "main" or "test", whereas the "type" variable
@@ -447,6 +463,11 @@ public class NarCompileMojo extends AbstractCompileMojo {
     noOfSources += getSourcesFor(getCpp()).size();
     noOfSources += getSourcesFor(getC()).size();
     noOfSources += getSourcesFor(getFortran()).size();
+      if(getOS().equals( OS.WINDOWS ) && getArchitecture().equals("amd64"))
+      {
+          noOfSources += getSourcesFor(getAssembler()).size();
+      }
+
     if (noOfSources > 0) {
       getLog().info("Compiling " + noOfSources + " native files");
       for (final Library library : getLibraries()) {
