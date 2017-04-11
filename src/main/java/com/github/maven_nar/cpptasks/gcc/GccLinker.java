@@ -59,7 +59,13 @@ public class GccLinker extends AbstractLdLinker {
       null);
   // FREEHEP added dllLinker for windows
   private static final GccLinker dllLinker = new GccLinker("gcc", objFiles, discardFiles, "", ".dll", false, null);
-
+  
+  //Support running on AIX
+   private static final GccLinker aLinker = new GccLinker("gcc", objFiles, discardFiles, "lib", ".a", false,  null);
+  /*
+   private static final GccLinker aLinker = new GccLinker("gcc", objFiles, discardFiles, "lib", ".a", false, new GccLinker("gcc", objFiles,
+            discardFiles, "lib", ".a", true, null));
+*/
   public static GccLinker getCLangInstance() {
     return clangInstance;
   }
@@ -230,7 +236,7 @@ public class GccLinker extends AbstractLdLinker {
       return isDarwin() ? machBundleLinker : isWindows() ? dllLinker : soLinker;
     }
     if (type.isSharedLibrary()) {
-      return isDarwin() ? machDllLinker : isWindows() ? dllLinker : soLinker;
+      return isDarwin() ? machDllLinker : isWindows() ? dllLinker : isAIX() ?  aLinker : soLinker;
     }
     // ENDFREEHEP
     return instance;

@@ -58,6 +58,9 @@ public class GppLinker extends AbstractLdLinker {
       false, null);
   private static final GppLinker machPluginLinker = new GppLinker(GPP_COMMAND, objFiles, discardFiles, "lib",
       ".bundle", false, null);
+	  
+  /*On AIX shared libaries use .a for extension */
+    private static final GppLinker aLinker = new GppLinker(GPP_COMMAND,objFiles, discardFiles, "lib", ".a", false, null);	  
   // FREEHEP
   private static final GppLinker machJNILinker = new GppLinker(GPP_COMMAND, objFiles, discardFiles, "lib", ".jnilib",
       false, null);
@@ -305,7 +308,7 @@ public class GppLinker extends AbstractLdLinker {
       return isDarwin() ? machPluginLinker : isWindows() ? dllLinker : soLinker;
     }
     if (type.isSharedLibrary()) {
-      return isDarwin() ? machDllLinker : isWindows() ? dllLinker : soLinker;
+        return isDarwin() ? machDllLinker : isWindows() ? dllLinker :isAIX() ?  aLinker : soLinker;
     }
     // ENDFREEHEP
     return instance;
