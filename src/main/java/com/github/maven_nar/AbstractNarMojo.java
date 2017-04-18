@@ -132,6 +132,13 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
   @Parameter
   private File testUnpackDirectory;
 
+    /**
+     * NARVersionInfo for Windows binaries
+     *
+     */
+    @Parameter
+    private NARVersionInfo versionInfo;
+
   /**
    * List of classifiers which you want download/unpack/assemble
    * Example ppc-MacOSX-g++, x86-Windows-msvc, i386-Linux-g++.
@@ -244,6 +251,11 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
   protected final Linker getLinker() {
     return this.linker;
   }
+
+    protected final NARVersionInfo getNARVersionInfo()
+    {
+        return versionInfo;
+    }
 
   protected final MavenProject getMavenProject() {
     return this.mavenProject;

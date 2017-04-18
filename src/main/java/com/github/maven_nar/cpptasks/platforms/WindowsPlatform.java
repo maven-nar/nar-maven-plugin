@@ -218,7 +218,7 @@ public final class WindowsPlatform {
   public static void writeResource(final Writer writer, final VersionInfo versionInfo, final File outputFile,
       final boolean isDebug, final LinkType linkType) throws IOException {
 
-    // writer.write("#include \"windows.h\"\n");
+    writer.write("#include \"windows.h\"\n");
 
     writer.write("VS_VERSION_INFO VERSIONINFO\n");
     final StringBuffer buf = new StringBuffer("FILEVERSION ");
