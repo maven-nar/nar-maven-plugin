@@ -268,7 +268,16 @@
       <artifactId>xml-apis</artifactId>
       <version>1.3.04</version>
     </dependency>
-
+    <dependency>
+      <groupId>org.eclipse.aether</groupId>
+      <artifactId>aether-api</artifactId>
+      <version>0.9.0.M2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.aether</groupId>
+      <artifactId>aether-util</artifactId>
+      <version>0.9.0.M2</version>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -517,6 +526,8 @@
                 <setupInclude>it0010-lib-static/pom.xml</setupInclude>
                 <setupInclude>it0020-lib-3rdparty/pom.xml</setupInclude>
                 <setupInclude>it0026-native-lib-loader/pom.xml</setupInclude>
+                <setupInclude>it0031-push-deps-to-lowest-order-agg/pom.xml</setupInclude>
+                
               </setupIncludes>
               <pomIncludes>
                 <pomInclude>*/pom.xml</pomInclude>

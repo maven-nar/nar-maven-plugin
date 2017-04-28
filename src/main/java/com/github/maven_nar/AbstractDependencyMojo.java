@@ -22,15 +22,19 @@ package com.github.maven_nar;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ListIterator;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
 import java.util.jar.JarFile;
 import java.util.zip.ZipInputStream;
 import org.apache.commons.io.IOUtils;
 
+import org.apache.maven.model.Dependency;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
@@ -52,7 +56,19 @@ import org.codehaus.plexus.util.StringUtils;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
 import org.apache.maven.shared.dependency.graph.DependencyNode;
+import org.apache.maven.shared.dependency.graph.internal.DefaultDependencyNode;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
+import org.apache.maven.artifact.DefaultArtifact;
+
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.collection.CollectRequest;
+import org.eclipse.aether.collection.CollectRequest;
+import org.eclipse.aether.util.graph.transformer.ConflictResolver;
+import org.eclipse.aether.util.graph.transformer.NoopDependencyGraphTransformer;
+import org.eclipse.aether.collection.DependencyCollectionException;
+import org.eclipse.aether.DefaultRepositorySystemSession;
 
 /**
  * @author Mark Donszelmann
@@ -118,18 +134,74 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
   protected  DependencyGraphBuilder dependencyGraphBuilder;
 
   /**
-   * The computed dependency tree root node of the Maven project.
+   * The Repository object that dispatches the verbose dependency graph collection request.
+   * @since 3.5.2
    */
-  private List<DependencyNode> LevelOrderList = new ArrayList<DependencyNode>();
+  @Component  
+  private RepositorySystem repoSystem;
+
+  /**
+   * The Session object for controling/configuring the verbose dependency graph collection request.
+   * @since 3.5.2
+   */
+  @Parameter(defaultValue = "${repositorySystemSession}")
+  private RepositorySystemSession repoSession;
+
+  /**
+   * The List of repositories queried by the verbose dependency graph collection request.
+   * @since 3.5.2
+   */  
+  @Parameter(defaultValue = "${project.remoteProjectRepositories}")
+  private List<RemoteRepository> projectRepos;
+
+  
+  /**
+   * Gets the project's full dependency tree prior to dependency mediation. This is required if
+   * we want to know where to push libraries in the linker line.
+   * @return {@link org.eclipse.aether.graph.DependencyNode Root node} of the projects verbose dependency tree.
+   * @since 3.5.2
+  */
+  protected org.eclipse.aether.graph.DependencyNode getVerboseDependencyTree ()
+  {
+    // Create CollectRequest object that will be submitted to collect the dependencies
+    CollectRequest collectReq = new CollectRequest();
+
+    // Get artifact this Maven project is attempting to build
+    Artifact art = getMavenProject().getArtifact();
+    
+    DefaultRepositorySystemSession session = new DefaultRepositorySystemSession(repoSession);
+
+    // Set the No-Op Graph transformer so tree stays intact
+    session.setDependencyGraphTransformer(new NoopDependencyGraphTransformer());
+    
+    // Create Aether graph dependency object from params extracted above
+    org.eclipse.aether.graph.Dependency dep = new org.eclipse.aether.graph.Dependency (
+        new org.eclipse.aether.artifact.DefaultArtifact(art.getGroupId(), art.getArtifactId (), null, art.getVersion()), null);
+    
+    // Set the root of the request, in this case the current project will be the root
+    collectReq.setRoot(dep);
+
+    // Set the repos the collectReq will hit
+    collectReq.setRepositories(projectRepos);
+    
+    try {
+      return repoSystem.collectDependencies (session, collectReq).getRoot();
+    } catch (DependencyCollectionException exception) {
+        this.getLog().warn("Could not collect dependencies from repo system", exception);
+        return null;
+    }
+  }
 
   /**
    * Serializes the dependency tree of current maven project to a string of comma separated list
    * of groupId:artifactId traversing nodes in Level-Order way (also called BFS algorithm)
-   *
-   * @return Dependency tree string of comma separated list
-   * of groupId:artifactId
+   * 
+   * @param pushDepsToLowestOrder when {@code true} enables linker re-ordering logic such that libraries
+   * that are lower in the dependency heirarchy appear lower in the list, maximizing symbol resolution.
+   * @return {@link String Dependency tree string} of comma separated list of groupId:artifactId
+   * @throws MojoExecutionException
    */
-  protected String dependencyTreeOrderStr()
+  protected String dependencyTreeOrderStr(boolean pushDepsToLowestOrder) throws MojoExecutionException
   {
     String depLevelOrderStr = "";
     DependencyNode libTreeRootNode;
@@ -141,33 +213,78 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
       return depLevelOrderStr;
     }
 
-    final List<DependencyNode> NodeList = depLevelOrderList(libTreeRootNode);
-
     this.getLog().debug("{");
     this.getLog().debug("Dependency Lib Order to be used::");
 
-    for (DependencyNode node : NodeList) {
+    /* Check if we should try to push libraries to their lowest place in the 
+     * link order. We will use the full dependency tree from Aether (unmediated)
+     * to determine this order. 
+     */
+    if (pushDepsToLowestOrder)
+    {
+      List <String> VerboseDepList;
+      try {
+        // Get verbose (full) list of dependencies
+        VerboseDepList = depLevelVerboseList(getVerboseDependencyTree ());
+      } catch (MojoExecutionException e) {
+        this.getLog().warn("Exception caught while getting verbose dependency list: ", e);
+        throw e;
+      }
+      
+      // Create set that tracks if we found a duplicate library in the list
+      Set<String> ReducedDepSet = new HashSet <String> ();
+      
+      /* Traverse full dependency list in REVERSE order. The dependencies at the
+       * end of the list signify the ones that are most heavily depended on 
+       * and therefore need to occur later in the link order.
+       */
+      for (int i = VerboseDepList.size()-1; i >= 0; i--)
+      {
+        String depStr = VerboseDepList.get(i);
 
-      if ( node != null ) {
-        String[] nodestring = node.toNodeString().split(":");
-        String usestring = nodestring[0] + ":" + nodestring[1];
+        /* Create link order by pushing new dep to the front of the list. Do not
+         * insert dep if it was added already (i.e. if adding to ReducedDepSet fails)
+         */
+        if (ReducedDepSet.add(depStr))
+        {
+          this.getLog().debug(depStr);
 
-        this.getLog().debug(usestring);
-
-        if (!depLevelOrderStr.isEmpty()){
-          depLevelOrderStr= depLevelOrderStr + "," + usestring;
-        }else{
-          depLevelOrderStr= usestring;
+          if (!depLevelOrderStr.isEmpty()){
+            depLevelOrderStr= depStr + "," + depLevelOrderStr;
+          }else{
+            depLevelOrderStr= depStr;
+          }
         }
+      } 
+    }
+    else
+    {
 
+      List<DependencyNode> NodeList = depLevelOrderList(libTreeRootNode);
+
+      for (DependencyNode node : NodeList) 
+      {
+        if ( node != null )
+        {
+          String[] nodestring = node.toNodeString().split(":");
+          String usestring = nodestring[0] + ":" + nodestring[1];
+
+          this.getLog().debug(usestring);
+
+          if (!depLevelOrderStr.isEmpty()){
+            depLevelOrderStr= depLevelOrderStr + "," + usestring;
+          }else{
+            depLevelOrderStr= usestring;
+          } 
+        }
       }
     }
-
+      
     this.getLog().debug("}");
-
     return depLevelOrderStr;
   }
 
+  
   /**
    * Get List of Nodes of Dependency tree serialised by traversing nodes
    * in Level-Order way (also called BFS algorithm)
@@ -176,28 +293,32 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
    * @return the dependency tree string of comma separated list
    * of groupId:artifactId
    */
-  private List<DependencyNode> depLevelOrderList(DependencyNode rootNode )
+  private List<DependencyNode> depLevelOrderList(DependencyNode rootNode)
   {
 
-    List<DependencyNode> NodeChildList = rootNode.getChildren();
+    // Create list to store aggregate list of all nodes in tree
+    List <DependencyNode> aggDepNodeList = new LinkedList<DependencyNode> ();
+    
+    // Create list that stores current breadth
+    List <DependencyNode> nodeChildList = rootNode.getChildren();
     //LevelOrderList.add(rootNode);
 
-    while (!NodeChildList.isEmpty()) {
-      NodeChildList = levelTraverseTreeList(NodeChildList);
+    while (!nodeChildList.isEmpty()) {
+      nodeChildList = levelTraverseTreeList(nodeChildList, aggDepNodeList);
     }
-
-    return this.LevelOrderList;
+    
+    return aggDepNodeList;
   }
 
   /**
    * helper function for traversing nodes
    * in Level-Order way (also called BFS algorithm)
    */
-  private List<DependencyNode> levelTraverseTreeList(List<DependencyNode>  NodeList )
+  private List<DependencyNode> levelTraverseTreeList(List<DependencyNode>  nodeList, List <DependencyNode> aggDepNodeList )
   {
-    this.LevelOrderList.addAll(NodeList);
+    aggDepNodeList.addAll(nodeList);
     List<DependencyNode> NodeChildList = new ArrayList<DependencyNode>();
-    for (DependencyNode node : NodeList) {
+    for (DependencyNode node : nodeList) {
       if ( (node != null) && (node.getChildren() != null) ) {
         NodeChildList.addAll(node.getChildren());
       }
@@ -206,6 +327,95 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     return NodeChildList;
   }
 
+  /**
+   * Get verbose List of Nodes in Dependency tree serialized by using a BFS algorithm
+   * (copied/refactored from the depLevelOrderList method)
+   *
+   * @param rootNode {@link org.eclipse.aether.graph.DependencyNode root node} of the project's dependency tree
+   * @return {@link List} of strings of the form "&lt;groupId&gt;:&lt;artifactId&gt;" representing the verbose (full) dependency tree.
+   * @throws MojoExecutionException
+   * @since 3.5.2
+   */
+  private List<String> depLevelVerboseList(org.eclipse.aether.graph.DependencyNode rootNode) throws MojoExecutionException
+  {
+
+    // Create list to store aggregate of all nodes in the dependency tree BFS
+    List <org.eclipse.aether.graph.DependencyNode> AggDepNodeList = 
+        new ArrayList<org.eclipse.aether.graph.DependencyNode> ();
+    
+    // Create list that stores current breadth
+    List <org.eclipse.aether.graph.DependencyNode> NodeChildList = rootNode.getChildren();
+
+    // Iterate over each breadth to aggregate the dependency list
+    while (!NodeChildList.isEmpty()) {
+        NodeChildList = levelTraverseVerboseTreeList(NodeChildList, AggDepNodeList, rootNode);
+    }
+    
+    List <String> FullDepList = new ArrayList<String> ();
+    
+    // Construct list of Strings representing the deps in the form "<groupId>:<artifactId>"
+    for (ListIterator<org.eclipse.aether.graph.DependencyNode> it = AggDepNodeList.listIterator (); it.hasNext ();)
+    {
+      org.eclipse.aether.artifact.Artifact art = it.next ().getArtifact();
+      FullDepList.add(art.getGroupId() + ":" + art.getArtifactId());
+    }
+    return FullDepList;
+  }
+
+  /**
+   * helper function for traversing nodes from the Aether package
+   * in Level-Order way.
+   * (copied/refactored from the levelTraverseTreeList method)
+   *
+   * @param nodeList {@link List} representing current breadth of nodes to be visited
+   * @param aggDepNodeList {@link List} representing aggregate nodes current breadth is added to.
+   * @param rootNode {@link org.eclipse.aether.graph.DependencyNode root node} of the project dependency tree used to check for circular dependencies.
+   * @return {@link List} of dependency nodes representing the next breadth to visit.
+   * @throws MojoExecutionException
+   * @since 3.5.2
+   */
+  private List<org.eclipse.aether.graph.DependencyNode> levelTraverseVerboseTreeList(
+        List<org.eclipse.aether.graph.DependencyNode>  nodeList, 
+        List <org.eclipse.aether.graph.DependencyNode> aggDepNodeList,
+        org.eclipse.aether.graph.DependencyNode rootNode) throws MojoExecutionException
+  {
+    aggDepNodeList.addAll(nodeList);
+    
+    List<org.eclipse.aether.graph.DependencyNode> NodeChildList = 
+        new ArrayList<org.eclipse.aether.graph.DependencyNode>();
+    
+    for (org.eclipse.aether.graph.DependencyNode node : nodeList) {
+      if (nodeArtifactsMatch(rootNode, node)){
+        throw new MojoExecutionException("Circular dependency detected in project: " + getMavenProject().toString());
+      }
+      if ( (node != null) && (node.getChildren() != null) ) {
+        NodeChildList.addAll(node.getChildren());
+      }
+    }
+
+    return NodeChildList;
+  }
+
+  /**
+   * Convenience function for determining if the 2 specified dependency
+   * nodes' artifacts match (i.e. if their group and artifact ids match)
+   * 
+   * @param nodeA {@link org.eclipse.aether.graph.DependencyNode dependency node} to match against
+   * @param nodeB {@link org.eclipse.aether.graph.DependencyNode dependency node} to match against
+   * @return {@code true} if the groupId and artifactId of the provided DependencyNode objects match, {@code false} otherwise.
+   * @since 3.5.2
+   */
+
+  private boolean nodeArtifactsMatch (org.eclipse.aether.graph.DependencyNode nodeA,
+                                      org.eclipse.aether.graph.DependencyNode nodeB)
+  {
+    if (nodeA == null || nodeB == null) {
+      return false;
+    }
+      
+    return nodeA.getArtifact().getGroupId ().equals(nodeB.getArtifact().getGroupId()) && 
+        nodeA.getArtifact().getArtifactId ().equals(nodeB.getArtifact().getArtifactId());
+  }
 
   //idea from dependency:tree mojo
   /**

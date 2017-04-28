@@ -171,6 +171,14 @@ public class Linker {
    */
   @Parameter(defaultValue = "false")
   private boolean narDefaultDependencyLibOrder = false;
+  
+  /**
+   * Specifies that if using default dependency lib order then turn on/off logic that pushes
+   * dependencies to appropriate place in linker line based on transitive dependencies.
+   * @since 3.5.2
+   */
+  @Parameter(defaultValue = "false")
+  protected boolean pushDepsToLowestOrder = false;
 
   /**
    * Specify that the linker should generate an intermediate manifest based on
@@ -379,7 +387,9 @@ public class Linker {
 
     //if No user preference of dependency library link order is specified then use the Default one nar generate.
     if ((this.narDependencyLibOrder == null) && (narDefaultDependencyLibOrder)) {
-        this.narDependencyLibOrder = mojo.dependencyTreeOrderStr();
+        this.narDependencyLibOrder = mojo.dependencyTreeOrderStr(pushDepsToLowestOrder);
+    } else if (pushDepsToLowestOrder && !narDefaultDependencyLibOrder) {
+        this.log.warn("pushDepsToLowestOrder will have no effect since narDefaultDependencyLibOrder is disabled");
     }
 
     // record the preference for nar dependency library link order
