@@ -400,7 +400,8 @@ public class CUtil {
       final boolean newEnvironment, final Environment env) throws BuildException {
     try {
       task.log(Commandline.toString(cmdline), task.getCommandLogLevel());
-      final Execute exe = new Execute(new LogStreamHandler(task, Project.MSG_INFO, Project.MSG_ERR));
+
+     /* final Execute exe = new Execute(new LogStreamHandler(task, Project.MSG_INFO, Project.MSG_ERR));
       if (System.getProperty("os.name").equals("OS/390")) {
         exe.setVMLauncher(false);
       }
@@ -418,6 +419,8 @@ public class CUtil {
       }
       exe.setNewenvironment(newEnvironment);
       return exe.execute();
+            */
+	  return CommandExecution.runCommand(cmdline,workingDir,task);
     } catch (final java.io.IOException exc) {
       throw new BuildException("Could not launch " + cmdline[0] + ": " + exc, task.getLocation());
     }

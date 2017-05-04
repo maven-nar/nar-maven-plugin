@@ -67,7 +67,16 @@ public abstract class AbstractProcessor implements Processor, Cloneable {
 
   protected AbstractProcessor(final String[] sourceExtensions, final String[] headerExtensions) {
     this.sourceExtensions = sourceExtensions.clone();
-    this.headerExtensions = headerExtensions.clone();
+      if(headerExtensions != null)
+      {
+          this.headerExtensions = (String[]) headerExtensions.clone();
+      }
+      else
+      {
+          this.headerExtensions = null;
+      }
+
+
   }
 
   /**
@@ -87,11 +96,14 @@ public abstract class AbstractProcessor implements Processor, Cloneable {
         return DEFAULT_PROCESS_BID;
       }
     }
-    for (final String headerExtension : this.headerExtensions) {
-      if (lower.endsWith(headerExtension)) {
-        return DEFAULT_DISCARD_BID;
+      if(headerExtensions != null)
+      {
+        for (final String headerExtension : this.headerExtensions) {
+          if (lower.endsWith(headerExtension)) {
+            return DEFAULT_DISCARD_BID;
+          }
+        }
       }
-    }
     return 0;
   }
 
@@ -106,7 +118,11 @@ public abstract class AbstractProcessor implements Processor, Cloneable {
   }
 
   public String[] getHeaderExtensions() {
-    return this.headerExtensions.clone();
+      if (headerExtensions != null)
+      {
+          return (String[]) this.headerExtensions.clone();
+      }
+      return null;
   }
 
   @Override
