@@ -36,7 +36,18 @@ public class Msvc {
 
   private final Set<String> paths = new LinkedHashSet<>();
 
-  @Parameter
+    /**
+     * VisualStudio Linker version required, the values should be-
+     *      7.1 for VS 2003
+     *      8.0 for VS 2005
+     *      9.0  for VS 2008
+     *     10.0   for VS 2010
+     *     11.0   for VS 2012
+     *      12.00  for VS 2013
+     *     14.0  for VS 2015
+     *     15.0 for VS 2017
+     */
+  @Parameter(defaultValue = "")
   private String version;
 
   @Parameter
@@ -100,20 +111,36 @@ public class Msvc {
   }
 
   static boolean isMSVC(final String name) {
+	
     return "msvc".equalsIgnoreCase(name);
   }
 
   public void configureCCTask(final CCTask task) throws MojoExecutionException {
+
     if (OS.WINDOWS.equals(mojo.getOS()) && isMSVC(mojo)) {
       addIncludePath(task, this.home, "VC/include");
       addIncludePath(task, this.home, "VC/atlmfc/include");
       if (compareVersion(this.windowsSdkVersion, "7.1A") <= 0) {
-        addIncludePath(task, this.windowsSdkHome, "include");
-      } else {
-        for (File sdkInclude : sdkIncludes)
-          addIncludePathToTask(task, sdkInclude);
-
+		  if(this.version.equals("8.0"))
+		  { // For VS 2005 the version of SDK is 2.0, but it needs more paths
+				 for (File sdkInclude : sdkIncludes)      {
+				addIncludePathToTask(task, sdkInclude);
+				mojo.getLog().debug(" configureCCTask add to Path-- " + sdkInclude.getAbsolutePath());
+			} 
+		  }
+		  else
+		  {
+			addIncludePath(task, this.windowsSdkHome, "include");  
+		  }
+			
+      } 
+	  
+	  else {
+        for (File sdkInclude : sdkIncludes)      {
+            addIncludePathToTask(task, sdkInclude);
+        }
       }
+	  
       task.addEnv(getPathVariable());
       // TODO: supporting running with clean environment - addEnv sets
       // newEnvironemnt by default
@@ -143,6 +170,7 @@ public class Msvc {
 
   public void configureLinker(final LinkerDef linker) throws MojoExecutionException {
     final String os = mojo.getOS();
+
     if (os.equals(OS.WINDOWS) && isMSVC(mojo)) {
       final String arch = mojo.getArchitecture();
 
@@ -154,6 +182,7 @@ public class Msvc {
         linker.addLibraryDirectory(this.home, "VC/lib/" + arch);
         linker.addLibraryDirectory(this.home, "VC/atlmfc/lib/" + arch);
       }
+	   
       // Windows SDK
       String sdkArch = arch;
       if ("amd64".equals(arch)) {
@@ -211,13 +240,24 @@ public class Msvc {
   private void init() throws MojoFailureException, MojoExecutionException {
     final String mojoOs = this.mojo.getOS();
     if (NarUtil.isWindows() && OS.WINDOWS.equals(mojoOs) && isMSVC(mojo)) {
-      windowsHome = new File(System.getenv("SystemRoot"));
+	  windowsHome = new File(System.getenv("SystemRoot"));
+	  
       initVisualStudio();
-      initWindowsSdk();
-      initPath();
+        if (this.version.equals("8.0"))
+        {  // VS 2005 works with build in Windows SDK
+            initWindowsSdk8();
+            initPath8();
+        }
+        else
+        {
+                initWindowsSdk();
+                 initPath();
+        }
+
     } else {
       this.version = "";
       this.windowsSdkVersion = "";
+        this.windowsHome = null;
     }
   }
 
@@ -289,8 +329,19 @@ public class Msvc {
     addPath(this.windowsHome, "System32/wbem");
   }
 
+    private void initPath8() throws MojoExecutionException {
+     
+        // clearing the path, add back the windows system folders
+        addPath(this.windowsHome, "System32");
+        addPath(this.windowsHome, "");
+        addPath(this.windowsHome, "System32/wbem");
+    }
+
   private void initVisualStudio() throws MojoFailureException, MojoExecutionException {
     mojo.getLog().debug(" -- Searching for usable VisualStudio ");
+
+      mojo.getLog().debug("Linker version is  " + this.version);
+
     if (this.version != null && this.version.trim().length() > 1) {
       String internalVersion;
       Pattern r = Pattern.compile("(\\d+)\\.*(\\d)");
@@ -398,6 +449,7 @@ public class Msvc {
     }
   };
   private boolean foundSDK = false;
+
   private void initWindowsSdk() throws MojoExecutionException {
     if(this.windowsSdkVersion != null && this.windowsSdkVersion.trim().equals(""))
       this.windowsSdkVersion = null;
@@ -507,16 +559,34 @@ public class Msvc {
     }
   }
 
+    private void initWindowsSdk8() throws MojoExecutionException {
+
+        final String osArchitecture = NarUtil.getArchitecture(null);
+        //VS 2005 - The SDK files are included in the VS installation-
+		File VCINSTALLDIR= new File (this.home,"VC");
+		
+		//File VSLibDir = new File(VCINSTALLDIR.getAbsolutePath()+File.separator+ "lib" , osArchitecture);
+		
+        File PlatformSDKIncludeDir = new File(VCINSTALLDIR.getAbsolutePath()+ File.separator+ "PlatformSDK", "include");
+		File SDKIncludeDir = new File(VCINSTALLDIR.getAbsolutePath()+ File.separator+ "SDK"+ File.separator+ "v2.0", "include");
+		
+		sdkIncludes.add(PlatformSDKIncludeDir);
+		sdkIncludes.add(SDKIncludeDir);
+		this.windowsSdkHome = this.home;
+		
+    }
+
   public void setMojo(final AbstractNarMojo mojo) throws MojoFailureException, MojoExecutionException {
-    if (mojo != this.mojo) {
+      if (mojo != this.mojo) {
       this.mojo = mojo;
       init();
     }
+
   }
 
   @Override
   public String toString() {
-    return this.home + "\n" + this.windowsSdkHome;
+    return "VS Home-"+ this.home + "\nSDKHome-" + this.windowsSdkHome;
   }
 
   public String getToolPath() {
