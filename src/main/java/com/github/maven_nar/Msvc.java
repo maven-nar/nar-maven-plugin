@@ -132,6 +132,12 @@ public class Msvc {
       envVariable.setKey("TMP");
       envVariable.setValue(getTempPath());
       task.addEnv(envVariable);
+      final String envInclude = System.getenv("INCLUDE");
+      if (envInclude != null) {
+        for (final String path : envInclude.split(";")) {
+          addIncludePathToTask(task, new File(path));
+        }
+      }
     }
   }
 
@@ -164,6 +170,12 @@ public class Msvc {
         for (File sdkLib : sdkLibs)
           linker.addLibraryDirectory(sdkLib, sdkArch);
 
+      final String envLib = System.getenv("LIB");
+      if (envLib != null) {
+        for (final String path : envLib.split(";")) {
+          linker.addLibraryDirectory(new File(path));
+        }
+      }
     }
   }
 
@@ -230,10 +242,17 @@ public class Msvc {
       toolPathLinker = new File(this.home, "VC/bin/" + osArchitecture + "_" + mojoArchitecture).getAbsolutePath();
     }
     if (null == toolPathLinker) {
-      if ("amd64".equals(mojoArchitecture))
+      if ("amd64".equals(mojoArchitecture)) {
         toolPathLinker = new File(this.home, "VC/bin/amd64").getAbsolutePath();
-      else
+        if (!new File(toolPathLinker).exists()) {
+          final String envVCToolsInstallDir = System.getenv("VCToolsInstallDir");
+          if (envVCToolsInstallDir != null) {
+            toolPathLinker = new File(envVCToolsInstallDir, "bin/HostX64/x64").getAbsolutePath();
+          }
+        }
+      } else {
         toolPathLinker = new File(this.home, "VC/bin").getAbsolutePath();
+      }
     }
     if ("amd64".equals(osArchitecture) && !matchMojo) {
       addPath(this.home, "VC/bin/amd64");
@@ -444,6 +463,7 @@ public class Msvc {
       File includeDir = new File(kitDirectory, "Include/" + version);
       File libDir = new File(kitDirectory, "Lib/" + version);
       addSDKLibs(includeDir, libDir);
+      setKit(kitDirectory);
     }
   }
 
