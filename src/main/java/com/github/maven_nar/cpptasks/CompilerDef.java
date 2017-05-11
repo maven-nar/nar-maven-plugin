@@ -62,6 +62,7 @@ public final class CompilerDef extends ProcessorDef {
   private String compilerPrefix;
   private File workDir;
   private boolean gccFileAbsolutePath;
+  private String fortifyID="";
 
   private boolean clearDefaultOptions;
 
@@ -571,7 +572,14 @@ public final class CompilerDef extends ProcessorDef {
   public void setWorkDir(final File workDir) {
       this.workDir = workDir;
   }
-  
+
+  public void setFortifyID(final String fortifyID) {
+    this.fortifyID = fortifyID;
+  }
+
+  public String getFortifyID() {
+    return this.fortifyID;
+  }
   /**
    * Enumerated attribute with the values "none", "severe", "default",
    * "production", "diagnostic", and "aserror".
