@@ -121,12 +121,14 @@ public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
   @Parameter
   private Java java;
 
-    /*
-  * To support scanning the code with HPE Fortify
-  * The attribute is used both as a flag that Fortify is required and the value set is used for the
-  * When setting a value -  sourceanalyzer –b <fortifyID> will be prepended to the
-  * command line
-  * */
+  /**
+   * To support scanning the code with HPE Fortify.
+   * <p>
+   * The attribute functions as a flag that indicates Fortify is required,
+   * and the value is an ID, prepended to the command line as
+   * {@code sourceanalyzer –b <fortifyID>}.
+   * </p>
+   */
   @Parameter(defaultValue = "")
   private String fortifyID;
 
