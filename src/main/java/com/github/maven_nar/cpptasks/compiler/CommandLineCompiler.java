@@ -60,6 +60,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
   private final boolean libtool;
   private final CommandLineCompiler libtoolCompiler;
   private final boolean newEnvironment;
+  private String fortifyID="";
 
   protected CommandLineCompiler(final String command, final String identifierArg, final String[] sourceExtensions,
       final String[] headerExtensions,
@@ -214,6 +215,13 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       ArrayList<String> commandlinePrefix = new ArrayList<>();
       if (this.libtool) {
         commandlinePrefix.add("libtool");
+      }
+      if((this.fortifyID !=null) && (!this.fortifyID.equals("")))
+      {// If FortifyID attribute was set, run the Fortify framework
+
+        commandlinePrefix.add("sourceanalyzer");
+        commandlinePrefix.add("-b");
+        commandlinePrefix.add(this.fortifyID);
       }
       commandlinePrefix.add(command);
       Collections.addAll(commandlinePrefix, args);
@@ -404,6 +412,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
     final String path = specificDef.getToolPath();
 
     CommandLineCompiler compiler = this;
+
     Environment environment = specificDef.getEnv();
     if (environment == null) {
       for (final ProcessorDef baseDef : baseDefs) {
@@ -415,6 +424,9 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
     } else {
       compiler = (CommandLineCompiler) compiler.changeEnvironment(specificDef.isNewEnvironment(), environment);
     }
+    // Pass the fortifyID for compiler
+    compiler.fortifyID = specificDef.getFortifyID();
+
     return new CommandLineCompilerConfiguration(compiler, configId, incPath, sysIncPath, envIncludePath,
         includePathIdentifier.toString(), argArray, paramArray, rebuild, endArgs, path, specificDef.getCcache());
   }

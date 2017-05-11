@@ -121,6 +121,16 @@ public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
   @Parameter
   private Java java;
 
+    /*
+  * To support scanning the code with HPE Fortify
+  * The attribute is used both as a flag that Fortify is required and the value set is used for the
+  * When setting a value -  sourceanalyzer –b <fortifyID> will be prepended to the
+  * command line
+  * */
+  @Parameter(defaultValue = "")
+  private String fortifyID;
+
+  
   /**
    * Flag to cpptasks to indicate whether linker options should be decorated or
    * not
@@ -227,6 +237,11 @@ public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
   public void setCpp(final Cpp cpp) {
     this.cpp = cpp;
     cpp.setAbstractCompileMojo(this);
+  }
+  
+  protected final String getfortifyID()
+  {
+    return this.fortifyID;
   }
 
   public final void setDependencyLibOrder(final List/* <String> */order) {
