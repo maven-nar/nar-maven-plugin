@@ -460,12 +460,12 @@ public class Msvc {
                 // windows 10 SDK supports
                 addNewSDKLibraries(kitDirectory);
               }
-	        }
-	      }
+            }
+          }
           if (libsRequired.size() == 0) // need it here to break out of the outer loop
               break;
-	    }
-	  }
+        }
+      }
     }
     if (!foundSDK)
       throw new MojoExecutionException("msvc.windowsSdkVersion not specified and versions cannot be found");
