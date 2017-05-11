@@ -35,7 +35,18 @@ public class Msvc {
   private AbstractNarMojo mojo;
 
   private final Set<String> paths = new LinkedHashSet<>();
-
+  
+  /**
+     * VisualStudio Linker version required, the values should be-
+     *      7.1 for VS 2003
+     *      8.0 for VS 2005
+     *      9.0  for VS 2008
+     *     10.0   for VS 2010
+     *     11.0   for VS 2012
+     *      12.00  for VS 2013
+     *     14.0  for VS 2015
+     *     15.0 for VS 2017
+     */
   @Parameter
   private String version;
 
@@ -54,6 +65,8 @@ public class Msvc {
   private List<File> sdkIncludes = new ArrayList<>();
   private List<File> sdkLibs = new ArrayList<>();
   private Set<String> libsRequired = Sets.newHashSet("ucrt", "um", "shared", "winrt");
+  @Parameter(defaultValue = "false")
+  private boolean force_requested_arch;
 
   private boolean addIncludePath(final CCTask task, final File home, final String subDirectory)
       throws MojoExecutionException {
@@ -234,7 +247,18 @@ public class Msvc {
 
     // Cross tools first if necessary, platform tools second, more generic tools
     // later
-    if (!osArchitecture.equals(mojoArchitecture) && !matchMojo) {
+	if (force_requested_arch)
+    {
+          if ("amd64".equals(mojoArchitecture) && !matchMojo) {
+            addPath(this.home, "VC/bin/amd64");
+            toolPathLinker = new File(this.home, "VC/bin/amd64").getAbsolutePath();
+          } else {
+            addPath(this.home, "VC/bin");
+            toolPathLinker = new File(this.home, "VC/bin").getAbsolutePath();
+          }
+
+    }
+    else if (!osArchitecture.equals(mojoArchitecture) && !matchMojo) {
       if (!addPath(this.home, "VC/bin/" + osArchitecture + "_" + mojoArchitecture)) {
         throw new MojoExecutionException("Unable to find compiler for architecture " + mojoArchitecture + ".\n"
             + new File(this.home, "VC/bin/" + osArchitecture + "_" + mojoArchitecture));
