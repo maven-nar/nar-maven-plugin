@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  #%L
+  Native ARchive plugin for Maven
+  %%
+  Copyright (C) 2002 - 2014 NAR Maven Plugin developers.
+  %%
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+       http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  #L%
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.github.maven-nar.its.nar</groupId>
+    <artifactId>it-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <relativePath>../it-parent/pom.xml</relativePath>
+  </parent>
+
+  <artifactId>it0031-push-deps-to-lowest-order-A</artifactId>
+  <packaging>nar</packaging>
+  
+  <name>NAR Executable and Static Libraries</name>
+  <version>1.0-SNAPSHOT</version>
+  <description>
+    Executable depending on static libraries.
+  </description>
+
+  <properties>
+    <skipTests>true</skipTests>
+  </properties>
+
+  <build>
+    <defaultGoal>integration-test</defaultGoal>
+    <plugins>
+      <plugin>
+        <groupId>@project.groupId@</groupId>
+        <artifactId>nar-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <linker>
+            <narDefaultDependencyLibOrder>true</narDefaultDependencyLibOrder>
+            <clearDefaultOptions>true</clearDefaultOptions>
+            <pushDepsToLowestOrder>true</pushDepsToLowestOrder>
+          </linker>
+          <libraries>
+            <library>
+              <type>executable</type>
+              <run>true</run>
+            </library>
+          </libraries>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <dependencies>
+    <dependency>
+      <groupId>com.github.maven-nar.its.nar</groupId>
+      <artifactId>it0031-push-deps-to-lowest-order-B</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>nar</type>
+    </dependency>
+    <dependency>
+      <groupId>com.github.maven-nar.its.nar</groupId>
+      <artifactId>it0031-push-deps-to-lowest-order-C</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>nar</type>
+    </dependency>
+  </dependencies>
+</project>
