@@ -179,8 +179,8 @@ public class NarCompileMojo extends AbstractCompileMojo {
     if (getCpp() != null) {
       final CompilerDef cpp = getCpp().getCompiler(Compiler.MAIN, null);
       if (cpp != null) {
-		// Set FortifyID attribute
-		cpp.setFortifyID(getfortifyID());
+        // Set FortifyID attribute
+        cpp.setFortifyID(getfortifyID());
         task.addConfiguredCompiler(cpp);
       }
     }
@@ -189,8 +189,8 @@ public class NarCompileMojo extends AbstractCompileMojo {
     if (getC() != null) {
       final CompilerDef c = getC().getCompiler(Compiler.MAIN, null);
       if (c != null) {
-		// Set FortifyID attribute
-		c.setFortifyID(getfortifyID());  
+        // Set FortifyID attribute
+        c.setFortifyID(getfortifyID());  
         task.addConfiguredCompiler(c);
       }
     }
