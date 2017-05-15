@@ -115,10 +115,12 @@ public class Msvc {
   }
 
   static boolean isMSVC(final String name) {
+	
     return "msvc".equalsIgnoreCase(name);
   }
 
   public void configureCCTask(final CCTask task) throws MojoExecutionException {
+
     if (OS.WINDOWS.equals(mojo.getOS()) && isMSVC(mojo)) {
       addIncludePath(task, this.home, "VC/include");
       addIncludePath(task, this.home, "VC/atlmfc/include");
@@ -338,12 +340,54 @@ public class Msvc {
     addPath(this.windowsHome, "System32/wbem");
   }
 
-  private void initPath8() throws MojoExecutionException {
-    // clearing the path, add back the windows system folders
-    addPath(this.windowsHome, "System32");
-    addPath(this.windowsHome, "");
-    addPath(this.windowsHome, "System32/wbem");
-  }
+    private void initPath8() throws MojoExecutionException {
+      final String mojoArchitecture = this.mojo.getArchitecture();
+      final String osArchitecture = NarUtil.getArchitecture(null);
+      // 32 bit build on 64 bit OS can be built with 32 bit tool, or 64 bit tool
+      // in amd64_x86 - currently defaulting to prefer 64 bit tools - match os
+      final boolean matchMojo = false;
+      // TODO: toolset architecture
+      // match os - os x86 mojo(x86 / x86_amd64); os x64 mojo(amd64_x86 / amd64);
+      // 32bit - force 32 on 64bit mojo(x86 / x86_amd64)
+      // match mojo - os x86 is as above; os x64 mojo (x86 / amd64)
+
+      // Cross tools first if necessary, platform tools second, more generic tools
+      // later
+
+      if (force_requested_arch)
+      {
+        if ("amd64".equals(mojoArchitecture) && !matchMojo) {
+          addPath(this.home, "VC/bin/amd64");
+          toolPathLinker = new File(this.home, "VC/bin/amd64").getAbsolutePath();
+        } else {
+          addPath(this.home, "VC/bin");
+          toolPathLinker = new File(this.home, "VC/bin").getAbsolutePath();
+        }
+
+      }
+      else if (!osArchitecture.equals(mojoArchitecture) && !matchMojo) {
+        if (!addPath(this.home, "VC/bin/" + osArchitecture + "_" + mojoArchitecture)) {
+          throw new MojoExecutionException("Unable to find compiler for architecture " + mojoArchitecture + ".\n"
+                  + new File(this.home, "VC/bin/" + osArchitecture + "_" + mojoArchitecture));
+        }
+        toolPathLinker = new File(this.home, "VC/bin/" + osArchitecture + "_" + mojoArchitecture).getAbsolutePath();
+      }
+      if (null == toolPathLinker) {
+        if ("amd64".equals(mojoArchitecture))
+          toolPathLinker = new File(this.home, "VC/bin/amd64").getAbsolutePath();
+        else
+          toolPathLinker = new File(this.home, "VC/bin").getAbsolutePath();
+      }
+      if ("amd64".equals(osArchitecture) && !matchMojo) {
+        addPath(this.home, "VC/bin/amd64");
+      } else {
+        addPath(this.home, "VC/bin");
+      }
+        // clearing the path, add back the windows system folders
+        addPath(this.windowsHome, "System32");
+        addPath(this.windowsHome, "");
+        addPath(this.windowsHome, "System32/wbem");
+    }
 
   private void initVisualStudio() throws MojoFailureException, MojoExecutionException {
     mojo.getLog().debug(" -- Searching for usable VisualStudio ");
@@ -464,6 +508,8 @@ public class Msvc {
 
     mojo.getLog().debug(" -- Searching for usable WindowSDK ");
     // newer first: 10 -> 8.1 -> 8.0 -> 7.1 and look for libs specified
+
+
     for (final File directory : Arrays.asList(
             new File("C:/Program Files (x86)/Windows Kits"),
             new File("C:/Program Files (x86)/Microsoft SDKs/Windows"),
@@ -481,8 +527,8 @@ public class Msvc {
               if (kitVersion.charAt(0) == 'v') {
                 kitVersion = kitVersion.substring(1);
               }
-              if (this.windowsSdkVersion!=null && compareVersion(kitVersion,this.windowsSdkVersion)>0)
-                continue; // skip versions higher than the previous version
+              if (this.windowsSdkVersion!=null && !(compareVersion(kitVersion,this.windowsSdkVersion)==0))
+                continue; // skip versions not identical to exact version
               mojo.getLog()
                   .debug(String.format(" WindowSDK %1s found %2s", kitVersion, kitDirectory.getAbsolutePath()));
               if (kitVersion.matches("\\d+\\.\\d+?[A-Z]?")) {
@@ -499,6 +545,45 @@ public class Msvc {
         }
       }
     }
+    if (!foundSDK)
+    { // Search for SDK with lower versions
+      for (final File directory : Arrays.asList(
+              new File("C:/Program Files (x86)/Windows Kits"),
+              new File("C:/Program Files (x86)/Microsoft SDKs/Windows"),
+              new File("C:/Program Files/Windows Kits"),
+              new File("C:/Program Files/Microsoft SDKs/Windows") )) {
+        if (directory.exists()) {
+          final File[] kitDirectories = directory.listFiles();
+          Arrays.sort(kitDirectories, versionComparator);
+          if (kitDirectories != null) {
+            for (final File kitDirectory : kitDirectories) {
+
+              if (new File(kitDirectory, "Include").exists()) {
+                // legacy SDK
+                String kitVersion = kitDirectory.getName();
+                if (kitVersion.charAt(0) == 'v') {
+                  kitVersion = kitVersion.substring(1);
+                }
+                if (this.windowsSdkVersion!=null && compareVersion(kitVersion,this.windowsSdkVersion)>0)
+                  continue; // skip versions higher than the previous version
+                mojo.getLog()
+                        .debug(String.format(" WindowSDK %1s found %2s", kitVersion, kitDirectory.getAbsolutePath()));
+                if (kitVersion.matches("\\d+\\.\\d+?[A-Z]?")) {
+                  // windows <= 8.1
+                  legacySDK(kitDirectory);
+                } else if (kitVersion.matches("\\d+?")) {
+                  // windows 10 SDK supports
+                  addNewSDKLibraries(kitDirectory);
+                }
+              }
+            }
+            if (libsRequired.size() == 0) // need it here to break out of the outer loop
+              break;
+          }
+        }
+      }
+    }
+
     if (!foundSDK)
       throw new MojoExecutionException("msvc.windowsSdkVersion not specified and versions cannot be found");
     mojo.getLog().debug(String.format(" Using WindowSDK %1s found %2s", this.windowsSdkVersion, this.windowsSdkHome));
@@ -583,10 +668,11 @@ public class Msvc {
   }
 
   public void setMojo(final AbstractNarMojo mojo) throws MojoFailureException, MojoExecutionException {
-    if (mojo != this.mojo) {
+      if (mojo != this.mojo) {
       this.mojo = mojo;
       init();
     }
+
   }
 
   @Override
