@@ -437,7 +437,7 @@ public class Msvc {
           if (versionStringComparator.compare(version, version) > 0) {
             final File commonToolsDirectory = new File(value);
             if (commonToolsDirectory.exists()) {
-              version = version;
+              this.version = version;
               home = commonToolsDirectory.getParentFile().getParentFile();
               mojo.getLog().debug(
                 String.format(" VisualStudio %1s (%2s) found %3s ", version,
