@@ -30,6 +30,7 @@ import com.github.maven_nar.cpptasks.gcc.GccCCompiler;
 import com.github.maven_nar.cpptasks.gcc.WindresResourceCompiler;
 import com.github.maven_nar.cpptasks.hp.aCCCompiler;
 import com.github.maven_nar.cpptasks.ibm.VisualAgeCCompiler;
+import com.github.maven_nar.cpptasks.ibm.xlC_rCompiler;
 import com.github.maven_nar.cpptasks.intel.IntelLinux32CCompiler;
 import com.github.maven_nar.cpptasks.intel.IntelLinux32Compiler;
 import com.github.maven_nar.cpptasks.intel.IntelLinux64CCompiler;
@@ -54,6 +55,7 @@ import com.github.maven_nar.cpptasks.sun.ForteF77Compiler;
 import com.github.maven_nar.cpptasks.ti.ClxxCCompiler;
 import com.github.maven_nar.cpptasks.trolltech.MetaObjectCompiler;
 import com.github.maven_nar.cpptasks.trolltech.UserInterfaceCompiler;
+
 
 /**
  * Enumeration of supported compilers
@@ -248,6 +250,7 @@ public class CompilerEnum extends EnumeratedAttribute {
       new ProcessorEnumValue("os400", IccCompiler.getInstance()),
       new ProcessorEnumValue("sunc89", C89CCompiler.getInstance()),
       new ProcessorEnumValue("xlC", VisualAgeCCompiler.getInstance()),
+	  new ProcessorEnumValue("xlC_r", xlC_rCompiler.getInstance()),
       new ProcessorEnumValue("cl6x", ClxxCCompiler.getCl6xInstance()),
       new ProcessorEnumValue("cl55", ClxxCCompiler.getCl55Instance()),
       new ProcessorEnumValue("armcc", ADSCCompiler.getArmCC()),
