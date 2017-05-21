@@ -248,9 +248,25 @@ public final class NarUtil {
 
   public static AOL getAOL(final MavenProject project, final String architecture, final String os, final Linker linker,
       final String aol, final Log log) throws MojoFailureException, MojoExecutionException {
-    // adjust aol
-    return aol == null ? new AOL(getArchitecture(architecture), getOS(os), getLinkerName(project, architecture, os,
-        linker, log)) : new AOL(aol);
+
+    /*
+    To support a linker that is not the default linker specified in the aol.properties
+    * */
+    String aol_linker;
+
+    if(linker != null & linker.getName() != null)
+    {
+      log.debug("linker original name: " + linker.getName());
+      aol_linker = linker.getName();
+    }
+    else
+    {
+      log.debug("linker original name not exist ");
+      aol_linker = getLinkerName(project, architecture, os,linker, log);
+    }
+    log.debug("aol_linker: " + aol_linker);
+
+    return aol == null ? new AOL(getArchitecture(architecture), getOS(os), aol_linker) : new AOL(aol);
   }
 
   public static String getAOLKey(final String aol) {
