@@ -556,6 +556,15 @@ public class Linker {
       if (m.find()) {
         version = m.group(0);
       }
+    } else if (this.name.equals("xlC_r")) {
+      NarUtil.runCommand("xlC_r", new String[] {
+              "-qversion"
+      }, null, null, out, err, dbg, this.log);
+      final Pattern p = Pattern.compile("\\d+\\.\\d+");
+      final Matcher m = p.matcher(out.toString());
+      if (m.find()) {
+        version = m.group(0);
+      }
     } else if (name.equals("clang") || name.equals("clang++")) {
       NarUtil.runCommand("clang", new String[] {
           "--version"

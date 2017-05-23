@@ -31,6 +31,7 @@ import com.github.maven_nar.cpptasks.gcc.GppLinker;
 import com.github.maven_nar.cpptasks.gcc.LdLinker;
 import com.github.maven_nar.cpptasks.hp.aCCLinker;
 import com.github.maven_nar.cpptasks.ibm.VisualAgeLinker;
+import com.github.maven_nar.cpptasks.ibm.xlC_rLinker;
 import com.github.maven_nar.cpptasks.intel.IntelLinux32CLinker;
 import com.github.maven_nar.cpptasks.intel.IntelLinux32Linker;
 import com.github.maven_nar.cpptasks.intel.IntelLinux64CLinker;
@@ -77,6 +78,7 @@ public class LinkerEnum extends EnumeratedAttribute {
       new ProcessorEnumValue("os400", IccLinker.getInstance()),
       new ProcessorEnumValue("sunc89", C89Linker.getInstance()),
       new ProcessorEnumValue("xlC", VisualAgeLinker.getInstance()),
+	  new ProcessorEnumValue("xlC_r", xlC_rLinker.getInstance()),
       new ProcessorEnumValue("cl6x", ClxxLinker.getCl6xInstance()),
       new ProcessorEnumValue("cl55", ClxxLinker.getCl55Instance()),
       new ProcessorEnumValue("armcc", ADSLinker.getInstance()),
