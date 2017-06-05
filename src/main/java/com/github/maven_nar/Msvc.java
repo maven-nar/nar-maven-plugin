@@ -1,6 +1,9 @@
 package com.github.maven_nar;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +32,7 @@ import com.google.common.collect.Sets;
 
 public class Msvc {
 
+  // the home location of visual studio
   @Parameter
   private File home;
 
@@ -61,50 +65,57 @@ public class Msvc {
   @Parameter
   private String tempPath;
 
+  @Parameter(defaultValue = "false")
+  private boolean force_requested_arch;
+
   private File windowsHome;
+  // The folder that contains the set of bin/include/lib folders
+  private File msvctoolhome;
   private String toolPathWindowsSDK;
   private String toolPathLinker;
   private List<File> sdkIncludes = new ArrayList<>();
   private List<File> sdkLibs = new ArrayList<>();
   private Set<String> libsRequired = Sets.newHashSet("ucrt", "um", "shared", "winrt");
-  @Parameter(defaultValue = "false")
-  private boolean force_requested_arch;
 
-  private boolean addIncludePath(final CCTask task, final File home, final String subDirectory)
+  private enum CrossCompilers {
+    x86, x64
+    // , arm
+    , x86_x64, x86_arm, x64_x86, x64_arm
+    // arm cross compilers to x86/x64?
+  }
+
+  private boolean addIncludePath(final CCTask task, final File base, final String subDirectory)
       throws MojoExecutionException {
-    if (home == null) {
+    if (base == null) {
       return false;
     }
-    final File file = new File(home, subDirectory);
+    final File file = new File(base, subDirectory);
     if (file.exists())
       return addIncludePathToTask(task, file);
 
     return false;
   }
 
-  private boolean addIncludePathToTask(final CCTask task, final File file)
-       throws MojoExecutionException {
+  private boolean addIncludePathToTask(final CCTask task, final File file) throws MojoExecutionException {
     try {
       final SystemIncludePath includePath = task.createSysIncludePath();
       final String fullPath = file.getCanonicalPath();
       includePath.setPath(fullPath);
       return true;
-    }
-    catch (final IOException e) {
+    } catch (final IOException e) {
       throw new MojoExecutionException("Unable to add system include: " + file.getAbsolutePath(), e);
     }
   }
 
-  private boolean addPath(final File home, final String path) {
-    if (home != null) {
-      final File directory = new File(home, path);
+  private boolean addPath(final File base, final String path) {
+    if (base != null) {
+      final File directory = new File(base, path);
       if (directory.exists()) {
         try {
           final String fullPath = directory.getCanonicalPath();
           paths.add(fullPath);
           return true;
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
           throw new IllegalArgumentException("Unable to get path: " + directory, e);
         }
       }
@@ -122,23 +133,21 @@ public class Msvc {
 
   public void configureCCTask(final CCTask task) throws MojoExecutionException {
     if (OS.WINDOWS.equals(mojo.getOS()) && isMSVC(mojo)) {
-      addIncludePath(task, home, "VC/include");
-      addIncludePath(task, home, "VC/atlmfc/include");
+      addIncludePath(task, msvctoolhome, "include");
+      addIncludePath(task, msvctoolhome, "atlmfc/include");
       if (compareVersion(windowsSdkVersion, "7.1A") <= 0) {
         if (version.equals("8.0")) {
           // For VS 2005 the version of SDK is 2.0, but it needs more paths
-          for (File sdkInclude : sdkIncludes)      {
+          for (File sdkInclude : sdkIncludes) {
             addIncludePathToTask(task, sdkInclude);
             mojo.getLog().debug(" configureCCTask add to Path-- " + sdkInclude.getAbsolutePath());
           }
-        }
-        else {
+        } else {
           addIncludePath(task, windowsSdkHome, "include");
         }
-      }
-      else {
+      } else {
         for (File sdkInclude : sdkIncludes) {
-            addIncludePathToTask(task, sdkInclude);
+          addIncludePathToTask(task, sdkInclude);
         }
       }
 
@@ -160,12 +169,6 @@ public class Msvc {
       envVariable.setKey("TMP");
       envVariable.setValue(getTempPath());
       task.addEnv(envVariable);
-      final String envInclude = System.getenv("INCLUDE");
-      if (envInclude != null) {
-        for (final String path : envInclude.split(";")) {
-          addIncludePathToTask(task, new File(path));
-        }
-      }
     }
   }
 
@@ -177,12 +180,11 @@ public class Msvc {
 
       // Visual Studio
       if ("x86".equals(arch)) {
-        linker.addLibraryDirectory(home, "VC/lib");
-        linker.addLibraryDirectory(home, "VC/atlmfc/lib");
-      }
-      else {
-        linker.addLibraryDirectory(home, "VC/lib/" + arch);
-        linker.addLibraryDirectory(home, "VC/atlmfc/lib/" + arch);
+        linker.addLibraryDirectory(msvctoolhome, "lib");
+        linker.addLibraryDirectory(msvctoolhome, "atlmfc/lib");
+      } else {
+        linker.addLibraryDirectory(msvctoolhome, "lib/" + arch);
+        linker.addLibraryDirectory(msvctoolhome, "atlmfc/lib/" + arch);
       }
 
       // Windows SDK
@@ -194,37 +196,31 @@ public class Msvc {
       if (compareVersion(windowsSdkVersion, "8.0") < 0) {
         if ("x86".equals(arch)) {
           linker.addLibraryDirectory(windowsSdkHome, "lib");
-        }
-        else {
+        } else {
           linker.addLibraryDirectory(windowsSdkHome, "lib/" + sdkArch);
         }
-      }
-      else {
+      } else {
         for (File sdkLib : sdkLibs) {
           linker.addLibraryDirectory(sdkLib, sdkArch);
-        }
-      }
-
-      final String envLib = System.getenv("LIB");
-      if (envLib != null) {
-        for (final String path : envLib.split(";")) {
-          linker.addLibraryDirectory(new File(path));
         }
       }
     }
   }
 
-  private String getTempPath(){
+  private String getTempPath() {
     if (null == tempPath) {
       tempPath = System.getenv("TMP");
-      if (tempPath == null) tempPath = System.getenv("TEMP");
-      if (tempPath == null) tempPath = "C:\\Temp";
+      if (tempPath == null)
+        tempPath = System.getenv("TEMP");
+      if (tempPath == null)
+        tempPath = "C:\\Temp";
     }
     return tempPath;
   }
 
   public Variable getPathVariable() {
-    if (paths.isEmpty()) return null;
+    if (paths.isEmpty())
+      return null;
     final Variable pathVariable = new Variable();
     pathVariable.setKey("PATH");
     pathVariable.setValue(StringUtils.join(paths.iterator(), File.pathSeparator));
@@ -245,155 +241,256 @@ public class Msvc {
       windowsHome = new File(System.getenv("SystemRoot"));
 
       initVisualStudio();
+      msvctoolhome = new File(home, "VC/");
+
+      final String mojoArchitecture = mojo.getArchitecture();
+      final String osArchitecture = NarUtil.getArchitecture(null);
+      // On 64 bit OS either 32 or 64 bit tools can be used
+      // * 32 bit tools in hostx86/
+      // * 64 bit tools in hostx64/
+
+      // default use compiler tools match os
+      // - os x86: mojo(x86 / x86_x64);
+      // - os x64: mojo(x64_x86 / x64);
+      // use only 32 bit compiler tools - treat x64 as if os is x86
+      // - mojo(x86 / x86_x64)
+      // force_requested_arch - on 64 bit host match mojo host tools to target
+      // platform
+      // - os x64: mojo(x86 / x64)
+      // - os x86: mojo(x86 / x86_x64) same as default
+      CrossCompilers compiler;
+      if (force_requested_arch) {
+        if ("amd64".equals(mojoArchitecture)) {
+          if ("amd64".equals(osArchitecture)) {
+            compiler = CrossCompilers.x64;
+          } else {
+            compiler = CrossCompilers.x86_x64;
+          }
+          // } else if ("arm".equals(mojoArchitecture)) {
+          // compiler = CrossCompilers.arm;
+        } else {// else if ("x86".equals(mojoArchitecture))
+          compiler = CrossCompilers.x86;
+        }
+      } else {
+        if ("amd64".equals(osArchitecture)) {
+          if ("amd64".equals(mojoArchitecture)) {
+            compiler = CrossCompilers.x64;
+          } else if ("arm".equals(mojoArchitecture)) {
+            compiler = CrossCompilers.x64_arm;
+          } else {
+            compiler = CrossCompilers.x64_x86;
+          }
+        } else {
+          if ("amd64".equals(mojoArchitecture)) {
+            compiler = CrossCompilers.x86_x64;
+          } else if ("arm".equals(mojoArchitecture)) {
+            compiler = CrossCompilers.x86_arm;
+          } else {
+            compiler = CrossCompilers.x86;
+          }
+        } // todo arm
+      }
+
       if (version.equals("8.0")) {
+        // Earlier version of VS have Windows SDK installed
+        // TODO: make more generic
         // VS 2005 works with build in Windows SDK
         initWindowsSdk8();
-        initPath8();
-      }
-      else {
+        initPath(compiler);
+        addWindowsPaths();
+      } else {
         initWindowsSdk();
-        initPath();
+        if (compareVersion(version, "15.0") < 0) {
+          initPath(compiler);
+        } else {
+
+          final File msvcversionFile = new File(home, "VC/Auxiliary/Build/Microsoft.VCToolsVersion.default.txt");
+          String msvcversion = "14.10.25017"; // what to do if we can't read the
+                                              // current value??
+          try {
+            BufferedReader brTest = new BufferedReader(new FileReader(msvcversionFile));
+            msvcversion = brTest.readLine().trim();
+            brTest.close();
+          } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          } finally {
+          }
+          msvctoolhome = new File(new File(home, "VC/Tools/MSVC"), msvcversion);
+
+          initPath15(compiler);
+        }
+        addWindowsSDKPaths();
+        addWindowsPaths();
       }
-    }
-    else {
+    } else {
       version = "";
       windowsSdkVersion = "";
       windowsHome = null;
     }
   }
 
-  private void initPath() throws MojoExecutionException {
-    final String mojoArchitecture = mojo.getArchitecture();
-    final String osArchitecture = NarUtil.getArchitecture(null);
-    // 32 bit build on 64 bit OS can be built with 32 bit tool, or 64 bit tool
-    // in amd64_x86 - currently defaulting to prefer 64 bit tools - match os
-    final boolean matchMojo = false;
-    // TODO: toolset architecture
-    // match os - os x86 mojo(x86 / x86_amd64); os x64 mojo(amd64_x86 / amd64);
-    // 32bit - force 32 on 64bit mojo(x86 / x86_amd64)
-    // match mojo - os x86 is as above; os x64 mojo (x86 / amd64)
+  private void initPath(CrossCompilers compiler) throws MojoExecutionException {
 
-    // Cross tools first if necessary, platform tools second, more generic tools
-    // later
-    if (force_requested_arch)
-    {
-      if ("amd64".equals(mojoArchitecture) && !matchMojo) {
-        addPath(home, "VC/bin/amd64");
-        toolPathLinker = new File(home, "VC/bin/amd64").getAbsolutePath();
-      }
-      else {
-        addPath(home, "VC/bin");
-        toolPathLinker = new File(home, "VC/bin").getAbsolutePath();
-      }
+    Boolean found = true;
+    switch (compiler) {
+      case x86:
+        // compile using x86 tools.
+        found = addPath(msvctoolhome, "bin");
+        toolPathLinker = new File(msvctoolhome, "bin").getAbsolutePath();
+        break;
+      case x86_x64:
+        // cross compile x64 using x86 tools
+        found = addPath(msvctoolhome, "bin/x86_amd64");
+        addPath(msvctoolhome, "bin");
+        toolPathLinker = new File(msvctoolhome, "bin/x86_amd64").getAbsolutePath();
+        break;
+      case x86_arm:
+        // cross compile arm using x86 tools
+        found = addPath(msvctoolhome, "bin/x86_arm");
+        addPath(msvctoolhome, "bin");
+        toolPathLinker = new File(msvctoolhome, "bin/x86_arm").getAbsolutePath();
+        break;
+      case x64:
+        // compile using x64 tools
+        found = addPath(msvctoolhome, "bin/amd64");
+        toolPathLinker = new File(msvctoolhome, "bin/amd64").getAbsolutePath();
+        break;
+      case x64_x86:
+        // cross compile x86 using x64 tools
+        found = addPath(msvctoolhome, "bin/amd64_x86");
+        addPath(msvctoolhome, "bin/amd64");
+        toolPathLinker = new File(msvctoolhome, "bin/amd64_x86").getAbsolutePath();
+        break;
+      case x64_arm:
+        // cross compile arm using x64 tools
+        found = addPath(msvctoolhome, "bin/amd64_arm");
+        addPath(msvctoolhome, "bin/amd64");
+        toolPathLinker = new File(msvctoolhome, "bin/amd64_arm").getAbsolutePath();
+        break;
     }
-    else if (!osArchitecture.equals(mojoArchitecture) && !matchMojo) {
-      if (!addPath(home, "VC/bin/" + osArchitecture + "_" + mojoArchitecture)) {
-        throw new MojoExecutionException("Unable to find compiler for architecture " + mojoArchitecture + ".\n"
-            + new File(home, "VC/bin/" + osArchitecture + "_" + mojoArchitecture));
-      }
-      toolPathLinker = new File(home, "VC/bin/" + osArchitecture + "_" + mojoArchitecture).getAbsolutePath();
+    if (!found) {
+      throw new MojoExecutionException("Unable to find bin folder for architecture " + compiler.name() + ".\n");
     }
-    if (null == toolPathLinker) {
-      if ("amd64".equals(mojoArchitecture)) {
-        toolPathLinker = new File(home, "VC/bin/amd64").getAbsolutePath();
-        if (!new File(toolPathLinker).exists()) {
-          final String envVCToolsInstallDir = System.getenv("VCToolsInstallDir");
-          if (envVCToolsInstallDir != null) {
-            toolPathLinker = new File(envVCToolsInstallDir, "bin/HostX64/x64").getAbsolutePath();
-          }
-        }
-      }
-      else {
-        toolPathLinker = new File(home, "VC/bin").getAbsolutePath();
-      }
-    }
-    if ("amd64".equals(osArchitecture) && !matchMojo) {
-      addPath(home, "VC/bin/amd64");
-    }
-    else {
-      addPath(home, "VC/bin");
-    }
-    addPath(home, "VC/VCPackages");
+
+    addPath(msvctoolhome, "VCPackages");
     addPath(home, "Common7/Tools");
     addPath(home, "Common7/IDE");
 
+  }
+
+  private void addWindowsSDKPaths() throws MojoExecutionException {
+    final String mojoArchitecture = mojo.getArchitecture();
+    final String osArchitecture = NarUtil.getArchitecture(null);
+
     // 64 bit tools if present are preferred
     if (compareVersion(windowsSdkVersion, "7.1A") <= 0) {
-      if ("amd64".equals(osArchitecture) && !matchMojo) {
+      if ("amd64".equals(osArchitecture)) {
         addPath(windowsSdkHome, "bin/x64");
       }
       addPath(windowsSdkHome, "bin");
-    }
-    else {
-      if ("amd64".equals(osArchitecture) && !matchMojo) {
+    } else {
+      if ("amd64".equals(osArchitecture)) {
         addPath(windowsSdkHome, "bin/x64");
       }
       addPath(windowsSdkHome, "bin/x86");
     }
     if ("amd64".equals(mojoArchitecture)) {
       toolPathWindowsSDK = new File(windowsSdkHome, "bin/x64").getAbsolutePath();
-    }
-    else if (compareVersion(windowsSdkVersion, "7.1A") <= 0) {
+    } else if (compareVersion(windowsSdkVersion, "7.1A") <= 0) {
       toolPathWindowsSDK = new File(windowsSdkHome, "bin").getAbsolutePath();
-    }
-    else {
+    } else {
       toolPathWindowsSDK = new File(windowsSdkHome, "bin/x86").getAbsolutePath();
     }
+  }
 
+  private void initPath15(CrossCompilers compiler) throws MojoExecutionException {
+
+    Boolean found = true;
+    switch (compiler) {
+      case x86: // compile using x86 tools.
+        found = addPath(msvctoolhome, "bin/HostX86/x86");
+        toolPathLinker = new File(msvctoolhome, "bin/HostX86/x86").getAbsolutePath();
+        break;
+      case x86_x64:
+        // cross compile x64 using x86 tools
+        found = addPath(msvctoolhome, "bin/HostX86/x64");
+        addPath(msvctoolhome, "bin/HostX86/x86");
+        toolPathLinker = new File(msvctoolhome, "bin/HostX86/x64").getAbsolutePath();
+        break;
+      case x86_arm:
+        // cross compile arm using x86 tools
+        found = addPath(msvctoolhome, "bin/HostX86/arm");
+        addPath(msvctoolhome, "bin/HostX86/x86");
+        toolPathLinker = new File(msvctoolhome, "bin/HostX86/arm").getAbsolutePath();
+        break;
+      case x64:
+        // compile using x64 tools
+        found = addPath(msvctoolhome, "bin/HostX64/x64");
+        toolPathLinker = new File(msvctoolhome, "bin/HostX64/x64").getAbsolutePath();
+        break;
+      case x64_x86:
+        // cross compile x86 using x64 tools
+        found = addPath(msvctoolhome, "bin/HostX64/x86");
+        addPath(msvctoolhome, "bin/HostX64/x64");
+        toolPathLinker = new File(msvctoolhome, "bin/HostX64/x86").getAbsolutePath();
+        break;
+      case x64_arm:
+        // cross compile arm using x64 tools
+        found = addPath(msvctoolhome, "bin/HostX64/arm");
+        addPath(msvctoolhome, "bin/HostX64/x64");
+        toolPathLinker = new File(msvctoolhome, "bin/HostX64/arm").getAbsolutePath();
+        break;
+    }
+
+    if (!found) {
+      throw new MojoExecutionException("Unable to find bin folder for architecture " + compiler.name() + ".\n");
+    }
+
+    // tools that are more generic
+    addPath(home, "Common7/IDE/VC/VCPackages");
+    addPath(home, "Common7/IDE/");
+    addPath(home, "Common7/Tools");
+  }
+
+  private void addWindowsPaths() throws MojoExecutionException {
     // clearing the path, add back the windows system folders
     addPath(windowsHome, "System32");
     addPath(windowsHome, "");
     addPath(windowsHome, "System32/wbem");
   }
 
-    private void initPath8() throws MojoExecutionException {
-      final String mojoArchitecture = mojo.getArchitecture();
-      final String osArchitecture = NarUtil.getArchitecture(null);
-      // 32 bit build on 64 bit OS can be built with 32 bit tool, or 64 bit tool
-      // in amd64_x86 - currently defaulting to prefer 64 bit tools - match os
-      final boolean matchMojo = false;
-      // TODO: toolset architecture
-      // match os - os x86 mojo(x86 / x86_amd64); os x64 mojo(amd64_x86 / amd64);
-      // 32bit - force 32 on 64bit mojo(x86 / x86_amd64)
-      // match mojo - os x86 is as above; os x64 mojo (x86 / amd64)
-
-      // Cross tools first if necessary, platform tools second, more generic tools
-      // later
-
-      if (force_requested_arch) {
-        if ("amd64".equals(mojoArchitecture) && !matchMojo) {
-          addPath(home, "VC/bin/amd64");
-          toolPathLinker = new File(home, "VC/bin/amd64").getAbsolutePath();
-        }
-        else {
-          addPath(home, "VC/bin");
-          toolPathLinker = new File(home, "VC/bin").getAbsolutePath();
-        }
-      }
-      else if (!osArchitecture.equals(mojoArchitecture) && !matchMojo) {
-        if (!addPath(home, "VC/bin/" + osArchitecture + "_" + mojoArchitecture)) {
-          throw new MojoExecutionException("Unable to find compiler for architecture " + mojoArchitecture + ".\n" +
-            new File(home, "VC/bin/" + osArchitecture + "_" + mojoArchitecture));
-        }
-        toolPathLinker = new File(home, "VC/bin/" + osArchitecture + "_" + mojoArchitecture).getAbsolutePath();
-      }
-      if (null == toolPathLinker) {
-        if ("amd64".equals(mojoArchitecture))
-          toolPathLinker = new File(home, "VC/bin/amd64").getAbsolutePath();
-        else
-          toolPathLinker = new File(home, "VC/bin").getAbsolutePath();
-      }
-      if ("amd64".equals(osArchitecture) && !matchMojo) {
-        addPath(home, "VC/bin/amd64");
-      }
-      else {
-        addPath(home, "VC/bin");
-      }
-      // clearing the path, add back the windows system folders
-      addPath(windowsHome, "System32");
-      addPath(windowsHome, "");
-      addPath(windowsHome, "System32/wbem");
+  /**
+   * Get a registry REG_SZ value.
+   *
+   * @param root
+   *          Root key.
+   * @param key
+   *          Registry path.
+   * @param value
+   *          Name of the value to retrieve.
+   * @return String value.
+   */
+  public static String registryGet32StringValue(com.sun.jna.platform.win32.WinReg.HKEY root, String key, String value)
+      throws com.sun.jna.platform.win32.Win32Exception {
+    com.sun.jna.platform.win32.WinReg.HKEYByReference phkKey = new com.sun.jna.platform.win32.WinReg.HKEYByReference();
+    int rc = com.sun.jna.platform.win32.Advapi32.INSTANCE.RegOpenKeyEx(root, key, 0,
+        com.sun.jna.platform.win32.WinNT.KEY_READ | com.sun.jna.platform.win32.WinNT.KEY_WOW64_32KEY, phkKey);
+    if (rc != com.sun.jna.platform.win32.W32Errors.ERROR_SUCCESS) {
+      throw new com.sun.jna.platform.win32.Win32Exception(rc);
     }
+    try {
+      return com.sun.jna.platform.win32.Advapi32Util.registryGetStringValue(phkKey.getValue(), value);
+    } finally {
+      rc = com.sun.jna.platform.win32.Advapi32.INSTANCE.RegCloseKey(phkKey.getValue());
+      if (rc != com.sun.jna.platform.win32.W32Errors.ERROR_SUCCESS) {
+        throw new com.sun.jna.platform.win32.Win32Exception(rc);
+      }
+    }
+  }
 
   private void initVisualStudio() throws MojoFailureException, MojoExecutionException {
     mojo.getLog().debug(" -- Searching for usable VisualStudio ");
@@ -407,11 +504,19 @@ public class Msvc {
       if (matcher.find()) {
         internalVersion = matcher.group(1) + matcher.group(2);
         version = matcher.group(1) + "." + matcher.group(2);
-      }
-      else {
+      } else {
         throw new MojoExecutionException("msvc.version must be the internal version in the form 10.0 or 120");
       }
       if (home == null) {
+        // HKLM (32 bit) - HKLM\SOFTWARE\Microsoft\VisualStudio\SxS\VS7
+        // @<Major.Minor>
+        try {
+          home = new File(registryGet32StringValue(com.sun.jna.platform.win32.WinReg.HKEY_LOCAL_MACHINE,
+              "SOFTWARE\\Microsoft\\VisualStudio\\SxS\\VS7", version));
+        } finally {
+        }
+      }
+      if (home == null || !home.exists()) {
         final String commontToolsVar = System.getenv("VS" + internalVersion + "COMNTOOLS");
         if (commontToolsVar != null && commontToolsVar.trim().length() > 0) {
           final File commonToolsDirectory = new File(commontToolsVar);
@@ -419,14 +524,12 @@ public class Msvc {
             home = commonToolsDirectory.getParentFile().getParentFile();
           }
         }
-        // TODO: else Registry might be more reliable but adds dependency to be
-        // able to acccess - HKLM\SOFTWARE\Microsoft\Visual Studio\Major.Minor:InstallDir
       }
-      mojo.getLog()
-          .debug(String.format(" VisualStudio %1s (%2s) found %3s ", version, internalVersion, home));
-    }
-    else {
+      mojo.getLog().debug(String.format(" VisualStudio %1s (%2s) found %3s ", version, internalVersion, home));
+    } else {
       version = "";
+      // TODO: First search registry for installed items, more reliable than
+      // environment.
       for (final Entry<String, String> entry : System.getenv().entrySet()) {
         final String key = entry.getKey();
         final String value = entry.getValue();
@@ -439,8 +542,7 @@ public class Msvc {
             if (commonToolsDirectory.exists()) {
               this.version = version;
               home = commonToolsDirectory.getParentFile().getParentFile();
-              mojo.getLog().debug(
-                String.format(" VisualStudio %1s (%2s) found %3s ", version,
+              mojo.getLog().debug(String.format(" VisualStudio %1s (%2s) found %3s ", version,
                   matcher.group(1) + matcher.group(2), home));
             }
           }
@@ -452,17 +554,16 @@ public class Msvc {
         final TextStream dbg = new StringTextStream();
 
         NarUtil.runCommand("link", new String[] {
-          "/?"
+            "/?"
         }, null, null, out, err, dbg, null, true);
         final Pattern p = Pattern.compile("(\\d+\\.\\d+)\\.\\d+(\\.\\d+)?");
         final Matcher m = p.matcher(out.toString());
         if (m.find()) {
           version = m.group(1);
-          mojo.getLog().debug(
-            String.format(" VisualStudio Not found but link runs and reports version %1s (%2s)", version,
-              m.group(0)));
-        }
-        else {
+          mojo.getLog().debug(String.format(" VisualStudio Not found but link runs and reports version %1s (%2s)",
+              version, m.group(0)));
+          return;
+        } else {
           throw new MojoExecutionException(
               "msvc.version not specified and no VS<Version>COMNTOOLS environment variable can be found");
         }
@@ -485,7 +586,13 @@ public class Msvc {
       // will be sorted smallest first, so we need to invert the order of
       // the objects
       String firstDir = o2.getName(), secondDir = o1.getName();
-      if (firstDir.charAt(0) == 'v') { // remove 'v' and 'A' at the end
+      if (firstDir.charAt(0) == 'v') { // remove
+        // 'v'
+        // and
+        // 'A'
+        // at
+        // the
+        // end
         firstDir = firstDir.substring(1, firstDir.length() - 1);
         secondDir = secondDir.substring(1, secondDir.length() - 1);
       }
@@ -499,11 +606,12 @@ public class Msvc {
           if ((deltaVer = Integer.parseInt(firstVersionString[i]) - Integer.parseInt(secondVersionString[i])) != 0)
             return deltaVer;
 
-      }
-      catch (NumberFormatException e) {
+      } catch (NumberFormatException e) {
         return firstDir.compareTo(secondDir);
       }
-      if (firstVersionString.length > maxIdx) // 10.0.150 > 10.0
+      if (firstVersionString.length > maxIdx) // 10.0.150
+                                              // >
+                                              // 10.0
         return 1;
       else if (secondVersionString.length > maxIdx) // 10.0 < 10.0.150
         return -1;
@@ -519,12 +627,9 @@ public class Msvc {
     mojo.getLog().debug(" -- Searching for usable WindowSDK ");
     // newer first: 10 -> 8.1 -> 8.0 -> 7.1 and look for libs specified
 
-
-    for (final File directory : Arrays.asList(
-            new File("C:/Program Files (x86)/Windows Kits"),
-            new File("C:/Program Files (x86)/Microsoft SDKs/Windows"),
-            new File("C:/Program Files/Windows Kits"),
-            new File("C:/Program Files/Microsoft SDKs/Windows") )) {
+    for (final File directory : Arrays.asList(new File("C:/Program Files (x86)/Windows Kits"),
+        new File("C:/Program Files (x86)/Microsoft SDKs/Windows"), new File("C:/Program Files/Windows Kits"),
+        new File("C:/Program Files/Microsoft SDKs/Windows"))) {
       if (directory.exists()) {
         final File[] kitDirectories = directory.listFiles();
         Arrays.sort(kitDirectories, versionComparator);
@@ -544,25 +649,22 @@ public class Msvc {
               if (kitVersion.matches("\\d+\\.\\d+?[A-Z]?")) {
                 // windows <= 8.1
                 legacySDK(kitDirectory);
-              }
-              else if (kitVersion.matches("\\d+?")) {
+              } else if (kitVersion.matches("\\d+?")) {
                 // windows 10 SDK supports
                 addNewSDKLibraries(kitDirectory);
               }
             }
           }
-          if (libsRequired.size() == 0) // need it here to break out of the outer loop
-              break;
+          if (libsRequired.size() == 0) // need it here to break out of the
+                                        // outer loop
+            break;
         }
       }
     }
-    if (!foundSDK)
-    { // Search for SDK with lower versions
-      for (final File directory : Arrays.asList(
-              new File("C:/Program Files (x86)/Windows Kits"),
-              new File("C:/Program Files (x86)/Microsoft SDKs/Windows"),
-              new File("C:/Program Files/Windows Kits"),
-              new File("C:/Program Files/Microsoft SDKs/Windows") )) {
+    if (!foundSDK) { // Search for SDK with lower versions
+      for (final File directory : Arrays.asList(new File("C:/Program Files (x86)/Windows Kits"),
+          new File("C:/Program Files (x86)/Microsoft SDKs/Windows"), new File("C:/Program Files/Windows Kits"),
+          new File("C:/Program Files/Microsoft SDKs/Windows"))) {
         if (directory.exists()) {
           final File[] kitDirectories = directory.listFiles();
           Arrays.sort(kitDirectories, versionComparator);
@@ -578,18 +680,19 @@ public class Msvc {
                 if (windowsSdkVersion != null && compareVersion(kitVersion, windowsSdkVersion) > 0) {
                   continue; // skip versions higher than the previous version
                 }
-                mojo.getLog().debug(String.format(" WindowSDK %1s found %2s", kitVersion, kitDirectory.getAbsolutePath()));
+                mojo.getLog()
+                    .debug(String.format(" WindowSDK %1s found %2s", kitVersion, kitDirectory.getAbsolutePath()));
                 if (kitVersion.matches("\\d+\\.\\d+?[A-Z]?")) {
                   // windows <= 8.1
                   legacySDK(kitDirectory);
-                }
-                else if (kitVersion.matches("\\d+?")) {
+                } else if (kitVersion.matches("\\d+?")) {
                   // windows 10 SDK supports
                   addNewSDKLibraries(kitDirectory);
                 }
               }
             }
-            if (libsRequired.size() == 0) // need it here to break out of the outer loop
+            if (libsRequired.size() == 0) // need it here to break out of the
+                                          // outer loop
               break;
           }
         }
@@ -604,7 +707,7 @@ public class Msvc {
   private void addNewSDKLibraries(final File kitDirectory) {
     // multiple installs
     List<File> kitVersionDirectories = Arrays.asList(new File(kitDirectory, "Include").listFiles());
-    Collections.sort(kitVersionDirectories,  versionComparator);
+    Collections.sort(kitVersionDirectories, versionComparator);
     ListIterator<File> kitVersionDirectoriesIt = kitVersionDirectories.listIterator();
     File kitVersionDirectory = null;
     while (kitVersionDirectoriesIt.hasNext() && (kitVersionDirectory = kitVersionDirectoriesIt.next()) != null) {
@@ -615,7 +718,8 @@ public class Msvc {
 
     if (kitVersionDirectory != null) {
       String version = kitVersionDirectory.getName();
-      mojo.getLog().debug(String.format(" Latest Win %1s KitDir at %2s", kitVersionDirectory.getName(), kitVersionDirectory.getAbsolutePath()));
+      mojo.getLog().debug(String.format(" Latest Win %1s KitDir at %2s", kitVersionDirectory.getName(),
+          kitVersionDirectory.getAbsolutePath()));
       // add the libraries found:
       File includeDir = new File(kitDirectory, "Include/" + version);
       File libDir = new File(kitDirectory, "Lib/" + version);
@@ -626,8 +730,10 @@ public class Msvc {
 
   private void setKit(File home) {
     if (!foundSDK) {
-      if (windowsSdkVersion == null) windowsSdkVersion = home.getName();
-      if (windowsSdkHome == null) windowsSdkHome = home;
+      if (windowsSdkVersion == null)
+        windowsSdkVersion = home.getName();
+      if (windowsSdkHome == null)
+        windowsSdkHome = home;
       foundSDK = true;
     }
   }
@@ -635,15 +741,16 @@ public class Msvc {
   private void legacySDK(final File kitDirectory) {
     File includeDir = new File(kitDirectory, "Include");
     File libDir = new File(kitDirectory, "Lib");
-    if (includeDir.exists() && libDir.exists()){
+    if (includeDir.exists() && libDir.exists()) {
       File usableLibDir = null;
       for (final File libSubDir : libDir.listFiles()) {
-        final File um = new File(libSubDir,"um");
-        if (um.exists()) usableLibDir = libSubDir;
+        final File um = new File(libSubDir, "um");
+        if (um.exists())
+          usableLibDir = libSubDir;
       }
       if (usableLibDir == null)
         usableLibDir = libDir.listFiles()[0];
-      
+
       addSDKLibs(includeDir, usableLibDir);
       setKit(kitDirectory);
     }
@@ -654,7 +761,8 @@ public class Msvc {
     for (final File libIncludeDir : libs) {
       // <libName> <include path> <lib path>
       if (libsRequired.remove(libIncludeDir.getName())) {
-        mojo.getLog().debug(String.format(" Using directory %1s for library %2s", libIncludeDir.getAbsolutePath(), libIncludeDir.getName()));
+        mojo.getLog().debug(String.format(" Using directory %1s for library %2s", libIncludeDir.getAbsolutePath(),
+            libIncludeDir.getName()));
         sdkIncludes.add(libIncludeDir);
         sdkLibs.add(new File(libdir, libIncludeDir.getName()));
       }
@@ -663,13 +771,15 @@ public class Msvc {
 
   private void initWindowsSdk8() throws MojoExecutionException {
     final String osArchitecture = NarUtil.getArchitecture(null);
-    //VS 2005 - The SDK files are included in the VS installation-
-    File VCINSTALLDIR = new File (home,"VC");
+    // VS 2005 - The SDK files are included in the VS installation-
+    File VCINSTALLDIR = new File(home, "VC");
 
-    //File VSLibDir = new File(VCINSTALLDIR.getAbsolutePath()+File.separator+ "lib" , osArchitecture);
+    // File VSLibDir = new File(VCINSTALLDIR.getAbsolutePath()+File.separator+
+    // "lib" , osArchitecture);
 
-    File PlatformSDKIncludeDir = new File(VCINSTALLDIR.getAbsolutePath()+ File.separator+ "PlatformSDK", "include");
-    File SDKIncludeDir = new File(VCINSTALLDIR.getAbsolutePath()+ File.separator+ "SDK"+ File.separator+ "v2.0", "include");
+    File PlatformSDKIncludeDir = new File(VCINSTALLDIR.getAbsolutePath() + File.separator + "PlatformSDK", "include");
+    File SDKIncludeDir = new File(VCINSTALLDIR.getAbsolutePath() + File.separator + "SDK" + File.separator + "v2.0",
+        "include");
 
     sdkIncludes.add(PlatformSDKIncludeDir);
     sdkIncludes.add(SDKIncludeDir);
@@ -686,7 +796,7 @@ public class Msvc {
 
   @Override
   public String toString() {
-    return "VS Home-"+ home + "\nSDKHome-" + windowsSdkHome;
+    return "VS Home-" + home + "\nSDKHome-" + windowsSdkHome;
   }
 
   public String getToolPath() {
@@ -700,8 +810,7 @@ public class Msvc {
   public void setToolPath(CompilerDef compilerDef, String name) {
     if ("res".equals(name) || "mc".equals(name) || "idl".equals(name)) {
       compilerDef.setToolPath(toolPathWindowsSDK);
-    }
-    else {
+    } else {
       compilerDef.setToolPath(toolPathLinker);
     }
   }
