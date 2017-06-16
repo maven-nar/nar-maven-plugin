@@ -387,9 +387,11 @@ public class Linker {
 
     //if No user preference of dependency library link order is specified then use the Default one nar generate.
     if ((this.narDependencyLibOrder == null) && (narDefaultDependencyLibOrder)) {
-        this.narDependencyLibOrder = mojo.dependencyTreeOrderStr(pushDepsToLowestOrder);
+        this.narDependencyLibOrder = mojo.dependencyTreeOrderStr(pushDepsToLowestOrder, mojo.getDirectDepsOnly());
     } else if (pushDepsToLowestOrder && !narDefaultDependencyLibOrder) {
         this.log.warn("pushDepsToLowestOrder will have no effect since narDefaultDependencyLibOrder is disabled");
+    } else if (mojo.getDirectDepsOnly() && !narDefaultDependencyLibOrder) {
+        this.log.warn("directDepsOnly will have no effect since narDefaultDependencyLibOrder is disabled");
     }
 
     // record the preference for nar dependency library link order
