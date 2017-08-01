@@ -232,22 +232,6 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
           throw e;
       }
 
-      if (specifyDirectDeps)
-      {
-        // Get first level of deps, when specifyAllDirectDeps is true those can be the only ones linked.
-        Set<String> directDepsSet = getDirectDepsSet(verboseTreeRootNode);
-
-        // Trim all deps from verboseDepList that are not in the directDepsSet, warn if they are found.
-        ListIterator <String> it = verboseDepList.listIterator();
-        while(it.hasNext()){
-            String dep = it.next();
-            if(!directDepsSet.contains(dep)){
-                this.getLog().warn("Stray dependency: " + dep + " found. This may cause build failures.");
-                verboseDepList.remove(it);
-            }
-        }
-      }
-
       // Create set that tracks if we found a duplicate library in the list
       Set<String> reducedDepSet = new HashSet <String> ();
       
@@ -272,7 +256,24 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
             depLevelOrderStr= depStr;
           }
         }
-      } 
+      }
+
+      if (specifyDirectDeps)
+      {
+        // Get first level of deps, when specifyAllDirectDeps is true those can be the only ones linked.
+        Set<String> directDepsSet = getDirectDepsSet(verboseTreeRootNode);
+
+        // Trim all deps from verboseDepList that are not in the directDepsSet, warn if they are found.
+        Iterator <String> it = reducedDepSet.iterator();
+        while(it.hasNext()){
+            String dep = it.next();
+            if(!directDepsSet.contains(dep)){
+                this.getLog().warn("Stray dependency: " + dep + " found. This may cause build failures.");
+                reducedDepSet.remove(it);
+            }
+        }
+      }
+
     }
     else
     {
