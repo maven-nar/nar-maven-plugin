@@ -162,6 +162,24 @@ public class NarInfo {
     return getProperty(aol, "syslibs.names");
   }
 
+  /**
+   * Get the Group Id of the NarInfo instance
+   * @return {@link String} representing a NarInfo object's Group Id.
+   * @since 3.5.3
+   */
+  public String getGroupId() {
+      return this.groupId;
+  }
+
+  /**
+   * Get the Artifact Id of the NarInfo instance
+   * @return {@link String} representing a NarInfo object's Artifact Id.
+   * @since 3.5.3
+   */
+  public String getArtifactId() {
+      return this.artifactId;
+  }
+
   public final void read(final JarFile jar) throws IOException {
     this.info.load(jar.getInputStream(getNarPropertiesEntry(jar)));
   }

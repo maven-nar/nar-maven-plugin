@@ -201,7 +201,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
    * @return {@link String Dependency tree string} of comma separated list of groupId:artifactId
    * @throws MojoExecutionException
    */
-  protected String dependencyTreeOrderStr(boolean pushDepsToLowestOrder) throws MojoExecutionException
+  protected String dependencyTreeOrderStr(boolean pushDepsToLowestOrder, boolean specifyDirectDeps) throws MojoExecutionException
   {
     String depLevelOrderStr = "";
     DependencyNode libTreeRootNode;
@@ -220,32 +220,33 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
      * link order. We will use the full dependency tree from Aether (unmediated)
      * to determine this order. 
      */
-    if (pushDepsToLowestOrder)
+    if (pushDepsToLowestOrder || specifyDirectDeps)
     {
-      List <String> VerboseDepList;
+      org.eclipse.aether.graph.DependencyNode verboseTreeRootNode = getVerboseDependencyTree ();
+      List <String> verboseDepList;
       try {
-        // Get verbose (full) list of dependencies
-        VerboseDepList = depLevelVerboseList(getVerboseDependencyTree ());
+          // Get verbose (full) list of dependencies
+          verboseDepList = depLevelVerboseList(verboseTreeRootNode);
       } catch (MojoExecutionException e) {
-        this.getLog().warn("Exception caught while getting verbose dependency list: ", e);
-        throw e;
+          this.getLog().warn("Exception caught while getting verbose dependency list: ", e);
+          throw e;
       }
-      
+
       // Create set that tracks if we found a duplicate library in the list
-      Set<String> ReducedDepSet = new HashSet <String> ();
+      Set<String> reducedDepSet = new HashSet <String> ();
       
       /* Traverse full dependency list in REVERSE order. The dependencies at the
        * end of the list signify the ones that are most heavily depended on 
        * and therefore need to occur later in the link order.
        */
-      for (int i = VerboseDepList.size()-1; i >= 0; i--)
+      for (int i = verboseDepList.size()-1; i >= 0; i--)
       {
-        String depStr = VerboseDepList.get(i);
+        String depStr = verboseDepList.get(i);
 
         /* Create link order by pushing new dep to the front of the list. Do not
          * insert dep if it was added already (i.e. if adding to ReducedDepSet fails)
          */
-        if (ReducedDepSet.add(depStr))
+        if (reducedDepSet.add(depStr))
         {
           this.getLog().debug(depStr);
 
@@ -255,7 +256,24 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
             depLevelOrderStr= depStr;
           }
         }
-      } 
+      }
+
+      if (specifyDirectDeps)
+      {
+        // Get first level of deps, when specifyAllDirectDeps is true those can be the only ones linked.
+        Set<String> directDepsSet = getDirectDepsSet(verboseTreeRootNode);
+
+        // Trim all deps from verboseDepList that are not in the directDepsSet, warn if they are found.
+        Iterator <String> it = reducedDepSet.iterator();
+        while(it.hasNext()){
+            String dep = it.next();
+            if(!directDepsSet.contains(dep)){
+                this.getLog().warn("Stray dependency: " + dep + " found. This may cause build failures.");
+                reducedDepSet.remove(it);
+            }
+        }
+      }
+
     }
     else
     {
@@ -284,6 +302,27 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     return depLevelOrderStr;
   }
 
+  /**
+   * Gets the set strings of the form "&lt;groupId&gt;:&lt;artifactId&gt;" representing the specified nodes direct dependencies (immediate children).
+   *
+   * @param rootNode {@link org.eclipse.aether.graph.DependencyNode root node} of the tree to fetch the direct dependencies from.
+   * @return {@link HashSet<String>} of the form "&lt;groupId&gt;:&lt;artifactId&gt;" containing all direct dependencies of the parameter specified by rootNode.
+   * @since 3.5.3
+   */
+  protected HashSet<String> getDirectDepsSet(org.eclipse.aether.graph.DependencyNode rootNode)
+  {
+    HashSet<String> directDepsSet = new HashSet<String> ();
+    List <org.eclipse.aether.graph.DependencyNode> directDepsList = rootNode.getChildren();
+    ListIterator <org.eclipse.aether.graph.DependencyNode> iter = directDepsList.listIterator();
+
+    // Accumulate set that represents the collection of direct deps
+    while(iter.hasNext()){
+      org.eclipse.aether.artifact.Artifact art = iter.next().getArtifact();
+      directDepsSet.add(createArtifactString(art));
+    }
+
+    return directDepsSet;
+  }
   
   /**
    * Get List of Nodes of Dependency tree serialised by traversing nodes
@@ -348,7 +387,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
 
     // Iterate over each breadth to aggregate the dependency list
     while (!NodeChildList.isEmpty()) {
-        NodeChildList = levelTraverseVerboseTreeList(NodeChildList, AggDepNodeList, rootNode);
+      NodeChildList = levelTraverseVerboseTreeList(NodeChildList, AggDepNodeList, rootNode);
     }
     
     List <String> FullDepList = new ArrayList<String> ();
@@ -356,8 +395,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     // Construct list of Strings representing the deps in the form "<groupId>:<artifactId>"
     for (ListIterator<org.eclipse.aether.graph.DependencyNode> it = AggDepNodeList.listIterator (); it.hasNext ();)
     {
-      org.eclipse.aether.artifact.Artifact art = it.next ().getArtifact();
-      FullDepList.add(art.getGroupId() + ":" + art.getArtifactId());
+      FullDepList.add(createArtifactString(it.next().getArtifact()));
     }
     return FullDepList;
   }
@@ -397,6 +435,18 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
   }
 
   /**
+   * Convenience function for constructing a String representing an artifact in the form "<groupId>:<artifactId>"
+   * 
+   * @param artifact {@link org.eclipse.aether.Artifact artifact} to construct string from
+   * @return {@link String} in the form <groupId>:<artifactId" representing the artifact
+   * @since 3.5.3
+   */
+  private String createArtifactString (org.eclipse.aether.artifact.Artifact artifact)
+  {
+    return new String(artifact.getGroupId() + ":" + artifact.getArtifactId());
+  }
+
+  /**
    * Convenience function for determining if the 2 specified dependency
    * nodes' artifacts match (i.e. if their group and artifact ids match)
    * 
@@ -425,7 +475,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
    * @return root node of the project Dependency tree
    * @throws MojoExecutionException
    */
-  private DependencyNode getRootNodeDependecyTree() throws MojoExecutionException{
+  protected DependencyNode getRootNodeDependecyTree() throws MojoExecutionException{
     try {
       ArtifactFilter artifactFilter = null;
 

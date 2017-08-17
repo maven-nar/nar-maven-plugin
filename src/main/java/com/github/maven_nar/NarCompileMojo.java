@@ -26,7 +26,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Vector;
+import java.util.HashSet;
 
 import com.github.maven_nar.cpptasks.*;
 import org.apache.maven.artifact.Artifact;
@@ -39,6 +41,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
+import org.eclipse.aether.artifact.DefaultArtifact;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.codehaus.plexus.util.FileUtils;
@@ -234,6 +237,22 @@ public class NarCompileMojo extends AbstractCompileMojo {
     getMsvc().configureCCTask(task);
 
     final List<NarArtifact> dependencies = getNarArtifacts();
+    
+    // If we're restricting deps to direct deps ONLY then trim transitive deps
+    if (directDepsOnly){
+      HashSet<String> directDepsSet = getDirectDepsSet(getVerboseDependencyTree());
+      ListIterator <NarArtifact> depsIt = dependencies.listIterator();
+
+      // Trim all deps from dependencies that are not in the directDepsSet, warn if they are found.
+      while(depsIt.hasNext()){
+        NarInfo dep = depsIt.next().getNarInfo();
+        if(!directDepsSet.contains(dep.getGroupId() + ":" + dep.getArtifactId())){
+          this.getLog().warn("Stray dependency: " + dep + " found. This may cause build failures.");
+          depsIt.remove();
+        }
+      }
+    }
+
     // add dependency include paths
     for (final Object element : dependencies) {
       // FIXME, handle multiple includes from one NAR

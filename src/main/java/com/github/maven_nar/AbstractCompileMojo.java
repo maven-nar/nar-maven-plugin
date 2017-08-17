@@ -110,6 +110,14 @@ public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
   private boolean libtool;
 
   /**
+   * Forces project to specify all it's dependencies and not inherit transitive  
+   * dependencies.
+   @since 3.5.3
+   */
+  @Parameter(defaultValue = "false")
+  protected boolean directDepsOnly;
+
+  /**
    * List of tests to create
    */
   @Parameter
@@ -200,6 +208,15 @@ public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
 
   protected final int getMaxCores(final AOL aol) throws MojoExecutionException {
     return getNarInfo().getProperty(aol, "maxCores", this.maxCores);
+  }
+
+  /**
+   * Get value of the directDepsOnly flag.
+   * @return {@code true} if directDepsOnly is true, {@code false} otherwise.
+   * @since 3.5.3
+   */
+  protected boolean getDirectDepsOnly(){
+     return this.directDepsOnly;
   }
 
   protected final Message getMessage() {
