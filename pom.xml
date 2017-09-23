@@ -136,6 +136,7 @@
     <organization.logo />
     <sonar.host.url />
     <sourceReleaseAssemblyDescriptor>source-release</sourceReleaseAssemblyDescriptor>
+    <releaseProfiles>sonatype-oss-release</releaseProfiles>
   </properties>
 
   <repositories>
