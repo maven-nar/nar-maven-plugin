@@ -216,7 +216,7 @@ public class NarSystemMojo extends AbstractNarMojo {
           + "            final String libPath = getLibPath(loader, aols, mappedNames);\n"
           + "            final JniExtractor extractor = new DefaultJniExtractor(NarSystem.class, System.getProperty(\"java.io.tmpdir\"));\n"
           + "            final File extracted = extractor.extractJni(libPath, fileName);\n"
-          + "            System.load(extracted.getPath());\n" + "        } catch (final Exception e) {\n"
+          + "            System.load(extracted.getAbsolutePath());\n" + "        } catch (final Exception e) {\n"
           + "            e.printStackTrace();\n" + "            throw e instanceof RuntimeException ?\n"
           + "                (RuntimeException) e : new RuntimeException(e);\n" + "        }";
       extraMethods = generateExtraMethods();
