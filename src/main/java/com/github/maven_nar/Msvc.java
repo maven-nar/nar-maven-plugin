@@ -178,20 +178,26 @@ public class Msvc {
     if (os.equals(OS.WINDOWS) && isMSVC(mojo)) {
       final String arch = mojo.getArchitecture();
 
-      // Visual Studio
-      if ("x86".equals(arch)) {
-        linker.addLibraryDirectory(msvctoolhome, "lib");
-        linker.addLibraryDirectory(msvctoolhome, "atlmfc/lib");
-      } else {
-        linker.addLibraryDirectory(msvctoolhome, "lib/" + arch);
-        linker.addLibraryDirectory(msvctoolhome, "atlmfc/lib/" + arch);
-      }
-
       // Windows SDK
       String sdkArch = arch;
       if ("amd64".equals(arch)) {
         sdkArch = "x64";
       }
+
+      // Visual Studio
+      if( compareVersion(version, "15.0") < 0 ) {
+        if ("x86".equals(arch)) {
+          linker.addLibraryDirectory(msvctoolhome, "lib");
+          linker.addLibraryDirectory(msvctoolhome, "atlmfc/lib");
+        } else {
+          linker.addLibraryDirectory(msvctoolhome, "lib/" + arch);
+          linker.addLibraryDirectory(msvctoolhome, "atlmfc/lib/" + arch);
+        }
+      } else {
+        linker.addLibraryDirectory(msvctoolhome, "lib/" + sdkArch);
+        linker.addLibraryDirectory(msvctoolhome, "atlmfc/lib/" + sdkArch);
+      }
+
       // 6 lib ?+ lib/x86 or lib/x64
       if (compareVersion(windowsSdkVersion, "8.0") < 0) {
         if ("x86".equals(arch)) {
