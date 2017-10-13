@@ -36,7 +36,7 @@ public class Msvc {
   @Parameter
   private File home;
 
-  private AbstractNarMojo mojo;
+  private AbstractNarMojo mojo = null;
 
   private final Set<String> paths = new LinkedHashSet<>();
 
@@ -48,7 +48,7 @@ public class Msvc {
    * <li>9.0 for VS 2008</li>
    * <li>10.0 for VS 2010</li>
    * <li>11.0 for VS 2012</li>
-   * <li>12.00 for VS 2013</li>
+   * <li>12.0 for VS 2013</li>
    * <li>14.0 for VS 2015</li>
    * <li>15.0 for VS 2017</li>
    * </ul>
@@ -84,45 +84,6 @@ public class Msvc {
     // arm cross compilers to x86/x64?
   }
 
-  private boolean addIncludePath(final CCTask task, final File base, final String subDirectory)
-      throws MojoExecutionException {
-    if (base == null) {
-      return false;
-    }
-    final File file = new File(base, subDirectory);
-    if (file.exists())
-      return addIncludePathToTask(task, file);
-
-    return false;
-  }
-
-  private boolean addIncludePathToTask(final CCTask task, final File file) throws MojoExecutionException {
-    try {
-      final SystemIncludePath includePath = task.createSysIncludePath();
-      final String fullPath = file.getCanonicalPath();
-      includePath.setPath(fullPath);
-      return true;
-    } catch (final IOException e) {
-      throw new MojoExecutionException("Unable to add system include: " + file.getAbsolutePath(), e);
-    }
-  }
-
-  private boolean addPath(final File base, final String path) {
-    if (base != null) {
-      final File directory = new File(base, path);
-      if (directory.exists()) {
-        try {
-          final String fullPath = directory.getCanonicalPath();
-          paths.add(fullPath);
-          return true;
-        } catch (final IOException e) {
-          throw new IllegalArgumentException("Unable to get path: " + directory, e);
-        }
-      }
-    }
-    return false;
-  }
-
   static boolean isMSVC(final AbstractNarMojo mojo) {
     return isMSVC(mojo.getLinker().getName());
   }
@@ -131,8 +92,125 @@ public class Msvc {
     return "msvc".equalsIgnoreCase(name);
   }
 
+  public String getVersion() {
+    return version;
+  }
+
+  public String getWindowsSdkVersion() {
+    return windowsSdkVersion;
+  }
+
+  public Variable getPathVariable() {
+    if (paths.isEmpty())
+      return null;
+    final Variable pathVariable = new Variable();
+    pathVariable.setKey("PATH");
+    pathVariable.setValue(StringUtils.join(paths.iterator(), File.pathSeparator));
+    return pathVariable;
+  }
+  @Override
+  public String toString() {
+    return "VS Home-" + home + "\nSDKHome-" + windowsSdkHome;
+  }
+
+  public String getToolPath() {
+    return toolPathLinker;
+  }
+
+  public String getSDKToolPath() {
+    return toolPathWindowsSDK;
+  }
+
+  public void setToolPath(CompilerDef compilerDef, String name) {
+    if ("res".equals(name) || "mc".equals(name) || "idl".equals(name)) {
+      compilerDef.setToolPath(toolPathWindowsSDK);
+    } else {
+      compilerDef.setToolPath(toolPathLinker);
+    }
+  }
+
+
+  public void init(final AbstractNarMojo mojo) throws MojoFailureException, MojoExecutionException {
+    if (this.mojo != mojo && isMSVC(mojo)) {
+      this.mojo = mojo;
+      final String mojoOs = mojo.getOS();
+      if (NarUtil.isWindows() && OS.WINDOWS.equals(mojoOs) && isMSVC(mojo)) {
+        windowsHome = new File(System.getenv("SystemRoot"));
+
+        initVisualStudio();
+        msvctoolhome = VCToolHome();
+
+        final String mojoArchitecture = mojo.getArchitecture();
+        final String osArchitecture = NarUtil.getArchitecture(null);
+        // On 64 bit OS either 32 or 64 bit tools can be used
+        // * 32 bit tools in hostx86/
+        // * 64 bit tools in hostx64/
+
+        // default use compiler tools match os
+        // - os x86: mojo(x86 / x86_x64);
+        // - os x64: mojo(x64_x86 / x64);
+        // use only 32 bit compiler tools - treat x64 as if os is x86
+        // - mojo(x86 / x86_x64)
+        // force_requested_arch - on 64 bit host match mojo host tools to target
+        // platform
+        // - os x64: mojo(x86 / x64)
+        // - os x86: mojo(x86 / x86_x64) same as default
+        CrossCompilers compiler;
+        if (force_requested_arch) {
+          if ("amd64".equals(mojoArchitecture)) {
+            if ("amd64".equals(osArchitecture)) {
+              compiler = CrossCompilers.x64;
+            } else {
+              compiler = CrossCompilers.x86_x64;
+            }
+            // } else if ("arm".equals(mojoArchitecture)) {
+            // compiler = CrossCompilers.arm;
+          } else {// else if ("x86".equals(mojoArchitecture))
+            compiler = CrossCompilers.x86;
+          }
+        } else {
+          if ("amd64".equals(osArchitecture)) {
+            if ("amd64".equals(mojoArchitecture)) {
+              compiler = CrossCompilers.x64;
+            } else if ("arm".equals(mojoArchitecture)) {
+              compiler = CrossCompilers.x64_arm;
+            } else {
+              compiler = CrossCompilers.x64_x86;
+            }
+          } else {
+            if ("amd64".equals(mojoArchitecture)) {
+              compiler = CrossCompilers.x86_x64;
+            } else if ("arm".equals(mojoArchitecture)) {
+              compiler = CrossCompilers.x86_arm;
+            } else {
+              compiler = CrossCompilers.x86;
+            }
+          } // todo arm
+        }
+
+        if (version.equals("8.0")) {
+          // Earlier version of VS have Windows SDK installed
+          // TODO: make more generic
+          // VS 2005 works with build in Windows SDK
+          initWindowsSdk8();
+          initPath(compiler);
+          addWindowsPaths();
+        } else {
+          initWindowsSdk();
+          initPath(compiler);
+          addWindowsSDKPaths();
+          addWindowsPaths();
+        }
+      } else {
+        version = "";
+        windowsSdkVersion = "";
+        windowsHome = null;
+      }
+    }
+  }
+
   public void configureCCTask(final CCTask task) throws MojoExecutionException {
-    if (OS.WINDOWS.equals(mojo.getOS()) && isMSVC(mojo)) {
+    if (mojo!=null && OS.WINDOWS.equals(mojo.getOS()) && isMSVC(mojo)) {
       addIncludePath(task, msvctoolhome, "include");
       addIncludePath(task, msvctoolhome, "atlmfc/include");
       if (compareVersion(windowsSdkVersion, "7.1A") <= 0) {
@@ -173,9 +251,7 @@ public class Msvc {
   }
 
   public void configureLinker(final LinkerDef linker) throws MojoExecutionException {
-    final String os = mojo.getOS();
-
-    if (os.equals(OS.WINDOWS) && isMSVC(mojo)) {
+    if (mojo!=null && OS.WINDOWS.equals(mojo.getOS()) && isMSVC(mojo)) {
       final String arch = mojo.getArchitecture();
 
       // Windows SDK
@@ -213,6 +289,45 @@ public class Msvc {
     }
   }
 
+  private boolean addIncludePath(final CCTask task, final File base, final String subDirectory)
+          throws MojoExecutionException {
+    if (base == null) {
+      return false;
+    }
+    final File file = new File(base, subDirectory);
+    if (file.exists())
+      return addIncludePathToTask(task, file);
+
+    return false;
+  }
+
+  private boolean addIncludePathToTask(final CCTask task, final File file) throws MojoExecutionException {
+    try {
+      final SystemIncludePath includePath = task.createSysIncludePath();
+      final String fullPath = file.getCanonicalPath();
+      includePath.setPath(fullPath);
+      return true;
+    } catch (final IOException e) {
+      throw new MojoExecutionException("Unable to add system include: " + file.getAbsolutePath(), e);
+    }
+  }
+
+  private boolean addPath(final File base, final String path) {
+    if (base != null) {
+      final File directory = new File(base, path);
+      if (directory.exists()) {
+        try {
+          final String fullPath = directory.getCanonicalPath();
+          paths.add(fullPath);
+          return true;
+        } catch (final IOException e) {
+          throw new IllegalArgumentException("Unable to get path: " + directory, e);
+        }
+      }
+    }
+    return false;
+  }
+
   private String getTempPath() {
     if (null == tempPath) {
       tempPath = System.getenv("TMP");
@@ -224,168 +339,97 @@ public class Msvc {
     return tempPath;
   }
 
-  public Variable getPathVariable() {
-    if (paths.isEmpty())
-      return null;
-    final Variable pathVariable = new Variable();
-    pathVariable.setKey("PATH");
-    pathVariable.setValue(StringUtils.join(paths.iterator(), File.pathSeparator));
-    return pathVariable;
-  }
-
-  public String getVersion() {
-    return version;
-  }
-
-  public String getWindowsSdkVersion() {
-    return windowsSdkVersion;
-  }
-
-  private void init() throws MojoFailureException, MojoExecutionException {
-    final String mojoOs = mojo.getOS();
-    if (NarUtil.isWindows() && OS.WINDOWS.equals(mojoOs) && isMSVC(mojo)) {
-      windowsHome = new File(System.getenv("SystemRoot"));
-
-      initVisualStudio();
-      msvctoolhome = new File(home, "VC/");
-
-      final String mojoArchitecture = mojo.getArchitecture();
-      final String osArchitecture = NarUtil.getArchitecture(null);
-      // On 64 bit OS either 32 or 64 bit tools can be used
-      // * 32 bit tools in hostx86/
-      // * 64 bit tools in hostx64/
-
-      // default use compiler tools match os
-      // - os x86: mojo(x86 / x86_x64);
-      // - os x64: mojo(x64_x86 / x64);
-      // use only 32 bit compiler tools - treat x64 as if os is x86
-      // - mojo(x86 / x86_x64)
-      // force_requested_arch - on 64 bit host match mojo host tools to target
-      // platform
-      // - os x64: mojo(x86 / x64)
-      // - os x86: mojo(x86 / x86_x64) same as default
-      CrossCompilers compiler;
-      if (force_requested_arch) {
-        if ("amd64".equals(mojoArchitecture)) {
-          if ("amd64".equals(osArchitecture)) {
-            compiler = CrossCompilers.x64;
-          } else {
-            compiler = CrossCompilers.x86_x64;
-          }
-          // } else if ("arm".equals(mojoArchitecture)) {
-          // compiler = CrossCompilers.arm;
-        } else {// else if ("x86".equals(mojoArchitecture))
-          compiler = CrossCompilers.x86;
-        }
-      } else {
-        if ("amd64".equals(osArchitecture)) {
-          if ("amd64".equals(mojoArchitecture)) {
-            compiler = CrossCompilers.x64;
-          } else if ("arm".equals(mojoArchitecture)) {
-            compiler = CrossCompilers.x64_arm;
-          } else {
-            compiler = CrossCompilers.x64_x86;
-          }
-        } else {
-          if ("amd64".equals(mojoArchitecture)) {
-            compiler = CrossCompilers.x86_x64;
-          } else if ("arm".equals(mojoArchitecture)) {
-            compiler = CrossCompilers.x86_arm;
-          } else {
-            compiler = CrossCompilers.x86;
-          }
-        } // todo arm
-      }
-
-      if (version.equals("8.0")) {
-        // Earlier version of VS have Windows SDK installed
-        // TODO: make more generic
-        // VS 2005 works with build in Windows SDK
-        initWindowsSdk8();
-        initPath(compiler);
-        addWindowsPaths();
-      } else {
-        initWindowsSdk();
-        if (compareVersion(version, "15.0") < 0) {
-          initPath(compiler);
-        } else {
-
-          final File msvcversionFile = new File(home, "VC/Auxiliary/Build/Microsoft.VCToolsVersion.default.txt");
-          String msvcversion = "14.10.25017"; // what to do if we can't read the
-                                              // current value??
-          try {
-            BufferedReader brTest = new BufferedReader(new FileReader(msvcversionFile));
-            msvcversion = brTest.readLine().trim();
-            brTest.close();
-          } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-          } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-          } finally {
-          }
-          msvctoolhome = new File(new File(home, "VC/Tools/MSVC"), msvcversion);
-
-          initPath15(compiler);
-        }
-        addWindowsSDKPaths();
-        addWindowsPaths();
-      }
-    } else {
-      version = "";
-      windowsSdkVersion = "";
-      windowsHome = null;
-    }
-  }
-
   private void initPath(CrossCompilers compiler) throws MojoExecutionException {
 
     Boolean found = true;
-    switch (compiler) {
-      case x86:
-        // compile using x86 tools.
-        found = addPath(msvctoolhome, "bin");
-        toolPathLinker = new File(msvctoolhome, "bin").getAbsolutePath();
-        break;
-      case x86_x64:
-        // cross compile x64 using x86 tools
-        found = addPath(msvctoolhome, "bin/x86_amd64");
-        addPath(msvctoolhome, "bin");
-        toolPathLinker = new File(msvctoolhome, "bin/x86_amd64").getAbsolutePath();
-        break;
-      case x86_arm:
-        // cross compile arm using x86 tools
-        found = addPath(msvctoolhome, "bin/x86_arm");
-        addPath(msvctoolhome, "bin");
-        toolPathLinker = new File(msvctoolhome, "bin/x86_arm").getAbsolutePath();
-        break;
-      case x64:
-        // compile using x64 tools
-        found = addPath(msvctoolhome, "bin/amd64");
-        toolPathLinker = new File(msvctoolhome, "bin/amd64").getAbsolutePath();
-        break;
-      case x64_x86:
-        // cross compile x86 using x64 tools
-        found = addPath(msvctoolhome, "bin/amd64_x86");
-        addPath(msvctoolhome, "bin/amd64");
-        toolPathLinker = new File(msvctoolhome, "bin/amd64_x86").getAbsolutePath();
-        break;
-      case x64_arm:
-        // cross compile arm using x64 tools
-        found = addPath(msvctoolhome, "bin/amd64_arm");
-        addPath(msvctoolhome, "bin/amd64");
-        toolPathLinker = new File(msvctoolhome, "bin/amd64_arm").getAbsolutePath();
-        break;
+    if (compareVersion(version, "15.0") < 0) {
+      switch (compiler) {
+        case x86:
+          // compile using x86 tools.
+          found = addPath(msvctoolhome, "bin");
+          toolPathLinker = new File(msvctoolhome, "bin").getAbsolutePath();
+          break;
+        case x86_x64:
+          // cross compile x64 using x86 tools
+          found = addPath(msvctoolhome, "bin/x86_amd64");
+          addPath(msvctoolhome, "bin");
+          toolPathLinker = new File(msvctoolhome, "bin/x86_amd64").getAbsolutePath();
+          break;
+        case x86_arm:
+          // cross compile arm using x86 tools
+          found = addPath(msvctoolhome, "bin/x86_arm");
+          addPath(msvctoolhome, "bin");
+          toolPathLinker = new File(msvctoolhome, "bin/x86_arm").getAbsolutePath();
+          break;
+        case x64:
+          // compile using x64 tools
+          found = addPath(msvctoolhome, "bin/amd64");
+          toolPathLinker = new File(msvctoolhome, "bin/amd64").getAbsolutePath();
+          break;
+        case x64_x86:
+          // cross compile x86 using x64 tools
+          found = addPath(msvctoolhome, "bin/amd64_x86");
+          addPath(msvctoolhome, "bin/amd64");
+          toolPathLinker = new File(msvctoolhome, "bin/amd64_x86").getAbsolutePath();
+          break;
+        case x64_arm:
+          // cross compile arm using x64 tools
+          found = addPath(msvctoolhome, "bin/amd64_arm");
+          addPath(msvctoolhome, "bin/amd64");
+          toolPathLinker = new File(msvctoolhome, "bin/amd64_arm").getAbsolutePath();
+          break;
+      }
+    } else {
+      switch (compiler) {
+        case x86: // compile using x86 tools.
+          found = addPath(msvctoolhome, "bin/HostX86/x86");
+          toolPathLinker = new File(msvctoolhome, "bin/HostX86/x86").getAbsolutePath();
+          break;
+        case x86_x64:
+          // cross compile x64 using x86 tools
+          found = addPath(msvctoolhome, "bin/HostX86/x64");
+          addPath(msvctoolhome, "bin/HostX86/x86");
+          toolPathLinker = new File(msvctoolhome, "bin/HostX86/x64").getAbsolutePath();
+          break;
+        case x86_arm:
+          // cross compile arm using x86 tools
+          found = addPath(msvctoolhome, "bin/HostX86/arm");
+          addPath(msvctoolhome, "bin/HostX86/x86");
+          toolPathLinker = new File(msvctoolhome, "bin/HostX86/arm").getAbsolutePath();
+          break;
+        case x64:
+          // compile using x64 tools
+          found = addPath(msvctoolhome, "bin/HostX64/x64");
+          toolPathLinker = new File(msvctoolhome, "bin/HostX64/x64").getAbsolutePath();
+          break;
+        case x64_x86:
+          // cross compile x86 using x64 tools
+          found = addPath(msvctoolhome, "bin/HostX64/x86");
+          addPath(msvctoolhome, "bin/HostX64/x64");
+          toolPathLinker = new File(msvctoolhome, "bin/HostX64/x86").getAbsolutePath();
+          break;
+        case x64_arm:
+          // cross compile arm using x64 tools
+          found = addPath(msvctoolhome, "bin/HostX64/arm");
+          addPath(msvctoolhome, "bin/HostX64/x64");
+          toolPathLinker = new File(msvctoolhome, "bin/HostX64/arm").getAbsolutePath();
+          break;
+      }
     }
     if (!found) {
       throw new MojoExecutionException("Unable to find bin folder for architecture " + compiler.name() + ".\n");
     }
 
-    addPath(msvctoolhome, "VCPackages");
-    addPath(home, "Common7/Tools");
-    addPath(home, "Common7/IDE");
-
+    // tools that are more generic
+    if (compareVersion(version, "15.0") < 0) {
+      addPath(msvctoolhome, "VCPackages");
+      addPath(home, "Common7/Tools");
+      addPath(home, "Common7/IDE");
+    } else {
+      addPath(home, "Common7/IDE/VC/VCPackages");
+      addPath(home, "Common7/IDE/");
+      addPath(home, "Common7/Tools");
+    }
   }
 
   private void addWindowsSDKPaths() throws MojoExecutionException {
@@ -413,55 +457,6 @@ public class Msvc {
     }
   }
 
-  private void initPath15(CrossCompilers compiler) throws MojoExecutionException {
-
-    Boolean found = true;
-    switch (compiler) {
-      case x86: // compile using x86 tools.
-        found = addPath(msvctoolhome, "bin/HostX86/x86");
-        toolPathLinker = new File(msvctoolhome, "bin/HostX86/x86").getAbsolutePath();
-        break;
-      case x86_x64:
-        // cross compile x64 using x86 tools
-        found = addPath(msvctoolhome, "bin/HostX86/x64");
-        addPath(msvctoolhome, "bin/HostX86/x86");
-        toolPathLinker = new File(msvctoolhome, "bin/HostX86/x64").getAbsolutePath();
-        break;
-      case x86_arm:
-        // cross compile arm using x86 tools
-        found = addPath(msvctoolhome, "bin/HostX86/arm");
-        addPath(msvctoolhome, "bin/HostX86/x86");
-        toolPathLinker = new File(msvctoolhome, "bin/HostX86/arm").getAbsolutePath();
-        break;
-      case x64:
-        // compile using x64 tools
-        found = addPath(msvctoolhome, "bin/HostX64/x64");
-        toolPathLinker = new File(msvctoolhome, "bin/HostX64/x64").getAbsolutePath();
-        break;
-      case x64_x86:
-        // cross compile x86 using x64 tools
-        found = addPath(msvctoolhome, "bin/HostX64/x86");
-        addPath(msvctoolhome, "bin/HostX64/x64");
-        toolPathLinker = new File(msvctoolhome, "bin/HostX64/x86").getAbsolutePath();
-        break;
-      case x64_arm:
-        // cross compile arm using x64 tools
-        found = addPath(msvctoolhome, "bin/HostX64/arm");
-        addPath(msvctoolhome, "bin/HostX64/x64");
-        toolPathLinker = new File(msvctoolhome, "bin/HostX64/arm").getAbsolutePath();
-        break;
-    }
-
-    if (!found) {
-      throw new MojoExecutionException("Unable to find bin folder for architecture " + compiler.name() + ".\n");
-    }
-
-    // tools that are more generic
-    addPath(home, "Common7/IDE/VC/VCPackages");
-    addPath(home, "Common7/IDE/");
-    addPath(home, "Common7/Tools");
-  }
-
   private void addWindowsPaths() throws MojoExecutionException {
     // clearing the path, add back the windows system folders
     addPath(windowsHome, "System32");
@@ -480,7 +475,7 @@ public class Msvc {
    *          Name of the value to retrieve.
    * @return String value.
    */
-  public static String registryGet32StringValue(com.sun.jna.platform.win32.WinReg.HKEY root, String key, String value)
+  private static String registryGet32StringValue(com.sun.jna.platform.win32.WinReg.HKEY root, String key, String value)
       throws com.sun.jna.platform.win32.Win32Exception {
     com.sun.jna.platform.win32.WinReg.HKEYByReference phkKey = new com.sun.jna.platform.win32.WinReg.HKEYByReference();
     int rc = com.sun.jna.platform.win32.Advapi32.INSTANCE.RegOpenKeyEx(root, key, 0,
@@ -792,32 +787,24 @@ public class Msvc {
     windowsSdkHome = home;
   }
 
-  public void setMojo(final AbstractNarMojo mojo) throws MojoFailureException, MojoExecutionException {
-    if (this.mojo != mojo) {
-      this.mojo = mojo;
-      init();
-    }
-
-  }
-
-  @Override
-  public String toString() {
-    return "VS Home-" + home + "\nSDKHome-" + windowsSdkHome;
-  }
-
-  public String getToolPath() {
-    return toolPathLinker;
-  }
-
-  public String getSDKToolPath() {
-    return toolPathWindowsSDK;
-  }
-
-  public void setToolPath(CompilerDef compilerDef, String name) {
-    if ("res".equals(name) || "mc".equals(name) || "idl".equals(name)) {
-      compilerDef.setToolPath(toolPathWindowsSDK);
+  private File VCToolHome() {
+    if (compareVersion(version, "15.0") < 0) {
+      return new File(home, "VC/");
     } else {
-      compilerDef.setToolPath(toolPathLinker);
+      final File msvcversionFile = new File(home, "VC/Auxiliary/Build/Microsoft.VCToolsVersion.default.txt");
+      String msvcversion = "14.10.25017"; // what to do if we can't read the
+      // current value??
+      try {
+        BufferedReader brTest = new BufferedReader(new FileReader(msvcversionFile));
+        msvcversion = brTest.readLine().trim();
+        brTest.close();
+      } catch (FileNotFoundException e) {
+        e.printStackTrace();
+      } catch (IOException e) {
+        e.printStackTrace();
+      } finally {
+      }
+      return new File(new File(home, "VC/Tools/MSVC"), msvcversion);
     }
   }
 
