@@ -188,19 +188,10 @@ public class Msvc {
           } // todo arm
         }
 
-        if (version.equals("8.0")) {
-          // Earlier version of VS have Windows SDK installed
-          // TODO: make more generic
-          // VS 2005 works with build in Windows SDK
-          initWindowsSdk8();
-          initPath(compiler);
-          addWindowsPaths();
-        } else {
-          initWindowsSdk();
-          initPath(compiler);
-          addWindowsSDKPaths();
-          addWindowsPaths();
-        }
+        initWindowsSdk();
+        initPath(compiler);
+        addWindowsSDKPaths();
+        addWindowsPaths();
       } else {
         version = "";
         windowsSdkVersion = "";
@@ -622,49 +613,33 @@ public class Msvc {
   private boolean foundSDK = false;
 
   private void initWindowsSdk() throws MojoExecutionException {
-    if (windowsSdkVersion != null && windowsSdkVersion.trim().equals(""))
-      windowsSdkVersion = null;
+    // In ancient times the Windows SDK was part of the Visual Studio installation
+    //  - version identity was by release qaurter, or by visual studio service pack level
+    // In the middle ages there was a Standalone and a Visual Studio variation (denoted by A)
+    // - version identify was specific to windows version, 6.0//6.1/7.0/7.1/8.0/8.1
+    // Recently there is only standalone, the management is incremental to match evergreen releases
+    // - version 10.  with many more specific subfolders
 
-    mojo.getLog().debug(" -- Searching for usable WindowSDK ");
-    // newer first: 10 -> 8.1 -> 8.0 -> 7.1 and look for libs specified
+    // VS 2005 - There are built in SDK files included in the VS installation
+    // TODO: for some reason this is hard coded to only use the WindowsSDK installed with VS...
+    if (compareVersion(version, "8.0") <= 0) { // builtInWindowsSDK
 
-    for (final File directory : Arrays.asList(new File("C:/Program Files (x86)/Windows Kits"),
-        new File("C:/Program Files (x86)/Microsoft SDKs/Windows"), new File("C:/Program Files/Windows Kits"),
-        new File("C:/Program Files/Microsoft SDKs/Windows"))) {
-      if (directory.exists()) {
-        final File[] kitDirectories = directory.listFiles();
-        Arrays.sort(kitDirectories, versionComparator);
-        if (kitDirectories != null) {
-          for (final File kitDirectory : kitDirectories) {
+      final String osArchitecture = NarUtil.getArchitecture(null);
+      File VCINSTALLDIR = new File(home, "VC");
 
-            if (new File(kitDirectory, "Include").exists()) {
-              // legacy SDK
-              String kitVersion = kitDirectory.getName();
-              if (kitVersion.charAt(0) == 'v') {
-                kitVersion = kitVersion.substring(1);
-              }
-              if (windowsSdkVersion != null && compareVersion(kitVersion, windowsSdkVersion) != 0)
-                continue; // skip versions not identical to exact version
-              mojo.getLog()
-                  .debug(String.format(" WindowSDK %1s found %2s", kitVersion, kitDirectory.getAbsolutePath()));
-              if (kitVersion.matches("\\d+\\.\\d+?[A-Z]?")) {
-                // windows <= 8.1
-                legacySDK(kitDirectory);
-              } else if (kitVersion.matches("\\d+?")) {
-                // windows 10 SDK supports
-                addNewSDKLibraries(kitDirectory);
-              }
-            }
-          }
-          if (libsRequired.size() == 0) // need it here to break out of the
-                                        // outer loop
-            break;
-        }
-      }
-    }
-    if (!foundSDK) { // Search for SDK with lower versions
-      for (final File directory : Arrays.asList(new File("C:/Program Files (x86)/Windows Kits"),
-          new File("C:/Program Files (x86)/Microsoft SDKs/Windows"), new File("C:/Program Files/Windows Kits"),
+      legacySDK(new File(VCINSTALLDIR,"PlatformSDK"));
+      // Additionally include the .Net includes
+      File SDKIncludeDir = new File(VCINSTALLDIR.getAbsolutePath() + File.separator + "SDK" + File.separator + "v2.0",
+          "include");
+      sdkIncludes.add(SDKIncludeDir);
+    } else {
+      if (windowsSdkVersion != null && windowsSdkVersion.trim().equals(""))
+        windowsSdkVersion = null;
+
+      mojo.getLog().debug(" -- Searching for usable WindowSDK ");
+      // newer first: 10 -> 8.1 -> 8.0 -> 7.1 and look for libs specified
+
+      for (final File directory : Arrays.asList(new File("C:/Program Files (x86)/Windows Kits"), new File("C:/Program Files (x86)/Microsoft SDKs/Windows"), new File("C:/Program Files/Windows Kits"),
           new File("C:/Program Files/Microsoft SDKs/Windows"))) {
         if (directory.exists()) {
           final File[] kitDirectories = directory.listFiles();
@@ -678,11 +653,9 @@ public class Msvc {
                 if (kitVersion.charAt(0) == 'v') {
                   kitVersion = kitVersion.substring(1);
                 }
-                if (windowsSdkVersion != null && compareVersion(kitVersion, windowsSdkVersion) > 0) {
-                  continue; // skip versions higher than the previous version
-                }
-                mojo.getLog()
-                    .debug(String.format(" WindowSDK %1s found %2s", kitVersion, kitDirectory.getAbsolutePath()));
+                if (windowsSdkVersion != null && compareVersion(kitVersion, windowsSdkVersion) != 0)
+                  continue; // skip versions not identical to exact version
+                mojo.getLog().debug(String.format(" WindowSDK %1s found %2s", kitVersion, kitDirectory.getAbsolutePath()));
                 if (kitVersion.matches("\\d+\\.\\d+?[A-Z]?")) {
                   // windows <= 8.1
                   legacySDK(kitDirectory);
@@ -693,8 +666,43 @@ public class Msvc {
               }
             }
             if (libsRequired.size() == 0) // need it here to break out of the
-                                          // outer loop
+              // outer loop
               break;
+          }
+        }
+      }
+      if (!foundSDK) { // Search for SDK with lower versions
+        for (final File directory : Arrays.asList(new File("C:/Program Files (x86)/Windows Kits"), new File("C:/Program Files (x86)/Microsoft SDKs/Windows"), new File("C:/Program Files/Windows Kits"),
+            new File("C:/Program Files/Microsoft SDKs/Windows"))) {
+          if (directory.exists()) {
+            final File[] kitDirectories = directory.listFiles();
+            Arrays.sort(kitDirectories, versionComparator);
+            if (kitDirectories != null) {
+              for (final File kitDirectory : kitDirectories) {
+
+                if (new File(kitDirectory, "Include").exists()) {
+                  // legacy SDK
+                  String kitVersion = kitDirectory.getName();
+                  if (kitVersion.charAt(0) == 'v') {
+                    kitVersion = kitVersion.substring(1);
+                  }
+                  if (windowsSdkVersion != null && compareVersion(kitVersion, windowsSdkVersion) > 0) {
+                    continue; // skip versions higher than the previous version
+                  }
+                  mojo.getLog().debug(String.format(" WindowSDK %1s found %2s", kitVersion, kitDirectory.getAbsolutePath()));
+                  if (kitVersion.matches("\\d+\\.\\d+?[A-Z]?")) {
+                    // windows <= 8.1
+                    legacySDK(kitDirectory);
+                  } else if (kitVersion.matches("\\d+?")) {
+                    // windows 10 SDK supports
+                    addNewSDKLibraries(kitDirectory);
+                  }
+                }
+              }
+              if (libsRequired.size() == 0) // need it here to break out of the
+                // outer loop
+                break;
+            }
           }
         }
       }
@@ -768,23 +776,6 @@ public class Msvc {
         sdkLibs.add(new File(libdir, libIncludeDir.getName()));
       }
     }
-  }
-
-  private void initWindowsSdk8() throws MojoExecutionException {
-    final String osArchitecture = NarUtil.getArchitecture(null);
-    // VS 2005 - The SDK files are included in the VS installation-
-    File VCINSTALLDIR = new File(home, "VC");
-
-    // File VSLibDir = new File(VCINSTALLDIR.getAbsolutePath()+File.separator+
-    // "lib" , osArchitecture);
-
-    File PlatformSDKIncludeDir = new File(VCINSTALLDIR.getAbsolutePath() + File.separator + "PlatformSDK", "include");
-    File SDKIncludeDir = new File(VCINSTALLDIR.getAbsolutePath() + File.separator + "SDK" + File.separator + "v2.0",
-        "include");
-
-    sdkIncludes.add(PlatformSDKIncludeDir);
-    sdkIncludes.add(SDKIncludeDir);
-    windowsSdkHome = home;
   }
 
   private File VCToolHome() {
