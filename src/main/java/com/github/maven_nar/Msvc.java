@@ -33,7 +33,6 @@ import com.google.common.collect.Sets;
 public class Msvc {
 
   // the home location of visual studio
-  @Parameter
   private File home;
 
   private AbstractNarMojo mojo = null;
@@ -53,20 +52,15 @@ public class Msvc {
    * <li>15.0 for VS 2017</li>
    * </ul>
    */
-  @Parameter(defaultValue = "")
-  private String version;
+  private String version = "";
 
-  @Parameter
   private File windowsSdkHome;
 
-  @Parameter
   private String windowsSdkVersion;
 
-  @Parameter
   private String tempPath;
 
-  @Parameter(defaultValue = "false")
-  private boolean force_requested_arch;
+  private boolean force_requested_arch = false;
 
   private File windowsHome;
   // The folder that contains the set of bin/include/lib folders
@@ -108,8 +102,8 @@ public class Msvc {
     pathVariable.setValue(StringUtils.join(paths.iterator(), File.pathSeparator));
     return pathVariable;
   }
-  @Override
-  public String toString() {
+
+  @Override public String toString() {
     return "VS Home-" + home + "\nSDKHome-" + windowsSdkHome;
   }
 
@@ -128,7 +122,6 @@ public class Msvc {
       compilerDef.setToolPath(toolPathLinker);
     }
   }
-
 
   public void init(final AbstractNarMojo mojo) throws MojoFailureException, MojoExecutionException {
     if (this.mojo != mojo && isMSVC(mojo)) {
@@ -201,7 +194,7 @@ public class Msvc {
   }
 
   public void configureCCTask(final CCTask task) throws MojoExecutionException {
-    if (mojo!=null && OS.WINDOWS.equals(mojo.getOS()) && isMSVC(mojo)) {
+    if (mojo != null && OS.WINDOWS.equals(mojo.getOS()) && isMSVC(mojo)) {
       addIncludePath(task, msvctoolhome, "include");
       addIncludePath(task, msvctoolhome, "atlmfc/include");
       if (compareVersion(windowsSdkVersion, "7.1A") <= 0) {
@@ -242,7 +235,7 @@ public class Msvc {
   }
 
   public void configureLinker(final LinkerDef linker) throws MojoExecutionException {
-    if (mojo!=null && OS.WINDOWS.equals(mojo.getOS()) && isMSVC(mojo)) {
+    if (mojo != null && OS.WINDOWS.equals(mojo.getOS()) && isMSVC(mojo)) {
       final String arch = mojo.getArchitecture();
 
       // Windows SDK
@@ -252,7 +245,7 @@ public class Msvc {
       }
 
       // Visual Studio
-      if( compareVersion(version, "15.0") < 0 ) {
+      if (compareVersion(version, "15.0") < 0) {
         if ("x86".equals(arch)) {
           linker.addLibraryDirectory(msvctoolhome, "lib");
           linker.addLibraryDirectory(msvctoolhome, "atlmfc/lib");
@@ -281,7 +274,7 @@ public class Msvc {
   }
 
   private boolean addIncludePath(final CCTask task, final File base, final String subDirectory)
-          throws MojoExecutionException {
+      throws MojoExecutionException {
     if (base == null) {
       return false;
     }
@@ -458,12 +451,9 @@ public class Msvc {
   /**
    * Get a registry REG_SZ value.
    *
-   * @param root
-   *          Root key.
-   * @param key
-   *          Registry path.
-   * @param value
-   *          Name of the value to retrieve.
+   * @param root  Root key.
+   * @param key   Registry path.
+   * @param value Name of the value to retrieve.
    * @return String value.
    */
   private static String registryGet32StringValue(com.sun.jna.platform.win32.WinReg.HKEY root, String key, String value)
@@ -534,8 +524,8 @@ public class Msvc {
             if (commonToolsDirectory.exists()) {
               this.version = version;
               home = commonToolsDirectory.getParentFile().getParentFile();
-              mojo.getLog().debug(String.format(" VisualStudio %1s (%2s) found %3s ", version,
-                  matcher.group(1) + matcher.group(2), home));
+              mojo.getLog().debug(String
+                  .format(" VisualStudio %1s (%2s) found %3s ", version, matcher.group(1) + matcher.group(2), home));
             }
           }
         }
@@ -545,15 +535,14 @@ public class Msvc {
         final TextStream err = new StringTextStream();
         final TextStream dbg = new StringTextStream();
 
-        NarUtil.runCommand("link", new String[] {
-            "/?"
+        NarUtil.runCommand("link", new String[] { "/?"
         }, null, null, out, err, dbg, null, true);
         final Pattern p = Pattern.compile("(\\d+\\.\\d+)\\.\\d+(\\.\\d+)?");
         final Matcher m = p.matcher(out.toString());
         if (m.find()) {
           version = m.group(1);
-          mojo.getLog().debug(String.format(" VisualStudio Not found but link runs and reports version %1s (%2s)",
-              version, m.group(0)));
+          mojo.getLog().debug(String
+              .format(" VisualStudio Not found but link runs and reports version %1s (%2s)", version, m.group(0)));
           return;
         } else {
           throw new MojoExecutionException(
@@ -564,8 +553,7 @@ public class Msvc {
   }
 
   private final Comparator<String> versionStringComparator = new Comparator<String>() {
-    @Override
-    public int compare(String o1, String o2) {
+    @Override public int compare(String o1, String o2) {
       DefaultArtifactVersion version1 = new DefaultArtifactVersion(o1);
       DefaultArtifactVersion version2 = new DefaultArtifactVersion(o2);
       return version1.compareTo(version2);
@@ -573,8 +561,7 @@ public class Msvc {
   };
 
   private final Comparator<File> versionComparator = new Comparator<File>() {
-    @Override
-    public int compare(File o1, File o2) {
+    @Override public int compare(File o1, File o2) {
       // will be sorted smallest first, so we need to invert the order of
       // the objects
       String firstDir = o2.getName(), secondDir = o1.getName();
@@ -601,9 +588,7 @@ public class Msvc {
       } catch (NumberFormatException e) {
         return firstDir.compareTo(secondDir);
       }
-      if (firstVersionString.length > maxIdx) // 10.0.150
-                                              // >
-                                              // 10.0
+      if (firstVersionString.length > maxIdx) // 10.0.150 > 10.0
         return 1;
       else if (secondVersionString.length > maxIdx) // 10.0 < 10.0.150
         return -1;
@@ -770,8 +755,8 @@ public class Msvc {
     for (final File libIncludeDir : libs) {
       // <libName> <include path> <lib path>
       if (libsRequired.remove(libIncludeDir.getName())) {
-        mojo.getLog().debug(String.format(" Using directory %1s for library %2s", libIncludeDir.getAbsolutePath(),
-            libIncludeDir.getName()));
+        mojo.getLog().debug(String
+            .format(" Using directory %1s for library %2s", libIncludeDir.getAbsolutePath(), libIncludeDir.getName()));
         sdkIncludes.add(libIncludeDir);
         sdkLibs.add(new File(libdir, libIncludeDir.getName()));
       }
