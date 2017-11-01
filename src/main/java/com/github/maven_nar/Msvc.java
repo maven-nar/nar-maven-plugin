@@ -130,8 +130,34 @@ public class Msvc {
       if (NarUtil.isWindows() && OS.WINDOWS.equals(mojoOs) && isMSVC(mojo)) {
         windowsHome = new File(System.getenv("SystemRoot"));
 
-        initVisualStudio();
+        // complex objects don't support configuration directly from properties
+        // so the same configuration is now duplicated to the mojo to allow configuration or property setting.
+        // alternate might be to just read the property, however that wouldn't get documented in API
+        //version = mojo.getMavenProject().getProperties().getProperty("nar.windows.msvc.version", version);
+        final String versionProperty = mojo.getWindowsMsvcVersion();
+        if (versionProperty != null){
+          version = versionProperty;
+        }
+
+        final String msvcDir = mojo.getWindowsMsvcDir();
+        if (msvcDir != null) {
+          home = new File(msvcDir);
+        } else {
+          initVisualStudio();
+        }
         msvctoolhome = VCToolHome();
+
+        final String windowsSdkVersionProperty = mojo.getWindowsSdkVersion();
+        if (windowsSdkVersionProperty != null) {
+          windowsSdkVersion = windowsSdkVersionProperty;
+        }
+
+        final String sdkDir = mojo.getWindowsSdkDir();
+        if (sdkDir != null) {
+          windowsSdkHome = new File(sdkDir);
+        } else {
+          initWindowsSdk();
+        }
 
         final String mojoArchitecture = mojo.getArchitecture();
         final String osArchitecture = NarUtil.getArchitecture(null);
@@ -181,7 +207,6 @@ public class Msvc {
           } // todo arm
         }
 
-        initWindowsSdk();
         initPath(compiler);
         addWindowsSDKPaths();
         addWindowsPaths();

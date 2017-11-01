@@ -190,6 +190,47 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
   @Parameter
   private Msvc msvc = new Msvc();
 
+  /**
+   * The version of MSVC to use
+   */
+  @Parameter(property = "nar.windows.msvc.version")
+  private String windowsMsvcVersion = null;
+
+  /**
+   * Provide specific path for VisualStudio (VC/CommonTools), default when not set is to search by version.
+   * Version will also determine where to find the specific tools.
+   */
+  @Parameter(property = "nar.windows.msvc.dir")
+  private String windowsMsvcDir = null;
+
+  /**
+   * The version of Windows Platform SDK to use
+   */
+  @Parameter(property = "nar.windows.sdk.version")
+  private String windowsSdkVersion = null;
+
+  /**
+   * Provide specific path for Windows Platform SDK, default when not set is to search by version.
+   */
+  @Parameter(property = "nar.windows.sdk.dir")
+  private String windowsSdkDir = null;
+
+  public String getWindowsMsvcVersion() {
+    return this.windowsMsvcVersion;
+  }
+
+  public String getWindowsMsvcDir() {
+    return this.windowsMsvcDir;
+  }
+
+  public String getWindowsSdkVersion() {
+    return this.windowsSdkVersion;
+  }
+
+  public String getWindowsSdkDir() {
+    return this.windowsSdkDir;
+  }
+
   @Override
   public final void execute() throws MojoExecutionException, MojoFailureException {
     if (this.skip) {
