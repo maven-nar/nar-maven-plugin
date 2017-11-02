@@ -17,6 +17,8 @@ install:
   - cmd: SET PATH=C:\maven\apache-maven-3.3.9\bin;%JAVA_HOME%\bin;%PATH%
   - cmd: SET MAVEN_OPTS=-XX:MaxPermSize=2g -Xmx4g
   - cmd: SET JAVA_OPTS=-XX:MaxPermSize=2g -Xmx4g
+  - cmd: SET M2_HOME=C:\maven\apache-maven-3.3.9
+  - cmd: SET MAVEN_HOME=C:\maven\apache-maven-3.3.9
   - cmd: COPY C:\maven\apache-maven-3.3.9\bin\mvn.cmd C:\maven\apache-maven-3.3.9\bin\mvn.bat
 
 build_script:
