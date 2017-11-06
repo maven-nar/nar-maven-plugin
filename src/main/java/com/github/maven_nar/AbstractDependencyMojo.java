@@ -371,7 +371,6 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
 
   private List<DependencyNode> trimDuplicates(List<DependencyNode> nodeList, List<DependencyNode> aggDepNodeList)
   {
-    getLog.info("In the new function.")
     ListIterator<org.apache.maven.shared.dependency.graph.DependencyNode> it = aggDepNodeList.listIterator();
     while (it.hasNext()) 
     {
@@ -380,7 +379,6 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
       {
         if (it == node)
         {
-          getLog().info("Duplicate trimmed.");
           it.remove();
           break;
         }
