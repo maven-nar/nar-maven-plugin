@@ -450,7 +450,6 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
         if (currentNode == node)
         {
           it.remove();
-          break;
         }
       }
     }
