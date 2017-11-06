@@ -444,10 +444,10 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     ListIterator<org.eclipse.aether.graph.DependencyNode> it = aggDepNodeList.listIterator();
     while (it.hasNext()) 
     {
-      it.next();
+      org.eclipse.aether.graph.DependencyNode currentNode = it.next();
       for (org.eclipse.aether.graph.DependencyNode node : nodeList)
       {
-        if (it == node)
+        if (currentNode == node)
         {
           it.remove();
           break;
