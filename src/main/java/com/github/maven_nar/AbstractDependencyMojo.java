@@ -355,6 +355,9 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
    */
   private List<DependencyNode> levelTraverseTreeList(List<DependencyNode>  nodeList, List <DependencyNode> aggDepNodeList )
   {
+    // Compare and trimp duplicates first
+    aggDepNodeList = trimDuplicates(nodeList, aggDepNodeList);
+
     aggDepNodeList.addAll(nodeList);
     List<DependencyNode> NodeChildList = new ArrayList<DependencyNode>();
     for (DependencyNode node : nodeList) {
@@ -364,6 +367,27 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     }
 
     return NodeChildList;
+  }
+
+  private List<DependencyNode> trimDuplicates(List<DependencyNode> nodeList, List<DependencyNode> aggDepNodeList)
+  {
+    getLog.info("In the new function.")
+    ListIterator<org.apache.maven.shared.dependency.graph.DependencyNode> it = aggDepNodeList.listIterator();
+    while (it.hasNext()) 
+    {
+      it.next();
+      for (DependencyNode node : nodeList)
+      {
+        if (it == node)
+        {
+          getLog().info("Duplicate trimmed.");
+          it.remove();
+          break;
+        }
+      }
+    }
+
+    return aggDepNodeList;
   }
 
   /**
@@ -438,7 +462,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
    * Convenience function for constructing a String representing an artifact in the form "<groupId>:<artifactId>"
    * 
    * @param artifact {@link org.eclipse.aether.Artifact artifact} to construct string from
-   * @return {@link String} in the form <groupId>:<artifactId" representing the artifact
+   * @return {@link String} in the form "<groupId>:<artifactId>" representing the artifact
    * @since 3.5.3
    */
   private String createArtifactString (org.eclipse.aether.artifact.Artifact artifact)
