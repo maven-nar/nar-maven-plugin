@@ -355,9 +355,6 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
    */
   private List<DependencyNode> levelTraverseTreeList(List<DependencyNode>  nodeList, List <DependencyNode> aggDepNodeList )
   {
-    // Compare and trimp duplicates first
-    aggDepNodeList = trimDuplicates(nodeList, aggDepNodeList);
-
     aggDepNodeList.addAll(nodeList);
     List<DependencyNode> NodeChildList = new ArrayList<DependencyNode>();
     for (DependencyNode node : nodeList) {
@@ -367,25 +364,6 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     }
 
     return NodeChildList;
-  }
-
-  private List<DependencyNode> trimDuplicates(List<DependencyNode> nodeList, List<DependencyNode> aggDepNodeList)
-  {
-    ListIterator<org.apache.maven.shared.dependency.graph.DependencyNode> it = aggDepNodeList.listIterator();
-    while (it.hasNext()) 
-    {
-      it.next();
-      for (DependencyNode node : nodeList)
-      {
-        if (it == node)
-        {
-          it.remove();
-          break;
-        }
-      }
-    }
-
-    return aggDepNodeList;
   }
 
   /**
@@ -439,6 +417,10 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
         List <org.eclipse.aether.graph.DependencyNode> aggDepNodeList,
         org.eclipse.aether.graph.DependencyNode rootNode) throws MojoExecutionException
   {
+
+    // Compare and trimp duplicates first
+    aggDepNodeList = trimDuplicates(nodeList, aggDepNodeList);
+
     aggDepNodeList.addAll(nodeList);
     
     List<org.eclipse.aether.graph.DependencyNode> NodeChildList = 
@@ -454,6 +436,26 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     }
 
     return NodeChildList;
+  }
+
+  private List<org.eclipse.aether.graph.DependencyNode> trimDuplicates(List<org.eclipse.aether.graph.DependencyNode> nodeList, 
+                                                                       List<org.eclipse.aether.graph.DependencyNode> aggDepNodeList)
+  {
+    ListIterator<org.eclipse.aether.graph.DependencyNode> it = aggDepNodeList.listIterator();
+    while (it.hasNext()) 
+    {
+      it.next();
+      for (org.eclipse.aether.graph.DependencyNode node : nodeList)
+      {
+        if (it == node)
+        {
+          it.remove();
+          break;
+        }
+      }
+    }
+
+    return aggDepNodeList;
   }
 
   /**
