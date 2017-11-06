@@ -5,18 +5,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.sun.jna.platform.win32.Advapi32Util;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -135,7 +129,7 @@ public class Msvc {
         // alternate might be to just read the property, however that wouldn't get documented in API
         //version = mojo.getMavenProject().getProperties().getProperty("nar.windows.msvc.version", version);
         final String versionProperty = mojo.getWindowsMsvcVersion();
-        if (versionProperty != null){
+        if (versionProperty != null) {
           version = versionProperty;
         }
 
@@ -144,7 +138,30 @@ public class Msvc {
           home = new File(msvcDir);
         } else {
           initVisualStudio();
+          if (!version.isEmpty()) {
+            mojo.getLog().debug(String.format(" Using VisualStudio %1s home %2s ", version, home));
+          } else {
+            final TextStream out = new StringTextStream();
+            final TextStream err = new StringTextStream();
+            final TextStream dbg = new StringTextStream();
+
+            NarUtil.runCommand("link",
+                new String[] { "/?" }, null, null, out, err, dbg, null, true);
+            final Pattern p = Pattern.compile("(\\d+\\.\\d+)\\.\\d+(\\.\\d+)?");
+            final Matcher m = p.matcher(out.toString());
+            if (m.find()) {
+              version = m.group(1);
+              mojo.getLog().debug(String
+                  .format(" VisualStudio Not found but link runs and reports version %1s (%2s)", version, m.group(0)));
+              // just use whatever is configured in the environment.
+              return;
+            } else {
+              throw new MojoExecutionException(
+                  "msvc.version not specified and no VS7 SxS or VS<Version>COMNTOOLS environment variable can be found");
+            }
+          }
         }
+
         msvctoolhome = VCToolHome();
 
         final String windowsSdkVersionProperty = mojo.getWindowsSdkVersion();
@@ -499,10 +516,27 @@ public class Msvc {
     }
   }
 
+  private static TreeMap<String, Object> visualStudioVS7SxS(com.sun.jna.platform.win32.WinReg.HKEY root, String key) {
+    com.sun.jna.platform.win32.WinReg.HKEYByReference phkKey = new com.sun.jna.platform.win32.WinReg.HKEYByReference();
+    int rc = com.sun.jna.platform.win32.Advapi32.INSTANCE.RegOpenKeyEx(root, key, 0,
+        com.sun.jna.platform.win32.WinNT.KEY_READ | com.sun.jna.platform.win32.WinNT.KEY_WOW64_32KEY, phkKey);
+    if (rc != com.sun.jna.platform.win32.W32Errors.ERROR_SUCCESS) {
+      throw new com.sun.jna.platform.win32.Win32Exception(rc);
+    }
+    try {
+      return com.sun.jna.platform.win32.Advapi32Util.registryGetValues(phkKey.getValue());
+    } finally {
+      rc = com.sun.jna.platform.win32.Advapi32.INSTANCE.RegCloseKey(phkKey.getValue());
+      if (rc != com.sun.jna.platform.win32.W32Errors.ERROR_SUCCESS) {
+        throw new com.sun.jna.platform.win32.Win32Exception(rc);
+      }
+    }
+  }
+
   private void initVisualStudio() throws MojoFailureException, MojoExecutionException {
     mojo.getLog().debug(" -- Searching for usable VisualStudio ");
 
-    mojo.getLog().debug("Linker version is  " + version);
+    mojo.getLog().debug("Requested Linker version is  \"" + version + "\"");
 
     if (version != null && version.trim().length() > 1) {
       String internalVersion;
@@ -534,44 +568,38 @@ public class Msvc {
       }
       mojo.getLog().debug(String.format(" VisualStudio %1s (%2s) found %3s ", version, internalVersion, home));
     } else {
-      version = "";
-      // TODO: First search registry for installed items, more reliable than
-      // environment.
-      for (final Entry<String, String> entry : System.getenv().entrySet()) {
-        final String key = entry.getKey();
-        final String value = entry.getValue();
-        final Pattern versionPattern = Pattern.compile("VS(\\d+)(\\d)COMNTOOLS");
-        final Matcher matcher = versionPattern.matcher(key);
-        if (matcher.matches()) {
-          final String version = matcher.group(1) + "." + matcher.group(2);
-          if (versionStringComparator.compare(version, version) > 0) {
-            final File commonToolsDirectory = new File(value);
-            if (commonToolsDirectory.exists()) {
-              this.version = version;
-              home = commonToolsDirectory.getParentFile().getParentFile();
-              mojo.getLog().debug(String
-                  .format(" VisualStudio %1s (%2s) found %3s ", version, matcher.group(1) + matcher.group(2), home));
-            }
+      this.version = ""; //
+      // First search registry for installed items, more reliable than environment.
+      for (final Entry<String, Object> entry : visualStudioVS7SxS(com.sun.jna.platform.win32.WinReg.HKEY_LOCAL_MACHINE,
+          "SOFTWARE\\Microsoft\\VisualStudio\\SxS\\VS7").entrySet()) {
+        final String newestVersion = entry.getKey();
+        final String value = entry.getValue().toString();
+        mojo.getLog().debug(String.format(" VisualStudio %1s found SxS %3s ", newestVersion, value));
+        if (versionStringComparator.compare(newestVersion, this.version) > 0) {
+          final File vsDirectory = new File(value);
+          if (vsDirectory.exists()) {
+            this.version = newestVersion;
+            home = vsDirectory;
           }
         }
       }
-      if (version.length() == 0) {
-        final TextStream out = new StringTextStream();
-        final TextStream err = new StringTextStream();
-        final TextStream dbg = new StringTextStream();
-
-        NarUtil.runCommand("link", new String[] { "/?"
-        }, null, null, out, err, dbg, null, true);
-        final Pattern p = Pattern.compile("(\\d+\\.\\d+)\\.\\d+(\\.\\d+)?");
-        final Matcher m = p.matcher(out.toString());
-        if (m.find()) {
-          version = m.group(1);
-          mojo.getLog().debug(String
-              .format(" VisualStudio Not found but link runs and reports version %1s (%2s)", version, m.group(0)));
-          return;
-        } else {
-          throw new MojoExecutionException(
-              "msvc.version not specified and no VS<Version>COMNTOOLS environment variable can be found");
+      // Search environment for common tools which is within VS.
+      final Pattern versionPattern = Pattern.compile("VS(\\d+)(\\d)COMNTOOLS");
+      for (final Entry<String, String> entry : System.getenv().entrySet()) {
+        final String key = entry.getKey();
+        final String value = entry.getValue();
+        final Matcher matcher = versionPattern.matcher(key);
+        if (matcher.matches()) {
+          final String newestVersion = matcher.group(1) + "." + matcher.group(2);
+          mojo.getLog().debug(String.format(" VisualStudio %1s (%2s) common tools found %3s ", newestVersion,
+              matcher.group(1) + matcher.group(2), value));
+          if (versionStringComparator.compare(newestVersion, this.version) > 0) {
+            final File commonToolsDirectory = new File(value);
+            if (commonToolsDirectory.exists()) {
+              this.version = newestVersion;
+              home = commonToolsDirectory.getParentFile().getParentFile();
+            }
+          }
         }
       }
     }
@@ -637,7 +665,7 @@ public class Msvc {
       final String osArchitecture = NarUtil.getArchitecture(null);
       File VCINSTALLDIR = new File(home, "VC");
 
-      legacySDK(new File(VCINSTALLDIR,"PlatformSDK"));
+      legacySDK(new File(VCINSTALLDIR, "PlatformSDK"));
       // Additionally include the .Net includes
       File SDKIncludeDir = new File(VCINSTALLDIR.getAbsolutePath() + File.separator + "SDK" + File.separator + "v2.0",
           "include");
@@ -649,7 +677,8 @@ public class Msvc {
       mojo.getLog().debug(" -- Searching for usable WindowSDK ");
       // newer first: 10 -> 8.1 -> 8.0 -> 7.1 and look for libs specified
 
-      for (final File directory : Arrays.asList(new File("C:/Program Files (x86)/Windows Kits"), new File("C:/Program Files (x86)/Microsoft SDKs/Windows"), new File("C:/Program Files/Windows Kits"),
+      for (final File directory : Arrays.asList(new File("C:/Program Files (x86)/Windows Kits"),
+          new File("C:/Program Files (x86)/Microsoft SDKs/Windows"), new File("C:/Program Files/Windows Kits"),
           new File("C:/Program Files/Microsoft SDKs/Windows"))) {
         if (directory.exists()) {
           final File[] kitDirectories = directory.listFiles();
@@ -665,7 +694,8 @@ public class Msvc {
                 }
                 if (windowsSdkVersion != null && compareVersion(kitVersion, windowsSdkVersion) != 0)
                   continue; // skip versions not identical to exact version
-                mojo.getLog().debug(String.format(" WindowSDK %1s found %2s", kitVersion, kitDirectory.getAbsolutePath()));
+                mojo.getLog()
+                    .debug(String.format(" WindowSDK %1s found %2s", kitVersion, kitDirectory.getAbsolutePath()));
                 if (kitVersion.matches("\\d+\\.\\d+?[A-Z]?")) {
                   // windows <= 8.1
                   legacySDK(kitDirectory);
@@ -682,7 +712,8 @@ public class Msvc {
         }
       }
       if (!foundSDK) { // Search for SDK with lower versions
-        for (final File directory : Arrays.asList(new File("C:/Program Files (x86)/Windows Kits"), new File("C:/Program Files (x86)/Microsoft SDKs/Windows"), new File("C:/Program Files/Windows Kits"),
+        for (final File directory : Arrays.asList(new File("C:/Program Files (x86)/Windows Kits"),
+            new File("C:/Program Files (x86)/Microsoft SDKs/Windows"), new File("C:/Program Files/Windows Kits"),
             new File("C:/Program Files/Microsoft SDKs/Windows"))) {
           if (directory.exists()) {
             final File[] kitDirectories = directory.listFiles();
@@ -699,7 +730,8 @@ public class Msvc {
                   if (windowsSdkVersion != null && compareVersion(kitVersion, windowsSdkVersion) > 0) {
                     continue; // skip versions higher than the previous version
                   }
-                  mojo.getLog().debug(String.format(" WindowSDK %1s found %2s", kitVersion, kitDirectory.getAbsolutePath()));
+                  mojo.getLog()
+                      .debug(String.format(" WindowSDK %1s found %2s", kitVersion, kitDirectory.getAbsolutePath()));
                   if (kitVersion.matches("\\d+\\.\\d+?[A-Z]?")) {
                     // windows <= 8.1
                     legacySDK(kitDirectory);
