@@ -441,17 +441,17 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
   private List<org.eclipse.aether.graph.DependencyNode> trimDuplicates(List<org.eclipse.aether.graph.DependencyNode> nodeList, 
                                                                        List<org.eclipse.aether.graph.DependencyNode> aggDepNodeList)
   {
-    ListIterator<org.eclipse.aether.graph.DependencyNode> it = aggDepNodeList.listIterator();
-    while (it.hasNext()) 
+    for (org.eclipse.aether.graph.DependencyNode node : nodeList)
     {
-      org.eclipse.aether.graph.DependencyNode currentNode = it.next();
-      for (org.eclipse.aether.graph.DependencyNode node : nodeList)
+      ListIterator<org.eclipse.aether.graph.DependencyNode> it = aggDepNodeList.listIterator();
+      do 
       {
+        org.eclipse.aether.graph.DependencyNode currentNode = it.next();
         if (currentNode == node)
         {
           it.remove();
         }
-      }
+      } while (it.hasNext());
     }
 
     return aggDepNodeList;
