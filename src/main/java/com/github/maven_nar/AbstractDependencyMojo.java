@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.ListIterator;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -383,7 +384,8 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
         new ArrayList<org.eclipse.aether.graph.DependencyNode> ();
     
     // Create list that stores current breadth
-    List <org.eclipse.aether.graph.DependencyNode> NodeChildList = rootNode.getChildren();
+    Set <org.eclipse.aether.graph.DependencyNode> NodeChildList = 
+      new LinkedHashSet<org.eclipse.aether.graph.DependencyNode>(rootNode.getChildren());
 
     // Iterate over each breadth to aggregate the dependency list
     while (!NodeChildList.isEmpty()) {
@@ -412,19 +414,19 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
    * @throws MojoExecutionException
    * @since 3.5.2
    */
-  private List<org.eclipse.aether.graph.DependencyNode> levelTraverseVerboseTreeList(
-        List<org.eclipse.aether.graph.DependencyNode>  nodeList, 
+  private Set<org.eclipse.aether.graph.DependencyNode> levelTraverseVerboseTreeList(
+        Set<org.eclipse.aether.graph.DependencyNode>  nodeList, 
         List <org.eclipse.aether.graph.DependencyNode> aggDepNodeList,
         org.eclipse.aether.graph.DependencyNode rootNode) throws MojoExecutionException
   {
-
+    // First remove duplicates in nodeList
     // Compare and trimp duplicates first
     aggDepNodeList = trimDuplicates(nodeList, aggDepNodeList);
 
     aggDepNodeList.addAll(nodeList);
     
-    List<org.eclipse.aether.graph.DependencyNode> NodeChildList = 
-        new ArrayList<org.eclipse.aether.graph.DependencyNode>();
+    Set<org.eclipse.aether.graph.DependencyNode> NodeChildList = 
+        new LinkedHashSet<org.eclipse.aether.graph.DependencyNode>();
     
     for (org.eclipse.aether.graph.DependencyNode node : nodeList) {
       if (nodeArtifactsMatch(rootNode, node)){
@@ -438,7 +440,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     return NodeChildList;
   }
 
-  private List<org.eclipse.aether.graph.DependencyNode> trimDuplicates(List<org.eclipse.aether.graph.DependencyNode> nodeList, 
+  private List<org.eclipse.aether.graph.DependencyNode> trimDuplicates(Set<org.eclipse.aether.graph.DependencyNode> nodeList, 
                                                                        List<org.eclipse.aether.graph.DependencyNode> aggDepNodeList)
   {
     for (org.eclipse.aether.graph.DependencyNode node : nodeList)
