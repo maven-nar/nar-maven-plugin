@@ -389,9 +389,9 @@ public class Linker {
     if ((this.narDependencyLibOrder == null) && (narDefaultDependencyLibOrder)) {
         this.narDependencyLibOrder = mojo.dependencyTreeOrderStr(pushDepsToLowestOrder, mojo.getDirectDepsOnly());
     } else if (pushDepsToLowestOrder && !narDefaultDependencyLibOrder) {
-        this.log.warn("pushDepsToLowestOrder will have no effect since narDefaultDependencyLibOrder is disabled");
+        mojo.getLog().warn("pushDepsToLowestOrder will have no effect since narDefaultDependencyLibOrder is disabled");
     } else if (mojo.getDirectDepsOnly() && !narDefaultDependencyLibOrder) {
-        this.log.warn("directDepsOnly will have no effect since narDefaultDependencyLibOrder is disabled");
+        mojo.getLog().warn("directDepsOnly will have no effect since narDefaultDependencyLibOrder is disabled");
     }
 
     // record the preference for nar dependency library link order
