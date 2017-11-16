@@ -325,7 +325,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
   }
   
   /**
-   * Get List of Nodes of Dependency tree serialised by traversing nodes
+   * Get List of Nodes of Dependency tree serialized by traversing nodes
    * in Level-Order way (also called BFS algorithm)
    *
    * @param rootNode root node of the project Dependency tree

@@ -180,6 +180,15 @@ public class NarInfo {
       return this.artifactId;
   }
 
+  /**
+   * Get the version of the NarInfo instance
+   * @return {@link String} representing a NarInfo object's version.
+   * @since 3.5.3
+   */
+  public String getVersion() {
+      return this.version;
+  }
+
   public final void read(final JarFile jar) throws IOException {
     this.info.load(jar.getInputStream(getNarPropertiesEntry(jar)));
   }
