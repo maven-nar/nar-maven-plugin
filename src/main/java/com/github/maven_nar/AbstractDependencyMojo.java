@@ -420,8 +420,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
         org.eclipse.aether.graph.DependencyNode rootNode) throws MojoExecutionException
   {
     // First remove duplicates in nodeList
-    // Compare and trimp duplicates first
-    aggDepNodeList = trimDuplicates(nodeList, aggDepNodeList);
+    aggDepNodeList.removeAll(nodeList);
 
     aggDepNodeList.addAll(nodeList);
     
@@ -438,25 +437,6 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     }
 
     return NodeChildList;
-  }
-
-  private List<org.eclipse.aether.graph.DependencyNode> trimDuplicates(Set<org.eclipse.aether.graph.DependencyNode> nodeList, 
-                                                                       List<org.eclipse.aether.graph.DependencyNode> aggDepNodeList)
-  {
-    for (org.eclipse.aether.graph.DependencyNode node : nodeList)
-    {
-      ListIterator<org.eclipse.aether.graph.DependencyNode> it = aggDepNodeList.listIterator();
-      while (it.hasNext()) 
-      {
-        org.eclipse.aether.graph.DependencyNode currentNode = it.next();
-        if (currentNode == node)
-        {
-          it.remove();
-        }
-      }
-    }
-
-    return aggDepNodeList;
   }
 
   /**
