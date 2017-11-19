@@ -1,3 +1,6 @@
+[![](https://travis-ci.org/maven-nar/nar-maven-plugin.svg?branch=master)](https://travis-ci.org/maven-nar/nar-maven-plugin)
+[![](https://ci.appveyor.com/api/projects/status/h7w25ou1vmtypw6f?svg=true)](https://ci.appveyor.com/project/maven-nar/nar-maven-plugin)
+
 The NAR plugin for Maven allows you to compile native code (C++, C and
 Fortran) on a number of different architectures (Linux, Windows, MacOSX,
 Solaris, FreeBSD, ...) and with a number of different compilers/linkers
