@@ -190,6 +190,47 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
   @Parameter
   private Msvc msvc = new Msvc();
 
+  /**
+   * The version of MSVC to use
+   */
+  @Parameter(property = "nar.windows.msvc.version")
+  private String windowsMsvcVersion = null;
+
+  /**
+   * Provide specific path for VisualStudio (VC/CommonTools), default when not set is to search by version.
+   * Version will also determine where to find the specific tools.
+   */
+  @Parameter(property = "nar.windows.msvc.dir")
+  private String windowsMsvcDir = null;
+
+  /**
+   * The version of Windows Platform SDK to use
+   */
+  @Parameter(property = "nar.windows.sdk.version")
+  private String windowsSdkVersion = null;
+
+  /**
+   * Provide specific path for Windows Platform SDK, default when not set is to search by version.
+   */
+  @Parameter(property = "nar.windows.sdk.dir")
+  private String windowsSdkDir = null;
+
+  public String getWindowsMsvcVersion() {
+    return this.windowsMsvcVersion;
+  }
+
+  public String getWindowsMsvcDir() {
+    return this.windowsMsvcDir;
+  }
+
+  public String getWindowsSdkVersion() {
+    return this.windowsSdkVersion;
+  }
+
+  public String getWindowsSdkDir() {
+    return this.windowsSdkDir;
+  }
+
   @Override
   public final void execute() throws MojoExecutionException, MojoFailureException {
     if (this.skip) {
@@ -262,7 +303,7 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
   }
 
   public Msvc getMsvc() throws MojoFailureException, MojoExecutionException {
-    this.msvc.setMojo(this);
+    this.msvc.init(this);
     return this.msvc;
   }
 
@@ -334,7 +375,6 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
     this.os = NarUtil.getOS(this.os);
     this.linker = NarUtil.getLinker(this.linker, getLog()); // linker name set in NarUtil.getAOL if not configured
     this.aolId = NarUtil.getAOL(this.mavenProject, this.architecture, this.os, this.linker, this.aol, getLog());
-    this.msvc.setMojo(this);
 
     final Model model = this.mavenProject.getModel();
     final Properties properties = model.getProperties();
