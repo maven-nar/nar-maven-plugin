@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -35,8 +35,6 @@ import com.github.maven_nar.cpptasks.TargetMatcher;
 import com.github.maven_nar.cpptasks.VersionInfo;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 
-
-
 /**
  * Platform specific behavior for Microsoft Windows.
  *
@@ -45,29 +43,26 @@ import com.github.maven_nar.cpptasks.compiler.LinkType;
 public final class WindowsPlatform {
 
   /**
-   * Constructor.
-   */
-  private WindowsPlatform() {
-  }
-  /**
    * Adds source or object files to the bidded fileset to
    * support version information.
    *
-   * @param versionInfo version information
-   * @param linkType link type
-   * @param isDebug true if debug build
-   * @param outputFile name of generated executable
-   * @param objDir directory for generated files
-   * @param matcher bidded fileset
-   * @throws IOException if unable to write version resource
+   * @param versionInfo
+   *          version information
+   * @param linkType
+   *          link type
+   * @param isDebug
+   *          true if debug build
+   * @param outputFile
+   *          name of generated executable
+   * @param objDir
+   *          directory for generated files
+   * @param matcher
+   *          bidded fileset
+   * @throws IOException
+   *           if unable to write version resource
    */
-  public static void addVersionFiles(final VersionInfo versionInfo,
-                                     final LinkType linkType,
-                                     final File outputFile,
-                                     final boolean isDebug,
-                                     final File objDir,
-                                     final TargetMatcher matcher)
-      throws IOException {
+  public static void addVersionFiles(final VersionInfo versionInfo, final LinkType linkType, final File outputFile,
+      final boolean isDebug, final File objDir, final TargetMatcher matcher) throws IOException {
     if (versionInfo == null) {
       throw new NullPointerException("versionInfo");
     }
@@ -84,23 +79,22 @@ public final class WindowsPlatform {
     /**
      * Fully resolve version info
      */
-    VersionInfo mergedInfo = versionInfo.merge();
+    final VersionInfo mergedInfo = versionInfo.merge();
 
-    File versionResource = new File(objDir, "versioninfo.rc");
+    final File versionResource = new File(objDir, "versioninfo.rc");
 
     boolean notChanged = false;
     //
-    //   if the resource exists
+    // if the resource exists
     //
     if (versionResource.exists()) {
-      ByteArrayOutputStream memStream = new ByteArrayOutputStream();
-      Writer writer = new BufferedWriter(new OutputStreamWriter(memStream));
+      final ByteArrayOutputStream memStream = new ByteArrayOutputStream();
+      final Writer writer = new BufferedWriter(new OutputStreamWriter(memStream));
       writeResource(writer, mergedInfo, outputFile, isDebug, linkType);
       writer.close();
-      ByteArrayInputStream proposedResource = new ByteArrayInputStream(
-          memStream.toByteArray());
+      final ByteArrayInputStream proposedResource = new ByteArrayInputStream(memStream.toByteArray());
 
-      InputStream existingResource = new FileInputStream(versionResource);
+      final InputStream existingResource = new FileInputStream(versionResource);
       //
       //
       //
@@ -109,78 +103,94 @@ public final class WindowsPlatform {
     }
 
     //
-    //   if the resource file did not exist or will be changed then
-    //       write the file
+    // if the resource file did not exist or will be changed then
+    // write the file
     //
     if (!notChanged) {
-      Writer writer = new BufferedWriter(
-          new OutputStreamWriter(
-          new FileOutputStream(versionResource)));
+      final Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(versionResource)));
       writeResource(writer, mergedInfo, outputFile, isDebug, linkType);
       writer.close();
     }
     if (matcher != null) {
-      matcher.visit(new File(versionResource.getParent()),
-                    versionResource.getName());
+      matcher.visit(new File(versionResource.getParent()), versionResource.getName());
     }
 
+  }
+
+  /**
+   * Converts parsed version information into a string representation.
+   *
+   * @param buf
+   *          StringBuffer string buffer to receive version number
+   * @param version
+   *          short[] four-element array
+   */
+  private static void encodeVersion(final StringBuffer buf, final short[] version) {
+    for (int i = 0; i < 3; i++) {
+      buf.append(Short.toString(version[i]));
+      buf.append(',');
+    }
+    buf.append(Short.toString(version[3]));
   }
 
   /**
    * Compare two input streams for duplicate content
    *
    * Naive implementation, but should not be performance issue.
-   * @param stream1 stream
-   * @param stream2 stream
+   * 
+   * @param stream1
+   *          stream
+   * @param stream2
+   *          stream
    * @return true if streams are identical in content
-   * @throws IOException if error reading streams
+   * @throws IOException
+   *           if error reading streams
    */
-  private static boolean hasSameContent(final InputStream stream1,
-                                        final InputStream stream2)
-      throws IOException {
+  private static boolean hasSameContent(final InputStream stream1, final InputStream stream2) throws IOException {
     int byte1 = -1;
     int byte2 = -1;
     do {
       byte1 = stream1.read();
       byte2 = stream2.read();
 
-    }
-    while (byte1 == byte2 && byte1 != -1);
-    return (byte1 == byte2);
+    } while (byte1 == byte2 && byte1 != -1);
+    return byte1 == byte2;
   }
-
 
   /**
    * Parse version string into array of four short values.
-   * @param version String version
+   * 
+   * @param version
+   *          String version
    * @return short[] four element array
    */
   public static short[] parseVersion(final String version) {
-    short[] values = new short[] {
-        0, 0, 0, 0};
+    final short[] values = new short[] {
+        0, 0, 0, 0
+    };
     if (version != null) {
-      StringBuffer buf = new StringBuffer(version);
+      final StringBuffer buf = new StringBuffer(version);
       int start = 0;
       for (int i = 0; i < 4; i++) {
         int end = version.indexOf('.', start);
         if (end <= 0) {
           end = version.length();
           for (int j = end; j > start; j--) {
-            String part = buf.substring(start, end);
+            final String part = buf.substring(start, end);
             try {
               values[i] = Short.parseShort(part);
               break;
-            } catch (NumberFormatException ex) {
+            } catch (final NumberFormatException ex) {
               values[i] = 0;
             }
           }
           break;
         } else {
-          String part = buf.substring(start, end);
+          final String part = buf.substring(start, end);
           try {
             values[i] = Short.parseShort(part);
             start = end + 1;
-          } catch (NumberFormatException ex) {
+          } catch (final NumberFormatException ex) {
             break;
           }
         }
@@ -190,39 +200,28 @@ public final class WindowsPlatform {
   }
 
   /**
-   * Converts parsed version information into a string representation.
-   *
-   * @param buf StringBuffer string buffer to receive version number
-   * @param version short[] four-element array
-   */
-  private static void encodeVersion(final StringBuffer buf,
-                                    final short[] version) {
-    for (int i = 0; i < 3; i++) {
-      buf.append(Short.toString(version[i]));
-      buf.append(',');
-    }
-    buf.append(Short.toString(version[3]));
-  }
-
-  /**
    * Writes windows resource.
-   * @param writer writer, may not be nul
-   * @param versionInfo version information
-   * @param outputFile executable file
-   * @param isDebug true if debug
-   * @param linkType link type
-   * @throws IOException if error writing resource file
+   * 
+   * @param writer
+   *          writer, may not be nul
+   * @param versionInfo
+   *          version information
+   * @param outputFile
+   *          executable file
+   * @param isDebug
+   *          true if debug
+   * @param linkType
+   *          link type
+   * @throws IOException
+   *           if error writing resource file
    */
-  public static void writeResource(final Writer writer,
-                                   final VersionInfo versionInfo,
-                                   final File outputFile,
-                                   final boolean isDebug,
-                                   final LinkType linkType) throws IOException {
+  public static void writeResource(final Writer writer, final VersionInfo versionInfo, final File outputFile,
+      final boolean isDebug, final LinkType linkType) throws IOException {
 
-    //writer.write("#include \"windows.h\"\n");
+    writer.write("#include \"windows.h\"\n");
 
     writer.write("VS_VERSION_INFO VERSIONINFO\n");
-    StringBuffer buf = new StringBuffer("FILEVERSION ");
+    final StringBuffer buf = new StringBuffer("FILEVERSION ");
     encodeVersion(buf, parseVersion(versionInfo.getFileversion()));
     buf.append("\nPRODUCTVERSION ");
     encodeVersion(buf, parseVersion(versionInfo.getProductversion()));
@@ -230,8 +229,8 @@ public final class WindowsPlatform {
     writer.write(buf.toString());
     buf.setLength(0);
     buf.append("FILEFLAGSMASK 0x1L /* VS_FF_DEBUG */");
-    Boolean patched = versionInfo.getPatched();
-    Boolean prerelease = versionInfo.getPrerelease();
+    final Boolean patched = versionInfo.getPatched();
+    final Boolean prerelease = versionInfo.getPrerelease();
     if (patched != null) {
       buf.append(" | 0x4L /* VS_FF_PATCHED */");
     }
@@ -258,9 +257,11 @@ public final class WindowsPlatform {
     if (Boolean.TRUE.equals(prerelease)) {
       buf.append("0x2L /* VS_FF_PRERELEASE */ | ");
     }
+    // FIXME: What are the possible values of private build? Would it be sufficient to check if private build is empty?
     if (Boolean.TRUE.equals(versionInfo.getPrivatebuild())) {
       buf.append("0x8L /* VS_FF_PRIVATEBUILD */ | ");
     }
+    // FIXME: What are the possible values of special build? Would it be sufficient to check if special build is empty?
     if (Boolean.TRUE.equals(versionInfo.getSpecialbuild())) {
       buf.append("0x20L /* VS_FF_SPECIALBUILD */ | ");
     }
@@ -311,7 +312,7 @@ public final class WindowsPlatform {
       writer.write(versionInfo.getFileversion());
       writer.write("\\0\"\n");
     }
-    String baseName = CUtil.getBasename(outputFile);
+    final String baseName = CUtil.getBasename(outputFile);
     String internalName = versionInfo.getInternalname();
     if (internalName == null) {
       internalName = baseName;
@@ -363,6 +364,12 @@ public final class WindowsPlatform {
     writer.write("#endif\n");
     writer.write("END\n");
     writer.write("END\n");
+  }
+
+  /**
+   * Constructor.
+   */
+  private WindowsPlatform() {
   }
 
 }

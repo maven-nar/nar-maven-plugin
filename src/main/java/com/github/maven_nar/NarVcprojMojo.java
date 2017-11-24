@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,6 +25,17 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.model.Profile;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+
 import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.CUtil;
 import com.github.maven_nar.cpptasks.CompilerDef;
@@ -40,320 +51,298 @@ import com.github.maven_nar.cpptasks.types.LibrarySet;
 import com.github.maven_nar.cpptasks.types.LinkerArgument;
 import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-
 /**
  * Generates a Visual Studio 2005 project file (vcproj) Heavily inspired by
  * NarCompileMojo.
- * 
+ *
  * @author Darren Sargent
- * 
+ *
  */
-@Mojo(name = "nar-vcproj", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE)
+@Mojo(name = "nar-vcproj", defaultPhase = LifecyclePhase.GENERATE_RESOURCES,
+  requiresDependencyResolution = ResolutionScope.COMPILE)
 public class NarVcprojMojo extends AbstractCompileMojo {
 
-	@Override
-	protected List/*<Artifact>*/ getArtifacts() {
-		return getMavenProject().getCompileArtifacts();  // Artifact.SCOPE_COMPILE 
-	}
+  // FIXME: code duplication with NarCompileMojo
+  private void createVcProjFile(final Project antProject, final Library library)
+      throws MojoExecutionException, MojoFailureException {
 
-	public void narExecute() throws MojoExecutionException,
-			MojoFailureException {
+    // configure task
+    final CCTask task = new CCTask();
+    task.setProject(antProject);
+    task.setDebug(true);
 
-		// Only do this if MSVC++ compiler is being used.
-		if (!getOS().equals(OS.WINDOWS)) {
-			getLog().debug("Skipping -- not running on Windows");
-			return;
-		}
+    // subsystem (console)
+    final SubsystemEnum subSystem = new SubsystemEnum();
+    subSystem.setValue(library.getSubSystem());
+    task.setSubsystem(subSystem);
 
-		// need to run with profile "windows-debug". No other profiles are valid
-		// for vcproj generation.
-		boolean debug = false;
+    // outtype
+    final OutputTypeEnum outTypeEnum = new OutputTypeEnum();
+    final String type = library.getType();
+    outTypeEnum.setValue(type);
+    task.setOuttype(outTypeEnum);
 
-		List profiles = NarUtil.collectActiveProfiles(getMavenProject());
-		for (Iterator i = profiles.iterator(); i.hasNext();) {
-			org.apache.maven.model.Profile profile = (org.apache.maven.model.Profile) i
-					.next();
-			if (profile.getId().equalsIgnoreCase("windows-debug")) {
-				debug = true;
-				break;
-			}
-		}
+    // stdc++
+    task.setLinkCPP(library.linkCPP());
 
-		if (!debug) {
-			getLog()
-					.info(
-							"NAR: Skipping vcproj generation.  Run with -P windows-debug to enable this step.");
-			return;
-		}
+    // TODO: this should match the standard NAR location defined by layout
+    // similar to Nar Compile
+    // outDir
+    File outDir = new File(getTargetDirectory(), "bin");
+    outDir = new File(outDir, getAOL().toString());
+    outDir.mkdirs();
 
-		if (getLibraries().isEmpty()) {
-			getLog()
-					.info(
-							"NAR: Skipping vcproj generation.  No libraries to be built.");
-			return;
-		}
+    // outFile
+    final File outFile = new File(outDir, getOutput(getAOL(), type));
 
-//		super.narExecute();
+    getLog().debug("NAR - output: '" + outFile + "'");
+    task.setOutfile(outFile);
 
-		// arbitrarily grab the first library -- we're going to make treat it as
-		// an exe anyway, whatever type it's supposed to be.
-		createVcProjFile(getAntProject(), (Library) getLibraries().get(0));
-	}
+    // object directory
+    File objDir = new File(getTargetDirectory(), "obj");
+    objDir = new File(objDir, getAOL().toString());
+    objDir.mkdirs();
+    task.setObjdir(objDir);
 
-	// FIXME: code duplication with NarCompileMojo
-	private void createVcProjFile(Project antProject, Library library)
-			throws MojoExecutionException, MojoFailureException {
+    // failOnError, libtool
+    task.setFailonerror(failOnError(getAOL()));
+    task.setLibtool(useLibtool(getAOL()));
 
-		// configure task
-		CCTask task = new CCTask();
-		task.setProject(antProject);
-		task.setDebug(true);
+    // runtime
+    final RuntimeType runtimeType = new RuntimeType();
+    runtimeType.setValue(getRuntime(getAOL()));
+    task.setRuntime(runtimeType);
 
-		// subsystem (console)
-        SubsystemEnum subSystem = new SubsystemEnum();
-        subSystem.setValue( library.getSubSystem() );
-        task.setSubsystem( subSystem );
-        
-		// outtype
-		OutputTypeEnum outTypeEnum = new OutputTypeEnum();
-		String type = library.getType();
-		outTypeEnum.setValue(type);
-		task.setOuttype(outTypeEnum);
+    // add C++ compiler
+    final CompilerDef cpp = getCpp().getCompiler(Compiler.MAIN, null);
+    if (cpp != null) {
+      task.addConfiguredCompiler(cpp);
+    }
 
-		// stdc++
-		task.setLinkCPP(library.linkCPP());
+    // add VCPROJ_MOJO def (see UnitTestDriverImpl.cpp generated by Krusoe
+    // plugin)
+    final DefineSet defineSet = new DefineSet();
+    final DefineArgument defineArgument = new DefineArgument();
+    defineArgument.setName("VCPROJ_MOJO");
+    defineSet.addDefine(defineArgument);
+    cpp.addConfiguredDefineset(defineSet);
 
-		// TODO: this should match the standard NAR location defined by layout similar to Nar Compile
-		// outDir
-		File outDir = new File(getTargetDirectory(), "bin");
-		outDir = new File(outDir, getAOL().toString());
-		outDir.mkdirs();
+    // add javah include path
+    final File jniDirectory = getJavah().getJniDirectory();
+    if (jniDirectory.exists()) {
+      task.createIncludePath().setPath(jniDirectory.getPath());
+    }
 
-		// outFile
-		File outFile = new File(outDir, getOutput(getAOL(), type) );
+    // add java include paths
+    getJava().addIncludePaths(task, Library.EXECUTABLE);
 
-		getLog().debug("NAR - output: '" + outFile + "'");
-		task.setOutfile(outFile);
+    getMsvc().configureCCTask(task);
 
-		// object directory
-		File objDir = new File(getTargetDirectory(), "obj");
-		objDir = new File(objDir, getAOL().toString());
-		objDir.mkdirs();
-		task.setObjdir(objDir);
+    final List<NarArtifact> dependencies = getNarArtifacts();
+    // add dependency include paths
+    for (final Object element : dependencies) {
+      // FIXME, handle multiple includes from one NAR
+      final NarArtifact narDependency = (NarArtifact) element;
+      final String binding = narDependency.getNarInfo().getBinding(getAOL(), Library.STATIC);
+      getLog().debug("Looking for " + narDependency + " found binding " + binding);
+      if (!binding.equals(Library.JNI)) {
+        final File unpackDirectory = getUnpackDirectory();
+        final File include = getLayout().getIncludeDirectory(unpackDirectory, narDependency.getArtifactId(),
+            narDependency.getBaseVersion());
+        getLog().debug("Looking for directory: " + include);
+        if (include.exists()) {
+          task.createIncludePath().setPath(include.getPath());
+        } else {
+          getLog().warn(String.format("Unable to locate %1$s lib include path '%2$s'", binding, include));
+        }
+      }
+    }
 
-		// failOnError, libtool
-		task.setFailonerror(failOnError(getAOL()));
-		task.setLibtool(useLibtool(getAOL()));
+    // add linker
+    final LinkerDef linkerDefinition = getLinker().getLinker(this, task, getOS(), getAOL().getKey() + ".linker.",
+        type);
+    task.addConfiguredLinker(linkerDefinition);
 
-		// runtime
-		RuntimeType runtimeType = new RuntimeType();
-		runtimeType.setValue(getRuntime(getAOL()));
-		task.setRuntime(runtimeType);
+    // add dependency libraries
+    // FIXME: what about PLUGIN and STATIC, depending on STATIC, should we
+    // not add all libraries, see NARPLUGIN-96
+    if (type.equals(Library.SHARED) || type.equals(Library.JNI) || type.equals(Library.EXECUTABLE)) {
 
-		// add C++ compiler
-		CompilerDef cpp = getCpp().getCompiler(Compiler.MAIN,null);
-		if (cpp != null) {
-			task.addConfiguredCompiler(cpp);
-		}
-		
-		// add VCPROJ_MOJO def (see UnitTestDriverImpl.cpp generated by Krusoe plugin)
-		DefineSet defineSet = new DefineSet();
-		DefineArgument defineArgument = new DefineArgument();
-		defineArgument.setName("VCPROJ_MOJO");
-		defineSet.addDefine(defineArgument);
-		cpp.addConfiguredDefineset(defineSet);
-		
-		
-		// add javah include path
-		File jniDirectory = getJavah().getJniDirectory();
-		if (jniDirectory.exists()) {
-			task.createIncludePath().setPath(jniDirectory.getPath());
-		}
+      final List depLibOrder = getDependencyLibOrder();
+      List depLibs = dependencies;
 
-		// add java include paths
-		getJava().addIncludePaths(task, Library.EXECUTABLE);
-		
-		List<NarArtifact> dependencies = getNarArtifacts();
-		// add dependency include paths
-		for (Iterator i = dependencies.iterator(); i.hasNext();) {
-			// FIXME, handle multiple includes from one NAR
-			NarArtifact narDependency = (NarArtifact) i.next();
-			String binding = narDependency.getNarInfo().getBinding(getAOL(),
-					Library.STATIC);
-			getLog().debug(
-					"Looking for " + narDependency + " found binding "
-							+ binding);
-			if (!binding.equals(Library.JNI)) {
-                File unpackDirectory = getUnpackDirectory();
-                File include =
-                    getLayout().getIncludeDirectory( unpackDirectory, narDependency.getArtifactId(),
-                                                     narDependency.getBaseVersion() );
-                getLog().debug("Looking for directory: " + include);
-				if (include.exists()) {
-					task.createIncludePath().setPath(include.getPath());
-				} else {
-					throw new MojoExecutionException(
-							"NAR: unable to locate include path: " + include);
-				}
-			}
-		}
+      // reorder the libraries that come from the nar dependencies
+      // to comply with the order specified by the user
+      if (depLibOrder != null && !depLibOrder.isEmpty()) {
 
-		// add linker
-		LinkerDef linkerDefinition = getLinker().getLinker(this, antProject,
-				getOS(), getAOL().getKey() + ".linker.", type);
-		task.addConfiguredLinker(linkerDefinition);
+        final List tmp = new LinkedList();
 
-		// add dependency libraries
-		// FIXME: what about PLUGIN and STATIC, depending on STATIC, should we
-		// not add all libraries, see NARPLUGIN-96
-		if (type.equals(Library.SHARED) || type.equals(Library.JNI)
-				|| type.equals(Library.EXECUTABLE)) {
+        for (final Object aDepLibOrder : depLibOrder) {
 
-			List depLibOrder = getDependencyLibOrder();
-			List depLibs = dependencies;
+          final String depToOrderName = (String) aDepLibOrder;
 
-			// reorder the libraries that come from the nar dependencies
-			// to comply with the order specified by the user
-			if ((depLibOrder != null) && !depLibOrder.isEmpty()) {
+          for (final Iterator j = depLibs.iterator(); j.hasNext(); ) {
 
-				List tmp = new LinkedList();
+            final NarArtifact dep = (NarArtifact) j.next();
+            final String depName = dep.getGroupId() + ":" + dep.getArtifactId();
 
-				for (Iterator i = depLibOrder.iterator(); i.hasNext();) {
+            if (depName.equals(depToOrderName)) {
 
-					String depToOrderName = (String) i.next();
+              tmp.add(dep);
+              j.remove();
+            }
+          }
+        }
 
-					for (Iterator j = depLibs.iterator(); j.hasNext();) {
+        tmp.addAll(depLibs);
+        depLibs = tmp;
+      }
 
-						NarArtifact dep = (NarArtifact) j.next();
-						String depName = dep.getGroupId() + ":"
-								+ dep.getArtifactId();
+      for (final Object depLib : depLibs) {
 
-						if (depName.equals(depToOrderName)) {
+        final NarArtifact dependency = (NarArtifact) depLib;
 
-							tmp.add(dep);
-							j.remove();
-						}
-					}
-				}
+        // FIXME no handling of "local"
 
-				tmp.addAll(depLibs);
-				depLibs = tmp;
-			}
+        // FIXME, no way to override this at this stage
+        final String binding = dependency.getNarInfo().getBinding(getAOL(), Library.STATIC);
+        getLog().debug("Using Binding: " + binding);
+        AOL aol = getAOL();
+        aol = dependency.getNarInfo().getAOL(getAOL());
+        getLog().debug("Using Library AOL: " + aol.toString());
 
-			for (Iterator i = depLibs.iterator(); i.hasNext();) {
+        if (!binding.equals(Library.JNI) && !binding.equals(Library.NONE) && !binding.equals(Library.EXECUTABLE)) {
+          final File unpackDirectory = getUnpackDirectory();
+          final File dir = getLayout()
+              .getLibDirectory(unpackDirectory, dependency.getArtifactId(), dependency.getBaseVersion(), aol.toString(),
+                  binding);
+          getLog().debug("Looking for Library Directory: " + dir);
+          if (dir.exists()) {
+            final LibrarySet libSet = new LibrarySet();
+            libSet.setProject(antProject);
 
-				NarArtifact dependency = (NarArtifact) i.next();
+            // FIXME, no way to override
+            final String libs = dependency.getNarInfo().getLibs(getAOL());
+            if (libs != null && !libs.equals("")) {
+              getLog().debug("Using LIBS = " + libs);
+              libSet.setLibs(new CUtil.StringArrayBuilder(libs));
+              libSet.setDir(dir);
+              task.addLibset(libSet);
+            }
+          } else {
+            getLog().debug("Library Directory " + dir + " does NOT exist.");
+          }
 
-				// FIXME no handling of "local"
+          // FIXME, look again at this, for multiple dependencies we
+          // may need to remove duplicates
+          final String options = dependency.getNarInfo().getOptions(getAOL());
+          if (options != null && !options.equals("")) {
+            getLog().debug("Using OPTIONS = " + options);
+            final LinkerArgument arg = new LinkerArgument();
+            arg.setValue(options);
+            linkerDefinition.addConfiguredLinkerArg(arg);
+          }
 
-				// FIXME, no way to override this at this stage
-				String binding = dependency.getNarInfo().getBinding(getAOL(),
-						Library.STATIC);
-				getLog().debug("Using Binding: " + binding);
-				AOL aol = getAOL();
-				aol = dependency.getNarInfo().getAOL(getAOL());
-				getLog().debug("Using Library AOL: " + aol.toString());
+          final String sysLibs = dependency.getNarInfo().getSysLibs(getAOL());
 
-                if ( !binding.equals( Library.JNI ) && !binding.equals( Library.NONE ) && !binding.equals( Library.EXECUTABLE) )
-                {
-                    File unpackDirectory = getUnpackDirectory();
-                    File dir =
-                        getLayout().getLibDirectory( unpackDirectory, dependency.getArtifactId(),
-                                                     dependency.getBaseVersion(), aol.toString(), binding );
-					getLog().debug("Looking for Library Directory: " + dir);
-					if (dir.exists()) {
-						LibrarySet libSet = new LibrarySet();
-						libSet.setProject(antProject);
+          if (sysLibs != null && !sysLibs.equals("")) {
+            getLog().debug("Using SYSLIBS = " + sysLibs);
+            final SystemLibrarySet sysLibSet = new SystemLibrarySet();
+            sysLibSet.setProject(antProject);
 
-						// FIXME, no way to override
-						String libs = dependency.getNarInfo().getLibs(getAOL());
-						if ((libs != null) && !libs.equals("")) {
-							getLog().debug("Using LIBS = " + libs);
-							libSet.setLibs(new CUtil.StringArrayBuilder(libs));
-							libSet.setDir(dir);
-							task.addLibset(libSet);
-						}
-					} else {
-						getLog()
-								.debug(
-										"Library Directory " + dir
-												+ " does NOT exist.");
-					}
+            sysLibSet.setLibs(new CUtil.StringArrayBuilder(sysLibs));
 
-					// FIXME, look again at this, for multiple dependencies we
-					// may need to remove duplicates
-					String options = dependency.getNarInfo().getOptions(
-							getAOL());
-					if ((options != null) && !options.equals("")) {
-						getLog().debug("Using OPTIONS = " + options);
-						LinkerArgument arg = new LinkerArgument();
-						arg.setValue(options);
-						linkerDefinition.addConfiguredLinkerArg(arg);
-					}
+            task.addSyslibset(sysLibSet);
+          }
+        }
+      }
 
-					String sysLibs = dependency.getNarInfo().getSysLibs(
-							getAOL());
+      // Add JVM to linker
+      getJava().addRuntime(task, getJavaHome(getAOL()), getOS(), getAOL().getKey() + "java.");
 
-					if ((sysLibs != null) && !sysLibs.equals("")) {
-						getLog().debug("Using SYSLIBS = " + sysLibs);
-						SystemLibrarySet sysLibSet = new SystemLibrarySet();
-						sysLibSet.setProject(antProject);
+      // DS: generate project file
+      getLog().debug("NAR: Writing project file...");
+      final ProjectWriterEnum projectWriterEnum = new ProjectWriterEnum();
+      projectWriterEnum.setValue("msvc8");
+      final ProjectDef projectDef = new ProjectDef();
+      projectDef.setType(projectWriterEnum);
+      String filename = null;
+      try {
+        final File outputDir = new File(getTargetDirectory(), "vcproj");
+        if (!outputDir.exists()) {
+          final boolean succeeded = outputDir.mkdir();
+          if (!succeeded) {
+            throw new MojoExecutionException("Unable to create directory: " + outputDir);
+          }
+        }
+        filename = outputDir + "/" + getMavenProject().getArtifactId();
+        final File projFile = new File(filename);
+        projectDef.setOutfile(projFile.getCanonicalFile());
+      } catch (final IOException e) {
+        throw new MojoExecutionException("Unable to create file: " + filename, e);
+      }
+      task.addProject(projectDef);
+      task.setProjectsOnly(true);
 
-						sysLibSet
-								.setLibs(new CUtil.StringArrayBuilder(sysLibs));
+      // we always want an EXE for debugging
+      task.setOuttype(new OutputTypeEnum());
 
-						task.addSyslibset(sysLibSet);
-					}
-				}
-			}
+      // execute
+      try {
+        task.execute();
+        getLog().info("Wrote project file: " + filename + ".vcproj");
+      } catch (final BuildException e) {
+        throw new MojoExecutionException("NAR: Compile failed", e);
+      }
+    }
+  }
 
-			// Add JVM to linker
-			getJava().addRuntime(task, getJavaHome(getAOL()), getOS(),
-					getAOL().getKey() + "java.");
+  /**
+   * List the dependencies needed for compilation, those dependencies are used
+   * to get the include paths needed for
+   * compilation and to get the libraries paths and names needed for linking.
+   */
+  @Override
+  protected ScopeFilter getArtifactScopeFilter() {
+    return new ScopeFilter( Artifact.SCOPE_COMPILE, null );
+  }
 
-			// DS: generate project file
-			getLog().debug("NAR: Writing project file...");
-			ProjectWriterEnum projectWriterEnum = new ProjectWriterEnum();
-			projectWriterEnum.setValue("msvc8");
-			ProjectDef projectDef = new ProjectDef();
-			projectDef.setType(projectWriterEnum);			
-			String filename = null;
-			try {
-				File outputDir = new File(getTargetDirectory(), "vcproj");
-				if (!outputDir.exists()) {
-					boolean succeeded = outputDir.mkdir();
-					if (!succeeded) {
-						throw new MojoExecutionException(
-								"Unable to create directory: " + outputDir);
-					}
-				}
-				filename = outputDir + "/" + getMavenProject().getArtifactId();
-				File projFile = new File(filename);
-				projectDef.setOutfile(projFile.getCanonicalFile());
-			} catch (IOException e) {
-				throw new MojoExecutionException("Unable to create file: "
-						+ filename, e);
-			}
-			task.addProject(projectDef);
-			task.setProjectsOnly(true);
+  @Override
+  public void narExecute() throws MojoExecutionException, MojoFailureException {
 
-			// we always want an EXE for debugging
-			task.setOuttype(new OutputTypeEnum());
+    // Only do this if MSVC++ compiler is being used.
+    if (!getOS().equals(OS.WINDOWS)) {
+      getLog().debug("Skipping -- not running on Windows");
+      return;
+    }
 
-			// execute
-			try {
-				task.execute();
-				getLog().info("Wrote project file: " + filename + ".vcproj");
-			} catch (BuildException e) {
-				throw new MojoExecutionException("NAR: Compile failed", e);
-			}
-		}
-	}
+    // need to run with profile "windows-debug". No other profiles are valid
+    // for vcproj generation.
+    boolean debug = false;
+
+    final List profiles = NarUtil.collectActiveProfiles(getMavenProject());
+    for (final Object profile1 : profiles) {
+      final Profile profile = (Profile) profile1;
+      if (profile.getId().equalsIgnoreCase("windows-debug")) {
+        debug = true;
+        break;
+      }
+    }
+
+    if (!debug) {
+      getLog().info("NAR: Skipping vcproj generation.  Run with -P windows-debug to enable this step.");
+      return;
+    }
+
+    if (getLibraries().isEmpty()) {
+      getLog().info("NAR: Skipping vcproj generation.  No libraries to be built.");
+      return;
+    }
+
+    // super.narExecute();
+
+    // arbitrarily grab the first library -- we're going to make treat it as
+    // an exe anyway, whatever type it's supposed to be.
+    createVcProjFile(getAntProject(), getLibraries().get(0));
+  }
 }

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  #%L
+  Native ARchive plugin for Maven
+  %%
+  Copyright (C) 2002 - 2014 NAR Maven Plugin developers.
+  %%
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+       http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  #L%
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.github.maven-nar.its.nar</groupId>
+    <artifactId>it0028-scope</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>it0028-scope-compile-shared</artifactId>
+  <packaging>nar</packaging>
+
+  <name>Compile Library</name>
+  <version>1.0-SNAPSHOT</version>
+  <description>
+    Maven definition of scope compile:
+    This is the default scope, used if none is specified. Compile dependencies are available in all classpaths of a
+    project. Furthermore, those dependencies are propagated to dependent projects.
+    
+    For NAR artifacts this scope can be used for standard libraries as it is for Java.
+  </description>
+  <url>http://maven.apache.org/</url>
+
+  <build>
+    <defaultGoal>install</defaultGoal>
+
+  </build>
+  
+  <profiles>
+    <profile>
+      <id>Windows</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>@project.groupId@</groupId>
+            <artifactId>nar-maven-plugin</artifactId>
+            <extensions>true</extensions>
+            <configuration>
+              <libraries>
+                <library>
+                  <type>shared</type>
+                </library>
+              </libraries>
+              <linker>
+                <sysLibs>
+                  <!-- Kernel32 seems to be automatically linked -->
+                  <!-- <sysLib>
+                    <name>Kernel32</name>
+                    <type>shared</type>
+                  </sysLib> -->
+                </sysLibs>
+              </linker>
+              <tests>
+                <test>
+                  <name>OperationsTest</name>
+                  <link>shared</link>
+                </test>
+              </tests>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>Unix</id>
+      <activation>
+        <os>
+          <family>unix</family>
+        </os>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>@project.groupId@</groupId>
+            <artifactId>nar-maven-plugin</artifactId>
+            <extensions>true</extensions>
+            <configuration>
+              <libraries>
+                <library>
+                  <type>shared</type>
+                </library>
+              </libraries>
+              <linker>
+                <sysLibs>
+                  <sysLib>
+                    <name>dl</name>
+                    <type>shared</type>
+                  </sysLib>
+                </sysLibs>
+              </linker>
+              <tests>
+                <test>
+                  <name>OperationsTest</name>
+                  <link>shared</link>
+                </test>
+              </tests>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+  
+  <dependencies>
+    <dependency>
+      <groupId>com.github.maven-nar.its.nar</groupId>
+      <artifactId>it0028-scope-system-shared</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>nar</type>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/../system-shared/target/it0028-scope-system-shared-1.0-SNAPSHOT.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.github.maven-nar.its.nar</groupId>
+      <artifactId>it0028-scope-provided-static</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>nar</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.maven-nar.its.nar</groupId>
+      <artifactId>it0028-scope-test-shared</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>nar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.maven-nar.its.nar</groupId>
+      <artifactId>it0028-scope-runtime-shared</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>nar</type>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+</project>

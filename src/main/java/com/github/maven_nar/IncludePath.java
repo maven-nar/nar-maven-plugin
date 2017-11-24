@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,52 +31,58 @@ import java.util.List;
  * @author Ivan Drobyshevskyi
  */
 public class IncludePath {
-    /**
-     * Include path itself.
-     *
-     * @parameter
-     * @required
-     */
-    private String path;
+  /**
+   * Include path itself.
+   *
+   * @parameter
+   * @required
+   */
+  private String path;
 
-    /**
-     * List of include files masks.
-     *
-     * @parameter
-     */
-    private List/* <String> */includes;
+  /**
+   * List of include files masks.
+   *
+   * @parameter
+   */
+  private List/* <String> */includes;
 
-    /**
-     * File corresponding to the path above.
-     */
-    private File file;
+  /**
+   * File corresponding to the path above.
+   */
+  private File file;
 
-    public String getPath() {
-        return path;
-    }
-    public void set(String path) {
-        setPath(path);
-    }
-    public void setPath(String path) {
-        this.path = path;
-        file = new File(path);
-    }
-    public File getFile() {
-        return file;
-    }
-    public final String getIncludes()
-    {
-        StringBuilder includesString = new StringBuilder();
+  boolean exists() {
+    return this.file.exists() && this.file.isDirectory();
+  }
 
-        if (includes == null)
-            return null;
+  public File getFile() {
+    return this.file;
+  }
 
-        for (String s : (List<String>) includes)
-             includesString.append(s + ",");
+  public final String getIncludes() {
+    final StringBuilder includesString = new StringBuilder();
 
-        return includesString.toString();
+    if (this.includes == null) {
+      return null;
     }
-    boolean exists() {
-        return file.exists() && file.isDirectory();
+
+    for (final String s : (List<String>) this.includes) {
+      includesString.append(s).append(",");
     }
+
+    return includesString.toString();
+  }
+
+  public String getPath() {
+    return this.path;
+  }
+
+  public void set(final String path) {
+    setPath(path);
+  }
+
+  public void setPath(final String path) {
+    this.path = path;
+    this.file = new File(path);
+  }
 }

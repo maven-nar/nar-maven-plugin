@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,6 +18,7 @@
  * #L%
  */
 package com.github.maven_nar.cpptasks.borland;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Vector;
@@ -29,46 +30,53 @@ import com.github.maven_nar.cpptasks.parser.WhitespaceOrLetterState;
 
 /**
  * A parser that paths from a borland cfg file
- * 
+ *
  * @author Curt Arnold
  */
 public final class BorlandCfgParser extends AbstractParser {
-    private AbstractParserState newLineState;
-    private final Vector<String> path = new Vector<String>();
-    /**
-     * 
-     *  
+  private final AbstractParserState newLineState;
+  private final Vector<String> path = new Vector<>();
+
+  /**
+     *
+     *
      */
-    public BorlandCfgParser(char switchChar) {
-        //
-        //   a quoted path (-I"some path")
-        //      doesn't end till a close quote and will be abandoned
-        //      if a new line is encountered first
-        //
-        AbstractParserState quote = new CfgFilenameState(this, new char[]{'"'});
-        //
-        //    an unquoted path (-Ic:\borland\include)
-        //      ends at the first space or new line
-        AbstractParserState unquote = new CfgFilenameState(this, new char[]{
-                ' ', '\n', '\r'});
-        AbstractParserState quoteBranch = new QuoteBranchState(this, quote,
-                unquote);
-        AbstractParserState toNextSwitch = new ConsumeToSpaceOrNewLine(this);
-        AbstractParserState switchState = new LetterState(this, switchChar,
-                quoteBranch, toNextSwitch);
-        newLineState = new WhitespaceOrLetterState(this, '-', switchState);
-    }
-    public void addFilename(String include) {
-        path.addElement(include);
-    }
-    public AbstractParserState getNewLineState() {
-        return newLineState;
-    }
-    public String[] parsePath(Reader reader) throws IOException {
-        path.setSize(0);
-        super.parse(reader);
-        String[] retval = new String[path.size()];
-        path.copyInto(retval);
-        return retval;
-    }
+  public BorlandCfgParser(final char switchChar) {
+    //
+    // a quoted path (-I"some path")
+    // doesn't end till a close quote and will be abandoned
+    // if a new line is encountered first
+    //
+    final AbstractParserState quote = new CfgFilenameState(this, new char[] {
+      '"'
+    });
+    //
+    // an unquoted path (-Ic:\borland\include)
+    // ends at the first space or new line
+    final AbstractParserState unquote = new CfgFilenameState(this, new char[] {
+        ' ', '\n', '\r'
+    });
+    final AbstractParserState quoteBranch = new QuoteBranchState(this, quote, unquote);
+    final AbstractParserState toNextSwitch = new ConsumeToSpaceOrNewLine(this);
+    final AbstractParserState switchState = new LetterState(this, switchChar, quoteBranch, toNextSwitch);
+    this.newLineState = new WhitespaceOrLetterState(this, '-', switchState);
+  }
+
+  @Override
+  public void addFilename(final String include) {
+    this.path.addElement(include);
+  }
+
+  @Override
+  public AbstractParserState getNewLineState() {
+    return this.newLineState;
+  }
+
+  public String[] parsePath(final Reader reader) throws IOException {
+    this.path.setSize(0);
+    super.parse(reader);
+    final String[] retval = new String[this.path.size()];
+    this.path.copyInto(retval);
+    return retval;
+  }
 }

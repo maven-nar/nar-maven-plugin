@@ -26,8 +26,8 @@
 	<name>NAR JNI and Shared Library</name>
 	<version>1.0-SNAPSHOT</version>
 	<description>Depends on it0026-native-lib-loader
-     depending on JNI library that uses  native lib loader  to load.
-  </description>
+	depending on JNI library that uses  native lib loader  to load.
+	</description>
 
 	<properties>
 		<skipTests>true</skipTests>
@@ -48,6 +48,12 @@
 						</goals>
 					</execution>					
 					<execution>
+						<id>nar-test-unpack</id>
+						<goals>
+							<goal>nar-test-unpack</goal>
+						</goals>
+					</execution>
+					<execution>
 						<id>nar-integration-test</id>
 						<goals>
 							<goal>nar-integration-test</goal>
@@ -60,8 +66,8 @@
 
 	<dependencies>
 		<dependency>
-			 <artifactId>it0026-native-lib-loader</artifactId>
-    			<version>1.0-SNAPSHOT</version>
+			<artifactId>it0026-native-lib-loader</artifactId>
+			<version>1.0-SNAPSHOT</version>
 			<groupId>com.github.maven-nar.its.nar</groupId>			
 			<type>nar</type>
 		</dependency>

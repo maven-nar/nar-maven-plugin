@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,8 +27,7 @@ import org.apache.tools.ant.types.EnumeratedAttribute;
  * @author Curt Arnold
  *
  */
-public final class ArchEnum
-    extends EnumeratedAttribute {
+public final class ArchEnum extends EnumeratedAttribute {
   /**
    * Constructor.
    *
@@ -45,31 +44,15 @@ public final class ArchEnum
    *
    * @see org.apache.tools.ant.types.EnumeratedAttribute#getValues()
    */
+  @Override
   public String[] getValues() {
     /**
      * Class initializer.
      */
-     return new String[] {
-          "i386",
-          "i486",
-          "i586",
-          "i686",
-          "pentium",
-          "pentium-mmx",
-          "pentiumpro",
-          "pentium2",
-          "pentium3",
-          "pentium4",
-          "k6",
-          "k6-2",
-          "k6-3",
-          "athlon",
-          "athlon-tbird",
-          "athlon-4",
-          "athlon-xp",
-          "athlon-mp",
-          "winchip-c6",
-          "winchip2",
-          "c3"};
+    return new String[] {
+        "i386", "i486", "i586", "i686", "pentium", "pentium-mmx", "pentiumpro", "pentium2", "pentium3", "pentium4",
+        "k6", "k6-2", "k6-3", "athlon", "athlon-tbird", "athlon-4", "athlon-xp", "athlon-mp", "winchip-c6", "winchip2",
+        "c3"
+    };
   }
 }

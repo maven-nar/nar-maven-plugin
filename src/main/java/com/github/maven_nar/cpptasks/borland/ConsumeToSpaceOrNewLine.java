@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,16 +18,20 @@
  * #L%
  */
 package com.github.maven_nar.cpptasks.borland;
+
 import com.github.maven_nar.cpptasks.parser.AbstractParser;
 import com.github.maven_nar.cpptasks.parser.AbstractParserState;
+
 public class ConsumeToSpaceOrNewLine extends AbstractParserState {
-    public ConsumeToSpaceOrNewLine(AbstractParser parser) {
-        super(parser);
+  public ConsumeToSpaceOrNewLine(final AbstractParser parser) {
+    super(parser);
+  }
+
+  @Override
+  public AbstractParserState consume(final char ch) {
+    if (ch == ' ' || ch == '\t' || ch == '\n') {
+      return getParser().getNewLineState();
     }
-    public AbstractParserState consume(char ch) {
-        if (ch == ' ' || ch == '\t' || ch == '\n') {
-            return getParser().getNewLineState();
-        }
-        return this;
-    }
+    return this;
+  }
 }

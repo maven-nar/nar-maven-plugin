@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,24 +18,30 @@
  * #L%
  */
 package com.github.maven_nar.cpptasks.types;
+
 /**
  * Preprocessor macro definition.
- * 
+ *
  * @author Mark A Russell <a
- *         href="mailto:mark_russell@csgsystems.com">mark_russell@csg_systems.com
+ *         href="mailto:mark_russell@csgsystems.com">mark_russell@csg_systems.
+ *         com
  *         </a>
  */
 public class DefineArgument extends UndefineArgument {
-    private String value;
-    public DefineArgument() {
-        super(true);
-    }
-    /** Returns the value of the define */
-    public final String getValue() {
-        return value;
-    }
-    /** Set the value attribute */
-    public final void setValue(String value) {
-        this.value = value;
-    }
+  private String value;
+
+  public DefineArgument() {
+    super(true);
+  }
+
+  /** Returns the value of the define */
+  @Override
+  public final String getValue() {
+    return this.value;
+  }
+
+  /** Set the value attribute */
+  public final void setValue(final String value) {
+    this.value = value;
+  }
 }

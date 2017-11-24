@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,6 +18,7 @@
  * #L%
  */
 package com.github.maven_nar.cpptasks;
+
 import java.io.File;
 
 import com.github.maven_nar.cpptasks.compiler.ProcessorConfiguration;
@@ -26,106 +27,114 @@ import com.github.maven_nar.cpptasks.compiler.ProcessorConfiguration;
  * A description of a file built or to be built
  */
 public final class TargetInfo {
-    private static final File[] emptyFileArray = new File[0];
-    private/* final */ProcessorConfiguration config;
-    private/* final */File output;
-    private boolean rebuild;
-    private/* final */File[] sources;
-    private File[] sysSources;
-    public TargetInfo(ProcessorConfiguration config, File[] sources,
-            File[] sysSources, File output, boolean rebuild) {
-        if (config == null) {
-            throw new NullPointerException("config");
-        }
-        if (sources == null) {
-            throw new NullPointerException("sources");
-        }
-        if (output == null) {
-            throw new NullPointerException("output");
-        }
-        this.config = config;
-        this.sources = (File[]) sources.clone();
-        if (sysSources == null) {
-            this.sysSources = emptyFileArray;
-        } else {
-            this.sysSources = (File[]) sysSources.clone();
-        }
-        this.output = output;
-        this.rebuild = rebuild;
-        //
-        //   if the output doesn't exist, must rebuild it
-        //
-        if (!output.exists()) {
-            rebuild = true;
-        }
+  private static final File[] emptyFileArray = new File[0];
+  private final/* final */ProcessorConfiguration config;
+  private final/* final */File output;
+  private boolean rebuild;
+  private final/* final */File[] sources;
+  private File[] sysSources;
+
+  public TargetInfo(final ProcessorConfiguration config, final File[] sources, final File[] sysSources,
+      final File output, boolean rebuild) {
+    if (config == null) {
+      throw new NullPointerException("config");
     }
-    public String[] getAllSourcePaths() {
-        String[] paths = new String[sysSources.length + sources.length];
-        for (int i = 0; i < sysSources.length; i++) {
-            paths[i] = sysSources[i].toString();
-        }
-        int offset = sysSources.length;
-        for (int i = 0; i < sources.length; i++) {
-            paths[offset + i] = sources[i].toString();
-        }
-        return paths;
+    if (sources == null) {
+      throw new NullPointerException("sources");
     }
-    public File[] getAllSources() {
-        File[] allSources = new File[sources.length + sysSources.length];
-        for (int i = 0; i < sysSources.length; i++) {
-            allSources[i] = sysSources[i];
-        }
-        int offset = sysSources.length;
-        for (int i = 0; i < sources.length; i++) {
-            allSources[i + offset] = sources[i];
-        }
-        return allSources;
+    if (output == null) {
+      throw new NullPointerException("output");
     }
-    public ProcessorConfiguration getConfiguration() {
-        return config;
+    this.config = config;
+    this.sources = sources.clone();
+    if (sysSources == null) {
+      this.sysSources = emptyFileArray;
+    } else {
+      this.sysSources = sysSources.clone();
     }
-    public File getOutput() {
-        return output;
+    this.output = output;
+    this.rebuild = rebuild;
+    //
+    // if the output doesn't exist, must rebuild it
+    //
+    if (!output.exists()) {
+      rebuild = true;
     }
-    public boolean getRebuild() {
-        return rebuild;
+  }
+
+  public String[] getAllSourcePaths() {
+    final String[] paths = new String[this.sysSources.length + this.sources.length];
+    for (int i = 0; i < this.sysSources.length; i++) {
+      paths[i] = this.sysSources[i].toString();
     }
-    /**
-     * Returns an array of SourceHistory objects (contains relative path and
-     * last modified time) for the source[s] of this target
-     */
-    public SourceHistory[] getSourceHistories(String basePath) {
-        SourceHistory[] histories = new SourceHistory[sources.length];
-        for (int i = 0; i < sources.length; i++) {
-            String relativeName = CUtil.getRelativePath(basePath, sources[i]);
-            long lastModified = sources[i].lastModified();
-            histories[i] = new SourceHistory(relativeName, lastModified);
-        }
-        return histories;
+    final int offset = this.sysSources.length;
+    for (int i = 0; i < this.sources.length; i++) {
+      paths[offset + i] = this.sources[i].toString();
     }
-    public String[] getSourcePaths() {
-        String[] paths = new String[sources.length];
-        for (int i = 0; i < sources.length; i++) {
-            paths[i] = sources[i].toString();
-        }
-        return paths;
+    return paths;
+  }
+
+  public File[] getAllSources() {
+    final File[] allSources = new File[this.sources.length + this.sysSources.length];
+    System.arraycopy(this.sysSources, 0, allSources, 0, this.sysSources.length);
+    final int offset = this.sysSources.length;
+    System.arraycopy(this.sources, 0, allSources, 0 + offset, this.sources.length);
+    return allSources;
+  }
+
+  public ProcessorConfiguration getConfiguration() {
+    return this.config;
+  }
+
+  public File getOutput() {
+    return this.output;
+  }
+
+  public boolean getRebuild() {
+    return this.rebuild;
+  }
+
+  /**
+   * Returns an array of SourceHistory objects (contains relative path and
+   * last modified time) for the source[s] of this target
+   */
+  public SourceHistory[] getSourceHistories(final String basePath) {
+    final SourceHistory[] histories = new SourceHistory[this.sources.length];
+    for (int i = 0; i < this.sources.length; i++) {
+      final String relativeName = CUtil.getRelativePath(basePath, this.sources[i]);
+      final long lastModified = this.sources[i].lastModified();
+      histories[i] = new SourceHistory(relativeName, lastModified);
     }
-    public File[] getSources() {
-        File[] clone = (File[]) sources.clone();
-        return clone;
+    return histories;
+  }
+
+  public String[] getSourcePaths() {
+    final String[] paths = new String[this.sources.length];
+    for (int i = 0; i < this.sources.length; i++) {
+      paths[i] = this.sources[i].toString();
     }
-    public String[] getSysSourcePaths() {
-        String[] paths = new String[sysSources.length];
-        for (int i = 0; i < sysSources.length; i++) {
-            paths[i] = sysSources[i].toString();
-        }
-        return paths;
+    return paths;
+  }
+
+  public File[] getSources() {
+    final File[] clone = this.sources.clone();
+    return clone;
+  }
+
+  public String[] getSysSourcePaths() {
+    final String[] paths = new String[this.sysSources.length];
+    for (int i = 0; i < this.sysSources.length; i++) {
+      paths[i] = this.sysSources[i].toString();
     }
-    public File[] getSysSources() {
-        File[] clone = (File[]) sysSources.clone();
-        return clone;
-    }
-    public void mustRebuild() {
-        this.rebuild = true;
-    }
+    return paths;
+  }
+
+  public File[] getSysSources() {
+    final File[] clone = this.sysSources.clone();
+    return clone;
+  }
+
+  public void mustRebuild() {
+    this.rebuild = true;
+  }
 }

@@ -57,6 +57,7 @@
 					<goal>nar-validate</goal>
 					<goal>nar-download</goal>
 					<goal>nar-unpack</goal>
+					<goal>nar-test-unpack</goal>
 					<goal>nar-gnu-configure</goal>
 					<goal>nar-system-generate</goal>
 					<goal>nar-vcproj</goal>

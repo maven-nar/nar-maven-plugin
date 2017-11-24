@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  #%L
+  Native ARchive plugin for Maven
+  %%
+  Copyright (C) 2002 - 2014 NAR Maven Plugin developers.
+  %%
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+       http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  #L%
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.github.maven-nar.its.nar</groupId>
+    <artifactId>it0028-scope</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>it0028-scope-provided-static</artifactId>
+  <packaging>nar</packaging>
+
+  <name>Provided Library</name>
+  <version>1.0-SNAPSHOT</version>
+  <description>
+    Maven definition of scope provided:
+    This is much like compile, but indicates you expect the JDK or a container to provide the dependency at runtime.
+    For example, when building a web application for the Java Enterprise Edition, you would set the dependency on the
+    Servlet API and related Java EE APIs to scope provided because the web container provides those classes. This scope
+    is only available on the compilation and test classpath, and is not transitive.
+    
+    For NAR artifacts this scope can be used for static libraries, in Java the library must be provided at runtime by
+    the JDK or a container, in NAR the library will be provided inside the other libraries or applications as it is
+    statically linked. Libraries with this scope are not transitive, so this scope is valid only if the header files of
+    the library is used only in the libraries or applications which define this dependency.
+  </description>
+  <url>http://maven.apache.org/</url>
+
+  <build>
+    <defaultGoal>install</defaultGoal>
+    <plugins>
+      <plugin>
+        <groupId>@project.groupId@</groupId>
+        <artifactId>nar-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <libraries>
+            <library>
+              <type>static</type>
+            </library>
+          </libraries>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

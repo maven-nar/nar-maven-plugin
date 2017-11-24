@@ -55,6 +55,8 @@ NAR Configuration
   <gnuTargetDirectory/>
   <gnuAutogenSkip/>
   <gnuConfigureSkip/>
+  <gnuMakeSkip/>
+  <libsName/>
 
   <libraries>
     <library>
@@ -83,6 +85,7 @@ NAR Configuration
 
   <linker>
     <name/>
+    <prefix/>
     <toolPath/>
     <incremental/>
     <map/>
@@ -110,6 +113,7 @@ NAR Configuration
 
   <cpp>
     <name/>
+    <prefix/>
     <toolPath/>
     <sourceDirectory/>
     <includes>
@@ -123,6 +127,7 @@ NAR Configuration
     <rtti/>
     <optimize/>
     <multiThreaded/>
+    <ccache/>
     <defines>
       <define/>
     </defines>
@@ -260,6 +265,18 @@ Default is dynamic.
 	Set use of libtool. If set to true, the "libtool " will be prepended to 
 the command line for compatible compilers/linkers. Default is false.
 
+* {gnuMakeSkip}
+    
+    Skip the GNU Make step if you are using the GNU stages. This is useful if you 
+wish to run a GNU configure step but not the full make process.
+
+* {libsName}
+
+    This tag is use to list multiple libs to be included into the linker.
+    This is really usefull when packaging 3rd party libraries.
+    
+    Use the CSV notation: \<libsName\>lib1,lib2\</libsName\>
+
 * {libraries}
 
 	Section to specify what type or libraries to create. For each library you may specify:
@@ -313,6 +330,10 @@ the command line for compatible compilers/linkers. Default is false.
 
 	The Linker. Some choices are: "msvc", "g++", "CC", "icpc", ...
     Default is Architecture OS specific.
+
+** {linker prefix}
+
+    Add prefix to the linker name: "prefix-name"
 
 ** {linker toolPath}
 
@@ -371,6 +392,10 @@ the command line for compatible compilers/linkers. Default is false.
 	The name of the compiler. Some choices are: "msvc", "g++", "gcc", "CC", "cc", "icc", "icpc", ...
     Default is AOL specific.
     
+** {cpp prefix}
+
+    Add prefix to the compiler name: "prefix-name"
+
 ** {cpp toolPath}
 
 	The path that the compiler is located within.  Default is to use the system's environment.
@@ -409,6 +434,12 @@ the command line for compatible compilers/linkers. Default is false.
    
     Enables or disables generation of multithreaded code.
     Default value: false, except on Windows.
+
+** {cpp ccache}
+
+    Enables or disables the use of ccache (https://ccache.samba.org/) for compilation. 
+    Ccache must be present on the system and available the path in the same way your compiler is.
+    Default value: false
    
 ** {cpp defines}
 

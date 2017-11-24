@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,9 +25,7 @@ package com.github.maven_nar.cpptasks.parser;
  *
  * @author Curt Arnold
  */
-public final class WhitespaceOrCaseInsensitiveLetterState
-    extends
-    AbstractParserState {
+public final class WhitespaceOrCaseInsensitiveLetterState extends AbstractParserState {
   /**
    * Next state if the character is found.
    */
@@ -47,16 +45,14 @@ public final class WhitespaceOrCaseInsensitiveLetterState
    * Constructor.
    *
    * @param parser
-   *            parser
+   *          parser
    * @param matchLetter
-   *            letter to match
+   *          letter to match
    * @param nextStateArg
-   *            next state if a match on the letter
+   *          next state if a match on the letter
    */
-  public WhitespaceOrCaseInsensitiveLetterState(final AbstractParser parser,
-                                                final char matchLetter,
-                                                final AbstractParserState
-                                                nextStateArg) {
+  public WhitespaceOrCaseInsensitiveLetterState(final AbstractParser parser, final char matchLetter,
+      final AbstractParserState nextStateArg) {
     super(parser);
     this.lowerLetter = Character.toLowerCase(matchLetter);
     this.upperLetter = Character.toUpperCase(matchLetter);
@@ -67,13 +63,14 @@ public final class WhitespaceOrCaseInsensitiveLetterState
    * Consumes a character and returns the next state for the parser.
    *
    * @param ch
-   *            next character
+   *          next character
    * @return the configured nextState if ch is the expected character or the
    *         configure noMatchState otherwise.
    */
+  @Override
   public AbstractParserState consume(final char ch) {
-    if (ch == lowerLetter || ch == upperLetter) {
-      return nextState;
+    if (ch == this.lowerLetter || ch == this.upperLetter) {
+      return this.nextState;
     }
     if (ch == ' ' || ch == '\t') {
       return this;
