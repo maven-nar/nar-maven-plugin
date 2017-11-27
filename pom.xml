@@ -698,5 +698,21 @@
         <additionalparam>-Xdoclint:none</additionalparam>
       </properties>
     </profile>
+    <!-- This profile enables deployment to the SciJava Maven repository. -->
+    <profile>
+      <id>deploy-to-imagej</id>
+      <distributionManagement>
+        <repository>
+          <id>imagej.releases</id>
+          <name>ImageJ Releases Repository</name>
+          <url>dav:http://maven.imagej.net/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+          <id>imagej.snapshots</id>
+          <name>ImageJ Snapshots Repository</name>
+          <url>dav:http://maven.imagej.net/content/repositories/snapshots</url>
+        </snapshotRepository>
+      </distributionManagement>
+    </profile>
   </profiles>
 </project>

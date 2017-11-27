@@ -1,14 +1,17 @@
-language:
-    - cpp
-    - java
-
-os:
-    - linux
-    - osx
-
-before_script:
-    - if [[ "$TRAVIS_OS_NAME" == "osx" && -z "$JAVA_HOME" && -x "/usr/libexec/java_home" ]] ; then export JAVA_HOME=$(/usr/libexec/java_home); fi
-    - git submodule init
-    - git submodule update
-
-script: mvn -Prun-its
+language: java
+jdk: oraclejdk8
+branches:
+  only:
+  - master
+  - "/.*-[0-9]+\\..*/"
+install: true
+script: ".travis/build.sh"
+cache:
+  directories:
+  - "~/.m2/repository"
+env:
+  global:
+  - secure: CF6vPy8rQOYz7ngbwx3F9FLVS53f4f7TYhTuev3JNvaNX4FFC2KupxRQGWhpcnDPd20c8af21cU7WiJX71ZHOw3QWpM6eHWraEcuMiQ1oaHpUQJsW0D5BZs9KV2K1HRuOKIwCowOVItrHcVZt/4+XiBC52CsLcTt1QYL9p6HzMo=
+  - secure: kxmNdYyMCN/yAm8wf6MxntMnMXD1fYEPfpJKpWJgz/cugdi6CDcmVaNFu0NLGthjI3bABnzvC7dThckvQHBztLDq9bgUKB8E57KbqjF4FVVHoNgLz8tMmcSwhWYDOUZydch19fdOh4dR3Vvgh8yuWLrBsUIwEaWWSjKUEEOwpEY=
+  - secure: nmmm4cFQf+XrHxDRWFySRxg34Va7cpPiG4caYIJhb5iAzNuOy6zPrx3i7DgggWywEp2KsJc8VcUuGH+HtAbtC784mDstNH41fQTWxO2t/jvUzBlS7Lo2CbCfhj9ZieU5hrY0FOqCNl16KHxCLZQe73vzjB7MA5ol0zVNkamwcbA=
+  - secure: PmR8kB9za2awy3sNOxkFgzJXSEMpjJm+SGGa2RzcLlmkfLj8qIUyzdskQpvr2p7UKBwUALJu7d4nAXA/o8PGRgNmmAyBv8CN7mt3Mo1a8ja6GdB1VfTE2OVpblzGFL3vfRRDJ9YXny/ZQHFqV86HeiQT2m2qhoU+8KMVWbgjDQ4=
