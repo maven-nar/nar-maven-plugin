@@ -30,5 +30,9 @@ cache:
 
 artifacts:
   - path: target\it\**\build.log
-    name: ITS logs
+    name: ITSlogs
     type: zip
+
+on_failure:
+  - 7z a ITSlogs.zip target\it\**\build.log
+  - appveyor PushArtifact ITSlogs.zip
