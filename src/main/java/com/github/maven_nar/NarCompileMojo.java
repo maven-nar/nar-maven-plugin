@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
 import java.util.Vector;
 import java.util.HashSet;
 import java.util.Properties;
@@ -254,7 +255,8 @@ public class NarCompileMojo extends AbstractCompileMojo {
     getMsvc().configureCCTask(task);
 
     final List<NarArtifact> dependencies = getNarArtifacts();
-    
+    List<String> linkPaths = new ArrayList<String>();
+
     // If we're restricting deps to direct deps ONLY then trim transitive deps
     if (directDepsOnly){
       HashSet<String> directDepsSet = getDirectDepsSet(getVerboseDependencyTree());
@@ -266,6 +268,15 @@ public class NarCompileMojo extends AbstractCompileMojo {
         if(!directDepsSet.contains(dep.getGroupId() + ":" + dep.getArtifactId())){
           this.getLog().warn("Stray dependency: " + dep + " found. This may cause build failures.");
           depsIt.remove();
+          // If this transitive dependency was a shared object, add it to the linkPaths list.
+          String depType = dep.getBinding(null, null);
+          if (Objects.equals(depType, Library.SHARED))
+          {
+            File soDir = getLayout().getLibDirectory(getTargetDirectory(), dep.getArtifactId(), dep.getVersion(), getAOL().toString(), depType);
+            if (soDir.exists()){
+              linkPaths.add(soDir.getAbsolutePath());
+            }
+          }
         }
       }
     }
@@ -294,7 +305,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
     }
 
     // add linker
-    final LinkerDef linkerDefinition = getLinker().getLinker(this, task, getOS(), getAOL().getKey() + ".linker.", type);
+    final LinkerDef linkerDefinition = getLinker().getLinker(this, task, getOS(), getAOL().getKey() + ".linker.", type, linkPaths);
     task.addConfiguredLinker(linkerDefinition);
 
     // add dependency libraries

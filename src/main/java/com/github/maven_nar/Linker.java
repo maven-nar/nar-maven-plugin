@@ -257,8 +257,8 @@ public class Linker {
     return generateManifest;
   }
 
-  public final LinkerDef getLinker(final AbstractCompileMojo mojo, final CCTask task, final String os,
-      final String prefix, final String type) throws MojoFailureException, MojoExecutionException {
+  public final LinkerDef getLinker(final AbstractCompileMojo mojo, final CCTask task, final String os, final String prefix,
+      final String type, final List<String> linkPaths) throws MojoFailureException, MojoExecutionException {
     Project antProject = task.getProject();
     if (this.name == null) {
       throw new MojoFailureException("NAR: Please specify a <Name> as part of <Linker>");
@@ -389,9 +389,23 @@ public class Linker {
     if ((this.narDependencyLibOrder == null) && (narDefaultDependencyLibOrder)) {
         this.narDependencyLibOrder = mojo.dependencyTreeOrderStr(pushDepsToLowestOrder, mojo.getDirectDepsOnly());
     } else if (pushDepsToLowestOrder && !narDefaultDependencyLibOrder) {
-        this.log.warn("pushDepsToLowestOrder will have no effect since narDefaultDependencyLibOrder is disabled");
+        mojo.getLog().warn("pushDepsToLowestOrder will have no effect since narDefaultDependencyLibOrder is disabled");
     } else if (mojo.getDirectDepsOnly() && !narDefaultDependencyLibOrder) {
-        this.log.warn("directDepsOnly will have no effect since narDefaultDependencyLibOrder is disabled");
+        mojo.getLog().warn("directDepsOnly will have no effect since narDefaultDependencyLibOrder is disabled");
+    }
+
+    // Add transitive dependencies to the shared library search path if we are on linux and directDepsOnly is enabled.
+    if (linkPaths != null && linkPaths.size() > 0 && mojo.getDirectDepsOnly() && os.equals(OS.LINUX)){
+        StringBuilder argStrBuilder = new StringBuilder();
+        argStrBuilder.append("-Wl,-rpath-link,");
+        for (String path : linkPaths){
+            argStrBuilder.append(path).append(':');
+        }
+        String argStr = argStrBuilder.toString();
+        final LinkerArgument linkPathArg = new LinkerArgument ();
+        // Trim trailing ':' character from argument
+        linkPathArg.setValue(argStr.substring(0, argStr.length() - 1));
+        linker.addConfiguredLinkerArg(linkPathArg);
     }
 
     // record the preference for nar dependency library link order
@@ -480,7 +494,7 @@ public class Linker {
    */
   public final LinkerDef getTestLinker(final AbstractCompileMojo mojo, final CCTask task, final String os,
       final String prefix, final String type) throws MojoFailureException, MojoExecutionException {
-    final LinkerDef linker = getLinker(mojo, task, os, prefix, type);
+    final LinkerDef linker = getLinker(mojo, task, os, prefix, type, null);
     if (this.testOptions != null) {
       for (final Object testOption : this.testOptions) {
         final LinkerArgument arg = new LinkerArgument();
