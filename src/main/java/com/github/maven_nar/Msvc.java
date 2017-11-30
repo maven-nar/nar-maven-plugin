@@ -461,6 +461,7 @@ public class Msvc {
   private void addWindowsSDKPaths() throws MojoExecutionException {
     final String mojoArchitecture = mojo.getArchitecture();
     final String osArchitecture = NarUtil.getArchitecture(null);
+    final String versionPart = compareVersion(windowsSdkVersion, "10") < 0 ? "" : windowsSdkVersion + "/";
 
     // 64 bit tools if present are preferred
     if (compareVersion(windowsSdkVersion, "7.1A") <= 0) {
@@ -470,17 +471,20 @@ public class Msvc {
       addPath(windowsSdkHome, "bin");
     } else {
       if ("amd64".equals(osArchitecture)) {
-        addPath(windowsSdkHome, "bin/x64");
+        addPath(windowsSdkHome, "bin/"+versionPart+"x64");
       }
-      addPath(windowsSdkHome, "bin/x86");
+      addPath(windowsSdkHome, "bin/"+versionPart+"x86");
     }
+
     if ("amd64".equals(mojoArchitecture)) {
-      toolPathWindowsSDK = new File(windowsSdkHome, "bin/x64").getAbsolutePath();
+      toolPathWindowsSDK = new File(windowsSdkHome, "bin/"+versionPart+"x64").getAbsolutePath();
     } else if (compareVersion(windowsSdkVersion, "7.1A") <= 0) {
       toolPathWindowsSDK = new File(windowsSdkHome, "bin").getAbsolutePath();
     } else {
-      toolPathWindowsSDK = new File(windowsSdkHome, "bin/x86").getAbsolutePath();
+      toolPathWindowsSDK = new File(windowsSdkHome, "bin/"+versionPart+"x86").getAbsolutePath();
     }
+
+    mojo.getLog().debug(String.format(" Using WindowSDK bin %1s", toolPathWindowsSDK));
   }
 
   private void addWindowsPaths() throws MojoExecutionException {
@@ -774,6 +778,7 @@ public class Msvc {
       // add the libraries found:
       File includeDir = new File(kitDirectory, "Include/" + version);
       File libDir = new File(kitDirectory, "Lib/" + version);
+      windowsSdkVersion=version;
       addSDKLibs(includeDir, libDir);
       setKit(kitDirectory);
     }
