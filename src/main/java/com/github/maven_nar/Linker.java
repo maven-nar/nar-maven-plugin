@@ -394,8 +394,8 @@ public class Linker {
         mojo.getLog().warn("directDepsOnly will have no effect since narDefaultDependencyLibOrder is disabled");
     }
 
-    // Add transitive dependencies to the shared library search path if we are on linux and directDepsOnly is enabled.
-    if (linkPaths != null && linkPaths.size() > 0 && mojo.getDirectDepsOnly() && os.equals(OS.LINUX)){
+    // Add transitive dependencies to the shared library search path if we are on linux, directDepsOnly is enabled, and this is not a static library.
+    if (linkPaths != null && linkPaths.size() > 0 && mojo.getDirectDepsOnly() && os.equals(OS.LINUX) && !type.equals("static")){
         StringBuilder argStrBuilder = new StringBuilder();
         argStrBuilder.append("-Wl,-rpath-link,");
         for (String path : linkPaths){

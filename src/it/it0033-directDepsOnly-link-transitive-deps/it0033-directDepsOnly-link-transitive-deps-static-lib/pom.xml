@@ -24,28 +24,53 @@
 
   <parent>
     <groupId>com.github.maven-nar.its.nar</groupId>
-    <artifactId>it-parent</artifactId>
+    <artifactId>it0033-directDepsOnly-link-transitive-deps</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <relativePath>../it-parent/pom.xml</relativePath>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>it0033-directDepsOnly-link-transitive-deps</artifactId>
-  <packaging>pom</packaging>
-  <name>Aggregate Direct and Transitive shared objects pom</name>
+  <artifactId>it0033-directDepsOnly-link-transitive-deps-static-lib</artifactId>
+  <packaging>nar</packaging>
+  
+  <name>NAR Transitive Deps Static Library</name>
   <version>1.0-SNAPSHOT</version>  
   <description>
-    Aggregate for controlling dependency building order
+    A static library that consumes a transitive dependency which is a shared object
   </description>
   <url>http://maven.apache.org/</url>
 
   <properties>
     <skipTests>true</skipTests>
   </properties>
-  <modules>
-    <module>it0033-directDepsOnly-link-transitive-deps-trans</module>
-    <module>it0033-directDepsOnly-link-transitive-deps-direct</module>
-    <module>it0033-directDepsOnly-link-transitive-deps-exe</module>
-    <module>it0033-directDepsOnly-link-transitive-deps-static-lib</module>
-  </modules>
+
+  <build>
+    <defaultGoal>integration-test</defaultGoal>
+    <plugins>
+      <plugin>
+        <groupId>@project.groupId@</groupId>
+        <artifactId>nar-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <directDepsOnly>true</directDepsOnly>
+          <linker>
+            <narDefaultDependencyLibOrder>true</narDefaultDependencyLibOrder>
+          </linker>
+          <libraries>
+            <library>
+              <type>static</type>
+            </library>
+          </libraries>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
   
+  <dependencies>
+    <dependency>
+      <groupId>com.github.maven-nar.its.nar</groupId>
+      <artifactId>it0033-directDepsOnly-link-transitive-deps-direct</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>nar</type>
+    </dependency>
+  </dependencies>
 </project>
