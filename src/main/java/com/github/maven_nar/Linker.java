@@ -387,17 +387,29 @@ public class Linker {
 
     //if No user preference of dependency library link order is specified then use the Default one nar generate.
     if ((this.narDependencyLibOrder == null) && (narDefaultDependencyLibOrder)) {
-        this.narDependencyLibOrder = mojo.dependencyTreeOrderStr(pushDepsToLowestOrder, mojo.getDirectDepsOnly());
+         if (os.equals(OS.AIX) && (getName(null, null).equals("xlC_r") || getName(null, null).equals("xlC") || getName(null, null).equals("xlc"))){
+            String reverse = new StringBuilder(mojo.dependencyTreeOrderStr(pushDepsToLowestOrder, mojo.getDirectDepsOnly())).reverse().toString();
+            this.narDependencyLibOrder = reverse;
+         } else {
+            this.narDependencyLibOrder = mojo.dependencyTreeOrderStr(pushDepsToLowestOrder, mojo.getDirectDepsOnly());
+         }
     } else if (pushDepsToLowestOrder && !narDefaultDependencyLibOrder) {
         mojo.getLog().warn("pushDepsToLowestOrder will have no effect since narDefaultDependencyLibOrder is disabled");
     } else if (mojo.getDirectDepsOnly() && !narDefaultDependencyLibOrder) {
         mojo.getLog().warn("directDepsOnly will have no effect since narDefaultDependencyLibOrder is disabled");
     }
 
-    // Add transitive dependencies to the shared library search path if we are on linux, directDepsOnly is enabled, and this is not a static library.
-    if (linkPaths != null && linkPaths.size() > 0 && mojo.getDirectDepsOnly() && os.equals(OS.LINUX) && !type.equals(Library.STATIC)){
+    // Add transitive dependencies to the shared library search path if directDepsOnly is enabled, this is not a static library, and the OS is either Linux or AIX.
+    if (linkPaths != null && linkPaths.size() > 0 && mojo.getDirectDepsOnly() && !type.equals(Library.STATIC) && (os.equals(OS.LINUX) || os.equals(OS.AIX))){
         StringBuilder argStrBuilder = new StringBuilder();
-        argStrBuilder.append("-Wl,-rpath-link,");
+        if (os.equals(OS.LINUX))
+        {
+           argStrBuilder.append("-Wl,-rpath-link,");
+        }
+        else if (os.equals(OS.AIX))
+        {
+           argStrBuilder.append("-L");
+        }
         for (String path : linkPaths){
             argStrBuilder.append(path).append(':');
         }
