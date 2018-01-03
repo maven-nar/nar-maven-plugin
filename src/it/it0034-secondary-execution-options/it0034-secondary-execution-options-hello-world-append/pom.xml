@@ -50,7 +50,6 @@
         <artifactId>nar-maven-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>
-          <directDepsOnly>true</directDepsOnly>
           <cpp>
             <options combine.children="append">
               <option>-D_APPEND_FLAG_PRIMARY=5</option>

@@ -43,25 +43,4 @@
     <skipTests>true</skipTests>
   </properties>
 
-  <build>
-    <defaultGoal>integration-test</defaultGoal>
-    <plugins>
-      <plugin>
-        <groupId>@project.groupId@</groupId>
-        <artifactId>nar-maven-plugin</artifactId>
-        <extensions>true</extensions>
-        <configuration>
-          <directDepsOnly>true</directDepsOnly>
-          <linker>
-            <narDefaultDependencyLibOrder>true</narDefaultDependencyLibOrder>
-          </linker>
-          <libraries>
-            <library>
-              <type>executable</type>
-            </library>
-          </libraries>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 </project>
