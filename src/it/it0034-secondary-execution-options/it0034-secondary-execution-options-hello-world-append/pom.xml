@@ -32,10 +32,9 @@
   <artifactId>it0034-secondary-execution-options-hello-world-append</artifactId>
   <packaging>nar</packaging>
   
-  <name>NAR Transitive Deps Executable</name>
+  <name>Primary and secondary execution with append option</name>
   <version>1.0-SNAPSHOT</version>  
-  <description>
-    An executable program that consumes a transitive dependency which is a shared object
+  <description>A primary and secondary execution using append in the options tag.
   </description>
   <url>http://maven.apache.org/</url>
 

@@ -32,10 +32,10 @@
   <artifactId>it0034-secondary-execution-options-hello-world</artifactId>
   <packaging>nar</packaging>
   
-  <name>NAR Transitive Deps Executable</name>
+  <name>Primary and secondary execution using default options</name>
   <version>1.0-SNAPSHOT</version>  
   <description>
-    An executable program that consumes a transitive dependency which is a shared object
+    A primary and secondary execution using the default parent pom options.
   </description>
   <url>http://maven.apache.org/</url>
 
