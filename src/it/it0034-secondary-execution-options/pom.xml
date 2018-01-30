@@ -34,7 +34,7 @@
   <name>Secondary Execution Appended Options</name>
   <version>1.0-SNAPSHOT</version>  
   <description>
-    Appended Option for Secondary Execution pulls in Primary Execution Options
+    Cpp Appended Option for Secondary Executions Does Not Correctly Append to Options in Primary Execution Options When Defined in Same Pom.xml
   </description>
   <url>http://maven.apache.org/</url>
 
@@ -56,14 +56,21 @@
              </library>
            </libraries>
            <cpp>
+             <name>g++</name>
+             <includes>
+               <include>**/*.cpp</include>
+             </includes>
              <options>
-               <option>-D_PARENT_FLAG_PRIMARY=5</option>
+               <option>-D_PARENT_FLAG=0</option>
              </options>
            </cpp>
+           <linker>
+             <name>g++</name>
+           </linker>
          </configuration>
          <executions>
            <execution>
-             <id>secondary</id>
+             <id>execution1</id>
              <phase>test</phase>
              <goals>
                <goal>nar-download</goal>
@@ -74,19 +81,32 @@
                <goal>nar-test</goal>
              </goals>
              <configuration>
-               <aol>amd64-Linux-gpp-secondary</aol>
+               <aol>amd64-Linux-gpp-execution1</aol>
                <cpp>
-                 <name>g++</name>
-                 <includes>
-                   <include>**/*.cpp</include>
-                 </includes>
-                 <options>
-                   <option>-D_PARENT_FLAG_SECONDARY=5</option>
+                 <options children.combine="append">
+                   <option>-D_EXECUTION_1_FLAG=1</option>
                  </options>
                </cpp>
-               <linker>
-                 <name>g++</name>
-               </linker>
+             </configuration>
+           </execution>
+           <execution>
+             <id>execution2</id>
+             <phase>test</phase>
+             <goals>
+               <goal>nar-download</goal>
+               <goal>nar-unpack</goal>
+               <goal>nar-compile</goal>
+               <goal>nar-test-unpack</goal>
+               <goal>nar-testCompile</goal>
+               <goal>nar-test</goal>
+             </goals>
+             <configuration>
+               <aol>amd64-Linux-gpp-execution2</aol>
+               <cpp>
+                 <options children.combine="append">
+                   <option>-D_EXECUTION_2_FLAG=2</option>
+                 </options>
+               </cpp>
              </configuration>
            </execution>
          </executions>
@@ -96,7 +116,6 @@
   
   <modules>
     <module>it0034-secondary-execution-options-hello-world</module>
-    <module>it0034-secondary-execution-options-hello-world-append</module>
   </modules>
   
 </project>

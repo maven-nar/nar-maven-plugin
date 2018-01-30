@@ -4,16 +4,18 @@
 int main(int argc, char *argv[]) {
 	printf("Helloworld\n");
 
-#ifdef _PARENT_FLAG_PRIMARY
-   printf("_PARENT_FLAG_PRIMARY is defined\n");
+#ifdef _EXECUTION_1_FLAG
+   printf("_EXECUTION_1_FLAG is defined\n");
 #endif
 
-#ifdef _PARENT_FLAG_SECONDARY
-   printf("_PARENT_FLAG_SECONDARY is defined\n");
+#ifdef _EXECUTION_2_FLAG
+   printf("_EXECUTION_2_FLAG is defined\n");
 #endif
-
-#if defined(_PARENT_FLAG_PRIMARY) && defined(_PARENT_FLAG_SECONDARY)
-   printf("Both flags defined, this is in error.\n");
+   
+#ifdef _PARENT_FLAG
+   printf("_PARENT_FLAG is defined.\n");
+#else
+   printf("_PARENT_FLAG should be defined for all executions.\n");
    assert (false);
 #endif
 

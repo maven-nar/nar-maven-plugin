@@ -35,7 +35,7 @@
   <name>Primary and secondary execution using default options</name>
   <version>1.0-SNAPSHOT</version>  
   <description>
-    A primary and secondary execution using the default parent pom options.
+    Dual secondary executions using the default parent pom options.
   </description>
   <url>http://maven.apache.org/</url>
 
