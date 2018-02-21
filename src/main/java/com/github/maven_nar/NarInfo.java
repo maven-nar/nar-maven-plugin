@@ -180,6 +180,24 @@ public class NarInfo {
       return this.artifactId;
   }
 
+  /**
+   * Get the version of the NarInfo instance
+   * @return {@link String} representing a NarInfo object's version.
+   * @since 3.5.3
+   */
+  public String getVersion() {
+    return this.version;
+  }
+
+  /**
+   * Get the properties of the NarInfo instance
+   * @return {@link Properties} representing a NarInfo object's properties.
+   * @since 3.5.4
+   */
+  public Properties getInfo() {
+    return this.info;
+  }
+
   public final void read(final JarFile jar) throws IOException {
     this.info.load(jar.getInputStream(getNarPropertiesEntry(jar)));
   }
@@ -208,6 +226,11 @@ public class NarInfo {
     }
   }
 
+  public void mergeProperties(final Properties properties){
+    this.getInfo().putAll(properties);
+  }
+
+
   @Override
   public final String toString() {
     final StringBuffer s = new StringBuffer("NarInfo for ");
@@ -231,11 +254,14 @@ public class NarInfo {
     return s.toString();
   }
 
-  public final void writeToDirectory(final File directory) throws MojoExecutionException {
-    try {
-      writeToFile(new File(directory, getNarInfoFileName()));
-    } catch (final IOException ioe) {
-      throw new MojoExecutionException("Cannot write nar properties file to " + directory, ioe);
+  public final void writeToDirectory(final File... directories) throws MojoExecutionException {
+    for(File directory:directories) {
+      try {
+        writeToFile(new File(directory, getNarInfoFileName()));
+      }
+      catch (final IOException ioe) {
+        throw new MojoExecutionException("Cannot write nar properties file to " + directory, ioe);
+      }
     }
   }
 
@@ -244,6 +270,7 @@ public class NarInfo {
     if (parent != null) {
       parent.mkdirs();
     }
+    log.debug("Write NAR Properties: " + file.toString());
     this.info.store(new FileOutputStream(file), "NAR Properties for " + this.groupId + "." + this.artifactId + "-"
         + this.version);
   }

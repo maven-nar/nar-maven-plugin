@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  #%L
+  Native ARchive plugin for Maven
+  %%
+  Copyright (C) 2002 - 2014 NAR Maven Plugin developers.
+  %%
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+       http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  #L%
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.github.maven-nar.its.nar</groupId>
+    <artifactId>it-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <relativePath>../it-parent/pom.xml</relativePath>
+  </parent>
+
+  <artifactId>it0035-downstream-project</artifactId>
+  <packaging>nar</packaging>
+  
+  <name>NAR Downstream project</name>
+  <version>1.0-SNAPSHOT</version>  
+  <description>
+    Simple dynamic library that depends on a project.
+  </description>
+  <url>http://maven.apache.org/</url>
+
+  <properties>
+    <skipTests>true</skipTests>
+  </properties>
+
+  <!-- it0034-upstream-aol1-multi-aol and it0034-upstream-aol2-multi-aol set 
+  as upstream for this execution is installed in multiple different executions 
+  with same maven coordinates (groupId:artifactId:version), but deploys different 
+  aol artifacts.
+  This build performs two executions against two different aol's of the upstream 
+  project, and is expected to use custom properties file provided in the aol nar
+  to identify correct output override property for an aol -->
+
+  <build>
+    <defaultGoal>integration-test</defaultGoal>
+      <plugins>
+      <plugin>
+        <groupId>@project.groupId@</groupId>
+        <artifactId>nar-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <output>${project.artifactId}</output>
+          <libraries>
+            <library>
+              <type>shared</type>
+            </library>
+          </libraries>
+        </configuration>
+        <executions>
+          <execution>
+            <configuration>
+              <!-- consumes it0034-upstream-aol1-multi-aol project --> 
+              <aol>amd64-Linux-gpp</aol>
+              <output>${project.artifactId}</output>
+            </configuration>
+          </execution>
+          <execution>
+            <id>aol2-platform2</id>
+            <phase>test</phase>
+            <goals>
+              <goal>nar-download</goal>
+              <goal>nar-unpack</goal>
+              <goal>nar-compile</goal>
+            </goals>
+            <configuration>
+              <!-- consumes it0034-upstream-aol2-multi-aol project -->
+              <aol>amd64-Windows-gpp</aol>
+              <output>${project.artifactId}</output>
+              <cpp>
+                <includes>
+                  <include>**/*.cpp</include>
+                </includes>
+              </cpp>
+            </configuration>
+          </execution>
+        </executions>        
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.github.maven-nar.its.nar</groupId>
+      <artifactId>it0034-upstream-project</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>nar</type>
+    </dependency>
+  </dependencies>
+</project>

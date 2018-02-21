@@ -45,4 +45,12 @@ public interface NarFileLayout {
    * @return
    */
   String getLibDirectory(String aol, String type);
+
+  /**
+   * Specifies where nar properties are stored
+   *
+   * @return
+   */
+  String getNarInfoFile(String groupId, String artifactId, String type);
+
 }

@@ -56,4 +56,17 @@ public class NarFileLayout10 implements NarFileLayout {
   public String getLibDirectory(final String aol, final String type) {
     return "lib" + File.separator + aol + File.separator + type;
   }
+
+
+  /*
+   * (non-Javadoc)
+   *
+   * @see com.github.maven_nar.NarFileLayout#getNarInfoFile(java.lang.String,
+   * java.lang.String,
+   * java.lang.String)
+   */
+  @Override
+  public String getNarInfoFile(final String groupId, final String artifactId, final String type) {
+    return "META-INF/nar/" + groupId + "/" + artifactId + "/" + NarInfo.NAR_PROPERTIES;
+  }
 }
