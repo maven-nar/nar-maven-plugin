@@ -20,7 +20,9 @@
 package com.github.maven_nar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -72,6 +74,12 @@ public class Test implements Executable {
    */
   @Parameter
   private List<String> dependencyBindings = new ArrayList<>();
+
+  /**
+   * Additional environment variables to set on the command line.
+   */
+  @Parameter
+  private Map<String, String> environmentVariables = new HashMap<>();
   
 
   @Override
@@ -114,6 +122,10 @@ public class Test implements Executable {
 
   public String getType() {
     return this.type;
+  }
+
+  public Map<String, String> getEnvironmentVariables() {
+    return environmentVariables;
   }
 
   @Override

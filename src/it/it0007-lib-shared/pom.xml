@@ -60,6 +60,9 @@
             <test>
               <name>HelloWorldTest</name>
               <link>shared</link>
+              <environmentVariables>
+                <TESTENVVAR>test</TESTENVVAR>
+              </environmentVariables>
             </test>
           </tests>
         </configuration>
