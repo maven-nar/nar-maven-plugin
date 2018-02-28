@@ -19,6 +19,8 @@
  */
 package com.github.maven_nar.cpptasks.types;
 
+import java.util.Objects;
+
 /**
  * A compiler command line argument.
  */
@@ -28,5 +30,34 @@ public class CompilerArgument extends CommandLineArgument {
 
   public void execute() throws org.apache.tools.ant.BuildException {
     throw new org.apache.tools.ant.BuildException("Not an actual task, but looks like one for documentation purposes");
+  }
+
+  /**
+   * Since equals method is overloaded, also overload hashCode() to be consistent
+   * when comparing objects for collections.
+   * @return calculated hashcode of an object.
+   */
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(this.getValue());
+  }
+
+
+  /**
+   * Override default equals method to compare objects based on the string value,
+   * consumed by Collections (Vector, etc.,) methods for its comparisons.
+   * @return true if the comparing object has the same superclass & contains the same value.
+   */
+  @Override
+  public boolean equals(Object arg)
+  {
+    if((arg== null) || (arg.getClass() != CompilerArgument.class)) {
+      return false;
+    }
+    CompilerArgument cmdLineArg = (CompilerArgument) arg;
+    return (cmdLineArg.compareStrings(cmdLineArg.getValue(),this.getValue())
+            && cmdLineArg.getLocation() == this.getLocation()
+            && cmdLineArg.compareStrings(cmdLineArg.getIfCond(),this.getIfCond())
+            && cmdLineArg.compareStrings(cmdLineArg.getUnlessCond(),this.getUnlessCond()));
   }
 }

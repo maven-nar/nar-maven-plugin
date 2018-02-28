@@ -95,6 +95,9 @@ NAR Configuration
     <testOptions>
       <testOption/>
     </testOptions>
+    <testExcludeOptions>
+      <testExcludeOption/>
+    </testExcludeOptions>
     <clearDefaultOptions/>
     <libs>
       <lib>
@@ -355,6 +358,10 @@ wish to run a GNU configure step but not the full make process.
 ** {linker testOptions}
 
 	Additional options for the linker during the nar-testCompile phase.
+
+** {linker testExcludeOptions}
+
+	Additional options to be excluded for the linker during the nar-testCompile phase.
 
 ** {linker clearDefaultOptions}
 

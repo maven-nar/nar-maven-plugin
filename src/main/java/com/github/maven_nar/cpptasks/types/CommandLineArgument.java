@@ -45,6 +45,10 @@ public class CommandLineArgument {
   public CommandLineArgument() {
   }
 
+  protected String getIfCond() { return this.ifCond; }
+
+  protected String getUnlessCond() { return this.unlessCond; }
+
   public int getLocation() {
     return this.location;
   }
@@ -67,6 +71,13 @@ public class CommandLineArgument {
       return false;
     }
     return true;
+  }
+
+  /**
+   * Returns true if both of the objects are null or are equal by value.
+   */
+  protected static boolean compareStrings (String object1, String object2) {
+    return (object1 == null ? object2 == null : object1.equals(object2));
   }
 
   /**

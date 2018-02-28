@@ -134,6 +134,26 @@ public abstract class ProcessorDef extends DataType {
   }
 
   /**
+   * Remove a <compilerarg> or <linkerarg>
+   *
+   * @param arg
+   *          command line argument, must not be null
+   * @throws NullPointerException
+   *           if arg is null
+   * @throws BuildException
+   *           if this definition is a reference
+   */
+  protected boolean removeConfiguredProcessorArg(final CommandLineArgument arg) throws NullPointerException, BuildException {
+    if (arg == null) {
+      throw new NullPointerException("arg");
+    }
+    if (isReference()) {
+      throw noChildrenAllowed();
+    }
+    return this.processorArgs.removeElement(arg);
+  }
+
+  /**
    * Adds a <compilerarg>or <linkerarg>
    * 
    * @param param
@@ -317,6 +337,13 @@ public abstract class ProcessorDef extends DataType {
   public Environment getEnv() {
     return this.env;
   }
+
+  /**
+   * Provide direct access to copy of processorArgs for validation testing.
+   *
+   * @return processorArgs
+   */
+  public Vector getProcessorArgs() { return this.processorArgs; }
 
   /**
    * Gets the ProcessorDef specified by the extends attribute
