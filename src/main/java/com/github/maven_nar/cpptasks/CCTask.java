@@ -406,7 +406,7 @@ public class CCTask extends Task {
   }
 
   /**
-   * Adds desriptive version information to be included in the
+   * Adds descriptive version information to be included in the
    * generated file. The first active version info block will
    * be used.
    */

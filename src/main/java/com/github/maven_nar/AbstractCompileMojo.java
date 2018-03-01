@@ -49,6 +49,13 @@ public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
   @Parameter
   private Fortran fortran;
 
+    /**
+     * Assembler Compiler
+     *
+     */
+    @Parameter
+    private Assembler assembler;
+
   /**
    * Resource Compiler
    */
@@ -190,6 +197,16 @@ public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
     }
     return this.fortran;
   }
+
+    protected final Assembler getAssembler()
+    {
+        if ( assembler == null )
+        {
+            assembler = new Assembler();
+        }
+        assembler.setAbstractCompileMojo( this );
+        return assembler;
+    }
 
   protected final IDL getIdl() {
     if (this.idl == null && !this.onlySpecifiedCompilers) {

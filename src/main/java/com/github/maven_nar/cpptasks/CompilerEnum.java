@@ -44,6 +44,7 @@ import com.github.maven_nar.cpptasks.msvc.MsvcCCompiler;
 import com.github.maven_nar.cpptasks.msvc.MsvcMIDLCompiler;
 import com.github.maven_nar.cpptasks.msvc.MsvcMessageCompiler;
 import com.github.maven_nar.cpptasks.msvc.MsvcResourceCompiler;
+import com.github.maven_nar.cpptasks.msvc.Assembler64bitCompiler;
 import com.github.maven_nar.cpptasks.openwatcom.OpenWatcomCCompiler;
 import com.github.maven_nar.cpptasks.openwatcom.OpenWatcomFortranCompiler;
 import com.github.maven_nar.cpptasks.os390.OS390CCompiler;
@@ -227,6 +228,7 @@ public class CompilerEnum extends EnumeratedAttribute {
       new ProcessorEnumValue("msvc8", Msvc2005CCompiler.getInstance()),
       new ProcessorEnumValue("bcc", BorlandCCompiler.getInstance()),
       new ProcessorEnumValue("msrc", MsvcResourceCompiler.getInstance()),
+	  new ProcessorEnumValue("ml64", Assembler64bitCompiler.getInstance()),
       new ProcessorEnumValue("msmc", MsvcMessageCompiler.getInstance()),
       new ProcessorEnumValue("brc", BorlandResourceCompiler.getInstance()),
       new ProcessorEnumValue("df", CompaqVisualFortranCompiler.getInstance()),
