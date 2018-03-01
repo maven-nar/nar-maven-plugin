@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,9 +22,11 @@ package com.github.maven_nar;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
@@ -57,6 +59,21 @@ public class NarTestMojo extends AbstractCompileMojo {
    */
   @Parameter(defaultValue = "${basedir}/src/test/resources", required = true)
   private File testResourceDirectory;
+
+  private String[] generateEnvironment(Map<String, String> environmentVariables) throws MojoExecutionException, MojoFailureException {
+    List<String> env = new ArrayList<>();
+
+    // Add the default configured environment
+    Collections.addAll(env, generateEnvironment());
+
+    // Add manually specified environment variables
+    for (Map.Entry<String, String> envVar : environmentVariables.entrySet()) {
+      getLog().debug("Adding environment variable: " + envVar.getKey() + " with value: " + envVar.getValue());
+      env.add(envVar.getKey() + "=" + envVar.getValue());
+    }
+
+    return env.toArray(new String[env.size()]);
+  }
 
   private String[] generateEnvironment() throws MojoExecutionException, MojoFailureException {
     final List env = new ArrayList();
@@ -115,7 +132,7 @@ public class NarTestMojo extends AbstractCompileMojo {
     // add CLASSPATH
     env.add("CLASSPATH=" + StringUtils.join(this.classpathElements.iterator(), File.pathSeparator));
 
-    return env.size() > 0 ? (String[]) env.toArray(new String[env.size()]) : null;
+    return env.size() > 0 ? (String[]) env.toArray(new String[env.size()]) : new String[]{};
   }
 
   /**
@@ -205,7 +222,7 @@ public class NarTestMojo extends AbstractCompileMojo {
 
       final List args = test.getArgs();
       final int result = NarUtil.runCommand(path.toString(), (String[]) args.toArray(new String[args.size()]),
-          workingDir, generateEnvironment(), getLog());
+          workingDir, generateEnvironment(test.getEnvironmentVariables()), getLog());
       if (result != 0) {
         throw new MojoFailureException("Test " + name + " failed with exit code: " + result + " 0x"
             + Integer.toHexString(result));

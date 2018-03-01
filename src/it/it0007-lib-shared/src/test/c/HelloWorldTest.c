@@ -18,11 +18,18 @@
  * #L%
  */
 #include <stdio.h>
+#include <stdlib.h>
 #include "HelloWorldLib.h"
 
 int main(int argc, char *argv[]) {
 	printf("%s\n", HelloWorldLib_sayHello());
-	return 0;
+	if(getenv("TESTENVVAR")) {
+	    printf("Found expected test environment variable\n");
+	    return 0;
+	} else {
+	    printf("Did not find expected test environment variable\n");
+	    return 1;
+    }
 }
 
 
