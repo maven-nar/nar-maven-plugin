@@ -61,13 +61,23 @@ public interface NarLayout {
 
   /**
    * Specifies where libraries are stored
-   * 
+   *
    * @return
    * @throws MojoExecutionException
    *           , MojoFailureException
    */
   File getLibDirectory(File baseDir, String artifactId, String version, String aol, String type)
-      throws MojoExecutionException, MojoFailureException;
+          throws MojoExecutionException, MojoFailureException;
+
+  /**
+   * Specifies where aol specific nar properties are stored
+   *
+   * @return
+   * @throws MojoExecutionException
+   *           , MojoFailureException
+   */
+  File getNarInfoDirectory(File baseDir, String groupId, String artifactId, String version, String aol, String type)
+          throws MojoExecutionException, MojoFailureException;
 
   /**
    * Returns the unpack directory of a specific nar file.

@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 import java.util.HashSet;
+import java.util.Properties;
 
 import com.github.maven_nar.cpptasks.*;
 import org.apache.maven.artifact.Artifact;
@@ -342,18 +343,47 @@ public class NarCompileMojo extends AbstractCompileMojo {
 
         if (!binding.equals(Library.JNI) && !binding.equals(Library.NONE) && !binding.equals(Library.EXECUTABLE)) {
           final File unpackDirectory = getUnpackDirectory();
-
           final File dir = getLayout()
               .getLibDirectory(unpackDirectory, dependency.getArtifactId(), dependency.getBaseVersion(), aol.toString(),
                   binding);
 
           getLog().debug("Looking for Library Directory: " + dir);
           if (dir.exists()) {
+            // Load nar properties file from aol specific directory
+            final File aolNarInfoFile = getLayout()
+                    .getNarInfoDirectory(unpackDirectory, dependency.getGroupId(), dependency.getArtifactId(),
+                            dependency.getBaseVersion(), aol.toString(), binding);
+
+            // Read nar properties file as narInfo
+            NarInfo aolNarInfo = new NarInfo(dependency.getGroupId(), dependency.getArtifactId(),
+                    dependency.getBaseVersion(), getLog(), aolNarInfoFile);
+
+            // Write to log about custom nar properties found in aol directory.
+            if(!aolNarInfo.getInfo().isEmpty()) {
+              getLog().debug(String.format ("Custom NAR properties identified: %s-%s-%s-%s-%s",
+                      dependency.getGroupId(),
+                      dependency.getArtifactId(),
+                      dependency.getBaseVersion(),
+                      aol.toString(),
+                      binding));
+            }
+            else {
+              getLog().debug(String.format ("Custom NAR properties not identified: %s-%s-%s-%s-%s",
+                      dependency.getGroupId(),
+                      dependency.getArtifactId(),
+                      dependency.getBaseVersion(),
+                      aol.toString(),
+                      binding));
+            }
+
+            // overlay aol nar properties file on top of the default one.
+            aolNarInfo.mergeProperties(dependency.getNarInfo().getInfo());
+
             final LibrarySet libSet = new LibrarySet();
             libSet.setProject(antProject);
 
             // FIXME, no way to override
-            final String libs = dependency.getNarInfo().getLibs(getAOL());
+            final String libs = aolNarInfo.getLibs(getAOL());
             if (libs != null && !libs.equals("")) {
               getLog().debug("Using LIBS = " + libs);
               libSet.setLibs(new CUtil.StringArrayBuilder(libs));

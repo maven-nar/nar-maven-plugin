@@ -126,6 +126,25 @@ public class NarLayout20 extends AbstractNarLayout {
     return dir;
   }
 
+  /*
+* (non-Javadoc)
+*
+* @see com.github.maven_nar.NarLayout#getNarInfoDirectory(java.io.File,
+ * java.lang.String
+ * java.lang.String
+ * java.lang.String
+ * com.github.maven_nar.AOL,
+ * java.lang.String)
+*/
+  @Override
+  public final File getNarInfoDirectory(final File baseDir, final String groupId, final String artifactId, final String version,
+                                         final String aol, final String type) throws MojoExecutionException {
+
+  // This functionality is not supported for older layouts, return an empty file to be passive.
+    getLog().debug("NarLayout20 doesn't support writing NarInfo to project classifier directories,use NarLayout21 instead.");
+    return new File("");
+  }
+
   @Override
   public File getNarUnpackDirectory(final File baseUnpackDirectory, final File narFile) {
     final File dir = new File(baseUnpackDirectory, FileUtils.basename(narFile.getPath(), "."

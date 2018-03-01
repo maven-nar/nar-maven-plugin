@@ -24,6 +24,9 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
+import java.io.File;
+import java.io.FileFilter;
+
 /**
  * Create the nar.properties file.
  * 
@@ -38,8 +41,19 @@ public class NarPreparePackageMojo extends AbstractNarMojo {
   public final void narExecute() throws MojoExecutionException, MojoFailureException {
     // let the layout decide which (additional) nars to attach
     getLayout().prepareNarInfo(getTargetDirectory(), getMavenProject(), getNarInfo(), this);
-
     getNarInfo().writeToDirectory(this.classesDirectory);
-  }
 
+    final String artifactIdVersion = getMavenProject().getArtifactId() + "-" + getMavenProject().getVersion();
+
+    // Scan target directory to identify project classifier directories, skipping noarch
+    File[] files = getTargetDirectory().listFiles(new FileFilter() {
+      @Override
+      public boolean accept(File file) {
+        return file.getName().startsWith(artifactIdVersion) && (!file.getName().endsWith(NarConstants.NAR_NO_ARCH));
+      }
+    });
+
+    // Write nar info to project classifier directories
+    getNarInfo().writeToDirectory(files);
+  }
 }

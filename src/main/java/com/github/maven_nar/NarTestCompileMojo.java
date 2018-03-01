@@ -23,6 +23,7 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -296,8 +297,38 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
           final LibrarySet libSet = new LibrarySet();
           libSet.setProject(antProject);
 
+          // Load nar properties file from aol specific directory
+          final File aolNarInfoFile = getLayout()
+                  .getNarInfoDirectory(getUnpackDirectory(), dependency.getGroupId(), dependency.getArtifactId(),
+                          dependency.getBaseVersion(), aol.toString(), binding);
+
+          // Read nar properties file as NarInfo
+          NarInfo aolNarInfo = new NarInfo(dependency.getGroupId(), dependency.getArtifactId(),
+                  dependency.getBaseVersion(), getLog(), aolNarInfoFile);
+
+          // Write to log about custom nar properties found in aol directory.
+          if(!aolNarInfo.getInfo().isEmpty()) {
+            getLog().debug(String.format ("Custom NAR properties identified: %s-%s-%s-%s-%s",
+                    dependency.getGroupId(),
+                    dependency.getArtifactId(),
+                    dependency.getBaseVersion(),
+                    aol.toString(),
+                    binding));
+          }
+          else {
+            getLog().debug(String.format ("Custom NAR properties not identified: %s-%s-%s-%s-%s",
+                    dependency.getGroupId(),
+                    dependency.getArtifactId(),
+                    dependency.getBaseVersion(),
+                    aol.toString(),
+                    binding));
+          }
+
+          // overlay aol nar properties file on top of the default one.
+          aolNarInfo.mergeProperties(dependency.getNarInfo().getInfo());
+
           // FIXME, no way to override
-          final String libs = dependency.getNarInfo().getLibs(getAOL());
+          final String libs = aolNarInfo.getLibs(getAOL());
           if (libs != null && !libs.equals("")) {
             getLog().debug("Using LIBS = " + libs);
             libSet.setLibs(new CUtil.StringArrayBuilder(libs));
