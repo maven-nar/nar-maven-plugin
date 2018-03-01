@@ -25,6 +25,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -257,8 +259,8 @@ public class Linker {
     return generateManifest;
   }
 
-  public final LinkerDef getLinker(final AbstractCompileMojo mojo, final CCTask task, final String os,
-      final String prefix, final String type) throws MojoFailureException, MojoExecutionException {
+  public final LinkerDef getLinker(final AbstractCompileMojo mojo, final CCTask task, final String os, final String prefix,
+      final String type, final List<String> linkPaths) throws MojoFailureException, MojoExecutionException {
     Project antProject = task.getProject();
     if (this.name == null) {
       throw new MojoFailureException("NAR: Please specify a <Name> as part of <Linker>");
@@ -387,11 +389,39 @@ public class Linker {
 
     //if No user preference of dependency library link order is specified then use the Default one nar generate.
     if ((this.narDependencyLibOrder == null) && (narDefaultDependencyLibOrder)) {
-        this.narDependencyLibOrder = mojo.dependencyTreeOrderStr(pushDepsToLowestOrder, mojo.getDirectDepsOnly());
+         if (os.equals(OS.AIX) && (getName(null, null).equals("xlC_r") || getName(null, null).equals("xlC") || getName(null, null).equals("xlc"))){
+            String dependencies = new StringBuilder(mojo.dependencyTreeOrderStr(pushDepsToLowestOrder, mojo.getDirectDepsOnly())).toString();
+            List<String> dependency_list = Arrays.asList(dependencies.split("\\s*,\\s*"));
+            Collections.reverse(dependency_list); 
+            this.narDependencyLibOrder = String.join(",", dependency_list);;
+         } else {
+            this.narDependencyLibOrder = mojo.dependencyTreeOrderStr(pushDepsToLowestOrder, mojo.getDirectDepsOnly());
+         }
     } else if (pushDepsToLowestOrder && !narDefaultDependencyLibOrder) {
-        this.log.warn("pushDepsToLowestOrder will have no effect since narDefaultDependencyLibOrder is disabled");
+        mojo.getLog().warn("pushDepsToLowestOrder will have no effect since narDefaultDependencyLibOrder is disabled");
     } else if (mojo.getDirectDepsOnly() && !narDefaultDependencyLibOrder) {
-        this.log.warn("directDepsOnly will have no effect since narDefaultDependencyLibOrder is disabled");
+        mojo.getLog().warn("directDepsOnly will have no effect since narDefaultDependencyLibOrder is disabled");
+    }
+
+    // Add transitive dependencies to the shared library search path if directDepsOnly is enabled, this is not a static library, and the OS is either Linux or AIX.
+    if (linkPaths != null && linkPaths.size() > 0 && mojo.getDirectDepsOnly() && !type.equals(Library.STATIC) && (os.equals(OS.LINUX) || os.equals(OS.AIX))){
+        StringBuilder argStrBuilder = new StringBuilder();
+        if (os.equals(OS.LINUX))
+        {
+           argStrBuilder.append("-Wl,-rpath-link,");
+        }
+        else if (os.equals(OS.AIX))
+        {
+           argStrBuilder.append("-L");
+        }
+        for (String path : linkPaths){
+            argStrBuilder.append(path).append(':');
+        }
+        String argStr = argStrBuilder.toString();
+        final LinkerArgument linkPathArg = new LinkerArgument ();
+        // Trim trailing ':' character from argument
+        linkPathArg.setValue(argStr.substring(0, argStr.length() - 1));
+        linker.addConfiguredLinkerArg(linkPathArg);
     }
 
     // record the preference for nar dependency library link order
@@ -480,7 +510,7 @@ public class Linker {
    */
   public final LinkerDef getTestLinker(final AbstractCompileMojo mojo, final CCTask task, final String os,
       final String prefix, final String type) throws MojoFailureException, MojoExecutionException {
-    final LinkerDef linker = getLinker(mojo, task, os, prefix, type);
+    final LinkerDef linker = getLinker(mojo, task, os, prefix, type, null);
     if (this.testOptions != null) {
       for (final Object testOption : this.testOptions) {
         final LinkerArgument arg = new LinkerArgument();
