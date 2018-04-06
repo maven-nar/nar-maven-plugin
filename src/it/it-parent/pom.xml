@@ -62,4 +62,31 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  <profiles>
+    <profile>
+      <id>aix-it-profile</id>
+      <activation>
+        <os>
+          <name>aix</name>
+        </os>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>@project.groupId@</groupId>
+            <artifactId>nar-maven-plugin</artifactId>
+            <version>@project.version@</version>
+            <extensions>true</extensions>
+            <configuration>
+              // Need to specifiy linker on AIX otherwise gcc will be assumed and nar-validate goal will fail.
+              <linker>
+                <name>xlC_r</name>
+              </linker>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
