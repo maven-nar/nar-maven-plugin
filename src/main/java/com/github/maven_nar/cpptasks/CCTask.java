@@ -307,6 +307,12 @@ public class CCTask extends Task {
    */
   private int commandLogLevel = Project.MSG_VERBOSE;
 
+  /**
+   * If non-empty, compile an object of this name and package it 
+   * into a shared archive with the specified output name (AIX only)
+   */
+  private String sharedObjectName = "";
+
   public CCTask() {
   }
 
@@ -901,6 +907,22 @@ public class CCTask extends Task {
           getProject().setProperty(this.outputFileProperty, output.getAbsolutePath());
         }
       }
+
+      // If sharedObjectName was specified, add the shared object to an archive, then delete the shared object.
+      if (sharedObjectName != null && !sharedObjectName.isEmpty()) {
+        File workingDirectory = new File(this._outfile.getParent());
+        String[] archiveCommand = new String[4];
+        archiveCommand[0] = "ar";
+        archiveCommand[1] = "r";
+        archiveCommand[2] = linkerConfig.getOutputFileNames(this._outfile.getName(), versionInfo)[0];
+        archiveCommand[3] = sharedObjectName;
+        CUtil.runCommand(this, workingDirectory, archiveCommand, false, null);
+
+        String[] removeCommand = new String[2];
+        removeCommand[0] = "rm";
+        removeCommand[1] = sharedObjectName;
+        CUtil.runCommand(this, workingDirectory, removeCommand, false, null);
+      }
     }
   }
 
@@ -1104,9 +1126,14 @@ public class CCTask extends Task {
     objectFiles.copyInto(objectFileArray);
     final File[] sysObjectFileArray = new File[sysObjectFiles.size()];
     sysObjectFiles.copyInto(sysObjectFileArray);
-    final String baseName = this._outfile.getName();
-    final String[] fullNames = linkerConfig.getOutputFileNames(baseName, versionInfo);
-    final File outputFile = new File(this._outfile.getParent(), fullNames[0]);
+    File outputFile;
+    if (sharedObjectName == null || sharedObjectName.isEmpty()) {
+        final String baseName = this._outfile.getName();
+        final String[] fullNames = linkerConfig.getOutputFileNames(baseName, versionInfo);
+        outputFile = new File(this._outfile.getParent(), fullNames[0]);
+    } else {
+        outputFile = new File(this._outfile.getParent(), sharedObjectName);
+    }
     return new TargetInfo(linkerConfig, objectFileArray, sysObjectFileArray, outputFile, linkerConfig.getRebuild());
   }
 
@@ -1761,5 +1788,12 @@ public class CCTask extends Task {
   public void setWarnings(final WarningLevelEnum level) {
     this.compilerDef.setWarnings(level);
   }
+
+  /**
+   * @param sharedObjectName the sharedObjectName to set
+   */
+   public void setSharedObjectName(String sharedObjectName) {
+      this.sharedObjectName = sharedObjectName;
+   }
 
 }

@@ -49,6 +49,8 @@ NAR Configuration
   <failOnError/>
   <runtime/>
   <libtool/>
+  <directDepsOnly/>
+  <sharedObjectName/>
   
   <gnuUseOnWindows/>
   <gnuSourceDirectory/>
@@ -89,6 +91,7 @@ NAR Configuration
     <toolPath/>
     <incremental/>
     <map/>
+    <pushDepsToLowestOrder/>
     <options>
       <option/>
     </options>
@@ -265,6 +268,17 @@ Default is dynamic.
 	Set use of libtool. If set to true, the "libtool " will be prepended to 
 the command line for compatible compilers/linkers. Default is false.
 
+* {directDepsOnly}
+
+	If set to true, will force the project to specify all it's 
+dependencies and not inherit transitive dependencies.
+
+* {sharedObjectName}
+
+	This parameter only has an effect on the AIX operating system for shared library projects. 
+If set, the linker will output a shared object of the given name, 
+and that shared object will be added to a shared archive using the normal output name.
+
 * {gnuMakeSkip}
     
     Skip the GNU Make step if you are using the GNU stages. This is useful if you 
@@ -346,6 +360,11 @@ wish to run a GNU configure step but not the full make process.
 ** {linker map}
 
 	Enables the production of a map file. Default is false.
+
+** {linker pushDepsToLowestOrder}
+
+	When true, this property enables linker re-ordering logic such that libraries that 
+are lower in the dependency heirarchy appear lower in the list, maximizing symbol resolution.
 
 ** {linker options}
 

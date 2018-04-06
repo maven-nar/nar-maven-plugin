@@ -133,6 +133,11 @@ public class NarCompileMojo extends AbstractCompileMojo {
     getLog().debug("NAR - output: '" + outFile + "'");
     task.setOutfile(outFile);
 
+    // If we are building a shared library on AIX and the user has specified a sharedObjectName, use it.
+    if (getOS().equals(OS.AIX) && type.equals(Library.SHARED) && sharedObjectName != "") {
+       task.setSharedObjectName(sharedObjectName);
+    }
+
     // object directory
     File objDir = new File(getTargetDirectory(), "obj");
     objDir = new File(objDir, getAOL().toString());
