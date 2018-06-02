@@ -55,6 +55,12 @@ public class Javah {
    */
   @Parameter(defaultValue = "javah")
   private String name = "javah";
+  
+  /**
+   * Skip javah.
+   */
+  @Parameter
+  private boolean skip = false;
 
   /**
    * Add boot class paths. By default none.
@@ -125,6 +131,12 @@ public class Javah {
   }
 
   public final void execute() throws MojoExecutionException, MojoFailureException {
+      
+    if (skip) {
+        this.mojo.getLog().info("javah skipped");
+        return;
+    }  
+    
     getClassDirectory().mkdirs();
 
     try {
@@ -177,7 +189,7 @@ public class Javah {
   private String[] generateArgs(final Set/* <String> */classes) throws MojoExecutionException {
 
     final List args = new ArrayList();
-
+    
     if (!this.bootClassPaths.isEmpty()) {
       args.add("-bootclasspath");
       args.add(StringUtils.join(this.bootClassPaths.iterator(), File.pathSeparator));
