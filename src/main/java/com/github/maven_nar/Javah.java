@@ -55,6 +55,12 @@ public class Javah {
    */
   @Parameter(defaultValue = "javah")
   private String name = "javah";
+  
+  /**
+   * Additional parameters to pass to javah command.
+   */
+  @Parameter
+  private List /* <String> */additionalParameters = new ArrayList();
 
   /**
    * Add boot class paths. By default none.
@@ -178,6 +184,10 @@ public class Javah {
 
     final List args = new ArrayList();
 
+    if (!this.additionalParameters.isEmpty()) {
+        args.addAll(additionalParameters);
+    }
+    
     if (!this.bootClassPaths.isEmpty()) {
       args.add("-bootclasspath");
       args.add(StringUtils.join(this.bootClassPaths.iterator(), File.pathSeparator));
