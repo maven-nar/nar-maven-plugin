@@ -393,7 +393,14 @@ public class Linker {
             String dependencies = new StringBuilder(mojo.dependencyTreeOrderStr(pushDepsToLowestOrder, mojo.getDirectDepsOnly())).toString();
             List<String> dependency_list = Arrays.asList(dependencies.split("\\s*,\\s*"));
             Collections.reverse(dependency_list); 
-            this.narDependencyLibOrder = String.join(",", dependency_list);;
+            StringBuilder libOrder = new StringBuilder();
+            boolean first = true;
+            for (String dependency : dependency_list) {
+                if (first) first = false;
+                else libOrder.append(",");
+                libOrder.append(dependency);
+            }
+            this.narDependencyLibOrder = libOrder.toString();
          } else {
             this.narDependencyLibOrder = mojo.dependencyTreeOrderStr(pushDepsToLowestOrder, mojo.getDirectDepsOnly());
          }
