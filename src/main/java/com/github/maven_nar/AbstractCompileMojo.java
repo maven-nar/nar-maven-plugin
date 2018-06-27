@@ -125,6 +125,13 @@ public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
   protected boolean directDepsOnly;
 
   /**
+   * This parameter only has an effect on the AIX operating system for shared library projects. 
+   * If set, the linker will output a shared object of the given name, 
+   * and that shared object will be added to a shared archive using the normal output name.
+   */
+  @Parameter(defaultValue = "")
+  protected String sharedObjectName;
+  /**
    * List of tests to create
    */
   @Parameter
