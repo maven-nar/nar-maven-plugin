@@ -20,9 +20,14 @@
 package com.github.maven_nar;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Objects;
+import java.util.Vector;
+import java.util.HashSet;
 import java.util.Properties;
 
 import org.apache.maven.artifact.Artifact;
@@ -137,10 +142,35 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
 
     getMsvc().configureCCTask(task);
 
-    List depLibs = getNarArtifacts();
+    List<NarArtifact> dependencies = getNarArtifacts();
+    List<String> linkPaths = new ArrayList<String>();
+
+    // If we're restricting deps to direct deps ONLY then trim transitive deps
+    if (directDepsOnly){
+      HashSet<String> directDepsSet = getDirectDepsSet(getVerboseDependencyTree());
+      ListIterator <NarArtifact> depsIt = dependencies.listIterator();
+
+      // Trim all deps from dependencies that are not in the directDepsSet, warn if they are found.
+      while(depsIt.hasNext()){
+        NarInfo dep = depsIt.next().getNarInfo();
+        if(!directDepsSet.contains(dep.getGroupId() + ":" + dep.getArtifactId())){
+          this.getLog().debug("Stray dependency: " + dep + " found. This may cause build failures.");
+          depsIt.remove();
+          // If this transitive dependency was a shared object, add it to the linkPaths list.
+          String depType = dep.getBinding(null, null);
+          if (Objects.equals(depType, Library.SHARED))
+          {
+            File soDir = getLayout().getLibDirectory(getTargetDirectory(), dep.getArtifactId(), dep.getVersion(), getAOL().toString(), depType);
+            if (soDir.exists()){
+              linkPaths.add(soDir.getAbsolutePath());
+            }
+          }
+        }
+      }
+    }
     
     // add dependency include paths
-    for (final Object depLib1 : depLibs) {
+    for (final Object depLib1 : dependencies) {
       final Artifact artifact = (Artifact) depLib1;
 
       // check if it exists in the normal unpack directory
@@ -164,7 +194,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
 
     // add linker
     final LinkerDef linkerDefinition = getLinker().getTestLinker(this, task, getOS(), getAOL().getKey() + ".linker.",
-        type);
+        type, linkPaths);
     task.addConfiguredLinker(linkerDefinition);
 
     final File includeDir = getLayout().getIncludeDirectory(getTargetDirectory(), getMavenProject().getArtifactId(),
@@ -243,7 +273,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
 
         final String depToOrderName = (String) aDepLibOrder;
 
-        for (final Iterator j = depLibs.iterator(); j.hasNext(); ) {
+        for (final Iterator j = dependencies.iterator(); j.hasNext(); ) {
 
           final NarArtifact dep = (NarArtifact) j.next();
           final String depName = dep.getGroupId() + ":" + dep.getArtifactId();
@@ -256,11 +286,11 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
         }
       }
 
-      tmp.addAll(depLibs);
-      depLibs = tmp;
+      tmp.addAll(dependencies);
+      dependencies = tmp;
     }
 
-    for (final Object depLib : depLibs) {
+    for (final Object depLib : dependencies) {
       final NarArtifact dependency = (NarArtifact) depLib;
 
       // FIXME no handling of "local"

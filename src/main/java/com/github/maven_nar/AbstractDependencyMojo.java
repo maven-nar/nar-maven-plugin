@@ -66,9 +66,13 @@ import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.collection.CollectRequest;
 import org.eclipse.aether.collection.CollectRequest;
+import org.eclipse.aether.util.graph.selector.AndDependencySelector;
+import org.eclipse.aether.util.graph.selector.OptionalDependencySelector;
+import org.eclipse.aether.util.graph.selector.ScopeDependencySelector;
 import org.eclipse.aether.util.graph.transformer.ConflictResolver;
 import org.eclipse.aether.util.graph.transformer.NoopDependencyGraphTransformer;
 import org.eclipse.aether.collection.DependencyCollectionException;
+import org.eclipse.aether.collection.DependencySelector;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 
 /**
@@ -177,19 +181,26 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     
     // Create Aether graph dependency object from params extracted above
     org.eclipse.aether.graph.Dependency dep = new org.eclipse.aether.graph.Dependency (
-        new org.eclipse.aether.artifact.DefaultArtifact(art.getGroupId(), art.getArtifactId (), null, art.getVersion()), null);
+      new org.eclipse.aether.artifact.DefaultArtifact(art.getGroupId(), art.getArtifactId (), null, art.getVersion()), null);
     
     // Set the root of the request, in this case the current project will be the root
     collectReq.setRoot(dep);
 
     // Set the repos the collectReq will hit
     collectReq.setRepositories(projectRepos);
-    
+
+    // Get test scope dependencies if we are in the testCompile phase
+    if (this instanceof NarTestCompileMojo)
+    {
+      DependencySelector dependencySelector = new AndDependencySelector(new OptionalDependencySelector(), new ScopeDependencySelector(null));
+      session.setDependencySelector(dependencySelector);
+    }
+
     try {
       return repoSystem.collectDependencies (session, collectReq).getRoot();
     } catch (DependencyCollectionException exception) {
-        this.getLog().warn("Could not collect dependencies from repo system", exception);
-        return null;
+      this.getLog().warn("Could not collect dependencies from repo system", exception);
+      return null;
     }
   }
 

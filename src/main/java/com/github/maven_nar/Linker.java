@@ -516,8 +516,8 @@ public class Linker {
    *         argument list.
    */
   public final LinkerDef getTestLinker(final AbstractCompileMojo mojo, final CCTask task, final String os,
-      final String prefix, final String type) throws MojoFailureException, MojoExecutionException {
-    final LinkerDef linker = getLinker(mojo, task, os, prefix, type, null);
+      final String prefix, final String type, final List<String> linkPaths) throws MojoFailureException, MojoExecutionException {
+    final LinkerDef linker = getLinker(mojo, task, os, prefix, type, linkPaths);
     if (this.testOptions != null) {
       for (final Object testOption : this.testOptions) {
         final LinkerArgument arg = new LinkerArgument();

@@ -49,8 +49,8 @@ public class TestLinkerVersion extends TestCase {
   }
 
   public void testVersion() throws Exception {
-    if ("Windows".equals(NarUtil.getOS(null)) && null == System.getenv("DevEnvDir")) {
-      // Skip testing the MSVC linker on Win if vsvars32.bat has not run
+    if (("Windows".equals(NarUtil.getOS(null)) && null == System.getenv("DevEnvDir")) || "AIX".equals(NarUtil.getOS(null))) {
+      // Skip testing the MSVC linker on Win if vsvars32.bat has not run.  Also skip the test on AIX.
       return;
     }
     final String version = this.linker.getVersion();

@@ -266,7 +266,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
       while(depsIt.hasNext()){
         NarInfo dep = depsIt.next().getNarInfo();
         if(!directDepsSet.contains(dep.getGroupId() + ":" + dep.getArtifactId())){
-          this.getLog().warn("Stray dependency: " + dep + " found. This may cause build failures.");
+          this.getLog().debug("Stray dependency: " + dep + " found. This may cause build failures.");
           depsIt.remove();
           // If this transitive dependency was a shared object, add it to the linkPaths list.
           String depType = dep.getBinding(null, null);
