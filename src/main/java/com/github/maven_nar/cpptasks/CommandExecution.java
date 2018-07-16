@@ -66,7 +66,7 @@ public class CommandExecution {
                 //Append space
                 builder.append(" ");
             }
-            task.log("Executing - " + builder.toString(), Project.MSG_INFO);
+            //task.log("Executing - " + builder.toString(), Project.MSG_INFO);
 
 
             //Create the StreamGobbler to read the process output
