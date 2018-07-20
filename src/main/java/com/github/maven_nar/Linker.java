@@ -104,6 +104,14 @@ public class Linker {
   private List testOptions;
 
   /**
+   * Additional options for the linker when running in the nar-testCompile
+   * phase.
+   *
+   */
+  @Parameter
+  private List testExcludeOptions;
+
+  /**
    * Options for the linker as a whitespace separated list. Defaults to
    * Architecture-OS-Linker specific values. Will
    * work in combination with &lt;options&gt;.
@@ -525,7 +533,23 @@ public class Linker {
         linker.addConfiguredLinkerArg(arg);
       }
     }
-    return linker;
+    if (this.testExcludeOptions != null) {
+      for (final Object testExcludeOption : this.testExcludeOptions) {
+        final LinkerArgument arg = new LinkerArgument();
+        arg.setValue((String) testExcludeOption);
+        if (linker.removeConfiguredLinkerArg(arg)) {
+          mojo.getLog().debug(String.format("TestExcludeOption removed %s from the list of test execution arguments." ,
+                  arg.getValue()));
+        }
+        else {
+          mojo.getLog().debug(String.format ("%s%s%s",
+                  "TestExcludeOption didn't find ",
+                  arg.getValue(),
+                  " as a matching argument among the list of test execution arguments."));
+        }
+      }
+    }
+      return linker;
   }
 
   public final String getVersion() throws MojoFailureException, MojoExecutionException {

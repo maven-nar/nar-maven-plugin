@@ -361,4 +361,21 @@ public final class TestLinkerDef extends TestProcessorDef {
     }
     fail("should have thrown exception");
   }
+  /**
+   * Tests the behavior of testExcludeOptions,
+   * ensures that linker arguments are removed as expected.
+   */
+  public void testLinkerBase() {
+    final LinkerDef baseLinkerDef = new LinkerDef();
+    final LinkerArgument argument1 = new LinkerArgument();
+    argument1.setValue("OPTION1");
+    baseLinkerDef.addConfiguredLinkerArg(argument1);
+    final LinkerArgument argument2 = new LinkerArgument();
+    argument2.setValue("OPTION2");
+    baseLinkerDef.addConfiguredLinkerArg(argument2);
+    assertEquals(2,baseLinkerDef.getProcessorArgs().size());
+    baseLinkerDef.removeConfiguredLinkerArg(argument1);
+    baseLinkerDef.removeConfiguredLinkerArg(argument2);
+    assertEquals(0,baseLinkerDef.getProcessorArgs().size());
+  }
 }

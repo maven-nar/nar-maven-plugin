@@ -98,6 +98,9 @@ NAR Configuration
     <testOptions>
       <testOption/>
     </testOptions>
+    <testExcludeOptions>
+      <testExcludeOption/>
+    </testExcludeOptions>
     <clearDefaultOptions/>
     <libs>
       <lib>
@@ -374,6 +377,10 @@ are lower in the dependency heirarchy appear lower in the list, maximizing symbo
 ** {linker testOptions}
 
 	Additional options for the linker during the nar-testCompile phase.
+
+** {linker testExcludeOptions}
+
+	Additional options to be excluded for the linker during the nar-testCompile phase.
 
 ** {linker clearDefaultOptions}
 

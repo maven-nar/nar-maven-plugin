@@ -100,6 +100,13 @@ public class LinkerDef extends ProcessorDef {
   }
 
   /**
+   * Removes a linker command-line arg.
+   */
+  public boolean removeConfiguredLinkerArg(final LinkerArgument arg) {
+    return removeConfiguredProcessorArg(arg);
+  }
+
+  /**
    * Adds a compiler command-line arg.
    */
   public void addConfiguredLinkerParam(final LinkerParam param) {
