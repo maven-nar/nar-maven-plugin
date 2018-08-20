@@ -102,7 +102,7 @@ public abstract class AbstractNarLayout implements NarLayout, NarConstants {
   }
 
   protected void unpackNarAndProcess(final ArchiverManager archiverManager, final File file, final File narLocation,
-      final String os, final String linkerName, final AOL defaultAOL)
+      final String os, final String linkerName, final AOL defaultAOL, final boolean skipRanlib)
       throws MojoExecutionException, MojoFailureException {
 
     final String gpp = "g++";
@@ -133,10 +133,14 @@ public abstract class AbstractNarLayout implements NarLayout, NarConstants {
       NarUtil.makeLink(new File(narLocation, "lib/" + defaultAOL), this.log);
     }
     if (linkerName.equals(gcc) || linkerName.equals(gpp)) {
-      NarUtil.runRanlib(new File(narLocation, "lib/" + defaultAOL), this.log);
+      if (!skipRanlib) {
+        NarUtil.runRanlib(new File(narLocation, "lib/" + defaultAOL), this.log);
+  	  }
       // FIXME clumsy
       if (defaultAOL.hasLinker(gpp)) {
-        NarUtil.runRanlib(new File(narLocation, "lib/" + NarUtil.replace(gpp, gcc, defaultAOL.toString())), this.log);
+        if (!skipRanlib) {
+          NarUtil.runRanlib(new File(narLocation, "lib/" + NarUtil.replace(gpp, gcc, defaultAOL.toString())), this.log);
+    	}
       }
     }
     // TODO: Find replacement action to install name tool

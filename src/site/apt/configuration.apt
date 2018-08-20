@@ -59,6 +59,7 @@ NAR Configuration
   <gnuConfigureSkip/>
   <gnuMakeSkip/>
   <libsName/>
+  <skipRanlib/>
 
   <libraries>
     <library>
@@ -290,6 +291,11 @@ wish to run a GNU configure step but not the full make process.
     This is really usefull when packaging 3rd party libraries.
     
     Use the CSV notation: \<libsName\>lib1,lib2\</libsName\>
+    
+* {skipRanlib}
+
+    Prevents nar from running the ranlib command on attached archives in a unix/linux
+    environment.
 
 * {libraries}
 
