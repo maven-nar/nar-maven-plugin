@@ -539,6 +539,7 @@
                 <setupInclude>it0031-push-deps-to-lowest-order-agg/pom.xml</setupInclude>
                 <setupInclude>it0034-upstream-aol1-multi-aol/pom.xml</setupInclude>
                 <setupInclude>it0034-upstream-aol2-multi-aol/pom.xml</setupInclude>
+                <setupInclude>it0039-includesTypes/pom.xml</setupInclude>
               </setupIncludes>
               <pomIncludes>
                 <pomInclude>*/pom.xml</pomInclude>
