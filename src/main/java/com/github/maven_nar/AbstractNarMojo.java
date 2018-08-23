@@ -354,7 +354,7 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
   }
   
   protected final boolean isSkipRanlib() throws MojoExecutionException {
-	  return this.skipRanlib;
+    return this.skipRanlib;
   }
 
   protected final File getOutputDirectory() {
