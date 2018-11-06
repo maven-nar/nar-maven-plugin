@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -139,16 +139,21 @@ public class NarSystemMojo extends AbstractNarMojo {
   }
 
   private boolean hasNativeLibLoaderAsDependency() {
+    return getNativeLibLoaderVersion() != null;
+  }
+
+
+  private String getNativeLibLoaderVersion() {
     for (MavenProject project = getMavenProject(); project != null; project = project.getParent()) {
       final List<Dependency> dependencies = project.getDependencies();
       for (final Dependency dependency : dependencies) {
         final String artifactId = dependency.getArtifactId();
         if ("native-lib-loader".equals(artifactId)) {
-          return true;
+          return dependency.getVersion();
         }
       }
     }
-    return false;
+    return null;
   }
 
   @Override
@@ -214,7 +219,7 @@ public class NarSystemMojo extends AbstractNarMojo {
           + "            System.load(unpacked.getPath());\n"
           + "        } else try {\n"
           + "            final String libPath = getLibPath(loader, aols, mappedNames);\n"
-          + "            final JniExtractor extractor = new DefaultJniExtractor(NarSystem.class, System.getProperty(\"java.io.tmpdir\"));\n"
+          + "            final JniExtractor extractor = "+ getJniExtractorCreationStatement() +"\n"
           + "            final File extracted = extractor.extractJni(libPath, fileName);\n"
           + "            System.load(extracted.getAbsolutePath());\n" + "        } catch (final Exception e) {\n"
           + "            e.printStackTrace();\n" + "            throw e instanceof RuntimeException ?\n"
@@ -276,5 +281,18 @@ public class NarSystemMojo extends AbstractNarMojo {
     if (this.buildContext != null) {
       this.buildContext.refresh(narSystem);
     }
+  }
+
+  private String getJniExtractorCreationStatement() {
+    String nativeLoaderVersion = getNativeLibLoaderVersion();
+    if (nativeLoaderVersion == null) {
+      throw new AssertionError("getJniExtractorCreationStatement() called, but nativel-lib-loader plugin is absent, or its version is unknown");
+    }
+    // versions 1.x.x are unavailable on Maven Central and Github, not checking against them
+    // new format was introduced in "2.3.0"
+    boolean oldFormat = nativeLoaderVersion.matches("2\\.[012]\\..*");
+    return oldFormat
+        ? "new DefaultJniExtractor(NarSystem.class, System.getProperty(\"java.io.tmpdir\"));"
+        : "new DefaultJniExtractor(NarSystem.class);";
   }
 }
