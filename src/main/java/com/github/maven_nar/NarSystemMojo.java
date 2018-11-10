@@ -107,7 +107,9 @@ public class NarSystemMojo extends AbstractNarMojo {
     builder.append("        final String classPath = NarSystem.class.getName().replace('.', '/') + \".class\";\n");
     builder.append("        final URL url = loader.getResource(classPath);\n");
     builder.append("        if (url == null || !\"file\".equals(url.getProtocol())) return null;\n");
-    builder.append("        final String path = url.getPath();\n");
+    builder.append("        System.out.println(url);\n");
+    builder.append("        final String path = url.getPath().replace(\"%5C\", File.separator);\n");
+    builder.append("        System.out.println(path);\n");
     builder
         .append("        final String prefix = path.substring(0, path.length() - classPath.length()) + \"../nar/\" + fileName + \"-\";\n");
     builder.append("        for (final String aol : aols) {\n");
