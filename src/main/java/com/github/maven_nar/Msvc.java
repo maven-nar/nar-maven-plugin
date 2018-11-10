@@ -10,11 +10,9 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.sun.jna.platform.win32.Advapi32Util;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.types.Environment.Variable;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -520,8 +518,11 @@ public class Msvc {
     }
   }
 
-  private static TreeMap<String, Object> visualStudioVS7SxS(com.sun.jna.platform.win32.WinReg.HKEY root, String key) {
-    com.sun.jna.platform.win32.WinReg.HKEYByReference phkKey = new com.sun.jna.platform.win32.WinReg.HKEYByReference();
+  private TreeMap<String, Object> visualStudioVS7SxS(com.sun.jna.platform.win32.WinReg.HKEY root, String key) {
+    if(!com.sun.jna.platform.win32.Advapi32Util.registryKeyExists(root, key)){
+      return new TreeMap<>();
+    }
+        com.sun.jna.platform.win32.WinReg.HKEYByReference phkKey = new com.sun.jna.platform.win32.WinReg.HKEYByReference();
     int rc = com.sun.jna.platform.win32.Advapi32.INSTANCE.RegOpenKeyEx(root, key, 0,
         com.sun.jna.platform.win32.WinNT.KEY_READ | com.sun.jna.platform.win32.WinNT.KEY_WOW64_32KEY, phkKey);
     if (rc != com.sun.jna.platform.win32.W32Errors.ERROR_SUCCESS) {
