@@ -129,7 +129,7 @@
     <skip.fortran.it>it0018-fortran/**</skip.fortran.it>
     <skip.toolchain.it>it0017-toolchain/**</skip.toolchain.it>
     <sonatypeOssDistMgmtSnapshotsUrl>https://oss.sonatype.org/content/repositories/snapshots/</sonatypeOssDistMgmtSnapshotsUrl>
-    <mavenPluginPluginVersion>3.2</mavenPluginPluginVersion>
+    <mavenPluginPluginVersion>3.5.2</mavenPluginPluginVersion>
     <distMgmtSnapshotsName />
     <distMgmtSnapshotsUrl />
     <maven.site.cache />
@@ -321,6 +321,11 @@
           <version>3.1</version>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.22.0</version>
+        </plugin>
+        <plugin>
           <artifactId>maven-site-plugin</artifactId>
           <version>3.3</version>
         </plugin>
@@ -337,14 +342,6 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -523,7 +520,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-invoker-plugin</artifactId>
-            <version>1.8</version>
+            <version>3.2.0</version>
             <configuration>
               <debug>${invoker.debug}</debug>
               <ignoreFailures>false</ignoreFailures>
