@@ -33,10 +33,8 @@ Examples
 	The nar-maven-plugin repository contains a collection of integration tests in the #link_it( '', 'src/it' ) directory.
     These examples demonstrates different usage scenarios and can be useful to learn how to use NAR.
     
-    Running the tests standalone require a little hacking, since they are not intended as unit-tests.
-    Still, you can build and run them by replacing <<\<groupId\>@project.groupId@\</groupId\>>> with
-    <<\<groupId\>com.github.maven-nar\</groupId\>>> in the pom.xml files. Then, navigate to each test
-    folder and invoke <<<mvn test>>>.
+    Running the tests standalone require a little preparation: run <<<mvn -Prun-its integration-test>>>.
+    Then, you can navigate in <<<target/it>>> to each test folder and invoke <<<mvn test>>>.
     
 	The following examples are available:
 
