@@ -166,7 +166,7 @@ public class NarIntegrationTestMojo extends AbstractDependencyMojo {
    * The Maven Project Object
    */
   // DUNS, made private
-  @Component
+  @Parameter(defaultValue = "${project}", readonly = true)
   private MavenProject project;
 
   /**
@@ -528,7 +528,7 @@ public class NarIntegrationTestMojo extends AbstractDependencyMojo {
   /**
    * The current build session instance.
    */
-  @Component
+  @Parameter(defaultValue = "${session}", readonly = true)
   private MavenSession session;
 
   private void addArtifact(final SurefireBooter surefireBooter, final Artifact surefireArtifact)

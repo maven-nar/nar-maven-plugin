@@ -30,20 +30,17 @@ import java.util.ListIterator;
 import java.util.Objects;
 import java.util.Vector;
 import java.util.HashSet;
-import java.util.Properties;
 
 import com.github.maven_nar.cpptasks.*;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
-import org.eclipse.aether.artifact.DefaultArtifact;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.codehaus.plexus.util.FileUtils;
@@ -72,7 +69,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
   /**
    * The current build session instance.
    */
-  @Component
+  @Parameter(defaultValue = "${session}", readonly = true)
   protected MavenSession session;
 
   private void copyInclude(final Compiler c) throws IOException, MojoExecutionException, MojoFailureException {

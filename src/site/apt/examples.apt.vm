@@ -1,0 +1,131 @@
+~~~
+~~ #%L
+~~ Native ARchive plugin for Maven
+~~ %%
+~~ Copyright (C) 2002 - 2014 NAR Maven Plugin developers.
+~~ %%
+~~ Licensed under the Apache License, Version 2.0 (the "License");
+~~ you may not use this file except in compliance with the License.
+~~ You may obtain a copy of the License at
+~~ 
+~~      http://www.apache.org/licenses/LICENSE-2.0
+~~ 
+~~ Unless required by applicable law or agreed to in writing, software
+~~ distributed under the License is distributed on an "AS IS" BASIS,
+~~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~ See the License for the specific language governing permissions and
+~~ limitations under the License.
+~~ #L%
+~~~
+	---
+NAR Plugin
+	---
+	---
+Mark Donszelmann
+	---
+#macro ( link_it $dir $text )
+#if ( "" == $text ) #set( $text = $dir )#end
+{{{https://github.com/maven-nar/nar-maven-plugin/tree/master/src/it/$dir}<<<$text>>>}}
+#end
+
+Examples
+
+	The nar-maven-plugin repository contains a collection of integration tests in the #link_it( '', 'src/it' ) directory.
+    These examples demonstrates different usage scenarios and can be useful to learn how to use NAR.
+    
+    Running the tests standalone require a little preparation: run <<<mvn -Prun-its integration-test>>>.
+    Then, you can navigate in <<<target/it>>> to each test folder and invoke <<<mvn test>>>.
+    
+	The following examples are available:
+
+ * <<Basics>>
+
+  	[#link_it( 'it0001-executable', '' )] A C routine.
+  
+  	[#link_it( 'it0002-executable-static', '' )] A C routine statically linked with the C-runtime library.
+
+	[]
+
+ * <<JNI>>
+
+	[#link_it( 'it0003-jni', '' )] A C routine called from Java.
+	
+	[#link_it( 'it0004-java-dep-jni', '' )] A NAR JNI project which depends on "jni".
+
+	[#link_it( 'it0005-jni-static', '' )] A C routine called from Java statically linked with the C-runtime library.
+	
+	[#link_it( 'it0006-jni-3rdparty', '' )] A third party JNI library called from Java.
+	The third party library is the "jni" from the example above and is added as resource to the project in the 
+	form of a JNI library and a corresponding jar file. The "jni" lib is currently provided for the following
+	platforms:
+	
+	* x86_64-MacOSX-g++
+	
+	[]
+	
+	[]
+
+ * <<Shared (dynamic) libraries>>
+
+	[#link_it( 'it0007-lib-shared', '' )] A C routine which gets archived into a shared library. A C test executable 
+	is created.
+	
+	[#link_it( 'it0008-executable-dep-lib-shared', '' )] A C executable which depends on "lib-shared" and links dynamically 
+	with it. The executable is created and run.
+	
+	[#link_it( 'it0009-jni-dep-lib-shared', '' )] A C routine called from Java, which depends on 
+	"lib-shared" and links dynamically with it.
+	
+	[]
+
+ * <<Static libraries>>
+
+	[#link_it( 'it0010-lib-static', '' )] A C routine which gets archived into a static library. A C test executable 
+	is created.
+	
+	[#link_it( 'it0011-executable-dep-lib-static', '' )] A C executable which depends on "lib-static" and links statically 
+	with it. The executabe is created and run. 
+
+	[#link_it( 'it0012-jni-dep-lib-static', '' )] A C routine called from Java, which depends on 
+	"lib-static" and links statically with it.
+	
+	[]
+
+ * <<Advanced scenarios>>
+
+	[#link_it( 'it0013-gnu-executable', '' )] A gnu autogen and configurable package.
+	
+	[#link_it( 'it0014-multi-module', '' )] A multi module package, consisting of a library and an executable dependent on that library. 
+	
+	[#link_it( 'it0015-cpp-executable', '' )] A C++ program.
+	
+	[#link_it( 'it0016-layout', '' )] Tests for different repository layouts, currently NarLayout20 and NarLayout21.
+	
+	[#link_it( 'it0017-toolchain', '' )] Tests which use the toolchain to find tools such as javah. 
+	
+	[#link_it( 'it0018-fortran', '' )] A Fortran 90 program, not enabled on Windows. 
+	
+	[#link_it( 'it0019-compiler', '' )] Test to run with the Intel compiler.
+	
+	[]
+
+ * <<3rd party libraries>>
+	
+	[#link_it( 'it0020-lib-3rdparty', '' )] A 3rd party library, including header files. 
+	
+	[#link_it( 'it0021-executable-dep-lib-3rdparty', '' )] An executable dependent on the 3rd party library. 
+	
+	[#link_it( 'it0025-jar-dep-jni', '' )] A JAR project which depends on "jni".
+
+	[#link_it( 'it0026-native-lib-loader', '' )] A demonstration of how to unpack native libraries at runtime from ".nar" files present
+	on the class path, using the `native-lib-loader` library.
+
+	[] 
+
+ []
+
+	These examples are now all run as integration tests by running Maven on the nar-maven-plugin from its top-level directory with the profile "run-its":
+
++-----+
+mvn -Prun-its verify
++-----+
