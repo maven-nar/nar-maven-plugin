@@ -99,8 +99,8 @@ public abstract class AbstractResourcesMojo extends AbstractNarMojo {
     int copied = 0;
 
     // copy libraries
-    File libDir = new File(srcDir, this.resourceLibDir);
-    if (libDir.exists()) {
+    File baseLibDir = new File(srcDir, this.resourceLibDir);
+    if (baseLibDir.exists()) {
       // TODO: copyLibraries is used on more than just this artifact - this
       // check needs to be placed elsewhere
       if (getLibraries().isEmpty()) {
@@ -111,6 +111,7 @@ public abstract class AbstractResourcesMojo extends AbstractNarMojo {
         final Library library = (Library) element;
         final String type = library.getType();
 
+        File libDir = baseLibDir;
         final File typedLibDir = new File(libDir, type);
         if (typedLibDir.exists()) {
           libDir = typedLibDir;
