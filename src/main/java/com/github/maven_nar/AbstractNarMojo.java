@@ -159,6 +159,12 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
   private String libsName;
 
   /**
+   * Skip running ranlib if this artifact is a library
+   */
+  @Parameter(defaultValue = "false", required = true)
+  private boolean skipRanlib;
+
+  /**
    * Layout to be used for building and unpacking artifacts
    */
   @Parameter(property = "nar.layout", defaultValue = "com.github.maven_nar.NarLayout21", required = true)
@@ -344,6 +350,10 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
     } else {
       return null;
     }
+  }
+  
+  protected final boolean isSkipRanlib() throws MojoExecutionException {
+    return this.skipRanlib;
   }
 
   protected final File getOutputDirectory() {

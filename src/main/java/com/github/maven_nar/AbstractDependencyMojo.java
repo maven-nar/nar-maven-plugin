@@ -813,7 +813,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
       // TODO: the dependency may be specified against a different linker
       // (version)?
       // AOL aol = dependency.getClassifier(); Trim
-      layout.unpackNar(unpackDir, this.archiverManager, file, getOS(), getLinker().getName(), getAOL());
+      layout.unpackNar(unpackDir, this.archiverManager, file, getOS(), getLinker().getName(), getAOL(), isSkipRanlib());
     }
   }
 

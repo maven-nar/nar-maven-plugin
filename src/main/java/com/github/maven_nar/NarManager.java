@@ -280,7 +280,7 @@ public class NarManager {
 
   public final void unpackAttachedNars(final List/* <NarArtifacts> */narArtifacts,
       final ArchiverManager archiverManager, final String classifier, final String os, final NarLayout layout,
-      final File unpackDir) throws MojoExecutionException, MojoFailureException {
+      final File unpackDir, boolean skipRanlib) throws MojoExecutionException, MojoFailureException {
     this.log.debug("Unpack called for OS: " + os + ", classifier: " + classifier + " for NarArtifacts {");
     for (final Object narArtifact : narArtifacts) {
       this.log.debug("  - " + narArtifact);
@@ -293,7 +293,7 @@ public class NarManager {
       this.log.debug("Unpack " + dependency + " to " + unpackDir);
       final File file = getNarFile(dependency);
 
-      layout.unpackNar(unpackDir, archiverManager, file, os, this.linkerName, this.defaultAOL);
+      layout.unpackNar(unpackDir, archiverManager, file, os, this.linkerName, this.defaultAOL, skipRanlib);
     }
   }
 }

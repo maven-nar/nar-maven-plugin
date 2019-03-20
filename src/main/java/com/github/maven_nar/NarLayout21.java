@@ -254,7 +254,7 @@ public class NarLayout21 extends AbstractNarLayout {
 
   @Override
   public void unpackNar(final File unpackDirectory, final ArchiverManager archiverManager, final File file,
-      final String os, final String linkerName, final AOL defaultAOL)
+      final String os, final String linkerName, final AOL defaultAOL, final boolean skipRanlib)
       throws MojoExecutionException, MojoFailureException {
     final File dir = getNarUnpackDirectory(unpackDirectory, file);
 
@@ -275,7 +275,7 @@ public class NarLayout21 extends AbstractNarLayout {
     }
 
     if (process) {
-      unpackNarAndProcess(archiverManager, file, dir, os, linkerName, defaultAOL);
+      unpackNarAndProcess(archiverManager, file, dir, os, linkerName, defaultAOL, skipRanlib);
     }
   }
 

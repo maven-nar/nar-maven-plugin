@@ -103,8 +103,7 @@ public interface NarLayout {
    * @param defaultAOL
    * @param linkerName
    */
-  void
-      unpackNar(File baseDir, ArchiverManager archiverManager, File file, String os, String linkerName, AOL defaultAOL)
+  void unpackNar(File baseDir, ArchiverManager archiverManager, File file, String os, String linkerName, AOL defaultAOL, boolean skipRanlib)
           throws MojoExecutionException, MojoFailureException;
 
 }
