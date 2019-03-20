@@ -535,6 +535,7 @@
                 <setupInclude>it0010-lib-static/pom.xml</setupInclude>
                 <setupInclude>it0020-lib-3rdparty/pom.xml</setupInclude>
                 <setupInclude>it0026-native-lib-loader/pom.xml</setupInclude>
+                <setupInclude>it0026-native-lib-loader-2.3.0/pom.xml</setupInclude>
                 <setupInclude>it0031-push-deps-to-lowest-order-agg/pom.xml</setupInclude>
                 <setupInclude>it0034-upstream-aol1-multi-aol/pom.xml</setupInclude>
                 <setupInclude>it0034-upstream-aol2-multi-aol/pom.xml</setupInclude>
