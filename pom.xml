@@ -705,17 +705,17 @@
     </profile>
     <!-- This profile enables deployment to the SciJava Maven repository. -->
     <profile>
-      <id>deploy-to-imagej</id>
+      <id>deploy-to-scijava</id>
       <distributionManagement>
         <repository>
-          <id>imagej.releases</id>
-          <name>ImageJ Releases Repository</name>
-          <url>dav:http://maven.imagej.net/content/repositories/releases</url>
+          <id>scijava.releases</id>
+          <name>SciJava Releases Repository</name>
+          <url>dav:https://maven.scijava.org/content/repositories/releases</url>
         </repository>
         <snapshotRepository>
-          <id>imagej.snapshots</id>
-          <name>ImageJ Snapshots Repository</name>
-          <url>dav:http://maven.imagej.net/content/repositories/snapshots</url>
+          <id>scijava.snapshots</id>
+          <name>SciJava Snapshots Repository</name>
+          <url>dav:https://maven.scijava.org/content/repositories/snapshots</url>
         </snapshotRepository>
       </distributionManagement>
     </profile>
