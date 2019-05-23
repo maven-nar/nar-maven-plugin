@@ -329,6 +329,27 @@
           <artifactId>maven-site-plugin</artifactId>
           <version>3.3</version>
         </plugin>
+        <plugin>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.0.1</version>
+          <executions>
+            <!--
+            NB: Attach sources with jar goal, not jar-no-fork, to avoid a bug
+            where the -sources JAR gets generated and deployed twice. See:
+            https://issues.apache.org/jira/browse/MNG-5939
+            -->
+            <execution>
+              <id>attach-sources</id>
+              <phase>none</phase>
+            </execution>
+            <execution>
+              <id>attach-sources-jar</id>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -467,18 +488,6 @@
               <useAgent>true</useAgent>
               <skip>${gpg.skip}</skip>
             </configuration>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-source-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-sources</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
           </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
