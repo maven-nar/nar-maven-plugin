@@ -11,7 +11,7 @@
 
   <groupId>com.github.maven-nar</groupId>
   <artifactId>nar-maven-plugin</artifactId>
-  <version>3.7.2-SNAPSHOT</version>
+  <version>3.8.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>Native ARchive plugin for Maven</name>
@@ -331,21 +331,12 @@
         </plugin>
         <plugin>
           <artifactId>maven-source-plugin</artifactId>
-          <version>3.0.1</version>
+          <version>3.1.0</version>
           <executions>
-            <!--
-            NB: Attach sources with jar goal, not jar-no-fork, to avoid a bug
-            where the -sources JAR gets generated and deployed twice. See:
-            https://issues.apache.org/jira/browse/MNG-5939
-            -->
             <execution>
               <id>attach-sources</id>
-              <phase>none</phase>
-            </execution>
-            <execution>
-              <id>attach-sources-jar</id>
               <goals>
-                <goal>jar</goal>
+                <goal>jar-no-fork</goal>
               </goals>
             </execution>
           </executions>
@@ -496,7 +487,7 @@
               <execution>
                 <id>attach-javadocs</id>
                 <goals>
-                  <goal>jar</goal>
+                  <goal>jar-no-fork</goal>
                 </goals>
               </execution>
             </executions>
