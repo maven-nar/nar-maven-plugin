@@ -475,14 +475,21 @@ public class Msvc {
       }
       addPath(windowsSdkHome, "bin/"+versionPart+"x86");
     }
+    System.out.printf("TRACE: addWindowsSDKPaths pre: toolPathWindowsSDK='%s' %n", toolPathWindowsSDK);
 
-    if ("amd64".equals(mojoArchitecture)) {
-      toolPathWindowsSDK = new File(windowsSdkHome, "bin/"+versionPart+"x64").getAbsolutePath();
-    } else if (compareVersion(windowsSdkVersion, "7.1A") <= 0) {
-      toolPathWindowsSDK = new File(windowsSdkHome, "bin").getAbsolutePath();
-    } else {
-      toolPathWindowsSDK = new File(windowsSdkHome, "bin/"+versionPart+"x86").getAbsolutePath();
+    if(toolPathWindowsSDK==null||toolPathWindowsSDK.trim().isEmpty()) {
+    	if ("amd64".equals(mojoArchitecture)) {
+    		toolPathWindowsSDK = new File(windowsSdkHome, "bin/"+versionPart+"x64").getAbsolutePath();
+    		System.out.printf("TRACE: arch=amd64: set toolPathWindowsSDK='%s' %n", toolPathWindowsSDK);
+    	} else if (compareVersion(windowsSdkVersion, "7.1A") <= 0) {
+    		toolPathWindowsSDK = new File(windowsSdkHome, "bin").getAbsolutePath();
+    		System.out.printf("TRACE:sdkr<7.1A: set toolPathWindowsSDK='%s' %n", toolPathWindowsSDK);
+    	} else {
+    		toolPathWindowsSDK = new File(windowsSdkHome, "bin/"+versionPart+"x86").getAbsolutePath();
+    		System.out.printf("TRACE: arc86 sdk>7.1 set toolPathWindowsSDK='%s' %n", toolPathWindowsSDK);
+    	}
     }
+    System.out.printf("TRACE: addWindowsSDKPaths post: toolPathWindowsSDK='%s' %n", toolPathWindowsSDK);
 
     mojo.getLog().debug(String.format(" Using WindowSDK bin %1s", toolPathWindowsSDK));
   }

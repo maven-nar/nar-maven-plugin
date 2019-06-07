@@ -480,6 +480,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
               mtexe = mtexeFile.getAbsolutePath();
           } else {
             File mtexeFile = new File(getMsvc().getSDKToolPath(), mtexe);
+            System.out.printf("TRACE: VC>7 mtexeFile='%s' %n",mtexeFile);
             if (mtexeFile.exists())
               mtexe = mtexeFile.getAbsolutePath();
           }
