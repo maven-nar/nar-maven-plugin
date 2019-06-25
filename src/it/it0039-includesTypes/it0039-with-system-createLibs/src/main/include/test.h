@@ -19,7 +19,7 @@
  */
 
 #ifdef __GNUC__
-#pragma GCC diagnostic error "-Werror"
+#pragma GCC diagnostic error "-Wreturn-type"
 #endif
 
 int testWithWarning() {}
