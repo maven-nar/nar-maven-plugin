@@ -15,9 +15,7 @@
   <packaging>maven-plugin</packaging>
 
   <name>Native ARchive plugin for Maven</name>
-  <description>
-    This plugin compiles native code and publishes native artifacts in the form of nar files.
-  </description>
+  <description>This plugin compiles native code and publishes native artifacts in the form of nar files.</description>
   <url>https://maven-nar.github.io/</url>
   <inceptionYear>2005</inceptionYear>
   <organization>
