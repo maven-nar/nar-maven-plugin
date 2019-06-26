@@ -171,7 +171,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
     
     // add dependency include paths
     for (final Object depLib1 : dependencies) {
-      final Artifact artifact = (Artifact) depLib1;
+      final NarArtifact artifact = (NarArtifact) depLib1;
 
       // check if it exists in the normal unpack directory
       File include = getLayout()
@@ -182,7 +182,13 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
             .getIncludeDirectory(getTestUnpackDirectory(), artifact.getArtifactId(), artifact.getBaseVersion());
       }
       if (include.exists()) {
-        task.createIncludePath().setPath(include.getPath());
+        String includesType = artifact.getNarInfo().getInludesType(null);
+        if (includesType.equals("system")) {
+          task.createSysIncludePath().setPath(include.getPath());
+        }
+        else {
+          task.createIncludePath().setPath(include.getPath());
+        }
       }
     }
 

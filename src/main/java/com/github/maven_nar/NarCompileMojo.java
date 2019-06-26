@@ -295,7 +295,13 @@ public class NarCompileMojo extends AbstractCompileMojo {
             narDependency.getBaseVersion());
         getLog().debug("Looking for include directory: " + include);
         if (include.exists()) {
-          task.createIncludePath().setPath(include.getPath());
+          String includesType = narDependency.getNarInfo().getInludesType(null);
+          if (includesType.equals("system")) {
+            task.createSysIncludePath().setPath(include.getPath());
+          }
+          else {
+            task.createIncludePath().setPath(include.getPath());
+          }
         } else {
           // Ideally includes are used from lib (static or shared)
           // however it's not required.

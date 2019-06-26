@@ -165,6 +165,13 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
   private boolean skipRanlib;
 
   /**
+   * Specifies the type of include this artifact may contain -- system
+   * or local (default)
+   */
+  @Parameter(defaultValue = "local", required = true)
+  private String includesType;
+
+  /**
    * Layout to be used for building and unpacking artifacts
    */
   @Parameter(property = "nar.layout", defaultValue = "com.github.maven_nar.NarLayout21", required = true)
@@ -354,6 +361,10 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
   
   protected final boolean isSkipRanlib() throws MojoExecutionException {
     return this.skipRanlib;
+  }
+
+  protected final String getIncludesType() throws MojoExecutionException {
+    return this.includesType;
   }
 
   protected final File getOutputDirectory() {
