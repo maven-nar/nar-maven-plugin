@@ -24,18 +24,18 @@
 
   <parent>
     <groupId>com.github.maven-nar.its.nar</groupId>
-    <artifactId>it0034-secondary-execution-options</artifactId>
+    <artifactId>it0033-trans-deps</artifactId>
     <version>1.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>it0034-secondary-execution-options-hello-world</artifactId>
+  <artifactId>it0033-trans-deps-exe</artifactId>
   <packaging>nar</packaging>
   
-  <name>Primary and secondary execution using default options</name>
+  <name>NAR Transitive Deps Executable</name>
   <version>1.0-SNAPSHOT</version>  
   <description>
-    Dual secondary executions using the default parent pom options.
+    An executable program that consumes a transitive dependency which is a shared object
   </description>
   <url>http://maven.apache.org/</url>
 
@@ -43,4 +43,34 @@
     <skipTests>true</skipTests>
   </properties>
 
+  <build>
+    <defaultGoal>integration-test</defaultGoal>
+    <plugins>
+      <plugin>
+        <groupId>@project.groupId@</groupId>
+        <artifactId>nar-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <directDepsOnly>true</directDepsOnly>
+          <linker>
+            <narDefaultDependencyLibOrder>true</narDefaultDependencyLibOrder>
+          </linker>
+          <libraries>
+            <library>
+              <type>executable</type>
+            </library>
+          </libraries>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <dependencies>
+    <dependency>
+      <groupId>com.github.maven-nar.its.nar</groupId>
+      <artifactId>it0033-trans-deps-direct</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>nar</type>
+    </dependency>
+  </dependencies>
 </project>

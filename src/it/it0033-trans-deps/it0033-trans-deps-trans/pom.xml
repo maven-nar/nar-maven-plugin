@@ -24,12 +24,12 @@
 
   <parent>
     <groupId>com.github.maven-nar.its.nar</groupId>
-    <artifactId>it0033-directDepsOnly-link-transitive-deps</artifactId>
+    <artifactId>it0033-trans-deps</artifactId>
     <version>1.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>it0033-directDepsOnly-link-transitive-deps-trans</artifactId>
+  <artifactId>it0033-trans-deps-trans</artifactId>
   <packaging>nar</packaging>
   
   <name>NAR Shared Library Trans</name>

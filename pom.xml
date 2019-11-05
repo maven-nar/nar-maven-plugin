@@ -534,6 +534,9 @@
             <artifactId>maven-invoker-plugin</artifactId>
             <version>3.2.0</version>
             <configuration>
+              <properties>
+                <jna.nosys>true</jna.nosys>
+              </properties>
               <debug>${invoker.debug}</debug>
               <ignoreFailures>false</ignoreFailures>
               <!-- FAILS to run, see ReleaseNotes

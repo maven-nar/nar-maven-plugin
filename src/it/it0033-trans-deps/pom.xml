@@ -29,7 +29,7 @@
     <relativePath>../it-parent/pom.xml</relativePath>
   </parent>
 
-  <artifactId>it0033-directDepsOnly-link-transitive-deps</artifactId>
+  <artifactId>it0033-trans-deps</artifactId>
   <packaging>pom</packaging>
   <name>Aggregate Direct and Transitive shared objects pom</name>
   <version>1.0-SNAPSHOT</version>  
@@ -42,10 +42,10 @@
     <skipTests>true</skipTests>
   </properties>
   <modules>
-    <module>it0033-directDepsOnly-link-transitive-deps-trans</module>
-    <module>it0033-directDepsOnly-link-transitive-deps-direct</module>
-    <module>it0033-directDepsOnly-link-transitive-deps-exe</module>
-    <module>it0033-directDepsOnly-link-transitive-deps-static-lib</module>
+    <module>it0033-trans-deps-trans</module>
+    <module>it0033-trans-deps-direct</module>
+    <module>it0033-trans-deps-exe</module>
+    <module>it0033-trans-deps-static-lib</module>
   </modules>
   
 </project>

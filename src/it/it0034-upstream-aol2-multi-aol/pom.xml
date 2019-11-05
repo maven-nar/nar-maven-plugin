@@ -54,7 +54,7 @@
         <artifactId>nar-maven-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>
-          <aol>amd64-Windows-gpp</aol>
+          <aol>amd64-Windows-${nar.linker}</aol>
           <output>${project.artifactId}</output>
           <libraries>
             <library>

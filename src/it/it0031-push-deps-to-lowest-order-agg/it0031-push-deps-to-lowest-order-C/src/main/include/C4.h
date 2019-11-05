@@ -21,10 +21,12 @@
 #define C4_H
 
 #ifdef WIN32
-__declspec(dllexport) 
+#define DLLEXPORT __declspec(dllexport) 
+#else
+#define DLLEXPORT
 #endif
 
-class C4{
+class DLLEXPORT C4{
    public:
       const char* print();
 };

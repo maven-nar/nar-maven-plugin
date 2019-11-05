@@ -29,7 +29,7 @@
     <relativePath>../it-parent/pom.xml</relativePath>
   </parent>
 
-  <artifactId>it0034-secondary-execution-options</artifactId>
+  <artifactId>it0034-secondary-exec-opt</artifactId>
   <packaging>pom</packaging>
   <name>Secondary Execution Appended Options</name>
   <version>1.0-SNAPSHOT</version>  
@@ -56,7 +56,7 @@
              </library>
            </libraries>
            <cpp>
-             <name>g++</name>
+             <name>${nar.linker}</name>
              <includes>
                <include>**/*.cpp</include>
              </includes>
@@ -64,9 +64,6 @@
                <option>-D_PARENT_FLAG=0</option>
              </options>
            </cpp>
-           <linker>
-             <name>g++</name>
-           </linker>
          </configuration>
          <executions>
            <execution>
@@ -81,7 +78,7 @@
                <goal>nar-test</goal>
              </goals>
              <configuration>
-               <aol>amd64-Linux-gpp-execution1</aol>
+               <aol>amd64-Linux-${nar.linker}-execution1</aol>
                <cpp>
                  <options children.combine="append">
                    <option>-D_EXECUTION_1_FLAG=1</option>
@@ -101,7 +98,7 @@
                <goal>nar-test</goal>
              </goals>
              <configuration>
-               <aol>amd64-Linux-gpp-execution2</aol>
+               <aol>amd64-Linux-${nar.linker}-execution2</aol>
                <cpp>
                  <options children.combine="append">
                    <option>-D_EXECUTION_2_FLAG=2</option>
@@ -115,7 +112,7 @@
    </build>
   
   <modules>
-    <module>it0034-secondary-execution-options-hello-world</module>
+    <module>it0034-secondary-exec-opt-hw</module>
   </modules>
   
 </project>

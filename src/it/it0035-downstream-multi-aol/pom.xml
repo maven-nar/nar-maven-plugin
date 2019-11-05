@@ -70,7 +70,7 @@
           <execution>
             <configuration>
               <!-- consumes it0034-upstream-aol1-multi-aol project --> 
-              <aol>amd64-Linux-gpp</aol>
+              <aol>amd64-Linux-${nar.linker}</aol>
               <output>${project.artifactId}</output>
             </configuration>
           </execution>
@@ -84,7 +84,7 @@
             </goals>
             <configuration>
               <!-- consumes it0034-upstream-aol2-multi-aol project -->
-              <aol>amd64-Windows-gpp</aol>
+              <aol>amd64-Windows-${nar.linker}</aol>
               <output>${project.artifactId}</output>
               <cpp>
                 <includes>
