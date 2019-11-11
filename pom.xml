@@ -457,8 +457,10 @@
               <serverId>sonatype-nexus-releases</serverId>
               <nexusUrl>https://oss.sonatype.org/</nexusUrl>
               <autoReleaseAfterClose>true</autoReleaseAfterClose>
-              <stagingProgressTimeoutMinutes>15</stagingProgressTimeoutMinutes>
+              <stagingProgressTimeoutMinutes>30</stagingProgressTimeoutMinutes>
               <stagingProgressPauseDurationSeconds>12</stagingProgressPauseDurationSeconds>
+              <keepStagingRepositoryOnFailure>true</keepStagingRepositoryOnFailure>
+              <keepStagingRepositoryOnCloseRuleFailure>true</keepStagingRepositoryOnCloseRuleFailure>
               <!--
               By having no explicit stagingProfileId, we use
               Staging V2 in "auto" mode, profile will be
