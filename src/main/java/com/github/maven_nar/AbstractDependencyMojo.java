@@ -159,7 +159,14 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
   @Parameter(defaultValue = "${project.remoteProjectRepositories}")
   private List<RemoteRepository> projectRepos;
 
-  
+  // in very large projects where n >= 2 libraries are created, getNarArtifacts()
+  // will be call n times. The time distance between the first and second calls
+  // may be arbitrarily large since CCTask::execute is asynchronous. If it becomes
+  // too large, getMavenProject().getArtifacts() may differ.
+  // This should make sense since the the list of artifacts should not differ
+  // between the first and second libraries.
+  private final List<NarArtifact> narDependencies = new LinkedList<>();
+
   /**
    * Gets the project's full dependency tree prior to dependency mediation. This is required if
    * we want to know where to push libraries in the linker line.
@@ -695,7 +702,9 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
    * NarInfo)
    */
   public final List<NarArtifact> getNarArtifacts() throws MojoExecutionException {
-    final List<NarArtifact> narDependencies = new LinkedList<>();
+    if (!narDependencies.isEmpty()) {
+      return narDependencies;
+    }
 
     FilterArtifacts filter = new FilterArtifacts();
 
