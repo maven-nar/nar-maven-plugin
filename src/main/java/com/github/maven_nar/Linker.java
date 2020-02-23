@@ -613,8 +613,17 @@ public class Linker {
       if (m.find()) {
         version = m.group(0);
       }
+    } else if (name.equals("gnucobol")) {
+      NarUtil.runCommand("cobc", new String[] {
+          "--version"
+      }, null, null, out, err, dbg, log);
+      final Pattern p = Pattern.compile("\\d+\\.\\d+\\.\\d+");
+      final Matcher m = p.matcher(out.toString());
+      if (m.find()) {
+        version = m.group(0);
+      }
     } else {
-      if (!this.prefix.isEmpty()) {
+      if (this.prefix != null && !this.prefix.isEmpty()) {
         NarUtil.runCommand(linkerPrefix+this.name, new String[] {
           "--version"
         }, null, null, out, err, dbg, this.log);

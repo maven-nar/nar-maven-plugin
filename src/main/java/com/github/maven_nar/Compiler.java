@@ -299,7 +299,7 @@ public abstract class Compiler {
     compilerDef.setName(compilerName);
 
     // tool path
-    if (this.toolPath != null) {
+    if (this.toolPath != null || compilerName.getValue().equalsIgnoreCase("gnucobol")) {
       compilerDef.setToolPath(this.toolPath);
     } else if (Msvc.isMSVC(mojo)) {
       mojo.getMsvc().setToolPath(compilerDef,getLanguage());

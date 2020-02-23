@@ -32,6 +32,12 @@ import org.apache.tools.ant.Project;
 public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
 
   /**
+   * Cobol Compiler
+   */
+  @Parameter
+  private Cobol cobol;
+
+  /**
    * C++ Compiler
    */
   @Parameter
@@ -49,12 +55,12 @@ public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
   @Parameter
   private Fortran fortran;
 
-    /**
-     * Assembler Compiler
-     *
-     */
-    @Parameter
-    private Assembler assembler;
+  /**
+   * Assembler Compiler
+   *
+   */
+  @Parameter
+  private Assembler assembler;
 
   /**
    * Resource Compiler
@@ -187,6 +193,13 @@ public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
     return this.c;
   }
 
+  protected final Cobol getCobol() {
+    if (this.cobol == null && !this.onlySpecifiedCompilers) {
+      setCobol(new Cobol());
+    }
+    return this.cobol;
+  }
+
   protected final Cpp getCpp() {
     if (this.cpp == null && !this.onlySpecifiedCompilers) {
       setCpp(new Cpp());
@@ -277,11 +290,16 @@ public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
     c.setAbstractCompileMojo(this);
   }
 
+  public void setCobol(final Cobol cobol) {
+    this.cobol = cobol;
+    cobol.setAbstractCompileMojo(this);
+  }
+	  
   public void setCpp(final Cpp cpp) {
     this.cpp = cpp;
     cpp.setAbstractCompileMojo(this);
   }
-  
+	  
   protected final String getfortifyID()
   {
     return this.fortifyID;

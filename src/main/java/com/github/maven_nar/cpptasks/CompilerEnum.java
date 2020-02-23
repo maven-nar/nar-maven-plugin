@@ -24,6 +24,7 @@ import org.apache.tools.ant.types.EnumeratedAttribute;
 import com.github.maven_nar.cpptasks.arm.ADSCCompiler;
 import com.github.maven_nar.cpptasks.borland.BorlandCCompiler;
 import com.github.maven_nar.cpptasks.borland.BorlandResourceCompiler;
+import com.github.maven_nar.cpptasks.cobol.GNUCobolCompiler;
 import com.github.maven_nar.cpptasks.compaq.CompaqVisualFortranCompiler;
 import com.github.maven_nar.cpptasks.compiler.Compiler;
 import com.github.maven_nar.cpptasks.gcc.GccCCompiler;
@@ -39,12 +40,12 @@ import com.github.maven_nar.cpptasks.intel.IntelLinuxFortranCompiler;
 import com.github.maven_nar.cpptasks.intel.IntelWin32CCompiler;
 import com.github.maven_nar.cpptasks.intel.IntelWin64CCompiler;
 import com.github.maven_nar.cpptasks.mozilla.XpidlCompiler;
+import com.github.maven_nar.cpptasks.msvc.Assembler64bitCompiler;
 import com.github.maven_nar.cpptasks.msvc.Msvc2005CCompiler;
 import com.github.maven_nar.cpptasks.msvc.MsvcCCompiler;
 import com.github.maven_nar.cpptasks.msvc.MsvcMIDLCompiler;
 import com.github.maven_nar.cpptasks.msvc.MsvcMessageCompiler;
 import com.github.maven_nar.cpptasks.msvc.MsvcResourceCompiler;
-import com.github.maven_nar.cpptasks.msvc.Assembler64bitCompiler;
 import com.github.maven_nar.cpptasks.openwatcom.OpenWatcomCCompiler;
 import com.github.maven_nar.cpptasks.openwatcom.OpenWatcomFortranCompiler;
 import com.github.maven_nar.cpptasks.os390.OS390CCompiler;
@@ -278,7 +279,8 @@ public class CompilerEnum extends EnumeratedAttribute {
       new ProcessorEnumValue("xpidl", XpidlCompiler.getInstance()),
       new ProcessorEnumValue("wcl", OpenWatcomCCompiler.getInstance()),
       new ProcessorEnumValue("wfl", OpenWatcomFortranCompiler.getInstance()),
-      new ProcessorEnumValue("windres", WindresResourceCompiler.getInstance())
+      new ProcessorEnumValue("windres", WindresResourceCompiler.getInstance()),
+      new ProcessorEnumValue("gnucobol", GNUCobolCompiler.getInstance())
   };
 
   public Compiler getCompiler() {

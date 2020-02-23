@@ -23,6 +23,7 @@ import org.apache.tools.ant.types.EnumeratedAttribute;
 
 import com.github.maven_nar.cpptasks.arm.ADSLinker;
 import com.github.maven_nar.cpptasks.borland.BorlandLinker;
+import com.github.maven_nar.cpptasks.cobol.GNUCobolLinker;
 import com.github.maven_nar.cpptasks.compaq.CompaqVisualFortranLinker;
 import com.github.maven_nar.cpptasks.compiler.Linker;
 import com.github.maven_nar.cpptasks.gcc.GccLibrarian;
@@ -100,6 +101,7 @@ public class LinkerEnum extends EnumeratedAttribute {
       new ProcessorEnumValue("ar-cross", com.github.maven_nar.cpptasks.gcc.cross.GccLibrarian.getInstance()),
       new ProcessorEnumValue("wcl", OpenWatcomCLinker.getInstance()),
       new ProcessorEnumValue("wfl", OpenWatcomFortranLinker.getInstance()),
+      new ProcessorEnumValue("gnucobol", GNUCobolLinker.getInstance()),
   };
 
   public Linker getLinker() {
