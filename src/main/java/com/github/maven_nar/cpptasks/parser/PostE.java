@@ -29,13 +29,7 @@ public class PostE extends AbstractParserState {
     this.quote = quote;
   }
 
-  public PostE(final CobolParser parser, AbstractParserState bracket, AbstractParserState quote) {
-    super(parser);
-    this.bracket = bracket;
-    this.quote = quote;
-  }
-
-@Override
+  @Override
   public AbstractParserState consume(final char ch) {
     switch (ch) {
       case ' ':

@@ -65,13 +65,6 @@ public class NarValidateMojo extends AbstractCompileMojo {
     // check compilers
     int noOfCompilers = 0;
     if (this.onlySpecifiedCompilers) {
-        if (getCobol() != null && getCobol().getName() != null) {
-            noOfCompilers++;
-            // need includes
-            if (getCobol().getIncludes(Compiler.MAIN).isEmpty()) {
-              throw new MojoExecutionException("No includes defined for compiler " + getCobol().getName());
-            }
-          }
       if (getCpp() != null && getCpp().getName() != null) {
         noOfCompilers++;
         // need includes

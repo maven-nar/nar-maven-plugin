@@ -185,8 +185,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       baseLength += 8;
     }
     for (final String arg : args) {
-      if (arg != null)
-    	  baseLength += arg.length();
+      baseLength += arg.length();
     }
     for (final String endArg : endArgs) {
       baseLength += endArg.length();

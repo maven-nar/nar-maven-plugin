@@ -110,15 +110,6 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
     runtimeType.setValue(getRuntime(getAOL()));
     task.setRuntime(runtimeType);
 
-    // add Cobol compiler
-    final Cobol cobol = getCobol();
-    if (cobol != null) {
-      final CompilerDef cobolCompiler = getCobol().getTestCompiler(type, test.getName());
-      if (cobolCompiler != null) {
-        task.addConfiguredCompiler(cobolCompiler);
-      }
-    }
-
     // add C++ compiler
     final Cpp cpp = getCpp();
     if (cpp != null) {

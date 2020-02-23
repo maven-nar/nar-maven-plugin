@@ -194,13 +194,6 @@ public class NarCompileMojo extends AbstractCompileMojo {
 
       }
 
-      // add Cobol compiler
-      if (getCobol() != null) {
-        final CompilerDef cobol = getCobol().getCompiler(Compiler.MAIN, null);
-        if (cobol != null) {
-          task.addConfiguredCompiler(cobol);
-        }
-      }
     // Darren Sargent Feb 11 2010: Use Compiler.MAIN for "type"...appears the
     // wrong "type" variable was being used
     // since getCompiler() expects "main" or "test", whereas the "type" variable
@@ -554,7 +547,6 @@ public class NarCompileMojo extends AbstractCompileMojo {
     noOfSources += getSourcesFor(getCpp()).size();
     noOfSources += getSourcesFor(getC()).size();
     noOfSources += getSourcesFor(getFortran()).size();
-    noOfSources += getSourcesFor(getCobol()).size();
       if(getOS().equals( OS.WINDOWS ) && getArchitecture().equals("amd64"))
       {
           noOfSources += getSourcesFor(getAssembler()).size();
@@ -574,7 +566,6 @@ public class NarCompileMojo extends AbstractCompileMojo {
       copyInclude(getCpp());
       copyInclude(getC());
       copyInclude(getFortran());
-      copyInclude(getCobol());
     } catch (final IOException e) {
       throw new MojoExecutionException("NAR: could not copy include files", e);
     }
