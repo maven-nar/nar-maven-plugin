@@ -881,7 +881,7 @@ public class CCTask extends Task {
         final LinkerConfiguration linkConfig = (LinkerConfiguration) linkTarget.getConfiguration();
         // BEGINFREEHEP
         log("Linking...");
-        log("Starting link {" + linkConfig.getIdentifier() + "}");
+        log("Starting link {" + linkConfig.getIdentifier() + "}", this.getCommandLogLevel());
         // ENDFREEHEP
         if (this.failOnError) {
           linkConfig.link(this, linkTarget);
@@ -900,7 +900,7 @@ public class CCTask extends Task {
         try {
           linkHistory.commit();
         } catch (final IOException ex) {
-          log("Error writing link history.xml: " + ex.toString());
+          log("Error writing link history.xml: " + ex.toString(), Project.MSG_ERR);
         }
       } else {
         if (this.outputFileProperty != null) {
