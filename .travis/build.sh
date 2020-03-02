@@ -1,6 +1,6 @@
 #!/bin/sh
 curl -fsLO https://raw.githubusercontent.com/scijava/scijava-scripts/master/travis-build.sh
-sh -x travis-build.sh $encrypted_f76761764219_key $encrypted_f76761764219_iv &&
+bash travis-build.sh $encrypted_f76761764219_key $encrypted_f76761764219_iv &&
 if [ ! -f release.properties ]
 then
   echo
