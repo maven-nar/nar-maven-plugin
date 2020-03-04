@@ -135,7 +135,6 @@
     <organization.logo />
     <sonar.host.url />
     <sourceReleaseAssemblyDescriptor>source-release</sourceReleaseAssemblyDescriptor>
-    <releaseProfiles>sonatype-oss-release</releaseProfiles>
   </properties>
 
   <repositories>
@@ -357,6 +356,12 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+      	<artifactId>maven-release-plugin</artifactId>
+      	<configuration>
+      		<releaseProfiles>sonatype-oss-release</releaseProfiles>
+      	</configuration>
+      </plugin>
       <plugin>
         <artifactId>maven-plugin-plugin</artifactId>
         <executions>
