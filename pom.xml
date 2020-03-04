@@ -11,7 +11,7 @@
 
   <groupId>com.github.maven-nar</groupId>
   <artifactId>nar-maven-plugin</artifactId>
-  <version>3.9.3-SNAPSHOT</version>
+  <version>3.9.4-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>Native ARchive plugin for Maven</name>
@@ -105,7 +105,7 @@
     <snapshotRepository>
       <id>sonatype-nexus-snapshots</id>
       <name>Sonatype Nexus Snapshots</name>
-      <url>${sonatypeOssDistMgmtSnapshotsUrl}</url>
+      <url>${sonatypeOssSnapshot}</url>
     </snapshotRepository>
     <repository>
       <id>sonatype-nexus-releases</id>
@@ -126,7 +126,7 @@
     <skip.it0029>it0029-gnu-libsName/**</skip.it0029>
     <skip.fortran.it>it0018-fortran/**</skip.fortran.it>
     <skip.toolchain.it>it0017-toolchain/**</skip.toolchain.it>
-    <sonatypeOssDistMgmtSnapshotsUrl>https://oss.sonatype.org/content/repositories/snapshots/</sonatypeOssDistMgmtSnapshotsUrl>
+    <sonatypeOssSnapshot>https://oss.sonatype.org/content/repositories/snapshots/</sonatypeOssSnapshot>
     <mavenPluginPluginVersion>3.6.0</mavenPluginPluginVersion>
     <distMgmtSnapshotsName />
     <distMgmtSnapshotsUrl />
