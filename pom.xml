@@ -11,7 +11,7 @@
 
   <groupId>com.github.maven-nar</groupId>
   <artifactId>nar-maven-plugin</artifactId>
-  <version>3.9.4</version>
+  <version>3.9.5-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>Native ARchive plugin for Maven</name>
@@ -90,7 +90,7 @@
     <connection>scm:git:git://github.com/maven-nar/nar-maven-plugin</connection>
     <developerConnection>scm:git:git@github.com:maven-nar/nar-maven-plugin</developerConnection>
     <url>https://github.com/maven-nar/nar-maven-plugin</url>
-    <tag>nar-maven-plugin-3.9.4</tag>
+    <tag>HEAD</tag>
   </scm>
   <issueManagement>
     <system>GitHub Issues</system>
