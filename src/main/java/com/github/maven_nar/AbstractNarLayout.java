@@ -30,6 +30,7 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 import org.codehaus.plexus.archiver.Archiver;
+import org.codehaus.plexus.archiver.zip.AbstractZipArchiver;
 import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.archiver.UnArchiver;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
@@ -75,7 +76,7 @@ public abstract class AbstractNarLayout implements NarLayout, NarConstants {
   }
 
   protected final void attachNar(final ArchiverManager archiverManager, final MavenProjectHelper projectHelper,
-      final MavenProject project, final String classifier, final File dir, final String include)
+      final MavenProject project, final String classifier, final File dir, final String include, boolean compress)
       throws MojoExecutionException {
     final File narFile = new File(project.getBuild().getDirectory(), project.getBuild().getFinalName() + "-"
         + classifier + "." + NarConstants.NAR_EXTENSION);
@@ -84,6 +85,10 @@ public abstract class AbstractNarLayout implements NarLayout, NarConstants {
     }
     try {
       final Archiver archiver = archiverManager.getArchiver(NarConstants.NAR_ROLE_HINT);
+      if (archiver instanceof AbstractZipArchiver) {
+        AbstractZipArchiver zipArchiver = (AbstractZipArchiver) archiver;
+        zipArchiver.setCompress(compress);
+      }
       archiver.addDirectory(dir, new String[] {
         include
       }, null);

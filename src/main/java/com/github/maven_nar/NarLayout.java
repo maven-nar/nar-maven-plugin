@@ -40,7 +40,7 @@ public interface NarLayout {
    * all the attached nar archive files.
    */
   void
-      attachNars(File baseDir, ArchiverManager archiverManager, MavenProjectHelper projectHelper, MavenProject project)
+      attachNars(File baseDir, ArchiverManager archiverManager, MavenProjectHelper projectHelper, MavenProject project, boolean compress)
           throws MojoExecutionException, MojoFailureException;
 
   /**

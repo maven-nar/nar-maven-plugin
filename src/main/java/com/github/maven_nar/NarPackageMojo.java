@@ -52,7 +52,7 @@ public class NarPackageMojo extends AbstractNarMojo {
   @Override
   public final void narExecute() throws MojoExecutionException, MojoFailureException {
     // let the layout decide which nars to attach
-    getLayout().attachNars(getTargetDirectory(), this.archiverManager, this.projectHelper, getMavenProject());
+    getLayout().attachNars(getTargetDirectory(), this.archiverManager, this.projectHelper, getMavenProject(), isCompress());
 
   }
 }

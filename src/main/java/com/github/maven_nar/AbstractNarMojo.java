@@ -171,6 +171,9 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
   @Parameter(defaultValue = "local", required = true)
   private String includesType;
 
+  @Parameter(defaultValue = "true", required = true) 
+  private boolean compress;
+
   /**
    * Layout to be used for building and unpacking artifacts
    */
@@ -361,6 +364,10 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
   
   protected final boolean isSkipRanlib() throws MojoExecutionException {
     return this.skipRanlib;
+  }
+
+  protected final boolean isCompress() throws MojoExecutionException {
+    return this.compress;
   }
 
   protected final String getIncludesType() throws MojoExecutionException {

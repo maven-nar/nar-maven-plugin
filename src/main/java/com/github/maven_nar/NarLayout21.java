@@ -60,10 +60,10 @@ public class NarLayout21 extends AbstractNarLayout {
    */
   @Override
   public final void attachNars(final File baseDir, final ArchiverManager archiverManager,
-      final MavenProjectHelper projectHelper, final MavenProject project) throws MojoExecutionException {
+      final MavenProjectHelper projectHelper, final MavenProject project, boolean compress) throws MojoExecutionException {
     if (getNoArchDirectory(baseDir, project.getArtifactId(), project.getVersion()).exists()) {
       attachNar(archiverManager, projectHelper, project, NarConstants.NAR_NO_ARCH,
-          getNoArchDirectory(baseDir, project.getArtifactId(), project.getVersion()), "*/**");
+          getNoArchDirectory(baseDir, project.getArtifactId(), project.getVersion()), "*/**", compress);
     }
 
     // list all directories in basedir, scan them for classifiers
@@ -84,7 +84,7 @@ public class NarLayout21 extends AbstractNarLayout {
       }
 
       final File dir = new File(baseDir, subDirs[i]);
-      attachNar(archiverManager, projectHelper, project, classifier, dir, "*/**");
+      attachNar(archiverManager, projectHelper, project, classifier, dir, "*/**", compress);
     }
   }
 

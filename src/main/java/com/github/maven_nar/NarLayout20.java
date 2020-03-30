@@ -62,15 +62,15 @@ public class NarLayout20 extends AbstractNarLayout {
    */
   @Override
   public final void attachNars(final File baseDir, final ArchiverManager archiverManager,
-      final MavenProjectHelper projectHelper, final MavenProject project) throws MojoExecutionException {
+      final MavenProjectHelper projectHelper, final MavenProject project, boolean compress) throws MojoExecutionException {
     if (getIncludeDirectory(baseDir, project.getArtifactId(), project.getVersion()).exists()) {
-      attachNar(archiverManager, projectHelper, project, "noarch", baseDir, "include/**");
+      attachNar(archiverManager, projectHelper, project, "noarch", baseDir, "include/**", compress);
     }
 
     final String[] binAOL = new File(baseDir, "bin").list();
     for (int i = 0; binAOL != null && i < binAOL.length; i++) {
       attachNar(archiverManager, projectHelper, project, binAOL[i] + "-" + Library.EXECUTABLE, baseDir, "bin/"
-          + binAOL[i] + "/**");
+          + binAOL[i] + "/**", compress);
     }
 
     final File libDir = new File(baseDir, "lib");
@@ -80,7 +80,7 @@ public class NarLayout20 extends AbstractNarLayout {
       final String[] libType = new File(libDir, libAOL[i]).list();
       for (int j = 0; libType != null && j < libType.length; j++) {
         attachNar(archiverManager, projectHelper, project, libAOL[i] + "-" + libType[j], baseDir, "lib/" + libAOL[i]
-            + "/" + libType[j] + "/**");
+            + "/" + libType[j] + "/**", compress);
       }
 
     }

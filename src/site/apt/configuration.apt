@@ -61,6 +61,7 @@ NAR Configuration
   <gnuMakeSkip/>
   <libsName/>
   <skipRanlib/>
+  <compress/>
 
   <libraries>
     <library>
@@ -302,6 +303,11 @@ wish to run a GNU configure step but not the full make process.
 
     Prevents nar from running the ranlib command on attached archives in a unix/linux
     environment.
+
+* {compress}
+
+    Specifies whether the produced nar artifacts should be compressed. Default is true.
+
 
 * {libraries}
 
