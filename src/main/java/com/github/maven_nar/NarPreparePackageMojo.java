@@ -59,6 +59,9 @@ public class NarPreparePackageMojo extends AbstractNarMojo {
       }
     });
     
+    // Write nar info to project classifier directories
+    getNarInfo().writeToDirectory(files);
+    
     // process the replay files here
     if (replay != null && replay.getScripts() != null && !replay.getScripts().isEmpty()) {
 
