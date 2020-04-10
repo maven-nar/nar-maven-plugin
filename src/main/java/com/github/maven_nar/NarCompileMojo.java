@@ -20,7 +20,9 @@
 package com.github.maven_nar;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -41,6 +43,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
+import org.apache.maven.surefire.shade.org.apache.commons.lang.ArrayUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.codehaus.plexus.util.FileUtils;
@@ -204,6 +207,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
       if (cpp != null) {
         // Set FortifyID attribute
         cpp.setFortifyID(getfortifyID());
+        cpp.setCommands(compileCommands);
         task.addConfiguredCompiler(cpp);
       }
     }
@@ -214,6 +218,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
       if (c != null) {
         // Set FortifyID attribute
         c.setFortifyID(getfortifyID());  
+        c.setCommands(compileCommands);
         task.addConfiguredCompiler(c);
       }
     }
@@ -222,6 +227,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
     if (getFortran() != null) {
       final CompilerDef fortran = getFortran().getCompiler(Compiler.MAIN, null);
       if (fortran != null) {
+        fortran.setCommands(compileCommands);
         task.addConfiguredCompiler(fortran);
       }
     }
@@ -314,6 +320,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
 
     // add linker
     final LinkerDef linkerDefinition = getLinker().getLinker(this, task, getOS(), getAOL().getKey() + ".linker.", type, linkPaths);
+    linkerDefinition.setCommands(linkCommands);
     task.addConfiguredLinker(linkerDefinition);
 
     // add dependency libraries
@@ -571,6 +578,14 @@ public class NarCompileMojo extends AbstractCompileMojo {
     }
 
     getNarInfo().writeToDirectory(this.classesDirectory);
+    
+    if (replay != null) {
+      File compileCommandFile = new File(replay.getOutputDirectory(), NarConstants.REPLAY_COMPILE_NAME);
+      NarUtil.writeCommandFile(compileCommandFile, compileCommands);
+      
+      File linkCommandFile = new File(replay.getOutputDirectory(), NarConstants.REPLAY_LINK_NAME);
+      NarUtil.writeCommandFile(linkCommandFile, linkCommands);
+    }
   }
 
   public boolean isEmbedManifest() {

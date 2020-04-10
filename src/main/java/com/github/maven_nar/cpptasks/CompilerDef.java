@@ -19,6 +19,7 @@
  */
 package com.github.maven_nar.cpptasks;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
@@ -63,6 +64,7 @@ public final class CompilerDef extends ProcessorDef {
   private File workDir;
   private boolean gccFileAbsolutePath;
   private String fortifyID="";
+  private List<String[]> commands;
 
   private boolean clearDefaultOptions;
 
@@ -595,5 +597,13 @@ public final class CompilerDef extends ProcessorDef {
 
   public boolean getGccFileAbsolutePath() {
     return this.gccFileAbsolutePath;
+  }
+
+  public List<String[]> getCommands() {
+    return commands;
+  }
+
+  public void setCommands(List<String[]> commands) {
+    this.commands = commands;
   }
 }

@@ -445,7 +445,6 @@ public abstract class Compiler {
       if (!includePath.exists()) {
         throw new MojoFailureException("NAR: Include path not found: " + includePath);
       }
-      mojo.getLog().info("include: " + includePath.getPath());
       compilerDef.createIncludePath().setPath(includePath.getPath());
     }
 

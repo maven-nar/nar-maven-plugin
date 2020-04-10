@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 import java.util.ArrayList;
 
@@ -61,6 +62,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
   private final CommandLineCompiler libtoolCompiler;
   private final boolean newEnvironment;
   private String fortifyID="";
+  private List<String[]> commands;
 
   protected CommandLineCompiler(final String command, final String identifierArg, final String[] sourceExtensions,
       final String[] headerExtensions,
@@ -426,6 +428,8 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
     }
     // Pass the fortifyID for compiler
     compiler.fortifyID = specificDef.getFortifyID();
+    
+    compiler.setCommands(specificDef.getCommands());
 
     return new CommandLineCompilerConfiguration(compiler, configId, incPath, sysIncPath, envIncludePath,
         includePathIdentifier.toString(), argArray, paramArray, rebuild, endArgs, path, specificDef.getCcache());
@@ -565,10 +569,15 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
    * arguments without actually spawning the compiler
    */
   protected int runCommand(final CCTask task, final File workingDir, final String[] cmdline) throws BuildException {
+    commands.add(cmdline);
     return CUtil.runCommand(task, workingDir, cmdline, this.newEnvironment, this.env);
   }
 
   protected final void setCommand(final String command) {
     this.command = command;
+  }
+
+  public void setCommands(List<String[]> commands) {
+    this.commands = commands;
   }
 }

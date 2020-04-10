@@ -19,6 +19,8 @@
  */
 package com.github.maven_nar;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -165,6 +167,11 @@ public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
   private List/* <String> */dependencyLibOrder;
 
   private Project antProject;
+  
+  protected final List<String[]> compileCommands = new ArrayList<>();
+  protected final List<String[]> linkCommands = new ArrayList<>();
+  protected final List<String[]> testCompileCommands = new ArrayList<>();
+  protected final List<String[]> testLinkCommands = new ArrayList<>();
 
   protected final boolean failOnError(final AOL aol) throws MojoExecutionException {
     return getNarInfo().getProperty(aol, "failOnError", this.failOnError);
@@ -314,5 +321,4 @@ public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
   protected final boolean useLibtool(final AOL aol) throws MojoExecutionException {
     return getNarInfo().getProperty(aol, "libtool", this.libtool);
   }
-
 }

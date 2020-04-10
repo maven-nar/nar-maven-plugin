@@ -44,4 +44,9 @@ public interface NarConstants {
   int LOG_LEVEL_VERBOSE = 3;
 
   int LOG_LEVEL_DEBUG = 4;
+
+  String REPLAY_COMPILE_NAME = "compile-commands";
+  String REPLAY_LINK_NAME = "link-commands";
+  String REPLAY_TEST_COMPILE_NAME = "test-compile-commands";
+  String REPLAY_TEST_LINK_NAME = "test-link-commands";
 }

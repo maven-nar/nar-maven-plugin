@@ -19,13 +19,19 @@
  */
 package com.github.maven_nar;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.util.List;
+import java.util.Scanner;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-
-import java.io.File;
-import java.io.FileFilter;
 
 /**
  * Create the nar.properties file.
@@ -52,8 +58,68 @@ public class NarPreparePackageMojo extends AbstractNarMojo {
         return file.getName().startsWith(artifactIdVersion) && (!file.getName().endsWith(NarConstants.NAR_NO_ARCH));
       }
     });
+    
+    // process the replay files here
+    if (replay != null && replay.getScripts() != null && !replay.getScripts().isEmpty()) {
 
-    // Write nar info to project classifier directories
-    getNarInfo().writeToDirectory(files);
+      File compileCommandsInFile = new File(replay.getOutputDirectory(), NarConstants.REPLAY_COMPILE_NAME);
+      File linkCommandsInputInFile = new File(replay.getOutputDirectory(), NarConstants.REPLAY_LINK_NAME);
+      File testCompileCommandsInFile = new File(replay.getOutputDirectory(), NarConstants.REPLAY_TEST_COMPILE_NAME);
+      File testLinkCommandsInFile = new File(replay.getOutputDirectory(), NarConstants.REPLAY_TEST_LINK_NAME);
+      try {
+        List<String> compileCommands = Files.readAllLines(compileCommandsInFile.toPath());
+        List<String> linkCommands = Files.readAllLines(linkCommandsInputInFile.toPath());
+        List<String> testCompileCommands = Files.readAllLines(testCompileCommandsInFile.toPath());
+        List<String> testLinkCommands = Files.readAllLines(testLinkCommandsInFile.toPath());
+        
+        for (Script script : replay.getScripts()) {
+          File outDir = new File(replay.getOutputDirectory(), script.getId());
+
+          File compileCommandsOutFile = new File(outDir, NarConstants.REPLAY_COMPILE_NAME + "." + script.getExtension());
+          File linkCommandsOutputInFile = new File(outDir, NarConstants.REPLAY_LINK_NAME + "." + script.getExtension());
+          File testCompileCommandsOutFile = new File(outDir, NarConstants.REPLAY_TEST_COMPILE_NAME + "." + script.getExtension());
+          File testLinkCommandsOutFile = new File(outDir, NarConstants.REPLAY_TEST_LINK_NAME + "." + script.getExtension());
+
+          if (script.isCompile()) {
+            processReplayFile(compileCommands, script, compileCommandsOutFile);
+            getLog().info("Wrote compile replay file: " + compileCommandsOutFile);
+          }
+          
+          if (script.isLink()) {
+            processReplayFile(linkCommands, script, linkCommandsOutputInFile);
+            getLog().info("Wrote link replay file: " + linkCommandsOutputInFile);
+          }
+          
+          if (script.testCompile) {
+            processReplayFile(testCompileCommands, script, testCompileCommandsOutFile);
+            getLog().info("Wrote test compile replay file: " + testCompileCommandsOutFile);
+          }
+          
+          if (script.isTestLink()) {
+            processReplayFile(testLinkCommands, script, testLinkCommandsOutFile);
+            getLog().info("Wrote link replay file: " + testLinkCommandsOutFile);
+            
+          }
+        }
+      } catch (IOException e) {
+        throw new MojoExecutionException("Unable to read command history", e);
+      }
+    }
+  }
+
+  public void processReplayFile(List<String> lines, Script script, File outFile) throws MojoExecutionException {
+    try (PrintWriter writer = new PrintWriter(new FileWriter(outFile))) {
+      for (String line : lines) {
+        String processed = line;
+        if (script.getSubstitutions() != null) {
+          for (Substitution sub : script.getSubstitutions()) {
+            processed = sub.substitute(processed);
+          }
+        }
+        writer.println(processed);
+      }
+    } catch (IOException e) {
+      throw new MojoExecutionException("Unable to write replay script to " + outFile, e);
+    }
   }
 }

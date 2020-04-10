@@ -21,9 +21,11 @@ package com.github.maven_nar;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -704,6 +706,28 @@ public final class NarUtil {
     }
     catch (final IllegalArgumentException | IllegalAccessException exc) {
       return "<ERROR>";
+    }
+  }
+  
+  public static String commandArrayToCommand(String[] commandArray) {
+    if (commandArray == null) return "";
+    StringBuilder builder = new StringBuilder();
+    for (String arg : commandArray) {
+      builder.append(arg);
+      builder.append(" ");
+    }
+    
+    return builder.toString();
+  }
+
+  public static void writeCommandFile(File file, List<String[]> commands) throws MojoExecutionException {
+    try (PrintWriter compileCommandWriter = new PrintWriter(new FileWriter(file))) {
+      for (String[] commandArr : commands) {
+        String command = NarUtil.commandArrayToCommand(commandArr);
+        compileCommandWriter.println(command);
+      }
+    } catch (IOException e) {
+      throw new MojoExecutionException("Unable to write command history to " + file, e);
     }
   }
 

@@ -61,6 +61,7 @@ public class LinkerDef extends ProcessorDef {
   private String toolPath;
   private String linkerPrefix;
   private Boolean skipDepLink;
+  private List<String[]> commands;
 
   private final Set<File> libraryDirectories = new LinkedHashSet<>();
 
@@ -574,5 +575,13 @@ public class LinkerDef extends ProcessorDef {
         }
       }
     }
+  }
+
+  public List<String[]> getCommands() {
+    return commands;
+  }
+
+  public void setCommands(List<String[]> commands) {
+    this.commands = commands;
   }
 }

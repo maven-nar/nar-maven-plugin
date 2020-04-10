@@ -21,8 +21,10 @@ package com.github.maven_nar;
 
 import java.io.File;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.maven.model.Model;
 import org.apache.maven.plugin.AbstractMojo;
@@ -226,6 +228,9 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
    */
   @Parameter(property = "nar.windows.sdk.dir")
   private String windowsSdkDir = null;
+  
+  @Parameter
+  protected Replay replay;
 
   public String getWindowsMsvcVersion() {
     return this.windowsMsvcVersion;
@@ -417,6 +422,39 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
     }
     if (this.testUnpackDirectory == null) {
       this.testUnpackDirectory = this.testTargetDirectory;
+    }
+    if (this.replay != null && this.replay.getOutputDirectory() == null) {
+      this.replay.setOutputDirectory(new File(targetDirectory, "nar-replay"));
+    }
+
+    if (this.replay != null && this.replay.getScripts() != null) {
+      Set<String> replayIds = new HashSet<String>();
+      for (Script s : this.replay.getScripts()) {
+        if (replayIds.contains(s.getId())) throw new MojoFailureException("Replay id must be unique");
+        replayIds.add(s.getId());
+      }
+    }
+  }
+
+  public Replay getReplay() {
+    return replay;
+  }
+
+  public void setReplay(Replay replay) {
+    this.replay = replay;
+  }
+
+  protected void createReplayDirs() {
+    if (replay != null) {
+      
+      replay.getOutputDirectory().mkdirs();
+      
+      if (replay.getScripts() != null) {
+        for (Script s : replay.getScripts()) {
+          File dir = new File(replay.getOutputDirectory(), s.getId());
+          dir.mkdirs();
+        }
+      }
     }
   }
 }

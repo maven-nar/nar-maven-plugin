@@ -115,6 +115,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
     if (cpp != null) {
       final CompilerDef cppCompiler = getCpp().getTestCompiler(type, test.getName());
       if (cppCompiler != null) {
+        cppCompiler.setCommands(testCompileCommands);
         task.addConfiguredCompiler(cppCompiler);
       }
     }
@@ -124,6 +125,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
     if (c != null) {
       final CompilerDef cCompiler = c.getTestCompiler(type, test.getName());
       if (cCompiler != null) {
+        cCompiler.setCommands(testCompileCommands);
         task.addConfiguredCompiler(cCompiler);
       }
     }
@@ -133,6 +135,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
     if (fortran != null) {
       final CompilerDef fortranCompiler = getFortran().getTestCompiler(type, test.getName());
       if (fortranCompiler != null) {
+        fortranCompiler.setCommands(testCompileCommands);
         task.addConfiguredCompiler(fortranCompiler);
       }
     }
@@ -201,6 +204,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
     // add linker
     final LinkerDef linkerDefinition = getLinker().getTestLinker(this, task, getOS(), getAOL().getKey() + ".linker.",
         type, linkPaths);
+    linkerDefinition.setCommands(testLinkCommands);
     task.addConfiguredLinker(linkerDefinition);
 
     final File includeDir = getLayout().getIncludeDirectory(getTargetDirectory(), getMavenProject().getArtifactId(),
@@ -436,6 +440,14 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
 
       for (final Object o : getTests()) {
         createTest(getAntProject(), (Test) o);
+      }
+      
+      if (replay != null) {
+        File compileCommandFile = new File(replay.getOutputDirectory(), NarConstants.REPLAY_TEST_COMPILE_NAME);
+        NarUtil.writeCommandFile(compileCommandFile, testCompileCommands);
+        
+        File linkCommandFile = new File(replay.getOutputDirectory(), NarConstants.REPLAY_TEST_LINK_NAME);
+        NarUtil.writeCommandFile(linkCommandFile, testLinkCommands);
       }
     }
   }
