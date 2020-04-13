@@ -19,6 +19,7 @@
  */
 package com.github.maven_nar;
 
+import java.io.File;
 import java.util.regex.Pattern;
 
 import org.apache.maven.plugins.annotations.Parameter;
@@ -30,23 +31,24 @@ import org.apache.maven.plugins.annotations.Parameter;
  */
 public class Substitution {
   
+  private static final String[] types = new String[] {"string", "relativePath", "absolutePath", "regex"};
   private Pattern pattern;
   
-  @Parameter(defaultValue = "false", required = true)
-  protected boolean regex;
-  
-  @Parameter(required = true)
+  protected String type;
   protected String replace;
-  
-  @Parameter(defaultValue = "", required = true)
   protected String replaceWith;
-
-  public boolean isRegex() {
-    return regex;
+  
+  public Substitution() {
+    this.type = "string";
+    this.replaceWith = "";
   }
 
-  public void setRegex(boolean regex) {
-    this.regex = regex;
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
   }
 
   public String getReplace() {
@@ -66,11 +68,20 @@ public class Substitution {
   }
   
   public String substitute(String line) {
-    if (regex) {
+    if (replace == null) return line;
+    
+    String temp = replace;
+    if (type.equals("regex")) {
       if (pattern == null) pattern = Pattern.compile(replace);
       return pattern.matcher(line).replaceAll(replaceWith);
       
     }
-    else return line.replace(replace, replaceWith);
+    else if (type.equals("relativePath")) {
+      temp = new File(replace).getPath() + File.separator;
+    }
+    else if (type.equals("absolutePath")) {
+      temp = new File(replace).getAbsolutePath() + File.separator;
+    }
+    return line.replace(temp, replaceWith);
   }
 }

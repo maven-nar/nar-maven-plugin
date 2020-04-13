@@ -25,8 +25,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.nio.file.attribute.PosixFilePermission;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -72,37 +74,58 @@ public class NarPreparePackageMojo extends AbstractNarMojo {
       try {
         List<String> compileCommands = Files.readAllLines(compileCommandsInFile.toPath());
         List<String> linkCommands = Files.readAllLines(linkCommandsInputInFile.toPath());
-        List<String> testCompileCommands = Files.readAllLines(testCompileCommandsInFile.toPath());
-        List<String> testLinkCommands = Files.readAllLines(testLinkCommandsInFile.toPath());
+        
+        List<String> testCompileCommands = null;
+        List<String> testLinkCommands = null;
+        if (!this.skipTests) {
+          testCompileCommands = Files.readAllLines(testCompileCommandsInFile.toPath());
+          testLinkCommands = Files.readAllLines(testLinkCommandsInFile.toPath());
+        }
         
         for (Script script : replay.getScripts()) {
-          File outDir = new File(replay.getOutputDirectory(), script.getId());
 
-          File compileCommandsOutFile = new File(outDir, NarConstants.REPLAY_COMPILE_NAME + "." + script.getExtension());
-          File linkCommandsOutputInFile = new File(outDir, NarConstants.REPLAY_LINK_NAME + "." + script.getExtension());
-          File testCompileCommandsOutFile = new File(outDir, NarConstants.REPLAY_TEST_COMPILE_NAME + "." + script.getExtension());
-          File testLinkCommandsOutFile = new File(outDir, NarConstants.REPLAY_TEST_LINK_NAME + "." + script.getExtension());
+          File scriptFile = new File(replay.getScriptDirectory(), script.getId() + "." + script.getExtension());
 
-          if (script.isCompile()) {
-            processReplayFile(compileCommands, script, compileCommandsOutFile);
-            getLog().info("Wrote compile replay file: " + compileCommandsOutFile);
-          }
-          
-          if (script.isLink()) {
-            processReplayFile(linkCommands, script, linkCommandsOutputInFile);
-            getLog().info("Wrote link replay file: " + linkCommandsOutputInFile);
-          }
-          
-          if (script.testCompile) {
-            processReplayFile(testCompileCommands, script, testCompileCommandsOutFile);
-            getLog().info("Wrote test compile replay file: " + testCompileCommandsOutFile);
-          }
-          
-          if (script.isTestLink()) {
-            processReplayFile(testLinkCommands, script, testLinkCommandsOutFile);
-            getLog().info("Wrote link replay file: " + testLinkCommandsOutFile);
+          try (PrintWriter writer = new PrintWriter(new FileWriter(scriptFile))) {
             
+            for (String header : script.getHeaders()) {
+              writer.println(header);
+            }
+            
+            if (script.isCompile()) {
+              writer.println();
+              processReplayFile(compileCommands, script, writer);
+              getLog().info("Wrote compile commands to file: " + scriptFile);
+            }
+            
+            if (script.isLink()) {
+              writer.println();
+              processReplayFile(linkCommands, script, writer);
+              getLog().info("Wrote link commands to file: " + scriptFile);
+            }
+            
+            if (script.testCompile && !this.skipTests) {
+              writer.println();
+              processReplayFile(testCompileCommands, script, writer);
+              getLog().info("Wrote test compile commands to file: " + scriptFile);
+            }
+            
+            if (script.isTestLink() && !this.skipTests) {
+              writer.println();
+              processReplayFile(testLinkCommands, script, writer);
+              getLog().info("Wrote test link commands to file: " + scriptFile);
+            }
+            
+            for (String footer : script.getFooters()) {
+              writer.println(footer);
+            }
+
+            Set<PosixFilePermission> perms = NarUtil.parseOctalPermission(script.getMode());
+            Files.setPosixFilePermissions(scriptFile.toPath(), perms);
           }
+          catch (IOException e) {
+          throw new MojoExecutionException("Unable to write replay script to " + scriptFile, e);
+        }
         }
       } catch (IOException e) {
         throw new MojoExecutionException("Unable to read command history", e);
@@ -110,19 +133,19 @@ public class NarPreparePackageMojo extends AbstractNarMojo {
     }
   }
 
-  public void processReplayFile(List<String> lines, Script script, File outFile) throws MojoExecutionException {
-    try (PrintWriter writer = new PrintWriter(new FileWriter(outFile))) {
-      for (String line : lines) {
-        String processed = line;
-        if (script.getSubstitutions() != null) {
-          for (Substitution sub : script.getSubstitutions()) {
-            processed = sub.substitute(processed);
-          }
+  public void processReplayFile(List<String> lines, Script script, PrintWriter writer) throws MojoExecutionException {
+    for (String line : lines) {
+      String processed = line;
+      if (script.getSubstitutions() != null) {
+        for (Substitution sub : script.getSubstitutions()) {
+          processed = sub.substitute(processed);
         }
+      }
+      if (script.isEchoLines()) {
+        writer.print("echo " );
         writer.println(processed);
       }
-    } catch (IOException e) {
-      throw new MojoExecutionException("Unable to write replay script to " + outFile, e);
+      writer.println(processed);
     }
   }
 }

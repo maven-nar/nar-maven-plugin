@@ -116,6 +116,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
       final CompilerDef cppCompiler = getCpp().getTestCompiler(type, test.getName());
       if (cppCompiler != null) {
         cppCompiler.setCommands(testCompileCommands);
+        cppCompiler.setDryRun(dryRun);
         task.addConfiguredCompiler(cppCompiler);
       }
     }
@@ -126,6 +127,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
       final CompilerDef cCompiler = c.getTestCompiler(type, test.getName());
       if (cCompiler != null) {
         cCompiler.setCommands(testCompileCommands);
+        cCompiler.setDryRun(dryRun);
         task.addConfiguredCompiler(cCompiler);
       }
     }
@@ -136,6 +138,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
       final CompilerDef fortranCompiler = getFortran().getTestCompiler(type, test.getName());
       if (fortranCompiler != null) {
         fortranCompiler.setCommands(testCompileCommands);
+        fortranCompiler.setDebug(dryRun);
         task.addConfiguredCompiler(fortranCompiler);
       }
     }
@@ -205,6 +208,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
     final LinkerDef linkerDefinition = getLinker().getTestLinker(this, task, getOS(), getAOL().getKey() + ".linker.",
         type, linkPaths);
     linkerDefinition.setCommands(testLinkCommands);
+    linkerDefinition.setDryRun(dryRun);
     task.addConfiguredLinker(linkerDefinition);
 
     final File includeDir = getLayout().getIncludeDirectory(getTargetDirectory(), getMavenProject().getArtifactId(),

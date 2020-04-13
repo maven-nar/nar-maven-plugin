@@ -62,6 +62,7 @@ public class LinkerDef extends ProcessorDef {
   private String linkerPrefix;
   private Boolean skipDepLink;
   private List<String[]> commands;
+  private boolean dryRun;
 
   private final Set<File> libraryDirectories = new LinkedHashSet<>();
 
@@ -583,5 +584,13 @@ public class LinkerDef extends ProcessorDef {
 
   public void setCommands(List<String[]> commands) {
     this.commands = commands;
+  }
+
+  public boolean isDryRun() {
+    return dryRun;
+  }
+
+  public void setDryRun(boolean dryRun) {
+    this.dryRun = dryRun;
   }
 }

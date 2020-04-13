@@ -36,16 +36,11 @@ public class Replay {
   @Parameter
   protected File outputDirectory;
   
+  @Parameter 
+  protected File scriptDirectory; 
+  
   @Parameter
   protected List<Script> scripts;
-
-  public String[] getScriptTypes() {
-    return scriptTypes;
-  }
-
-  public void setScriptTypes(String[] scriptTypes) {
-    this.scriptTypes = scriptTypes;
-  }
 
   public File getOutputDirectory() {
     return outputDirectory;
@@ -53,6 +48,14 @@ public class Replay {
 
   public void setOutputDirectory(File outputDirectory) {
     this.outputDirectory = outputDirectory;
+  }
+
+  public File getScriptDirectory() {
+    return scriptDirectory;
+  }
+
+  public void setScriptDirectory(File scriptDirectory) {
+    this.scriptDirectory = scriptDirectory;
   }
 
   public List<Script> getScripts() {

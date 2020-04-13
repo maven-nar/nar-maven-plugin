@@ -158,20 +158,28 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
    * Name of the libraries included
    */
   @Parameter
-  private String libsName;
+  protected String libsName;
 
   /**
    * Skip running ranlib if this artifact is a library
    */
   @Parameter(defaultValue = "false", required = true)
-  private boolean skipRanlib;
+  protected boolean skipRanlib;
 
   /**
    * Specifies the type of include this artifact may contain -- system
    * or local (default)
    */
   @Parameter(defaultValue = "local", required = true)
-  private String includesType;
+  protected String includesType;
+  
+  /**
+   * Indicates that the NAR plugin should do everything besides actually compiling
+   * or linking any source or object files. Typically used in conjunction with
+   * "replay" functionality.
+   */
+  @Parameter(defaultValue = "false", required = true)
+  protected boolean dryRun;
 
   /**
    * Layout to be used for building and unpacking artifacts
@@ -392,6 +400,14 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
     return this.unpackDirectory;
   }
 
+  protected boolean isDryRun() {
+    return dryRun;
+  }
+
+  protected void setDryRun(boolean dryRun) {
+    this.dryRun = dryRun;
+  }
+
   public abstract void narExecute() throws MojoFailureException, MojoExecutionException;
 
   protected final void validate() throws MojoFailureException, MojoExecutionException {
@@ -423,8 +439,13 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
     if (this.testUnpackDirectory == null) {
       this.testUnpackDirectory = this.testTargetDirectory;
     }
-    if (this.replay != null && this.replay.getOutputDirectory() == null) {
-      this.replay.setOutputDirectory(new File(targetDirectory, "nar-replay"));
+    if (this.replay != null) {
+      if (this.replay.getOutputDirectory() == null) {
+        this.replay.setOutputDirectory(new File(targetDirectory, "nar-replay"));
+      }
+      if (this.replay.getScriptDirectory() == null) {
+        this.replay.setScriptDirectory(new File(this.replay.getOutputDirectory(), "scripts"));
+      }
     }
 
     if (this.replay != null && this.replay.getScripts() != null) {
@@ -448,13 +469,7 @@ public abstract class AbstractNarMojo extends AbstractMojo implements NarConstan
     if (replay != null) {
       
       replay.getOutputDirectory().mkdirs();
-      
-      if (replay.getScripts() != null) {
-        for (Script s : replay.getScripts()) {
-          File dir = new File(replay.getOutputDirectory(), s.getId());
-          dir.mkdirs();
-        }
-      }
+      replay.getScriptDirectory().mkdirs();
     }
   }
 }

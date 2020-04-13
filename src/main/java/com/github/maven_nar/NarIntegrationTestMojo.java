@@ -1044,7 +1044,7 @@ public class NarIntegrationTestMojo extends AbstractDependencyMojo {
   // DUNS, changed name
   @Override
   public void narExecute() throws MojoExecutionException, MojoFailureException {
-    if (this.skipTests) {
+    if (this.skipTests || this.dryRun) {
       getLog().info("Tests are skipped");
     } else if (verifyParameters()) {
 

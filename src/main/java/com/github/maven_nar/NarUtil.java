@@ -29,6 +29,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.attribute.PosixFilePermission;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -729,6 +730,27 @@ public final class NarUtil {
     } catch (IOException e) {
       throw new MojoExecutionException("Unable to write command history to " + file, e);
     }
+  }
+  
+  
+  public static Set<PosixFilePermission> parseOctalPermission(String octal) {
+    
+    if (octal == null) return null;
+    
+    Set<PosixFilePermission> permissions = new HashSet<>();
+    short dec = Short.parseShort(octal, 8);
+
+    if ((dec & 0b000000001) != 0) permissions.add(PosixFilePermission.OTHERS_EXECUTE);
+    if ((dec & 0b000000010) != 0) permissions.add(PosixFilePermission.OTHERS_WRITE);
+    if ((dec & 0b000000100) != 0) permissions.add(PosixFilePermission.OTHERS_READ);
+    if ((dec & 0b000001000) != 0) permissions.add(PosixFilePermission.GROUP_EXECUTE);
+    if ((dec & 0b000010000) != 0) permissions.add(PosixFilePermission.GROUP_READ);
+    if ((dec & 0b000100000) != 0) permissions.add(PosixFilePermission.GROUP_READ);
+    if ((dec & 0b001000000) != 0) permissions.add(PosixFilePermission.OWNER_EXECUTE);
+    if ((dec & 0b010000000) != 0) permissions.add(PosixFilePermission.OWNER_WRITE);
+    if ((dec & 0b100000000) != 0) permissions.add(PosixFilePermission.OWNER_READ);
+    
+    return permissions;
   }
 
   private NarUtil() {

@@ -55,6 +55,7 @@ public abstract class CommandLineLinker extends AbstractLinker {
   private final boolean newEnvironment = false;
   private final String outputSuffix;
   private List<String[]> commands;
+  private boolean dryRun;
 
   // FREEHEP
   private final int maxPathLength = 250;
@@ -236,6 +237,7 @@ public abstract class CommandLineLinker extends AbstractLinker {
     final String toolPath = specificDef.getToolPath();
     
     setCommands(specificDef.getCommands());
+    setDryRun(specificDef.isDryRun());
 
     // task.log("libnames:"+libnames.length, Project.MSG_VERBOSE);
     return new CommandLineLinkerConfiguration(this, configId, options, paramArray, rebuild, map, debug, libnames,
@@ -494,6 +496,7 @@ public abstract class CommandLineLinker extends AbstractLinker {
    */
   protected int runCommand(final CCTask task, final File workingDir, final String[] cmdline) throws BuildException {
     commands.add(cmdline);
+    if (dryRun) return 0;
     return CUtil.runCommand(task, workingDir, cmdline, this.newEnvironment, this.env);
   }
 
@@ -503,6 +506,14 @@ public abstract class CommandLineLinker extends AbstractLinker {
 
   public void setCommands(List<String[]> commands) {
     this.commands = commands;
+  }
+
+  public boolean isDryRun() {
+    return dryRun;
+  }
+
+  public void setDryRun(boolean dryRun) {
+    this.dryRun = dryRun;
   }
 
 }

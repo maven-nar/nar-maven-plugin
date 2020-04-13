@@ -19,32 +19,38 @@
  */
 package com.github.maven_nar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Parameter;
 
 public class Script {
-  @Parameter(required = true)
+  
   protected String id;
-  
-  @Parameter(defaultValue = "sh", required = true)
   protected String scriptType;
-  
-  @Parameter(defaultValue = "true", required = true)
+  protected String mode;
   protected boolean compile;
-  
-  @Parameter(defaultValue = "true", required = true)
   protected boolean link;
-  
-  @Parameter(defaultValue = "false", required = true)
   protected boolean testCompile;
-  
-  @Parameter(defaultValue = "false", required = true)
   protected boolean testLink;
+  protected boolean echoLines;
   
-  @Parameter
+  protected List<String> headers;
   protected List<Substitution> substitutions;
+  protected List<String> footers;
+  
+  public Script() {
+    this.scriptType = "sh";
+    this.mode = "0755";
+    this.compile = true;
+    this.link = true;
+    this.testCompile = false;
+    this.testLink = false;
+    this.echoLines = true;
+    this.headers = new ArrayList<>();
+    this.substitutions = new ArrayList<>();
+    this.footers = new ArrayList<>();
+  }
 
   public String getId() {
     return id;
@@ -60,6 +66,14 @@ public class Script {
 
   public void setScriptType(String scriptType) {
     this.scriptType = scriptType;
+  }
+
+  public String getMode() {
+    return mode;
+  }
+
+  public void setMode(String mode) {
+    this.mode = mode;
   }
 
   public boolean isCompile() {
@@ -94,12 +108,36 @@ public class Script {
     this.testLink = testLink;
   }
 
+  public boolean isEchoLines() {
+    return echoLines;
+  }
+
+  public void setEchoLines(boolean echoLines) {
+    this.echoLines = echoLines;
+  }
+
+  public List<String> getHeaders() {
+    return headers;
+  }
+
+  public void setHeaders(List<String> headers) {
+    this.headers = headers;
+  }
+
   public List<Substitution> getSubstitutions() {
     return substitutions;
   }
 
   public void setSubstitutions(List<Substitution> substitutions) {
     this.substitutions = substitutions;
+  }
+
+  public List<String> getFooters() {
+    return footers;
+  }
+
+  public void setFooters(List<String> footers) {
+    this.footers = footers;
   }
 
   public String getExtension() throws MojoExecutionException {

@@ -63,6 +63,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
   private final boolean newEnvironment;
   private String fortifyID="";
   private List<String[]> commands;
+  private boolean dryRun;
 
   protected CommandLineCompiler(final String command, final String identifierArg, final String[] sourceExtensions,
       final String[] headerExtensions,
@@ -430,6 +431,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
     compiler.fortifyID = specificDef.getFortifyID();
     
     compiler.setCommands(specificDef.getCommands());
+    compiler.setDryRun(specificDef.isDryRun());
 
     return new CommandLineCompilerConfiguration(compiler, configId, incPath, sysIncPath, envIncludePath,
         includePathIdentifier.toString(), argArray, paramArray, rebuild, endArgs, path, specificDef.getCcache());
@@ -570,6 +572,7 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
    */
   protected int runCommand(final CCTask task, final File workingDir, final String[] cmdline) throws BuildException {
     commands.add(cmdline);
+    if (dryRun) return 0;
     return CUtil.runCommand(task, workingDir, cmdline, this.newEnvironment, this.env);
   }
 
@@ -579,5 +582,13 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
 
   public void setCommands(List<String[]> commands) {
     this.commands = commands;
+  }
+
+  public boolean isDryRun() {
+    return dryRun;
+  }
+
+  public void setDryRun(boolean dryRun) {
+    this.dryRun = dryRun;
   }
 }

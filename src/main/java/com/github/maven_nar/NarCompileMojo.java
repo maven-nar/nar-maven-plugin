@@ -208,6 +208,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
         // Set FortifyID attribute
         cpp.setFortifyID(getfortifyID());
         cpp.setCommands(compileCommands);
+        cpp.setDryRun(dryRun);
         task.addConfiguredCompiler(cpp);
       }
     }
@@ -219,6 +220,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
         // Set FortifyID attribute
         c.setFortifyID(getfortifyID());  
         c.setCommands(compileCommands);
+        c.setDryRun(dryRun);
         task.addConfiguredCompiler(c);
       }
     }
@@ -228,6 +230,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
       final CompilerDef fortran = getFortran().getCompiler(Compiler.MAIN, null);
       if (fortran != null) {
         fortran.setCommands(compileCommands);
+        fortran.setDryRun(dryRun);
         task.addConfiguredCompiler(fortran);
       }
     }
@@ -321,6 +324,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
     // add linker
     final LinkerDef linkerDefinition = getLinker().getLinker(this, task, getOS(), getAOL().getKey() + ".linker.", type, linkPaths);
     linkerDefinition.setCommands(linkCommands);
+    linkerDefinition.setDryRun(dryRun);
     task.addConfiguredLinker(linkerDefinition);
 
     // add dependency libraries

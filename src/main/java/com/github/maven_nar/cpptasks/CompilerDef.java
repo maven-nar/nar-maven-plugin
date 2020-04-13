@@ -65,6 +65,7 @@ public final class CompilerDef extends ProcessorDef {
   private boolean gccFileAbsolutePath;
   private String fortifyID="";
   private List<String[]> commands;
+  private boolean dryRun;
 
   private boolean clearDefaultOptions;
 
@@ -605,5 +606,13 @@ public final class CompilerDef extends ProcessorDef {
 
   public void setCommands(List<String[]> commands) {
     this.commands = commands;
+  }
+
+  public boolean isDryRun() {
+    return dryRun;
+  }
+
+  public void setDryRun(boolean dryRun) {
+    this.dryRun = dryRun;
   }
 }
