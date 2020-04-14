@@ -34,6 +34,7 @@ NAR Configuration
   <skip/>
   <skipNar/>
   <skipNarTest/>
+  <dryRun/>
   <architecture/>
   <os/>
   <javaHome/>
@@ -199,6 +200,34 @@ NAR Configuration
   </javah>
   
   <link/>
+
+  <replay>
+    <outputDirectory/>
+    <scriptDirectory/>
+    <scripts>
+      <id/>
+      <scriptType/>
+      <mode/>
+      <compile/>
+      <link/>
+      <testCompile/>
+      <testLink/>
+      <echoLines/>
+      <headers>
+        <header/>
+      </headers>
+      <substitutions>
+        <substitution>
+          <type/>
+          <replace/>
+          <replaceWith/>
+        </substitution>
+      </substitutions>
+      <footers>
+        <footer/>
+      </footers>
+    </scripts>
+  </replay>
 </configuration>
 +--
 
@@ -302,6 +331,11 @@ wish to run a GNU configure step but not the full make process.
 
     Prevents nar from running the ranlib command on attached archives in a unix/linux
     environment.
+
+* {dryRun}
+    Execute all phases through compilation and linking, but don't actually invoke the compiler or linker.
+    Will skip goals nar-test and nar-integration-test. This options is typically set to true for generating
+    replays. Default false.
 
 * {libraries}
 
@@ -411,8 +445,8 @@ are lower in the dependency heirarchy appear lower in the list, maximizing symbo
 	
 	[type] Type of linking for this system library. Default is shared.
   
-  	[]
-  	 
+        []
+ 
 
 * {cpp}
 
@@ -458,8 +492,8 @@ are lower in the dependency heirarchy appear lower in the list, maximizing symbo
 ** {cpp optimize}
 
 	Sets optimization.
-  	Possible choices are: "none", "size", "minimal", "speed", "full", "aggressive", "extreme", "unsafe".
-  	Default is none.
+    Possible choices are: "none", "size", "minimal", "speed", "full", "aggressive", "extreme", "unsafe".
+    Default is none.
    
 ** {cpp  multiThreaded}
    
@@ -583,4 +617,54 @@ are lower in the dependency heirarchy appear lower in the list, maximizing symbo
 
 	A list of exclusion filters, relative to classDirectory/sourceDirectory. Defaults to none.
 	
+* {replay}
+
+        Instructs NAR to record the commands issued for compilation and linking to a file, for later use. This is
+        useful if builds need to be done outside of Maven and NAR itself.
+
+** {outputDirectory}
+
+        Directory where replay logs should be recorded to. Defaults to ${project.build.directory}/nar/nar-replay
+
+** {scriptDirectory}
+
+        Directory where generated scripts should be written to. Defaults to ${project.build.directory}/nar/nar-replay/scripts
+
+** {scripts}
+
+        List of scripts to generate from NAR command output.
+
+        [id] unique identifier of this script. This id will be used to name the script.
+
+        [scriptType] The type of script to generate. Currently supported types are: sh, bash, amd bat. Default value of sh.
+
+        [mode] The Linux mode of the outputted script. Defualt of 0775. This field has no effect if OS is other than Linux.
+
+        [compile] Boolean value of whether to include compile commands in generated script. Default is true.
+
+        [link] Boolean value of whether to include link commands in generated script. Default is true.
+
+        [testCompile] Boolean value of whether to include test compile commands in generated script. Default is false.
+
+        [testLink] Boolean value of whether to include test link commands in generated script. Default is false.
+
+        [echoLines] Boolean whether each compile or link line should be echo'd before actually running the command. Default is true.
+
+        [headers] List of lines to add to script prior to commands. Can be used to add script shebang, for ecample.
+
+        [footers] List of lines to add to script after all commands.
+
+ *** {substitutions}
+
+        List of substitutions that should be made while transforming command log to script file. Substitutions can be used to
+        change absolute paths to relative paths, for example.
+
+        [type] The type of substitution. Can be one of "string", "relativePath", "absolutePath", or "regex".
+
+        [replace] String, path, or regex to use to match for replacements.
+
+        [replaceWith] String to replace with.
+
+        
+
 
