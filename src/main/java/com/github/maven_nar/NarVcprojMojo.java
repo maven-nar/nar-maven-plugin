@@ -21,9 +21,11 @@ package com.github.maven_nar;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Profile;
@@ -197,6 +199,8 @@ public class NarVcprojMojo extends AbstractCompileMojo {
         tmp.addAll(depLibs);
         depLibs = tmp;
       }
+      
+      Set<SysLib> dependencySysLibs = new HashSet<SysLib>();
 
       for (final Object depLib : depLibs) {
 
@@ -243,18 +247,12 @@ public class NarVcprojMojo extends AbstractCompileMojo {
             linkerDefinition.addConfiguredLinkerArg(arg);
           }
 
-          final String sysLibs = dependency.getNarInfo().getSysLibs(getAOL());
-
-          if (sysLibs != null && !sysLibs.equals("")) {
-            getLog().debug("Using SYSLIBS = " + sysLibs);
-            final SystemLibrarySet sysLibSet = new SystemLibrarySet();
-            sysLibSet.setProject(antProject);
-
-            sysLibSet.setLibs(new CUtil.StringArrayBuilder(sysLibs));
-
-            task.addSyslibset(sysLibSet);
-          }
+          dependencySysLibs.addAll(getDependecySysLib(dependency));
         }
+      }
+      
+      for (SysLib s : dependencySysLibs) {
+        task.addSyslibset(s.getSysLibSet(antProject));
       }
 
       // Add JVM to linker

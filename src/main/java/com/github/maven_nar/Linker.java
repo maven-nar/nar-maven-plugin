@@ -635,4 +635,12 @@ public class Linker {
     }
     return version;
   }
+
+  public List getSysLibs() {
+    return sysLibs;
+  }
+
+  public String getSysLibSet() {
+    return sysLibSet;
+  }
 }

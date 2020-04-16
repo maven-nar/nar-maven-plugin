@@ -30,18 +30,22 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
 
 /**
  * Create the nar.properties file.
  * 
  * @author GDomjan
  */
-@Mojo(name = "nar-prepare-package", defaultPhase = LifecyclePhase.PREPARE_PACKAGE, requiresProject = true)
-public class NarPreparePackageMojo extends AbstractNarMojo {
+@Mojo(name = "nar-prepare-package", defaultPhase = LifecyclePhase.PREPARE_PACKAGE, 
+  requiresProject = true, requiresDependencyResolution = ResolutionScope.COMPILE)
+public class NarPreparePackageMojo extends AbstractCompileMojo {
 
   // TODO: this is working of what is present rather than what was requested to
   // be built, POM ~/= artifacts!
@@ -147,5 +151,10 @@ public class NarPreparePackageMojo extends AbstractNarMojo {
       }
       writer.println(processed);
     }
+  }
+
+  @Override
+  protected ScopeFilter getArtifactScopeFilter() {
+    return new ScopeFilter(Artifact.SCOPE_COMPILE, null);
   }
 }

@@ -30,6 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
+import java.util.Set;
 import java.util.Vector;
 import java.util.HashSet;
 
@@ -50,6 +51,7 @@ import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 
 import com.github.maven_nar.cpptasks.types.LibrarySet;
+import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
 import com.github.maven_nar.cpptasks.types.LinkerArgument;
 import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 
@@ -304,7 +306,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
             narDependency.getBaseVersion());
         getLog().debug("Looking for include directory: " + include);
         if (include.exists()) {
-          String includesType = narDependency.getNarInfo().getInludesType(null);
+          String includesType = narDependency.getNarInfo().getIncludesType(null);
           if (includesType.equals("system")) {
             task.createSysIncludePath().setPath(include.getPath());
           }
@@ -326,6 +328,8 @@ public class NarCompileMojo extends AbstractCompileMojo {
     linkerDefinition.setCommands(linkCommands);
     linkerDefinition.setDryRun(dryRun);
     task.addConfiguredLinker(linkerDefinition);
+    
+    Set<SysLib> dependencySysLibs = new HashSet<SysLib>();
 
     // add dependency libraries
     // FIXME: what about PLUGIN and STATIC, depending on STATIC, should we
@@ -434,17 +438,13 @@ public class NarCompileMojo extends AbstractCompileMojo {
             linkerDefinition.addConfiguredLinkerArg(arg);
           }
 
-          final String sysLibs = dependency.getNarInfo().getSysLibs(getAOL());
-          if (sysLibs != null && !sysLibs.equals("")) {
-            getLog().debug("Using SYSLIBS = " + sysLibs);
-            final SystemLibrarySet sysLibSet = new SystemLibrarySet();
-            sysLibSet.setProject(antProject);
-
-            sysLibSet.setLibs(new CUtil.StringArrayBuilder(sysLibs));
-            task.addSyslibset(sysLibSet);
-          }
+          dependencySysLibs.addAll(getDependecySysLib(dependency));
         }
       }
+    }
+    
+    for (SysLib s : dependencySysLibs) {
+      task.addSyslibset(s.getSysLibSet(antProject));
     }
 
     // Add JVM to linker

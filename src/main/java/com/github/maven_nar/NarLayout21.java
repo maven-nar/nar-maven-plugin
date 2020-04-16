@@ -21,6 +21,10 @@ package com.github.maven_nar;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -29,6 +33,9 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
 import org.codehaus.plexus.util.FileUtils;
+
+import com.github.maven_nar.cpptasks.CUtil;
+import com.google.inject.spi.Dependency;
 
 /**
  * Layout which expands a nar file into:
@@ -177,7 +184,7 @@ public class NarLayout21 extends AbstractNarLayout {
    */
   @Override
   public final void prepareNarInfo(final File baseDir, final MavenProject project, final NarInfo narInfo,
-      final AbstractNarMojo mojo) throws MojoExecutionException {
+      final AbstractCompileMojo mojo) throws MojoExecutionException, MojoFailureException {
     if (getNoArchDirectory(baseDir, project.getArtifactId(), project.getVersion()).exists()) {
       narInfo.setNar(null, NarConstants.NAR_NO_ARCH, project.getGroupId() + ":" + project.getArtifactId() + ":"
           + NarConstants.NAR_TYPE + ":" + NarConstants.NAR_NO_ARCH);
@@ -218,7 +225,7 @@ public class NarLayout21 extends AbstractNarLayout {
           narInfo.setLibs(aol, mojo.getLibsName());
         }
         
-        narInfo.setInludesType(null, mojo.getIncludesType());
+        narInfo.setIncludesType(null, mojo.getIncludesType());
 
         // We prefer shared to jni/executable/static/none,
         if (type.equals(Library.SHARED)) // overwrite whatever we had
@@ -243,7 +250,47 @@ public class NarLayout21 extends AbstractNarLayout {
 
         narInfo.setNar(null, type, project.getGroupId() + ":" + project.getArtifactId() + ":" + NarConstants.NAR_TYPE
             + ":" + "${aol}" + "-" + type);
-
+        
+        // set the system includes
+        Set<String> flattenedSysLibs = new HashSet<>();
+        String sysLibSet = mojo.getLinker().getSysLibSet();
+        List<SysLib> sysLibList = mojo.getLinker().getSysLibs();
+        
+        Set<SysLib> dependencySysLibSet = new HashSet<>();
+        // add syslibs from all attached artifacts
+        System.out.println("NarLayout21.mojo.getNarArtifacts().size(): " + mojo.getNarArtifacts().size());
+        for (NarArtifact artifact : mojo.getNarArtifacts()) {
+          System.out.println("HERRRRRRRRREEEEEEEEEEEEE");
+          dependencySysLibSet.addAll(mojo.getDependecySysLib(artifact));
+        }
+        sysLibList.addAll(dependencySysLibSet);
+        
+        if (sysLibSet != null) {
+          String[] split = sysLibSet.split(",");
+          
+          for (String s : split) {
+            flattenedSysLibs.add(s.trim());
+          }
+        }
+        
+        if (sysLibList != null && !sysLibList.isEmpty()) {
+          for (SysLib s : sysLibList) {
+            flattenedSysLibs.add(s.getName() + ":" + s.getType());
+          }
+        }
+        
+        if (!flattenedSysLibs.isEmpty()) {
+          Iterator<String> iter = flattenedSysLibs.iterator();
+          
+          StringBuilder b = new StringBuilder();
+          while (iter.hasNext()) {
+            b.append(iter.next());
+            if (iter.hasNext()) b.append(", ");
+          }
+          
+          getLog().debug("Added syslib to narInfo: " + b.toString());
+          narInfo.setSysLibs(aol, b.toString());
+        }
       }
 
       // setting this first stops the per type config because getOutput check

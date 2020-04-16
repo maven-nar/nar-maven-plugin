@@ -116,8 +116,8 @@ public class NarInfo {
     return getProperty(aol, "libs.names", getOutput(aol, this.artifactId + "-" + this.version));
   }
   
-  public final String getInludesType(final AOL aol) {
-    return getProperty(aol, "inludes.type", "local");
+  public final String getIncludesType(final AOL aol) {
+    return getProperty(aol, "includes.type", "local");
   }
 
   public String getNarInfoFileName() {
@@ -222,8 +222,12 @@ public class NarInfo {
     setProperty(aol, "libs.names", value);
   }
   
-  public final void setInludesType(final AOL aol, final String value) {
-    setProperty(aol, "inludes.type", value);
+  public final void setIncludesType(final AOL aol, final String value) {
+    setProperty(aol, "includes.type", value);
+  }
+
+  public final void setSysLibs(final AOL aol, final String value) {
+    setProperty(aol, "syslibs.names", value);
   }
 
   private void setProperty(final AOL aol, final String key, final String value) {

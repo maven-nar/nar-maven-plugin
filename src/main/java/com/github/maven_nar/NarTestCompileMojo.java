@@ -29,6 +29,7 @@ import java.util.Objects;
 import java.util.Vector;
 import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -188,7 +189,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
             .getIncludeDirectory(getTestUnpackDirectory(), artifact.getArtifactId(), artifact.getBaseVersion());
       }
       if (include.exists()) {
-        String includesType = artifact.getNarInfo().getInludesType(null);
+        String includesType = artifact.getNarInfo().getIncludesType(null);
         if (includesType.equals("system")) {
           task.createSysIncludePath().setPath(include.getPath());
         }
@@ -303,6 +304,8 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
       tmp.addAll(dependencies);
       dependencies = tmp;
     }
+    
+    Set<SysLib> dependencySysLibs = new HashSet<SysLib>();
 
     for (final Object depLib : dependencies) {
       final NarArtifact dependency = (NarArtifact) depLib;
@@ -393,16 +396,12 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
           linkerDefinition.addConfiguredLinkerArg(arg);
         }
 
-        final String sysLibs = dependency.getNarInfo().getSysLibs(getAOL());
-        if (sysLibs != null && !sysLibs.equals("")) {
-          getLog().debug("Using SYSLIBS = " + sysLibs);
-          final SystemLibrarySet sysLibSet = new SystemLibrarySet();
-          sysLibSet.setProject(antProject);
-
-          sysLibSet.setLibs(new CUtil.StringArrayBuilder(sysLibs));
-          task.addSyslibset(sysLibSet);
-        }
+        dependencySysLibs.addAll(getDependecySysLib(dependency));
       }
+    }
+    
+    for (SysLib s : dependencySysLibs) {
+      task.addSyslibset(s.getSysLibSet(antProject));
     }
 
     // Add JVM to linker

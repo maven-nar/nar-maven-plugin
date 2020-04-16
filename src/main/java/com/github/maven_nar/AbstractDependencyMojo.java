@@ -216,7 +216,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
    * of groupId:artifactId traversing nodes in Level-Order way (also called BFS algorithm)
    * 
    * @param pushDepsToLowestOrder when {@code true} enables linker re-ordering logic such that libraries
-   * that are lower in the dependency heirarchy appear lower in the list, maximizing symbol resolution.
+   * that are lower in the dependency hierarchy appear lower in the list, maximizing symbol resolution.
    * @return {@link String Dependency tree string} of comma separated list of groupId:artifactId
    * @throws MojoExecutionException
    */
@@ -702,6 +702,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
    * NarInfo)
    */
   public final List<NarArtifact> getNarArtifacts() throws MojoExecutionException {
+    System.out.println("getNarArtifacts() 1: " + narDependencies.size());
     if (!narDependencies.isEmpty()) {
       return narDependencies;
     }
@@ -740,6 +741,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
       }
     }
     getLog().debug("Dependencies contained " + narDependencies.size() + " NAR artifacts.");
+    System.out.println("getNarArtifacts() 2: " + narDependencies.size());
     return narDependencies;
   }
 

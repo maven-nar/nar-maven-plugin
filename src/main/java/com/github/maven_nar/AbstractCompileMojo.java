@@ -25,8 +25,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.Project;
+
+import com.github.maven_nar.cpptasks.CCTask;
+import com.github.maven_nar.cpptasks.CUtil;
+import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
+import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 
 /**
  * @author Mark Donszelmann
@@ -320,5 +326,30 @@ public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
 
   protected final boolean useLibtool(final AOL aol) throws MojoExecutionException {
     return getNarInfo().getProperty(aol, "libtool", this.libtool);
+  }
+
+  public List<SysLib> getDependecySysLib(final NarArtifact dependency) throws MojoExecutionException, 
+      MojoFailureException {
+    
+    final String sysLibs = dependency.getNarInfo().getSysLibs(getAOL());
+    List<SysLib> l = new ArrayList<SysLib>();
+    
+    if (sysLibs != null && !sysLibs.equals("")) {
+      getLog().debug("Using SYSLIBS = " + sysLibs);
+      
+      String[] split = sysLibs.split(",");
+      
+      for (String s : split) {
+        String[] typeAndValue = s.split(":", 2);
+        if (typeAndValue.length != 2) throw new MojoExecutionException("Malformed syslib from dependency: " + s);
+        
+        SysLib sysLib = new SysLib();
+        sysLib.setName(typeAndValue[0]);
+        sysLib.setType(typeAndValue[1]);
+        l.add(sysLib);
+      }
+    }
+    
+    return l;
   }
 }

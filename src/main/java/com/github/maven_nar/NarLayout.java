@@ -93,9 +93,10 @@ public interface NarLayout {
   /**
    * Called to attach nars to main nar/jar file. This method needs to set
    * NarInfo accordingly so it can be included in the nar archive.
+   * @throws MojoFailureException 
    */
-  void prepareNarInfo(File baseDir, MavenProject project, NarInfo narInfo, AbstractNarMojo libraryName)
-      throws MojoExecutionException;
+  void prepareNarInfo(File baseDir, MavenProject project, NarInfo narInfo, AbstractCompileMojo libraryName)
+      throws MojoExecutionException, MojoFailureException;
 
   /**
    * Called to unpack a nar file

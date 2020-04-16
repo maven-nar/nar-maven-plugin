@@ -172,7 +172,7 @@ public class NarLayout20 extends AbstractNarLayout {
    */
   @Override
   public final void prepareNarInfo(final File baseDir, final MavenProject project, final NarInfo narInfo,
-      final AbstractNarMojo mojo) throws MojoExecutionException {
+      final AbstractCompileMojo mojo) throws MojoExecutionException {
     if (getIncludeDirectory(baseDir, project.getArtifactId(), project.getVersion()).exists()) {
       narInfo.setNar(null, "noarch", project.getGroupId() + ":" + project.getArtifactId() + ":" + NarConstants.NAR_TYPE
           + ":" + "noarch");
