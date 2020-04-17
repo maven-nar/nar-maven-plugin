@@ -255,6 +255,7 @@ public class NarLayout21 extends AbstractNarLayout {
         Set<String> flattenedSysLibs = new HashSet<>();
         String sysLibSet = mojo.getLinker().getSysLibSet();
         List<SysLib> sysLibList = mojo.getLinker().getSysLibs();
+        if (sysLibList == null) sysLibList = new ArrayList<>();
         
         Set<SysLib> dependencySysLibSet = new HashSet<>();
         // add syslibs from all attached artifacts
