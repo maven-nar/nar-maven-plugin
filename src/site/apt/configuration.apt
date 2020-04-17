@@ -62,6 +62,7 @@ NAR Configuration
   <gnuMakeSkip/>
   <libsName/>
   <skipRanlib/>
+  <syslibsFromDependencies/>
 
   <libraries>
     <library>
@@ -336,6 +337,9 @@ wish to run a GNU configure step but not the full make process.
     Execute all phases through compilation and linking, but don't actually invoke the compiler or linker.
     Will skip goals nar-test and nar-integration-test. This options is typically set to true for generating
     replays. Default false.
+
+* {syslibsFromDependencies}
+    Boolean for whether syslibs should be gathered from dependencies and added to linker args. Default false.
 
 * {libraries}
 
