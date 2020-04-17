@@ -169,7 +169,14 @@ public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
    */
   @Parameter
   protected boolean decorateLinkerOptions;
-
+  
+  
+  /** 
+   * Whether to automatically gather syslibs from dependencies
+   */
+  @Parameter(defaultValue = "false", required = true)
+  protected boolean syslibsFromDependencies;
+  
   private List/* <String> */dependencyLibOrder;
 
   private Project antProject;

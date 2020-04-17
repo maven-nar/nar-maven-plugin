@@ -702,7 +702,6 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
    * NarInfo)
    */
   public final List<NarArtifact> getNarArtifacts() throws MojoExecutionException {
-    System.out.println("getNarArtifacts() 1: " + narDependencies.size());
     if (!narDependencies.isEmpty()) {
       return narDependencies;
     }
@@ -741,7 +740,6 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
       }
     }
     getLog().debug("Dependencies contained " + narDependencies.size() + " NAR artifacts.");
-    System.out.println("getNarArtifacts() 2: " + narDependencies.size());
     return narDependencies;
   }
 
