@@ -53,7 +53,7 @@ public class GppLinker extends AbstractLdLinker {
   private static final GppLinker soLinker = new GppLinker(GPP_COMMAND, objFiles, discardFiles, "lib", ".so", false,
       new GppLinker(GPP_COMMAND, objFiles, discardFiles, "lib", ".so", true, null));
   private static final GppLinker instance = new GppLinker(GPP_COMMAND, objFiles, discardFiles, "", "", false, null);
-  private static final GppLinker clangInstance = new GppLinker("clang", objFiles, discardFiles, "", "", false, null);
+  private static final GppLinker clangInstance = new GppLinker("clang++", objFiles, discardFiles, "", "", false, null);
   private static final GppLinker machDllLinker = new GppLinker(GPP_COMMAND, objFiles, discardFiles, "lib", ".dylib",
       false, null);
   private static final GppLinker machPluginLinker = new GppLinker(GPP_COMMAND, objFiles, discardFiles, "lib",
@@ -308,6 +308,9 @@ public class GppLinker extends AbstractLdLinker {
     }
     if (type.isSharedLibrary()) {
       return isDarwin() ? machDllLinker : isWindows() ? dllLinker :isAIX() ?  aLinker : soLinker;
+    }
+    if (getCommand().startsWith("clang")) {
+      return clangInstance;
     }
     // ENDFREEHEP
     return instance;

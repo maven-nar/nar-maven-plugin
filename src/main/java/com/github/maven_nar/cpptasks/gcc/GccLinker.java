@@ -235,6 +235,9 @@ public class GccLinker extends AbstractLdLinker {
     if (type.isSharedLibrary()) {
       return isDarwin() ? machDllLinker : isWindows() ? dllLinker : isAIX() ?  aLinker : soLinker;
     }
+    if (getCommand().startsWith("clang")) {
+      return clangInstance;
+    }
     // ENDFREEHEP
     return instance;
   }
