@@ -20,21 +20,19 @@
 package com.github.maven_nar;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Vector;
-import java.util.HashSet;
 
-import com.github.maven_nar.cpptasks.*;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -44,16 +42,21 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
-import org.apache.maven.surefire.shade.org.apache.commons.lang.ArrayUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 
+import com.github.maven_nar.cpptasks.CCTask;
+import com.github.maven_nar.cpptasks.CUtil;
+import com.github.maven_nar.cpptasks.CompilerDef;
+import com.github.maven_nar.cpptasks.LinkerDef;
+import com.github.maven_nar.cpptasks.OutputTypeEnum;
+import com.github.maven_nar.cpptasks.RuntimeType;
+import com.github.maven_nar.cpptasks.SubsystemEnum;
+import com.github.maven_nar.cpptasks.VersionInfo;
 import com.github.maven_nar.cpptasks.types.LibrarySet;
-import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
 import com.github.maven_nar.cpptasks.types.LinkerArgument;
-import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 
 /**
  * Compiles native source files.
@@ -329,7 +332,7 @@ public class NarCompileMojo extends AbstractCompileMojo {
     linkerDefinition.setDryRun(dryRun);
     task.addConfiguredLinker(linkerDefinition);
     
-    Set<SysLib> dependencySysLibs = new HashSet<SysLib>();
+    Set<SysLib> dependencySysLibs = new LinkedHashSet<>();
 
     // add dependency libraries
     // FIXME: what about PLUGIN and STATIC, depending on STATIC, should we

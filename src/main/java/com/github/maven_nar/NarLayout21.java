@@ -23,6 +23,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,9 +34,6 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
 import org.codehaus.plexus.util.FileUtils;
-
-import com.github.maven_nar.cpptasks.CUtil;
-import com.google.inject.spi.Dependency;
 
 /**
  * Layout which expands a nar file into:
@@ -252,7 +250,7 @@ public class NarLayout21 extends AbstractNarLayout {
             + ":" + "${aol}" + "-" + type);
         
         // set the system includes
-        Set<String> flattenedSysLibs = new HashSet<>();
+        Set<String> flattenedSysLibs = new LinkedHashSet<>();
         String sysLibSet = mojo.getLinker().getSysLibSet();
         List<SysLib> sysLibList = mojo.getLinker().getSysLibs();
         if (sysLibList == null) sysLibList = new ArrayList<>();
