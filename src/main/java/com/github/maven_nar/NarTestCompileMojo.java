@@ -21,14 +21,13 @@ package com.github.maven_nar;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
-import java.util.Vector;
-import java.util.HashSet;
-import java.util.Properties;
 import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
@@ -52,7 +51,6 @@ import com.github.maven_nar.cpptasks.SubsystemEnum;
 import com.github.maven_nar.cpptasks.types.LibrarySet;
 import com.github.maven_nar.cpptasks.types.LibraryTypeEnum;
 import com.github.maven_nar.cpptasks.types.LinkerArgument;
-import com.github.maven_nar.cpptasks.types.SystemLibrarySet;
 
 /**
  * Compiles native test source files.
@@ -305,7 +303,7 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
       dependencies = tmp;
     }
     
-    Set<SysLib> dependencySysLibs = new HashSet<SysLib>();
+    Set<SysLib> dependencySysLibs = new LinkedHashSet<>();
 
     for (final Object depLib : dependencies) {
       final NarArtifact dependency = (NarArtifact) depLib;

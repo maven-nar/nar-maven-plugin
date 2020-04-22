@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -200,7 +201,7 @@ public class NarVcprojMojo extends AbstractCompileMojo {
         depLibs = tmp;
       }
       
-      Set<SysLib> dependencySysLibs = new HashSet<SysLib>();
+      Set<SysLib> dependencySysLibs = new LinkedHashSet<>();
 
       for (final Object depLib : depLibs) {
 
