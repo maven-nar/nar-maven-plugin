@@ -335,10 +335,10 @@ public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
     return getNarInfo().getProperty(aol, "libtool", this.libtool);
   }
 
-  public List<SysLib> getDependecySysLib(final NarArtifact dependency) throws MojoExecutionException, 
+  public List<SysLib> getDependecySysLib(final NarInfo dependencyNarInfo) throws MojoExecutionException, 
       MojoFailureException {
     
-    final String sysLibs = dependency.getNarInfo().getSysLibs(getAOL());
+    final String sysLibs = dependencyNarInfo.getSysLibs(getAOL());
     List<SysLib> l = new ArrayList<SysLib>();
     
     if (sysLibs != null && !sysLibs.equals("")) {

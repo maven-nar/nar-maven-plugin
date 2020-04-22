@@ -382,6 +382,8 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
             libSet.setDir(dir);
             task.addLibset(libSet);
           }
+
+          dependencySysLibs.addAll(getDependecySysLib(aolNarInfo));
         } else {
           getLog().debug("Library Directory " + dir + " does NOT exist.");
         }
@@ -395,8 +397,6 @@ public class NarTestCompileMojo extends AbstractCompileMojo {
           arg.setValue(options);
           linkerDefinition.addConfiguredLinkerArg(arg);
         }
-
-        dependencySysLibs.addAll(getDependecySysLib(dependency));
       }
     }
     

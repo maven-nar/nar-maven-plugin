@@ -246,14 +246,6 @@ public class NarVcprojMojo extends AbstractCompileMojo {
             arg.setValue(options);
             linkerDefinition.addConfiguredLinkerArg(arg);
           }
-
-          dependencySysLibs.addAll(getDependecySysLib(dependency));
-        }
-      }
-      
-      if (syslibsFromDependencies) {
-        for (SysLib s : dependencySysLibs) {
-          task.addSyslibset(s.getSysLibSet(antProject));
         }
       }
 

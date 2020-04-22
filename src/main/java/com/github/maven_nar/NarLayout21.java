@@ -260,7 +260,7 @@ public class NarLayout21 extends AbstractNarLayout {
         Set<SysLib> dependencySysLibSet = new HashSet<>();
         // add syslibs from all attached artifacts
         for (NarArtifact artifact : mojo.getNarArtifacts()) {
-          dependencySysLibSet.addAll(mojo.getDependecySysLib(artifact));
+          dependencySysLibSet.addAll(mojo.getDependecySysLib(artifact.getNarInfo()));
         }
         sysLibList.addAll(dependencySysLibSet);
         
