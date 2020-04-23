@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.Arrays;
 import java.util.Collections;
@@ -282,7 +283,20 @@ public class Linker {
     linker.setSkipDepLink(this.skipDepLink);
     
     // incremental, map
-    linker.setLinkerPrefix(this.prefix);
+    String linkerPrefix;
+    if (this.prefix == null || this.prefix.equals("")) {
+      String key = mojo.getAOL().getKey() + ".linker.prefix";
+      linkerPrefix = NarProperties.getInstance(mojo.getMavenProject()).getProperty(key);
+    }
+    else {
+      linkerPrefix = this.prefix;
+    }
+
+    // don't add prefix to ar-like commands FIXME should be done in cpptasks
+    if (type.equals(Library.STATIC) && !getName(null, null).equals("msvc")) {
+      linkerPrefix = null;
+    }
+    linker.setLinkerPrefix(linkerPrefix);
     linker.setIncremental(this.incremental);
     linker.setMap(this.map);
 
