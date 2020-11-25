@@ -257,7 +257,7 @@ public final class NarUtil {
     * */
     String aol_linker;
 
-    if(linker != null & linker.getName() != null)
+    if(linker != null && linker.getName() != null)
     {
       log.debug("linker original name: " + linker.getName());
       aol_linker = linker.getName();
