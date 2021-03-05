@@ -286,7 +286,7 @@ public class Msvc {
       }
 
       // Visual Studio
-      if (compareVersion(version, "16.0") < 0) {
+      if (compareVersion(version, "15.0") < 0) {
         if ("x86".equals(arch)) {
           linker.addLibraryDirectory(msvctoolhome, "lib");
           linker.addLibraryDirectory(msvctoolhome, "atlmfc/lib");
@@ -367,7 +367,7 @@ public class Msvc {
   private void initPath(CrossCompilers compiler) throws MojoExecutionException {
 
     Boolean found = true;
-    if (compareVersion(version, "16.0") < 0) {
+    if (compareVersion(version, "15.0") < 0) {
       switch (compiler) {
         case x86:
           // compile using x86 tools.
@@ -446,7 +446,7 @@ public class Msvc {
     }
 
     // tools that are more generic
-    if (compareVersion(version, "16.0") < 0) {
+    if (compareVersion(version, "15.0") < 0) {
       addPath(msvctoolhome, "VCPackages");
       addPath(home, "Common7/Tools");
       addPath(home, "Common7/IDE");
@@ -559,11 +559,15 @@ public class Msvc {
     WindowsSdkVerBinPath=C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\
     WindowsSDKVersion=10.0.18362.0\ 
     */
-    // examine the VS version variable first before attempting to read older registry entries which are not supported in later VS versions
-    this.version = System.getenv("VisualStudioVersion");
-
+    // don't attempt to subvert the version setting from the pom
+    if (version == null || version.trim().length() < 1) {
+      // examine the VS version variable before attempting to read older registry entries which are not supported in later VS versions
+      String envVisualStudioVersion = System.getenv("VisualStudioVersion");
+      if (envVisualStudioVersion != null && envVisualStudioVersion.length() > 3) {
+        this.version = envVisualStudioVersion;
+      }
+    }
     mojo.getLog().debug("Requested Linker version is  \"" + version + "\"");
-
     if (version != null && version.trim().length() > 1) {
       String internalVersion;
       Pattern r = Pattern.compile("(\\d+)\\.*(\\d)");
@@ -596,7 +600,7 @@ public class Msvc {
       mojo.getLog().debug(String.format(" VisualStudio %1s (%2s) found %3s ", version, internalVersion, home));
     } else {  
       // reset
-      this.version = ""; //
+      this.version = "";
       // First search registry for installed items, more reliable than environment.
       for (final Entry<String, Object> entry : visualStudioVS7SxS(com.sun.jna.platform.win32.WinReg.HKEY_LOCAL_MACHINE,
           "SOFTWARE\\Microsoft\\VisualStudio\\SxS\\VS7").entrySet()) {
@@ -850,7 +854,7 @@ public class Msvc {
   }
 
   private File VCToolHome() {
-    if (compareVersion(version, "16.0") < 0) {
+    if (compareVersion(version, "15.0") < 0) {
       return new File(home, "VC/");
     } else {
       final File msvcversionFile = new File(home, "VC/Auxiliary/Build/Microsoft.VCToolsVersion.default.txt");
