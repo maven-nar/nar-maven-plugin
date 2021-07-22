@@ -399,7 +399,7 @@
               <configuration>
                   <rules>
                       <enforceBytecodeVersion>
-                          <maxJdkVersion>1.7</maxJdkVersion>
+                          <maxJdkVersion>1.8</maxJdkVersion>
                       </enforceBytecodeVersion>
                   </rules>
                   <fail>true</fail>
