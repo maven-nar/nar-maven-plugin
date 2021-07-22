@@ -2,8 +2,10 @@ package com.github.maven_nar.cpptasks;
 
 
 import org.apache.tools.ant.Project;
+import org.apache.tools.ant.types.Environment;
 
 import java.io.*;
+import java.util.Vector;
 
 
 class StreamGobbler extends Thread {
@@ -41,7 +43,7 @@ public class CommandExecution {
 
 
 
-    public static int runCommand(String[] cmdArgs, File workDir, CCTask task) throws  IOException{
+    public static int runCommand(String[] cmdArgs, File workDir, CCTask task, Vector<Environment.Variable> env) throws  IOException{
 
 
         try {
@@ -53,6 +55,11 @@ public class CommandExecution {
             pb.redirectErrorStream(true);
 
             pb.directory(workDir);
+
+            for (Environment.Variable var:env) {
+                pb.environment().put(var.getKey(), var.getValue());
+                task.log("Environment variable: " + var.getKey() + "=" + var.getValue(), Project.MSG_VERBOSE);
+            }
 
             //Start the new process
             Process process = pb.start();
