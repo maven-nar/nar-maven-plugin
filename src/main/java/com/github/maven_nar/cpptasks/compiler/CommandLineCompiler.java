@@ -571,7 +571,8 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
    * arguments without actually spawning the compiler
    */
   protected int runCommand(final CCTask task, final File workingDir, final String[] cmdline) throws BuildException {
-    commands.add(cmdline);
+    if(commands!=null)
+      commands.add(cmdline);
     if (dryRun) return 0;
     return CUtil.runCommand(task, workingDir, cmdline, this.newEnvironment, this.env);
   }
