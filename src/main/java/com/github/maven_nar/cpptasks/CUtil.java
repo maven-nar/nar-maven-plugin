@@ -420,7 +420,8 @@ public class CUtil {
       exe.setNewenvironment(newEnvironment);
       return exe.execute();
             */
-	  return CommandExecution.runCommand(cmdline,workingDir,task);
+
+	  return CommandExecution.runCommand(cmdline,workingDir,task,env.getVariablesVector());
     } catch (final java.io.IOException exc) {
       throw new BuildException("Could not launch " + cmdline[0] + ": " + exc, task.getLocation());
     }
