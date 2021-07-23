@@ -994,7 +994,11 @@ public class CCTask extends Task {
                   if (compileException == null && exception instanceof BuildException) {
                     compileException = (BuildException) exception;
                   } else {
-                    log(cores[j].getName() + " " + exception + "                                  ", Project.MSG_ERR);
+                    log(cores[j].getName() + " " + exception + " ", Project.MSG_ERR);
+                    final StackTraceElement[] stackTrace = exception.getStackTrace();
+                    for (final StackTraceElement element : stackTrace) {
+                      log(element.toString(),Project.MSG_DEBUG);
+                    }
                   }
                   if (!this.relentless) {
                     cores[j] = null;
