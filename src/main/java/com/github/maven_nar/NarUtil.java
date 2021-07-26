@@ -109,7 +109,7 @@ public final class NarUtil {
     String libPath = path;
     libPath = libPath.replace(File.pathSeparatorChar, separator);
     if (value != null) {
-      value += separator + libPath;
+      value = libPath + separator + value; // items under test first on path
     } else {
       value = libPath;
     }
