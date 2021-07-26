@@ -86,7 +86,13 @@ public class NarProperties {
    *          the properties from input stream
    */
   public static void inject(final MavenProject project, final InputStream properties) throws MojoFailureException {
-    final Properties defaults = PropertyUtils.loadProperties(properties);
+    Properties defaults;
+    try {
+      defaults = PropertyUtils.loadProperties(properties);
+    } catch (IOException e) {
+      // re-throw as a mojo failure
+      throw new MojoFailureException("IOException loading properties", e);
+    }
     final NarProperties nar = getInstance(project);
     nar.properties.putAll(defaults);
   }
@@ -95,7 +101,13 @@ public class NarProperties {
 
   private NarProperties(final MavenProject project, File narFile, String customPropertyLocation) throws MojoFailureException {
 
-    final Properties defaults = PropertyUtils.loadProperties(NarUtil.class.getResourceAsStream(AOL_PROPERTIES));
+    Properties defaults;
+    try {
+      defaults = PropertyUtils.loadProperties(NarUtil.class.getResourceAsStream(AOL_PROPERTIES));
+    } catch (IOException e) {
+      // re-throw as a mojo failure
+      throw new MojoFailureException("IOException loading properties", e);
+    }
     if (defaults == null) {
       throw new MojoFailureException("NAR: Could not load default properties file: '" + AOL_PROPERTIES + "'.");
     }
@@ -107,13 +119,14 @@ public class NarProperties {
         fis = new FileInputStream(narFile);
         this.properties.load(fis);
       }
-    } catch (final FileNotFoundException e) {
+    } catch (FileNotFoundException e) {
       if (customPropertyLocation != null) {
         // We tried loading from a custom location - so throw the exception
         throw new MojoFailureException("NAR: Could not load custom properties file: '" + customPropertyLocation + "'.");
       }
-    } catch (final IOException e) {
-      // ignore (FIXME)
+    } catch (IOException e) {
+      // re-throw as a mojo failure
+      throw new MojoFailureException("IOException loading properties", e);
     } finally {
       try {
         if (fis != null) {

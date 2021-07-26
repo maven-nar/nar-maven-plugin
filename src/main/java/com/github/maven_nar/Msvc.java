@@ -10,11 +10,9 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.sun.jna.platform.win32.Advapi32Util;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.types.Environment.Variable;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -44,6 +42,7 @@ public class Msvc {
    * <li>12.0 for VS 2013</li>
    * <li>14.0 for VS 2015</li>
    * <li>15.0 for VS 2017</li>
+   * <li>16.0 for VS 2019</li>
    * </ul>
    */
   private String version = "";
@@ -540,8 +539,35 @@ public class Msvc {
   private void initVisualStudio() throws MojoFailureException, MojoExecutionException {
     mojo.getLog().debug(" -- Searching for usable VisualStudio ");
 
+    /* New env values used by VS 2019
+    VCIDEInstallDir=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\VC\
+    VCINSTALLDIR=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\
+    VCToolsInstallDir=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\
+    VCToolsRedistDir=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.28.29325\
+    VCToolsVersion=14.28.29333
+    VisualStudioVersion=16.0
+    VS160COMNTOOLS=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\
+    VSCMD_ARG_app_plat=Desktop
+    VSCMD_ARG_HOST_ARCH=x64
+    VSCMD_ARG_TGT_ARCH=x64
+    VSCMD_VER=16.8.5
+    VSINSTALLDIR=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\
+    WindowsLibPath=C:\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.18362.0;C:\Program Files (x86)\Windows Kits\10\References\10.0.18362.0
+    WindowsSdkBinPath=C:\Program Files (x86)\Windows Kits\10\bin\
+    WindowsSdkDir=C:\Program Files (x86)\Windows Kits\10\
+    WindowsSDKLibVersion=10.0.18362.0\
+    WindowsSdkVerBinPath=C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\
+    WindowsSDKVersion=10.0.18362.0\ 
+    */
+    // don't attempt to subvert the version setting from the pom
+    if (version == null || version.trim().length() < 1) {
+      // examine the VS version variable before attempting to read older registry entries which are not supported in later VS versions
+      String envVisualStudioVersion = System.getenv("VisualStudioVersion");
+      if (envVisualStudioVersion != null && envVisualStudioVersion.length() > 3) {
+        this.version = envVisualStudioVersion;
+      }
+    }
     mojo.getLog().debug("Requested Linker version is  \"" + version + "\"");
-
     if (version != null && version.trim().length() > 1) {
       String internalVersion;
       Pattern r = Pattern.compile("(\\d+)\\.*(\\d)");
@@ -557,8 +583,9 @@ public class Msvc {
         // @<Major.Minor>
         try {
           home = new File(registryGet32StringValue(com.sun.jna.platform.win32.WinReg.HKEY_LOCAL_MACHINE,
-              "SOFTWARE\\Microsoft\\VisualStudio\\SxS\\VS7", version));
-        } finally {
+          "SOFTWARE\\Microsoft\\VisualStudio\\SxS\\VS7", version));
+        } catch (Exception e) {
+          // is there interest in knowing about an Win32Exception here for newer VS versions?
         }
       }
       if (home == null || !home.exists()) {
@@ -571,8 +598,9 @@ public class Msvc {
         }
       }
       mojo.getLog().debug(String.format(" VisualStudio %1s (%2s) found %3s ", version, internalVersion, home));
-    } else {
-      this.version = ""; //
+    } else {  
+      // reset
+      this.version = "";
       // First search registry for installed items, more reliable than environment.
       for (final Entry<String, Object> entry : visualStudioVS7SxS(com.sun.jna.platform.win32.WinReg.HKEY_LOCAL_MACHINE,
           "SOFTWARE\\Microsoft\\VisualStudio\\SxS\\VS7").entrySet()) {
