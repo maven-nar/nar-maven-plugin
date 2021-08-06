@@ -116,6 +116,7 @@
 
   <properties>
     <invoker.debug>false</invoker.debug>
+    <invoker.workspace>${project.build.directory}/it</invoker.workspace>
     <its.to.skip>dummy</its.to.skip>
     <mavenVersion>3.0.4</mavenVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -541,6 +542,7 @@
             <artifactId>maven-invoker-plugin</artifactId>
             <version>3.2.0</version>
             <configuration>
+              <cloneProjectsTo>${invoker.workspace}</cloneProjectsTo>
               <properties>
                 <jna.nosys>true</jna.nosys>
               </properties>

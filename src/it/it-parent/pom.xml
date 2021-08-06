@@ -88,5 +88,33 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>java-10+</id>
+      <activation>
+        <jdk>[10,)</jdk>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.maven-nar</groupId>
+            <artifactId>nar-maven-plugin</artifactId>
+            <configuration>
+              <javah>
+                <skip>true</skip>
+              </javah>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <compilerArguments>
+                <h>${project.build.directory}/nar/javah-include</h>
+              </compilerArguments>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 </project>
