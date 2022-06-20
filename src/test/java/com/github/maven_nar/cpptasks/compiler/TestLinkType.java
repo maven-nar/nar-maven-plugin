@@ -64,4 +64,16 @@ public class TestLinkType extends TestCase {
     type.setOutputType(pluginType);
     assertTrue(type.isPluginModule());
   }
+
+  public void testSetOutputType() throws Exception {
+    try {
+      final LinkType type = new LinkType();
+      final OutputTypeEnum pluginType = new OutputTypeEnum();
+      pluginType.setValue("executable");
+      type.setOutputType(null);
+      TestCase.fail("testSetOutputType should have thrown IllegalArgumentException");
+    } catch (IllegalArgumentException expected) {
+      TestCase.assertEquals("outputType", expected.getMessage());
+    }
+  }
 }
