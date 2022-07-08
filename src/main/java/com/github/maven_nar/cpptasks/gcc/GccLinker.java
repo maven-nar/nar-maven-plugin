@@ -46,7 +46,7 @@ public class GccLinker extends AbstractLdLinker {
       "-dynamic", "-arch", "-dynamiclib", "-nostartfiles", "-nostdlib", "-prebind", "-s", "-static", "-shared",
       "-symbolic", "-Xlinker", "--export-all-symbols", "-static-libgcc", "-p", "-pg", "-pthread",
       // Regex based
-      "-specs=.*", "-std=.*"
+      "-specs=.*", "-std=.*", "--specs=.*", "--std=.*"
   };
   // FREEHEP refactored dllLinker to soLinker
   private static final GccLinker soLinker = new GccLinker("gcc", objFiles, discardFiles, "lib", ".so", false,
