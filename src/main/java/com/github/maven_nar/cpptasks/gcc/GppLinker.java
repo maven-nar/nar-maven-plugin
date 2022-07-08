@@ -47,7 +47,9 @@ public class GppLinker extends AbstractLdLinker {
   };
   private static String[] linkerOptions = new String[] {
       "-bundle", "-dylib", "-dynamic", "-dynamiclib", "-nostartfiles", "-nostdlib", "-prebind", "-s", "-static",
-      "-shared", "-symbolic", "-Xlinker", "-static-libgcc", "-shared-libgcc", "-p", "-pg", "-pthread"
+      "-shared", "-symbolic", "-Xlinker", "-static-libgcc", "-shared-libgcc", "-p", "-pg", "-pthread",
+      // Regex based
+      "-specs=.*", "-std=.*"
   };
   // FREEHEP refactored dllLinker into soLinker
   private static final GppLinker soLinker = new GppLinker(GPP_COMMAND, objFiles, discardFiles, "lib", ".so", false,
@@ -230,7 +232,7 @@ public class GppLinker extends AbstractLdLinker {
         default:
           boolean known = false;
           for (final String linkerOption : linkerOptions) {
-            if (linkerOption.equals(arg)) {
+            if (arg.matches(linkerOption)) {
               known = true;
               break;
             }
