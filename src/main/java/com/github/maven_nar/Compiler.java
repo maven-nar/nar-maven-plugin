@@ -269,7 +269,7 @@ public abstract class Compiler {
     if (pair[0].equals("")) {
         this.mojo.getLog().warn("NAR configuration: definition has no name in " + configName + " - ignoring");
         return null;
-      }
+    }
 
     define.setName(pair[0]);
     define.setValue(pair.length > 1 ? cleanDefineValue(pair[1]) : null);
