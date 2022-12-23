@@ -19,12 +19,14 @@
  */
 package com.github.maven_nar;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.base.Strings.nullToEmpty;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 import java.util.Arrays;
 import java.util.Collections;
@@ -283,8 +285,12 @@ public class Linker {
     linker.setSkipDepLink(this.skipDepLink);
     
     // incremental, map
-    String linkerPrefix;
-    if (this.prefix == null || this.prefix.equals("")) {
+    final String linkerPrefix;
+    // don't add prefix to ar-like commands FIXME should be done in cpptasks
+    if (type.equals(Library.STATIC) && !getName(null, null).equals("msvc")) {
+      linkerPrefix = null;
+    }
+    else if (isNullOrEmpty(this.prefix)) {
       String key = mojo.getAOL().getKey() + ".linker.prefix";
       linkerPrefix = NarProperties.getInstance(mojo.getMavenProject()).getProperty(key);
     }
@@ -292,10 +298,6 @@ public class Linker {
       linkerPrefix = this.prefix;
     }
 
-    // don't add prefix to ar-like commands FIXME should be done in cpptasks
-    if (type.equals(Library.STATIC) && !getName(null, null).equals("msvc")) {
-      linkerPrefix = null;
-    }
     linker.setLinkerPrefix(linkerPrefix);
     linker.setIncremental(this.incremental);
     linker.setMap(this.map);
@@ -303,7 +305,7 @@ public class Linker {
     // Add definitions (Window only)
     if (os.equals(OS.WINDOWS) && getName(null, null).equals("msvc")
         && (type.equals(Library.SHARED) || type.equals(Library.JNI))) {
-      final Set defs = new HashSet();
+      final Set<File> defs = new HashSet<>();
       try {
         if (mojo.getC() != null) {
           final List cSrcDirs = mojo.getC().getSourceDirectories();
@@ -364,7 +366,6 @@ public class Linker {
         arg2.setValue("/MANIFESTFILE:" + task.getOutfile() + ".manifest");
         linker.addConfiguredLinkerArg(arg2);
       }
-
     }
 
     // Add options to linker
@@ -552,11 +553,7 @@ public class Linker {
     }
 
     String version = null;
-    String linkerPrefix = "";
-
-    if (this.prefix != null && (!this.prefix.isEmpty())) {
-      linkerPrefix = this.prefix;
-    }
+    final String linkerPrefix = nullToEmpty(this.prefix);
 
     final TextStream out = new StringTextStream();
     final TextStream err = new StringTextStream();
@@ -628,7 +625,7 @@ public class Linker {
         version = m.group(0);
       }
     } else {
-      if (!this.prefix.isEmpty()) {
+      if (!linkerPrefix.isEmpty()) {
         NarUtil.runCommand(linkerPrefix+this.name, new String[] {
           "--version"
         }, null, null, out, err, dbg, this.log);
