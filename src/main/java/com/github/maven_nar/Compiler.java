@@ -263,7 +263,6 @@ public abstract class Compiler {
       this.mojo.getLog().warn("NAR configuration: empty " + configName + " - ignoring");
       return null;
     }
-    final DefineArgument define = new DefineArgument();
     final String[] pair = argument.split("=", 2);
 
     if (pair[0].equals("")) {
@@ -271,6 +270,7 @@ public abstract class Compiler {
         return null;
     }
 
+    final DefineArgument define = new DefineArgument();
     define.setName(pair[0]);
     define.setValue(pair.length > 1 ? cleanDefineValue(pair[1]) : null);
     return define;
