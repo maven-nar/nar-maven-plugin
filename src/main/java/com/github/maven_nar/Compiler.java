@@ -251,6 +251,32 @@ public abstract class Compiler {
   }
 
   /**
+   * Parses a "NAME=VALUE" string into a name and (optional) value. Logs to warn if argument is null, implying a blank 
+   * config item (eg &lt;define>&lt;/define>, or &lt;define>${x}&lt;/define> when x is undefined).
+   * 
+   * @param argument the string to parse (may be null)
+   * @param configName the name of the argument type, for logging purposes
+   * @return the parsed DefineArgument, or null if argument is null
+   */
+  private DefineArgument parseDefineArgument(final String argument, String configName) {
+    if (argument == null) {
+      this.mojo.getLog().warn("NAR configuration: empty " + configName + " - ignoring");
+      return null;
+    }
+    final String[] pair = argument.split("=", 2);
+
+    if (pair[0].equals("")) {
+        this.mojo.getLog().warn("NAR configuration: definition has no name in " + configName + " - ignoring");
+        return null;
+    }
+
+    final DefineArgument define = new DefineArgument();
+    define.setName(pair[0]);
+    define.setValue(pair.length > 1 ? cleanDefineValue(pair[1]) : null);
+    return define;
+  }
+  
+  /**
    * Filter elements such as cr\lf that are problematic when used inside a `define`
    *  
    * @param value  define value to be cleaned
@@ -328,13 +354,10 @@ public abstract class Compiler {
     }
 
     if (this.optionSet != null) {
-
       final String[] opts = this.optionSet.split("\\s");
 
       for (final String opt : opts) {
-
         final CompilerArgument arg = new CompilerArgument();
-
         arg.setValue(opt);
         compilerDef.addConfiguredCompilerArg(arg);
       }
@@ -358,31 +381,24 @@ public abstract class Compiler {
     if (this.defines != null) {
       final DefineSet ds = new DefineSet();
       for (final String string : this.defines) {
-        final DefineArgument define = new DefineArgument();
-        final String[] pair = string.split("=", 2);
-        define.setName(pair[0]);
-        define.setValue(pair.length > 1 ? cleanDefineValue(pair[1]) : null);
-        ds.addDefine(define);
+        final DefineArgument define = parseDefineArgument(string, "define");
+        if (define != null) {
+          ds.addDefine(define);
+        }
       }
       compilerDef.addConfiguredDefineset(ds);
     }
 
     if (this.defineSet != null) {
-
       final String[] defList = this.defineSet.split(",");
       final DefineSet defSet = new DefineSet();
 
       for (final String element : defList) {
-
-        final String[] pair = element.trim().split("=", 2);
-        final DefineArgument def = new DefineArgument();
-
-        def.setName(pair[0]);
-        def.setValue(pair.length > 1 ? cleanDefineValue(pair[1]) : null);
-
-        defSet.addDefine(def);
+          final DefineArgument define = parseDefineArgument(element, "defineSet");
+          if (define != null) {
+              defSet.addDefine(define);
+          }
       }
-
       compilerDef.addConfiguredDefineset(defSet);
     }
 
@@ -400,11 +416,10 @@ public abstract class Compiler {
     if (this.undefines != null) {
       final DefineSet us = new DefineSet();
       for (final String string : this.undefines) {
-        final DefineArgument undefine = new DefineArgument();
-        final String[] pair = string.split("=", 2);
-        undefine.setName(pair[0]);
-        undefine.setValue(pair.length > 1 ? pair[1] : null);
-        us.addUndefine(undefine);
+        final DefineArgument undef = parseDefineArgument(string, "undefine");
+        if (undef != null) {
+            us.addUndefine(undef);
+        }
       }
       compilerDef.addConfiguredDefineset(us);
     }
@@ -415,16 +430,11 @@ public abstract class Compiler {
       final DefineSet undefSet = new DefineSet();
 
       for (final String element : undefList) {
-
-        final String[] pair = element.trim().split("=", 2);
-        final DefineArgument undef = new DefineArgument();
-
-        undef.setName(pair[0]);
-        undef.setValue(pair.length > 1 ? pair[1] : null);
-
-        undefSet.addUndefine(undef);
+        final DefineArgument undef = parseDefineArgument(element, "undefineSet");
+        if (undef != null) {
+            undefSet.addUndefine(undef);
+        }
       }
-
       compilerDef.addConfiguredDefineset(undefSet);
     }
 

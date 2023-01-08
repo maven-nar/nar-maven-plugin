@@ -85,4 +85,9 @@ public class IncludePath {
     this.path = path;
     this.file = new File(path);
   }
+
+  @Override
+  public String toString() {
+    return getPath() + (includes == null ? "" : "[" + getIncludes() + "]");
+  }
 }
