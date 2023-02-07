@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 
 import junit.framework.TestCase;
 
@@ -45,9 +46,7 @@ public abstract class TestXMLConsumer extends TestCase {
   public static void copyResourceToTmpDir(final String resourceName, final String tmpFile) throws IOException {
     String tmpDir = System.getProperty("java.io.tmpdir");
 
-    final File tempdir = File.createTempFile(tmpFile, Long.toString(System.nanoTime()), new File(tmpDir));
-    tempdir.delete();
-    tempdir.mkdir();
+    final File tempdir = Files.createTempDirectory(new File(tmpDir).toPath(), tmpFile + Long.toString(System.nanoTime())).toFile();
     tempdir.deleteOnExit();
     tmpDir = tempdir.getAbsolutePath();
     //

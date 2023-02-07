@@ -26,10 +26,8 @@ import java.util.*;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Execute;
-import org.apache.tools.ant.taskdefs.LogStreamHandler;
 import org.apache.tools.ant.types.Commandline;
 import org.apache.tools.ant.types.Environment;
-import org.apache.tools.ant.util.StringUtils;
 
 /**
  * Some utilities used by the CC and Link tasks.
@@ -421,7 +419,8 @@ public class CUtil {
       return exe.execute();
             */
 
-	  return CommandExecution.runCommand(cmdline,workingDir,task,env.getVariablesVector());
+      return CommandExecution.runCommand(cmdline, workingDir, task, 
+              env == null ? new Vector<Environment.Variable>() : env.getVariablesVector());
     } catch (final java.io.IOException exc) {
       throw new BuildException("Could not launch " + cmdline[0] + ": " + exc, task.getLocation());
     }
@@ -502,14 +501,14 @@ public class CUtil {
 
   public static String toUnixPath(final String path) {
     if (File.separatorChar != '/' && path.indexOf(File.separatorChar) != -1) {
-      return StringUtils.replace(path, File.separator, "/");
+      return path.replace(File.separator, "/");
     }
     return path;
   }
 
   public static String toWindowsPath(final String path) {
     if (File.separatorChar != '\\' && path.indexOf(File.separatorChar) != -1) {
-      return StringUtils.replace(path, File.separator, "\\");
+      return path.replace(File.separator, "\\");
     }
     return path;
   }
