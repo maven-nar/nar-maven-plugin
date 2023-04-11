@@ -8,5 +8,14 @@ AM_INIT_AUTOMAKE
 
 AC_PROG_CC
 
+AC_ARG_WITH(pkginfo,
+  AC_HELP_STRING([--with-pkginfo=PKG],
+                 [Package information string]),
+  [case "$withval" in
+    (yes) AC_MSG_ERROR([package information not specified]) ;;
+    (*) PKG_INFO="$withval" ;;
+   esac])
+AC_SUBST(PKG_INFO)
+
 AC_OUTPUT(Makefile src/Makefile)
 
