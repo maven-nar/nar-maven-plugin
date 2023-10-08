@@ -9,9 +9,9 @@
     <relativePath />
   </parent>
 
-  <groupId>com.github.maven-nar</groupId>
+  <groupId>net.zscript.maven-nar</groupId>
   <artifactId>nar-maven-plugin</artifactId>
-  <version>3.10.2-SNAPSHOT</version>
+  <version>3.10.2-alpha</version>
   <packaging>maven-plugin</packaging>
 
   <name>Native ARchive plugin for Maven</name>
