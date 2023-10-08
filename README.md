@@ -21,9 +21,9 @@ In your POM:
 <build>
 	<plugins>
 		<plugin>
-			<groupId>com.github.maven-nar</groupId>
+			<groupId>net.zscript.maven-nar</groupId>
 			<artifactId>nar-maven-plugin</artifactId>
-			<version>3.10.2-SNAPSHOT</version>
+			<version>3.10.2-alpha</version>
 			<extensions>true</extensions>
 			<configuration>
 				...
