@@ -28,38 +28,38 @@
 			<configuration>
 				<phases>
 					<validate>
-						com.github.maven-nar:nar-maven-plugin:nar-validate
+						net.zscript.maven-nar:nar-maven-plugin:nar-validate
 					</validate>
 					<initialize>
-						com.github.maven-nar:nar-maven-plugin:nar-download
+						net.zscript.maven-nar:nar-maven-plugin:nar-download
 					</initialize>
 					<generate-sources>
-						com.github.maven-nar:nar-maven-plugin:nar-unpack
+						net.zscript.maven-nar:nar-maven-plugin:nar-unpack
 					</generate-sources>
 					<process-sources>
-						com.github.maven-nar:nar-maven-plugin:nar-gnu-configure
+						net.zscript.maven-nar:nar-maven-plugin:nar-gnu-configure
 					</process-sources>
 					<generate-resources>
-						com.github.maven-nar:nar-maven-plugin:nar-system-generate,
-						com.github.maven-nar:nar-maven-plugin:nar-vcproj
+						net.zscript.maven-nar:nar-maven-plugin:nar-system-generate,
+						net.zscript.maven-nar:nar-maven-plugin:nar-vcproj
 					</generate-resources>
 					<process-resources>
 						org.apache.maven.plugins:maven-resources-plugin:resources,
-						com.github.maven-nar:nar-maven-plugin:nar-resources,
-						com.github.maven-nar:nar-maven-plugin:nar-gnu-resources
+						net.zscript.maven-nar:nar-maven-plugin:nar-resources,
+						net.zscript.maven-nar:nar-maven-plugin:nar-gnu-resources
 					</process-resources>
 					<compile>
 						org.apache.maven.plugins:maven-compiler-plugin:compile,
-						com.github.maven-nar:nar-maven-plugin:nar-javah,
-						com.github.maven-nar:nar-maven-plugin:nar-gnu-make,
-						com.github.maven-nar:nar-maven-plugin:nar-compile
+						net.zscript.maven-nar:nar-maven-plugin:nar-javah,
+						net.zscript.maven-nar:nar-maven-plugin:nar-gnu-make,
+						net.zscript.maven-nar:nar-maven-plugin:nar-compile
 					</compile>
 					<process-classes>
-						com.github.maven-nar:nar-maven-plugin:nar-gnu-process,
-						com.github.maven-nar:nar-maven-plugin:nar-process-libraries
+						net.zscript.maven-nar:nar-maven-plugin:nar-gnu-process,
+						net.zscript.maven-nar:nar-maven-plugin:nar-process-libraries
 					</process-classes>
 					<generate-test-sources>
-						com.github.maven-nar:nar-maven-plugin:nar-test-unpack
+						net.zscript.maven-nar:nar-maven-plugin:nar-test-unpack
 					</generate-test-sources>
 					<process-test-sources></process-test-sources>
 					<generate-test-resources></generate-test-resources>
@@ -68,25 +68,25 @@
 					</process-test-resources>
 					<test-compile>
 						org.apache.maven.plugins:maven-compiler-plugin:testCompile,
-						com.github.maven-nar:nar-maven-plugin:nar-testCompile
+						net.zscript.maven-nar:nar-maven-plugin:nar-testCompile
 					</test-compile>
 					<process-test-classes>
 						
 					</process-test-classes>
 					<test>
 						org.apache.maven.plugins:maven-surefire-plugin:test,
-						com.github.maven-nar:nar-maven-plugin:nar-test
+						net.zscript.maven-nar:nar-maven-plugin:nar-test
 					</test>
 					<prepare-package>
-						com.github.maven-nar:nar-maven-plugin:nar-prepare-package
+						net.zscript.maven-nar:nar-maven-plugin:nar-prepare-package
 					</prepare-package>
 					<package>
-						com.github.maven-nar:nar-maven-plugin:nar-package,
+						net.zscript.maven-nar:nar-maven-plugin:nar-package,
 						org.apache.maven.plugins:maven-jar-plugin:jar
 					</package>
 					<pre-integration-test></pre-integration-test>
 					<integration-test>
-						com.github.maven-nar:nar-maven-plugin:nar-integration-test
+						net.zscript.maven-nar:nar-maven-plugin:nar-integration-test
 					</integration-test>
 					<post-integration-test></post-integration-test>
 					<verify></verify>
