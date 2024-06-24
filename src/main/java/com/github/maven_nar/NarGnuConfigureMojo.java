@@ -136,7 +136,7 @@ public class NarGnuConfigureMojo extends AbstractGnuMojo {
             getLog().info("Running GNU " + BUILDCONF);
             String gnuBuildconfArgsArray[] = null;
             if (this.gnuBuildconfArgs != null) {
-              gnuBuildconfArgsArray = this.gnuBuildconfArgs.split("\\s");
+              gnuBuildconfArgsArray = this.gnuBuildconfArgs.split("[^\\s\"']+|\"([^\"]*)\"|'([^']*)'");
             }
             runAutogen(buildconf, targetDir, gnuBuildconfArgsArray);
           }
@@ -154,7 +154,7 @@ public class NarGnuConfigureMojo extends AbstractGnuMojo {
 
         // create the array to hold constant and additional args
         if (this.gnuConfigureArgs != null) {
-          final String[] a = this.gnuConfigureArgs.split(" ");
+          final String[] a = this.gnuConfigureArgs.split("[^\\s\"']+|\"([^\"]*)\"|'([^']*)'");
           args = new String[a.length + 2];
 
           System.arraycopy(a, 0, args, 2, a.length);
@@ -164,7 +164,7 @@ public class NarGnuConfigureMojo extends AbstractGnuMojo {
 
         // first 2 args are constant
         args[0] = configure.getAbsolutePath();
-        args[1] = "--prefix=" + getGnuAOLTargetDirectory().getAbsolutePath();
+        args[1] = "--prefix=\"" + getGnuAOLTargetDirectory().getAbsolutePath() + "\"";
 
         final File buildDir = getGnuAOLSourceDirectory();
         FileUtils.mkdir(buildDir.getPath());
@@ -196,7 +196,7 @@ public class NarGnuConfigureMojo extends AbstractGnuMojo {
     } else {
       arguments = new String[1];
     }
-    arguments[0] = "./" + autogen.getName();
+    arguments[0] = "\"./" + autogen.getName() + "\"";
 
     getLog().info("args: " + arraysToString(arguments));
 

@@ -413,7 +413,7 @@ public final class NarUtil {
     if (file.isFile() && file.canRead() && file.canWrite() && !file.isHidden()) {
       // chmod +x file
       final int result = runCommand("chmod", new String[] {
-          "+x", file.getPath()
+          "+x", file.getPath().replaceAll(" ", "\\ ")
       }, null, null, log);
       if (result != 0) {
         throw new MojoExecutionException("Failed to execute 'chmod +x " + file.getPath() + "'" + " return code: \'"
