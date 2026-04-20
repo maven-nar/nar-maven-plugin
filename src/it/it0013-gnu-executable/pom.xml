@@ -57,6 +57,9 @@
               <run>true</run>
             </library>
           </libraries>
+	<gnuConfigureArgs>
+		"--with-pkginfo=GNU Executable Integration Test"
+	</gnuConfigureArgs>	
         </configuration>
       </plugin>
     </plugins>

@@ -21,6 +21,9 @@ package com.github.maven_nar;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.regex.*;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -154,7 +157,14 @@ public class NarGnuConfigureMojo extends AbstractGnuMojo {
 
         // create the array to hold constant and additional args
         if (this.gnuConfigureArgs != null) {
-          final String[] a = this.gnuConfigureArgs.split(" ");
+          List<String> list = new ArrayList<String>();
+          Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(this.gnuConfigureArgs);
+          // strip double quotes
+          while (m.find()) {
+            list.add(m.group(1).replace("\"", ""));
+          }
+          String[] a = new String[list.size()];
+          a = list.toArray(a);
           args = new String[a.length + 2];
 
           System.arraycopy(a, 0, args, 2, a.length);
