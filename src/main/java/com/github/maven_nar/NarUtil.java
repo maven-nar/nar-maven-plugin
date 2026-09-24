@@ -744,7 +744,7 @@ public final class NarUtil {
     if ((dec & 0b000000010) != 0) permissions.add(PosixFilePermission.OTHERS_WRITE);
     if ((dec & 0b000000100) != 0) permissions.add(PosixFilePermission.OTHERS_READ);
     if ((dec & 0b000001000) != 0) permissions.add(PosixFilePermission.GROUP_EXECUTE);
-    if ((dec & 0b000010000) != 0) permissions.add(PosixFilePermission.GROUP_READ);
+    if ((dec & 0b000010000) != 0) permissions.add(PosixFilePermission.GROUP_WRITE);
     if ((dec & 0b000100000) != 0) permissions.add(PosixFilePermission.GROUP_READ);
     if ((dec & 0b001000000) != 0) permissions.add(PosixFilePermission.OWNER_EXECUTE);
     if ((dec & 0b010000000) != 0) permissions.add(PosixFilePermission.OWNER_WRITE);
