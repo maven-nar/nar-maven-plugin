@@ -183,7 +183,12 @@ NAR Configuration
   </java>
 
   <javah>
+    <mode>auto</mode>
     <name/>
+    <skip/>
+    <extraClasses>
+      <extraClass/>
+    </extraClasses>
     <bootClassPaths>
       <bootClassPath/>
     </bootClassPaths>
@@ -591,19 +596,59 @@ are lower in the dependency heirarchy appear lower in the list, maximizing symbo
 
 * {javah}
 
-	Section to specify parameters for javah
+    Configures JNI header generation by the <<<nar-javah>>> goal, using either
+ <<<javah>>> or <<<javac -h>>>. The section name is the same for every JDK.
+ See {{{./index.html#nar-javah}JNI header generation}} for JDK version selection,
+ supported classes and generated-work directories.
+
+** {javah mode}
+
+    Header generator: <<<auto>>> (default), <<<javah>>> or <<<javac>>>.
+ <<<auto>>> uses <<<javah>>> when available in the selected JDK (normally JDK 8
+ and 9), otherwise <<<javac -h>>> (JDK 10 and later). <<<javah>>> requires the
+ legacy tool; <<<javac>>> selects the new generator on any JDK 8 or newer.
+ Tool availability, rather than the application's target Java version, controls
+ automatic selection. A selected Maven JDK toolchain takes precedence over
+ <<<javaHome>>>.
+
+    The <<<javac>>> backend regenerates every selected header on each invocation,
+ including dependency headers. <<<staleMillis>>>, <<<timestampDirectory>>> and
+ <<<timestampFile>>> apply only to legacy <<<javah>>> generation.
 
 ** {javah name}
 
-	Javah command to run.
+    Legacy header command to run; defaults to <<<javah>>>. A custom command is
+ preserved in <<<auto>>> and <<<javah>>> modes, and a command failure never
+ triggers fallback. Absolute paths are used directly; relative names are resolved
+ under <<<javaHome/bin>>>. <<<javac>>> mode ignores this setting and locates
+ <<<javac>>> in the selected JDK. To select the new generator, set <<<mode>>> to
+ <<<javac>>> rather than changing <<<name>>>.
+
+** {javah skip}
+
+    Skip JNI header generation with either tool. Defaults to <<<false>>>.
+
+** {javah extraClasses}
+
+    Additional header targets from the classpath, specified as binary class names
+ such as <<<example.Outer$NativeApi>>>. The <<<javac>>> backend supports targets
+ from dependencies even when there are no local native classes, including
+ constants-only classes. Legacy <<<javah>>> mode includes these targets only
+ when local native classes trigger generation. JDK/platform classes cannot be
+ header targets with the <<<javac>>> backend.
 
 ** {javah bootClassPaths}
 
-	List of boot class paths. By default none.
+    List of boot class paths. By default none. Passed as <<<-bootclasspath>>>
+ to the selected tool; support depends on the selected JDK. Modern <<<javac>>>
+ versions reject this option with their default target release.
 
 ** {javah classPaths}
 
-	List of classpaths. By default the classDirectory directory is included and all dependent classes.
+    Classpath for header generation. Defaults to the Maven compile classpath,
+ including the project's compiled output and dependencies. An explicit list
+ replaces this default. Native signature types and required superclasses must
+ be available to the selected tool.
 
 ** {javah jniDirectory}
 

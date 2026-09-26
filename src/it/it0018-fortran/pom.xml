@@ -64,7 +64,8 @@
                 <library>
                   <type>executable</type>
                   <linkFortran>true</linkFortran>
-                  <linkFortranMain>true</linkFortranMain>
+                  <!-- Modern GNU Fortran generates main without the legacy libgfortranbegin library. -->
+                  <linkFortranMain>false</linkFortranMain>
                 </library>
               </libraries>
             </configuration>

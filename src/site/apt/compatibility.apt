@@ -32,6 +32,14 @@ made for Maven 1 and therefore we are not compatible with those.
 	In the NAR Plugin 2.x series we had to introduce some backward incompatibilites and other changes.
 Below a (rather incomplete) list.
 
+* JNI header generation and Java versions
+
+    The <<<nar-javah>>> goal selects <<<javah>>> on JDK 8 and 9 and <<<javac -h>>>
+ on JDK 10 and later by default. The selected JDK toolchain determines tool
+ availability; the application's target Java version does not. Explicit modes,
+ custom commands and supported header targets are described under
+ {{{./index.html#nar-javah}JNI header generation}}.
+
 * Version 2.1.x
 
 	* The internal layout of the nar files (.nar extension) is stable. No changes were made.

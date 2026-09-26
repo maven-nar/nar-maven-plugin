@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,9 +30,10 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.toolchain.ToolchainManager;
 
 /**
- * Compiles class files into c/c++ headers using "javah". Any class file that
- * contains methods that were declared
- * "native" will be run through javah.
+ * Generates JNI headers from compiled native declarations using javah or javac
+ * -h.
+ * The javac backend reconstructs temporary source declarations from class
+ * metadata.
  *
  * @requiresSession
  * @author Mark Donszelmann

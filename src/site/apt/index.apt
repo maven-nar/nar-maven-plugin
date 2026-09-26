@@ -155,17 +155,193 @@ with compiled shareable libraries.
 noarch area in the target directory.
                 
 * {nar-javah}
-                
-	This goal will run the javah tool on any class file in the <<<javah.classDirectory>>> directory
-that has native methods in it. The actual class files are inspected (rather than their sources).
-The javah tool is picked up from the java installation and is run with a classpath of the
-<<<javah.classDirectory>>> and all depencies' classpaths, unless you specify a list in <<<javah.classPaths>>>. 
-Additional classnames like java.sql.Types, which have no actual *.class file in the classDirectory, can be added
-using the <<<javah.extraClasses>>> list. You can also set a boot classpath using <<<javah.bootClassPaths>>>.
 
-	This goal has no effect if there are no java sources, or if none of the java classes contain a native
-method.
-                
+    Generates JNI headers from compiled classes in <<<javah.classDirectory>>> (by
+ default <<<target/classes>>>), selecting native classes with <<<javah.includes>>>
+ and <<<javah.excludes>>>. Sources are not required. Headers are published to
+ <<<javah.jniDirectory>>> (by default <<<target/nar/javah-include>>>).
+
+    The goal remains <<<nar-javah>>> and its configuration remains <<<javah>>>
+ with every JDK. With the default <<<mode>>> of <<<auto>>> and <<<name>>> of
+ <<<javah>>>, the usual tool selection is:
+
+*--------------------+-----------------------------------+-------------------------------+
+| Selected JDK       | Available header tools            | Tool used in <<<auto>>> mode   |
+*--------------------+-----------------------------------+-------------------------------+
+| JDK 8              | <<<javah>>> and <<<javac -h>>>     | <<<javah>>>                   |
+*--------------------+-----------------------------------+-------------------------------+
+| JDK 9              | <<<javah>>> and <<<javac -h>>>     | <<<javah>>>                   |
+*--------------------+-----------------------------------+-------------------------------+
+| JDK 10 and later   | <<<javac -h>>>                    | <<<javac -h>>>                |
+*--------------------+-----------------------------------+-------------------------------+
+
+    <<<javac -h>>> has been available since JDK 8; <<<javah>>> was removed in
+ JDK 10. See the
+ {{{https://docs.oracle.com/en/java/javase/21/migrate/removed-tools-and-components.html}JDK migration guide}}.
+ Selection checks tool availability, so a JDK 8 or 9 toolchain exposing only
+ <<<javac>>> also uses <<<javac -h>>>. The <<<javac>>> backend requires JDK 8 or newer.
+
+    For the standard tool names, the selected Maven JDK toolchain supplies the
+ header tool. Without a selected toolchain, NAR uses <<<javaHome>>>, which defaults to a location derived from the
+ JVM running Maven. A selected toolchain is authoritative: a missing tool does
+ not cause NAR to search another JDK. The project's Java source/target/release
+ settings do not select the header tool. For example, a JDK 21 toolchain uses
+ <<<javac -h>>> even when the application targets Java 8.
+
+    <<<javah>>> reads compiled classes directly. <<<javac -h>>> generates headers
+ while compiling Java source, so NAR uses ASM to read the compiled classes and
+ reconstruct minimal temporary source declarations. It then compiles those
+ declarations with the selected <<<javac>>>. Original application and dependency
+ sources are not needed, and application method bodies are not reconstructed.
+
+    Select the backend with <<<javah.mode>>>:
+
+    * <<<auto>>> (default): use <<<javah>>> when the selected JDK provides it;
+ otherwise generate temporary Java declarations using ASM and run <<<javac -h>>>.
+
+    * <<<javah>>>: require the legacy tool and retain timestamp-based generation.
+
+    * <<<javac>>>: require JDK 8 or newer and always regenerate all selected headers,
+ including dependency classes, so dependency changes are taken into account.
+
+    []
+
+    A custom <<<javah.name>>> (a value other than <<<javah>>>) remains a legacy
+ command in <<<auto>>> or <<<javah>>> mode. A failing command is reported; it does
+ not trigger fallback. <<<javac>>> mode ignores <<<javah.name>>>; select this mode
+ to use the new backend on JDK 8 or 9 as well as on newer JDKs. Put the following
+ fragment inside the NAR plugin's <<<configuration>>> element:
+
++--
+<javah>
+  <mode>javac</mode>
+  <extraClasses>
+    <extraClass>example.NativeLibrary$Api</extraClass>
+    <extraClass>example.Constants</extraClass>
+  </extraClasses>
+</javah>
++--
+
+    The compile classpath supplies dependency types; <<<javah.classPaths>>> can
+ replace it explicitly. <<<javah.bootClassPaths>>> is also passed to the compiler
+ (subject to that JDK's supported options). The new backend supports directories,
+ JARs and multi-release JARs, using the selected compiler's JDK version. Local
+ JAR and directory entries in a JAR manifest's <<<Class-Path>>> are resolved
+ relative to that JAR and searched immediately after it, including transitive
+ entries. Duplicate entries and cycles are ignored; remote URLs are not fetched.
+ Manifest entries follow the selected compiler: JDK 8-10 treat them as file names,
+ while JDK 11 and later decode file URLs (including percent-encoded spaces).
+ With the <<<javac>>> backend, <<<javah.extraClasses>>> uses binary class names
+ and works even with no local native classes. In legacy <<<javah>>> mode, extra
+ classes are passed to the tool only when local native classes trigger generation.
+ Explicitly selected classes without native methods receive a
+ constants-only header, without an extra generated constant.
+
+    The <<<javac>>> backend supports application and dependency top-level and member
+ classes, including nested classes and native enums. Local/anonymous classes and
+ classes enclosed within them cannot be reconstructed as header targets. JDK/platform
+ classes cannot be header targets (targets such as <<<java.sql.Types>>> require
+ legacy <<<javah>>> from a JDK that still provides it); ordinary references to
+ JDK types are supported. Missing or source-inexpressible required declarations
+ produce errors.
+
+    Native signatures, primitive constants, containment and superclass/interface
+ relationships are reconstructed. Real signature types and superclasses must be
+ available on the classpath. Types used only in omitted methods or unrelated fields are not eagerly
+ resolved. Superclass constructors must have an accessible, source-expressible
+ invocation; failures identify the class and constructor candidates. Checked
+ constructor exceptions are specialized for the selected superclass type and the
+ emitted invocation's inferred type arguments. Unconstrained throws-only type
+ variables can infer <<<RuntimeException>>>; unchecked exceptions require no throws
+ clause. Dependent bounds retain checked coverage needed by older compilers. Inaccessible or shadowed checked exception
+ names use the nearest usable superclass, including when a default-package name
+ conflicts with an import. Types from the default package are never imported.
+ Name checks verify the actual class denoted by declared and inherited member
+ names, rejecting hidden or ambiguous spellings while retaining valid self and
+ member references. Verified lexical bindings take precedence over canonical
+ names, so an inherited public member can be used without naming its inaccessible
+ declaring class. When a lexical name is hidden or unavailable, the generator
+ looks for an accessible subtype qualifier whose member resolves to the same
+ binary class. Parameterized member spellings preserve the declaring owner's type
+ arguments by projecting candidate qualifiers through their generic ancestry;
+ candidates must satisfy their bounds and denote the exact owner instantiation.
+ Wildcard upper bounds must permit a common subtype with the qualifier's bounds,
+ including compatible generic ancestors; wildcard lower bounds must satisfy those
+ bounds. Incompatible candidates are skipped. When a required qualifier is itself
+ generated, the generator retains its necessary class and enclosing type parameters
+ rather than erasing a member type that dependency contracts still parameterize.
+ Native signatures in these declarations retain the necessary generic source form.
+ Compiled native descriptors are checked against the original class files before
+ headers are published.
+ Constructor arguments and checked exceptions use these same
+ spelling rules. Qualifier discovery first uses known metadata; if necessary,
+ it indexes superclass/interface names from classpath files, respecting classpath
+ precedence, manifest entries and the compiler's multi-release JAR view. This
+ fallback does not resolve unrelated method or field types. Superclass and
+ interface clauses use their declaration scope;
+ member names enter scope in the class body. Unrelated member class files are not
+ resolved to perform these checks.
+ Generated subclasses follow the throws clause actually emitted for their parent;
+ a parent constructor choice is retained only if its generated descendants can
+ express the resulting clauses. Rejected choices discard descendant imports and
+ references before another parent candidate is considered. Constructor selection checks
+ exception and argument spellings against the compilation unit's required names,
+ trying another candidate when a throws clause cannot be expressed. Rejected
+ candidates do not retain imports. Throwaway constructors retain required type parameters and all their bounds when casting
+ arguments to generic superclass constructors, using fresh names to avoid shadowing
+ classes or package names. Fresh type parameter names reserve identifiers in the
+ actual selected spellings, including discovered qualifiers; subsequent name
+ resolution also avoids type parameters already in scope. Fully typed constructor calls are preferred. When
+ constructor argument types or generic bounds cannot be named due to accessibility
+ or source-name conflicts, calls using raw casts are tried before calls requiring
+ bare null arguments, avoiding ambiguous overloads when a usable cast is available.
+ Null inference remains available for inaccessible constructor bounds. Constructor
+ calls are selected from class metadata before compilation, checking applicability,
+ generic bounds and overload specificity. Wildcard capture includes parameterized
+ enclosing types, even when the member itself is not generic. All parameters are supplied, including an
+ array for a varargs parameter, and the call must be applicable without boxing or
+ varargs expansion. Ambiguous calls are rejected during selection; failures identify
+ the competing constructor descriptors. All generated units are then compiled
+ together in one javac invocation. Compiler failures propagate without retrying.
+ Enclosing
+ interfaces retain interface form. Enclosing records retain their record form
+ without reconstructing record components. Overrides needed to resolve conflicting
+ interface methods are retained. Records and enums receive throwaway method bodies
+ where needed to satisfy interface contracts, choosing covariant return types
+ independently of interface order. Return comparison includes generic arguments,
+ wildcard bounds and parameterized supertypes. Wildcard projection retains bounds
+ declared on the generic type, including dependent and intersection bounds. Redundant interface clauses are omitted so that
+ inherited generic instantiations, such as <<<Comparable<E\>>>> on an enum, remain
+ authoritative. Interface arguments on non-raw declarations and supporting interface
+ type parameters are retained, including bounds involving other generated classes.
+ Superclass arguments are retained consistently with interface arguments, constructor
+ calls and inherited-method lookup. When a supporting generic superclass is erased,
+ interface paths sharing its raw ancestors are reconciled with that erasure.
+ Enclosing type arguments are kept separate from member type parameters
+ when matching inherited methods. Retained generic contracts are specialized before
+ supporting methods are emitted: for example, <<<Supplier<String>.get()>>> needs a <<<String>>> return.
+ Method type parameters, their bounds and parameterized signature types are retained
+ when needed for valid supporting overrides. Compiler-generated bridge adapters do
+ not replace source overrides. Inherited methods are checked against the reconstructed
+ superclass declarations, with generic throws clauses specialized alongside return
+ and parameter types. Supporting return types satisfy both the retained superclass
+ method and all retained interface contracts. Native JVM descriptors remain unchanged. Unrelated methods remain omitted. Required contract signature types,
+ including generic argument types needed by the compiler's inheritance checks, must
+ be available on the classpath.
+
+    Temporary sources, throwaway class files, staged headers, compiler arguments and
+ diagnostics are kept in <<<target/nar/javac-headers>>> (relative to the configured
+ build directory), in <<<sources>>>, <<<classes>>>, <<<headers>>>, <<<javac.args>>>
+ and <<<javac.log>>>. Diagnostics from the single compilation are retained in
+ <<<javac.log>>> and are not parsed to select constructors. Temporary outputs are
+ cleared before compilation.
+ Application class files are not overwritten, and annotation
+ processing is disabled. Source names account for same-package types and reserve
+ unnamed-package references before adding imports. After the single compilation,
+ native method names, descriptors and static/instance flags are compared with the
+ original class files. This check and verification of every requested header
+ finish before publication; unsuccessful generation leaves existing headers intact.
+
 * {nar-gnu-make}  
 
     Runs "make" followed by "make install" to put the final files in position for copying to the NAR target areas by the 

@@ -87,8 +87,9 @@ primary outputs:
 
     *    When one builds a JNI library one needs both the java code in a jar
     	 file and native code in a shared library. The expected dependency is that
-         the jar file needs the JNI library. However, javah generates the
-         necessary header file from java, which would make the JNI library
+         the jar file needs the JNI library. However, the nar-javah goal generates
+         the necessary header file from compiled Java classes using javah or javac -h,
+         which would make the JNI library
          dependent on the jar file. Since this is impossible it would be
          better to attach the JNI library (in its nar file) as a secondary
          artifact to the primary nar file.

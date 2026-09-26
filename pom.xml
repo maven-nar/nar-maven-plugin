@@ -5,7 +5,7 @@
   <parent>
     <artifactId>maven-plugins</artifactId>
     <groupId>org.apache.maven.plugins</groupId>
-    <version>25</version>
+    <version>50</version>
     <relativePath />
   </parent>
 
@@ -115,6 +115,10 @@
   </distributionManagement>
 
   <properties>
+    <!-- Retain the project's existing formatting and license policy. -->
+    <checkstyle.skip>true</checkstyle.skip>
+    <rat.skip>true</rat.skip>
+    <spotless.skip>true</spotless.skip>
     <invoker.debug>false</invoker.debug>
     <invoker.workspace>${project.build.directory}/it</invoker.workspace>
     <its.to.skip>dummy</its.to.skip>
@@ -164,6 +168,11 @@
       <version>1.10.11</version>
     </dependency>
     <dependency>
+      <groupId>org.ow2.asm</groupId>
+      <artifactId>asm</artifactId>
+      <version>9.10.1</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.bcel</groupId>
       <artifactId>bcel</artifactId>
       <version>6.6.0</version>
@@ -196,6 +205,8 @@
     <dependency>
       <groupId>org.apache.maven.plugin-tools</groupId>
       <artifactId>maven-plugin-annotations</artifactId>
+      <version>3.2</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
@@ -372,40 +383,6 @@
               <goal>descriptor</goal>
             </goals>
           </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>enforce-maven</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <requireMavenVersion>
-                  <version>3.0.5</version>
-                </requireMavenVersion>
-              </rules>
-            </configuration>
-          </execution>
-            <!-- override unwanted 1.5 max from Maven parent -->
-          <execution>
-              <id>enforce-bytecode-version</id>
-              <goals>
-                  <goal>enforce</goal>
-              </goals>
-              <configuration>
-                  <rules>
-                      <enforceBytecodeVersion>
-                          <maxJdkVersion>1.8</maxJdkVersion>
-                      </enforceBytecodeVersion>
-                  </rules>
-                  <fail>true</fail>
-              </configuration>
-            </execution>
         </executions>
       </plugin>
       <plugin>

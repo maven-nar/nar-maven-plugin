@@ -101,7 +101,7 @@ Examples
 	
 	[#link_it( 'it0016-layout', '' )] Tests for different repository layouts, currently NarLayout20 and NarLayout21.
 	
-	[#link_it( 'it0017-toolchain', '' )] Tests which use the toolchain to find tools such as javah. 
+	[#link_it( 'it0017-toolchain', '' )] Tests which use the JDK toolchain to select the JNI header tool.
 	
 	[#link_it( 'it0018-fortran', '' )] A Fortran 90 program, not enabled on Windows. 
 	
