@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  #%L
+  Native ARchive plugin for Maven
+  %%
+  Copyright (C) 2002 - 2014 NAR Maven Plugin developers.
+  %%
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  #L%
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.github.maven-nar.its</groupId>
+  <artifactId>it0043-surefire-contract</artifactId>
+  <version>1.0</version>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <contract.case>default</contract.case>
+    <contract.fail>false</contract.fail>
+    <contract.error>false</contract.error>
+    <contract.crash>false</contract.crash>
+    <contract.ignore>false</contract.ignore>
+    <contract.promote>false</contract.promote>
+    <contract.fork>once</contract.fork>
+    <contract.noTests>false</contract.noTests>
+    <contract.dry>false</contract.dry>
+    <skipTests>true</skipTests>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <outputDirectory>${project.build.directory}/custom classes</outputDirectory>
+    <testOutputDirectory>${project.build.directory}/custom test classes</testOutputDirectory>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.16.0</version>
+        <configuration>
+          <release>8</release>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.5.6</version>
+        <configuration>
+          <reportsDirectory>${basedir}/results/${contract.case}/ordinary-reports</reportsDirectory>
+          <systemPropertyVariables>
+            <contract.case>${contract.case}</contract.case>
+          </systemPropertyVariables>
+          <includes>
+            <include>**/ContractTest.java</include>
+          </includes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>@project.groupId@</groupId>
+        <artifactId>nar-maven-plugin</artifactId>
+        <version>@project.version@</version>
+        <configuration>
+          <architecture>amd64</architecture>
+          <os>Linux</os>
+          <aol>amd64-Linux-gpp</aol>
+          <linker>
+            <name>g++</name>
+          </linker>
+          <reportsDirectory>${basedir}/results/${contract.case}/reports</reportsDirectory>
+          <workingDirectory>${basedir}/working directory</workingDirectory>
+          <forkMode>${contract.fork}</forkMode>
+          <dryRun>${contract.dry}</dryRun>
+          <failIfNoTests>${contract.noTests}</failIfNoTests>
+          <testFailureIgnore>${contract.ignore}</testFailureIgnore>
+          <promoteUserPropertiesToSystemProperties>${contract.promote}</promoteUserPropertiesToSystemProperties>
+          <systemProperties>
+            <property>
+              <name>legacy</name>
+              <value>legacy value</value>
+            </property>
+            <property>
+              <name>precedence</name>
+              <value>legacy</value>
+            </property>
+          </systemProperties>
+          <systemPropertiesFile>${basedir}/test-system.properties</systemPropertiesFile>
+          <systemPropertyVariables>
+            <contract.case>${contract.case}</contract.case>
+            <contract.fail>${contract.fail}</contract.fail>
+            <contract.error>${contract.error}</contract.error>
+            <contract.crash>${contract.crash}</contract.crash>
+            <contract.promote>${contract.promote}</contract.promote>
+            <precedence>variables</precedence>
+          </systemPropertyVariables>
+          <environmentVariables>
+            <NAR_CONTRACT_ENV>environment with spaces</NAR_CONTRACT_ENV>
+          </environmentVariables>
+          <argLine>-Dcontract.arg=&quot;argument with spaces&quot;</argLine>
+          <additionalClasspathElements>
+            <additionalClasspathElement>${basedir}/extra classpath</additionalClasspathElement>
+          </additionalClasspathElements>
+          <redirectTestOutputToFile>true</redirectTestOutputToFile>
+        </configuration>
+        <executions>
+          <execution>
+            <id>first</id>
+            <goals>
+              <goal>nar-integration-test</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>second</id>
+            <goals>
+              <goal>nar-integration-test</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <profiles>
+    <profile>
+      <id>explicit-selection</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>@project.groupId@</groupId>
+            <artifactId>nar-maven-plugin</artifactId>
+            <configuration>
+              <includes>
+                <include>**/ContractTest.java</include>
+              </includes>
+              <excludes>
+                <exclude>**/UnselectedTests.java</exclude>
+              </excludes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>invalid-jvm</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>@project.groupId@</groupId>
+            <artifactId>nar-maven-plugin</artifactId>
+            <configuration>
+              <jvm>${basedir}/absent-jdk/bin/java</jvm>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>no-matches</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>@project.groupId@</groupId>
+            <artifactId>nar-maven-plugin</artifactId>
+            <configuration>
+              <includes>
+                <include>**/Absent.java</include>
+              </includes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>excluded</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>@project.groupId@</groupId>
+            <artifactId>nar-maven-plugin</artifactId>
+            <configuration>
+              <excludes>
+                <exclude>**/ContractTest.java</exclude>
+              </excludes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>missing-directory</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>@project.groupId@</groupId>
+            <artifactId>nar-maven-plugin</artifactId>
+            <configuration>
+              <testClassesDirectory>${basedir}/absent-directory</testClassesDirectory>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

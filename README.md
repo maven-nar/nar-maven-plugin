@@ -15,6 +15,8 @@ using the standard `maven-install-plugin` and `maven-deploy-plugin`.
 Usage
 -----
 
+Building and running the plugin requires Java 8 or newer and Maven 3.6.3 or newer.
+
 In your POM:
 
 ```xml
@@ -43,6 +45,7 @@ for ideas, see:
 
 Documentation
 -------------
+* [Java/JNI integration tests](docs/java-integration-tests.md)
 * [Wiki](https://github.com/maven-nar/nar-maven-plugin/wiki)
     * [How to contribute](https://github.com/maven-nar/nar-maven-plugin/wiki/How-to-contribute)
     * [FAQ](https://github.com/maven-nar/nar-maven-plugin/wiki/Frequently_Asked_Questions)

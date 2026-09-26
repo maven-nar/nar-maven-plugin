@@ -11,19 +11,19 @@ install:
   - ps: Start-Sleep -s 10
   - ps: |
       Add-Type -AssemblyName System.IO.Compression.FileSystem
-      if (!(Test-Path -Path "C:\maven" )) {
+      if (!(Test-Path -Path "C:\maven\apache-maven-3.6.3" )) {
         (new-object System.Net.WebClient).DownloadFile(
-          'http://www.us.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.zip',
+          'https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.zip',
           'C:\maven-bin.zip'
         )
         [System.IO.Compression.ZipFile]::ExtractToDirectory("C:\maven-bin.zip", "C:\maven")
       }
-  - cmd: SET PATH=C:\maven\apache-maven-3.3.9\bin;%JAVA_HOME%\bin;%PATH%
+  - cmd: SET PATH=C:\maven\apache-maven-3.6.3\bin;%JAVA_HOME%\bin;%PATH%
   - cmd: SET MAVEN_OPTS=-XX:MaxPermSize=2g -Xmx4g
   - cmd: SET JAVA_OPTS=-XX:MaxPermSize=2g -Xmx4g
-  - cmd: SET M2_HOME=C:\maven\apache-maven-3.3.9
-  - cmd: SET MAVEN_HOME=C:\maven\apache-maven-3.3.9
-  - cmd: COPY C:\maven\apache-maven-3.3.9\bin\mvn.cmd C:\maven\apache-maven-3.3.9\bin\mvn.bat
+  - cmd: SET M2_HOME=C:\maven\apache-maven-3.6.3
+  - cmd: SET MAVEN_HOME=C:\maven\apache-maven-3.6.3
+  - cmd: COPY C:\maven\apache-maven-3.6.3\bin\mvn.cmd C:\maven\apache-maven-3.6.3\bin\mvn.bat
 
 build_script:
   - mvn -Prun-its
@@ -44,4 +44,3 @@ on_failure:
 # enable the following lines to open an rdp session on finsih
 #on_finish:
 #  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-

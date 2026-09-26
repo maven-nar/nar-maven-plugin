@@ -28,7 +28,7 @@ Introduction
  
 	NOTE: <<bold>> print is <<NOT implemented yet>>.
 
-	This plugin for Maven 2 allows you to compile native code (c++, c and fortran) on
+	This plugin requires Maven 3.6.3 or newer and Java 8 or newer. It allows you to compile native code (c++, c and fortran) on
 a number of different architectures (Linux, Windows, MacOSX, Solaris, ...) and with
 a number of different compilers/linkers (g++, Microsoft Visual C++, CC, ...)
 The output produced is wrapped up in Native ARchive files (.nar) some of which
@@ -302,4 +302,3 @@ unpack goal of a dependent artifact upon first usage.
                 
 	This goal deploys the produced artifacts on a maven (web) server. The jar and nar files will always
 be in their packaged form on the server (they will never be unpacked there by maven).
-

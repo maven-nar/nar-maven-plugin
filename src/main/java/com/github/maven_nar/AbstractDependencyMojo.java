@@ -36,6 +36,9 @@ import java.util.zip.ZipInputStream;
 import org.apache.commons.io.IOUtils;
 
 import org.apache.maven.model.Dependency;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.project.DefaultProjectBuildingRequest;
+import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
@@ -57,7 +60,6 @@ import org.codehaus.plexus.util.StringUtils;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
 import org.apache.maven.shared.dependency.graph.DependencyNode;
-import org.apache.maven.shared.dependency.graph.internal.DefaultDependencyNode;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.artifact.DefaultArtifact;
 
@@ -82,6 +84,9 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
 
   @Parameter(defaultValue = "${localRepository}", required = true, readonly = true)
   private ArtifactRepository localRepository;
+
+  @Parameter(defaultValue = "${session}", required = true, readonly = true)
+  private MavenSession mavenSession;
 
   /**
    * Artifact resolver, needed to download the attached nar files.
@@ -502,9 +507,10 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     try {
       ArtifactFilter artifactFilter = null;
 
-      // works for only maven 3. Use of dependency graph component not handled for maven 2
-      // as current version of NAR already requires Maven 3.x
-      rootNode = dependencyGraphBuilder.buildDependencyGraph(getMavenProject(), artifactFilter);
+      // Keep the session request unchanged when selecting a project in a reactor build.
+      final ProjectBuildingRequest request = new DefaultProjectBuildingRequest(mavenSession.getProjectBuildingRequest());
+      request.setProject(getMavenProject());
+      rootNode = dependencyGraphBuilder.buildDependencyGraph(request, artifactFilter);
 
     } catch (DependencyGraphBuilderException exception) {
       throw new MojoExecutionException("Cannot build project dependency graph", exception);
