@@ -1,5 +1,4 @@
-[![](https://travis-ci.org/maven-nar/nar-maven-plugin.svg?branch=master)](https://travis-ci.org/maven-nar/nar-maven-plugin)
-[![](https://ci.appveyor.com/api/projects/status/h7w25ou1vmtypw6f?svg=true)](https://ci.appveyor.com/project/maven-nar/nar-maven-plugin)
+[![CI](https://github.com/maven-nar/nar-maven-plugin/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/maven-nar/nar-maven-plugin/actions/workflows/ci.yml)
 
 The NAR plugin for Maven allows you to compile native code (C++, C and
 Fortran) on a number of different architectures (Linux, Windows, MacOSX,
@@ -40,6 +39,37 @@ What you put in the `<configuration>` section will depend on your build;
 for ideas, see:
 * [Working examples](https://github.com/maven-nar/nar-maven-plugin/wiki/Working-examples)
 * [integration tests](https://github.com/maven-nar/nar-maven-plugin/tree/master/src/it)
+
+Building and testing
+--------------------
+Building the plugin requires Java 8 or newer and Maven 3.6.3 or newer. GitHub
+Actions tests Java 8 with Maven 3.6.3 and 3.9.16 on Ubuntu 24.04 (GCC/G++,
+GFortran and Autotools) and Windows Server 2022 (MSVC x64). Pushes and pull
+requests run the same matrix, including in forks with Actions enabled.
+
+Run the unit and native integration tests with:
+
+```sh
+mvn -B -ntp -V -Dinvoker.debug=true -Prun-its clean install
+```
+
+Linux builds need `build-essential`, `gfortran`, `autoconf`, `automake`, and
+`libtool-bin`. On Windows, use an x64 Visual Studio developer environment and
+a short checkout path. CI maps its Windows workspace to `N:` for Java 8 path
+length compatibility. The bundled third-party DLL in `it0006` also needs the
+[Visual C++ 2010 SP1 x64 runtime](https://www.microsoft.com/en-us/download/details.aspx?id=26999)
+(`MSVCR100.dll`); CI installs it when missing.
+
+The existing test profiles enable GNU fixtures when `/usr/bin/autoreconf`
+exists, Fortran when `/usr/bin/gfortran` exists, and the toolchain fixture when
+`~/.m2/toolchains.xml` exists. CI supplies a Java 8 toolchain on both platforms;
+GNU and Fortran fixtures run on Linux. The existing `it0021` and `it0022`
+exclusions remain in place.
+
+The Linux/Maven 3.9.16 job also runs `mvn -B -ntp -V javadoc:javadoc`.
+Every matrix job uploads available integration build logs, Invoker reports,
+and Surefire reports for 14 days, including on failure. CI builds and tests
+artifacts locally; it does not publish snapshots or releases.
 
 Documentation
 -------------

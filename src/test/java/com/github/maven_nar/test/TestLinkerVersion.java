@@ -19,10 +19,13 @@
  */
 package com.github.maven_nar.test;
 
+import org.codehaus.plexus.util.ReflectionUtils;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import com.github.maven_nar.Linker;
+import com.github.maven_nar.NarCompileMojo;
 import com.github.maven_nar.NarProperties;
 import com.github.maven_nar.NarUtil;
 
@@ -32,6 +35,7 @@ import com.github.maven_nar.NarUtil;
  */
 public class TestLinkerVersion extends TestCase {
   private Linker linker;
+  private NarCompileMojo mojo;
 
   /*
    * (non-Javadoc)
@@ -41,11 +45,15 @@ public class TestLinkerVersion extends TestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    final String architecture = System.getProperty("os.arch");
+    final String architecture = NarUtil.getArchitecture(System.getProperty("os.arch"));
+    final String os = NarUtil.getOS(null);
     this.linker = new Linker();
-    // String name =
-    this.linker.getName(NarProperties.getInstance(null),
-        NarUtil.getArchitecture(architecture) + "." + NarUtil.getOS(null) + ".");
+    this.linker.getName(NarProperties.getInstance(null), architecture + "." + os + ".");
+    // MSVC discovery needs the platform and linker normally initialized by Maven.
+    this.mojo = new NarCompileMojo();
+    ReflectionUtils.setVariableValueInObject(this.mojo, "architecture", architecture);
+    ReflectionUtils.setVariableValueInObject(this.mojo, "os", os);
+    ReflectionUtils.setVariableValueInObject(this.mojo, "linker", this.linker);
   }
 
   public void testVersion() throws Exception {
@@ -53,8 +61,9 @@ public class TestLinkerVersion extends TestCase {
       // Skip testing the MSVC linker on Win if vsvars32.bat has not run.  Also skip the test on AIX.
       return;
     }
-    final String version = this.linker.getVersion();
+    final String version = this.linker.getVersion(this.mojo);
     Assert.assertNotNull(version);
+    Assert.assertFalse(version.isEmpty());
   }
 
 }

@@ -1,0 +1,134 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.os }} / Java 8 / Maven ${{ matrix.maven }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+        maven: ["3.6.3", "3.9.16"]
+    steps:
+      - name: Enable Git long paths
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: git config --global core.longpaths true
+
+      - name: Check out sources
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Map a short Windows build path
+        id: workspace
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          subst N: "$env:GITHUB_WORKSPACE"
+
+      - name: Set up Java 8 and Maven toolchain
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '8'
+          architecture: x64
+          cache: maven
+          cache-dependency-path: |
+            pom.xml
+            src/it/**/pom.xml
+          mvn-toolchain-id: java8
+          mvn-toolchain-vendor: temurin
+
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@12eb41b233df95d49b0c11fc1b5bc8312e5d4ce0 # v5.1
+        with:
+          maven-version: ${{ matrix.maven }}
+
+      - name: Install Linux native tools
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y build-essential gfortran autoconf automake libtool-bin
+
+      - name: Set up MSVC x64
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio/Installer/vswhere.exe'
+          $visualStudio = & $vswhere -latest -products '*' -version '[17.0,18.0)' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if ($LASTEXITCODE -ne 0 -or !$visualStudio) {
+            throw 'Visual Studio 2022 with the x64 C++ tools was not found'
+          }
+          $previousEnvironment = [Environment]::GetEnvironmentVariables('Process')
+          & (Join-Path $visualStudio 'Common7/Tools/Launch-VsDevShell.ps1') -Arch amd64 -HostArch amd64 -SkipAutomaticLocation
+          if (!$env:VSCMD_VER -or $env:VSCMD_ARG_HOST_ARCH -ne 'x64' -or $env:VSCMD_ARG_TGT_ARCH -ne 'x64') {
+            throw 'Visual Studio did not initialize the x64 build environment'
+          }
+          # Each workflow step starts a new shell; retain the developer environment for Maven.
+          Get-ChildItem Env: | Where-Object { $previousEnvironment[$_.Name] -cne $_.Value } | ForEach-Object {
+            "$($_.Name)=$($_.Value)" >> $env:GITHUB_ENV
+          }
+          Get-Command cl.exe, link.exe | Select-Object Name, Source
+
+      - name: Install runtime for the bundled third-party JNI library
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          # it0006 ships a prebuilt DLL linked against MSVCR100.dll.
+          # Microsoft Visual C++ 2010 SP1 MFC Security Update (KB2565063).
+          $runtimeDll = Join-Path $env:SystemRoot 'System32/msvcr100.dll'
+          if (Test-Path $runtimeDll) { exit 0 }
+          $installer = Join-Path $env:RUNNER_TEMP 'vcredist2010_x64.exe'
+          Invoke-WebRequest -Uri 'https://download.microsoft.com/download/1/6/5/165255e7-1014-4d0a-b094-b6a430a6bffc/vcredist_x64.exe' -OutFile $installer
+          $expectedHash = 'f3b7a76d84d23f91957aa18456a14b4e90609e4ce8194c5653384ed38dada6f3'
+          if ((Get-FileHash $installer -Algorithm SHA256).Hash -ne $expectedHash) {
+            throw 'Visual C++ 2010 runtime checksum mismatch'
+          }
+          $install = Start-Process -FilePath $installer -ArgumentList '/q', '/norestart' -Wait -PassThru
+          if ($install.ExitCode -notin 0, 3010) {
+            throw "Visual C++ 2010 runtime installation failed: $($install.ExitCode)"
+          }
+          if (!(Test-Path $runtimeDll)) { throw 'MSVCR100.dll is still missing after installation' }
+
+      # Use the runner's native shell: bash on Linux, PowerShell on Windows.
+      # Git Bash can shadow the MSVC linker with its unrelated link executable.
+      - name: Build and run unit and native integration tests
+        working-directory: ${{ runner.os == 'Windows' && 'N:\' || github.workspace }}
+        run: mvn -B -ntp -V "-Dinvoker.debug=true" -Prun-its clean install
+
+      - name: Generate Javadoc
+        if: runner.os == 'Linux' && matrix.maven == '3.9.16'
+        run: mvn -B -ntp -V javadoc:javadoc
+
+      - name: Upload test reports and integration logs
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: test-results-${{ matrix.os }}-java8-maven-${{ matrix.maven }}
+          path: |
+            target/it/**/build.log
+            target/invoker-reports/**
+            target/**/surefire-reports/**
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Remove Windows drive mapping
+        if: always() && steps.workspace.outcome == 'success'
+        shell: pwsh
+        run: |
+          subst N: /D
