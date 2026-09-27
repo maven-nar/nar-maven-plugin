@@ -39,6 +39,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.github.maven_nar.cpptasks.compiler.LinkerConfiguration;
 import com.github.maven_nar.cpptasks.compiler.ProcessorConfiguration;
 
 /**
@@ -335,6 +336,13 @@ public final class TargetHistoryTable {
 
   // FREEHEP added synchronized
   public synchronized void markForRebuild(final TargetInfo targetInfo) {
+    if (!targetInfo.getRebuild() && targetInfo.getConfiguration() instanceof LinkerConfiguration) {
+      final LinkerConfiguration config = (LinkerConfiguration) targetInfo.getConfiguration();
+      final File mapFile = config.getMapFile(targetInfo.getOutput());
+      if (mapFile != null && !mapFile.isFile()) {
+        targetInfo.mustRebuild();
+      }
+    }
     //
     // if it must already be rebuilt, no need to check further
     //

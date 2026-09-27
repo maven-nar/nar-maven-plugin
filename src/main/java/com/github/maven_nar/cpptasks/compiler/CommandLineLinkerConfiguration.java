@@ -19,6 +19,8 @@
  */
 package com.github.maven_nar.cpptasks.compiler;
 
+import java.io.File;
+
 import org.apache.tools.ant.BuildException;
 
 import com.github.maven_nar.cpptasks.CCTask;
@@ -43,6 +45,7 @@ public final class CommandLineLinkerConfiguration implements LinkerConfiguration
   private/* final */String commandPath;
   private final boolean debug;
   private final String startupObject;
+  private final String mapFileName;
 
   public CommandLineLinkerConfiguration(final CommandLineLinker linker, final String identifier, final String[][] args,
       final ProcessorParam[] params, final boolean rebuild, final boolean map, final boolean debug,
@@ -53,6 +56,12 @@ public final class CommandLineLinkerConfiguration implements LinkerConfiguration
   public CommandLineLinkerConfiguration(final CommandLineLinker linker, final String identifier, final String[][] args,
       final ProcessorParam[] params, final boolean rebuild, final boolean map, final boolean debug,
       final String[] libraryNames, final String startupObject, final String commandPath) {
+    this(linker, identifier, args, params, rebuild, map, debug, libraryNames, startupObject, commandPath, null);
+  }
+
+  private CommandLineLinkerConfiguration(final CommandLineLinker linker, final String identifier, final String[][] args,
+      final ProcessorParam[] params, final boolean rebuild, final boolean map, final boolean debug,
+      final String[] libraryNames, final String startupObject, final String commandPath, final String mapFileName) {
     if (linker == null) {
       throw new NullPointerException("linker");
     }
@@ -74,6 +83,7 @@ public final class CommandLineLinkerConfiguration implements LinkerConfiguration
     }
     this.startupObject = startupObject;
     this.commandPath = commandPath;
+    this.mapFileName = mapFileName;
   }
 
   @Override
@@ -108,6 +118,20 @@ public final class CommandLineLinkerConfiguration implements LinkerConfiguration
   @Override
   public Linker getLinker() {
     return this.linker;
+  }
+
+  @Override
+  public File getMapFile(final File outputFile) {
+    return this.linker.getMapFile(outputFile, this.map);
+  }
+
+  String getMapFileName(final String outputFile) {
+    return this.mapFileName == null ? outputFile + ".map" : this.mapFileName;
+  }
+
+  CommandLineLinkerConfiguration withMapFileName(final String filename) {
+    return new CommandLineLinkerConfiguration(this.linker, this.identifier, this.args, this.params, this.rebuild,
+        this.map, this.debug, this.libraryNames, this.startupObject, this.commandPath, filename);
   }
 
   public boolean getMap() {

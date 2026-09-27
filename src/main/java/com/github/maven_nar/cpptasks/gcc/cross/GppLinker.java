@@ -31,7 +31,7 @@ import com.github.maven_nar.cpptasks.compiler.CaptureStreamHandler;
 import com.github.maven_nar.cpptasks.compiler.CommandLineLinkerConfiguration;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
-import com.github.maven_nar.cpptasks.gcc.AbstractLdLinker;
+import com.github.maven_nar.cpptasks.gcc.GccCompatibleLinker;
 import com.github.maven_nar.cpptasks.types.LibrarySet;
 
 /**
@@ -39,7 +39,7 @@ import com.github.maven_nar.cpptasks.types.LibrarySet;
  *
  * @author Stephen M. Webb <stephen.webb@bregmasoft.com>
  */
-public class GppLinker extends AbstractLdLinker {
+public class GppLinker extends GccCompatibleLinker {
   protected static final String[] discardFiles = new String[0];
   protected static final String[] objFiles = new String[] {
       ".o", ".a", ".lib", ".dll", ".so", ".sl"
@@ -69,7 +69,7 @@ public class GppLinker extends AbstractLdLinker {
 
   protected GppLinker(final String command, final String[] extensions, final String[] ignoredExtensions,
       final String outputPrefix, final String outputSuffix, final boolean isLibtool, final GppLinker libtoolLinker) {
-    super(command, "-dumpversion", extensions, ignoredExtensions, outputPrefix, outputSuffix, isLibtool, libtoolLinker);
+    super(command, "-dumpversion", extensions, ignoredExtensions, outputPrefix, outputSuffix, isLibtool, libtoolLinker, true);
   }
 
   @Override

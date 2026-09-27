@@ -182,9 +182,9 @@ public abstract class AbstractCompileMojo extends AbstractDependencyMojo {
   private Project antProject;
   
   protected final List<String[]> compileCommands = new ArrayList<>();
-  protected final List<String[]> linkCommands = new ArrayList<>();
+  protected final List<String[]> linkCommands = new ReplayCommandList();
   protected final List<String[]> testCompileCommands = new ArrayList<>();
-  protected final List<String[]> testLinkCommands = new ArrayList<>();
+  protected final List<String[]> testLinkCommands = new ReplayCommandList();
 
   protected final boolean failOnError(final AOL aol) throws MojoExecutionException {
     return getNarInfo().getProperty(aol, "failOnError", this.failOnError);

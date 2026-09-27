@@ -30,14 +30,14 @@ import com.github.maven_nar.cpptasks.LinkerParam;
 import com.github.maven_nar.cpptasks.compiler.CommandLineLinkerConfiguration;
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
-import com.github.maven_nar.cpptasks.gcc.AbstractLdLinker;
+import com.github.maven_nar.cpptasks.gcc.GccCompatibleLinker;
 
 /**
  * Adapter for the GCC linker
  *
  * @author Adam Murdoch
  */
-public class GccLinker extends AbstractLdLinker {
+public class GccLinker extends GccCompatibleLinker {
   private static final String[] discardFiles = new String[0];
   private static final String[] objFiles = new String[] {
       ".o", ".a", ".lib", ".dll", ".so", ".sl"
@@ -68,7 +68,7 @@ public class GccLinker extends AbstractLdLinker {
 
   protected GccLinker(final String command, final String[] extensions, final String[] ignoredExtensions,
       final String outputPrefix, final String outputSuffix, final boolean isLibtool, final GccLinker libtoolLinker) {
-    super(command, "-dumpversion", extensions, ignoredExtensions, outputPrefix, outputSuffix, isLibtool, libtoolLinker);
+    super(command, "-dumpversion", extensions, ignoredExtensions, outputPrefix, outputSuffix, isLibtool, libtoolLinker, true);
   }
 
   @Override

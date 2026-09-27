@@ -22,8 +22,6 @@ package com.github.maven_nar;
 import java.io.File;
 import java.util.regex.Pattern;
 
-import org.apache.maven.plugins.annotations.Parameter;
-
 /**
  * Substitutes matched strings in a replay script
  *
@@ -69,19 +67,13 @@ public class Substitution {
   
   public String substitute(String line) {
     if (replace == null) return line;
-    
-    String temp = replace;
-    if (type.equals("regex")) {
+    if ("regex".equals(type)) {
       if (pattern == null) pattern = Pattern.compile(replace);
       return pattern.matcher(line).replaceAll(replaceWith);
-      
     }
-    else if (type.equals("relativePath")) {
-      temp = new File(replace).getPath() + File.separator;
-    }
-    else if (type.equals("absolutePath")) {
-      temp = new File(replace).getAbsolutePath() + File.separator;
-    }
-    return line.replace(temp, replaceWith);
+    String match = replace;
+    if ("relativePath".equals(type)) match = new File(replace).getPath() + File.separator;
+    else if ("absolutePath".equals(type)) match = new File(replace).getAbsolutePath() + File.separator;
+    return line.replace(match, replaceWith);
   }
 }

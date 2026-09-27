@@ -84,6 +84,8 @@ public class Linker {
 
   /**
    * Enables or disables the production of a map file.
+   * With GCC/Clang or direct ld, the map is written beside the native output using its complete
+   * filename with {@code .map} appended, for example {@code libexample.so.map}.
    */
   @Parameter(required = true)
   private boolean map = false;
@@ -265,6 +267,8 @@ public class Linker {
   public final LinkerDef getLinker(final AbstractCompileMojo mojo, final CCTask task, final String os, final String prefix,
       final String type, final List<String> linkPaths) throws MojoFailureException, MojoExecutionException {
     Project antProject = task.getProject();
+    // Map syntax follows the configured target, which may differ from the build host.
+    antProject.setProperty("nar.os", mojo.getAOL().getOS());
     if (this.name == null) {
       throw new MojoFailureException("NAR: Please specify a <Name> as part of <Linker>");
     }

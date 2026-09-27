@@ -411,6 +411,15 @@ wish to run a GNU configure step but not the full make process.
 
 	Enables the production of a map file. Default is false.
 
+    With GCC, G++, Clang, or direct ld, the map is written beside the native output,
+    using its complete filename with <<<.map>>> appended. For example,
+    <<<libexample.so>>> produces <<<libexample.so.map>>>. The plugin chooses GNU or
+    Darwin map syntax from the configured target OS and forwards the option through
+    compiler drivers automatically; enabling <<<decorateLinkerOptions>>> is not required.
+
+    A missing map triggers relinking on the next build. Maps are included with their
+    native outputs in binary NAR archives.
+
 ** {linker pushDepsToLowestOrder}
 
 	When true, this property enables linker re-ordering logic such that libraries that 
@@ -626,6 +635,41 @@ are lower in the dependency heirarchy appear lower in the list, maximizing symbo
         Instructs NAR to record the commands issued for compilation and linking to a file, for later use. This is
         useful if builds need to be done outside of Maven and NAR itself.
 
+        GCC, Clang, and direct ld structured replay entries retain their argument boundaries and
+        working directories. Generated sh, bash, and bat scripts quote literal arguments
+        for their respective shells. Substitutions run in configuration order on each argument
+        independently, before shell quoting. Replacement text is never split into arguments.
+        NAR preserves the resulting argument text; users are responsible for its meaning to the tool.
+
+        Replay executes each command in its recorded, substituted working directory. A relative
+        working directory resolves from the script's invocation directory. The sh and bash scripts
+        bypass <<<CDPATH>>> and treat leading dashes in directory names literally. Each command's
+        directory change is isolated from the following commands.
+
+        Replay does not insert invocation-directory prefixes or interpret linker options,
+        RPATH lists, commas, or loader tokens such as <<<$ORIGIN>>> and <<<${ORIGIN}>>>.
+        The invoked tool determines how relative arguments are resolved; the runtime loader
+        determines the meaning of runtime search paths. Shell quoting preserves loader tokens
+        literally without expanding them.
+
+        For relocation, replace an absolute project root such as <<</old/project/>>> with
+        another absolute root such as <<</new/project/>>>. Alternatively, explicitly supply
+        relative paths appropriate to the recorded working directory: when linking in
+        <<<target/bin>>>, an input in <<<target/obj/main.o>>> can be replaced with
+        <<<../obj/main.o>>>. Such a relative operand is not resolved from the script's
+        invocation directory.
+
+        Existing structured v1/v2 records and plain-text replay logs remain supported.
+        Plain-text logs retain their legacy line-based substitution behavior; they do not
+        carry structured argument boundaries or working-directory metadata.
+
+        When linker maps are enabled, replay scripts check that linking produced a nonempty
+        map and move it beside the native output with <<<.map>>> appended. Failed links
+        preserve any previous map, remove temporary maps, and stop the script with a failure status.
+        Dry runs record the same steps without creating native outputs or temporary maps.
+        Substitutions also apply to map metadata. Users who rewrite output or map arguments
+        must keep those replacements consistent with the temporary and final map names.
+
 ** {outputDirectory}
 
         Directory where replay logs should be recorded to. Defaults to ${project.build.directory}/nar/nar-replay
@@ -661,9 +705,22 @@ are lower in the dependency heirarchy appear lower in the list, maximizing symbo
  *** {substitutions}
 
         List of substitutions that should be made while transforming command log to script file. Substitutions can be used to
-        change absolute paths to relative paths, for example.
+        relocate a project by replacing its absolute root, for example.
 
-        [type] The type of substitution. Can be one of "string", "relativePath", "absolutePath", or "regex".
+        For structured replay entries, substitutions run in configuration order on each argument.
+        An originally nonempty argument is omitted if its final substituted value is empty;
+        removing the executable is a script-generation error. Originally empty arguments and
+        whitespace-only values are preserved. Replacements containing spaces remain one argument.
+
+        [type] The type of substitution. <<<string>>> performs literal replacement.
+        <<<regex>>> uses standard Java regex matching and replacement, including numbered
+        and named capture references. Regex replacement syntax is processed before shell quoting:
+        <<<$1>>> and <<<${name}>>> refer to captures, while a literal dollar sign or backslash
+        in replacement text must be escaped according to Java's Matcher replacement rules.
+        <<<relativePath>>> matches <<<new File(replace).getPath()>>> followed by the platform
+        separator; <<<absolutePath>>> uses <<<getAbsolutePath()>>> followed by that separator.
+        These two types only normalize the text to match. Their replacement text is literal
+        and receives no path interpretation.
 
         [replace] String, path, or regex to use to match for replacements.
 

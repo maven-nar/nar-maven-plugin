@@ -23,14 +23,14 @@ import java.io.File;
 
 import com.github.maven_nar.cpptasks.compiler.LinkType;
 import com.github.maven_nar.cpptasks.compiler.Linker;
-import com.github.maven_nar.cpptasks.gcc.AbstractLdLinker;
+import com.github.maven_nar.cpptasks.gcc.GccCompatibleLinker;
 
 /**
  * Adapter for the 'ld' linker
  *
  * @author Curt Arnold
  */
-public final class LdLinker extends AbstractLdLinker {
+public final class LdLinker extends GccCompatibleLinker {
   private static final String[] discardFiles = new String[0];
   private static final String[] libtoolObjFiles = new String[] {
       ".fo", ".a", ".lib", ".dll", ".so", ".sl"
@@ -51,7 +51,7 @@ public final class LdLinker extends AbstractLdLinker {
 
   private LdLinker(final String command, final String[] extensions, final String[] ignoredExtensions,
       final String outputPrefix, final String outputSuffix, final boolean isLibtool, final LdLinker libtoolLinker) {
-    super(command, "-version", extensions, ignoredExtensions, outputPrefix, outputSuffix, isLibtool, libtoolLinker);
+    super(command, "-version", extensions, ignoredExtensions, outputPrefix, outputSuffix, isLibtool, libtoolLinker, false);
   }
 
   @Override

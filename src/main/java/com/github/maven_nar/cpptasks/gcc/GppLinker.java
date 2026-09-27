@@ -34,7 +34,7 @@ import com.github.maven_nar.cpptasks.types.LibrarySet;
  *
  * @author Stephen M. Webb <stephen.webb@bregmasoft.com>
  */
-public class GppLinker extends AbstractLdLinker {
+public class GppLinker extends GccCompatibleLinker {
   public static final String GPP_COMMAND = "g++";
 
   protected static final String[] discardFiles = new String[0];
@@ -83,7 +83,7 @@ public class GppLinker extends AbstractLdLinker {
 
   protected GppLinker(final String command, final String[] extensions, final String[] ignoredExtensions,
       final String outputPrefix, final String outputSuffix, final boolean isLibtool, final GppLinker libtoolLinker) {
-    super(command, "-dumpversion", extensions, ignoredExtensions, outputPrefix, outputSuffix, isLibtool, libtoolLinker);
+    super(command, "-dumpversion", extensions, ignoredExtensions, outputPrefix, outputSuffix, isLibtool, libtoolLinker, true);
   }
 
   @Override

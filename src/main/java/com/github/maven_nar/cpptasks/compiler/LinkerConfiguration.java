@@ -19,6 +19,8 @@
  */
 package com.github.maven_nar.cpptasks.compiler;
 
+import java.io.File;
+
 import org.apache.tools.ant.BuildException;
 
 import com.github.maven_nar.cpptasks.CCTask;
@@ -32,6 +34,9 @@ import com.github.maven_nar.cpptasks.TargetInfo;
  */
 public interface LinkerConfiguration extends ProcessorConfiguration {
   Linker getLinker();
+
+  /** Returns a required map output, or null if this configuration does not manage one. */
+  File getMapFile(File outputFile);
 
   LinkerParam getParam(String name);
 

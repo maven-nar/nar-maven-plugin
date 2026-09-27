@@ -29,7 +29,7 @@ import com.github.maven_nar.cpptasks.compiler.Linker;
  *
  * @author Curt Arnold
  */
-public final class LdLinker extends AbstractLdLinker {
+public final class LdLinker extends GccCompatibleLinker {
   private static final String[] discardFiles = new String[0];
   private static final String[] objFiles = new String[] {
       ".o", ".a", ".lib", ".dll", ".so", ".sl"
@@ -49,7 +49,7 @@ public final class LdLinker extends AbstractLdLinker {
 
   private LdLinker(final String command, final String[] extensions, final String[] ignoredExtensions,
       final String outputPrefix, final String outputSuffix, final boolean isLibtool, final LdLinker libtoolLinker) {
-    super(command, "-version", extensions, ignoredExtensions, outputPrefix, outputSuffix, isLibtool, libtoolLinker);
+    super(command, "-version", extensions, ignoredExtensions, outputPrefix, outputSuffix, isLibtool, libtoolLinker, false);
   }
 
   @Override

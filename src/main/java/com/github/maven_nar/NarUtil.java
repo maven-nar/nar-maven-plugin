@@ -722,10 +722,16 @@ public final class NarUtil {
   }
 
   public static void writeCommandFile(File file, List<String[]> commands) throws MojoExecutionException {
-    try (PrintWriter compileCommandWriter = new PrintWriter(new FileWriter(file))) {
+    try (PrintWriter compileCommandWriter = new PrintWriter(file, "UTF-8")) {
       for (String[] commandArr : commands) {
-        String command = NarUtil.commandArrayToCommand(commandArr);
-        compileCommandWriter.println(command);
+        final ReplayCommand record = commands instanceof ReplayCommandList
+            ? ((ReplayCommandList) commands).getRecord(commandArr) : null;
+        if (record != null) {
+          compileCommandWriter.println(record.encode());
+          compileCommandWriter.println(record.display());
+        } else {
+          compileCommandWriter.println(NarUtil.commandArrayToCommand(commandArr));
+        }
       }
     } catch (IOException e) {
       throw new MojoExecutionException("Unable to write command history to " + file, e);

@@ -22,11 +22,15 @@ package com.github.maven_nar.cpptasks.compiler;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Environment;
 
+import com.github.maven_nar.ReplayCommand;
+import com.github.maven_nar.ReplayCommandList;
 import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.CUtil;
 import com.github.maven_nar.cpptasks.LinkerDef;
@@ -124,6 +128,21 @@ public abstract class CommandLineLinker extends AbstractLinker {
     // NB: Do nothing by default.
   }
 
+  /**
+   * Returns the expected map output, or null when this adapter does not manage a map file.
+   */
+  protected File getMapFile(final File outputFile, final boolean map) {
+    return null;
+  }
+
+  /**
+   * Map arguments for a filename relative to the output directory. Returned arguments
+   * must already include any forwarding required by the compiler driver.
+   */
+  protected String[] getMapFileSwitch(final CCTask task, final String mapFile) {
+    return new String[0];
+  }
+
   protected void addStack(final CCTask task, final int stack, final Vector<String> args) {
     // NB: Do nothing by default.
   }
@@ -185,11 +204,12 @@ public abstract class CommandLineLinker extends AbstractLinker {
     final boolean debug = specificDef.getDebug(baseDefs, 0);
 
     final String startupObject = getStartupObject(linkType);
+    final boolean map = specificDef.getMap(defaultProviders, 1);
 
     addImpliedArgs(task, debug, linkType, preargs);
     addIncremental(task, specificDef.getIncremental(defaultProviders, 1), preargs);
     addFixed(task, specificDef.getFixed(defaultProviders, 1), preargs);
-    addMap(task, specificDef.getMap(defaultProviders, 1), preargs);
+    addMap(task, map, preargs);
     addBase(task, specificDef.getBase(defaultProviders, 1), preargs);
     addStack(task, specificDef.getStack(defaultProviders, 1), preargs);
     addEntry(task, specificDef.getEntry(defaultProviders, 1), preargs);
@@ -207,6 +227,14 @@ public abstract class CommandLineLinker extends AbstractLinker {
       while (argenum.hasMoreElements()) {
         buf.append(' ');
         buf.append(argenum.nextElement());
+      }
+    }
+    // Keep map generation in the build history even when its arguments depend on the final output name.
+    if (map) {
+      buf.append(" [map]");
+      // Include the target's map syntax, but never a random temporary filename, in the history.
+      for (final String argument : getMapFileSwitch(task, "output.map")) {
+        buf.append(' ').append(argument);
       }
     }
     final String configId = buf.toString();
@@ -233,7 +261,6 @@ public abstract class CommandLineLinker extends AbstractLinker {
       }
     }
     final boolean rebuild = specificDef.getRebuild(baseDefs, 0);
-    final boolean map = specificDef.getMap(defaultProviders, 1);
     final String toolPath = specificDef.getToolPath();
     
     setCommands(specificDef.getCommands());
@@ -344,34 +371,48 @@ public abstract class CommandLineLinker extends AbstractLinker {
     } catch (final IOException ex) {
       parentPath = parentDir.getAbsolutePath();
     }
-    String[] execArgs = prepareArguments(task, parentPath, outputFile.getName(), sourceFiles, config);
-    int commandLength = 0;
-    for (final String execArg : execArgs) {
-      commandLength += execArg.length() + 1;
-    }
-
-    //
-    // if command length exceeds maximum
-    // then create a temporary
-    // file containing everything but the command name
-    if (commandLength >= this.getMaximumCommandLength()) {
-      try {
-        execArgs = prepareResponseFile(outputFile, execArgs);
-      } catch (final IOException ex) {
-        throw new BuildException(ex);
+    final File mapFile = config.getMapFile(outputFile);
+    File temporaryMap = null;
+    String temporaryMapName = null;
+    try {
+      CommandLineLinkerConfiguration invocation = config;
+      if (mapFile != null) {
+        // GNU ld expands '%' in map paths. Pass only a safe basename, then publish under
+        // the literal final name after success. A failed link must not replace an old map.
+        if (!isDryRun()) {
+          temporaryMap = File.createTempFile("nar-map-", ".tmp", parentDir);
+        }
+        temporaryMapName = temporaryMap == null ? "nar-map-" + UUID.randomUUID() + ".tmp" : temporaryMap.getName();
+        invocation = config.withMapFileName(temporaryMapName);
       }
-    }
+      String[] execArgs = prepareArguments(task, parentPath, outputFile.getName(), sourceFiles, invocation);
+      int commandLength = 0;
+      for (final String execArg : execArgs) {
+        commandLength += execArg.length() + 1;
+      }
 
-    final int retval = runCommand(task, parentDir, execArgs);
-    //
-    // if the process returned a failure code then
-    // throw an BuildException
-    //
-    if (retval != 0) {
-      //
-      // construct the exception
-      //
-      throw new BuildException(getCommandWithPath(config) + " failed with return code " + retval, task.getLocation());
+      // Use a response file when the command exceeds the linker's limit.
+      if (commandLength >= this.getMaximumCommandLength()) {
+        execArgs = prepareResponseFile(outputFile, execArgs);
+      }
+
+      recordCommand(parentDir, execArgs, temporaryMapName, mapFile == null ? null : mapFile.getName());
+      final int retval = runCommand(task, parentDir, execArgs);
+      if (retval != 0) {
+        throw new BuildException(getCommandWithPath(config) + " failed with return code " + retval, task.getLocation());
+      }
+      if (temporaryMap != null) {
+        if (!temporaryMap.isFile() || temporaryMap.length() == 0) {
+          throw new BuildException("Linker did not produce the requested map file: " + mapFile, task.getLocation());
+        }
+        Files.move(temporaryMap.toPath(), mapFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+      }
+    } catch (final IOException ex) {
+      throw new BuildException(ex, task.getLocation());
+    } finally {
+      if (temporaryMap != null && temporaryMap.exists() && !temporaryMap.delete()) {
+        task.log("Could not remove temporary linker map: " + temporaryMap, org.apache.tools.ant.Project.MSG_WARN);
+      }
     }
 
   }
@@ -396,7 +437,9 @@ public abstract class CommandLineLinker extends AbstractLinker {
     final String[] preargs = config.getPreArguments();
     final String[] endargs = config.getEndArguments();
     final String outputSwitch[] = getOutputFileSwitch(task, outputFile);
-    int allArgsCount = preargs.length + 1 + outputSwitch.length + sourceFiles.length + endargs.length;
+    final String[] mapSwitch = config.getMap()
+        ? getMapFileSwitch(task, config.getMapFileName(outputFile)) : new String[0];
+    int allArgsCount = preargs.length + 1 + outputSwitch.length + mapSwitch.length + sourceFiles.length + endargs.length;
     if (this.isLibtool) {
       allArgsCount++;
     }
@@ -413,6 +456,9 @@ public abstract class CommandLineLinker extends AbstractLinker {
     }
 
     for (final String element : outputSwitch) {
+      allArgs[index++] = element;
+    }
+    for (final String element : mapSwitch) {
       allArgs[index++] = element;
     }
     for (final String sourceFile : sourceFiles) {
@@ -495,9 +541,22 @@ public abstract class CommandLineLinker extends AbstractLinker {
    * compiler
    */
   protected int runCommand(final CCTask task, final File workingDir, final String[] cmdline) throws BuildException {
-    commands.add(cmdline);
     if (dryRun) return 0;
     return CUtil.runCommand(task, workingDir, cmdline, this.newEnvironment, this.env);
+  }
+
+  /** True when this adapter supplies literal arguments without embedded shell quoting. */
+  protected boolean hasRawReplayArguments() {
+    return false;
+  }
+
+  private void recordCommand(final File workingDir, final String[] arguments, final String temporaryMap,
+      final String finalMap) {
+    if (this.commands instanceof ReplayCommandList && hasRawReplayArguments()) {
+      ((ReplayCommandList) this.commands).add(arguments, new ReplayCommand(workingDir, arguments, temporaryMap, finalMap));
+    } else if (this.commands != null) {
+      this.commands.add(arguments);
+    }
   }
 
   protected final void setCommand(final String command) {

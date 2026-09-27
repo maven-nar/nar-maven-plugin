@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Run through spotless.py so this standalone POM has the repository as its base directory. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.github.maven-nar</groupId>
+  <artifactId>nar-code-style</artifactId>
+  <version>1</version>
+  <packaging>pom</packaging>
+  <build>
+    <directory>${project.basedir}/target/spotless</directory>
+    <plugins>
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <version>3.10.2</version>
+        <configuration>
+          <upToDateChecking>
+            <enabled>false</enabled>
+          </upToDateChecking>
+          <encoding>UTF-8</encoding>
+          <lineEndings>UNIX</lineEndings>
+          <java>
+            <includes>
+              <include>src/**/*.java</include>
+            </includes>
+            <!-- cleanup.organize_imports and cleanup.remove_unused_imports -->
+            <removeUnusedImports/>
+            <importOrder>
+              <order>java,javax,org,com,,\#</order>
+            </importOrder>
+            <!-- Format all lines, as selected in eclipse-save-actions.png. -->
+            <eclipse>
+              <version>4.26</version>
+              <file>${project.basedir}/config/eclipse-code-formatter-profile.xml</file>
+              <!-- cleanup.sort_members=true, cleanup.sort_members_all=false -->
+              <sortMembersEnabled>true</sortMembersEnabled>
+              <sortMembersDoNotSortFields>true</sortMembersDoNotSortFields>
+              <sortMembersOrder>T,SF,SI,SM,F,I,C,M</sortMembersOrder>
+              <sortMembersVisibilityOrderEnabled>false</sortMembersVisibilityOrderEnabled>
+            </eclipse>
+            <!-- cleanup.remove_trailing_whitespaces_all=true -->
+            <trimTrailingWhitespace/>
+            <endWithNewline/>
+          </java>
+          <formats>
+            <format>
+              <!-- The supplied Eclipse profiles define Java syntax formatting only. -->
+              <includes>
+                <include>src/**/*.c</include>
+                <include>src/**/*.bsh</include>
+                <include>src/**/*.xml</include>
+                <include>src/**/*.map</include>
+                <include>config/**/*.xml</include>
+                <include>config/**/*.md</include>
+                <include>config/**/*.py</include>
+              </includes>
+              <trimTrailingWhitespace/>
+              <endWithNewline/>
+            </format>
+          </formats>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

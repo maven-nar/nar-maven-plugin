@@ -138,7 +138,14 @@ public class NarPreparePackageMojo extends AbstractCompileMojo {
   }
 
   public void processReplayFile(List<String> lines, Script script, PrintWriter writer) throws MojoExecutionException {
-    for (String line : lines) {
+    for (int i = 0; i < lines.size(); i++) {
+      final String line = lines.get(i);
+      if (ReplayCommand.isRecord(line)) {
+        ReplayCommand.decode(line).write(script, writer);
+        // The next line is the human-readable rendering of the same command.
+        if (++i >= lines.size()) throw new MojoExecutionException("Truncated replay command log");
+        continue;
+      }
       String processed = line;
       if (script.getSubstitutions() != null) {
         for (Substitution sub : script.getSubstitutions()) {
