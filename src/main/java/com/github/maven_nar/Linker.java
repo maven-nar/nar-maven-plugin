@@ -19,9 +19,6 @@
  */
 package com.github.maven_nar;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.google.common.base.Strings.nullToEmpty;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
@@ -290,7 +287,7 @@ public class Linker {
     if (type.equals(Library.STATIC) && !getName(null, null).equals("msvc")) {
       linkerPrefix = null;
     }
-    else if (isNullOrEmpty(this.prefix)) {
+    else if (this.prefix == null || this.prefix.isEmpty()) {
       String key = mojo.getAOL().getKey() + ".linker.prefix";
       linkerPrefix = NarProperties.getInstance(mojo.getMavenProject()).getProperty(key);
     }
@@ -553,7 +550,7 @@ public class Linker {
     }
 
     String version = null;
-    final String linkerPrefix = nullToEmpty(this.prefix);
+    final String linkerPrefix = this.prefix == null ? "" : this.prefix;
 
     final TextStream out = new StringTextStream();
     final TextStream err = new StringTextStream();

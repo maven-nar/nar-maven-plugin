@@ -56,20 +56,9 @@ public class NarAssemblyMojo extends AbstractDependencyMojo {
   @Override
   public final void narExecute() throws MojoExecutionException, MojoFailureException {
     // download the dependencies if needed in local maven repository.
-    List<AttachedNarArtifact> attachedNarArtifacts = getAttachedNarArtifacts(libraries);
+    final List<AttachedNarArtifact> attachedNarArtifacts = getAttachedNarArtifacts(libraries);
     downloadAttachedNars(attachedNarArtifacts);
 
-    // Warning, for SNAPSHOT artifacts that were not in the local maven
-    // repository, the downloadAttachedNars
-    // method above modified the version in the AttachedNarArtifact object to
-    // set the timestamp version from
-    // the web repository.
-    // In order to unpack the files with the correct names we need to get back
-    // the AttachedNarArtifact objects with
-    // -SNAPSHOT versions, so we call again getAttachedNarArtifacts() to get the
-    // unmodified AttachedNarArtifact
-    // objects
-    attachedNarArtifacts = getAttachedNarArtifacts(libraries);
     unpackAttachedNars(attachedNarArtifacts);
 
     // this may make some extra copies...
@@ -77,17 +66,8 @@ public class NarAssemblyMojo extends AbstractDependencyMojo {
       final Artifact dependency = (Artifact) element;
       getLog().debug("Assemble from " + dependency);
 
-      // FIXME reported to maven developer list, isSnapshot
-      // changes behaviour
-      // of getBaseVersion, called in pathOf.
-      dependency.isSnapshot();
-
       final File srcDir = getLayout().getNarUnpackDirectory(getUnpackDirectory(),
-          getNarManager().getNarFile(dependency));
-      // File srcDir = new File( getLocalRepository().pathOf( dependency ) );
-      // srcDir = new File( getLocalRepository().getBasedir(),
-      // srcDir.getParent() );
-      // srcDir = new File( srcDir, "nar/" );
+          new File(NarArtifactResolver.fileName(dependency)));
 
       final File dstDir = getTargetDirectory();
       try {

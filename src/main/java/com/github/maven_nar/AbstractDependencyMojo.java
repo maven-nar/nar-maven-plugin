@@ -20,8 +20,6 @@
 package com.github.maven_nar;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ListIterator;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,16 +29,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.Map;
-import java.util.jar.JarFile;
-import java.util.zip.ZipInputStream;
-import org.apache.commons.io.IOUtils;
 
 import org.apache.maven.model.Dependency;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.project.DefaultProjectBuildingRequest;
+import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
-import org.apache.maven.artifact.resolver.ArtifactResolutionException;
-import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -57,7 +51,6 @@ import org.codehaus.plexus.util.StringUtils;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
 import org.apache.maven.shared.dependency.graph.DependencyNode;
-import org.apache.maven.shared.dependency.graph.internal.DefaultDependencyNode;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.artifact.DefaultArtifact;
 
@@ -80,20 +73,8 @@ import org.eclipse.aether.DefaultRepositorySystemSession;
  */
 public abstract class AbstractDependencyMojo extends AbstractNarMojo {
 
-  @Parameter(defaultValue = "${localRepository}", required = true, readonly = true)
-  private ArtifactRepository localRepository;
-
-  /**
-   * Artifact resolver, needed to download the attached nar files.
-   */
-  @Component(role = org.apache.maven.artifact.resolver.ArtifactResolver.class)
-  protected ArtifactResolver artifactResolver;
-
-  /**
-   * Remote repositories which will be searched for nar attachments.
-   */
-  @Parameter(defaultValue = "${project.remoteArtifactRepositories}", required = true, readonly = true)
-  protected List remoteArtifactRepositories;
+  @Parameter(defaultValue = "${session}", required = true, readonly = true)
+  private MavenSession mavenSession;
 
   /**
    * Comma separated list of Artifact names to exclude.
@@ -502,9 +483,10 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     try {
       ArtifactFilter artifactFilter = null;
 
-      // works for only maven 3. Use of dependency graph component not handled for maven 2
-      // as current version of NAR already requires Maven 3.x
-      rootNode = dependencyGraphBuilder.buildDependencyGraph(getMavenProject(), artifactFilter);
+      // Keep the session request unchanged when selecting a project in a reactor build.
+      final ProjectBuildingRequest request = new DefaultProjectBuildingRequest(mavenSession.getProjectBuildingRequest());
+      request.setProject(getMavenProject());
+      rootNode = dependencyGraphBuilder.buildDependencyGraph(request, artifactFilter);
 
     } catch (DependencyGraphBuilderException exception) {
       throw new MojoExecutionException("Cannot build project dependency graph", exception);
@@ -528,16 +510,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
     getLog().debug("}");
 
     for (final AttachedNarArtifact attachedNarArtifact : dependencies) {
-      try {
-        getLog().debug("Resolving " + attachedNarArtifact);
-        this.artifactResolver.resolve(attachedNarArtifact, this.remoteArtifactRepositories, getLocalRepository());
-      } catch (final ArtifactNotFoundException e) {
-        final String message = "nar not found " + attachedNarArtifact.getId();
-        throw new MojoExecutionException(message, e);
-      } catch (final ArtifactResolutionException e) {
-        final String message = "nar cannot resolve " + attachedNarArtifact.getId();
-        throw new MojoExecutionException(message, e);
-      }
+      getNarResolver().resolve(attachedNarArtifact);
     }
   }
 
@@ -625,7 +598,7 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
             }
             final String version = nar.length >= 5 ? nar[4].trim() : dependency.getBaseVersion();
             artifactList.add(new AttachedNarArtifact(groupId, artifactId, version, dependency.getScope(), ext,
-                classifier, dependency.isOptional(), dependency.getFile()));
+                classifier, dependency.isOptional()));
           } catch (final InvalidVersionSpecificationException e) {
             throw new MojoExecutionException("Error while reading nar file for dependency " + dependency, e);
           }
@@ -693,8 +666,12 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
   // @Parameter(defaultValue = "${project.pluginArtifactRepositories}")
   // private List remotePluginRepositories;
 
-  protected final ArtifactRepository getLocalRepository() {
-    return this.localRepository;
+  protected final File getLocalRepositoryDirectory() {
+    return this.repoSession.getLocalRepository().getBasedir();
+  }
+
+  protected final NarArtifactResolver getNarResolver() {
+    return new NarArtifactResolver(this.repoSystem, this.repoSession, this.projectRepos);
   }
 
   /**
@@ -744,60 +721,11 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
   }
 
   public final NarInfo getNarInfo(final Artifact dependency) throws MojoExecutionException {
-    // FIXME reported to maven developer list, isSnapshot changes behaviour
-    // of getBaseVersion, called in pathOf.
-    dependency.isSnapshot();
-
-    if (dependency.getFile().isDirectory()) {
-      getLog().debug("Dependency is not packaged: " + dependency.getFile());
-
-      return new NarInfo(dependency.getGroupId(), dependency.getArtifactId(), dependency.getBaseVersion(), getLog(),
-          dependency.getFile());
-    }
-
-    final File file = new File(getLocalRepository().getBasedir(), getLocalRepository().pathOf(dependency));
-    if (!file.exists()) {
-      getLog().debug("Dependency nar file does not exist: " + file);
-      return null;
-    }
-
-    ZipInputStream zipStream = null;
-    try {
-      zipStream = new ZipInputStream(new FileInputStream(file));
-      if (zipStream.getNextEntry() == null) {
-        getLog().debug("Skipping unreadable artifact: " + file);
-        return null;
-      }
-    } catch (IOException e) {
-      throw new MojoExecutionException("Error while testing for zip file " + file, e);
-    } finally {
-      IOUtils.closeQuietly(zipStream);
-    }
-
-    JarFile jar = null;
-    try {
-      jar = new JarFile(file);
-      final NarInfo info = new NarInfo(dependency.getGroupId(), dependency.getArtifactId(),
-          dependency.getBaseVersion(), getLog());
-      if (!info.exists(jar)) {
-        getLog().debug("Dependency nar file does not contain this artifact: " + file);
-        return null;
-      }
-      info.read(jar);
-      return info;
-    } catch (final IOException e) {
-      throw new MojoExecutionException("Error while reading " + file, e);
-    } finally {
-      IOUtils.closeQuietly(jar);
-    }
+    return NarArtifactResolver.readNarInfo(dependency, getLog());
   }
 
   protected final NarManager getNarManager() throws MojoFailureException, MojoExecutionException {
-    return new NarManager(getLog(), getLocalRepository(), getMavenProject(), getArchitecture(), getOS(), getLinker());
-  }
-
-  protected final List/* <ArtifactRepository> */getRemoteRepositories() {
-    return this.remoteArtifactRepositories;
+    return new NarManager(getLog(), getNarResolver(), getMavenProject(), getArchitecture(), getOS(), getLinker());
   }
 
   public final void unpackAttachedNars(final List<AttachedNarArtifact> dependencies)
@@ -822,7 +750,8 @@ public abstract class AbstractDependencyMojo extends AbstractNarMojo {
       // TODO: the dependency may be specified against a different linker
       // (version)?
       // AOL aol = dependency.getClassifier(); Trim
-      layout.unpackNar(unpackDir, this.archiverManager, file, getOS(), getLinker().getName(), getAOL(), isSkipRanlib());
+      layout.unpackNar(unpackDir, this.archiverManager, file, getOS(), getLinker().getName(), getAOL(), isSkipRanlib(),
+          NarArtifactResolver.fileName(dependency));
     }
   }
 

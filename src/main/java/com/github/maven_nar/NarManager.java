@@ -20,16 +20,10 @@
 package com.github.maven_nar;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.jar.JarFile;
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
-import org.apache.maven.artifact.resolver.ArtifactResolutionException;
-import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -46,7 +40,7 @@ public class NarManager {
 
   private final MavenProject project;
 
-  private final ArtifactRepository repository;
+  private final NarArtifactResolver resolver;
 
   private final AOL defaultAOL;
 
@@ -56,41 +50,14 @@ public class NarManager {
       NarConstants.NAR_NO_ARCH, Library.STATIC, Library.SHARED, Library.JNI, Library.PLUGIN
   };
 
-  public NarManager(final Log log, final ArtifactRepository repository, final MavenProject project,
+  public NarManager(final Log log, final NarArtifactResolver resolver, final MavenProject project,
       final String architecture, final String os, final Linker linker)
       throws MojoFailureException, MojoExecutionException {
     this.log = log;
-    this.repository = repository;
+    this.resolver = resolver;
     this.project = project;
     this.defaultAOL = NarUtil.getAOL(project, architecture, os, linker, null, log);
     this.linkerName = NarUtil.getLinkerName(project, architecture, os, linker, log);
-  }
-
-  public final void downloadAttachedNars(final List/* <NarArtifacts> */narArtifacts, final List remoteRepositories,
-      final ArtifactResolver resolver, final String classifier) throws MojoExecutionException, MojoFailureException {
-    // FIXME this may not be the right way to do this.... -U ignored and
-    // also SNAPSHOT not used
-    final List dependencies = getAttachedNarDependencies(narArtifacts, classifier);
-
-    this.log.debug("Download called with classifier: " + classifier + " for NarDependencies {");
-    for (final Object dependency2 : dependencies) {
-      this.log.debug("  - " + dependency2);
-    }
-    this.log.debug("}");
-
-    for (final Object dependency1 : dependencies) {
-      final Artifact dependency = (Artifact) dependency1;
-      try {
-        this.log.debug("Resolving " + dependency);
-        resolver.resolve(dependency, remoteRepositories, this.repository);
-      } catch (final ArtifactNotFoundException e) {
-        final String message = "nar not found " + dependency.getId();
-        throw new MojoExecutionException(message, e);
-      } catch (final ArtifactResolutionException e) {
-        final String message = "nar cannot resolve " + dependency.getId();
-        throw new MojoExecutionException(message, e);
-      }
-    }
   }
 
   private List/* <AttachedNarArtifact> */getAttachedNarDependencies(final Artifact dependency, final AOL archOsLinker,
@@ -121,7 +88,7 @@ public class NarManager {
             }
             final String version = nar.length >= 5 ? nar[4].trim() : dependency.getBaseVersion();
             artifactList.add(new AttachedNarArtifact(groupId, artifactId, version, dependency.getScope(), ext,
-                classifier, dependency.isOptional(), dependency.getFile()));
+                classifier, dependency.isOptional()));
           } catch (final InvalidVersionSpecificationException e) {
             throw new MojoExecutionException("Error while reading nar file for dependency " + dependency, e);
           }
@@ -237,45 +204,12 @@ public class NarManager {
     return artifactList;
   }
 
-  public final File getNarFile(final Artifact dependency) throws MojoFailureException {
-    // FIXME reported to maven developer list, isSnapshot changes behaviour
-    // of getBaseVersion, called in pathOf.
-    dependency.isSnapshot();
-    return new File(this.repository.getBasedir(), NarUtil.replace("${aol}", this.defaultAOL.toString(),
-        this.repository.pathOf(dependency)));
+  public final File getNarFile(final Artifact dependency) throws MojoExecutionException {
+    return this.resolver.resolve(dependency);
   }
 
   public final NarInfo getNarInfo(final Artifact dependency) throws MojoExecutionException {
-    // FIXME reported to maven developer list, isSnapshot changes behaviour
-    // of getBaseVersion, called in pathOf.
-    dependency.isSnapshot();
-
-    final File file = new File(this.repository.getBasedir(), this.repository.pathOf(dependency));
-    if (!file.exists()) {
-      return null;
-    }
-
-    JarFile jar = null;
-    try {
-      jar = new JarFile(file);
-      final NarInfo info = new NarInfo(dependency.getGroupId(), dependency.getArtifactId(),
-          dependency.getBaseVersion(), this.log);
-      if (!info.exists(jar)) {
-        return null;
-      }
-      info.read(jar);
-      return info;
-    } catch (final IOException e) {
-      throw new MojoExecutionException("Error while reading " + file, e);
-    } finally {
-      if (jar != null) {
-        try {
-          jar.close();
-        } catch (final IOException e) {
-          // ignore
-        }
-      }
-    }
+    return NarArtifactResolver.readNarInfo(dependency, this.log);
   }
 
   public final void unpackAttachedNars(final List/* <NarArtifacts> */narArtifacts,
@@ -293,7 +227,8 @@ public class NarManager {
       this.log.debug("Unpack " + dependency + " to " + unpackDir);
       final File file = getNarFile(dependency);
 
-      layout.unpackNar(unpackDir, archiverManager, file, os, this.linkerName, this.defaultAOL, skipRanlib);
+      layout.unpackNar(unpackDir, archiverManager, file, os, this.linkerName, this.defaultAOL, skipRanlib,
+          NarArtifactResolver.fileName(dependency));
     }
   }
 }

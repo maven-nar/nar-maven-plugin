@@ -84,11 +84,20 @@ public class AttachedNarArtifact extends DefaultArtifact {
   }
 
   public AttachedNarArtifact(final String groupId, final String artifactId, final String version, final String scope,
-      final String type, final String classifier, final boolean optional, final File file)
+      final String type, final String classifier, final boolean optional)
       throws InvalidVersionSpecificationException {
     super(groupId, artifactId, VersionRange.createFromVersionSpec(version), scope, type, classifier, null, optional);
     setArtifactHandler(new Handler(classifier));
-    setFile(new File(file.getParentFile(), artifactId + "-" + VersionRange.createFromVersionSpec(version) + "-"
-        + classifier + "." + type));
   }
+
+  /**
+   * @deprecated The parent archive location cannot determine an attachment's location.
+   */
+  @Deprecated
+  public AttachedNarArtifact(final String groupId, final String artifactId, final String version, final String scope,
+      final String type, final String classifier, final boolean optional, final File file)
+      throws InvalidVersionSpecificationException {
+    this(groupId, artifactId, version, scope, type, classifier, optional);
+  }
+
 }

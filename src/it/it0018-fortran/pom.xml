@@ -64,7 +64,7 @@
                 <library>
                   <type>executable</type>
                   <linkFortran>true</linkFortran>
-                  <linkFortranMain>true</linkFortranMain>
+                  <linkFortranMain>false</linkFortranMain>
                 </library>
               </libraries>
             </configuration>

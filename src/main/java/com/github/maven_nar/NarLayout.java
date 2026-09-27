@@ -107,4 +107,13 @@ public interface NarLayout {
   void unpackNar(File baseDir, ArchiverManager archiverManager, File file, String os, String linkerName, AOL defaultAOL, boolean skipRanlib)
           throws MojoExecutionException, MojoFailureException;
 
+  /**
+   * Unpacks a resolved archive using its logical base-version name. The default
+   * preserves existing custom layouts; layout 2.1 uses the name for its directory.
+   */
+  default void unpackNar(File baseDir, ArchiverManager archiverManager, File file, String os, String linkerName,
+      AOL defaultAOL, boolean skipRanlib, String archiveName) throws MojoExecutionException, MojoFailureException {
+    unpackNar(baseDir, archiverManager, file, os, linkerName, defaultAOL, skipRanlib);
+  }
+
 }

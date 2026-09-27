@@ -41,7 +41,6 @@ import com.github.maven_nar.cpptasks.TargetDef;
 import com.github.maven_nar.cpptasks.VersionInfo;
 import com.github.maven_nar.cpptasks.types.CommandLineArgument;
 import com.github.maven_nar.cpptasks.types.UndefineArgument;
-import com.google.common.collect.ObjectArrays;
 import org.apache.tools.ant.util.FileUtils;
 
 /**
@@ -181,7 +180,10 @@ public abstract class CommandLineCompiler extends AbstractCompiler {
       // command into the args.
       final String compilerCommand = command;
       command = CCACHE_CMD;
-      args = ObjectArrays.concat(compilerCommand, args);
+      final String[] compilerArgs = new String[args.length + 1];
+      compilerArgs[0] = compilerCommand;
+      System.arraycopy(args, 0, compilerArgs, 1, args.length);
+      args = compilerArgs;
     }
     int baseLength = command.length() + args.length + endArgs.length;
     if (this.libtool) {

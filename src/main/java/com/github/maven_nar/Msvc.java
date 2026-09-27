@@ -20,7 +20,6 @@ import com.github.maven_nar.cpptasks.CCTask;
 import com.github.maven_nar.cpptasks.CompilerDef;
 import com.github.maven_nar.cpptasks.LinkerDef;
 import com.github.maven_nar.cpptasks.types.SystemIncludePath;
-import com.google.common.collect.Sets;
 
 public class Msvc {
 
@@ -62,7 +61,7 @@ public class Msvc {
   private String toolPathLinker;
   private List<File> sdkIncludes = new ArrayList<>();
   private List<File> sdkLibs = new ArrayList<>();
-  private Set<String> libsRequired = Sets.newHashSet("ucrt", "um", "shared", "winrt");
+  private Set<String> libsRequired = new HashSet<>(Arrays.asList("ucrt", "um", "shared", "winrt"));
 
   private enum CrossCompilers {
     x86, x64

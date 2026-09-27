@@ -267,3 +267,12 @@ In other cases the classifiers must be adapted accordingly.
 </assembly>
 +--
 
+* Java/JNI integration tests
+
+  The <<<nar-integration-test>>> goal delegates Java test discovery, frameworks,
+  JVMs and reporting to released Surefire 3.5.6. NAR retains native preparation
+  and per-class fork isolation. Failures fail the integration-test phase.
+  Java 8 and Maven 3.6.3 are required.
+
+  See the {{{https://github.com/maven-nar/nar-maven-plugin/blob/master/docs/java-integration-tests.md}Java/JNI integration test guide}}
+  for Jupiter, mixed frameworks, legacy configuration and native paths.
